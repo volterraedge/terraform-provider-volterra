@@ -1125,6 +1125,138 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeSet,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"namespace": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"tenant": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
 															"monitor": {
 
 																Type:     schema.TypeSet,
@@ -1682,6 +1814,28 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"os": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_os_version": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"operating_system_version": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"custom_storage_config": {
@@ -4136,6 +4290,138 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+																									Type:     schema.TypeSet,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"dns_server": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"namespace": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"tenant": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
 															"monitor": {
 
 																Type:     schema.TypeSet,
@@ -4277,6 +4563,28 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"sw": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_sw_version": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"volterra_software_version": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"allow_all_usb": {
@@ -5895,6 +6203,166 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 										interfaceChoiceInt.EthernetInterface.Device = v.(string)
 									}
 
+									ipv6AddressChoiceTypeFound := false
+
+									if v, ok := cs["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+
+										if v.(bool) {
+											ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_NoIpv6Address{}
+											ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+											interfaceChoiceInt.EthernetInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+										ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_StaticIpv6Address{}
+										ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+										interfaceChoiceInt.EthernetInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											networkPrefixChoiceTypeFound := false
+
+											if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+												networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+														networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+														for _, set := range sl {
+															interfaceIpMapMapStrToI := set.(map[string]interface{})
+															key, ok := interfaceIpMapMapStrToI["name"]
+															if ok && !isIntfNil(key) {
+																interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																val, _ := interfaceIpMapMapStrToI["value"]
+
+																interfaceIpMapVals := val.(*schema.Set).List()
+																for _, intVal := range interfaceIpMapVals {
+
+																	interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																	if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DnsServer = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].IpAddress = w.(string)
+																	}
+
+																	// break after one loop
+																	break
+																}
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+												networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+														networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+														for _, set := range sl {
+															npaMapToStrVal := set.(map[string]interface{})
+															if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Name = val.(string)
+															}
+															if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Namespace = val.(string)
+															}
+
+															if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+												networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									monitoringChoiceTypeFound := false
 
 									if v, ok := cs["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -6681,6 +7149,44 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 			networkCfgChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_DefaultNetworkConfig{}
 			networkCfgChoiceInt.DefaultNetworkConfig = &ves_io_schema.Empty{}
 			createSpec.NetworkCfgChoice = networkCfgChoiceInt
+		}
+
+	}
+
+	//os
+	if v, ok := d.GetOk("os"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		os := &ves_io_schema_views.OperatingSystemType{}
+		createSpec.Os = os
+		for _, set := range sl {
+			osMapStrToI := set.(map[string]interface{})
+
+			operatingSystemVersionChoiceTypeFound := false
+
+			if v, ok := osMapStrToI["default_os_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+
+				operatingSystemVersionChoiceTypeFound = true
+
+				if v.(bool) {
+					operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}
+					operatingSystemVersionChoiceInt.DefaultOsVersion = &ves_io_schema.Empty{}
+					os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+				}
+
+			}
+
+			if v, ok := osMapStrToI["operating_system_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+
+				operatingSystemVersionChoiceTypeFound = true
+				operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_OperatingSystemVersion{}
+
+				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+
+				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
+
+			}
+
 		}
 
 	}
@@ -9749,6 +10255,166 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 										storageInterface.Device = w.(string)
 									}
 
+									ipv6AddressChoiceTypeFound := false
+
+									if v, ok := storageInterfaceMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+
+										if v.(bool) {
+											ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_NoIpv6Address{}
+											ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+											storageInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+										}
+
+									}
+
+									if v, ok := storageInterfaceMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+										ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_StaticIpv6Address{}
+										ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+										storageInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											networkPrefixChoiceTypeFound := false
+
+											if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+												networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+														networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+														for _, set := range sl {
+															interfaceIpMapMapStrToI := set.(map[string]interface{})
+															key, ok := interfaceIpMapMapStrToI["name"]
+															if ok && !isIntfNil(key) {
+																interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																val, _ := interfaceIpMapMapStrToI["value"]
+
+																interfaceIpMapVals := val.(*schema.Set).List()
+																for _, intVal := range interfaceIpMapVals {
+
+																	interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																	if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DnsServer = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].IpAddress = w.(string)
+																	}
+
+																	// break after one loop
+																	break
+																}
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+												networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+														networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+														for _, set := range sl {
+															npaMapToStrVal := set.(map[string]interface{})
+															if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Name = val.(string)
+															}
+															if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Namespace = val.(string)
+															}
+
+															if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+												networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									monitoringChoiceTypeFound := false
 
 									if v, ok := storageInterfaceMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -9976,6 +10642,44 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 			storageCfgChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_DefaultStorageConfig{}
 			storageCfgChoiceInt.DefaultStorageConfig = &ves_io_schema.Empty{}
 			createSpec.StorageCfgChoice = storageCfgChoiceInt
+		}
+
+	}
+
+	//sw
+	if v, ok := d.GetOk("sw"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		sw := &ves_io_schema_views.VolterraSoftwareType{}
+		createSpec.Sw = sw
+		for _, set := range sl {
+			swMapStrToI := set.(map[string]interface{})
+
+			volterraSwVersionChoiceTypeFound := false
+
+			if v, ok := swMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+				volterraSwVersionChoiceTypeFound = true
+
+				if v.(bool) {
+					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
+					volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+					sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+				}
+
+			}
+
+			if v, ok := swMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+				volterraSwVersionChoiceTypeFound = true
+				volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
+
+				sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+
+				volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
+
+			}
+
 		}
 
 	}
@@ -11647,6 +12351,166 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 										interfaceChoiceInt.EthernetInterface.Device = v.(string)
+									}
+
+									ipv6AddressChoiceTypeFound := false
+
+									if v, ok := cs["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+
+										if v.(bool) {
+											ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_NoIpv6Address{}
+											ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+											interfaceChoiceInt.EthernetInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+										ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_StaticIpv6Address{}
+										ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+										interfaceChoiceInt.EthernetInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											networkPrefixChoiceTypeFound := false
+
+											if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+												networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+														networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+														for _, set := range sl {
+															interfaceIpMapMapStrToI := set.(map[string]interface{})
+															key, ok := interfaceIpMapMapStrToI["name"]
+															if ok && !isIntfNil(key) {
+																interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																val, _ := interfaceIpMapMapStrToI["value"]
+
+																interfaceIpMapVals := val.(*schema.Set).List()
+																for _, intVal := range interfaceIpMapVals {
+
+																	interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																	if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DnsServer = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].IpAddress = w.(string)
+																	}
+
+																	// break after one loop
+																	break
+																}
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+												networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+														networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+														for _, set := range sl {
+															npaMapToStrVal := set.(map[string]interface{})
+															if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Name = val.(string)
+															}
+															if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Namespace = val.(string)
+															}
+
+															if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+												networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 									monitoringChoiceTypeFound := false
@@ -15499,6 +16363,166 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 									if w, ok := storageInterfaceMapStrToI["device"]; ok && !isIntfNil(w) {
 										storageInterface.Device = w.(string)
+									}
+
+									ipv6AddressChoiceTypeFound := false
+
+									if v, ok := storageInterfaceMapStrToI["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+
+										if v.(bool) {
+											ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_NoIpv6Address{}
+											ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+											storageInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+										}
+
+									}
+
+									if v, ok := storageInterfaceMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+										ipv6AddressChoiceTypeFound = true
+										ipv6AddressChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_StaticIpv6Address{}
+										ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+										storageInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											networkPrefixChoiceTypeFound := false
+
+											if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+												networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+														networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+														for _, set := range sl {
+															interfaceIpMapMapStrToI := set.(map[string]interface{})
+															key, ok := interfaceIpMapMapStrToI["name"]
+															if ok && !isIntfNil(key) {
+																interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																val, _ := interfaceIpMapMapStrToI["value"]
+
+																interfaceIpMapVals := val.(*schema.Set).List()
+																for _, intVal := range interfaceIpMapVals {
+
+																	interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																	if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].DnsServer = w.(string)
+																	}
+
+																	if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																		interfaceIpMap[key.(string)].IpAddress = w.(string)
+																	}
+
+																	// break after one loop
+																	break
+																}
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+												networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+														networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+														for _, set := range sl {
+															npaMapToStrVal := set.(map[string]interface{})
+															if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Name = val.(string)
+															}
+															if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Namespace = val.(string)
+															}
+
+															if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																networkPrefixAllocatorInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+												networkPrefixChoiceTypeFound = true
+												networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+												networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+												ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+													}
+
+													if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+													}
+
+													if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+														networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 									monitoringChoiceTypeFound := false

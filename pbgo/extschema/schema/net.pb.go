@@ -222,7 +222,7 @@ func (m *Ipv4SubnetType) GetPlen() uint32 {
 // IPv6 Address
 //
 // x-displayName: "IPv6 Address"
-// IPv6 Address specified as hexadecimal numbers seperated by ':'
+// IPv6 Address specified as hexadecimal numbers separated by ':'
 type Ipv6AddressType struct {
 	// IPv6 Address
 	//

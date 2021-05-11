@@ -985,10 +985,34 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
+		for idx, item := range m.GetInsideVipPortConfig() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["master_nodes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("master_nodes"))
 		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_port_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_port_config"))
+		for idx, item := range m.GetOutsideVipPortConfig() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -1066,6 +1090,10 @@ var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 	v.FldValidators["subnets"] = SubnetTypeValidator().Validate
 
 	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
+
+	v.FldValidators["inside_vip_port_config"] = VIPPortConfigValidator().Validate
+
+	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
 
 	return v
 }()

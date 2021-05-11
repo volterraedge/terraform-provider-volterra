@@ -227,6 +227,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))

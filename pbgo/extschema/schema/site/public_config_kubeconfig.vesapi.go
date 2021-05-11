@@ -707,6 +707,13 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Expiry Time"
                 },
+                "name": {
+                    "type": "string",
+                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "api-cred-x89sf"
+                },
                 "uid": {
                     "type": "string",
                     "description": " UUID of API credential object.\n\nExample: - \"fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa\"-",

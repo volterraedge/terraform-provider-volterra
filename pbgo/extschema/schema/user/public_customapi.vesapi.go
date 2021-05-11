@@ -3018,6 +3018,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Tenant",
                     "x-ves-example": "value"
                 },
+                "tenant_state": {
+                    "type": "string",
+                    "description": " Contains information about current state of the tenant.",
+                    "title": "Tenant State",
+                    "x-displayname": "Tenant State"
+                },
                 "tenant_type": {
                     "description": " tenant type of the user (FREEMIUM, ENTERPRISE, ...)",
                     "title": "Tenant type",
@@ -3088,6 +3094,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "IDM Type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
+                },
+                "last_login_timestamp": {
+                    "type": "string",
+                    "description": " Last successful login timestamp of the user .",
+                    "title": "last_login_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last Login Timestamp"
                 },
                 "last_name": {
                     "type": "string",

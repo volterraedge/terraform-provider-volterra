@@ -104,27 +104,6 @@ type ValidateBGPConfiguration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateBGPConfiguration) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_bgp.BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateBGPConfiguration) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_bgp.Peer, opts ...db.ValidateOpt) error {
@@ -165,6 +144,16 @@ func (v *ValidateBGPConfiguration) PeersValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateBGPConfiguration) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBGPConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BGPConfiguration)
 	if !ok {
@@ -179,10 +168,10 @@ func (v *ValidateBGPConfiguration) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
+	if fv, exists := v.FldValidators["asn"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
-		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
 		}
 
@@ -211,20 +200,10 @@ var DefaultBGPConfigurationValidator = func() *ValidateBGPConfiguration {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBgpParameters := v.BgpParametersValidationRuleHandler
-	rulesBgpParameters := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhBgpParameters(rulesBgpParameters)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BGPConfiguration.bgp_parameters: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["bgp_parameters"] = vFn
-
 	vrhPeers := v.PeersValidationRuleHandler
 	rulesPeers := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.max_items":            "8",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhPeers(rulesPeers)
 	if err != nil {
@@ -232,6 +211,18 @@ var DefaultBGPConfigurationValidator = func() *ValidateBGPConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["peers"] = vFn
+
+	vrhAsn := v.AsnValidationRuleHandler
+	rulesAsn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+	}
+	vFn, err = vrhAsn(rulesAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BGPConfiguration.asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn"] = vFn
 
 	return v
 }()

@@ -2583,6 +2583,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -2641,6 +2642,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Maximum Packet Size (MTU)",
                     "x-ves-example": "1450"
                 },
+                "no_ipv6_address": {
+                    "description": "Exclusive with [static_ipv6_address]\nx-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "title": "no_ipv6_address",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "node": {
                     "type": "string",
                     "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
@@ -2676,6 +2682,11 @@ var APISwaggerJSON string = `{
                 },
                 "static_ip": {
                     "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                },
+                "static_ipv6_address": {
+                    "description": "Exclusive with [no_ipv6_address]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
@@ -2775,6 +2786,12 @@ var APISwaggerJSON string = `{
                     "description": " Map of Site:Node to IP address offset. Key:Node, Value:Map\n Value of 10.1.1.5 with network prefix 24, offset is 0.0.0.5",
                     "title": "Site:Node to IP mapping",
                     "x-displayname": "Site:Node to IP Mapping"
+                },
+                "ipv6_static_addresses": {
+                    "description": " Configure IPv6 subnet to be used.",
+                    "title": "Ipv6 Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "IPv6 Static IP"
                 },
                 "is_primary": {
                     "type": "boolean",
@@ -3137,14 +3154,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IPv4 address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
                     "x-ves-example": "192.168.20.1"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IPv4 address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
                     "title": "DNS Server",
                     "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1"
@@ -3166,21 +3183,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IPv4 address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
                     "x-ves-example": "192.168.20.1"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IPv4 address of the DNS server\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-",
                     "title": "DNS Server",
                     "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": " IPv4 address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
+                    "description": " IP address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
                     "title": "Default Gateway",
                     "x-displayname": "IP address/Prefix Length",
                     "x-ves-example": "192.168.20.1/24",
@@ -3562,6 +3579,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

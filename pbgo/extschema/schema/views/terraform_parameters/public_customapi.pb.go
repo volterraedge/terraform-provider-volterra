@@ -115,11 +115,9 @@ type GetStatusResponse struct {
 	Status *StatusObject `protobuf:"bytes,1,opt,name=status" json:"status,omitempty"`
 }
 
-func (m *GetStatusResponse) Reset()      { *m = GetStatusResponse{} }
-func (*GetStatusResponse) ProtoMessage() {}
-func (*GetStatusResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{2}
-}
+func (m *GetStatusResponse) Reset()                    { *m = GetStatusResponse{} }
+func (*GetStatusResponse) ProtoMessage()               {}
+func (*GetStatusResponse) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{2} }
 
 func (m *GetStatusResponse) GetStatus() *StatusObject {
 	if m != nil {

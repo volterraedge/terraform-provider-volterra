@@ -38,20 +38,29 @@ type UamKubeConfigAPIGrpcClient struct {
 }
 
 func (c *UamKubeConfigAPIGrpcClient) doRPCCreateGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &CreateKubeConfigReq{}
+	req := &CreateGlobalKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateGlobalKubeConfigReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.CreateGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
 
 func (c *UamKubeConfigAPIGrpcClient) doRPCListGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &ListKubeConfigReq{}
+	req := &ListGlobalKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ListKubeConfigReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ListGlobalKubeConfigReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.ListGlobalKubeConfig(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *UamKubeConfigAPIGrpcClient) doRPCRevokeGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &RevokeKubeConfigReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.RevokeKubeConfigReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.RevokeGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -89,6 +98,8 @@ func NewUamKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
 
+	rpcFns["RevokeGlobalKubeConfig"] = ccl.doRPCRevokeGlobalKubeConfig
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -109,9 +120,9 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &CreateKubeConfigReq{}
+	req := &CreateGlobalKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateGlobalKubeConfigReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -135,8 +146,8 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("name", fmt.Sprintf("%v", req.Name))
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -188,9 +199,9 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &ListKubeConfigReq{}
+	req := &ListGlobalKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ListKubeConfigReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ListGlobalKubeConfigReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -214,8 +225,7 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("name", fmt.Sprintf("%v", req.Name))
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -258,6 +268,82 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	return pbRsp, nil
 }
 
+func (c *UamKubeConfigAPIRestClient) doRPCRevokeGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &RevokeKubeConfigReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.RevokeKubeConfigReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &KubeConfigStatusRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.KubeConfigStatusRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *UamKubeConfigAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -286,6 +372,8 @@ func NewUamKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
 
+	rpcFns["RevokeGlobalKubeConfig"] = ccl.doRPCRevokeGlobalKubeConfig
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -298,7 +386,7 @@ type UamKubeConfigAPIInprocClient struct {
 	svc svcfw.Service
 }
 
-func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
@@ -310,7 +398,7 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CreateKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CreateGlobalKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -342,7 +430,7 @@ func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Contex
 
 	return rsp, nil
 }
-func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
+func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
@@ -354,7 +442,7 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ListKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ListGlobalKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -383,6 +471,50 @@ func (c *UamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context,
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.ListKubeConfigRsp", rsp)...)
+
+	return rsp, nil
+}
+func (c *UamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq, opts ...grpc.CallOption) (*KubeConfigStatusRsp, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
+	cah, ok := ah.(UamKubeConfigAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *UamKubeConfigAPISrv", ah)
+	}
+
+	var (
+		rsp *KubeConfigStatusRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.RevokeKubeConfigReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'UamKubeConfigAPI.RevokeGlobalKubeConfig' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RevokeGlobalKubeConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.site.KubeConfigStatusRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -420,16 +552,16 @@ var UamKubeConfigAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
-        "/public/namespaces/{namespace}/sites/{name}/global-kubeconfig": {
+        "/public/namespaces/system/revoke/global-kubeconfigs": {
             "post": {
-                "summary": "Create K8s Cluster Global Kube Config",
-                "description": "Down load kube config for global k8s cluster access",
-                "operationId": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig",
+                "summary": "Revoke Global Kubeconfig",
+                "description": "Kubeconfig credential revoke/deletion.",
+                "operationId": "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig",
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/apiHttpBody"
+                            "$ref": "#/definitions/siteKubeConfigStatusRsp"
                         }
                     },
                     "401": {
@@ -483,23 +615,11 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 },
                 "parameters": [
                     {
-                        "name": "namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/siteCreateKubeConfigReq"
+                            "$ref": "#/definitions/siteRevokeKubeConfigReq"
                         }
                     }
                 ],
@@ -508,17 +628,17 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-CreateGlobalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-RevokeGlobalKubeConfig"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"
+                "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"
             },
             "x-displayname": "Global KubeConfig",
             "x-ves-proto-service": "ves.io.schema.site.UamKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/{namespace}/sites/{name}/global-kubeconfigs": {
+        "/public/namespaces/system/sites/{site}/global-kubeconfigs": {
             "get": {
-                "summary": "List Local Kube Configs",
+                "summary": "List Global Kube Configs",
                 "description": "Returns list of all global active kubeconfig minted for this site",
                 "operationId": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig",
                 "responses": {
@@ -579,13 +699,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 },
                 "parameters": [
                     {
-                        "name": "namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "name",
+                        "name": "site",
                         "in": "path",
                         "required": true,
                         "type": "string"
@@ -599,6 +713,91 @@ var UamKubeConfigAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-ListGlobalKubeConfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"
+            },
+            "post": {
+                "summary": "Create Global Kube Config",
+                "description": "Download kube config for global k8s cluster access",
+                "operationId": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/apiHttpBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/siteCreateGlobalKubeConfigReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "UamKubeConfigAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-CreateGlobalKubeConfig"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"
             },
             "x-displayname": "Global KubeConfig",
             "x-ves-proto-service": "ves.io.schema.site.UamKubeConfigAPI",
@@ -643,28 +842,45 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 }
             }
         },
-        "siteCreateKubeConfigReq": {
+        "siteCreateGlobalKubeConfigReq": {
             "type": "object",
             "description": "Create kubeconfig request parameters",
-            "title": "Create Kube Config Request",
+            "title": "Create Global Kube Config Request",
             "x-displayname": "Create Kube Config Request",
-            "x-ves-proto-message": "ves.io.schema.site.CreateKubeConfigReq",
+            "x-ves-proto-message": "ves.io.schema.site.CreateGlobalKubeConfigReq",
             "properties": {
-                "name": {
+                "expiration_timestamp": {
                     "type": "string",
-                    "description": " K8s Cluster name\n\nExample: - \"ce398\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Name",
+                    "description": " Timestamp of kubeconfig's certificate expiry.\n\nExample: - \"value\"-",
+                    "title": "Expiry timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Expiry timestamp",
+                    "x-ves-example": "value"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Name of the site for which kubeconfig is being requested.\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "title": "Site",
+                    "x-displayname": "Site",
                     "x-ves-example": "ce398",
                     "x-ves-required": "true"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " K8s Cluster namespace\n\nExample: - \"system\"-\nRequired: YES",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "system",
-                    "x-ves-required": "true"
+                }
+            }
+        },
+        "siteKubeConfigStatusRsp": {
+            "type": "object",
+            "description": "Response for operation on kube config",
+            "title": "Kube Config  status response",
+            "x-displayname": "Kube Config status response",
+            "x-ves-proto-message": "ves.io.schema.site.KubeConfigStatusRsp",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "description": " Result status flag.\n\nExample: - \"true\"-",
+                    "title": "Status",
+                    "format": "boolean",
+                    "x-displayname": "status",
+                    "x-ves-example": "true"
                 }
             }
         },
@@ -707,6 +923,13 @@ var UamKubeConfigAPISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Expiry Time"
                 },
+                "name": {
+                    "type": "string",
+                    "description": " Name of this credential\n\nExample: - \"api-cred-x89sf\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "api-cred-x89sf"
+                },
                 "uid": {
                     "type": "string",
                     "description": " UUID of API credential object.\n\nExample: - \"fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa\"-",
@@ -720,6 +943,23 @@ var UamKubeConfigAPISwaggerJSON string = `{
                     "title": "Email of user",
                     "x-displayname": "User",
                     "x-ves-example": "admin@acmecorp.com"
+                }
+            }
+        },
+        "siteRevokeKubeConfigReq": {
+            "type": "object",
+            "description": "Revoke kubeconfig object with a given name.",
+            "title": "Revoke Kubeconfig request",
+            "x-displayname": "Revoke Kubeconfig Request",
+            "x-ves-proto-message": "ves.io.schema.site.RevokeKubeConfigReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of kubeconfig resource.\n\nExample: - \"value\"-\nRequired: YES",
+                    "title": "Credential name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true"
                 }
             }
         }

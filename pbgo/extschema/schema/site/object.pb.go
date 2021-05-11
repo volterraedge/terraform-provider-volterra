@@ -6,6 +6,7 @@
 
 	It is generated from these files:
 		ves.io/schema/site/object.proto
+		ves.io/schema/site/private_config_kubeconfig.proto
 		ves.io/schema/site/public_config_kubeconfig.proto
 		ves.io/schema/site/public_crudapi.proto
 		ves.io/schema/site/public_custom_data_k8s_api.proto
@@ -27,9 +28,12 @@
 		ListResponseItem
 		ListResponse
 		NamespaceListRequest
+		NodeListRequest
 		PodListRequest
 		PersistentVolumeClaimListRequest
+		PersistentVolumeListRequest
 		ServiceListRequest
+		EndpointsListRequest
 		ConfigMapListRequest
 		SecretListRequest
 		DeploymentListRequest
@@ -50,6 +54,7 @@
 		Coordinates
 		K8SApiServerParameters
 		DefaultUnderlayNetworkType
+		PublishVIPParamsPerAz
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType
@@ -88,6 +93,12 @@
 		ListKubeConfigReq
 		ListKubeConfigRspItem
 		ListKubeConfigRsp
+		GlobalAccessCheckRequest
+		GlobalAccessCheckResponse
+		CreateGlobalKubeConfigReq
+		ListGlobalKubeConfigReq
+		RevokeKubeConfigReq
+		KubeConfigStatusRsp
 */
 package site
 

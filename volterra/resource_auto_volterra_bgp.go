@@ -346,6 +346,28 @@ func resourceVolterraBgp() *schema.Resource {
 										Optional: true,
 									},
 
+									"family_inet6vpn": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"disable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"family_inetvpn": {
 
 										Type:     schema.TypeSet,
@@ -404,6 +426,18 @@ func resourceVolterraBgp() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"disable_mtls": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_mtls": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"port": {
@@ -995,6 +1029,44 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 					}
 
+					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
+						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
+						for _, set := range sl {
+							familyInet6VpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -1096,6 +1168,32 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 							}
 
+						}
+
+					}
+
+					mtlsChoiceTypeFound := false
+
+					if v, ok := cs["disable_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_bgp.PeerInternal_DisableMtls{}
+							mtlsChoiceInt.DisableMtls = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.MtlsChoice = mtlsChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_bgp.PeerInternal_EnableMtls{}
+							mtlsChoiceInt.EnableMtls = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.MtlsChoice = mtlsChoiceInt
 						}
 
 					}
@@ -1756,6 +1854,44 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 
 					}
 
+					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
+						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
+						for _, set := range sl {
+							familyInet6VpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -1857,6 +1993,32 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 
 							}
 
+						}
+
+					}
+
+					mtlsChoiceTypeFound := false
+
+					if v, ok := cs["disable_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_bgp.PeerInternal_DisableMtls{}
+							mtlsChoiceInt.DisableMtls = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.MtlsChoice = mtlsChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_bgp.PeerInternal_EnableMtls{}
+							mtlsChoiceInt.EnableMtls = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.MtlsChoice = mtlsChoiceInt
 						}
 
 					}

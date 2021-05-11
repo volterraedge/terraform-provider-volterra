@@ -20,8 +20,8 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "srv6_network global_network site_local_network site_local_inside_network legacy_type" must be set
-  global_network = true
+  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
+  site_local_network = true
 }
 
 ```
@@ -194,6 +194,8 @@ Configure a per site srv6 network.
 `no_namespace_network` - (Optional) Namespace network is not connected to this network (bool).
 
 `srv6_network_ns_params` - (Optional) Name of namespace whose network is connected. See [Srv6 Network Ns Params ](#srv6-network-ns-params) below for details.
+
+`remote_sid_stats_plen` - (Optional) Number of most significant bits of remote SIDs to use for maintaining per-SID counters. (`Int`).
 
 `slice` - (Required) The srv6_network_slice to which this network belongs.. See [ref](#ref) below for details.
 

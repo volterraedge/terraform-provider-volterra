@@ -27,12 +27,8 @@ resource "volterra_fast_acl_rule" "example" {
 
   // One of the arguments from this list "prefix ip_prefix_set" must be set
 
-  ip_prefix_set {
-    ref {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  prefix {
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
   }
 }
 

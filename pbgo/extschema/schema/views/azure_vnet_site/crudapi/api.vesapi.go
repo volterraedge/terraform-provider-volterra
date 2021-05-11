@@ -2907,7 +2907,7 @@ var APISwaggerJSON string = `{
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
+            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
             "x-displayname": "IPv6 Address",
             "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
@@ -3221,6 +3221,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -3659,6 +3665,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "sitePublishVIPParamsPerAz": {
+            "type": "object",
+            "description": "Per AZ parameters needed to publish VIP for publci cloud sites",
+            "title": "Publish VIP Params Per AZ",
+            "x-displayname": "Publish VIP Params Per AZ",
+            "x-ves-proto-message": "ves.io.schema.site.PublishVIPParamsPerAz",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\nRequired: YES",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-east-2a",
+                    "x-ves-required": "true"
+                },
+                "inside_vip": {
+                    "type": "array",
+                    "description": " List of Inside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-",
+                    "title": "Inside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Inside VIP(s)",
+                    "x-ves-example": "192.168.0.156"
+                },
+                "inside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the inside VIP,\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Inside VIP CNAME",
+                    "x-displayname": "Inside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                },
+                "outside_vip": {
+                    "type": "array",
+                    "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\nRequired: YES",
+                    "title": "Outside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Outside VIP(s)",
+                    "x-ves-example": "192.168.0.156",
+                    "x-ves-required": "true"
+                },
+                "outside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the outside VIP\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Outside VIP CNAME",
+                    "x-displayname": "Outside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                }
+            }
+        },
         "viewsAzureSubnetChoiceType": {
             "type": "object",
             "description": "Parameters for Azure subnet",
@@ -3939,6 +3997,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsOperatingSystemType": {
+            "type": "object",
+            "description": "This is to specify volterra operating version choice",
+            "title": "Operating System Version",
+            "x-displayname": "Operating System Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
+            "properties": {
+                "default_os_version": {
+                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "title": "Default OS Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
+                    "title": "Operating System Version"
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -3975,6 +4054,27 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Exclusive with [custom_static_route]\nx-displayName: \"Simple Static Route\"\nx-example: \"10.5.1.0/24\"\nUse simple static route for prefix pointing to single interface in the network",
                     "title": "Simple Static Route"
+                }
+            }
+        },
+        "viewsVolterraSoftwareType": {
+            "type": "object",
+            "description": "This is to specify volterra software version choice",
+            "title": "Volterra Software Version",
+            "x-displayname": "Volterra Software Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
+            "properties": {
+                "default_sw_version": {
+                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "title": "Default SW Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
+                    "title": "Volterra Software Version"
                 }
             }
         },
@@ -4069,6 +4169,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
                 },
+                "os": {
+                    "description": " Operating System Details",
+                    "title": "Operating System",
+                    "$ref": "#/definitions/viewsOperatingSystemType",
+                    "x-displayname": "Operating System"
+                },
                 "resource_group": {
                     "type": "string",
                     "description": " Azure resource group for resources that will be created\n\nExample: - \"my-resources\"-\nRequired: YES",
@@ -4084,6 +4190,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
                 },
+                "sw": {
+                    "description": " Volterra Software Details",
+                    "title": "Volterra Software",
+                    "$ref": "#/definitions/viewsVolterraSoftwareType",
+                    "x-displayname": "Volterra Software"
+                },
                 "tf_params": {
                     "description": " Reference to view internal object",
                     "title": "Reference to terraform parameters",
@@ -4095,6 +4207,15 @@ var APISwaggerJSON string = `{
                     "title": "view_internal",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "View Internal"
+                },
+                "vip_params_per_az": {
+                    "type": "array",
+                    "description": " VIP Parameters Per AZ.",
+                    "title": "VIP Params Per Az",
+                    "items": {
+                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
+                    },
+                    "x-displayname": "VIP Params Per AZ"
                 },
                 "vnet": {
                     "description": " Choice of using existing Vnet or create new Vnet\nRequired: YES",

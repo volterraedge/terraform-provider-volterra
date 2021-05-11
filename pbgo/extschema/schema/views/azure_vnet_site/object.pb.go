@@ -7,6 +7,7 @@
 	It is generated from these files:
 		ves.io/schema/views/azure_vnet_site/object.proto
 		ves.io/schema/views/azure_vnet_site/public_crudapi.proto
+		ves.io/schema/views/azure_vnet_site/public_customapi.proto
 		ves.io/schema/views/azure_vnet_site/types.proto
 
 	It has these top-level messages:
@@ -23,6 +24,8 @@
 		ListResponseItem
 		ListResponse
 		DeleteRequest
+		SetVIPInfoRequest
+		SetVIPInfoResponse
 		AzureVnetIngressGwType
 		AzureVnetIngressEgressGwType
 		AzureVnetVoltstackClusterType

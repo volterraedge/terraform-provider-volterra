@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 )
 
 var (
@@ -188,6 +190,229 @@ var DefaultSetTGWInfoResponseValidator = func() *ValidateSetTGWInfoResponse {
 
 func SetTGWInfoResponseValidator() db.Validator {
 	return DefaultSetTGWInfoResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetVIPInfoRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetVIPInfoRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetVIPInfoRequest) DeepCopy() *SetVIPInfoRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetVIPInfoRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetVIPInfoRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetVIPInfoRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetVIPInfoRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetVIPInfoRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetVIPInfoRequest) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip_params_per_az")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_site.PublishVIPParamsPerAz)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_site.PublishVIPParamsPerAz, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip_params_per_az")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip_params_per_az")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSetVIPInfoRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetVIPInfoRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetVIPInfoRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
+		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
+	v := &ValidateSetVIPInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
+	rulesVipParamsPerAz := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SetVIPInfoRequest.vip_params_per_az: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_params_per_az"] = vFn
+
+	return v
+}()
+
+func SetVIPInfoRequestValidator() db.Validator {
+	return DefaultSetVIPInfoRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetVIPInfoResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetVIPInfoResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetVIPInfoResponse) DeepCopy() *SetVIPInfoResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetVIPInfoResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetVIPInfoResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetVIPInfoResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetVIPInfoResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetVIPInfoResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetVIPInfoResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetVIPInfoResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetVIPInfoResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetVIPInfoResponseValidator = func() *ValidateSetVIPInfoResponse {
+	v := &ValidateSetVIPInfoResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SetVIPInfoResponseValidator() db.Validator {
+	return DefaultSetVIPInfoResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

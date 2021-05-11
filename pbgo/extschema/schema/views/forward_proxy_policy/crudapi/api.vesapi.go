@@ -2874,7 +2874,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -3046,6 +3046,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

@@ -21,11 +21,8 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
-
-    prefix_list {
-      prefixes = ["192.168.20.0/24"]
-    }
+    // One of the arguments from this list "namespace label_selector prefix_list any outside_endpoints inside_endpoints interface" must be set
+    any = true
   }
 }
 
@@ -58,7 +55,7 @@ Argument Reference
 
 ### Adv Action
 
-Advanced action to be taken at rule match. Currently supported actions are NoLog & Log.
+Enable or disable logging..
 
 ### All Tcp Traffic
 
@@ -88,9 +85,11 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
 
-`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
+`adv_action` - (Optional) Enable or disable logging.. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
+
+`label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Label Matcher ](#label-matcher) below for details.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
@@ -146,9 +145,11 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
 
-`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
+`adv_action` - (Optional) Enable or disable logging.. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
+
+`label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Label Matcher ](#label-matcher) below for details.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
@@ -189,6 +190,12 @@ All ip prefixes that are reachable via inside interfaces are chosen as Endpoints
 Reference to object which represents list of IP prefixes that will be referred as remote endpoint.
 
 `ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
+
+### Label Matcher
+
+not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
+
+`keys` - (Optional) The list of label key names that have to match (`String`).
 
 ### Label Selector
 

@@ -505,6 +505,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -556,6 +565,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
 
@@ -687,6 +705,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	return v
 }()
@@ -4786,6 +4808,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -4837,6 +4868,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5017,6 +5057,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5537,8 +5581,10 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NodesPerAz = f.GetNodesPerAz()
+	m.Os = f.GetOs()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.Sw = f.GetSw()
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -5555,8 +5601,10 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NodesPerAz = m1.NodesPerAz
+	f.Os = m1.Os
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.Sw = m1.Sw
 }
 
 // create setters in GCPVPCIngressEgressGwReplaceType from GCPVPCIngressEgressGwType for oneof fields

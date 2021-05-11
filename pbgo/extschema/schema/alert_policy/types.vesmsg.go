@@ -1250,6 +1250,36 @@ func (v *ValidateNotificationParameters) GroupByValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateNotificationParameters) GroupWaitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for group_wait")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNotificationParameters) GroupIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for group_interval")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNotificationParameters) RepeatIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for repeat_interval")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateNotificationParameters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*NotificationParameters)
 	if !ok {
@@ -1374,6 +1404,45 @@ var DefaultNotificationParametersValidator = func() *ValidateNotificationParamet
 		panic(errMsg)
 	}
 	v.FldValidators["group_by"] = vFn
+
+	vrhGroupWait := v.GroupWaitValidationRuleHandler
+	rulesGroupWait := map[string]string{
+		"ves.io.schema.rules.string.max_time_interval": "5m",
+		"ves.io.schema.rules.string.min_time_interval": "0s",
+		"ves.io.schema.rules.string.time_interval":     "true",
+	}
+	vFn, err = vrhGroupWait(rulesGroupWait)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NotificationParameters.group_wait: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["group_wait"] = vFn
+
+	vrhGroupInterval := v.GroupIntervalValidationRuleHandler
+	rulesGroupInterval := map[string]string{
+		"ves.io.schema.rules.string.max_time_interval": "10m",
+		"ves.io.schema.rules.string.min_time_interval": "30s",
+		"ves.io.schema.rules.string.time_interval":     "true",
+	}
+	vFn, err = vrhGroupInterval(rulesGroupInterval)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NotificationParameters.group_interval: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["group_interval"] = vFn
+
+	vrhRepeatInterval := v.RepeatIntervalValidationRuleHandler
+	rulesRepeatInterval := map[string]string{
+		"ves.io.schema.rules.string.max_time_interval": "10d",
+		"ves.io.schema.rules.string.min_time_interval": "30m",
+		"ves.io.schema.rules.string.time_interval":     "true",
+	}
+	vFn, err = vrhRepeatInterval(rulesRepeatInterval)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NotificationParameters.repeat_interval: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["repeat_interval"] = vFn
 
 	return v
 }()

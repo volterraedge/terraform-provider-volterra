@@ -2080,7 +2080,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nKubernetes config file to access Virtual Kubernetes API in Volterra\nAPI token to access Volterra public API\nAPI token for service credentials\nAPI certificate for service credentials\nAPI certificate for kube config",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nusing self credential (my credential)\nKubernetes config file to access Virtual Kubernetes API in Volterra\nusing self credential (my credential)\nAPI token to access Volterra public API\nusing self credential (my credential)\nAPI token for service credentials\nusing service user credential (service credential)\nAPI certificate for service credentials\nusing service user credential (service credential)\nService Credential kubeconfig\nusing service user credential (service credential)\nKubeconfig for accessing Site via Global Controller",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
@@ -2088,7 +2088,8 @@ var APISwaggerJSON string = `{
                 "API_TOKEN",
                 "SERVICE_API_TOKEN",
                 "SERVICE_API_CERTIFICATE",
-                "SERVICE_KUBE_CONFIG"
+                "SERVICE_KUBE_CONFIG",
+                "SITE_GLOBAL_KUBE_CONFIG"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",
@@ -2133,6 +2134,12 @@ var APISwaggerJSON string = `{
                     "title": "Expiry timestamp",
                     "format": "date-time",
                     "x-displayname": "Expiry timestamp"
+                },
+                "site_name": {
+                    "type": "string",
+                    "description": " Site name when global kubeconfig is issued for physical k8s site",
+                    "title": "Site Name",
+                    "x-displayname": "Site Name"
                 },
                 "type": {
                     "description": " Type of API credential",
@@ -2666,6 +2673,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

@@ -805,6 +805,124 @@ func CpuValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CreateGlobalKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateGlobalKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateGlobalKubeConfigReq) DeepCopy() *CreateGlobalKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateGlobalKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateGlobalKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateGlobalKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateGlobalKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateGlobalKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateGlobalKubeConfigReq) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateGlobalKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateGlobalKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateGlobalKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateGlobalKubeConfigReqValidator = func() *ValidateCreateGlobalKubeConfigReq {
+	v := &ValidateCreateGlobalKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateGlobalKubeConfigReq.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	return v
+}()
+
+func CreateGlobalKubeConfigReqValidator() db.Validator {
+	return DefaultCreateGlobalKubeConfigReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateKubeConfigReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2555,6 +2673,46 @@ func (v *ValidateGetSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip_params_per_az")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*PublishVIPParamsPerAz)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*PublishVIPParamsPerAz, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip_params_per_az")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip_params_per_az")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -2783,6 +2941,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
+		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vip_vrrp_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vip_vrrp_mode"))
@@ -2981,6 +3147,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
 
+	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
+	rulesVipParamsPerAz := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+	}
+	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.vip_params_per_az: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_params_per_az"] = vFn
+
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
@@ -2990,6 +3167,225 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 func GetSpecTypeValidator() db.Validator {
 	return DefaultGetSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GlobalAccessCheckRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GlobalAccessCheckRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GlobalAccessCheckRequest) DeepCopy() *GlobalAccessCheckRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GlobalAccessCheckRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GlobalAccessCheckRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GlobalAccessCheckRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GlobalAccessCheckRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGlobalAccessCheckRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalAccessCheckRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalAccessCheckRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalAccessCheckRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GlobalAccessCheckRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GlobalAccessCheckRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGlobalAccessCheckRequestValidator = func() *ValidateGlobalAccessCheckRequest {
+	v := &ValidateGlobalAccessCheckRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalAccessCheckRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalAccessCheckRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func GlobalAccessCheckRequestValidator() db.Validator {
+	return DefaultGlobalAccessCheckRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GlobalAccessCheckResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GlobalAccessCheckResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GlobalAccessCheckResponse) DeepCopy() *GlobalAccessCheckResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GlobalAccessCheckResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GlobalAccessCheckResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GlobalAccessCheckResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GlobalAccessCheckResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGlobalAccessCheckResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalAccessCheckResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GlobalAccessCheckResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GlobalAccessCheckResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enabled"))
+		if err := fv(ctx, m.GetEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGlobalAccessCheckResponseValidator = func() *ValidateGlobalAccessCheckResponse {
+	v := &ValidateGlobalAccessCheckResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GlobalAccessCheckResponseValidator() db.Validator {
+	return DefaultGlobalAccessCheckResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3513,6 +3909,46 @@ func (v *ValidateGlobalSpecType) IpsecSslVipFqdnValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip_params_per_az")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*PublishVIPParamsPerAz)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*PublishVIPParamsPerAz, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip_params_per_az")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip_params_per_az")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -3764,6 +4200,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["phobos_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("phobos_enabled"))
+		if err := fv(ctx, m.GetPhobosEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["piku_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("piku_enabled"))
+		if err := fv(ctx, m.GetPikuEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["private_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("private_ip"))
@@ -3845,6 +4299,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["srv6_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("srv6_enabled"))
+		if err := fv(ctx, m.GetSrv6Enabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
@@ -3861,6 +4324,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, value, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_index"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_index"))
+		if err := fv(ctx, m.GetTenantIndex(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3896,6 +4368,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("vega"))
 		if err := fv(ctx, m.GetVega(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
+		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4165,6 +4645,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipsec_ssl_vip_fqdn"] = vFn
+
+	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
+	rulesVipParamsPerAz := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+	}
+	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.vip_params_per_az: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_params_per_az"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4649,6 +5140,193 @@ func KernelValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *KubeConfigStatusRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KubeConfigStatusRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KubeConfigStatusRsp) DeepCopy() *KubeConfigStatusRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KubeConfigStatusRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KubeConfigStatusRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KubeConfigStatusRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KubeConfigStatusRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKubeConfigStatusRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKubeConfigStatusRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KubeConfigStatusRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KubeConfigStatusRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKubeConfigStatusRspValidator = func() *ValidateKubeConfigStatusRsp {
+	v := &ValidateKubeConfigStatusRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func KubeConfigStatusRspValidator() db.Validator {
+	return DefaultKubeConfigStatusRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListGlobalKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListGlobalKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListGlobalKubeConfigReq) DeepCopy() *ListGlobalKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListGlobalKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListGlobalKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListGlobalKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListGlobalKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListGlobalKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListGlobalKubeConfigReq) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListGlobalKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListGlobalKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListGlobalKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListGlobalKubeConfigReqValidator = func() *ValidateListGlobalKubeConfigReq {
+	v := &ValidateListGlobalKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListGlobalKubeConfigReq.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	return v
+}()
+
+func ListGlobalKubeConfigReqValidator() db.Validator {
+	return DefaultListGlobalKubeConfigReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ListKubeConfigReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4862,6 +5540,8 @@ func (v *ValidateListKubeConfigRsp) Validate(ctx context.Context, pm interface{}
 var DefaultListKubeConfigRspValidator = func() *ValidateListKubeConfigRsp {
 	v := &ValidateListKubeConfigRsp{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["items"] = ListKubeConfigRspItemValidator().Validate
+
 	return v
 }()
 
@@ -4910,6 +5590,16 @@ type ValidateListKubeConfigRspItem struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListKubeConfigRspItem) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListKubeConfigRspItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListKubeConfigRspItem)
 	if !ok {
@@ -4942,6 +5632,15 @@ func (v *ValidateListKubeConfigRspItem) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["uid"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("uid"))
@@ -4966,6 +5665,26 @@ func (v *ValidateListKubeConfigRspItem) Validate(ctx context.Context, pm interfa
 // Well-known symbol for default validator implementation
 var DefaultListKubeConfigRspItemValidator = func() *ValidateListKubeConfigRspItem {
 	v := &ValidateListKubeConfigRspItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListKubeConfigRspItem.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
 
 	return v
 }()
@@ -5836,6 +6555,302 @@ func ProductValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *PublishVIPParamsPerAz) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PublishVIPParamsPerAz) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PublishVIPParamsPerAz) DeepCopy() *PublishVIPParamsPerAz {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PublishVIPParamsPerAz{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PublishVIPParamsPerAz) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PublishVIPParamsPerAz) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PublishVIPParamsPerAzValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePublishVIPParamsPerAz struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePublishVIPParamsPerAz) InsideVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for inside_vip")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for inside_vip")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated inside_vip")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items inside_vip")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) OutsideVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for outside_vip")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for outside_vip")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated outside_vip")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items outside_vip")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) OutsideVipCnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_cname")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) InsideVipCnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip_cname")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) AzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for az_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PublishVIPParamsPerAz)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PublishVIPParamsPerAz got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["az_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("az_name"))
+		if err := fv(ctx, m.GetAzName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_vip"]; exists {
+		vOpts := append(opts, db.WithValidateField("inside_vip"))
+		if err := fv(ctx, m.GetInsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_vip_cname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_cname"))
+		if err := fv(ctx, m.GetInsideVipCname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip"]; exists {
+		vOpts := append(opts, db.WithValidateField("outside_vip"))
+		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_cname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_cname"))
+		if err := fv(ctx, m.GetOutsideVipCname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerAz {
+	v := &ValidatePublishVIPParamsPerAz{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInsideVip := v.InsideVipValidationRuleHandler
+	rulesInsideVip := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv4": "true",
+		"ves.io.schema.rules.repeated.max_items":         "3",
+		"ves.io.schema.rules.repeated.unique":            "true",
+	}
+	vFn, err = vrhInsideVip(rulesInsideVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.inside_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip"] = vFn
+
+	vrhOutsideVip := v.OutsideVipValidationRuleHandler
+	rulesOutsideVip := map[string]string{
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.repeated.items.string.ipv4": "true",
+		"ves.io.schema.rules.repeated.max_items":         "3",
+		"ves.io.schema.rules.repeated.min_items":         "1",
+		"ves.io.schema.rules.repeated.unique":            "true",
+	}
+	vFn, err = vrhOutsideVip(rulesOutsideVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.outside_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip"] = vFn
+
+	vrhOutsideVipCname := v.OutsideVipCnameValidationRuleHandler
+	rulesOutsideVipCname := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhOutsideVipCname(rulesOutsideVipCname)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.outside_vip_cname: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_cname"] = vFn
+
+	vrhInsideVipCname := v.InsideVipCnameValidationRuleHandler
+	rulesInsideVipCname := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhInsideVipCname(rulesInsideVipCname)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.inside_vip_cname: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_cname"] = vFn
+
+	vrhAzName := v.AzNameValidationRuleHandler
+	rulesAzName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
+	}
+	vFn, err = vrhAzName(rulesAzName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.az_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_name"] = vFn
+
+	return v
+}()
+
+func PublishVIPParamsPerAzValidator() db.Validator {
+	return DefaultPublishVIPParamsPerAzValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6323,6 +7338,115 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RevokeKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RevokeKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RevokeKubeConfigReq) DeepCopy() *RevokeKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RevokeKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RevokeKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RevokeKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RevokeKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRevokeKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRevokeKubeConfigReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRevokeKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RevokeKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RevokeKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRevokeKubeConfigReqValidator = func() *ValidateRevokeKubeConfigReq {
+	v := &ValidateRevokeKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RevokeKubeConfigReq.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func RevokeKubeConfigReqValidator() db.Validator {
+	return DefaultRevokeKubeConfigReqValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7560,6 +8684,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.SiteType = f.GetSiteType()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
+	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VipVrrpMode = f.GetVipVrrpMode()
 	m.VolterraSoftwareOveride = f.GetVolterraSoftwareOveride()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -7595,6 +8720,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.SiteType = m1.SiteType
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
+	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VipVrrpMode = m1.VipVrrpMode
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion

@@ -493,6 +493,18 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -518,6 +530,8 @@ var DefaultGetResponseValidator = func() *ValidateGetResponse {
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 
 	v.FldValidators["spec"] = GetSpecTypeValidator().Validate
+
+	v.FldValidators["status"] = StatusObjectValidator().Validate
 
 	return v
 }()
@@ -744,6 +758,18 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("errors"))
+		for idx, item := range m.GetErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["items"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("items"))
@@ -947,6 +973,18 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["status_set"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status_set"))
+		for idx, item := range m.GetStatusSet() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -984,6 +1022,8 @@ var DefaultListResponseItemValidator = func() *ValidateListResponseItem {
 	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
+
+	v.FldValidators["status_set"] = StatusObjectValidator().Validate
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 

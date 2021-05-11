@@ -21,25 +21,22 @@ resource "volterra_k8s_cluster" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
-  use_default_cluster_role_bindings = true
 
+  use_custom_cluster_role_bindings {
+    cluster_role_bindings {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
   use_default_cluster_roles = true
-
   // One of the arguments from this list "no_global_access global_access_enable" must be set
-  no_global_access = true
-
+  global_access_enable = true
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
   no_insecure_registries = true
-
   // One of the arguments from this list "local_access_config no_local_access" must be set
-
-  local_access_config {
-    local_domain = "example.com"
-
-    // One of the arguments from this list "default_port port" must be set
-    port = "443"
-  }
+  no_local_access = true
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }

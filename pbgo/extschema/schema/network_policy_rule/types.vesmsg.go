@@ -286,7 +286,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+		"ves.io.schema.rules.string.in": "[\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {
@@ -569,7 +569,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+		"ves.io.schema.rules.string.in": "[\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {
@@ -890,7 +890,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+		"ves.io.schema.rules.string.in": "[\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {
@@ -1441,7 +1441,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+		"ves.io.schema.rules.string.in": "[\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {

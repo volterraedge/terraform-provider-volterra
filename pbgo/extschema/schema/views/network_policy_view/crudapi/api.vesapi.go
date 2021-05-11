@@ -2404,10 +2404,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Action"
                 },
                 "adv_action": {
-                    "description": " Advanced action to be taken at rule match. Currently supported actions are NoLog \u0026 Log",
-                    "title": "Advanced Action",
+                    "description": " Enable or disable logging.",
+                    "title": "adv_action",
                     "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAdvancedAction",
-                    "x-displayname": "Advanced Action"
+                    "x-displayname": "Logging Action"
                 },
                 "all_tcp_traffic": {
                     "description": "Exclusive with [all_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All TCP Traffic\"\nSelect all TCP traffic to match",
@@ -2453,6 +2453,13 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Keys for Label Match",
                     "x-ves-example": "['site']"
+                },
+                "label_matcher": {
+                    "description": " A list of label keys that identify the label values that need to be the same for the source and destination endpoints. Note that the actual label values are\n not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
+                    "title": "label matcher",
+                    "$ref": "#/definitions/schemaLabelMatcherType",
+                    "x-displayname": "Label Matcher",
+                    "x-ves-example": "['environment', 'location', 'deployment']"
                 },
                 "label_selector": {
                     "description": "Exclusive with [any inside_endpoints ip_prefix_set namespace outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
@@ -2530,7 +2537,7 @@ var APISwaggerJSON string = `{
         },
         "network_policy_ruleLogAction": {
             "type": "string",
-            "description": "Choice to choose logging or no logging\nThis works together with option selected via NetworkPolicyRuleAction or any other action specified\nx-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log\n\n - NOLOG: Dont sample the traffic hitting the rule\n - LOG: Sample the traffic hitting the rule",
+            "description": "Choice to choose logging or no logging\nThis works together with option selected via NetworkPolicyRuleAction or any other action specified\nx-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log\n\n - NOLOG: Don't sample the traffic hitting the rule\n - LOG: Sample the traffic hitting the rule",
             "title": "Log Action",
             "enum": [
                 "NOLOG",
@@ -2560,10 +2567,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction",
             "properties": {
                 "action": {
-                    "description": " Advanced action applied along with selection in NetworkPolicyRuleAction",
+                    "description": " Enable or disable logging.",
                     "title": "Action",
                     "$ref": "#/definitions/network_policy_ruleLogAction",
-                    "x-displayname": "Action"
+                    "x-displayname": "Logging Action"
                 }
             }
         },
@@ -2739,9 +2746,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaLabelMatcherType": {
+            "type": "object",
+            "description": "A label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the \nlabel key name.",
+            "title": "LabelMatcherType",
+            "x-displayname": "Label Matcher",
+            "x-ves-proto-message": "ves.io.schema.LabelMatcherType",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": " The list of label key names that have to match\n\nExample: - \"['environment', 'location', 'deployment']\"-",
+                    "title": "keys",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Keys",
+                    "x-ves-example": "['environment', 'location', 'deployment']"
+                }
+            }
+        },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -2913,6 +2939,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

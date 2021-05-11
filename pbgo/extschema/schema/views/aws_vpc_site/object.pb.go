@@ -26,6 +26,8 @@
 		DeleteRequest
 		SetVPCK8SHostnamesRequest
 		SetVPCK8SHostnamesResponse
+		SetVIPInfoRequest
+		SetVIPInfoResponse
 		AWSVPCIngressGwType
 		AWSVPCIngressEgressGwType
 		AWSVPCVoltstackClusterType

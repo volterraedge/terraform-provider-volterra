@@ -329,6 +329,15 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
 		val := m.GetForwardProxyChoice()
 		vOpts := append(opts,
@@ -599,6 +608,8 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()
@@ -958,6 +969,15 @@ func (v *ValidateAWSVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_certified_hw"))
@@ -1270,6 +1290,8 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
+
 	return v
 }()
 
@@ -1332,12 +1354,23 @@ func (v *ValidateAWSVPCIngressGwReplaceType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCIngressGwReplaceTypeValidator = func() *ValidateAWSVPCIngressGwReplaceType {
 	v := &ValidateAWSVPCIngressGwReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()
@@ -1451,6 +1484,15 @@ func (v *ValidateAWSVPCIngressGwType) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_certified_hw"))
@@ -1507,6 +1549,8 @@ var DefaultAWSVPCIngressGwTypeValidator = func() *ValidateAWSVPCIngressGwType {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_certified_hw"] = vFn
+
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()
@@ -1771,6 +1815,15 @@ func (v *ValidateAWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
 		val := m.GetForwardProxyChoice()
 		vOpts := append(opts,
@@ -1992,6 +2045,8 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()
@@ -2314,6 +2369,15 @@ func (v *ValidateAWSVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
+		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_certified_hw"))
@@ -2625,6 +2689,8 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
+
+	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()
@@ -3110,6 +3176,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -3161,6 +3236,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3303,6 +3387,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["vpc"] = ves_io_schema_views.AWSVPCchoiceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	return v
 }()
@@ -3668,6 +3756,46 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip_params_per_az")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_site.PublishVIPParamsPerAz)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_site.PublishVIPParamsPerAz, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip_params_per_az")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip_params_per_az")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -3882,6 +4010,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
+		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -4038,6 +4174,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
+	rulesVipParamsPerAz := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.vip_params_per_az: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_params_per_az"] = vFn
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4527,6 +4675,46 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip_params_per_az")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_site.PublishVIPParamsPerAz)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_site.PublishVIPParamsPerAz, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip_params_per_az")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip_params_per_az")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4676,6 +4864,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -4732,6 +4929,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tf_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tf_params"))
@@ -4745,6 +4951,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
+		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4907,6 +5121,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
+	rulesVipParamsPerAz := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.vip_params_per_az: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_params_per_az"] = vFn
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -4918,6 +5144,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["vpc"] = ves_io_schema_views.AWSVPCchoiceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5334,6 +5564,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AWSVPCIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AWSVPCVoltstackClusterReplaceTypeValidator().Validate
 
@@ -5531,6 +5762,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) FromAWSVPCIngressEgressGwType(f *AWSV
 	if f == nil {
 		return
 	}
+	m.AllowedVipPort = f.GetAllowedVipPort()
 	m.GetForwardProxyChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetInsideStaticRouteChoiceFromAWSVPCIngressEgressGwType(f)
@@ -5544,6 +5776,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) ToAWSVPCIngressEgressGwType(f *AWSVPC
 	if f == nil {
 		return
 	}
+	f.AllowedVipPort = m1.AllowedVipPort
 	m1.SetForwardProxyChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetInsideStaticRouteChoiceToAWSVPCIngressEgressGwType(f)
@@ -5555,6 +5788,7 @@ func (m *AWSVPCIngressGwReplaceType) FromAWSVPCIngressGwType(f *AWSVPCIngressGwT
 	if f == nil {
 		return
 	}
+	m.AllowedVipPort = f.GetAllowedVipPort()
 }
 
 func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
@@ -5563,6 +5797,7 @@ func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwType(f *AWSVPCIngressGwTyp
 	if f == nil {
 		return
 	}
+	f.AllowedVipPort = m1.AllowedVipPort
 }
 
 // create setters in AWSVPCVoltstackClusterReplaceType from AWSVPCVoltstackClusterType for oneof fields
@@ -5715,6 +5950,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) FromAWSVPCVoltstackClusterType(f *AW
 	if f == nil {
 		return
 	}
+	m.AllowedVipPort = f.GetAllowedVipPort()
 	m.GetForwardProxyChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetGlobalNetworkChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromAWSVPCVoltstackClusterType(f)
@@ -5727,6 +5963,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) ToAWSVPCVoltstackClusterType(f *AWSV
 	if f == nil {
 		return
 	}
+	f.AllowedVipPort = m1.AllowedVipPort
 	m1.SetForwardProxyChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToAWSVPCVoltstackClusterType(f)
@@ -5856,8 +6093,10 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NodesPerAz = f.GetNodesPerAz()
+	m.Os = f.GetOs()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.Sw = f.GetSw()
 	m.Vpc = f.GetVpc()
 }
 
@@ -5875,8 +6114,10 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NodesPerAz = m1.NodesPerAz
+	f.Os = m1.Os
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.Sw = m1.Sw
 	f.Vpc = m1.Vpc
 }
 
@@ -6007,6 +6248,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.Vpc = f.GetVpc()
 }
@@ -6029,6 +6271,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.Vpc = m1.Vpc
 }

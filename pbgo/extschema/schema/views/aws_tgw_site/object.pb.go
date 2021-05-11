@@ -30,6 +30,8 @@
 		SetVPNTunnelsResponse
 		SetTGWInfoRequest
 		SetTGWInfoResponse
+		SetVIPInfoRequest
+		SetVIPInfoResponse
 		TGWAssignedASNType
 		ExistingTGWType
 		TGWParamsType
@@ -1071,9 +1073,7 @@ var (
 	ErrIntOverflowObject   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() {
-	proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject)
-}
+func init() { proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject) }
 func init() {
 	golang_proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject)
 }
