@@ -55,6 +55,33 @@ func request_CustomDataK8SAPI_NamespaceList_0(ctx context.Context, marshaler run
 
 }
 
+func request_CustomDataK8SAPI_NodeList_0(ctx context.Context, marshaler runtime.Marshaler, client CustomDataK8SAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq NodeListRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["site"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "site")
+	}
+
+	protoReq.Site, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "site", err)
+	}
+
+	msg, err := client.NodeList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
 var (
 	filter_CustomDataK8SAPI_PodList_0 = &utilities.DoubleArray{Encoding: map[string]int{"site": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
@@ -202,6 +229,79 @@ func request_CustomDataK8SAPI_PersistentVolumeClaimList_1(ctx context.Context, m
 }
 
 var (
+	filter_CustomDataK8SAPI_PersistentVolumeList_0 = &utilities.DoubleArray{Encoding: map[string]int{"site": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
+func request_CustomDataK8SAPI_PersistentVolumeList_0(ctx context.Context, marshaler runtime.Marshaler, client CustomDataK8SAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq PersistentVolumeListRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["site"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "site")
+	}
+
+	protoReq.Site, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "site", err)
+	}
+
+	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomDataK8SAPI_PersistentVolumeList_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.PersistentVolumeList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func request_CustomDataK8SAPI_PersistentVolumeList_1(ctx context.Context, marshaler runtime.Marshaler, client CustomDataK8SAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq PersistentVolumeListRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["site"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "site")
+	}
+
+	protoReq.Site, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "site", err)
+	}
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	msg, err := client.PersistentVolumeList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+var (
 	filter_CustomDataK8SAPI_ServiceList_0 = &utilities.DoubleArray{Encoding: map[string]int{"site": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
@@ -270,6 +370,79 @@ func request_CustomDataK8SAPI_ServiceList_1(ctx context.Context, marshaler runti
 	}
 
 	msg, err := client.ServiceList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+var (
+	filter_CustomDataK8SAPI_EndpointsList_0 = &utilities.DoubleArray{Encoding: map[string]int{"site": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
+func request_CustomDataK8SAPI_EndpointsList_0(ctx context.Context, marshaler runtime.Marshaler, client CustomDataK8SAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq EndpointsListRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["site"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "site")
+	}
+
+	protoReq.Site, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "site", err)
+	}
+
+	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomDataK8SAPI_EndpointsList_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.EndpointsList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func request_CustomDataK8SAPI_EndpointsList_1(ctx context.Context, marshaler runtime.Marshaler, client CustomDataK8SAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq EndpointsListRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["site"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "site")
+	}
+
+	protoReq.Site, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "site", err)
+	}
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	msg, err := client.EndpointsList(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
@@ -925,6 +1098,35 @@ func RegisterCustomDataK8SAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 
 	})
 
+	mux.Handle("GET", pattern_CustomDataK8SAPI_NodeList_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		if cn, ok := w.(http.CloseNotifier); ok {
+			go func(done <-chan struct{}, closed <-chan bool) {
+				select {
+				case <-done:
+				case <-closed:
+					cancel()
+				}
+			}(ctx.Done(), cn.CloseNotify())
+		}
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CustomDataK8SAPI_NodeList_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CustomDataK8SAPI_NodeList_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("GET", pattern_CustomDataK8SAPI_PodList_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -1041,6 +1243,64 @@ func RegisterCustomDataK8SAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 
 	})
 
+	mux.Handle("GET", pattern_CustomDataK8SAPI_PersistentVolumeList_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		if cn, ok := w.(http.CloseNotifier); ok {
+			go func(done <-chan struct{}, closed <-chan bool) {
+				select {
+				case <-done:
+				case <-closed:
+					cancel()
+				}
+			}(ctx.Done(), cn.CloseNotify())
+		}
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CustomDataK8SAPI_PersistentVolumeList_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CustomDataK8SAPI_PersistentVolumeList_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_CustomDataK8SAPI_PersistentVolumeList_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		if cn, ok := w.(http.CloseNotifier); ok {
+			go func(done <-chan struct{}, closed <-chan bool) {
+				select {
+				case <-done:
+				case <-closed:
+					cancel()
+				}
+			}(ctx.Done(), cn.CloseNotify())
+		}
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CustomDataK8SAPI_PersistentVolumeList_1(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CustomDataK8SAPI_PersistentVolumeList_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("GET", pattern_CustomDataK8SAPI_ServiceList_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -1096,6 +1356,64 @@ func RegisterCustomDataK8SAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 		}
 
 		forward_CustomDataK8SAPI_ServiceList_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_CustomDataK8SAPI_EndpointsList_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		if cn, ok := w.(http.CloseNotifier); ok {
+			go func(done <-chan struct{}, closed <-chan bool) {
+				select {
+				case <-done:
+				case <-closed:
+					cancel()
+				}
+			}(ctx.Done(), cn.CloseNotify())
+		}
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CustomDataK8SAPI_EndpointsList_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CustomDataK8SAPI_EndpointsList_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_CustomDataK8SAPI_EndpointsList_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		if cn, ok := w.(http.CloseNotifier); ok {
+			go func(done <-chan struct{}, closed <-chan bool) {
+				select {
+				case <-done:
+				case <-closed:
+					cancel()
+				}
+			}(ctx.Done(), cn.CloseNotify())
+		}
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_CustomDataK8SAPI_EndpointsList_1(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_CustomDataK8SAPI_EndpointsList_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1569,6 +1887,8 @@ func RegisterCustomDataK8SAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 var (
 	pattern_CustomDataK8SAPI_NamespaceList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1}, []string{"public", "namespaces", "system", "site", "api", "v1"}, ""))
 
+	pattern_CustomDataK8SAPI_NodeList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "nodes"}, ""))
+
 	pattern_CustomDataK8SAPI_PodList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "pods"}, ""))
 
 	pattern_CustomDataK8SAPI_PodList_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"public", "namespaces", "system", "site", "api", "v1", "namespace", "pods"}, ""))
@@ -1577,9 +1897,17 @@ var (
 
 	pattern_CustomDataK8SAPI_PersistentVolumeClaimList_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"public", "namespaces", "system", "site", "api", "v1", "namespace", "persistentvolumeclaims"}, ""))
 
+	pattern_CustomDataK8SAPI_PersistentVolumeList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "persistentvolumes"}, ""))
+
+	pattern_CustomDataK8SAPI_PersistentVolumeList_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"public", "namespaces", "system", "site", "api", "v1", "namespace", "persistentvolumes"}, ""))
+
 	pattern_CustomDataK8SAPI_ServiceList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "services"}, ""))
 
 	pattern_CustomDataK8SAPI_ServiceList_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"public", "namespaces", "system", "site", "api", "v1", "namespace", "services"}, ""))
+
+	pattern_CustomDataK8SAPI_EndpointsList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "endpoints"}, ""))
+
+	pattern_CustomDataK8SAPI_EndpointsList_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 1, 1, 0, 4, 1, 5, 6, 2, 7}, []string{"public", "namespaces", "system", "site", "api", "v1", "namespace", "endpoints"}, ""))
 
 	pattern_CustomDataK8SAPI_ConfigMapList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 3, 2, 4, 2, 5, 2, 6}, []string{"public", "namespaces", "system", "site", "api", "v1", "configmaps"}, ""))
 
@@ -1617,6 +1945,8 @@ var (
 var (
 	forward_CustomDataK8SAPI_NamespaceList_0 = runtime.ForwardResponseMessage
 
+	forward_CustomDataK8SAPI_NodeList_0 = runtime.ForwardResponseMessage
+
 	forward_CustomDataK8SAPI_PodList_0 = runtime.ForwardResponseMessage
 
 	forward_CustomDataK8SAPI_PodList_1 = runtime.ForwardResponseMessage
@@ -1625,9 +1955,17 @@ var (
 
 	forward_CustomDataK8SAPI_PersistentVolumeClaimList_1 = runtime.ForwardResponseMessage
 
+	forward_CustomDataK8SAPI_PersistentVolumeList_0 = runtime.ForwardResponseMessage
+
+	forward_CustomDataK8SAPI_PersistentVolumeList_1 = runtime.ForwardResponseMessage
+
 	forward_CustomDataK8SAPI_ServiceList_0 = runtime.ForwardResponseMessage
 
 	forward_CustomDataK8SAPI_ServiceList_1 = runtime.ForwardResponseMessage
+
+	forward_CustomDataK8SAPI_EndpointsList_0 = runtime.ForwardResponseMessage
+
+	forward_CustomDataK8SAPI_EndpointsList_1 = runtime.ForwardResponseMessage
 
 	forward_CustomDataK8SAPI_ConfigMapList_0 = runtime.ForwardResponseMessage
 

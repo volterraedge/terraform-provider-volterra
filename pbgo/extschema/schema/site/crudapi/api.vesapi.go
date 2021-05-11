@@ -2654,6 +2654,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -3413,7 +3419,7 @@ var APISwaggerJSON string = `{
                 },
                 "bgp_peer_address": {
                     "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
                     "title": "bgp_peer_address",
                     "x-displayname": "BGP Peer Address",
                     "x-ves-example": "10.1.1.1"
@@ -3573,6 +3579,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Outside VIP",
                     "x-ves-example": "10.1.1.1"
                 },
+                "phobos_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that phobos service is enabled",
+                    "title": "Phobos enabled",
+                    "format": "boolean",
+                    "x-displayname": "Phobos enabled"
+                },
+                "piku_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that piku service is enabled",
+                    "title": "Piku enabled",
+                    "format": "boolean",
+                    "x-displayname": "Piku enabled"
+                },
                 "private_ip": {
                     "type": "string",
                     "description": " VIP in the Private VN used for terminating IPSec/SSL tunnels\n The automatic tunnels between regional-edges and customer-edge sites use this VIP if private access is enabled\n\nExample: - \"1.2.3.4\"-",
@@ -3613,7 +3633,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Subtype"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup. \n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
                     "title": "site_to_site_network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
                     "x-displayname": "Site To Site Network Type"
@@ -3631,6 +3651,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteType",
                     "x-displayname": "Site Type"
                 },
+                "srv6_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that Srv6 is enabled",
+                    "title": "Srv6 enabled",
+                    "format": "boolean",
+                    "x-displayname": "Srv6 enabled"
+                },
                 "static_routes": {
                     "type": "array",
                     "description": " List of Fabric VN subnets/addresses in this site\n\nExample: - \"10.1.1.0/24\"-\nRequired: YES",
@@ -3644,10 +3671,17 @@ var APISwaggerJSON string = `{
                 },
                 "template_parameters": {
                     "type": "object",
-                    "description": " Optional\n Map of string keys and values that can be used to provide per site config parameters to various \n configurations objects that configure features on set of sites\n In the configuration object a key is provided and value for that key is provided in the \n template_parameters\n\nExample: - \"value\"-",
+                    "description": " Optional\n Map of string keys and values that can be used to provide per site config parameters to various\n configurations objects that configure features on set of sites\n In the configuration object a key is provided and value for that key is provided in the\n template_parameters\n\nExample: - \"value\"-",
                     "title": "template_parameters",
                     "x-displayname": "Template Parameters",
                     "x-ves-example": "value"
+                },
+                "tenant_index": {
+                    "type": "integer",
+                    "description": " object_index of an associated Tenant Index",
+                    "title": "Tenant Index",
+                    "format": "int64",
+                    "x-displayname": "Tenant Index"
                 },
                 "tunnel_dead_timeout": {
                     "type": "integer",
@@ -3675,6 +3709,15 @@ var APISwaggerJSON string = `{
                     "title": "vega",
                     "$ref": "#/definitions/schemaServiceParameters",
                     "x-displayname": "Vega Parameters"
+                },
+                "vip_params_per_az": {
+                    "type": "array",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul",
+                    "title": "vip_params_per_az",
+                    "items": {
+                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
+                    },
+                    "x-displayname": "Publish VIP Params Per AZ"
                 },
                 "vip_vrrp_mode": {
                     "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
@@ -4221,6 +4264,58 @@ var APISwaggerJSON string = `{
                     "description": " version name. Info taken from /sys/class/dmi/id/product_version",
                     "title": "version",
                     "x-displayname": "Version"
+                }
+            }
+        },
+        "sitePublishVIPParamsPerAz": {
+            "type": "object",
+            "description": "Per AZ parameters needed to publish VIP for publci cloud sites",
+            "title": "Publish VIP Params Per AZ",
+            "x-displayname": "Publish VIP Params Per AZ",
+            "x-ves-proto-message": "ves.io.schema.site.PublishVIPParamsPerAz",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\nRequired: YES",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-east-2a",
+                    "x-ves-required": "true"
+                },
+                "inside_vip": {
+                    "type": "array",
+                    "description": " List of Inside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-",
+                    "title": "Inside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Inside VIP(s)",
+                    "x-ves-example": "192.168.0.156"
+                },
+                "inside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the inside VIP,\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Inside VIP CNAME",
+                    "x-displayname": "Inside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                },
+                "outside_vip": {
+                    "type": "array",
+                    "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\nRequired: YES",
+                    "title": "Outside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Outside VIP(s)",
+                    "x-ves-example": "192.168.0.156",
+                    "x-ves-required": "true"
+                },
+                "outside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the outside VIP\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Outside VIP CNAME",
+                    "x-displayname": "Outside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
                 }
             }
         },

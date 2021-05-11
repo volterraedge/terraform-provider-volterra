@@ -20,7 +20,7 @@ resource "volterra_k8s_cluster_role" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "yaml policy_rule_list k8s_cluster_role_selector" must be set
+  // One of the arguments from this list "policy_rule_list k8s_cluster_role_selector yaml" must be set
 
   policy_rule_list {
     policy_rule {

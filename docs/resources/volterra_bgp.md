@@ -26,8 +26,8 @@ resource "volterra_bgp" "example" {
     bgp_router_id {
       // One of the arguments from this list "ipv4 ipv6" must be set
 
-      ipv6 {
-        addr = "2001:db8:0:0:0:0:2:1"
+      ipv4 {
+        addr = "192.168.1.1"
       }
     }
 
@@ -51,15 +51,15 @@ resource "volterra_bgp" "example" {
 
     external {
       // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      from_site = true
-      asn       = "asn"
+      default_gateway = true
+      asn             = "asn"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
-        enable = true
+        disable = true
       }
 
-      // One of the arguments from this list "outside_interfaces interface interface_list inside_interfaces" must be set
+      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
 
       interface {
         name      = "test1"
@@ -146,9 +146,17 @@ Use the default gateway address..
 
 Disable the IPv4 Unicast family..
 
+### Disable Mtls
+
+Disable MTLS.
+
 ### Enable
 
 Enable the IPv4 Unicast family..
+
+### Enable Mtls
+
+Enable MTLS.
 
 ### External
 
@@ -185,6 +193,14 @@ Parameters for IPv4 Unicast family..
 `disable` - (Optional) Disable the IPv4 Unicast family. (bool).
 
 `enable` - (Optional) Enable the IPv4 Unicast family. (bool).
+
+### Family Inet6vpn
+
+Parameters for IPv6 VPN Unicast family..
+
+`disable` - (Optional) Disable the IPv6 Unicast family. (bool).
+
+`enable` - (Optional) Enable the IPv6 Unicast family. (bool).
 
 ### Family Inetvpn
 
@@ -226,9 +242,15 @@ External BGP peer..
 
 `from_site` - (Optional) Use the address specified in the site object. (bool).
 
+`family_inet6vpn` - (Optional) Parameters for IPv6 VPN Unicast family.. See [Family Inet6vpn ](#family-inet6vpn) below for details.
+
 `family_inetvpn` - (Optional) Parameters for IPv4 VPN Unicast family.. See [Family Inetvpn ](#family-inetvpn) below for details.
 
 `family_rtarget` - (Optional) Parameters for Route Target family.. See [Family Rtarget ](#family-rtarget) below for details.
+
+`disable_mtls` - (Optional) Disable MTLS (bool).
+
+`enable_mtls` - (Optional) Enable MTLS (bool).
 
 `port` - (Optional) Peer TCP port number. (`Int`).
 

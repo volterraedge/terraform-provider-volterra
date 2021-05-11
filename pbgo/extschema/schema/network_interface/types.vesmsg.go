@@ -1961,6 +1961,12 @@ func (m *EthernetInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2003,6 +2009,37 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "static_ip." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetIpv6AddressChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetIpv6AddressChoice().(type) {
+	case *EthernetInterfaceType_NoIpv6Address:
+
+	case *EthernetInterfaceType_StaticIpv6Address:
+		odrInfos, err = m.GetStaticIpv6Address().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "static_ipv6_address." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -2282,6 +2319,32 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetIpv6AddressChoice().(type) {
+	case *EthernetInterfaceType_NoIpv6Address:
+		if fv, exists := v.FldValidators["ipv6_address_choice.no_ipv6_address"]; exists {
+			val := m.GetIpv6AddressChoice().(*EthernetInterfaceType_NoIpv6Address).NoIpv6Address
+			vOpts := append(opts,
+				db.WithValidateField("ipv6_address_choice"),
+				db.WithValidateField("no_ipv6_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EthernetInterfaceType_StaticIpv6Address:
+		if fv, exists := v.FldValidators["ipv6_address_choice.static_ipv6_address"]; exists {
+			val := m.GetIpv6AddressChoice().(*EthernetInterfaceType_StaticIpv6Address).StaticIpv6Address
+			vOpts := append(opts,
+				db.WithValidateField("ipv6_address_choice"),
+				db.WithValidateField("static_ipv6_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2642,6 +2705,8 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 	v.FldValidators["address_choice.dhcp_server"] = DHCPServerParametersTypeValidator().Validate
 	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
 
+	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = StaticIPParametersTypeValidator().Validate
+
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["network_choice.srv6_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2944,6 +3009,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetIpv6StaticAddressesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetParentNetworkInterfaceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -3069,6 +3140,29 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GlobalSpecType_DedicatedManagementInterface:
 
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetIpv6StaticAddressesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetIpv6StaticAddresses() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.GetIpv6StaticAddresses().GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "ipv6_static_addresses." + dri.DRField
+		drInfos = append(drInfos, dri)
 	}
 
 	return drInfos, err
@@ -3637,6 +3731,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ipv6_static_addresses"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_static_addresses"))
+		if err := fv(ctx, m.GetIpv6StaticAddresses(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["is_primary"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("is_primary"))
@@ -3935,6 +4038,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["tunnel"] = NetworkInterfaceTunnelValidator().Validate
 
 	v.FldValidators["dhcp_server_params"] = DHCPServerParametersTypeValidator().Validate
+
+	v.FldValidators["ipv6_static_addresses"] = StaticIPParametersTypeValidator().Validate
 
 	return v
 }()
@@ -5909,7 +6014,7 @@ var DefaultStaticIpParametersFleetTypeValidator = func() *ValidateStaticIpParame
 
 	vrhDefaultGw := v.DefaultGwValidationRuleHandler
 	rulesDefaultGw := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.string.ip": "true",
 	}
 	vFn, err = vrhDefaultGw(rulesDefaultGw)
 	if err != nil {
@@ -5920,7 +6025,7 @@ var DefaultStaticIpParametersFleetTypeValidator = func() *ValidateStaticIpParame
 
 	vrhDnsServer := v.DnsServerValidationRuleHandler
 	rulesDnsServer := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.string.ip": "true",
 	}
 	vFn, err = vrhDnsServer(rulesDnsServer)
 	if err != nil {
@@ -6067,8 +6172,8 @@ var DefaultStaticIpParametersNodeTypeValidator = func() *ValidateStaticIpParamet
 
 	vrhIpAddress := v.IpAddressValidationRuleHandler
 	rulesIpAddress := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip_prefix": "true",
 	}
 	vFn, err = vrhIpAddress(rulesIpAddress)
 	if err != nil {
@@ -6079,7 +6184,7 @@ var DefaultStaticIpParametersNodeTypeValidator = func() *ValidateStaticIpParamet
 
 	vrhDefaultGw := v.DefaultGwValidationRuleHandler
 	rulesDefaultGw := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.string.ip": "true",
 	}
 	vFn, err = vrhDefaultGw(rulesDefaultGw)
 	if err != nil {
@@ -6090,7 +6195,7 @@ var DefaultStaticIpParametersNodeTypeValidator = func() *ValidateStaticIpParamet
 
 	vrhDnsServer := v.DnsServerValidationRuleHandler
 	rulesDnsServer := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.string.ip": "true",
 	}
 	vFn, err = vrhDnsServer(rulesDnsServer)
 	if err != nil {

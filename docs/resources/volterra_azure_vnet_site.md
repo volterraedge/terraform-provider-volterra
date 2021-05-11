@@ -22,29 +22,30 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = ["East US"]
 
   // One of the arguments from this list "azure_cred assisted" must be set
-  assisted = true
+
+  azure_cred {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
-  resource_group          = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  resource_group = ["my-resources"]
 
-  ingress_egress_gw {
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+
+  ingress_gw {
     az_nodes {
       azure_az  = "1"
       disk_size = "disk_size"
 
-      inside_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-
-      outside_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -54,31 +55,10 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
-
-    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-
-    active_network_policies {
-      network_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
+    azure_certified_hw = "azure-byol-voltmesh"
   }
   vnet {
-    // One of the arguments from this list "new_vnet existing_vnet" must be set
+    // One of the arguments from this list "existing_vnet new_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
@@ -130,6 +110,8 @@ Argument Reference
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
+`os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
@@ -139,6 +121,8 @@ Argument Reference
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+
+`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `vnet` - (Required) Choice of using existing Vnet or create new Vnet. See [Vnet ](#vnet) below for details.
 
@@ -227,6 +211,14 @@ Use Custom static route to configure all advanced options.
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+
+### Default Os Version
+
+Will assign latest available OS version.
+
+### Default Sw Version
+
+Will assign latest available SW version.
 
 ### Disable Forward Proxy
 
@@ -426,6 +418,14 @@ Network Policy is disabled for this site..
 
 Static Routes disabled for outside network..
 
+### Os
+
+Operating System Details.
+
+`default_os_version` - (Optional) Will assign latest available OS version (bool).
+
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -517,6 +517,14 @@ List of route prefixes.
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ipv4 ](#ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
+
+### Sw
+
+Volterra Software Details.
+
+`default_sw_version` - (Optional) Will assign latest available SW version (bool).
+
+`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 

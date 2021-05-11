@@ -3352,7 +3352,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specifies parameters that control retry back off.",
             "title": "RetryBackOff",
-            "x-displayname": "Retry BackOff interval",
+            "x-displayname": "Retry BackOff Interval",
             "x-ves-displayorder": "1,2",
             "x-ves-proto-message": "ves.io.schema.RetryBackOff",
             "properties": {
@@ -3361,14 +3361,14 @@ var APISwaggerJSON string = `{
                     "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-",
                     "title": "base_interval",
                     "format": "int64",
-                    "x-displayname": "base retry interval"
+                    "x-displayname": "Base Retry Interval"
                 },
                 "max_interval": {
                     "type": "integer",
                     "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - 60-",
                     "title": "max_interval",
                     "format": "int64",
-                    "x-displayname": "maximum retry interval"
+                    "x-displayname": "Maximum Retry Interval"
                 }
             }
         },
@@ -3517,6 +3517,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

@@ -522,6 +522,18 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["path_suffix_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path_suffix_in"))
+		for idx, item := range m.GetPathSuffixIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["root_object_in"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("root_object_in"))

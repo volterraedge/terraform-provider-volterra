@@ -28,25 +28,12 @@ resource "volterra_service_policy_rule" "example" {
   // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
   any_client = true
 
-  // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  // One of the arguments from this list "ip_matcher any_ip ip_prefix_list" must be set
+  any_ip = true
 
-  ip_prefix_list {
-    invert_match = true
-
-    ip_prefixes = ["192.168.20.0/24"]
-  }
   waf_action {
-    // One of the arguments from this list "waf_in_monitoring_mode none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
-
-    waf_rule_control {
-      exclude_rule_ids {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      monitoring_mode = true
-    }
+    // One of the arguments from this list "waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none waf_skip_processing" must be set
+    none = true
   }
 }
 

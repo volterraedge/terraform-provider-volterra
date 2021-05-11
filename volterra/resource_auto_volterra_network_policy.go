@@ -203,6 +203,26 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										},
 									},
 
+									"label_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"keys": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
 									"metadata": {
 
 										Type:     schema.TypeSet,
@@ -440,6 +460,26 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
+										},
+									},
+
+									"label_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"keys": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
 										},
 									},
 
@@ -897,6 +937,26 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 						egressRules[i].Keys = ls
 					}
 
+					if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						labelMatcher := &ves_io_schema.LabelMatcherType{}
+						egressRules[i].LabelMatcher = labelMatcher
+						for _, set := range sl {
+							labelMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								labelMatcher.Keys = ls
+							}
+
+						}
+
+					}
+
 					if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -1211,6 +1271,26 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 							ls[i] = v.(string)
 						}
 						ingressRules[i].Keys = ls
+					}
+
+					if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						labelMatcher := &ves_io_schema.LabelMatcherType{}
+						ingressRules[i].LabelMatcher = labelMatcher
+						for _, set := range sl {
+							labelMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								labelMatcher.Keys = ls
+							}
+
+						}
+
 					}
 
 					if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
@@ -1864,6 +1944,26 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 						egressRules[i].Keys = ls
 					}
 
+					if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						labelMatcher := &ves_io_schema.LabelMatcherType{}
+						egressRules[i].LabelMatcher = labelMatcher
+						for _, set := range sl {
+							labelMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								labelMatcher.Keys = ls
+							}
+
+						}
+
+					}
+
 					if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -2178,6 +2278,26 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 							ls[i] = v.(string)
 						}
 						ingressRules[i].Keys = ls
+					}
+
+					if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						labelMatcher := &ves_io_schema.LabelMatcherType{}
+						ingressRules[i].LabelMatcher = labelMatcher
+						for _, set := range sl {
+							labelMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								labelMatcher.Keys = ls
+							}
+
+						}
+
 					}
 
 					if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {

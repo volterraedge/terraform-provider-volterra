@@ -447,14 +447,6 @@ func (v *ValidateCreateSpecType) K8SClusterChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) LocalControlPlaneChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for local_control_plane_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -731,16 +723,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane_choice"]; exists {
-		val := m.GetLocalControlPlaneChoice()
-		vOpts := append(opts,
-			db.WithValidateField("local_control_plane_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *CreateSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -847,6 +829,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -879,6 +870,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -995,17 +995,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["k8s_cluster_choice"] = vFn
 
-	vrhLocalControlPlaneChoice := v.LocalControlPlaneChoiceValidationRuleHandler
-	rulesLocalControlPlaneChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhLocalControlPlaneChoice(rulesLocalControlPlaneChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.local_control_plane_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["local_control_plane_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1115,6 +1104,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	return v
 }()
@@ -1539,14 +1532,6 @@ func (v *ValidateGetSpecType) K8SClusterChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) LocalControlPlaneChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for local_control_plane_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1843,16 +1828,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane_choice"]; exists {
-		val := m.GetLocalControlPlaneChoice()
-		vOpts := append(opts,
-			db.WithValidateField("local_control_plane_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *GetSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -2133,17 +2108,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["k8s_cluster_choice"] = vFn
-
-	vrhLocalControlPlaneChoice := v.LocalControlPlaneChoiceValidationRuleHandler
-	rulesLocalControlPlaneChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhLocalControlPlaneChoice(rulesLocalControlPlaneChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.local_control_plane_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["local_control_plane_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -3180,14 +3144,6 @@ func (v *ValidateGlobalSpecType) K8SClusterChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) LocalControlPlaneChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for local_control_plane_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3484,16 +3440,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane_choice"]; exists {
-		val := m.GetLocalControlPlaneChoice()
-		vOpts := append(opts,
-			db.WithValidateField("local_control_plane_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *GlobalSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -3609,6 +3555,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -3641,6 +3596,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3775,17 +3739,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["k8s_cluster_choice"] = vFn
 
-	vrhLocalControlPlaneChoice := v.LocalControlPlaneChoiceValidationRuleHandler
-	rulesLocalControlPlaneChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhLocalControlPlaneChoice(rulesLocalControlPlaneChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.local_control_plane_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["local_control_plane_choice"] = vFn
-
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3917,6 +3870,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4773,14 +4730,6 @@ func (v *ValidateReplaceSpecType) K8SClusterChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) LocalControlPlaneChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for local_control_plane_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5057,16 +5006,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane_choice"]; exists {
-		val := m.GetLocalControlPlaneChoice()
-		vOpts := append(opts,
-			db.WithValidateField("local_control_plane_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *ReplaceSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -5320,17 +5259,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["k8s_cluster_choice"] = vFn
-
-	vrhLocalControlPlaneChoice := v.LocalControlPlaneChoiceValidationRuleHandler
-	rulesLocalControlPlaneChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhLocalControlPlaneChoice(rulesLocalControlPlaneChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.local_control_plane_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["local_control_plane_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -7775,7 +7703,9 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
+	m.Os = f.GetOs()
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
+	m.Sw = f.GetSw()
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
@@ -7796,7 +7726,9 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
+	f.Os = m1.Os
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
+	f.Sw = m1.Sw
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes

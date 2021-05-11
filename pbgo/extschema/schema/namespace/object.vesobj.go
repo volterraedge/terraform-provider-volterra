@@ -28,6 +28,9 @@ import (
 const (
 	ObjectDefTblName = "ves.io.schema.namespace.Object.default"
 	ObjectType       = "ves.io.schema.namespace.Object"
+
+	StatusObjectDefTblName = "ves.io.schema.namespace.StatusObject.default"
+	StatusObjectType       = "ves.io.schema.namespace.StatusObject"
 )
 
 // augmented methods on protoc/std generated struct
@@ -473,6 +476,62 @@ func (o *DBObject) SetObjSpec(in sro.Spec) error {
 	return nil
 }
 
+func FindObjectStatus(ctx context.Context, d db.Interface, objUid string) ([]*StatusObject, error) {
+	statusDBEntries, err := d.GetEntryBackrefs(ctx, objUid, ObjectType, db.WithBackrefTypes([]string{"ves.io.schema.namespace.StatusObject"}))
+	if err != nil {
+		return nil, err
+	}
+	var merr *multierror.Error
+	var statusObjs []*StatusObject
+	for _, statusDBEntry := range statusDBEntries {
+		statusEntry := statusDBEntry.ToStore()
+		statusObj, ok := statusEntry.(*StatusObject)
+		if !ok {
+			merr = multierror.Append(merr, fmt.Errorf("Status Backref expected *StatusObject, got %T: %v", statusEntry, statusEntry))
+			continue
+		}
+		statusObjs = append(statusObjs, statusObj)
+	}
+	return statusObjs, errors.ErrOrNil(merr)
+}
+
+// SetObjectRef sets reference to a configuration object
+func (o *StatusObject) SetObjectRef(objKind, objUid string) error {
+	if len(o.GetObjectRefs()) != 0 {
+		return fmt.Errorf("StatusObject already has a reference to %v", o.GetObjectRefs())
+	}
+	o.ObjectRefs = append(o.ObjectRefs, &ves_io_schema.ObjectRefType{Kind: objKind, Uid: objUid})
+	return nil
+}
+
+func (o *StatusObject) GetStatusObjMetadata() sro.StatusObjectMetadata {
+	return o.GetMetadata()
+}
+
+func (o *StatusObject) SetStatusObjMetadata(md sro.StatusObjectMetadata) {
+	if o == nil {
+		return
+	}
+	if o.Metadata == nil {
+		o.Metadata = &ves_io_schema.StatusMetaType{}
+	}
+	o.Metadata = md.(*ves_io_schema.StatusMetaType)
+}
+
+func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
+	if o == nil {
+		return nil
+	}
+	return ves_io_schema.ToStatusObjectConditions(o.GetConditions())
+}
+
+func (o *StatusObject) SetStatusObjConditions(socSet []sro.StatusObjectCondition) {
+	if o == nil {
+		return
+	}
+	o.Conditions = ves_io_schema.FromStatusObjectConditions(socSet)
+}
+
 func (o *DBObject) GetObjType() string {
 	return o.Type()
 }
@@ -738,4 +797,404 @@ var DefaultObjectValidator = func() *ValidateObject {
 
 func ObjectValidator() db.Validator {
 	return DefaultObjectValidator
+}
+
+// augmented methods on protoc/std generated struct
+func (e *StatusObject) Type() string {
+	return "ves.io.schema.namespace.StatusObject"
+}
+
+func (e *StatusObject) ToEntry() db.Entry {
+	return NewDBStatusObject(e, db.OpWithNoCopy())
+}
+
+func FindStatusObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBStatusObject, bool, error) {
+	e, exist, err := finder.FindEntry(ctx, StatusObjectDefTblName, key, opts...)
+	if !exist || err != nil {
+		return nil, exist, err
+	}
+	obj, ok := e.(*DBStatusObject)
+	if !ok {
+		return nil, false, fmt.Errorf("Cannot convert entry to object")
+	}
+	return obj, exist, err
+}
+
+func ListStatusObject(ctx context.Context, lister db.EntryLister, opts ...db.ListEntriesOpt) ([]*DBStatusObject, error) {
+	var (
+		oList []*DBStatusObject
+		merr  *multierror.Error
+	)
+	eList, err := lister.ListEntries(ctx, StatusObjectDefTblName, opts...)
+	if err != nil {
+		merr = multierror.Append(merr, err)
+	}
+	for _, e := range eList {
+		obj, ok := e.(*DBStatusObject)
+		if ok {
+			oList = append(oList, obj)
+		} else {
+			merr = multierror.Append(merr, fmt.Errorf("Cannot convert entry to %s object", StatusObjectType))
+		}
+	}
+	return oList, errors.ErrOrNil(merr)
+}
+
+func (o *StatusObject) DeepCopy() *StatusObject {
+	if o == nil {
+		return nil
+	}
+	ser, err := o.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObject{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (e *StatusObject) ToJSON() (string, error) {
+	return codec.ToJSON(e)
+}
+
+func (e *StatusObject) ToYAML() (string, error) {
+	return codec.ToYAML(e)
+}
+
+// A struct wrapping protoc/std generated struct with additional capabilities
+// forming a db.Entry
+type DBStatusObject struct {
+	// Anonymous embed of standard protobuf generated struct
+	*StatusObject
+
+	tbl db.Table
+}
+
+// GetStatusObjectIndexers returns the associated store.Indexers for StatusObject
+func GetStatusObjectIndexers() store.Indexers {
+
+	return nil
+
+}
+
+func (e *DBStatusObject) GetDB() (*db.DB, error) {
+	if e.tbl == nil {
+		return nil, fmt.Errorf("Entry has no table")
+	}
+	return e.tbl.GetDB(), nil
+}
+
+// Implement ves.io/stdlib/db.Entry interface
+func (e *DBStatusObject) Key(opts ...db.KeyOpt) (string, error) {
+	return e.GetMetadata().GetUid(), nil
+}
+
+func (e *DBStatusObject) Type() string {
+	return "ves.io.schema.namespace.StatusObject"
+}
+
+func (e *DBStatusObject) DeepCopy() db.Entry {
+	if e == nil {
+		return nil
+	}
+	n := NewDBStatusObject(e.StatusObject)
+	n.tbl = e.tbl
+	return n
+}
+
+func (e *DBStatusObject) MarshalBytes() ([]byte, error) {
+	return e.Marshal()
+}
+
+func (e *DBStatusObject) UnmarshalBytes(b []byte) error {
+	return e.Unmarshal(b)
+}
+
+func (e *DBStatusObject) Sample(r *rand.Rand) (db.Entry, error) {
+
+	o := &StatusObject{}
+
+	return &DBStatusObject{o, e.tbl}, nil
+}
+
+func (e *DBStatusObject) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectValidator().Validate(ctx, e.StatusObject, opts...)
+}
+
+func (e *DBStatusObject) SetBlob(ctx context.Context, bID string, bVal interface{}, opts ...db.BlobOpt) error {
+	db, err := e.GetDB()
+	if err != nil {
+		return errors.Wrap(err, "SetBlob")
+	}
+	key, err := e.Key()
+	if err != nil {
+		return errors.Wrap(err, "SetBlob accessing key")
+	}
+	err = db.SetEntryBlob(ctx, key, e.Type(), bID, bVal, opts...)
+	if err != nil {
+		return errors.Wrap(err, "SetBlob setting in db")
+	}
+	return nil
+}
+
+func (e *DBStatusObject) ClrBlob(ctx context.Context, bID string, opts ...db.BlobOpt) error {
+	db, err := e.GetDB()
+	if err != nil {
+		return errors.Wrap(err, "ClrBlob")
+	}
+	key, err := e.Key()
+	if err != nil {
+		return errors.Wrap(err, "ClrBlob accessing key")
+	}
+	err = db.ClrEntryBlob(ctx, key, e.Type(), bID, opts...)
+	if err != nil {
+		return errors.Wrap(err, "ClrBlob clearing in db")
+	}
+	return nil
+}
+
+func (e *DBStatusObject) GetBlob(ctx context.Context, bID string, opts ...db.BlobOpt) (interface{}, error) {
+	db, err := e.GetDB()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBlob")
+	}
+	key, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBlob accessing key")
+	}
+	return db.GetEntryBlob(ctx, key, e.Type(), bID, opts...)
+}
+
+func (e *DBStatusObject) GetBlobs(ctx context.Context, opts ...db.BlobOpt) (map[string]interface{}, error) {
+	db, err := e.GetDB()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBlobs")
+	}
+	key, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBlobs accessing key")
+	}
+	return db.GetEntryBlobs(ctx, key, e.Type(), opts...)
+}
+
+func (e *DBStatusObject) IsDeleted() (bool, error) {
+	db, err := e.GetDB()
+	if err != nil {
+		return false, errors.Wrap(err, "IsDeleted")
+	}
+	key, err := e.Key()
+	if err != nil {
+		return false, errors.Wrap(err, "IsDeleted accessing key")
+	}
+	isDel, err := db.IsEntryDeleted(key, e.Type())
+	if err != nil {
+		return false, errors.Wrap(err, "IsDeleted accessing db")
+	}
+	return isDel, nil
+}
+
+// Implement ves.io/stdlib/db.EntryPvt interface
+func (e *DBStatusObject) SetTable(tbl db.Table) {
+	e.tbl = tbl
+}
+
+func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		err               error
+		drInfos, fdrInfos []db.DRefInfo
+	)
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+	fdrInfos, err = e.GetObjectRefsDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting Field direct ref info")
+	}
+	for _, dri := range fdrInfos {
+		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+		dri.DRField = "ves.io.schema.namespace.StatusObject." + dri.DRField
+		dri.RefrType = e.Type()
+		dri.RefrUID = refrUID
+
+		// convert any ref_to schema annotation specified by kind value to type value
+		if !strings.HasPrefix(dri.RefdType, "ves.io") {
+			d, err := e.GetDB()
+			if err != nil {
+				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			}
+			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+			if err != nil {
+				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+			}
+			dri.RefdType = refdType
+		}
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
+}
+
+func (e *DBStatusObject) ToStore() store.Entry {
+	return e.StatusObject
+}
+
+func (e *DBStatusObject) ToJSON() (string, error) {
+	return e.ToStore().ToJSON()
+}
+
+func (e *DBStatusObject) ToYAML() (string, error) {
+	return e.ToStore().ToYAML()
+}
+
+func (e *DBStatusObject) GetTable() db.Table {
+	return e.tbl
+}
+
+func NewDBStatusObject(o *StatusObject, opts ...db.OpOption) *DBStatusObject {
+	op := db.NewOpFrom(opts...)
+	if o == nil {
+		return &DBStatusObject{StatusObject: &StatusObject{}}
+	}
+	obj := o
+	if !op.NoCopy() {
+		obj = o.DeepCopy()
+	}
+	return &DBStatusObject{StatusObject: obj}
+}
+
+func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
+	op := db.NewOpFrom(opts...)
+	s := op.StoreEntry()
+	switch v := s.(type) {
+	case nil:
+		return NewDBStatusObject(nil, opts...)
+	case *StatusObject:
+		return NewDBStatusObject(v, opts...)
+	}
+	return nil
+}
+
+func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
+	}
+
+	for i, ref := range e.GetObjectRefs() {
+		if ref == nil {
+			return nil, fmt.Errorf("StatusObject.object_refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "namespace.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			RefrType:   e.Type(),
+			RefrUID:    refrUID,
+			DRField:    "object_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+}
+
+// GetObjectRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (e *DBStatusObject) GetObjectRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refrUID, err := e.Key()
+	if err != nil {
+		return nil, errors.Wrap(err, "Get<fld>DBEntries, error in key")
+	}
+	refdType, err := d.TypeForEntryKind(e.Type(), refrUID, "namespace.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: namespace")
+	}
+	tblName := db.DefaultTableName(refdType)
+	if intTbl, err := d.GetTable(ctx, db.InternalTableName(refdType)); err == nil {
+		tblName = intTbl.Name()
+	}
+	for _, ref := range e.GetObjectRefs() {
+		e, exist, err := d.FindEntry(ctx, tblName, ref.Uid)
+		if err != nil {
+			return nil, errors.Wrap(err, fmt.Sprintf("Tbl: %s, Key: %s", tblName, ref.Uid))
+		}
+		if !exist {
+			continue
+		}
+		entries = append(entries, e)
+	}
+	return entries, nil
+}
+
+type ValidateStatusObject struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	e, ok := pm.(*StatusObject)
+	if !ok {
+		switch t := pm.(type) {
+		default:
+			return fmt.Errorf("Expected type *StatusObject got type %s", t)
+		}
+	}
+	if e == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["conditions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("conditions"))
+		for idx, item := range e.GetConditions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, e.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_refs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_refs"))
+		for idx, item := range e.GetObjectRefs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectValidator = func() *ValidateStatusObject {
+	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	return v
+}()
+
+func StatusObjectValidator() db.Validator {
+	return DefaultStatusObjectValidator
 }

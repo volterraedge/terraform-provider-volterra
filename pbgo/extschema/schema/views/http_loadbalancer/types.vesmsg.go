@@ -567,7 +567,7 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 	rulesCustomErrors := map[string]string{
 		"ves.io.schema.rules.map.keys.uint32.ranges":    "3,4,5,300-599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)

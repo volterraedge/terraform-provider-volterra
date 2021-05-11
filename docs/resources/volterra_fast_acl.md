@@ -20,11 +20,11 @@ resource "volterra_fast_acl" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
+  // One of the arguments from this list "legacy_acl site_acl re_acl" must be set
 
   legacy_acl {
     destination_type {
-      // One of the arguments from this list "shared_vip_services interface_services vip_services all_services destination_ip_address selected_vip_address" must be set
+      // One of the arguments from this list "interface_services vip_services all_services destination_ip_address selected_vip_address shared_vip_services" must be set
       shared_vip_services = true
     }
 

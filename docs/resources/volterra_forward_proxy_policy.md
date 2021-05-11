@@ -21,10 +21,45 @@ resource "volterra_forward_proxy_policy" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "network_connector proxy_label_selector drp_http_connect any_proxy" must be set
-  any_proxy = true
 
-  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
-  allow_all = true
+  proxy_label_selector {
+    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  }
+
+  // One of the arguments from this list "deny_list rule_list allow_all allow_list" must be set
+
+  allow_list {
+    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
+    default_action_next_policy = true
+
+    dest_list {
+      port_ranges = "80,443,8080-8191,9080"
+
+      prefixes = ["prefixes"]
+    }
+
+    http_list {
+      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
+      exact_value = "abc.zyz.com"
+
+      // One of the arguments from this list "path_regex_value any_path path_exact_value path_prefix_value" must be set
+      path_exact_value = "/abc/zyz"
+    }
+
+    metadata {
+      description = "Virtual Host for acmecorp website"
+      disable     = true
+      name        = "acmecorp-web"
+    }
+
+    rule_description = "Rule to block example.com"
+    rule_name        = "my-policy-allow-github.com"
+
+    tls_list {
+      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
+      exact_value = "abc.zyz.com"
+    }
+  }
 }
 
 ```

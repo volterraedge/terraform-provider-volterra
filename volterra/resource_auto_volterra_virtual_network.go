@@ -461,6 +461,11 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 							},
 						},
 
+						"remote_sid_stats_plen": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"slice": {
 
 							Type:     schema.TypeSet,
@@ -1232,6 +1237,11 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 
 				}
 
+			}
+
+			if v, ok := cs["remote_sid_stats_plen"]; ok && !isIntfNil(v) {
+
+				networkChoiceInt.Srv6Network.RemoteSidStatsPlen = uint32(v.(int))
 			}
 
 			if v, ok := cs["slice"]; ok && !isIntfNil(v) {
@@ -2092,6 +2102,11 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 
 				}
 
+			}
+
+			if v, ok := cs["remote_sid_stats_plen"]; ok && !isIntfNil(v) {
+
+				networkChoiceInt.Srv6Network.RemoteSidStatsPlen = uint32(v.(int))
 			}
 
 			if v, ok := cs["slice"]; ok && !isIntfNil(v) {

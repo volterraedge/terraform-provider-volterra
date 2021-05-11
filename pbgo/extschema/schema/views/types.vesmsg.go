@@ -1077,6 +1077,158 @@ func ObjectRefTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *OperatingSystemType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OperatingSystemType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OperatingSystemType) DeepCopy() *OperatingSystemType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OperatingSystemType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OperatingSystemType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OperatingSystemType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OperatingSystemTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOperatingSystemType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOperatingSystemType) OperatingSystemVersionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOperatingSystemType) OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_OperatingSystemVersion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
+	}
+	return oValidatorFn_OperatingSystemVersion, nil
+}
+
+func (v *ValidateOperatingSystemType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OperatingSystemType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OperatingSystemType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["operating_system_version_choice"]; exists {
+		val := m.GetOperatingSystemVersionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("operating_system_version_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOperatingSystemVersionChoice().(type) {
+	case *OperatingSystemType_DefaultOsVersion:
+		if fv, exists := v.FldValidators["operating_system_version_choice.default_os_version"]; exists {
+			val := m.GetOperatingSystemVersionChoice().(*OperatingSystemType_DefaultOsVersion).DefaultOsVersion
+			vOpts := append(opts,
+				db.WithValidateField("operating_system_version_choice"),
+				db.WithValidateField("default_os_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OperatingSystemType_OperatingSystemVersion:
+		if fv, exists := v.FldValidators["operating_system_version_choice.operating_system_version"]; exists {
+			val := m.GetOperatingSystemVersionChoice().(*OperatingSystemType_OperatingSystemVersion).OperatingSystemVersion
+			vOpts := append(opts,
+				db.WithValidateField("operating_system_version_choice"),
+				db.WithValidateField("operating_system_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOperatingSystemTypeValidator = func() *ValidateOperatingSystemType {
+	v := &ValidateOperatingSystemType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOperatingSystemVersionChoice := v.OperatingSystemVersionChoiceValidationRuleHandler
+	rulesOperatingSystemVersionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOperatingSystemVersionChoice(rulesOperatingSystemVersionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OperatingSystemType.operating_system_version_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["operating_system_version_choice"] = vFn
+
+	vrhOperatingSystemVersionChoiceOperatingSystemVersion := v.OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler
+	rulesOperatingSystemVersionChoiceOperatingSystemVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+	}
+	vFnMap["operating_system_version_choice.operating_system_version"], err = vrhOperatingSystemVersionChoiceOperatingSystemVersion(rulesOperatingSystemVersionChoiceOperatingSystemVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OperatingSystemType.operating_system_version_choice_operating_system_version: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["operating_system_version_choice.operating_system_version"] = vFnMap["operating_system_version_choice.operating_system_version"]
+
+	return v
+}()
+
+func OperatingSystemTypeValidator() db.Validator {
+	return DefaultOperatingSystemTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OriginPoolWithWeight) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1968,6 +2120,158 @@ var DefaultTlsConfigValidator = func() *ValidateTlsConfig {
 
 func TlsConfigValidator() db.Validator {
 	return DefaultTlsConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VolterraSoftwareType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VolterraSoftwareType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VolterraSoftwareType) DeepCopy() *VolterraSoftwareType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VolterraSoftwareType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VolterraSoftwareType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VolterraSoftwareType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VolterraSoftwareTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVolterraSoftwareType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVolterraSoftwareType) VolterraSwVersionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_sw_version_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVolterraSoftwareType) VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VolterraSoftwareVersion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
+	}
+	return oValidatorFn_VolterraSoftwareVersion, nil
+}
+
+func (v *ValidateVolterraSoftwareType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VolterraSoftwareType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VolterraSoftwareType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["volterra_sw_version_choice"]; exists {
+		val := m.GetVolterraSwVersionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("volterra_sw_version_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVolterraSwVersionChoice().(type) {
+	case *VolterraSoftwareType_DefaultSwVersion:
+		if fv, exists := v.FldValidators["volterra_sw_version_choice.default_sw_version"]; exists {
+			val := m.GetVolterraSwVersionChoice().(*VolterraSoftwareType_DefaultSwVersion).DefaultSwVersion
+			vOpts := append(opts,
+				db.WithValidateField("volterra_sw_version_choice"),
+				db.WithValidateField("default_sw_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VolterraSoftwareType_VolterraSoftwareVersion:
+		if fv, exists := v.FldValidators["volterra_sw_version_choice.volterra_software_version"]; exists {
+			val := m.GetVolterraSwVersionChoice().(*VolterraSoftwareType_VolterraSoftwareVersion).VolterraSoftwareVersion
+			vOpts := append(opts,
+				db.WithValidateField("volterra_sw_version_choice"),
+				db.WithValidateField("volterra_software_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVolterraSoftwareTypeValidator = func() *ValidateVolterraSoftwareType {
+	v := &ValidateVolterraSoftwareType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVolterraSwVersionChoice := v.VolterraSwVersionChoiceValidationRuleHandler
+	rulesVolterraSwVersionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVolterraSwVersionChoice(rulesVolterraSwVersionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VolterraSoftwareType.volterra_sw_version_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volterra_sw_version_choice"] = vFn
+
+	vrhVolterraSwVersionChoiceVolterraSoftwareVersion := v.VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler
+	rulesVolterraSwVersionChoiceVolterraSoftwareVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+	}
+	vFnMap["volterra_sw_version_choice.volterra_software_version"], err = vrhVolterraSwVersionChoiceVolterraSoftwareVersion(rulesVolterraSwVersionChoiceVolterraSoftwareVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field VolterraSoftwareType.volterra_sw_version_choice_volterra_software_version: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["volterra_sw_version_choice.volterra_software_version"] = vFnMap["volterra_sw_version_choice.volterra_software_version"]
+
+	return v
+}()
+
+func VolterraSoftwareTypeValidator() db.Validator {
+	return DefaultVolterraSoftwareTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

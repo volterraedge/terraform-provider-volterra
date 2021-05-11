@@ -8795,6 +8795,11 @@ func (m *StatusMetaType) SetUid(in string) {
 	m.Uid = in
 }
 
+// SetVtrpId sets the field
+func (m *StatusMetaType) SetVtrpId(in string) {
+	m.VtrpId = in
+}
+
 type ValidateStatusMetaType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -8862,6 +8867,15 @@ func (v *ValidateStatusMetaType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vtrp_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vtrp_id"))
+		if err := fv(ctx, m.GetVtrpId(), vOpts...); err != nil {
 			return err
 		}
 

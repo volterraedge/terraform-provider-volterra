@@ -29,9 +29,6 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
 
-  // One of the arguments from this list "no_local_control_plane local_control_plane" must be set
-  no_local_control_plane = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
@@ -43,7 +40,7 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
 
-  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -99,9 +96,13 @@ Argument Reference
 
 `default_network_config` - (Optional) Use default networking configuration based on certified hardware. (bool).
 
+`os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
 `default_storage_config` - (Optional) Use default storage configuration (bool).
+
+`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `allow_all_usb` - (Optional) All USB devices are allowed (bool).
 
@@ -141,13 +142,9 @@ Assign automatically from start of the first network in the list.
 
 BGP configuration for local control plane.
 
-`bgp_parameters` - (Required) BGP parameters for local site. See [Bgp Parameters ](#bgp-parameters) below for details.
+`asn` - (Required) Autonomous System Number (`Int`).
 
 `peers` - (Optional) BGP parameters for peer. See [Peers ](#peers) below for details.
-
-### Bgp Parameters
-
-BGP parameters for local site.
 
 ### Blindfold Secret Info
 
@@ -329,9 +326,17 @@ Use default configuration for site local network.
 
 Interface configuration is done based on certified hardware for this site.
 
+### Default Os Version
+
+Will assign latest available OS version.
+
 ### Default Storage Class
 
 Use only default storage class in kubernetes.
+
+### Default Sw Version
+
+Will assign latest available SW version.
 
 ### Dhcp Client
 
@@ -429,6 +434,10 @@ Ethernet interface configuration..
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
 
+`no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
+
+`static_ipv6_address` - (Optional) Interface IP is configured statically. See [Static Ipv6 Address ](#static-ipv6-address) below for details.
+
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitor ](#monitor) below for details.
 
 `monitor_disabled` - (Optional) Link quality monitoring disabled on the interface. (bool).
@@ -467,9 +476,9 @@ First usable address from the network prefix is chosen as default gateway.
 
 Static IP configuration for the fleet.
 
-`default_gw` - (Optional) IPv4 address offset of the default gateway, prefix len is used to calculate offset (`String`).
+`default_gw` - (Optional) IP address offset of the default gateway, prefix len is used to calculate offset (`String`).
 
-`dns_server` - (Optional) IPv4 address offset of the DNS server, prefix len is used to calculate offset (`String`).
+`dns_server` - (Optional) IP address offset of the DNS server, prefix len is used to calculate offset (`String`).
 
 `network_prefix_allocator` - (Optional) Static IP configuration for the fleet. See [ref](#ref) below for details.
 
@@ -593,6 +602,10 @@ No global network to connect.
 
 No TLS interception is enabled for this network connector.
 
+### No Ipv6 Address
+
+Interface does not have an IPv6 Address..
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -613,11 +626,11 @@ This site does not have any storage interfaces.
 
 Static IP configuration for the Node.
 
-`default_gw` - (Optional) IPv4 address of the default gateway. (`String`).
+`default_gw` - (Optional) IP address of the default gateway. (`String`).
 
-`dns_server` - (Optional) IPv4 address of the DNS server (`String`).
+`dns_server` - (Optional) IP address of the DNS server (`String`).
 
-`ip_address` - (Required) IPv4 address of the interface and prefix length (`String`).
+`ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
 ### Not Primary
 
@@ -630,6 +643,14 @@ Storage class Device configuration for OpenEBS Enterprise.
 `protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF) (`String`).
 
 `replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+### Os
+
+Operating System Details.
+
+`default_os_version` - (Optional) Will assign latest available OS version (bool).
+
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
 ### Outside Vn
 
@@ -739,6 +760,16 @@ Interface IP is configured statically.
 
 `node_static_ip` - (Optional) Static IP configuration for the Node. See [Node Static Ip ](#node-static-ip) below for details.
 
+### Static Ipv6 Address
+
+Interface IP is configured statically.
+
+`cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Cluster Static Ip ](#cluster-static-ip) below for details.
+
+`fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Fleet Static Ip ](#fleet-static-ip) below for details.
+
+`node_static_ip` - (Optional) Static IP configuration for the Node. See [Node Static Ip ](#node-static-ip) below for details.
+
 ### Static Routes
 
 Manage static routes for site local network..
@@ -807,6 +838,10 @@ Configure storage interface for this voltstack.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
 
+`no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
+
+`static_ipv6_address` - (Optional) Interface IP is configured statically. See [Static Ipv6 Address ](#static-ipv6-address) below for details.
+
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitor ](#monitor) below for details.
 
 `monitor_disabled` - (Optional) Link quality monitoring disabled on the interface. (bool).
@@ -856,6 +891,14 @@ Configure storage interfaces for this voltstack.
 ### Storage Network
 
 Interface belongs to site local network inside.
+
+### Sw
+
+Volterra Software Details.
+
+`default_sw_version` - (Optional) Will assign latest available SW version (bool).
+
+`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 

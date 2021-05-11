@@ -960,8 +960,14 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 		merr = multierror.Append(merr, errors.Wrap(err, "ListResponse allocation failed"))
 	}
 	if merr != nil {
-		err := server.MaybePublicRestError(ctx, errors.ErrOrNil(merr))
-		return rsp, server.GRPCStatusFromError(err).Err()
+		if rsp == nil {
+			return nil, merr
+		}
+		rsp.Errors = append(rsp.Errors, &ves_io_schema.ErrorType{
+			Code:    ves_io_schema.EINTERNAL,
+			Message: merr.Error(),
+		})
+
 	}
 	return rsp, nil
 }
@@ -1143,7 +1149,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		e := rsrcItem.Entry
 		o, ok := e.(*DBObject)
 		if !ok {
-			errStrs = append(errStrs, "entry not of type *DBObject in NewListResponse")
+			resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+				Code:    ves_io_schema.EINTERNAL,
+				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
+			})
+
 			continue
 		}
 		item := &ListResponseItem{
@@ -1183,7 +1193,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					getSpec.FromGlobalSpecType(o.Spec.GcSpec)
 					getRsp := &GetResponse{Spec: getSpec}
 					if err := conv(o, getRsp); err != nil {
-						errStrs = append(errStrs, fmt.Sprintf("converting entry to getResponse: %s", err))
+						resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+							Code:    ves_io_schema.EINTERNAL,
+							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
+						})
+
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1199,7 +1213,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
 				if !ok {
-					errStrs = append(errStrs, "sro.Status not of type *DBStatusObject in NewListResponse")
+					resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+						Code:    ves_io_schema.EINTERNAL,
+						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
+					})
+
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -1207,10 +1225,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		}
 
 		resp.Items = append(resp.Items, item)
-	}
-
-	if len(errStrs) != 0 {
-		return resp, fmt.Errorf("Error in list elements: %s", strings.Join(errStrs, "\n"))
 	}
 	return resp, nil
 }
@@ -1227,7 +1241,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Site",
-        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to \n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
+        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to\n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
         "version": "version not set"
     },
     "schemes": [
@@ -1563,6 +1577,21 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -1609,6 +1638,52 @@ var APISwaggerJSON string = `{
                     "title": "type",
                     "x-displayname": "Type",
                     "x-ves-example": "Operational"
+                }
+            }
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2016,6 +2091,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -2920,7 +3001,7 @@ var APISwaggerJSON string = `{
                 },
                 "bgp_peer_address": {
                     "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
                     "x-displayname": "BGP Peer Address",
                     "x-ves-example": "10.1.1.1"
                 },
@@ -3026,7 +3107,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site State"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup. \n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
                     "x-displayname": "Site To Site Network Type"
                 },
@@ -3052,6 +3133,14 @@ var APISwaggerJSON string = `{
                     "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels",
                     "$ref": "#/definitions/schemaSiteToSiteTunnelType",
                     "x-displayname": "Site Tunnel Type"
+                },
+                "vip_params_per_az": {
+                    "type": "array",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul",
+                    "items": {
+                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
+                    },
+                    "x-displayname": "Publish VIP Params Per AZ"
                 },
                 "vip_vrrp_mode": {
                     "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
@@ -3105,7 +3194,7 @@ var APISwaggerJSON string = `{
                 },
                 "bgp_peer_address": {
                     "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
                     "title": "bgp_peer_address",
                     "x-displayname": "BGP Peer Address",
                     "x-ves-example": "10.1.1.1"
@@ -3265,6 +3354,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Outside VIP",
                     "x-ves-example": "10.1.1.1"
                 },
+                "phobos_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that phobos service is enabled",
+                    "title": "Phobos enabled",
+                    "format": "boolean",
+                    "x-displayname": "Phobos enabled"
+                },
+                "piku_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that piku service is enabled",
+                    "title": "Piku enabled",
+                    "format": "boolean",
+                    "x-displayname": "Piku enabled"
+                },
                 "private_ip": {
                     "type": "string",
                     "description": " VIP in the Private VN used for terminating IPSec/SSL tunnels\n The automatic tunnels between regional-edges and customer-edge sites use this VIP if private access is enabled\n\nExample: - \"1.2.3.4\"-",
@@ -3305,7 +3408,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Subtype"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup. \n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
                     "title": "site_to_site_network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
                     "x-displayname": "Site To Site Network Type"
@@ -3323,6 +3426,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteType",
                     "x-displayname": "Site Type"
                 },
+                "srv6_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that Srv6 is enabled",
+                    "title": "Srv6 enabled",
+                    "format": "boolean",
+                    "x-displayname": "Srv6 enabled"
+                },
                 "static_routes": {
                     "type": "array",
                     "description": " List of Fabric VN subnets/addresses in this site\n\nExample: - \"10.1.1.0/24\"-\nRequired: YES",
@@ -3336,10 +3446,17 @@ var APISwaggerJSON string = `{
                 },
                 "template_parameters": {
                     "type": "object",
-                    "description": " Optional\n Map of string keys and values that can be used to provide per site config parameters to various \n configurations objects that configure features on set of sites\n In the configuration object a key is provided and value for that key is provided in the \n template_parameters\n\nExample: - \"value\"-",
+                    "description": " Optional\n Map of string keys and values that can be used to provide per site config parameters to various\n configurations objects that configure features on set of sites\n In the configuration object a key is provided and value for that key is provided in the\n template_parameters\n\nExample: - \"value\"-",
                     "title": "template_parameters",
                     "x-displayname": "Template Parameters",
                     "x-ves-example": "value"
+                },
+                "tenant_index": {
+                    "type": "integer",
+                    "description": " object_index of an associated Tenant Index",
+                    "title": "Tenant Index",
+                    "format": "int64",
+                    "x-displayname": "Tenant Index"
                 },
                 "tunnel_dead_timeout": {
                     "type": "integer",
@@ -3367,6 +3484,15 @@ var APISwaggerJSON string = `{
                     "title": "vega",
                     "$ref": "#/definitions/schemaServiceParameters",
                     "x-displayname": "Vega Parameters"
+                },
+                "vip_params_per_az": {
+                    "type": "array",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul",
+                    "title": "vip_params_per_az",
+                    "items": {
+                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
+                    },
+                    "x-displayname": "Publish VIP Params Per AZ"
                 },
                 "vip_vrrp_mode": {
                     "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
@@ -3617,6 +3743,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "List Response",
             "x-ves-proto-message": "ves.io.schema.site.ListResponse",
             "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                },
                 "items": {
                     "type": "array",
                     "description": " items represents the collection in response",
@@ -4062,6 +4197,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "sitePublishVIPParamsPerAz": {
+            "type": "object",
+            "description": "Per AZ parameters needed to publish VIP for publci cloud sites",
+            "title": "Publish VIP Params Per AZ",
+            "x-displayname": "Publish VIP Params Per AZ",
+            "x-ves-proto-message": "ves.io.schema.site.PublishVIPParamsPerAz",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\nRequired: YES",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-east-2a",
+                    "x-ves-required": "true"
+                },
+                "inside_vip": {
+                    "type": "array",
+                    "description": " List of Inside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-",
+                    "title": "Inside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Inside VIP(s)",
+                    "x-ves-example": "192.168.0.156"
+                },
+                "inside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the inside VIP,\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Inside VIP CNAME",
+                    "x-displayname": "Inside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                },
+                "outside_vip": {
+                    "type": "array",
+                    "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\nRequired: YES",
+                    "title": "Outside VIP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Outside VIP(s)",
+                    "x-ves-example": "192.168.0.156",
+                    "x-ves-required": "true"
+                },
+                "outside_vip_cname": {
+                    "type": "string",
+                    "description": " CNAME value for the outside VIP\n These are usually public cloud generated CNAME\n\nExample: - \"test.56670-387196482.useast2.ves.io\"-",
+                    "title": "Outside VIP CNAME",
+                    "x-displayname": "Outside VIP CNAME",
+                    "x-ves-example": "test.56670-387196482.useast2.ves.io"
+                }
+            }
+        },
         "siteReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -4110,7 +4297,7 @@ var APISwaggerJSON string = `{
                 },
                 "bgp_peer_address": {
                     "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
                     "x-displayname": "BGP Peer Address",
                     "x-ves-example": "10.1.1.1"
                 },
@@ -4174,7 +4361,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "east-us-2"
                 },
                 "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup. \n Must be specified for CE site mesh group configuration",
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
                     "x-displayname": "Site To Site Network Type"
                 },

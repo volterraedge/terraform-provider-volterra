@@ -55,11 +55,9 @@ type UpgradeSWRequest struct {
 	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
 }
 
-func (m *UpgradeSWRequest) Reset()      { *m = UpgradeSWRequest{} }
-func (*UpgradeSWRequest) ProtoMessage() {}
-func (*UpgradeSWRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicUpgradeapi, []int{0}
-}
+func (m *UpgradeSWRequest) Reset()                    { *m = UpgradeSWRequest{} }
+func (*UpgradeSWRequest) ProtoMessage()               {}
+func (*UpgradeSWRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicUpgradeapi, []int{0} }
 
 func (m *UpgradeSWRequest) GetNamespace() string {
 	if m != nil {
@@ -124,11 +122,9 @@ type UpgradeOSRequest struct {
 	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
 }
 
-func (m *UpgradeOSRequest) Reset()      { *m = UpgradeOSRequest{} }
-func (*UpgradeOSRequest) ProtoMessage() {}
-func (*UpgradeOSRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicUpgradeapi, []int{2}
-}
+func (m *UpgradeOSRequest) Reset()                    { *m = UpgradeOSRequest{} }
+func (*UpgradeOSRequest) ProtoMessage()               {}
+func (*UpgradeOSRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicUpgradeapi, []int{2} }
 
 func (m *UpgradeOSRequest) GetNamespace() string {
 	if m != nil {

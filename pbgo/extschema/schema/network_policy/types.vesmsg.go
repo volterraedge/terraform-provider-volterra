@@ -2134,6 +2134,15 @@ func (v *ValidateNetworkPolicyRuleType) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["label_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label_matcher"))
+		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
@@ -2345,6 +2354,8 @@ var DefaultNetworkPolicyRuleTypeValidator = func() *ValidateNetworkPolicyRuleTyp
 
 	v.FldValidators["traffic_choice.protocol_port_range"] = ProtocolPortTypeValidator().Validate
 
+	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
+
 	return v
 }()
 
@@ -2493,7 +2504,7 @@ var DefaultProtocolPortTypeValidator = func() *ValidateProtocolPortType {
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+		"ves.io.schema.rules.string.in": "[\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {

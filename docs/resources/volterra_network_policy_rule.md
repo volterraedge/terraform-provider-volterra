@@ -44,7 +44,7 @@ Argument Reference
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
 
-`advanced_action` - (Optional) NetworkPolicyRuleAction for allow/deny and also log for sampling. See [Advanced Action ](#advanced-action) below for details.
+`advanced_action` - (Optional) Enable or disable logging.. See [Advanced Action ](#advanced-action) below for details.
 
 `label_matcher` - (Optional) List of label keys to be matched in prefix_selector configured in remote_endpoint. See [Label Matcher ](#label-matcher) below for details.
 
@@ -60,9 +60,9 @@ Argument Reference
 
 ### Advanced Action
 
-NetworkPolicyRuleAction for allow/deny and also log for sampling.
+Enable or disable logging..
 
-`action` - (Optional) Advanced action applied along with selection in NetworkPolicyRuleAction (`String`).
+`action` - (Optional) Enable or disable logging. (`String`).
 
 ### Ip Prefix Set
 

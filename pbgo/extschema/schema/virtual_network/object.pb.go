@@ -7,6 +7,7 @@
 	It is generated from these files:
 		ves.io/schema/virtual_network/object.proto
 		ves.io/schema/virtual_network/public_crudapi.proto
+		ves.io/schema/virtual_network/public_custom_data_api.proto
 		ves.io/schema/virtual_network/types.proto
 
 	It has these top-level messages:
@@ -23,6 +24,10 @@
 		ListResponseItem
 		ListResponse
 		DeleteRequest
+		SIDCounterRequest
+		SIDCounterResponse
+		SIDCounterTypeData
+		SIDCounterData
 		VoltADNPrivateNetworkReInfoType
 		VoltADNPrivateNetworkTenantInfoType
 		DNSServersList

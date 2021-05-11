@@ -847,6 +847,18 @@ func (v *ValidateListResponse) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("errors"))
+		for idx, item := range m.GetErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["items"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("items"))

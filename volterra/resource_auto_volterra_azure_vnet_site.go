@@ -166,6 +166,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"os": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_os_version": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"operating_system_version": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"resource_group": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -2053,6 +2075,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"sw": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_sw_version": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"volterra_software_version": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"vnet": {
 
 				Type:     schema.TypeSet,
@@ -2312,6 +2356,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.NodesPerAz =
 			uint32(v.(int))
+	}
+
+	//os
+	if v, ok := d.GetOk("os"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		os := &ves_io_schema_views.OperatingSystemType{}
+		createSpec.Os = os
+		for _, set := range sl {
+			osMapStrToI := set.(map[string]interface{})
+
+			operatingSystemVersionChoiceTypeFound := false
+
+			if v, ok := osMapStrToI["default_os_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+
+				operatingSystemVersionChoiceTypeFound = true
+
+				if v.(bool) {
+					operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}
+					operatingSystemVersionChoiceInt.DefaultOsVersion = &ves_io_schema.Empty{}
+					os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+				}
+
+			}
+
+			if v, ok := osMapStrToI["operating_system_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+
+				operatingSystemVersionChoiceTypeFound = true
+				operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_OperatingSystemVersion{}
+
+				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+
+				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
+
+			}
+
+		}
+
 	}
 
 	//resource_group
@@ -4907,6 +4989,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.SshKey =
 			v.(string)
+	}
+
+	//sw
+	if v, ok := d.GetOk("sw"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		sw := &ves_io_schema_views.VolterraSoftwareType{}
+		createSpec.Sw = sw
+		for _, set := range sl {
+			swMapStrToI := set.(map[string]interface{})
+
+			volterraSwVersionChoiceTypeFound := false
+
+			if v, ok := swMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+				volterraSwVersionChoiceTypeFound = true
+
+				if v.(bool) {
+					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
+					volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+					sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+				}
+
+			}
+
+			if v, ok := swMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+				volterraSwVersionChoiceTypeFound = true
+				volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
+
+				sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+
+				volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
+
+			}
+
+		}
+
 	}
 
 	//vnet

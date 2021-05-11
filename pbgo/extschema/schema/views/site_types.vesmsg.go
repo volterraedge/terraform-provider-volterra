@@ -772,6 +772,125 @@ func AWSVPCchoiceTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AllowedVIPPorts) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AllowedVIPPorts) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AllowedVIPPorts) DeepCopy() *AllowedVIPPorts {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AllowedVIPPorts{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AllowedVIPPorts) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AllowedVIPPorts) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AllowedVIPPortsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAllowedVIPPorts struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAllowedVIPPorts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AllowedVIPPorts)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AllowedVIPPorts got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetPortChoice().(type) {
+	case *AllowedVIPPorts_UseHttpPort:
+		if fv, exists := v.FldValidators["port_choice.use_http_port"]; exists {
+			val := m.GetPortChoice().(*AllowedVIPPorts_UseHttpPort).UseHttpPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("use_http_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AllowedVIPPorts_UseHttpsPort:
+		if fv, exists := v.FldValidators["port_choice.use_https_port"]; exists {
+			val := m.GetPortChoice().(*AllowedVIPPorts_UseHttpsPort).UseHttpsPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("use_https_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AllowedVIPPorts_UseHttpHttpsPort:
+		if fv, exists := v.FldValidators["port_choice.use_http_https_port"]; exists {
+			val := m.GetPortChoice().(*AllowedVIPPorts_UseHttpHttpsPort).UseHttpHttpsPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("use_http_https_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AllowedVIPPorts_CustomPorts:
+		if fv, exists := v.FldValidators["port_choice.custom_ports"]; exists {
+			val := m.GetPortChoice().(*AllowedVIPPorts_CustomPorts).CustomPorts
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("custom_ports"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAllowedVIPPortsValidator = func() *ValidateAllowedVIPPorts {
+	v := &ValidateAllowedVIPPorts{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["port_choice.custom_ports"] = CustomPortsValidator().Validate
+
+	return v
+}()
+
+func AllowedVIPPortsValidator() db.Validator {
+	return DefaultAllowedVIPPortsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureSubnetChoiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2148,6 +2267,146 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 
 func CloudSubnetTypeValidator() db.Validator {
 	return DefaultCloudSubnetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomPorts) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomPorts) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomPorts) DeepCopy() *CustomPorts {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomPorts{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomPorts) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomPorts) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomPortsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomPorts struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomPorts) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for port_ranges")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for port_ranges")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated port_ranges")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items port_ranges")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomPorts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomPorts)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomPorts got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port_ranges"]; exists {
+		vOpts := append(opts, db.WithValidateField("port_ranges"))
+		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomPortsValidator = func() *ValidateCustomPorts {
+	v := &ValidateCustomPorts{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPortRanges := v.PortRangesValidationRuleHandler
+	rulesPortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.string.port_range": "true",
+		"ves.io.schema.rules.repeated.max_items":               "128",
+	}
+	vFn, err = vrhPortRanges(rulesPortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomPorts.port_ranges: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_ranges"] = vFn
+
+	return v
+}()
+
+func CustomPortsValidator() db.Validator {
+	return DefaultCustomPortsValidator
 }
 
 // augmented methods on protoc/std generated struct

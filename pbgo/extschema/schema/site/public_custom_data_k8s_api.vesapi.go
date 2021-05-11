@@ -76,6 +76,15 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCDeploymentList(ctx context.Context, ya
 	return rsp, err
 }
 
+func (c *CustomDataK8SAPIGrpcClient) doRPCEndpointsList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EndpointsListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.EndpointsListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.EndpointsList(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataK8SAPIGrpcClient) doRPCJobList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &JobListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,12 +103,30 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCNamespaceList(ctx context.Context, yam
 	return rsp, err
 }
 
+func (c *CustomDataK8SAPIGrpcClient) doRPCNodeList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &NodeListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.NodeListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.NodeList(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeClaimList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PersistentVolumeClaimListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PersistentVolumeClaimListRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.PersistentVolumeClaimList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &PersistentVolumeListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PersistentVolumeListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.PersistentVolumeList(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -186,11 +213,17 @@ func NewCustomDataK8SAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
 
+	rpcFns["EndpointsList"] = ccl.doRPCEndpointsList
+
 	rpcFns["JobList"] = ccl.doRPCJobList
 
 	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
 
+	rpcFns["NodeList"] = ccl.doRPCNodeList
+
 	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
+
+	rpcFns["PersistentVolumeList"] = ccl.doRPCPersistentVolumeList
 
 	rpcFns["PodList"] = ccl.doRPCPodList
 
@@ -523,6 +556,83 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	return pbRsp, nil
 }
 
+func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &EndpointsListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.EndpointsListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.EndpointsList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.EndpointsList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -676,6 +786,82 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	return pbRsp, nil
 }
 
+func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &NodeListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.NodeListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.NodeList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.NodeList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -744,6 +930,83 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	pbRsp := &k8s_io_api_core_v1.PersistentVolumeClaimList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeClaimList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &PersistentVolumeListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PersistentVolumeListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.PersistentVolumeList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1170,11 +1433,17 @@ func NewCustomDataK8SAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
 
+	rpcFns["EndpointsList"] = ccl.doRPCEndpointsList
+
 	rpcFns["JobList"] = ccl.doRPCJobList
 
 	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
 
+	rpcFns["NodeList"] = ccl.doRPCNodeList
+
 	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
+
+	rpcFns["PersistentVolumeList"] = ccl.doRPCPersistentVolumeList
 
 	rpcFns["PodList"] = ccl.doRPCPodList
 
@@ -1374,6 +1643,50 @@ func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *D
 
 	return rsp, nil
 }
+func (c *CustomDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *EndpointsListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.EndpointsList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.EndpointsList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.EndpointsListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.EndpointsList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.EndpointsList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.EndpointsList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.EndpointsList", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1.JobList, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
@@ -1462,6 +1775,50 @@ func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *Na
 
 	return rsp, nil
 }
+func (c *CustomDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NodeList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.NodeList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.NodeListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.NodeList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NodeList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.NodeList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.NodeList", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
@@ -1503,6 +1860,50 @@ func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Con
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PersistentVolumeClaimList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context, in *PersistentVolumeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.PersistentVolumeList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.PersistentVolumeListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.PersistentVolumeList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.PersistentVolumeList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PersistentVolumeList", rsp)...)
 
 	return rsp, nil
 }
@@ -1850,6 +2251,96 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/site/{site}/api/v1/endpoints": {
+            "get": {
+                "summary": "EndpointsList",
+                "description": "API to get list of endpoints for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1EndpointsList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of endpoints in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-EndpointsList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/site/{site}/api/v1/namespaces": {
             "get": {
                 "summary": "NamespaceList",
@@ -2020,6 +2511,94 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/endpoints": {
+            "get": {
+                "summary": "EndpointsList",
+                "description": "API to get list of endpoints for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1EndpointsList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-EndpointsList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumeclaims": {
             "get": {
                 "summary": "PersistentVolumeClaimList",
@@ -2103,6 +2682,94 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumes": {
+            "get": {
+                "summary": "PersistentVolumeList",
+                "description": "API to get list of Persistent Volumes for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1PersistentVolumeList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"
             },
             "x-displayname": "Custom Data K8s API",
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
@@ -2372,6 +3039,88 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/site/{site}/api/v1/nodes": {
+            "get": {
+                "summary": "NodeList",
+                "description": "API to get list of nodes in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.NodeList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1NodeList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-NodeList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NodeList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/site/{site}/api/v1/persistentvolumeclaims": {
             "get": {
                 "summary": "PersistentVolumeClaimList",
@@ -2457,6 +3206,96 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/persistentvolumes": {
+            "get": {
+                "summary": "PersistentVolumeList",
+                "description": "API to get list of Persistent Volumes for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1PersistentVolumeList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of PVs in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"
             },
             "x-displayname": "Custom Data K8s API",
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
@@ -3871,6 +4710,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1AttachedVolume": {
+            "type": "object",
+            "title": "AttachedVolume describes a volume attached to a node",
+            "properties": {
+                "devicePath": {
+                    "type": "string",
+                    "title": "DevicePath represents the device path where the volume should be available"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "Name of the attached volume"
+                }
+            }
+        },
         "v1AzureDiskVolumeSource": {
             "type": "object",
             "description": "AzureDisk represents an Azure Data Disk mount on the host and bind mount to the pod.",
@@ -3902,6 +4755,29 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1AzureFilePersistentVolumeSource": {
+            "type": "object",
+            "description": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.",
+            "properties": {
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
+                    "format": "boolean"
+                },
+                "secretName": {
+                    "type": "string",
+                    "title": "the name of secret that contains Azure Storage Account Name and Key"
+                },
+                "secretNamespace": {
+                    "type": "string",
+                    "title": "the namespace of the secret that contains Azure Storage Account Name and Key\ndefault is the same as the Pod\n+optional"
+                },
+                "shareName": {
+                    "type": "string",
+                    "title": "Share Name"
+                }
+            }
+        },
         "v1AzureFileVolumeSource": {
             "type": "object",
             "description": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.",
@@ -3918,6 +4794,49 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "shareName": {
                     "type": "string",
                     "title": "Share Name"
+                }
+            }
+        },
+        "v1CSIPersistentVolumeSource": {
+            "type": "object",
+            "title": "Represents storage that is managed by an external CSI volume driver (Beta feature)",
+            "properties": {
+                "controllerExpandSecretRef": {
+                    "title": "ControllerExpandSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nControllerExpandVolume call.\nThis is an alpha field and requires enabling ExpandCSIVolumes feature gate.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "controllerPublishSecretRef": {
+                    "title": "ControllerPublishSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nControllerPublishVolume and ControllerUnpublishVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "driver": {
+                    "type": "string",
+                    "description": "Driver is the name of the driver to use for this volume.\nRequired."
+                },
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\n+optional"
+                },
+                "nodePublishSecretRef": {
+                    "title": "NodePublishSecretRef is a reference to the secret object containing\nsensitive information to pass to the CSI driver to complete the CSI\nNodePublishVolume and NodeUnpublishVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "nodeStageSecretRef": {
+                    "title": "NodeStageSecretRef is a reference to the secret object containing sensitive\ninformation to pass to the CSI driver to complete the CSI NodeStageVolume\nand NodeStageVolume and NodeUnstageVolume calls.\nThis field is optional, and may be empty if no secret is required. If the\nsecret object contains more than one secret, all secrets are passed.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Optional: The value to pass to ControllerPublishVolumeRequest.\nDefaults to false (read/write).\n+optional",
+                    "format": "boolean"
+                },
+                "volumeAttributes": {
+                    "type": "object",
+                    "title": "Attributes of the volume to publish.\n+optional"
+                },
+                "volumeHandle": {
+                    "type": "string",
+                    "description": "VolumeHandle is the unique volume name returned by the CSI volume\nplugin’s CreateVolume to refer to the volume on all subsequent calls.\nRequired."
                 }
             }
         },
@@ -3968,6 +4887,40 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1CephFSPersistentVolumeSource": {
+            "type": "object",
+            "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
+            "properties": {
+                "monitors": {
+                    "type": "array",
+                    "title": "Required: Monitors is a collection of Ceph monitors\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "title": "Optional: Used as the mounted root, rather than the full Ceph tree, default is /\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
+                    "format": "boolean"
+                },
+                "secretFile": {
+                    "type": "string",
+                    "title": "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+                },
+                "secretRef": {
+                    "title": "Optional: SecretRef is reference to the authentication secret for User, default is empty.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "user": {
+                    "type": "string",
+                    "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+                }
+            }
+        },
         "v1CephFSVolumeSource": {
             "type": "object",
             "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
@@ -3999,6 +4952,29 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "user": {
                     "type": "string",
                     "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+                }
+            }
+        },
+        "v1CinderPersistentVolumeSource": {
+            "type": "object",
+            "description": "Represents a cinder volume resource in Openstack.\nA Cinder volume must exist before mounting to a container.\nThe volume must also be in the same region as the kubelet.\nCinder volumes support ownership management and SELinux relabeling.",
+            "properties": {
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "title": "Optional: points to a secret object containing parameters used to connect\nto OpenStack.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "volumeID": {
+                    "type": "string",
+                    "title": "volume id used to identify the volume in cinder.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md"
                 }
             }
         },
@@ -4102,6 +5078,32 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "metadata": {
                     "title": "More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
                     "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1ConfigMapNodeConfigSource": {
+            "type": "object",
+            "description": "ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node.",
+            "properties": {
+                "kubeletConfigKey": {
+                    "type": "string",
+                    "description": "KubeletConfigKey declares which key of the referenced ConfigMap corresponds to the KubeletConfiguration structure\nThis field is required in all cases."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name is the metadata.name of the referenced ConfigMap.\nThis field is required in all cases."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "Namespace is the metadata.namespace of the referenced ConfigMap.\nThis field is required in all cases."
+                },
+                "resourceVersion": {
+                    "type": "string",
+                    "title": "ResourceVersion is the metadata.ResourceVersion of the referenced ConfigMap.\nThis field is forbidden in Node.Spec, and required in Node.Status.\n+optional"
+                },
+                "uid": {
+                    "type": "string",
+                    "title": "UID is the metadata.UID of the referenced ConfigMap.\nThis field is forbidden in Node.Spec, and required in Node.Status.\n+optional"
                 }
             }
         },
@@ -4270,6 +5272,24 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1ContainerImage": {
+            "type": "object",
+            "title": "Describe a container image",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "title": "Names by which this image is known.\ne.g. [\"k8s.gcr.io/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sizeBytes": {
+                    "type": "string",
+                    "title": "The size of the image in bytes.\n+optional",
+                    "format": "int64"
+                }
+            }
+        },
         "v1ContainerPort": {
             "type": "object",
             "description": "ContainerPort represents a network port in a single container.",
@@ -4418,6 +5438,17 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "state": {
                     "title": "Details about the container's current condition.\n+optional",
                     "$ref": "#/definitions/v1ContainerState"
+                }
+            }
+        },
+        "v1DaemonEndpoint": {
+            "type": "object",
+            "description": "DaemonEndpoint contains information about a single Daemon endpoint.",
+            "properties": {
+                "Port": {
+                    "type": "integer",
+                    "description": "Port number of the given endpoint.",
+                    "format": "int32"
                 }
             }
         },
@@ -4820,6 +5851,108 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1EndpointAddress": {
+            "type": "object",
+            "description": "EndpointAddress is a tuple that describes single IP address.",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "title": "The Hostname of this endpoint\n+optional"
+                },
+                "ip": {
+                    "type": "string",
+                    "description": "The IP of this endpoint.\nMay not be loopback (127.0.0.0/8), link-local (169.254.0.0/16),\nor link-local multicast ((224.0.0.0/24).\nIPv6 is also accepted but not fully supported on all platforms. Also, certain\nkubernetes components, like kube-proxy, are not IPv6 ready.\nTODO: This should allow hostname or IP, See #4447."
+                },
+                "nodeName": {
+                    "type": "string",
+                    "title": "Optional: Node hosting this endpoint. This can be used to determine endpoints local to a node.\n+optional"
+                },
+                "targetRef": {
+                    "title": "Reference to object providing the endpoint.\n+optional",
+                    "$ref": "#/definitions/v1ObjectReference"
+                }
+            }
+        },
+        "v1EndpointPort": {
+            "type": "object",
+            "description": "EndpointPort is a tuple that describes a single port.",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "The name of this port.  This must match the 'name' field in the\ncorresponding ServicePort.\nMust be a DNS_LABEL.\nOptional only if one port is defined.\n+optional"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "The port number of the endpoint.",
+                    "format": "int32"
+                },
+                "protocol": {
+                    "type": "string",
+                    "title": "The IP protocol for this port.\nMust be UDP, TCP, or SCTP.\nDefault is TCP.\n+optional"
+                }
+            }
+        },
+        "v1EndpointSubset": {
+            "type": "object",
+            "title": "EndpointSubset is a group of addresses with a common set of ports. The\nexpanded set of endpoints is the Cartesian product of Addresses x Ports.\nFor example, given:\n  {\n    Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n    Ports:     [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n  }\nThe resulting set of endpoints can be viewed as:\n    a: [ 10.10.1.1:8675, 10.10.2.2:8675 ],\n    b: [ 10.10.1.1:309, 10.10.2.2:309 ]",
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "title": "IP addresses which offer the related ports that are marked as ready. These endpoints\nshould be considered safe for load balancers and clients to utilize.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1EndpointAddress"
+                    }
+                },
+                "notReadyAddresses": {
+                    "type": "array",
+                    "title": "IP addresses which offer the related ports but are not currently marked as ready\nbecause they have not yet finished starting, have recently failed a readiness check,\nor have recently failed a liveness check.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1EndpointAddress"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "title": "Port numbers available on the related IP addresses.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1EndpointPort"
+                    }
+                }
+            }
+        },
+        "v1Endpoints": {
+            "type": "object",
+            "title": "Endpoints is a collection of endpoints that implement the actual service. Example:\n  Name: \"mysvc\",\n  Subsets: [\n    {\n      Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n      Ports: [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n    },\n    {\n      Addresses: [{\"ip\": \"10.10.3.3\"}],\n      Ports: [{\"name\": \"a\", \"port\": 93}, {\"name\": \"b\", \"port\": 76}]\n    },\n ]",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "subsets": {
+                    "type": "array",
+                    "title": "The set of all endpoints is the union of all subsets. Addresses are placed into\nsubsets according to the IPs they share. A single address with multiple ports,\nsome of which are ready and some of which are not (because they come from\ndifferent containers) will result in the address being displayed in different\nsubsets for the different ports. No address will appear in both Addresses and\nNotReadyAddresses in the same subset.\nSets of addresses and ports that comprise a service.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1EndpointSubset"
+                    }
+                }
+            }
+        },
+        "v1EndpointsList": {
+            "type": "object",
+            "description": "EndpointsList is a list of endpoints.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "List of endpoints.",
+                    "items": {
+                        "$ref": "#/definitions/v1Endpoints"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
         "v1EnvFromSource": {
             "type": "object",
             "title": "EnvFromSource represents the source of a set of ConfigMaps",
@@ -5068,6 +6201,33 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1FlexPersistentVolumeSource": {
+            "type": "object",
+            "description": "FlexPersistentVolumeSource represents a generic persistent volume resource that is\nprovisioned/attached using an exec based plugin.",
+            "properties": {
+                "driver": {
+                    "type": "string",
+                    "description": "Driver is the name of the driver to use for this volume."
+                },
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n+optional"
+                },
+                "options": {
+                    "type": "object",
+                    "title": "Optional: Extra command options if any.\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "title": "Optional: SecretRef is reference to the secret object containing\nsensitive information to pass to the plugin scripts. This may be\nempty if no secret object is specified. If the secret object\ncontains more than one secret, all secrets are passed to the plugin\nscripts.\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                }
+            }
+        },
         "v1FlexVolumeSource": {
             "type": "object",
             "description": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.",
@@ -5148,6 +6308,29 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "revision": {
                     "type": "string",
                     "title": "Commit hash for the specified revision.\n+optional"
+                }
+            }
+        },
+        "v1GlusterfsPersistentVolumeSource": {
+            "type": "object",
+            "description": "Represents a Glusterfs mount that lasts the lifetime of a pod.\nGlusterfs volumes do not support ownership management or SELinux relabeling.",
+            "properties": {
+                "endpoints": {
+                    "type": "string",
+                    "title": "EndpointsName is the endpoint name that details Glusterfs topology.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+                },
+                "endpointsNamespace": {
+                    "type": "string",
+                    "title": "EndpointsNamespace is the namespace that contains Glusterfs endpoint.\nIf this field is empty, the EndpointNamespace defaults to the same namespace as the bound PVC.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional"
+                },
+                "path": {
+                    "type": "string",
+                    "title": "Path is the Glusterfs volume path.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional",
+                    "format": "boolean"
                 }
             }
         },
@@ -5259,6 +6442,63 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "type": {
                     "type": "string",
                     "title": "Type for HostPath Volume\nDefaults to \"\"\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n+optional"
+                }
+            }
+        },
+        "v1ISCSIPersistentVolumeSource": {
+            "type": "object",
+            "description": "ISCSIPersistentVolumeSource represents an ISCSI disk.\nISCSI volumes can only be mounted as read/write once.\nISCSI volumes support ownership management and SELinux relabeling.",
+            "properties": {
+                "chapAuthDiscovery": {
+                    "type": "boolean",
+                    "title": "whether support iSCSI Discovery CHAP authentication\n+optional",
+                    "format": "boolean"
+                },
+                "chapAuthSession": {
+                    "type": "boolean",
+                    "title": "whether support iSCSI Session CHAP authentication\n+optional",
+                    "format": "boolean"
+                },
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+                },
+                "initiatorName": {
+                    "type": "string",
+                    "title": "Custom iSCSI Initiator Name.\nIf initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface\n\u003ctarget portal\u003e:\u003cvolume name\u003e will be created for the connection.\n+optional"
+                },
+                "iqn": {
+                    "type": "string",
+                    "description": "Target iSCSI Qualified Name."
+                },
+                "iscsiInterface": {
+                    "type": "string",
+                    "title": "iSCSI Interface Name that uses an iSCSI transport.\nDefaults to 'default' (tcp).\n+optional"
+                },
+                "lun": {
+                    "type": "integer",
+                    "description": "iSCSI Target Lun number.",
+                    "format": "int32"
+                },
+                "portals": {
+                    "type": "array",
+                    "title": "iSCSI Target Portal List. The Portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "title": "CHAP Secret for iSCSI target and initiator authentication\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "targetPortal": {
+                    "type": "string",
+                    "description": "iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260)."
                 }
             }
         },
@@ -5595,6 +6835,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1LocalVolumeSource": {
+            "type": "object",
+            "title": "Local represents directly-attached storage with node affinity (Beta feature)",
+            "properties": {
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nIt applies only when the Path is a block device.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a fileystem if unspecified.\n+optional"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "The full path to the volume on the node.\nIt can be either a directory or block device (disk, partition, ...)."
+                }
+            }
+        },
         "v1ManagedFieldsEntry": {
             "type": "object",
             "description": "ManagedFieldsEntry is a workflow-id, a FieldSet and the group version of the resource\nthat the fieldset applies to.",
@@ -5735,6 +6989,38 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1Node": {
+            "type": "object",
+            "description": "Node is a worker node in Kubernetes.\nEach node will have a unique identifier in the cache (i.e. in etcd).",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the behavior of a node.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NodeSpec"
+                },
+                "status": {
+                    "title": "Most recently observed status of the node.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NodeStatus"
+                }
+            }
+        },
+        "v1NodeAddress": {
+            "type": "object",
+            "description": "NodeAddress contains information for the node's address.",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "The node address."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Node address type, one of Hostname, ExternalIP or InternalIP."
+                }
+            }
+        },
         "v1NodeAffinity": {
             "type": "object",
             "description": "Node affinity is a group of node affinity scheduling rules.",
@@ -5749,6 +7035,95 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "requiredDuringSchedulingIgnoredDuringExecution": {
                     "title": "If the affinity requirements specified by this field are not met at\nscheduling time, the pod will not be scheduled onto the node.\nIf the affinity requirements specified by this field cease to be met\nat some point during pod execution (e.g. due to an update), the system\nmay or may not try to eventually evict the pod from its node.\n+optional",
                     "$ref": "#/definitions/v1NodeSelector"
+                }
+            }
+        },
+        "v1NodeCondition": {
+            "type": "object",
+            "description": "NodeCondition contains condition information for a node.",
+            "properties": {
+                "lastHeartbeatTime": {
+                    "title": "Last time we got an update on a given condition.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "lastTransitionTime": {
+                    "title": "Last time the condition transit from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "Human readable message indicating details about last transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "(brief) reason for the condition's last transition.\n+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of node condition."
+                }
+            }
+        },
+        "v1NodeConfigSource": {
+            "type": "object",
+            "description": "NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil.",
+            "properties": {
+                "configMap": {
+                    "title": "ConfigMap is a reference to a Node's ConfigMap",
+                    "$ref": "#/definitions/v1ConfigMapNodeConfigSource"
+                }
+            }
+        },
+        "v1NodeConfigStatus": {
+            "type": "object",
+            "description": "NodeConfigStatus describes the status of the config assigned by Node.Spec.ConfigSource.",
+            "properties": {
+                "active": {
+                    "title": "Active reports the checkpointed config the node is actively using.\nActive will represent either the current version of the Assigned config,\nor the current LastKnownGood config, depending on whether attempting to use the\nAssigned config results in an error.\n+optional",
+                    "$ref": "#/definitions/v1NodeConfigSource"
+                },
+                "assigned": {
+                    "title": "Assigned reports the checkpointed config the node will try to use.\nWhen Node.Spec.ConfigSource is updated, the node checkpoints the associated\nconfig payload to local disk, along with a record indicating intended\nconfig. The node refers to this record to choose its config checkpoint, and\nreports this record in Assigned. Assigned only updates in the status after\nthe record has been checkpointed to disk. When the Kubelet is restarted,\nit tries to make the Assigned config the Active config by loading and\nvalidating the checkpointed payload identified by Assigned.\n+optional",
+                    "$ref": "#/definitions/v1NodeConfigSource"
+                },
+                "error": {
+                    "type": "string",
+                    "title": "Error describes any problems reconciling the Spec.ConfigSource to the Active config.\nErrors may occur, for example, attempting to checkpoint Spec.ConfigSource to the local Assigned\nrecord, attempting to checkpoint the payload associated with Spec.ConfigSource, attempting\nto load or validate the Assigned config, etc.\nErrors may occur at different points while syncing config. Earlier errors (e.g. download or\ncheckpointing errors) will not result in a rollback to LastKnownGood, and may resolve across\nKubelet retries. Later errors (e.g. loading or validating a checkpointed config) will result in\na rollback to LastKnownGood. In the latter case, it is usually possible to resolve the error\nby fixing the config assigned in Spec.ConfigSource.\nYou can find additional information for debugging by searching the error message in the Kubelet log.\nError is a human-readable description of the error state; machines can check whether or not Error\nis empty, but should not rely on the stability of the Error text across Kubelet versions.\n+optional"
+                },
+                "lastKnownGood": {
+                    "title": "LastKnownGood reports the checkpointed config the node will fall back to\nwhen it encounters an error attempting to use the Assigned config.\nThe Assigned config becomes the LastKnownGood config when the node determines\nthat the Assigned config is stable and correct.\nThis is currently implemented as a 10-minute soak period starting when the local\nrecord of Assigned config is updated. If the Assigned config is Active at the end\nof this period, it becomes the LastKnownGood. Note that if Spec.ConfigSource is\nreset to nil (use local defaults), the LastKnownGood is also immediately reset to nil,\nbecause the local default config is always assumed good.\nYou should not make assumptions about the node's method of determining config stability\nand correctness, as this may change or become configurable in the future.\n+optional",
+                    "$ref": "#/definitions/v1NodeConfigSource"
+                }
+            }
+        },
+        "v1NodeDaemonEndpoints": {
+            "type": "object",
+            "description": "NodeDaemonEndpoints lists ports opened by daemons running on the Node.",
+            "properties": {
+                "kubeletEndpoint": {
+                    "title": "Endpoint on which Kubelet is listening.\n+optional",
+                    "$ref": "#/definitions/v1DaemonEndpoint"
+                }
+            }
+        },
+        "v1NodeList": {
+            "type": "object",
+            "description": "NodeList is the whole list of all Nodes which have been registered with master.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "List of nodes",
+                    "items": {
+                        "$ref": "#/definitions/v1Node"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
                 }
             }
         },
@@ -5803,6 +7178,158 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/v1NodeSelectorRequirement"
                     }
+                }
+            }
+        },
+        "v1NodeSpec": {
+            "type": "object",
+            "description": "NodeSpec describes the attributes that a node is created with.",
+            "properties": {
+                "configSource": {
+                    "title": "If specified, the source to get node configuration from\nThe DynamicKubeletConfig feature gate must be enabled for the Kubelet to use this field\n+optional",
+                    "$ref": "#/definitions/v1NodeConfigSource"
+                },
+                "externalID": {
+                    "type": "string",
+                    "title": "Deprecated. Not all kubelets will set this field. Remove field after 1.13.\nsee: https://issues.k8s.io/61966\n+optional"
+                },
+                "podCIDR": {
+                    "type": "string",
+                    "title": "PodCIDR represents the pod IP range assigned to the node.\n+optional"
+                },
+                "podCIDRs": {
+                    "type": "array",
+                    "title": "podCIDRs represents the IP ranges assigned to the node for usage by Pods on that node. If this\nfield is specified, the 0th entry must match the podCIDR field. It may contain at most 1 value for\neach of IPv4 and IPv6.\n+optional\n+patchStrategy=merge",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "providerID": {
+                    "type": "string",
+                    "title": "ID of the node assigned by the cloud provider in the format: \u003cProviderName\u003e://\u003cProviderSpecificNodeID\u003e\n+optional"
+                },
+                "taints": {
+                    "type": "array",
+                    "title": "If specified, the node's taints.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1Taint"
+                    }
+                },
+                "unschedulable": {
+                    "type": "boolean",
+                    "title": "Unschedulable controls node schedulability of new pods. By default, node is schedulable.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#manual-node-administration\n+optional",
+                    "format": "boolean"
+                }
+            }
+        },
+        "v1NodeStatus": {
+            "type": "object",
+            "description": "NodeStatus is information about the current status of a node.",
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "title": "List of addresses reachable to the node.\nQueried from cloud provider, if available.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#addresses\nNote: This field is declared as mergeable, but the merge key is not sufficiently\nunique, which can cause data corruption when it is merged. Callers should instead\nuse a full-replacement patch. See http://pr.k8s.io/79391 for an example.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1NodeAddress"
+                    }
+                },
+                "allocatable": {
+                    "type": "object",
+                    "title": "Allocatable represents the resources of a node that are available for scheduling.\nDefaults to Capacity.\n+optional"
+                },
+                "capacity": {
+                    "type": "object",
+                    "title": "Capacity represents the total resources of a node.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity\n+optional"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Conditions is an array of current observed node conditions.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#condition\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1NodeCondition"
+                    }
+                },
+                "config": {
+                    "title": "Status of the config assigned to the node via the dynamic Kubelet config feature.\n+optional",
+                    "$ref": "#/definitions/v1NodeConfigStatus"
+                },
+                "daemonEndpoints": {
+                    "title": "Endpoints of daemons running on the Node.\n+optional",
+                    "$ref": "#/definitions/v1NodeDaemonEndpoints"
+                },
+                "images": {
+                    "type": "array",
+                    "title": "List of container images on this node\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1ContainerImage"
+                    }
+                },
+                "nodeInfo": {
+                    "title": "Set of ids/uuids to uniquely identify the node.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#info\n+optional",
+                    "$ref": "#/definitions/v1NodeSystemInfo"
+                },
+                "phase": {
+                    "type": "string",
+                    "title": "NodePhase is the recently observed lifecycle phase of the node.\nMore info: https://kubernetes.io/docs/concepts/nodes/node/#phase\nThe field is never populated, and now is deprecated.\n+optional"
+                },
+                "volumesAttached": {
+                    "type": "array",
+                    "title": "List of volumes that are attached to the node.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1AttachedVolume"
+                    }
+                },
+                "volumesInUse": {
+                    "type": "array",
+                    "title": "List of attachable volumes in use (mounted) by the node.\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1NodeSystemInfo": {
+            "type": "object",
+            "description": "NodeSystemInfo is a set of ids/uuids to uniquely identify the node.",
+            "properties": {
+                "architecture": {
+                    "type": "string",
+                    "title": "The Architecture reported by the node"
+                },
+                "bootID": {
+                    "type": "string",
+                    "description": "Boot ID reported by the node."
+                },
+                "containerRuntimeVersion": {
+                    "type": "string",
+                    "description": "ContainerRuntime Version reported by the node through runtime remote API (e.g. docker://1.5.0)."
+                },
+                "kernelVersion": {
+                    "type": "string",
+                    "description": "Kernel Version reported by the node from 'uname -r' (e.g. 3.16.0-0.bpo.4-amd64)."
+                },
+                "kubeProxyVersion": {
+                    "type": "string",
+                    "description": "KubeProxy Version reported by the node."
+                },
+                "kubeletVersion": {
+                    "type": "string",
+                    "description": "Kubelet Version reported by the node."
+                },
+                "machineID": {
+                    "type": "string",
+                    "title": "MachineID reported by the node. For unique machine identification\nin the cluster this field is preferred. Learn more from man(5)\nmachine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html"
+                },
+                "operatingSystem": {
+                    "type": "string",
+                    "title": "The Operating System reported by the node"
+                },
+                "osImage": {
+                    "type": "string",
+                    "description": "OS Image reported by the node from /etc/os-release (e.g. Debian GNU/Linux 7 (wheezy))."
+                },
+                "systemUUID": {
+                    "type": "string",
+                    "title": "SystemUUID reported by the node. For unique machine identification\nMachineID is preferred. This field is specific to Red Hat hosts\nhttps://access.redhat.com/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/getting-system-uuid.html"
                 }
             }
         },
@@ -5967,6 +7494,24 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1PersistentVolume": {
+            "type": "object",
+            "title": "PersistentVolume (PV) is a storage resource provisioned by an administrator.\nIt is analogous to a node.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines a specification of a persistent volume owned by the cluster.\nProvisioned by an administrator.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n+optional",
+                    "$ref": "#/definitions/v1PersistentVolumeSpec"
+                },
+                "status": {
+                    "title": "Status represents the current information/status for the persistent volume.\nPopulated by the system.\nRead-only.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes\n+optional",
+                    "$ref": "#/definitions/v1PersistentVolumeStatus"
+                }
+            }
+        },
         "v1PersistentVolumeClaim": {
             "type": "object",
             "title": "PersistentVolumeClaim is a user's request for and claim to a persistent volume",
@@ -6107,6 +7652,183 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "type": "boolean",
                     "title": "Will force the ReadOnly setting in VolumeMounts.\nDefault false.\n+optional",
                     "format": "boolean"
+                }
+            }
+        },
+        "v1PersistentVolumeList": {
+            "type": "object",
+            "description": "PersistentVolumeList is a list of PersistentVolume items.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "List of persistent volumes.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes",
+                    "items": {
+                        "$ref": "#/definitions/v1PersistentVolume"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1PersistentVolumeSource": {
+            "type": "object",
+            "description": "PersistentVolumeSource is similar to VolumeSource but meant for the\nadministrator who creates PVs. Exactly one of its members must be set.",
+            "properties": {
+                "awsElasticBlockStore": {
+                    "title": "AWSElasticBlockStore represents an AWS Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n+optional",
+                    "$ref": "#/definitions/v1AWSElasticBlockStoreVolumeSource"
+                },
+                "azureDisk": {
+                    "title": "AzureDisk represents an Azure Data Disk mount on the host and bind mount to the pod.\n+optional",
+                    "$ref": "#/definitions/v1AzureDiskVolumeSource"
+                },
+                "azureFile": {
+                    "title": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.\n+optional",
+                    "$ref": "#/definitions/v1AzureFilePersistentVolumeSource"
+                },
+                "cephfs": {
+                    "title": "CephFS represents a Ceph FS mount on the host that shares a pod's lifetime\n+optional",
+                    "$ref": "#/definitions/v1CephFSPersistentVolumeSource"
+                },
+                "cinder": {
+                    "title": "Cinder represents a cinder volume attached and mounted on kubelets host machine.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional",
+                    "$ref": "#/definitions/v1CinderPersistentVolumeSource"
+                },
+                "csi": {
+                    "title": "CSI represents storage that is handled by an external CSI driver (Beta feature).\n+optional",
+                    "$ref": "#/definitions/v1CSIPersistentVolumeSource"
+                },
+                "fc": {
+                    "title": "FC represents a Fibre Channel resource that is attached to a kubelet's host machine and then exposed to the pod.\n+optional",
+                    "$ref": "#/definitions/v1FCVolumeSource"
+                },
+                "flexVolume": {
+                    "title": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.\n+optional",
+                    "$ref": "#/definitions/v1FlexPersistentVolumeSource"
+                },
+                "flocker": {
+                    "title": "Flocker represents a Flocker volume attached to a kubelet's host machine and exposed to the pod for its usage. This depends on the Flocker control service being running\n+optional",
+                    "$ref": "#/definitions/v1FlockerVolumeSource"
+                },
+                "gcePersistentDisk": {
+                    "title": "GCEPersistentDisk represents a GCE Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod. Provisioned by an admin.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional",
+                    "$ref": "#/definitions/v1GCEPersistentDiskVolumeSource"
+                },
+                "glusterfs": {
+                    "title": "Glusterfs represents a Glusterfs volume that is attached to a host and\nexposed to the pod. Provisioned by an admin.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md\n+optional",
+                    "$ref": "#/definitions/v1GlusterfsPersistentVolumeSource"
+                },
+                "hostPath": {
+                    "title": "HostPath represents a directory on the host.\nProvisioned by a developer or tester.\nThis is useful for single-node development and testing only!\nOn-host storage is not supported in any way and WILL NOT WORK in a multi-node cluster.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n+optional",
+                    "$ref": "#/definitions/v1HostPathVolumeSource"
+                },
+                "iscsi": {
+                    "title": "ISCSI represents an ISCSI Disk resource that is attached to a\nkubelet's host machine and then exposed to the pod. Provisioned by an admin.\n+optional",
+                    "$ref": "#/definitions/v1ISCSIPersistentVolumeSource"
+                },
+                "local": {
+                    "title": "Local represents directly-attached storage with node affinity\n+optional",
+                    "$ref": "#/definitions/v1LocalVolumeSource"
+                },
+                "nfs": {
+                    "title": "NFS represents an NFS mount on the host. Provisioned by an admin.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n+optional",
+                    "$ref": "#/definitions/v1NFSVolumeSource"
+                },
+                "photonPersistentDisk": {
+                    "title": "PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine",
+                    "$ref": "#/definitions/v1PhotonPersistentDiskVolumeSource"
+                },
+                "portworxVolume": {
+                    "title": "PortworxVolume represents a portworx volume attached and mounted on kubelets host machine\n+optional",
+                    "$ref": "#/definitions/v1PortworxVolumeSource"
+                },
+                "quobyte": {
+                    "title": "Quobyte represents a Quobyte mount on the host that shares a pod's lifetime\n+optional",
+                    "$ref": "#/definitions/v1QuobyteVolumeSource"
+                },
+                "rbd": {
+                    "title": "RBD represents a Rados Block Device mount on the host that shares a pod's lifetime.\nMore info: https://examples.k8s.io/volumes/rbd/README.md\n+optional",
+                    "$ref": "#/definitions/v1RBDPersistentVolumeSource"
+                },
+                "scaleIO": {
+                    "title": "ScaleIO represents a ScaleIO persistent volume attached and mounted on Kubernetes nodes.\n+optional",
+                    "$ref": "#/definitions/v1ScaleIOPersistentVolumeSource"
+                },
+                "storageos": {
+                    "title": "StorageOS represents a StorageOS volume that is attached to the kubelet's host machine and mounted into the pod\nMore info: https://examples.k8s.io/volumes/storageos/README.md\n+optional",
+                    "$ref": "#/definitions/v1StorageOSPersistentVolumeSource"
+                },
+                "vsphereVolume": {
+                    "title": "VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine\n+optional",
+                    "$ref": "#/definitions/v1VsphereVirtualDiskVolumeSource"
+                }
+            }
+        },
+        "v1PersistentVolumeSpec": {
+            "type": "object",
+            "description": "PersistentVolumeSpec is the specification of a persistent volume.",
+            "properties": {
+                "accessModes": {
+                    "type": "array",
+                    "title": "AccessModes contains all ways the volume can be mounted.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "capacity": {
+                    "type": "object",
+                    "title": "A description of the persistent volume's resources and capacity.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity\n+optional"
+                },
+                "claimRef": {
+                    "title": "ClaimRef is part of a bi-directional binding between PersistentVolume and PersistentVolumeClaim.\nExpected to be non-nil when bound.\nclaim.VolumeName is the authoritative bind between PV and PVC.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#binding\n+optional",
+                    "$ref": "#/definitions/v1ObjectReference"
+                },
+                "mountOptions": {
+                    "type": "array",
+                    "title": "A list of mount options, e.g. [\"ro\", \"soft\"]. Not validated - mount will\nsimply fail if one is invalid.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "nodeAffinity": {
+                    "title": "NodeAffinity defines constraints that limit what nodes this volume can be accessed from.\nThis field influences the scheduling of pods that use this volume.\n+optional",
+                    "$ref": "#/definitions/v1VolumeNodeAffinity"
+                },
+                "persistentVolumeReclaimPolicy": {
+                    "type": "string",
+                    "title": "What happens to a persistent volume when released from its claim.\nValid options are Retain (default for manually created PersistentVolumes), Delete (default\nfor dynamically provisioned PersistentVolumes), and Recycle (deprecated).\nRecycle must be supported by the volume plugin underlying this PersistentVolume.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming\n+optional"
+                },
+                "persistentVolumeSource": {
+                    "description": "The actual volume backing the persistent volume.",
+                    "$ref": "#/definitions/v1PersistentVolumeSource"
+                },
+                "storageClassName": {
+                    "type": "string",
+                    "title": "Name of StorageClass to which this persistent volume belongs. Empty value\nmeans that this volume does not belong to any StorageClass.\n+optional"
+                },
+                "volumeMode": {
+                    "type": "string",
+                    "title": "volumeMode defines if a volume is intended to be used with a formatted filesystem\nor to remain in raw block state. Value of Filesystem is implied when not included in spec.\nThis is a beta feature.\n+optional"
+                }
+            }
+        },
+        "v1PersistentVolumeStatus": {
+            "type": "object",
+            "description": "PersistentVolumeStatus is the current status of a persistent volume.",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "title": "A human-readable message indicating details about why the volume is in this state.\n+optional"
+                },
+                "phase": {
+                    "type": "string",
+                    "title": "Phase indicates if a volume is available, bound to a claim, or released by a claim.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#phase\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "Reason is a brief CamelCase string that describes any failure and is meant\nfor machine parsing and tidy display in the CLI.\n+optional"
                 }
             }
         },
@@ -6745,6 +8467,48 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1RBDPersistentVolumeSource": {
+            "type": "object",
+            "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
+            "properties": {
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+                },
+                "image": {
+                    "type": "string",
+                    "title": "The rados image name.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+                },
+                "keyring": {
+                    "type": "string",
+                    "title": "Keyring is the path to key ring for RBDUser.\nDefault is /etc/ceph/keyring.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+                },
+                "monitors": {
+                    "type": "array",
+                    "title": "A collection of Ceph monitors.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pool": {
+                    "type": "string",
+                    "title": "The rados pool name.\nDefault is rbd.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "title": "SecretRef is name of the authentication secret for RBDUser. If provided\noverrides keyring.\nDefault is nil.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "user": {
+                    "type": "string",
+                    "title": "The rados user name.\nDefault is admin.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+                }
+            }
+        },
         "v1RBDVolumeSource": {
             "type": "object",
             "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
@@ -6999,6 +8763,54 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1ScaleIOPersistentVolumeSource": {
+            "type": "object",
+            "title": "ScaleIOPersistentVolumeSource represents a persistent ScaleIO volume",
+            "properties": {
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\nDefault is \"xfs\"\n+optional"
+                },
+                "gateway": {
+                    "type": "string",
+                    "description": "The host address of the ScaleIO API Gateway."
+                },
+                "protectionDomain": {
+                    "type": "string",
+                    "title": "The name of the ScaleIO Protection Domain for the configured storage.\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "description": "SecretRef references to the secret for ScaleIO user and other\nsensitive information. If this is not provided, Login operation will fail.",
+                    "$ref": "#/definitions/v1SecretReference"
+                },
+                "sslEnabled": {
+                    "type": "boolean",
+                    "title": "Flag to enable/disable SSL communication with Gateway, default false\n+optional",
+                    "format": "boolean"
+                },
+                "storageMode": {
+                    "type": "string",
+                    "title": "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.\nDefault is ThinProvisioned.\n+optional"
+                },
+                "storagePool": {
+                    "type": "string",
+                    "title": "The ScaleIO Storage Pool associated with the protection domain.\n+optional"
+                },
+                "system": {
+                    "type": "string",
+                    "description": "The name of the storage system as configured in ScaleIO."
+                },
+                "volumeName": {
+                    "type": "string",
+                    "description": "The name of a volume already created in the ScaleIO system\nthat is associated with this volume source."
+                }
+            }
+        },
         "v1ScaleIOVolumeSource": {
             "type": "object",
             "title": "ScaleIOVolumeSource represents a persistent ScaleIO volume",
@@ -7138,6 +8950,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "type": "boolean",
                     "title": "Specify whether the Secret or its key must be defined\n+optional",
                     "format": "boolean"
+                }
+            }
+        },
+        "v1SecretReference": {
+            "type": "object",
+            "title": "SecretReference represents a Secret Reference. It has enough information to retrieve secret\nin any namespace",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "Name is unique within a namespace to reference a secret resource.\n+optional"
+                },
+                "namespace": {
+                    "type": "string",
+                    "title": "Namespace defines the space within which the secret name must be unique.\n+optional"
                 }
             }
         },
@@ -7570,6 +9396,33 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1StorageOSPersistentVolumeSource": {
+            "type": "object",
+            "description": "Represents a StorageOS persistent volume resource.",
+            "properties": {
+                "fsType": {
+                    "type": "string",
+                    "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional",
+                    "format": "boolean"
+                },
+                "secretRef": {
+                    "title": "SecretRef specifies the secret to use for obtaining the StorageOS API\ncredentials.  If not specified, default values will be attempted.\n+optional",
+                    "$ref": "#/definitions/v1ObjectReference"
+                },
+                "volumeName": {
+                    "type": "string",
+                    "description": "VolumeName is the human-readable name of the StorageOS volume.  Volume\nnames are only unique within a namespace."
+                },
+                "volumeNamespace": {
+                    "type": "string",
+                    "title": "VolumeNamespace specifies the scope of the volume within StorageOS.  If no\nnamespace is specified then the Pod's namespace will be used.  This allows the\nKubernetes name scoping to be mirrored within StorageOS for tighter integration.\nSet VolumeName to any name to override the default behaviour.\nSet to \"default\" if you are not using namespaces within StorageOS.\nNamespaces that do not pre-exist within StorageOS will be created.\n+optional"
+                }
+            }
+        },
         "v1StorageOSVolumeSource": {
             "type": "object",
             "description": "Represents a StorageOS persistent volume resource.",
@@ -7622,6 +9475,28 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "port": {
                     "description": "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
                     "$ref": "#/definitions/intstrIntOrString"
+                }
+            }
+        },
+        "v1Taint": {
+            "type": "object",
+            "description": "The node this Taint is attached to has the \"effect\" on\nany pod that does not tolerate the Taint.",
+            "properties": {
+                "effect": {
+                    "type": "string",
+                    "description": "Required. The effect of the taint on pods\nthat do not tolerate the taint.\nValid effects are NoSchedule, PreferNoSchedule and NoExecute."
+                },
+                "key": {
+                    "type": "string",
+                    "description": "Required. The taint key to be applied to a node."
+                },
+                "timeAdded": {
+                    "title": "TimeAdded represents the time at which the taint was added.\nIt is only written for NoExecute taints.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "value": {
+                    "type": "string",
+                    "title": "Required. The taint value corresponding to the taint key.\n+optional"
                 }
             }
         },
@@ -7765,6 +9640,16 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "subPathExpr": {
                     "type": "string",
                     "title": "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.\n+optional"
+                }
+            }
+        },
+        "v1VolumeNodeAffinity": {
+            "type": "object",
+            "description": "VolumeNodeAffinity defines constraints that limit what nodes this volume can be accessed from.",
+            "properties": {
+                "required": {
+                    "description": "Required specifies hard node constraints that must be met.",
+                    "$ref": "#/definitions/v1NodeSelector"
                 }
             }
         },

@@ -21,11 +21,11 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
-  // One of the arguments from this list "legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list deny_list rule_list" must be set
+  // One of the arguments from this list "allow_list deny_list rule_list legacy_rule_list allow_all_requests deny_all_requests internally_generated" must be set
   allow_all_requests = true
 
-  // One of the arguments from this list "server_name server_selector server_name_matcher any_server" must be set
-  server_name = "database.production.customer.volterra.us"
+  // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
+  any_server = true
 }
 
 ```

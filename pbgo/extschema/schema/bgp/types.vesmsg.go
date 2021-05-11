@@ -1363,6 +1363,138 @@ func FamilyInetValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *FamilyInet6Vpn) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyInet6Vpn) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyInet6Vpn) DeepCopy() *FamilyInet6Vpn {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyInet6Vpn{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyInet6Vpn) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyInet6Vpn) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyInet6VpnValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyInet6Vpn struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyInet6Vpn) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyInet6Vpn) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyInet6Vpn)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyInet6Vpn got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *FamilyInet6Vpn_Enable:
+		if fv, exists := v.FldValidators["enable_choice.enable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInet6Vpn_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyInet6Vpn_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInet6Vpn_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyInet6VpnValidator = func() *ValidateFamilyInet6Vpn {
+	v := &ValidateFamilyInet6Vpn{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyInet6Vpn.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	return v
+}()
+
+func FamilyInet6VpnValidator() db.Validator {
+	return DefaultFamilyInet6VpnValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *FamilyInetvpn) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3694,6 +3826,15 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["family_inet6vpn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family_inet6vpn"))
+		if err := fv(ctx, m.GetFamilyInet6Vpn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["family_inetvpn"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("family_inetvpn"))
@@ -3708,6 +3849,32 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 		vOpts := append(opts, db.WithValidateField("family_rtarget"))
 		if err := fv(ctx, m.GetFamilyRtarget(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetMtlsChoice().(type) {
+	case *PeerInternal_DisableMtls:
+		if fv, exists := v.FldValidators["mtls_choice.disable_mtls"]; exists {
+			val := m.GetMtlsChoice().(*PeerInternal_DisableMtls).DisableMtls
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("disable_mtls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerInternal_EnableMtls:
+		if fv, exists := v.FldValidators["mtls_choice.enable_mtls"]; exists {
+			val := m.GetMtlsChoice().(*PeerInternal_EnableMtls).EnableMtls
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("enable_mtls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3784,6 +3951,8 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 	v.FldValidators["family_inetvpn"] = FamilyInetvpnValidator().Validate
 
 	v.FldValidators["family_rtarget"] = FamilyRtargetValidator().Validate
+
+	v.FldValidators["family_inet6vpn"] = FamilyInet6VpnValidator().Validate
 
 	return v
 }()

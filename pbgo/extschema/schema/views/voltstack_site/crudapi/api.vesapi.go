@@ -2078,72 +2078,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "bgpBgpParameters": {
-            "type": "object",
-            "description": "BGP parameters for the local site",
-            "title": "BGP Parameters",
-            "x-displayname": "BGP Parameters",
-            "x-ves-displayorder": "1,5",
-            "x-ves-oneof-field-router_id_choice": "[\"from_site\",\"ip_address\",\"local_address\"]",
-            "x-ves-proto-message": "ves.io.schema.bgp.BgpParameters",
-            "properties": {
-                "asn": {
-                    "type": "integer",
-                    "description": " Autonomous System Number\n\nExample: - 64512-\nRequired: YES",
-                    "title": "ASN",
-                    "format": "int64",
-                    "x-displayname": "ASN",
-                    "x-ves-required": "true"
-                },
-                "bgp_router_id": {
-                    "description": " If Router ID Type is set to \"From IP Address\", this is used as Router ID. Else, this is ignored.",
-                    "title": "Router ID",
-                    "$ref": "#/definitions/schemaIpAddressType",
-                    "x-displayname": "Router ID"
-                },
-                "bgp_router_id_key": {
-                    "type": "string",
-                    "description": " If Router ID Type is set to \"From Site Template\", this is used to lookup BGP router ID\n from site template parameters map in site object. Else, this is ignored.",
-                    "title": "Router ID Key",
-                    "x-displayname": "Router ID Key"
-                },
-                "bgp_router_id_type": {
-                    "description": " Decides how BGP router id is derived",
-                    "title": "Router ID Type",
-                    "$ref": "#/definitions/bgpBgpRouterIdType",
-                    "x-displayname": "Router ID Type"
-                },
-                "from_site": {
-                    "description": "Exclusive with [ip_address local_address]\nx-displayName: \"From Site\"\nUse the Router ID field from the site object.",
-                    "title": "from_site",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "ip_address": {
-                    "type": "string",
-                    "description": "Exclusive with [from_site local_address]\nx-displayName: \"IP Address\"\nUse the configured IPv4 Address as Router ID.",
-                    "title": "ip_address"
-                },
-                "local_address": {
-                    "description": "Exclusive with [from_site ip_address]\nx-displayName: \"From Interface Address\"\nUse an interface address of the site as the Router ID.",
-                    "title": "local_address",
-                    "$ref": "#/definitions/schemaEmpty"
-                }
-            }
-        },
-        "bgpBgpRouterIdType": {
-            "type": "string",
-            "description": "Dictates how BGP router id is derived\n\nUse IP address of interface on which BGP is configured as BGP router ID\nUse BGP Router ID from BGP Parameters as BGP router ID\nUse BGP Router ID from corresponding site object as BGP router ID\nUse BGP Router ID Key from corresponding site's Site Template Parameters as BGP router ID.\nThis is not currently supported.",
-            "title": "BGP Router ID",
-            "enum": [
-                "BGP_ROUTER_ID_FROM_INTERFACE",
-                "BGP_ROUTER_ID_FROM_IP_ADDRESS",
-                "BGP_ROUTER_ID_FROM_SITE_OBJECT",
-                "BGP_ROUTER_ID_FROM_SITE_TEMPLATE_PARAMETERS"
-            ],
-            "default": "BGP_ROUTER_ID_FROM_INTERFACE",
-            "x-displayname": "BGP Router ID",
-            "x-ves-proto-enum": "ves.io.schema.bgp.BgpRouterIdType"
-        },
         "bgpFamilyInet": {
             "type": "object",
             "description": "Parameters for inet family.",
@@ -2159,6 +2093,26 @@ var APISwaggerJSON string = `{
                 },
                 "enable": {
                     "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyInet6vpn": {
+            "type": "object",
+            "description": "Parameters for inet6vpn family.",
+            "title": "FamilyInet6vpn",
+            "x-displayname": "BGP Family Inet6vpn",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet6vpn",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv6 VPN Unicast\"\nDisable the IPv6 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv6 VPN Unicast\"\nEnable the IPv6 Unicast family.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2301,7 +2255,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use default gateway\"\nUse the default gateway address.",
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Default Gateway\"\nUse the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2312,7 +2266,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Family IPv4 Unicast"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2345,13 +2299,13 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Use offset from beginning of subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
                     "title": "subnet_begin_offset",
                     "format": "int64"
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Use offset from end of subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
                     "title": "subnet_end_offset",
                     "format": "int64"
                 }
@@ -2364,6 +2318,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Internal BGP Peer",
             "x-ves-displayorder": "2,10,11",
             "x-ves-oneof-field-address_choice": "[\"address\",\"dns_name\",\"from_site\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"disable_mtls\",\"enable_mtls\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerInternal",
             "properties": {
                 "address": {
@@ -2371,10 +2326,26 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [dns_name from_site]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
+                "disable_mtls": {
+                    "description": "Exclusive with [enable_mtls]\nx-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "title": "disable_mtls",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "dns_name": {
                     "type": "string",
                     "description": "Exclusive with [address from_site]\nx-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
                     "title": "dns_name"
+                },
+                "enable_mtls": {
+                    "description": "Exclusive with [disable_mtls]\nx-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "title": "enable_mtls",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "family_inet6vpn": {
+                    "description": " Parameters for IPv6 VPN Unicast family.",
+                    "title": "family_inet6vpn",
+                    "$ref": "#/definitions/bgpFamilyInet6vpn",
+                    "x-displayname": "Family IPv6 VPN Unicast"
                 },
                 "family_inetvpn": {
                     "description": " Parameters for IPv4 VPN Unicast family.",
@@ -2596,11 +2567,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "BGP Configuration",
             "x-ves-proto-message": "ves.io.schema.fleet.BGPConfiguration",
             "properties": {
-                "bgp_parameters": {
-                    "description": " BGP parameters for local site\nRequired: YES",
-                    "title": "BGP Parameters",
-                    "$ref": "#/definitions/bgpBgpParameters",
-                    "x-displayname": "Common Parameters",
+                "asn": {
+                    "type": "integer",
+                    "description": " Autonomous System Number\n\nExample: - 64512-\nRequired: YES",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN",
                     "x-ves-required": "true"
                 },
                 "peers": {
@@ -4084,6 +4056,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -4142,6 +4115,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Maximum Packet Size (MTU)",
                     "x-ves-example": "1450"
                 },
+                "no_ipv6_address": {
+                    "description": "Exclusive with [static_ipv6_address]\nx-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "title": "no_ipv6_address",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "node": {
                     "type": "string",
                     "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
@@ -4177,6 +4155,11 @@ var APISwaggerJSON string = `{
                 },
                 "static_ip": {
                     "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                },
+                "static_ipv6_address": {
+                    "description": "Exclusive with [no_ipv6_address]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
@@ -4254,14 +4237,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IPv4 address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
                     "x-ves-example": "192.168.20.1"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IPv4 address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
                     "title": "DNS Server",
                     "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1"
@@ -4283,21 +4266,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_gw": {
                     "type": "string",
-                    "description": " IPv4 address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
                     "x-ves-example": "192.168.20.1"
                 },
                 "dns_server": {
                     "type": "string",
-                    "description": " IPv4 address of the DNS server\n\nExample: - \"192.168.20.1\"-",
+                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-",
                     "title": "DNS Server",
                     "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": " IPv4 address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
+                    "description": " IP address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
                     "title": "Default Gateway",
                     "x-displayname": "IP address/Prefix Length",
                     "x-ves-example": "192.168.20.1/24",
@@ -4614,59 +4597,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaIpAddressType": {
-            "type": "object",
-            "description": "IP Address used to specify an IPv4 or IPv6 address",
-            "title": "IP Address",
-            "x-displayname": "IP Address",
-            "x-ves-displayorder": "3",
-            "x-ves-oneof-field-ver": "[\"ipv4\",\"ipv6\"]",
-            "x-ves-proto-message": "ves.io.schema.IpAddressType",
-            "properties": {
-                "ipv4": {
-                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
-                    "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
-                },
-                "ipv6": {
-                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
-                    "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
-                }
-            }
-        },
-        "schemaIpv4AddressType": {
-            "type": "object",
-            "description": "IPv4 Address in dot-decimal notation",
-            "title": "IPv4 Address",
-            "x-displayname": "IPv4 Address",
-            "x-ves-proto-message": "ves.io.schema.Ipv4AddressType",
-            "properties": {
-                "addr": {
-                    "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
-                    "title": "IPv4 Address",
-                    "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1"
-                }
-            }
-        },
-        "schemaIpv6AddressType": {
-            "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
-            "title": "IPv6 Address",
-            "x-displayname": "IPv6 Address",
-            "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
-            "properties": {
-                "addr": {
-                    "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
-                    "title": "IPv6 Address",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
-                }
-            }
-        },
         "schemaListMetaType": {
             "type": "object",
             "description": "ListMetaType is metadata that all lists must have.",
@@ -4890,6 +4820,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -5407,6 +5343,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsOperatingSystemType": {
+            "type": "object",
+            "description": "This is to specify volterra operating version choice",
+            "title": "Operating System Version",
+            "x-displayname": "Operating System Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
+            "properties": {
+                "default_os_version": {
+                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "title": "Default OS Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
+                    "title": "Operating System Version"
+                }
+            }
+        },
         "viewsPrefixStringListType": {
             "type": "object",
             "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
@@ -5424,6 +5381,27 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "viewsVolterraSoftwareType": {
+            "type": "object",
+            "description": "This is to specify volterra software version choice",
+            "title": "Volterra Software Version",
+            "x-displayname": "Volterra Software Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
+            "properties": {
+                "default_sw_version": {
+                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "title": "Default SW Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
+                    "title": "Volterra Software Version"
                 }
             }
         },
@@ -5552,6 +5530,18 @@ var APISwaggerJSON string = `{
                     "title": "Operating System Version",
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
+                },
+                "os": {
+                    "description": " Operating System Details",
+                    "title": "Operating System",
+                    "$ref": "#/definitions/viewsOperatingSystemType",
+                    "x-displayname": "Operating System"
+                },
+                "sw": {
+                    "description": " Volterra Software Details",
+                    "title": "Volterra Software",
+                    "$ref": "#/definitions/viewsVolterraSoftwareType",
+                    "x-displayname": "Volterra Software"
                 },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\nx-displayName: \"USB Device Policy\"\nAllow only specific USB devices",

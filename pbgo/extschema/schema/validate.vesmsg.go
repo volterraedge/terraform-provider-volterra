@@ -2830,6 +2830,15 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["max_time_interval"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_time_interval"))
+		if err := fv(ctx, m.GetMaxTimeInterval(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["min_bytes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("min_bytes"))
@@ -2852,6 +2861,15 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("min_len"))
 		if err := fv(ctx, m.GetMinLen(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["min_time_interval"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_time_interval"))
+		if err := fv(ctx, m.GetMinTimeInterval(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3222,6 +3240,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("http_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_TimeInterval:
+		if fv, exists := v.FldValidators["well_known.time_interval"]; exists {
+			val := m.GetWellKnown().(*StringRules_TimeInterval).TimeInterval
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("time_interval"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

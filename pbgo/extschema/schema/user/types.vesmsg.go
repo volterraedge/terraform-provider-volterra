@@ -534,6 +534,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
+		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["last_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("last_name"))

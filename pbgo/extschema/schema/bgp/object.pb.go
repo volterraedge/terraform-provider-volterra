@@ -29,6 +29,7 @@
 		FamilyInet
 		FamilyInetvpnParameters
 		FamilyInetvpn
+		FamilyInet6Vpn
 		FamilyRtarget
 		PeerFamilyParameters
 		PeerExternal

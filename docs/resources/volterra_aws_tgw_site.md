@@ -27,7 +27,7 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "disk_size"
 
@@ -42,11 +42,7 @@ resource "volterra_aws_tgw_site" "example" {
 
       workload_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
@@ -67,7 +63,8 @@ resource "volterra_aws_tgw_site" "example" {
       allocate_ipv6 = true
 
       // One of the arguments from this list "name_tag autogenerate" must be set
-      autogenerate = true
+      name_tag = "name_tag"
+
       primary_ipv4 = "10.1.0.0/16"
     }
     ssh_key = "ssh-rsa AAAAB..."
@@ -75,7 +72,7 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
-      // One of the arguments from this list "user_assigned system_generated" must be set
+      // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
   }
@@ -115,6 +112,10 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
+`os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 
 `vn_config` - (Optional) Virtual Network Configuration for transit gateway. See [Vn Config ](#vn-config) below for details.
@@ -138,6 +139,18 @@ Enable Forward Proxy for this site and manage policies.
 Network Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+
+### Allowed Vip Port
+
+Allowed VIP Port Configuration.
+
+`custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
+
+`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
+
+`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
 
 ### Assisted
 
@@ -239,6 +252,12 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
+### Custom Ports
+
+Custom list of ports to be allowed.
+
+`port_ranges` - (Required) List of Port Ranges (`String`).
+
 ### Custom Static Route
 
 Use Custom static route to configure all advanced options.
@@ -250,6 +269,14 @@ Use Custom static route to configure all advanced options.
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+
+### Default Os Version
+
+Will assign latest available OS version.
+
+### Default Sw Version
+
+Will assign latest available SW version.
 
 ### Disable Forward Proxy
 
@@ -431,6 +458,14 @@ Network Policy is disabled for this site..
 
 Static Routes disabled for outside network..
 
+### Os
+
+Operating System Details.
+
+`default_os_version` - (Optional) Will assign latest available OS version (bool).
+
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -517,6 +552,14 @@ List of route prefixes.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
 
+### Sw
+
+Volterra Software Details.
+
+`default_sw_version` - (Optional) Will assign latest available SW version (bool).
+
+`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+
 ### System Generated
 
 Volterra will automatically assign a private ASN for TGW and Volterra Site.
@@ -557,6 +600,18 @@ Specify TLS interception configuration for the network connector.
 
 `volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
 
+### Use Http Https Port
+
+HTTP Port (80) & HTTPS Port (443) will be allowed..
+
+### Use Http Port
+
+Only HTTP Port (80) will be allowed..
+
+### Use Https Port
+
+Only HTTPS Port (443) will be allowed..
+
 ### User Assigned
 
 User is managing the ASN for TGW and Volterra Site..
@@ -582,6 +637,8 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 ### Vn Config
 
 Virtual Network Configuration for transit gateway.
+
+`allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
 
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 

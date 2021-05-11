@@ -2547,6 +2547,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -2776,6 +2782,19 @@ var APISwaggerJSON string = `{
                     "title": "Decrypt Cache Timeout",
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
+                },
+                "delete_delay": {
+                    "type": "string",
+                    "description": " deleted_delay is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
+                    "title": "Delete Delay",
+                    "x-displayname": "Delete Delay"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "description": " deleted_at is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
+                    "title": "Deleted At",
+                    "format": "date-time",
+                    "x-displayname": "Deleted At"
                 },
                 "rules": {
                     "type": "array",

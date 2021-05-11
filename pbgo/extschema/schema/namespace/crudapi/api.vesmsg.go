@@ -619,6 +619,7 @@ func (m *ObjectGetRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 
 func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -717,6 +718,18 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -738,6 +751,8 @@ var DefaultObjectGetRspValidator = func() *ValidateObjectGetRsp {
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
 	v.FldValidators["spec"] = ves_io_schema_namespace.SpecTypeValidator().Validate
+
+	v.FldValidators["status"] = ves_io_schema_namespace.StatusObjectValidator().Validate
 
 	return v
 }()
@@ -1066,6 +1081,7 @@ func (m *ObjectListRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt
 
 func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1173,6 +1189,18 @@ func (v *ValidateObjectListRspItem) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -1203,6 +1231,8 @@ var DefaultObjectListRspItemValidator = func() *ValidateObjectListRspItem {
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
 	v.FldValidators["spec"] = ves_io_schema_namespace.SpecTypeValidator().Validate
+
+	v.FldValidators["status"] = ves_io_schema_namespace.StatusObjectValidator().Validate
 
 	return v
 }()
@@ -1512,6 +1542,7 @@ func (m *ObjectGetRsp) FromObject(e db.Entry) {
 	m.Metadata = f.GetMetadata()
 
 	m.Spec = f.GetSpec()
+
 	m.SystemMetadata = f.GetSystemMetadata()
 }
 
@@ -1524,6 +1555,7 @@ func (m *ObjectGetRsp) ToObject(e db.Entry) {
 	f.Metadata = m1.Metadata
 
 	f.Spec = m1.Spec
+
 	f.SystemMetadata = m1.SystemMetadata
 }
 
@@ -1534,6 +1566,7 @@ func (m *ObjectListRspItem) FromObject(e db.Entry) {
 	m.Metadata = f.GetMetadata()
 
 	m.Spec = f.GetSpec()
+
 	m.SystemMetadata = f.GetSystemMetadata()
 
 }
@@ -1547,6 +1580,7 @@ func (m *ObjectListRspItem) ToObject(e db.Entry) {
 	f.Metadata = m1.Metadata
 
 	f.Spec = m1.Spec
+
 	f.SystemMetadata = m1.SystemMetadata
 
 }

@@ -23,15 +23,22 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_name private_ip k8s_service consul_service public_ip custom_endpoint_object vn_private_ip vn_private_name private_name" must be set
+    // One of the arguments from this list "public_ip public_name private_ip consul_service vn_private_name private_name k8s_service custom_endpoint_object vn_private_ip" must be set
 
-    vn_private_name {
-      dns_name = "dns_name"
+    private_ip {
+      ip = "ip"
 
-      private_network {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+      // One of the arguments from this list "inside_network outside_network" must be set
+      inside_network = true
+
+      site_locator {
+        // One of the arguments from this list "site virtual_site" must be set
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
       }
     }
 

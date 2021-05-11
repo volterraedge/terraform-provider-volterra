@@ -13,7 +13,6 @@ import (
 
 	ves_io_schema_advertise_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 	ves_io_schema_alert_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
-	ves_io_schema_alert_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set"
 	ves_io_schema_alert_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
@@ -25,7 +24,6 @@ import (
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
 	ves_io_schema_fast_acl_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
-	ves_io_schema_fast_acl_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
@@ -39,7 +37,6 @@ import (
 	ves_io_schema_network_interface "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
-	ves_io_schema_network_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
 	ves_io_schema_protocol_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
@@ -48,7 +45,6 @@ import (
 	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
-	ves_io_schema_service_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
@@ -76,7 +72,6 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_namespace":                 resourceVolterraNamespace(),
 		"volterra_advertise_policy":          resourceVolterraAdvertisePolicy(),
 		"volterra_alert_policy":              resourceVolterraAlertPolicy(),
-		"volterra_alert_policy_set":          resourceVolterraAlertPolicySet(),
 		"volterra_alert_receiver":            resourceVolterraAlertReceiver(),
 		"volterra_app_type":                  resourceVolterraAppType(),
 		"volterra_bgp":                       resourceVolterraBgp(),
@@ -88,7 +83,6 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_endpoint":                  resourceVolterraEndpoint(),
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
 		"volterra_fast_acl_rule":             resourceVolterraFastAclRule(),
-		"volterra_fast_acl_set":              resourceVolterraFastAclSet(),
 		"volterra_fleet":                     resourceVolterraFleet(),
 		"volterra_healthcheck":               resourceVolterraHealthcheck(),
 		"volterra_ip_prefix_set":             resourceVolterraIpPrefixSet(),
@@ -102,7 +96,6 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_network_interface":         resourceVolterraNetworkInterface(),
 		"volterra_network_policy":            resourceVolterraNetworkPolicy(),
 		"volterra_network_policy_rule":       resourceVolterraNetworkPolicyRule(),
-		"volterra_network_policy_set":        resourceVolterraNetworkPolicySet(),
 		"volterra_policer":                   resourceVolterraPolicer(),
 		"volterra_protocol_policer":          resourceVolterraProtocolPolicer(),
 		"volterra_rate_limiter":              resourceVolterraRateLimiter(),
@@ -111,7 +104,6 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_secret_policy_rule":        resourceVolterraSecretPolicyRule(),
 		"volterra_service_policy":            resourceVolterraServicePolicy(),
 		"volterra_service_policy_rule":       resourceVolterraServicePolicyRule(),
-		"volterra_service_policy_set":        resourceVolterraServicePolicySet(),
 		"volterra_token":                     resourceVolterraToken(),
 		"volterra_usb_policy":                resourceVolterraUsbPolicy(),
 		"volterra_user":                      resourceVolterraUser(),
@@ -141,7 +133,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_namespace.ObjectType,
 		ves_io_schema_advertise_policy.ObjectType,
 		ves_io_schema_alert_policy.ObjectType,
-		ves_io_schema_alert_policy_set.ObjectType,
 		ves_io_schema_alert_receiver.ObjectType,
 		ves_io_schema_app_type.ObjectType,
 		ves_io_schema_bgp.ObjectType,
@@ -153,7 +144,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_endpoint.ObjectType,
 		ves_io_schema_fast_acl.ObjectType,
 		ves_io_schema_fast_acl_rule.ObjectType,
-		ves_io_schema_fast_acl_set.ObjectType,
 		ves_io_schema_fleet.ObjectType,
 		ves_io_schema_healthcheck.ObjectType,
 		ves_io_schema_ip_prefix_set.ObjectType,
@@ -167,7 +157,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_interface.ObjectType,
 		ves_io_schema_network_policy.ObjectType,
 		ves_io_schema_network_policy_rule.ObjectType,
-		ves_io_schema_network_policy_set.ObjectType,
 		ves_io_schema_policer.ObjectType,
 		ves_io_schema_protocol_policer.ObjectType,
 		ves_io_schema_rate_limiter.ObjectType,
@@ -176,7 +165,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_secret_policy_rule.ObjectType,
 		ves_io_schema_service_policy.ObjectType,
 		ves_io_schema_service_policy_rule.ObjectType,
-		ves_io_schema_service_policy_set.ObjectType,
 		ves_io_schema_token.ObjectType,
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user.ObjectType,

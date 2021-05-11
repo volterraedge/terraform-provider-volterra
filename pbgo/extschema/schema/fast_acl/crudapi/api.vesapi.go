@@ -2806,7 +2806,7 @@ var APISwaggerJSON string = `{
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
+            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
             "x-displayname": "IPv6 Address",
             "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
@@ -3055,6 +3055,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

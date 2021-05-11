@@ -2964,6 +2964,16 @@ func (v *ValidatePerSiteSrv6NetworkType) ExportRtargetsValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidatePerSiteSrv6NetworkType) RemoteSidStatsPlenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for remote_sid_stats_plen")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidatePerSiteSrv6NetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*PerSiteSrv6NetworkType)
 	if !ok {
@@ -3097,6 +3107,15 @@ func (v *ValidatePerSiteSrv6NetworkType) Validate(ctx context.Context, pm interf
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["remote_sid_stats_plen"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("remote_sid_stats_plen"))
+		if err := fv(ctx, m.GetRemoteSidStatsPlen(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3287,6 +3306,17 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 		panic(errMsg)
 	}
 	v.FldValidators["export_rtargets"] = vFn
+
+	vrhRemoteSidStatsPlen := v.RemoteSidStatsPlenValidationRuleHandler
+	rulesRemoteSidStatsPlen := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "96",
+	}
+	vFn, err = vrhRemoteSidStatsPlen(rulesRemoteSidStatsPlen)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.remote_sid_stats_plen: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["remote_sid_stats_plen"] = vFn
 
 	v.FldValidators["default_vip_choice.fleet_vip"] = AnyCastVIPFleetTypeValidator().Validate
 

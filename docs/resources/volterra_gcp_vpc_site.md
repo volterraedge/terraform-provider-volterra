@@ -101,6 +101,8 @@ Argument Reference
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
+`os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC network.. See [Ingress Gw ](#ingress-gw) below for details.
@@ -108,6 +110,8 @@ Argument Reference
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+
+`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 ### Active Forward Proxy Policies
 
@@ -178,6 +182,14 @@ Use Custom static route to configure all advanced options.
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+
+### Default Os Version
+
+Will assign latest available OS version.
+
+### Default Sw Version
+
+Will assign latest available SW version.
 
 ### Disable Forward Proxy
 
@@ -435,6 +447,14 @@ Network Policy is disabled for this site..
 
 Static Routes disabled for outside network..
 
+### Os
+
+Operating System Details.
+
+`default_os_version` - (Optional) Will assign latest available OS version (bool).
+
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
+
 ### Outside Network
 
 Network for the outside interface of the node.
@@ -536,6 +556,14 @@ List of route prefixes.
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ipv4 ](#ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
+
+### Sw
+
+Volterra Software Details.
+
+`default_sw_version` - (Optional) Will assign latest available SW version (bool).
+
+`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 

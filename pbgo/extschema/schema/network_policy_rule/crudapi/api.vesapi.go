@@ -2324,10 +2324,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Action"
                 },
                 "advanced_action": {
-                    "description": " Apart from the regular action(allow/deny) user can choose advanced action for a rule. Supported advanced actions are - Logging\n Note: It is not necessary to choose NetworkPolicyRuleAction for advanced action. Only advanced action can be selected\n NetworkPolicyRuleAction for allow/deny and also log for sampling\n\nExample: - For sampling a particular flow advanced action \"Log\" can be selected without choosing any NetworkPolicyRuleAction. Other example can be to choose-",
-                    "title": "Advanced Action",
+                    "description": " Enable or disable logging.",
+                    "title": "advanced_action",
                     "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAdvancedAction",
-                    "x-displayname": "Advanced Action"
+                    "x-displayname": "Logging Action"
                 },
                 "ip_prefix_set": {
                     "description": "Exclusive with [prefix prefix_selector]\nx-displayName: \"IP Prefix Set\"\nReference to object which represents list of IP prefixes that will be referred as remote endpoint",
@@ -2377,7 +2377,7 @@ var APISwaggerJSON string = `{
         },
         "network_policy_ruleLogAction": {
             "type": "string",
-            "description": "Choice to choose logging or no logging\nThis works together with option selected via NetworkPolicyRuleAction or any other action specified\nx-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log\n\n - NOLOG: Dont sample the traffic hitting the rule\n - LOG: Sample the traffic hitting the rule",
+            "description": "Choice to choose logging or no logging\nThis works together with option selected via NetworkPolicyRuleAction or any other action specified\nx-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log\n\n - NOLOG: Don't sample the traffic hitting the rule\n - LOG: Sample the traffic hitting the rule",
             "title": "Log Action",
             "enum": [
                 "NOLOG",
@@ -2425,10 +2425,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction",
             "properties": {
                 "action": {
-                    "description": " Advanced action applied along with selection in NetworkPolicyRuleAction",
+                    "description": " Enable or disable logging.",
                     "title": "Action",
                     "$ref": "#/definitions/network_policy_ruleLogAction",
-                    "x-displayname": "Action"
+                    "x-displayname": "Logging Action"
                 }
             }
         },
@@ -2621,7 +2621,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -2780,6 +2780,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

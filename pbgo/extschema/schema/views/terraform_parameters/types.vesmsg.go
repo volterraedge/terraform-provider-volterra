@@ -367,3 +367,140 @@ var DefaultPlanStatusValidator = func() *ValidatePlanStatus {
 func PlanStatusValidator() db.Validator {
 	return DefaultPlanStatusValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *VIPPortConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VIPPortConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VIPPortConfig) DeepCopy() *VIPPortConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VIPPortConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VIPPortConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VIPPortConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VIPPortConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVIPPortConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVIPPortConfig) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVIPPortConfig) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVIPPortConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VIPPortConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VIPPortConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVIPPortConfigValidator = func() *ValidateVIPPortConfig {
+	v := &ValidateVIPPortConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VIPPortConfig.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhProtocol := v.ProtocolValidationRuleHandler
+	rulesProtocol := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"TCP\",\"UDP\"]",
+	}
+	vFn, err = vrhProtocol(rulesProtocol)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VIPPortConfig.protocol: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protocol"] = vFn
+
+	return v
+}()
+
+func VIPPortConfigValidator() db.Validator {
+	return DefaultVIPPortConfigValidator
+}

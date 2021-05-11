@@ -20,37 +20,21 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "tunnel_interface legacy_interface dedicated_management_interface dedicated_interface ethernet_interface" must be set
+  // One of the arguments from this list "dedicated_interface ethernet_interface tunnel_interface legacy_interface dedicated_management_interface" must be set
 
-  tunnel_interface {
-    mtu = "1450"
+  dedicated_interface {
+    device = "eth0"
 
-    // One of the arguments from this list "site_local_network site_local_inside_network inside_network" must be set
+    // One of the arguments from this list "monitor_disabled monitor" must be set
+    monitor_disabled = true
+    mtu              = "1450"
 
-    inside_network {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
     // One of the arguments from this list "cluster node" must be set
-    cluster  = true
-    priority = "42"
-    static_ip {
-      // One of the arguments from this list "node_static_ip cluster_static_ip fleet_static_ip" must be set
+    cluster = true
 
-      cluster_static_ip {
-        interface_ip_map {
-          default_gw = "192.168.20.1"
-          dns_server = "192.168.20.1"
-          ip_address = "192.168.20.1/24"
-        }
-      }
-    }
-    tunnel {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+    // One of the arguments from this list "not_primary is_primary" must be set
+    not_primary = true
+    priority    = "42"
   }
 }
 
@@ -219,6 +203,10 @@ Ethernet interface configuration..
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
 
+`no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
+
+`static_ipv6_address` - (Optional) Interface IP is configured statically. See [Static Ipv6 Address ](#static-ipv6-address) below for details.
+
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitor ](#monitor) below for details.
 
 `monitor_disabled` - (Optional) Link quality monitoring disabled on the interface. (bool).
@@ -257,9 +245,9 @@ First usable address from the network prefix is chosen as default gateway.
 
 Static IP configuration for the fleet.
 
-`default_gw` - (Optional) IPv4 address offset of the default gateway, prefix len is used to calculate offset (`String`).
+`default_gw` - (Optional) IP address offset of the default gateway, prefix len is used to calculate offset (`String`).
 
-`dns_server` - (Optional) IPv4 address offset of the DNS server, prefix len is used to calculate offset (`String`).
+`dns_server` - (Optional) IP address offset of the DNS server, prefix len is used to calculate offset (`String`).
 
 `network_prefix_allocator` - (Optional) Static IP configuration for the fleet. See [ref](#ref) below for details.
 
@@ -321,15 +309,19 @@ Link Quality Monitoring parameters. Choosing the option will enable link quality
 
 Link quality monitoring disabled on the interface..
 
+### No Ipv6 Address
+
+Interface does not have an IPv6 Address..
+
 ### Node Static Ip
 
 Static IP configuration for the Node.
 
-`default_gw` - (Optional) IPv4 address of the default gateway. (`String`).
+`default_gw` - (Optional) IP address of the default gateway. (`String`).
 
-`dns_server` - (Optional) IPv4 address of the DNS server (`String`).
+`dns_server` - (Optional) IP address of the DNS server (`String`).
 
-`ip_address` - (Required) IPv4 address of the interface and prefix length (`String`).
+`ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
 ### Not Primary
 
@@ -376,6 +368,16 @@ If DHCP server is enabled, configures the subnet to be used for IP allocation..
 `prefix` - (Optional) Prefix part of the IPv4 subnet in string form with dot-decimal notation (`String`).
 
 ### Static Ip
+
+Interface IP is configured statically.
+
+`cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Cluster Static Ip ](#cluster-static-ip) below for details.
+
+`fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Fleet Static Ip ](#fleet-static-ip) below for details.
+
+`node_static_ip` - (Optional) Static IP configuration for the Node. See [Node Static Ip ](#node-static-ip) below for details.
+
+### Static Ipv6 Address
 
 Interface IP is configured statically.
 

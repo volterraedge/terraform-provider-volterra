@@ -32,28 +32,21 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
-  ingress_egress_gw {
-    aws_certified_hw = "aws-byol-multi-nic-voltmesh"
+  ingress_gw {
+    allowed_vip_port {
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      use_http_port = true
+    }
+
+    aws_certified_hw = "aws-byol-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
+      disk_size   = "disk_size"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
-      reserved_inside_subnet = true
-      disk_size              = "disk_size"
-
-      outside_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-
-      workload_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
@@ -62,59 +55,6 @@ resource "volterra_aws_vpc_site" "example" {
         }
       }
     }
-
-    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-
-    inside_static_routes {
-      static_route_list {
-        // One of the arguments from this list "custom_static_route simple_static_route" must be set
-
-        custom_static_route {
-          attrs = ["attrs"]
-
-          labels = {
-            "key1" = "value1"
-          }
-
-          nexthop {
-            interface {
-              name      = "test1"
-              namespace = "staging"
-              tenant    = "acmecorp"
-            }
-
-            nexthop_address {
-              // One of the arguments from this list "ipv4 ipv6" must be set
-
-              ipv4 {
-                addr = "192.168.1.1"
-              }
-            }
-
-            type = "type"
-          }
-
-          subnets {
-            // One of the arguments from this list "ipv4 ipv6" must be set
-
-            ipv4 {
-              plen   = "plen"
-              prefix = "192.168.1.0"
-            }
-          }
-        }
-      }
-    }
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-    no_network_policy = true
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
   }
 }
 
@@ -159,6 +99,8 @@ Argument Reference
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
+`os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC.. See [Ingress Gw ](#ingress-gw) below for details.
@@ -166,6 +108,8 @@ Argument Reference
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+
+`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `vpc` - (Optional) Choice of using existing VPC or create new VPC. See [Vpc ](#vpc) below for details.
 
@@ -180,6 +124,18 @@ Enable Forward Proxy for this site and manage policies.
 Network Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+
+### Allowed Vip Port
+
+Allowed VIP Port Configuration.
+
+`custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
+
+`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
+
+`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
 
 ### Autogenerate
 
@@ -247,6 +203,12 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
+### Custom Ports
+
+Custom list of ports to be allowed.
+
+`port_ranges` - (Required) List of Port Ranges (`String`).
+
 ### Custom Static Route
 
 Use Custom static route to configure all advanced options.
@@ -259,9 +221,17 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Os Version
+
+Will assign latest available OS version.
+
 ### Default Storage
 
 Use standard storage class configured as AWS EBS.
+
+### Default Sw Version
+
+Will assign latest available SW version.
 
 ### Disable Forward Proxy
 
@@ -331,6 +301,8 @@ List of global network connections.
 
 Two interface site is useful when site is used as ingress/egress gateway to the VPC..
 
+`allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
+
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
@@ -360,6 +332,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 ### Ingress Gw
 
 One interface site is useful when site is only used as ingress gateway to the VPC..
+
+`allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
@@ -463,6 +437,14 @@ Storage class Device configuration for OpenEBS Enterprise.
 
 `storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
 
+### Os
+
+Operating System Details.
+
+`default_os_version` - (Optional) Will assign latest available OS version (bool).
+
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -565,6 +547,14 @@ List of route prefixes.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
 
+### Sw
+
+Volterra Software Details.
+
+`default_sw_version` - (Optional) Will assign latest available SW version (bool).
+
+`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+
 ### Tls Intercept
 
 Specify TLS interception configuration for the network connector.
@@ -580,6 +570,18 @@ Specify TLS interception configuration for the network connector.
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
 `volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
+
+### Use Http Https Port
+
+HTTP Port (80) & HTTPS Port (443) will be allowed..
+
+### Use Http Port
+
+Only HTTP Port (80) will be allowed..
+
+### Use Https Port
+
+Only HTTPS Port (443) will be allowed..
 
 ### Vault Secret Info
 
@@ -606,6 +608,8 @@ Default volterra trusted CA list for validating upstream server certificate.
 ### Voltstack Cluster
 
 Voltstack Cluster using single interface, useful for deploying K8s cluster..
+
+`allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 

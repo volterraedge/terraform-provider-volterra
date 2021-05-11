@@ -2384,6 +2384,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpFamilyInet6vpn": {
+            "type": "object",
+            "description": "Parameters for inet6vpn family.",
+            "title": "FamilyInet6vpn",
+            "x-displayname": "BGP Family Inet6vpn",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet6vpn",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv6 VPN Unicast\"\nDisable the IPv6 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv6 VPN Unicast\"\nEnable the IPv6 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "bgpFamilyInetvpn": {
             "type": "object",
             "description": "Parameters for inetvpn family.",
@@ -2585,7 +2605,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use default gateway\"\nUse the default gateway address.",
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Default Gateway\"\nUse the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2596,7 +2616,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Family IPv4 Unicast"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2629,13 +2649,13 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Use offset from beginning of subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
                     "title": "subnet_begin_offset",
                     "format": "int64"
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Use offset from end of subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
                     "title": "subnet_end_offset",
                     "format": "int64"
                 }
@@ -2671,6 +2691,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Internal BGP Peer",
             "x-ves-displayorder": "2,10,11",
             "x-ves-oneof-field-address_choice": "[\"address\",\"dns_name\",\"from_site\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"disable_mtls\",\"enable_mtls\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerInternal",
             "properties": {
                 "address": {
@@ -2678,10 +2699,26 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [dns_name from_site]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
+                "disable_mtls": {
+                    "description": "Exclusive with [enable_mtls]\nx-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "title": "disable_mtls",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "dns_name": {
                     "type": "string",
                     "description": "Exclusive with [address from_site]\nx-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
                     "title": "dns_name"
+                },
+                "enable_mtls": {
+                    "description": "Exclusive with [disable_mtls]\nx-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "title": "enable_mtls",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "family_inet6vpn": {
+                    "description": " Parameters for IPv6 VPN Unicast family.",
+                    "title": "family_inet6vpn",
+                    "$ref": "#/definitions/bgpFamilyInet6vpn",
+                    "x-displayname": "Family IPv6 VPN Unicast"
                 },
                 "family_inetvpn": {
                     "description": " Parameters for IPv4 VPN Unicast family.",
@@ -3142,7 +3179,7 @@ var APISwaggerJSON string = `{
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
+            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
             "x-displayname": "IPv6 Address",
             "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
@@ -3354,6 +3391,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

@@ -22,34 +22,98 @@ resource "volterra_discovery" "example" {
 
   // One of the arguments from this list "discovery_consul discovery_k8s" must be set
 
-  discovery_k8s {
+  discovery_consul {
     access_info {
-      // One of the arguments from this list "in_cluster kubeconfig_url connection_info" must be set
+      connection_info {
+        api_server = "api.acme.com:4430"
 
-      kubeconfig_url {
-        blindfold_secret_info_internal {
-          decryption_provider = "decryption_provider"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "store_provider"
-        }
+        tls_info {
+          ca_certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
 
-        secret_encoding_type = "secret_encoding_type"
+            secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+            // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "decryption_provider"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "store_provider"
+            blindfold_secret_info {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+          }
+
+          certificate = "certificate"
+
+          certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+            blindfold_secret_info {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+          }
+
+          key_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+            wingman_secret_info {
+              name = "ChargeBack-API-Key"
+            }
+          }
+
+          server_name    = "k8s.acme.com"
+          trusted_ca_url = "trusted_ca_url"
         }
       }
 
-      // One of the arguments from this list "isolated reachable" must be set
-      isolated = true
+      http_basic_auth_info {
+        passwd_url {
+          blindfold_secret_info_internal {
+            decryption_provider = "decryption_provider"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "store_provider"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "decryption_provider"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "store_provider"
+          }
+        }
+
+        user_name = "Joe"
+      }
+
+      scheme = "scheme"
     }
 
     publish_info {
-      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
+      // One of the arguments from this list "disable publish" must be set
       disable = true
     }
   }

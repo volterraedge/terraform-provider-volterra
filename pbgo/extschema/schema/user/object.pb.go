@@ -6,6 +6,7 @@
 
 	It is generated from these files:
 		ves.io/schema/user/object.proto
+		ves.io/schema/user/private_customapi.proto
 		ves.io/schema/user/public_crudapi.proto
 		ves.io/schema/user/public_customapi.proto
 		ves.io/schema/user/types.proto
@@ -14,6 +15,8 @@
 		Object
 		SpecType
 		StatusObject
+		LastLoginUpdateRequest
+		LastLoginUpdateResponse
 		CreateRequest
 		CreateResponse
 		ReplaceRequest

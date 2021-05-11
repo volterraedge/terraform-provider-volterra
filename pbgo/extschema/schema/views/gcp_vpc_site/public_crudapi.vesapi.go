@@ -1283,8 +1283,14 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 		merr = multierror.Append(merr, errors.Wrap(err, "ListResponse allocation failed"))
 	}
 	if merr != nil {
-		err := server.MaybePublicRestError(ctx, errors.ErrOrNil(merr))
-		return rsp, server.GRPCStatusFromError(err).Err()
+		if rsp == nil {
+			return nil, merr
+		}
+		rsp.Errors = append(rsp.Errors, &ves_io_schema.ErrorType{
+			Code:    ves_io_schema.EINTERNAL,
+			Message: merr.Error(),
+		})
+
 	}
 	return rsp, nil
 }
@@ -1521,7 +1527,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		e := rsrcItem.Entry
 		o, ok := e.(*DBObject)
 		if !ok {
-			errStrs = append(errStrs, "entry not of type *DBObject in NewListResponse")
+			resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+				Code:    ves_io_schema.EINTERNAL,
+				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
+			})
+
 			continue
 		}
 		item := &ListResponseItem{
@@ -1561,7 +1571,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 					getSpec.FromGlobalSpecType(o.Spec.GcSpec)
 					getRsp := &GetResponse{Spec: getSpec}
 					if err := conv(o, getRsp); err != nil {
-						errStrs = append(errStrs, fmt.Sprintf("converting entry to getResponse: %s", err))
+						resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+							Code:    ves_io_schema.EINTERNAL,
+							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
+						})
+
 						continue
 					}
 					item.GetSpec = getRsp.Spec
@@ -1577,7 +1591,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			for _, sroStatus := range rsrcItem.StatusSet {
 				statusDBO, ok := sroStatus.(*DBStatusObject)
 				if !ok {
-					errStrs = append(errStrs, "sro.Status not of type *DBStatusObject in NewListResponse")
+					resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+						Code:    ves_io_schema.EINTERNAL,
+						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
+					})
+
 					continue
 				}
 				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
@@ -1585,10 +1603,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		}
 
 		resp.Items = append(resp.Items, item)
-	}
-
-	if len(errStrs) != 0 {
-		return resp, fmt.Errorf("Error in list elements: %s", strings.Join(errStrs, "\n"))
 	}
 	return resp, nil
 }
@@ -2658,6 +2672,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "List Response",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.ListResponse",
             "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                },
                 "items": {
                     "type": "array",
                     "description": " items represents the collection in response",
@@ -2967,6 +2990,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
             "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
@@ -3093,6 +3131,52 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Exclusive with [exact_value regex_value]\nx-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
                     "title": "suffix value"
+                }
+            }
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3273,7 +3357,7 @@ var APISwaggerJSON string = `{
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
+            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
             "x-displayname": "IPv6 Address",
             "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
@@ -3723,6 +3807,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -4472,6 +4562,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsOperatingSystemType": {
+            "type": "object",
+            "description": "This is to specify volterra operating version choice",
+            "title": "Operating System Version",
+            "x-displayname": "Operating System Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.OperatingSystemType",
+            "properties": {
+                "default_os_version": {
+                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Latest OS Version\"\nWill assign latest available OS version",
+                    "title": "Default OS Version",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.",
+                    "title": "Operating System Version"
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -4508,6 +4619,27 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Exclusive with [custom_static_route]\nx-displayName: \"Simple Static Route\"\nx-example: \"10.5.1.0/24\"\nUse simple static route for prefix pointing to single interface in the network",
                     "title": "Simple Static Route"
+                }
+            }
+        },
+        "viewsVolterraSoftwareType": {
+            "type": "object",
+            "description": "This is to specify volterra software version choice",
+            "title": "Volterra Software Version",
+            "x-displayname": "Volterra Software Version",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
+            "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
+            "properties": {
+                "default_sw_version": {
+                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Latest SW Version\"\nWill assign latest available SW version",
+                    "title": "Default SW Version",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
+                    "title": "Volterra Software Version"
                 }
             }
         },
@@ -4584,11 +4716,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
                 },
+                "os": {
+                    "description": " Operating System Details",
+                    "title": "Operating System",
+                    "$ref": "#/definitions/viewsOperatingSystemType",
+                    "x-displayname": "Operating System"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
+                },
+                "sw": {
+                    "description": " Volterra Software Details",
+                    "title": "Volterra Software",
+                    "$ref": "#/definitions/viewsVolterraSoftwareType",
+                    "x-displayname": "Volterra Software"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
@@ -4788,12 +4932,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
                 },
+                "os": {
+                    "description": " Operating System Details",
+                    "title": "Operating System",
+                    "$ref": "#/definitions/viewsOperatingSystemType",
+                    "x-displayname": "Operating System"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-",
                     "title": "Public SSH key",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
+                },
+                "sw": {
+                    "description": " Volterra Software Details",
+                    "title": "Volterra Software",
+                    "$ref": "#/definitions/viewsVolterraSoftwareType",
+                    "x-displayname": "Volterra Software"
                 },
                 "tf_params": {
                     "description": " Reference to view internal object",

@@ -7,6 +7,7 @@
 	It is generated from these files:
 		ves.io/schema/secret_policy/object.proto
 		ves.io/schema/secret_policy/public_crudapi.proto
+		ves.io/schema/secret_policy/public_custom_policy_api.proto
 		ves.io/schema/secret_policy/types.proto
 
 	It has these top-level messages:
@@ -23,6 +24,10 @@
 		ListResponseItem
 		ListResponse
 		DeleteRequest
+		SoftDeleteRequest
+		SoftDeleteResponse
+		RecoverRequest
+		RecoverResponse
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType
