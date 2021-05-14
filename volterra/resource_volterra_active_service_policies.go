@@ -129,7 +129,7 @@ func resourceVolterraActiveServicePoliciesRead(d *schema.ResourceData, meta inte
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
 
-	log.Printf("[DEBUG] Setting active service policies for a namespace, with req struct: %+v", req)
+	log.Printf("[DEBUG] Get active service policies for a namespace %s", namespace)
 
 	_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(activeSPsURI, req.Namespace), getActiveSPsRPCFQN, yamlReq)
 	if err != nil {

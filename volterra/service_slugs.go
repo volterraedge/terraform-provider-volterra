@@ -65,6 +65,8 @@ var (
 		"ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies":   "config",
 		"ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies":   "config",
 		"ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies":   "config",
+		"ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies":     "config",
+		"ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies":     "config",
 		"ves.io.schema.namespace.CustomAPI.CascadeDelete":                       "web",
 		"ves.io.schema.network_connector.Object":                                "config",
 		"ves.io.schema.network_firewall.Object":                                 "config",

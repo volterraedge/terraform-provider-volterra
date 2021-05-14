@@ -23,6 +23,7 @@ var (
 const (
 	activeNetworkPolicies     = "volterra_active_network_policies"
 	activeServicePolicies     = "volterra_active_service_policies"
+	activeAlertPolicies       = "volterra_active_alert_policies"
 	setFastACLForInternetVIPs = "volterra_fast_acl_for_internet_vips"
 	approvalResource          = "volterra_registration_approval"
 	modifySite                = "volterra_modify_site"
@@ -174,6 +175,7 @@ func getResourceMap() map[string]*schema.Resource {
 	// auto generated resource map
 	resourceMap := getVolterraResourceMap()
 	// add custom respurce map
+	resourceMap[activeAlertPolicies] = resourceVolterraActiveAlertPolicies()
 	resourceMap[activeNetworkPolicies] = resourceVolterraActiveNetworkPolicies()
 	resourceMap[activeServicePolicies] = resourceVolterraActiveServicePolicies()
 	resourceMap[apiCredential] = resourceVolterraAPICredential()
