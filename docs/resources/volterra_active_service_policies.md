@@ -10,7 +10,7 @@ Resource volterra_active_service_policies
 
 The active service policies allows you to set a list of active service policies on a certain namespace
 
-~> **Note:** Please refer to [Active Service Policies API docs](https://volterra.io/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies) to learn more
+~> **Note:** Please refer to [Active Service Policies API docs](https://volterra.io/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies) to learn more
 
 Example Usage
 -------------
