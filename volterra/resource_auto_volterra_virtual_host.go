@@ -713,6 +713,11 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"connection_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"resolution_network": {
 
 							Type:     schema.TypeList,
@@ -2212,6 +2217,10 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		createSpec.DynamicReverseProxy = dynamicReverseProxy
 		for _, set := range sl {
 			dynamicReverseProxyMapStrToI := set.(map[string]interface{})
+
+			if w, ok := dynamicReverseProxyMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
+				dynamicReverseProxy.ConnectionTimeout = uint32(w.(int))
+			}
 
 			if v, ok := dynamicReverseProxyMapStrToI["resolution_network"]; ok && !isIntfNil(v) {
 
@@ -3850,6 +3859,10 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.DynamicReverseProxy = dynamicReverseProxy
 		for _, set := range sl {
 			dynamicReverseProxyMapStrToI := set.(map[string]interface{})
+
+			if w, ok := dynamicReverseProxyMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
+				dynamicReverseProxy.ConnectionTimeout = uint32(w.(int))
+			}
 
 			if v, ok := dynamicReverseProxyMapStrToI["resolution_network"]; ok && !isIntfNil(v) {
 

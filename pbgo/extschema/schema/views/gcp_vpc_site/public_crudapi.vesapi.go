@@ -2493,6 +2493,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "GCP Voltstack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCVoltstackClusterType",
@@ -2536,6 +2537,11 @@ var APISwaggerJSON string = `{
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
+                "k8s_cluster": {
+                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "title": "Enable Site Local K8s API access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
                 "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
@@ -2544,6 +2550,11 @@ var APISwaggerJSON string = `{
                 "no_global_network": {
                     "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
                     "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_k8s_cluster": {
+                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "title": "Disable Site Local K8s API access",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_network_policy": {

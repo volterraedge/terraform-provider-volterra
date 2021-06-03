@@ -32,7 +32,7 @@ resource "volterra_gcp_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -48,7 +48,7 @@ resource "volterra_gcp_vpc_site" "example" {
     }
 
     local_subnet {
-      // One of the arguments from this list "new_subnet existing_subnet" must be set
+      // One of the arguments from this list "existing_subnet new_subnet" must be set
 
       new_subnet {
         primary_ipv4 = "10.1.0.0/16"
@@ -439,6 +439,10 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
+### No K8s Cluster
+
+Site Local K8s API access is disabled.
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -620,6 +624,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (bool).
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

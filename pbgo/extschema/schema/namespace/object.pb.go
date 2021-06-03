@@ -31,6 +31,8 @@
 		APIItemList
 		EvaluateAPIAccessReq
 		EvaluateAPIAccessResp
+		UpdateAllowAdvertiseOnPublicReq
+		UpdateAllowAdvertiseOnPublicResp
 		SetFastACLsForInternetVIPsRequest
 		SetFastACLsForInternetVIPsResponse
 		GetFastACLsForInternetVIPsRequest

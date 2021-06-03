@@ -24,61 +24,30 @@ resource "volterra_http_loadbalancer" "example" {
   advertise_on_public_default_vip = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  captcha_challenge {
-    cookie_expiry = "cookie_expiry"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
-  round_robin = true
+
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  source_ip_stickiness = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  https {
-    add_hsts      = true
-    http_redirect = true
-
-    // One of the arguments from this list "server_name append_server_name pass_through default_header" must be set
-    default_header = true
-
-    tls_parameters {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "certificate_url"
-        description     = "description"
-
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "custom_security default_security medium_security low_security" must be set
-        default_security = true
-      }
-    }
+  http {
+    dns_volterra_managed = true
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
-  service_policies_from_namespace = true
+
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
   disable_waf = true
 }

@@ -3018,6 +3018,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Tenant",
                     "x-ves-example": "value"
                 },
+                "tenant_flags": {
+                    "type": "object",
+                    "description": " Contains information about tenant configuration for giving UI instructions to show specific sections.",
+                    "title": "Tenant Flags",
+                    "x-displayname": "Tenant Flags"
+                },
                 "tenant_state": {
                     "type": "string",
                     "description": " Contains information about current state of the tenant.",

@@ -3152,9 +3152,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
 	// 669 bytes of a gzipped FileDescriptorProto

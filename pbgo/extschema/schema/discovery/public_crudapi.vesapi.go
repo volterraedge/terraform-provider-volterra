@@ -2363,6 +2363,15 @@ var APISwaggerJSON string = `{
                     "title": "Port mapping",
                     "x-displayname": "Port Mapping"
                 },
+                "ports": {
+                    "type": "array",
+                    "description": " List of ports along with protocol on which the service is exposed.",
+                    "title": "Port list",
+                    "items": {
+                        "$ref": "#/definitions/discoveryPortInfoType"
+                    },
+                    "x-displayname": "Ports"
+                },
                 "service_name": {
                     "type": "string",
                     "description": " Name of the discovered service\n\nExample: - \"myservice\"-",
@@ -2858,6 +2867,41 @@ var APISwaggerJSON string = `{
                     "title": "POD name",
                     "x-displayname": "Name",
                     "x-ves-example": "mypod-nk8wr"
+                }
+            }
+        },
+        "discoveryPortInfoType": {
+            "type": "object",
+            "description": "Information about port and protocol on which the service is provided",
+            "title": "Port information",
+            "x-displayname": "Port details",
+            "x-ves-proto-message": "ves.io.schema.discovery.PortInfoType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": " Port number on which the service is exposed\n\nExample: - \"8080\"-\nRequired: YES",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port number",
+                    "x-ves-example": "8080",
+                    "x-ves-required": "true"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol on which the service is exposed\n\nExample: - \"TCP\"-\nRequired: YES",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-required": "true"
+                },
+                "target_port": {
+                    "type": "integer",
+                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubenetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\nRequired: YES",
+                    "title": "Target Port",
+                    "format": "int64",
+                    "x-displayname": "Target Port number",
+                    "x-ves-example": "8081",
+                    "x-ves-required": "true"
                 }
             }
         },

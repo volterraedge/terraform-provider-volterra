@@ -36,11 +36,9 @@ type StorageClassListType struct {
 	StorageClasses []*StorageClassType `protobuf:"bytes,1,rep,name=storage_classes,json=storageClasses" json:"storage_classes,omitempty"`
 }
 
-func (m *StorageClassListType) Reset()      { *m = StorageClassListType{} }
-func (*StorageClassListType) ProtoMessage() {}
-func (*StorageClassListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorStorageTypes, []int{0}
-}
+func (m *StorageClassListType) Reset()                    { *m = StorageClassListType{} }
+func (*StorageClassListType) ProtoMessage()               {}
+func (*StorageClassListType) Descriptor() ([]byte, []int) { return fileDescriptorStorageTypes, []int{0} }
 
 func (m *StorageClassListType) GetStorageClasses() []*StorageClassType {
 	if m != nil {
@@ -1034,9 +1032,7 @@ var (
 	ErrIntOverflowStorageTypes   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() {
-	proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptorStorageTypes)
-}
+func init() { proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptorStorageTypes) }
 func init() {
 	golang_proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptorStorageTypes)
 }

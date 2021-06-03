@@ -199,24 +199,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["delete_delay"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("delete_delay"))
-		if err := fv(ctx, m.GetDeleteDelay(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["deleted_at"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("deleted_at"))
-		if err := fv(ctx, m.GetDeletedAt(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
@@ -432,19 +414,19 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["delete_delay"]; exists {
+	if fv, exists := v.FldValidators["deletion_time"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("delete_delay"))
-		if err := fv(ctx, m.GetDeleteDelay(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("deletion_time"))
+		if err := fv(ctx, m.GetDeletionTime(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["deleted_at"]; exists {
+	if fv, exists := v.FldValidators["marked_for_delete"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("deleted_at"))
-		if err := fv(ctx, m.GetDeletedAt(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("marked_for_delete"))
+		if err := fv(ctx, m.GetMarkedForDelete(), vOpts...); err != nil {
 			return err
 		}
 
@@ -898,24 +880,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["delete_delay"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("delete_delay"))
-		if err := fv(ctx, m.GetDeleteDelay(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["deleted_at"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("deleted_at"))
-		if err := fv(ctx, m.GetDeletedAt(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
@@ -964,8 +928,6 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Algo = f.GetAlgo()
 	m.AllowVolterra = f.GetAllowVolterra()
 	m.DecryptCacheTimeout = f.GetDecryptCacheTimeout()
-	m.DeleteDelay = f.GetDeleteDelay()
-	m.DeletedAt = f.GetDeletedAt()
 	m.Rules = f.GetRules()
 }
 
@@ -978,8 +940,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Algo = m1.Algo
 	f.AllowVolterra = m1.AllowVolterra
 	f.DecryptCacheTimeout = m1.DecryptCacheTimeout
-	f.DeleteDelay = m1.DeleteDelay
-	f.DeletedAt = m1.DeletedAt
 	f.Rules = m1.Rules
 }
 
@@ -990,8 +950,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Algo = f.GetAlgo()
 	m.AllowVolterra = f.GetAllowVolterra()
 	m.DecryptCacheTimeout = f.GetDecryptCacheTimeout()
-	m.DeleteDelay = f.GetDeleteDelay()
-	m.DeletedAt = f.GetDeletedAt()
+
 	m.Rules = f.GetRules()
 }
 
@@ -1004,8 +963,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Algo = m1.Algo
 	f.AllowVolterra = m1.AllowVolterra
 	f.DecryptCacheTimeout = m1.DecryptCacheTimeout
-	f.DeleteDelay = m1.DeleteDelay
-	f.DeletedAt = m1.DeletedAt
+
 	f.Rules = m1.Rules
 }
 
@@ -1016,8 +974,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Algo = f.GetAlgo()
 	m.AllowVolterra = f.GetAllowVolterra()
 	m.DecryptCacheTimeout = f.GetDecryptCacheTimeout()
-	m.DeleteDelay = f.GetDeleteDelay()
-	m.DeletedAt = f.GetDeletedAt()
 	m.Rules = f.GetRules()
 }
 
@@ -1030,7 +986,5 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Algo = m1.Algo
 	f.AllowVolterra = m1.AllowVolterra
 	f.DecryptCacheTimeout = m1.DecryptCacheTimeout
-	f.DeleteDelay = m1.DeleteDelay
-	f.DeletedAt = m1.DeletedAt
 	f.Rules = m1.Rules
 }

@@ -2920,17 +2920,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "delete_delay": {
-                    "type": "string",
-                    "description": " deleted_delay is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "x-displayname": "Delete Delay"
-                },
-                "deleted_at": {
-                    "type": "string",
-                    "description": " deleted_at is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "format": "date-time",
-                    "x-displayname": "Deleted At"
-                },
                 "rules": {
                     "type": "array",
                     "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
@@ -2966,16 +2955,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "delete_delay": {
+                "deletion_time": {
                     "type": "string",
-                    "description": " deleted_delay is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "x-displayname": "Delete Delay"
+                    "format": "date-time"
                 },
-                "deleted_at": {
-                    "type": "string",
-                    "description": " deleted_at is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "format": "date-time",
-                    "x-displayname": "Deleted At"
+                "marked_for_delete": {
+                    "type": "boolean",
+                    "format": "boolean"
                 },
                 "rules": {
                     "type": "array",
@@ -3063,17 +3049,6 @@ var APISwaggerJSON string = `{
                     "description": " decrypt_cache_timeout contains the amount of time a decrypted secret is cached in wingman.\n Value for this parameter is a string ending in the suffix \"s\" (indicating seconds), suffix \"m\" (indicating minutes) or suffix \"h\" (indicating hours)\n\nExample: - \"6h\"-",
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
-                },
-                "delete_delay": {
-                    "type": "string",
-                    "description": " deleted_delay is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "x-displayname": "Delete Delay"
-                },
-                "deleted_at": {
-                    "type": "string",
-                    "description": " deleted_at is set when the secret policy object is marked for delete, based on this value\n object marked for delete will be deleted after delete_delay",
-                    "format": "date-time",
-                    "x-displayname": "Deleted At"
                 },
                 "rules": {
                     "type": "array",

@@ -459,6 +459,18 @@ func (v *ValidateOperMetaType) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["annotations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("annotations"))
+		for key, value := range m.GetAnnotations() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))

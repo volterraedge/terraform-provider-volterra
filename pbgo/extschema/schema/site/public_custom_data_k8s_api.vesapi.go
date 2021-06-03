@@ -972,7 +972,6 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("site", fmt.Sprintf("%v", req.Site))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -2687,94 +2686,6 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumes": {
-            "get": {
-                "summary": "PersistentVolumeList",
-                "description": "API to get list of Persistent Volumes for a given namespace in a site.",
-                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/v1PersistentVolumeList"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "site",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "tags": [
-                    "CustomDataK8SAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeList"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"
-            },
-            "x-displayname": "Custom Data K8s API",
-            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/pods": {
             "get": {
                 "summary": "PodList",
@@ -3214,7 +3125,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         "/public/namespaces/system/site/{site}/api/v1/persistentvolumes": {
             "get": {
                 "summary": "PersistentVolumeList",
-                "description": "API to get list of Persistent Volumes for a given namespace in a site.",
+                "description": "API to get list of Persistent Volumes in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
                 "responses": {
                     "200": {
@@ -3278,14 +3189,6 @@ var CustomDataK8SAPISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "name": "namespace",
-                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of PVs in a site",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [

@@ -5172,6 +5172,14 @@ var APISwaggerJSON string = `{
             "x-displayname": "Dynamic Reverse Proxy Type",
             "x-ves-proto-message": "ves.io.schema.virtual_host.DynamicReverseProxyType",
             "properties": {
+                "connection_timeout": {
+                    "type": "integer",
+                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2000 (2 seconds)\n\nExample: - \"4000\"-",
+                    "title": "connection_timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Timeout",
+                    "x-ves-example": "4000"
+                },
                 "resolution_network": {
                     "type": "array",
                     "description": " Reference to virtual network where the endpoint is resolved.\n Reference is valid only when the network type is VIRTUAL_NETWORK_PER_SITE or\n VIRTUAL_NETWORK_GLOBAL. It is ignored for all other network types",

@@ -35,7 +35,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_type = "bgp_router_id_type"
 
     // One of the arguments from this list "local_address from_site ip_address" must be set
-    local_address = true
+    from_site = true
   }
 
   peers {
@@ -47,19 +47,20 @@ resource "volterra_bgp" "example" {
 
     target_service = "target_service"
 
-    // One of the arguments from this list "external internal" must be set
+    // One of the arguments from this list "internal external" must be set
 
     external {
-      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      default_gateway = true
-      asn             = "asn"
+      // One of the arguments from this list "subnet_end_offset from_site default_gateway address subnet_begin_offset" must be set
+      subnet_end_offset = "subnet_end_offset"
+
+      asn = "asn"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
-        disable = true
+        enable = true
       }
 
-      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
+      // One of the arguments from this list "interface_list inside_interfaces outside_interfaces interface" must be set
 
       interface {
         name      = "test1"
@@ -110,7 +111,7 @@ Argument Reference
 
 `peers` - (Required) BGP parameters for peer. See [Peers ](#peers) below for details.
 
-`where` - (Required) Set of sites in which this configuration is valid and must be present. See [Where ](#where) below for details.
+`where` - (Required) Site or virtual site where this BGP configuration should be applied.. See [Where ](#where) below for details.
 
 ### Bgp Parameters
 
@@ -324,7 +325,7 @@ Direct reference to virtual site object.
 
 ### Where
 
-Set of sites in which this configuration is valid and must be present.
+Site or virtual site where this BGP configuration should be applied..
 
 `site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
 

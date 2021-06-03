@@ -34,6 +34,7 @@ const (
 	setVPCIPPrefixes          = "volterra_tgw_vpc_ip_prefixes"
 	setVPNTunnels             = "volterra_tgw_vpn_tunnels"
 	setTGWInfo                = "volterra_tgw_info"
+	setSiteVipInfo            = "volterra_site_set_vip_info"
 	tfParamsAction            = "volterra_tf_params_action"
 )
 
@@ -188,6 +189,7 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[setVPCIPPrefixes] = resourceVolterraSetVpcIPPrefixes()
 	resourceMap[setVPNTunnels] = resourceVolterraSetVPNTunnels()
 	resourceMap[setTGWInfo] = resourceVolterraSetTGWInfo()
+	resourceMap[setSiteVipInfo] = resourceVolterraSiteSetVIPInfo()
 	resourceMap[tfParamsAction] = resourceVolterraTFParamsRunAction()
 	return resourceMap
 }

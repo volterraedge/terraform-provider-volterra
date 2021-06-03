@@ -2312,41 +2312,9 @@ type ValidateCustomPorts struct {
 
 func (v *ValidateCustomPorts) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for port_ranges")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for port_ranges")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated port_ranges")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items port_ranges")
-		}
-		return nil
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
 	}
 
 	return validatorFn, nil
@@ -2367,6 +2335,7 @@ func (v *ValidateCustomPorts) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["port_ranges"]; exists {
+
 		vOpts := append(opts, db.WithValidateField("port_ranges"))
 		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
 			return err
@@ -2391,9 +2360,8 @@ var DefaultCustomPortsValidator = func() *ValidateCustomPorts {
 
 	vrhPortRanges := v.PortRangesValidationRuleHandler
 	rulesPortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":                 "true",
-		"ves.io.schema.rules.repeated.items.string.port_range": "true",
-		"ves.io.schema.rules.repeated.max_items":               "128",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.port_range_list": "true",
 	}
 	vFn, err = vrhPortRanges(rulesPortRanges)
 	if err != nil {

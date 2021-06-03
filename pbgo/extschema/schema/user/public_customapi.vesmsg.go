@@ -1322,6 +1322,18 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_flags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_flags"))
+		for key, value := range m.GetTenantFlags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_state"))

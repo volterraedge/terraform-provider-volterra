@@ -36,8 +36,8 @@ resource "volterra_route" "example" {
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "regex prefix path" must be set
-        regex = "regex"
+        // One of the arguments from this list "prefix path regex" must be set
+        prefix = "/register/"
       }
 
       query_params {
@@ -109,8 +109,8 @@ resource "volterra_route" "example" {
       }
 
       hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
+        // One of the arguments from this list "cookie source_ip header_name" must be set
+        source_ip = true
 
         terminal = true
       }

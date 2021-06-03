@@ -28,15 +28,9 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  resource_group = ["my-resources"]
+  logs_streaming_disabled = true
+  resource_group          = ["my-resources"]
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
@@ -58,13 +52,11 @@ resource "volterra_azure_vnet_site" "example" {
     azure_certified_hw = "azure-byol-voltmesh"
   }
   vnet {
-    // One of the arguments from this list "existing_vnet new_vnet" must be set
+    // One of the arguments from this list "new_vnet existing_vnet" must be set
 
-    new_vnet {
-      // One of the arguments from this list "name autogenerate" must be set
-      name = "name"
-
-      primary_ipv4 = "10.1.0.0/16"
+    existing_vnet {
+      resource_group = "resource_group"
+      vnet_name      = "vnet_name"
     }
   }
 }
@@ -410,6 +402,10 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
+### No K8s Cluster
+
+Site Local K8s API access is disabled.
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -593,6 +589,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (bool).
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

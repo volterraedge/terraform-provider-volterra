@@ -104,5 +104,44 @@ func testConfigFleet(resourceName, name, namespace string) string {
 			tenant    = volterra_namespace.system.tenant_name
 		  }
 		}
+
+		resource "volterra_fleet" "fleet_storage_test" {
+			name = "fleet-storage-test"
+			namespace = "system"
+			fleet_label = "fleet-storage-test"
+			disable_gpu = true
+			logs_streaming_disabled = true
+			deny_all_usb = true
+			default_config = true
+			no_storage_interfaces = true
+			no_storage_static_routes = true
+			no_bond_devices = true
+			no_dc_cluster_group = true
+			storage_class_list {
+			  storage_classes {
+				storage_class_name = "mayastor"
+				storage_device = "sd-test"
+				openebs_enterprise {
+				  protocol = "nvmf"
+				  replication = 3
+				}
+			  }
+			}
+			storage_device_list {
+			  storage_devices {
+				storage_device = "sd-test"
+				openebs_enterprise {
+				  dynamic "mayastor_pools" {
+					for_each = toset(["test1", "test2", "test3"])
+					content {
+					  node = mayastor_pools.key
+					  pool_disk_devices = ["/dev/sdb"]
+					  pool_name = "msp-${mayastor_pools.key}"
+					}
+				  }
+				}
+			  }
+			}
+		  }
 		`, resourceName, name, namespace)
 }
