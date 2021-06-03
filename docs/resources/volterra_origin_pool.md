@@ -19,8 +19,8 @@ Example Usage
 resource "volterra_origin_pool" "example" {
   name                   = "acmecorp-web"
   namespace              = "staging"
-  endpoint_selection     = ["endpoint_selection"]
-  loadbalancer_algorithm = ["loadbalancer_algorithm"]
+  endpoint_selection     = "endpoint_selection"
+  loadbalancer_algorithm = "loadbalancer_algorithm"
 
   origin_servers {
     // One of the arguments from this list "public_ip public_name private_ip consul_service vn_private_name private_name k8s_service custom_endpoint_object vn_private_ip" must be set
@@ -47,7 +47,7 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  port = ["9080"]
+  port = 9080
 
   // One of the arguments from this list "no_tls use_tls" must be set
   no_tls = true
