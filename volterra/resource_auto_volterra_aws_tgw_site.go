@@ -624,13 +624,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"port_ranges": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -2331,12 +2326,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -3891,12 +3881,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}

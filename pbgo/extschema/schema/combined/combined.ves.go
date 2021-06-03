@@ -841,6 +841,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.discovery.K8SPublishType"] = ves_io_schema_discovery.K8SPublishTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.K8SVipDiscoveryInfoType"] = ves_io_schema_discovery.K8SVipDiscoveryInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.PodInfoType"] = ves_io_schema_discovery.PodInfoTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.discovery.PortInfoType"] = ves_io_schema_discovery.PortInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.ReplaceSpecType"] = ves_io_schema_discovery.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.RestConfigType"] = ves_io_schema_discovery.RestConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.TLSClientConfigType"] = ves_io_schema_discovery.TLSClientConfigTypeValidator()
@@ -1123,6 +1124,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.GetSpecType"] = ves_io_schema_k8s_cluster.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.GlobalSpecType"] = ves_io_schema_k8s_cluster.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.InsecureRegistryListType"] = ves_io_schema_k8s_cluster.InsecureRegistryListTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.LocalAccessArgoCDType"] = ves_io_schema_k8s_cluster.LocalAccessArgoCDTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.LocalAccessConfigType"] = ves_io_schema_k8s_cluster.LocalAccessConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.PodSecurityPolicyListType"] = ves_io_schema_k8s_cluster.PodSecurityPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ReplaceSpecType"] = ves_io_schema_k8s_cluster.ReplaceSpecTypeValidator()
@@ -1351,6 +1353,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessReq"] = ves_io_schema_namespace.EvaluateAPIAccessReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessResp"] = ves_io_schema_namespace.EvaluateAPIAccessRespValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicRespValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveAlertPoliciesRequest"] = ves_io_schema_namespace.GetActiveAlertPoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveAlertPoliciesResponse"] = ves_io_schema_namespace.GetActiveAlertPoliciesResponseValidator()
@@ -2805,6 +2809,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.Interface"] = ves_io_schema_views_voltstack_site.InterfaceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.InterfaceListType"] = ves_io_schema_views_voltstack_site.InterfaceListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.ReplaceSpecType"] = ves_io_schema_views_voltstack_site.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.SliVnConfiguration"] = ves_io_schema_views_voltstack_site.SliVnConfigurationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.StaticRoutesListType"] = ves_io_schema_views_voltstack_site.StaticRoutesListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.StorageInterfaceListType"] = ves_io_schema_views_voltstack_site.StorageInterfaceListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.StorageInterfaceType"] = ves_io_schema_views_voltstack_site.StorageInterfaceTypeValidator()
@@ -4813,12 +4818,19 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
+				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
+				sets.NewString([]string{"argo_cd", "dashboard"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4829,12 +4841,19 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
+				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
+				sets.NewString([]string{"argo_cd", "dashboard"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4856,6 +4875,9 @@ func init() {
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
 				sets.NewString([]string{"argo_cd", "dashboard"}...),
 			},
+			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
+			},
 			"spec.gc_spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
 			},
@@ -4875,6 +4897,9 @@ func init() {
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
 				sets.NewString([]string{"argo_cd", "dashboard"}...),
+			},
+			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
 			},
 			"spec.gc_spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -6732,6 +6757,9 @@ func init() {
 			"spec.ingress_egress_gw.allowed_vip_port": []sets.String{
 				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
 			},
+			"spec.ingress_egress_gw.allowed_vip_port_sli": []sets.String{
+				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
+			},
 			"spec.ingress_egress_gw.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
 			},
@@ -6800,6 +6828,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_storage", "storage_class_list"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.voltstack_cluster.allowed_vip_port": []sets.String{
@@ -6864,6 +6893,9 @@ func init() {
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.ingress_egress_gw.allowed_vip_port": []sets.String{
+				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
+			},
+			"spec.ingress_egress_gw.allowed_vip_port_sli": []sets.String{
 				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
 			},
 			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
@@ -6967,6 +6999,9 @@ func init() {
 			"spec.gc_spec.ingress_egress_gw.allowed_vip_port": []sets.String{
 				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
 			},
+			"spec.gc_spec.ingress_egress_gw.allowed_vip_port_sli": []sets.String{
+				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
+			},
 			"spec.gc_spec.ingress_egress_gw.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
 			},
@@ -7035,6 +7070,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_storage", "storage_class_list"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.allowed_vip_port": []sets.String{
@@ -7102,6 +7138,9 @@ func init() {
 			"spec.gc_spec.ingress_egress_gw.allowed_vip_port": []sets.String{
 				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
 			},
+			"spec.gc_spec.ingress_egress_gw.allowed_vip_port_sli": []sets.String{
+				sets.NewString([]string{"custom_ports", "use_http_https_port", "use_http_port", "use_https_port"}...),
+			},
 			"spec.gc_spec.ingress_egress_gw.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
 			},
@@ -7170,6 +7209,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_storage", "storage_class_list"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.allowed_vip_port": []sets.String{
@@ -7307,6 +7347,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
@@ -7526,6 +7567,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
@@ -7654,6 +7696,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
@@ -7940,6 +7983,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
@@ -8153,6 +8197,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
@@ -8275,6 +8320,7 @@ func init() {
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
@@ -9206,6 +9252,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_config", "slo_config"}...),
 				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
 			},
 			"spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
@@ -9269,6 +9316,12 @@ func init() {
 			},
 			"spec.custom_network_config.interface_list.interfaces.tunnel_interface.static_ip": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.custom_network_config.slo_config": []sets.String{
 				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
@@ -9428,6 +9481,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_config", "slo_config"}...),
 				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
 			},
 			"spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
@@ -9491,6 +9545,12 @@ func init() {
 			},
 			"spec.custom_network_config.interface_list.interfaces.tunnel_interface.static_ip": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.custom_network_config.slo_config": []sets.String{
 				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
@@ -9644,6 +9704,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_config", "slo_config"}...),
 				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
 			},
 			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
@@ -9707,6 +9768,12 @@ func init() {
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.tunnel_interface.static_ip": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.gc_spec.custom_network_config.slo_config": []sets.String{
 				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
@@ -9866,6 +9933,7 @@ func init() {
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
 				sets.NewString([]string{"default_config", "slo_config"}...),
 				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
 				sets.NewString([]string{"global_network_list", "no_global_network"}...),
 			},
 			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
@@ -9929,6 +9997,12 @@ func init() {
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.tunnel_interface.static_ip": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.gc_spec.custom_network_config.slo_config": []sets.String{
 				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),

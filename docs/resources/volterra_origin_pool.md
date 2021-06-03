@@ -23,7 +23,7 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_ip public_name private_ip consul_service vn_private_name private_name k8s_service custom_endpoint_object vn_private_ip" must be set
+    // One of the arguments from this list "public_ip private_ip private_name custom_endpoint_object public_name k8s_service consul_service vn_private_ip vn_private_name" must be set
 
     private_ip {
       ip = "ip"

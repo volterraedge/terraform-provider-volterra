@@ -2198,6 +2198,12 @@ var APISwaggerJSON string = `{
                     "description": " Generated YAML",
                     "title": "Generated YAML",
                     "x-displayname": "Generated YAML"
+                },
+                "local_domain": {
+                    "description": " Local domain to access argocd for example argocd.localdomain",
+                    "title": "ArgoCD Local Domain",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessArgoCDType",
+                    "x-displayname": "ArgoCD Local Domain"
                 }
             }
         },
@@ -2343,6 +2349,7 @@ var APISwaggerJSON string = `{
             "description": "Create k8s_cluster will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create k8s_cluster",
             "x-displayname": "Create Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2351,6 +2358,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.CreateSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2362,6 +2373,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
@@ -2519,6 +2534,7 @@ var APISwaggerJSON string = `{
             "description": "Get k8s_cluster will get the object from the storage backend for namespace metadata.namespace",
             "title": "Get k8s_cluster",
             "x-displayname": "Get Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2527,6 +2543,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GetSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2538,6 +2558,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
@@ -2844,6 +2868,35 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "k8s_clusterLocalAccessArgoCDType": {
+            "type": "object",
+            "description": "Parameters required to enable local access",
+            "title": "Local Access ArgoCD Configuration",
+            "x-displayname": "Local Access Configuration",
+            "x-ves-oneof-field-port_choice": "[\"default_port\",\"port\"]",
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.LocalAccessArgoCDType",
+            "properties": {
+                "default_port": {
+                    "description": "Exclusive with [port]\nx-displayName: \"Default ArgoCD Port\"\nUse default port 443 for ArgoCD server.",
+                    "title": "Default ArgoCD Port",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "local_domain": {
+                    "type": "string",
+                    "description": " ArgoCD will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\nRequired: YES",
+                    "title": "Local Domain",
+                    "x-displayname": "Local Domain",
+                    "x-ves-example": "example.com",
+                    "x-ves-required": "true"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom ArgoCD Port\"\nx-example: \"443\"\nUse custom ArgoCD port.\nAvailable port range is less than 65000 except reserved ports.",
+                    "title": "Custom ArgoCD Port",
+                    "format": "int64"
+                }
+            }
+        },
         "k8s_clusterLocalAccessConfigType": {
             "type": "object",
             "description": "Parameters required to enable local access",
@@ -2956,6 +3009,7 @@ var APISwaggerJSON string = `{
             "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace k8s_cluster",
             "x-displayname": "Replace Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2964,6 +3018,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ReplaceSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2975,6 +3033,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",

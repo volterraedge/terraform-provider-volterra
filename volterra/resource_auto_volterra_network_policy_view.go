@@ -75,6 +75,15 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							Optional: true,
 						},
 
+						"adv_action": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
 						"keys": {
 
 							Type: schema.TypeList,
@@ -415,6 +424,15 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 						"action": {
 							Type:     schema.TypeString,
 							Optional: true,
+						},
+
+						"adv_action": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
 						},
 
 						"keys": {

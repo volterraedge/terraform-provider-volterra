@@ -652,3 +652,168 @@ var DefaultEvaluateAPIAccessRespValidator = func() *ValidateEvaluateAPIAccessRes
 func EvaluateAPIAccessRespValidator() db.Validator {
 	return DefaultEvaluateAPIAccessRespValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateAllowAdvertiseOnPublicReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateAllowAdvertiseOnPublicReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateAllowAdvertiseOnPublicReq) DeepCopy() *UpdateAllowAdvertiseOnPublicReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateAllowAdvertiseOnPublicReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateAllowAdvertiseOnPublicReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateAllowAdvertiseOnPublicReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateAllowAdvertiseOnPublicReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateAllowAdvertiseOnPublicReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateAllowAdvertiseOnPublicReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateAllowAdvertiseOnPublicReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateAllowAdvertiseOnPublicReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["allow_advertise_on_public"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_advertise_on_public"))
+		if err := fv(ctx, m.GetAllowAdvertiseOnPublic(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateAllowAdvertiseOnPublicReqValidator = func() *ValidateUpdateAllowAdvertiseOnPublicReq {
+	v := &ValidateUpdateAllowAdvertiseOnPublicReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateAllowAdvertiseOnPublicReqValidator() db.Validator {
+	return DefaultUpdateAllowAdvertiseOnPublicReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateAllowAdvertiseOnPublicResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateAllowAdvertiseOnPublicResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateAllowAdvertiseOnPublicResp) DeepCopy() *UpdateAllowAdvertiseOnPublicResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateAllowAdvertiseOnPublicResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateAllowAdvertiseOnPublicResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateAllowAdvertiseOnPublicResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateAllowAdvertiseOnPublicRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateAllowAdvertiseOnPublicResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateAllowAdvertiseOnPublicResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateAllowAdvertiseOnPublicResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateAllowAdvertiseOnPublicResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("result"))
+		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateAllowAdvertiseOnPublicRespValidator = func() *ValidateUpdateAllowAdvertiseOnPublicResp {
+	v := &ValidateUpdateAllowAdvertiseOnPublicResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateAllowAdvertiseOnPublicRespValidator() db.Validator {
+	return DefaultUpdateAllowAdvertiseOnPublicRespValidator
+}

@@ -2188,6 +2188,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
+
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
 	v.FldValidators["retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
@@ -2294,6 +2296,16 @@ type ValidateDynamicReverseProxyType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDynamicReverseProxyType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DynamicReverseProxyType)
 	if !ok {
@@ -2306,6 +2318,15 @@ func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm inter
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["connection_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_timeout"))
+		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["resolution_network"]; exists {
@@ -2344,6 +2365,25 @@ func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm inter
 // Well-known symbol for default validator implementation
 var DefaultDynamicReverseProxyTypeValidator = func() *ValidateDynamicReverseProxyType {
 	v := &ValidateDynamicReverseProxyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnectionTimeout := v.ConnectionTimeoutValidationRuleHandler
+	rulesConnectionTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionTimeout(rulesConnectionTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DynamicReverseProxyType.connection_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_timeout"] = vFn
 
 	return v
 }()
@@ -3791,6 +3831,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
@@ -5798,6 +5840,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
+
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
 	v.FldValidators["retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
@@ -7750,6 +7794,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 

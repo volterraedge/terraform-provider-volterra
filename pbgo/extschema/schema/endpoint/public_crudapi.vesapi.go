@@ -2441,7 +2441,6 @@ var APISwaggerJSON string = `{
             "description": "Get endpoint will get the object from the storage backend for namespace metadata.namespace",
             "title": "Get Endpoint",
             "x-displayname": "Get Endpoint",
-            "x-ves-displayorder": "1,3,4,8,11,9,2",
             "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GetSpecType",
             "properties": {

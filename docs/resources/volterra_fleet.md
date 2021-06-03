@@ -26,7 +26,7 @@ resource "volterra_fleet" "example" {
     bond_devices {
       devices = ["devices"]
 
-      // One of the arguments from this list "lacp active_backup" must be set
+      // One of the arguments from this list "active_backup lacp" must be set
 
       lacp {
         rate = "30"
@@ -36,7 +36,7 @@ resource "volterra_fleet" "example" {
       name                  = "bond0"
     }
   }
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
@@ -51,10 +51,41 @@ resource "volterra_fleet" "example" {
       tenant    = "acmecorp"
     }
   }
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
-  default_storage_class = true
+
+  storage_class_list {
+    storage_classes {
+      advanced_storage_parameters = {
+        "key1" = "value1"
+      }
+
+      allow_volume_expansion = true
+      default_storage_class  = true
+      description            = "description"
+
+      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
+
+      netapp_trident {
+        selector = {
+          "key1" = "value1"
+        }
+
+        storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
+      }
+      reclaim_policy     = "Delete"
+      storage_class_name = "premium"
+      storage_device     = "storage_device"
+    }
+  }
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set

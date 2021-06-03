@@ -29,6 +29,7 @@
 		StorageInterfaceListType
 		StaticRoutesListType
 		VnConfiguration
+		SliVnConfiguration
 		GlobalNetworkConnectionType
 		GlobalNetworkConnectionListType
 		VssNetworkConfiguration

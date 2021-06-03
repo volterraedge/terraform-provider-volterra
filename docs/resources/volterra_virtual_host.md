@@ -261,6 +261,8 @@ resources from a server at a different origin.
 
 request. The DNS response is cached for 60s by default..
 
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
+
 `resolution_network` - (Optional) VIRTUAL_NETWORK_GLOBAL. It is ignored for all other network types. See [ref](#ref) below for details.
 
 `resolution_network_type` - (Optional) Type of the network to resolve the destination (`String`).

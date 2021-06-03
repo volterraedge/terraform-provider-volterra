@@ -254,6 +254,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allow_advertise_on_public"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_advertise_on_public"))
+		if err := fv(ctx, m.GetAllowAdvertiseOnPublic(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy_sub_ca_latest_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy_sub_ca_latest_version"))

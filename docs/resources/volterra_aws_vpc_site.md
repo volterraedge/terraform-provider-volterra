@@ -32,7 +32,7 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
@@ -127,7 +127,19 @@ Network Policies active for this site..
 
 ### Allowed Vip Port
 
-Allowed VIP Port Configuration.
+Allowed VIP Port Configuration for Outside Network.
+
+`custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
+
+`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
+
+`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
+
+### Allowed Vip Port Sli
+
+Allowed VIP Port Configuration for Inside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
 
@@ -207,7 +219,7 @@ Certificates for generating intermediate certificate for TLS interception..
 
 Custom list of ports to be allowed.
 
-`port_ranges` - (Required) List of Port Ranges (`String`).
+`port_ranges` - (Required) Port Ranges (`String`).
 
 ### Custom Static Route
 
@@ -301,7 +313,9 @@ List of global network connections.
 
 Two interface site is useful when site is used as ingress/egress gateway to the VPC..
 
-`allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
+`allowed_vip_port` - (Optional) Allowed VIP Port Configuration for Outside Network. See [Allowed Vip Port ](#allowed-vip-port) below for details.
+
+`allowed_vip_port_sli` - (Optional) Allowed VIP Port Configuration for Inside Network. See [Allowed Vip Port Sli ](#allowed-vip-port-sli) below for details.
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
@@ -420,6 +434,10 @@ Static Routes disabled for inside network..
 ### No Interception
 
 No TLS interception is enabled for this network connector.
+
+### No K8s Cluster
+
+Site Local K8s API access is disabled.
 
 ### No Network Policy
 
@@ -624,6 +642,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (bool).
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

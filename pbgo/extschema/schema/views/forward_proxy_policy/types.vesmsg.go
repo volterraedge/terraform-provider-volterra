@@ -1579,27 +1579,6 @@ func (v *ValidateForwardProxySimpleRuleType) DestListValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateForwardProxySimpleRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateForwardProxySimpleRuleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ForwardProxySimpleRuleType)
 	if !ok {
@@ -1677,33 +1656,6 @@ func (v *ValidateForwardProxySimpleRuleType) Validate(ctx context.Context, pm in
 
 	}
 
-	if fv, exists := v.FldValidators["metadata"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("metadata"))
-		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rule_description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("rule_description"))
-		if err := fv(ctx, m.GetRuleDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rule_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("rule_name"))
-		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["tls_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("tls_list"))
 		if err := fv(ctx, m.GetTlsList(), vOpts...); err != nil {
@@ -1773,17 +1725,6 @@ var DefaultForwardProxySimpleRuleTypeValidator = func() *ValidateForwardProxySim
 		panic(errMsg)
 	}
 	v.FldValidators["dest_list"] = vFn
-
-	vrhMetadata := v.MetadataValidationRuleHandler
-	rulesMetadata := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhMetadata(rulesMetadata)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxySimpleRuleType.metadata: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["metadata"] = vFn
 
 	return v
 }()

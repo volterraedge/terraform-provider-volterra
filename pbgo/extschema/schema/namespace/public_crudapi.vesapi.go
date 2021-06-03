@@ -2091,6 +2091,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.namespace.GlobalSpecType",
             "properties": {
+                "allow_advertise_on_public": {
+                    "description": " Config choice to allow advertisement on the public.",
+                    "$ref": "#/definitions/namespacePublicAdvertiseChoice",
+                    "x-displayname": "Allow advertisement on public."
+                },
                 "proxy_sub_ca_latest_version": {
                     "type": "integer",
                     "description": " SubCA version which is the latest and will be used for proxy feature.",
@@ -2263,6 +2268,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "System Metadata"
                 }
             }
+        },
+        "namespacePublicAdvertiseChoice": {
+            "type": "string",
+            "description": "Enum for advertisement choise on public.\n\nInherit tenant's default.\nEnable enables advertisement on public.\nDisable disables advertisement on public.",
+            "title": "PublicAdvertiseChoice",
+            "enum": [
+                "Default",
+                "Enable",
+                "Disable"
+            ],
+            "default": "Default",
+            "x-displayname": "PublicAdvertiseChoice",
+            "x-ves-proto-enum": "ves.io.schema.namespace.PublicAdvertiseChoice"
         },
         "namespaceReplaceRequest": {
             "type": "object",

@@ -30,12 +30,14 @@ resource "volterra_alert_policy" "example" {
     // One of the arguments from this list "send dont_send" must be set
     send = true
 
-    // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
-    any = true
+    // One of the arguments from this list "custom any severity group alertname alertname_regex" must be set
 
+    severity {
+      severities = ["severities"]
+    }
     notification_parameters {
       // One of the arguments from this list "default individual ves_io_group custom" must be set
-      default         = true
+      individual      = true
       group_interval  = "1m"
       group_wait      = "30s"
       repeat_interval = "4h"

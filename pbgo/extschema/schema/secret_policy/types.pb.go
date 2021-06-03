@@ -127,8 +127,6 @@ type CreateSpecType struct {
 	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
 	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
-	DeletedAt           *google_protobuf2.Timestamp                 `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt" json:"deleted_at,omitempty"`
-	DeleteDelay         *google_protobuf1.Duration                  `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay" json:"delete_delay,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -163,20 +161,6 @@ func (m *CreateSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
 	return nil
 }
 
-func (m *CreateSpecType) GetDeletedAt() *google_protobuf2.Timestamp {
-	if m != nil {
-		return m.DeletedAt
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetDeleteDelay() *google_protobuf1.Duration {
-	if m != nil {
-		return m.DeleteDelay
-	}
-	return nil
-}
-
 // Replace Secret Policy
 //
 // x-displayName: "Replace Secret Policy"
@@ -186,8 +170,6 @@ type ReplaceSpecType struct {
 	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
 	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
-	DeletedAt           *google_protobuf2.Timestamp                 `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt" json:"deleted_at,omitempty"`
-	DeleteDelay         *google_protobuf1.Duration                  `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay" json:"delete_delay,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
@@ -222,20 +204,6 @@ func (m *ReplaceSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDeletedAt() *google_protobuf2.Timestamp {
-	if m != nil {
-		return m.DeletedAt
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetDeleteDelay() *google_protobuf1.Duration {
-	if m != nil {
-		return m.DeleteDelay
-	}
-	return nil
-}
-
 // Get Secret Policy
 //
 // x-displayName: "Get Secret Policy"
@@ -245,8 +213,8 @@ type GetSpecType struct {
 	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
 	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
-	DeletedAt           *google_protobuf2.Timestamp                 `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt" json:"deleted_at,omitempty"`
-	DeleteDelay         *google_protobuf1.Duration                  `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay" json:"delete_delay,omitempty"`
+	MarkedForDelete     bool                                        `protobuf:"varint,5,opt,name=marked_for_delete,json=markedForDelete,proto3" json:"marked_for_delete,omitempty"`
+	DeletionTime        *google_protobuf2.Timestamp                 `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime" json:"deletion_time,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -281,16 +249,16 @@ func (m *GetSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
 	return nil
 }
 
-func (m *GetSpecType) GetDeletedAt() *google_protobuf2.Timestamp {
+func (m *GetSpecType) GetMarkedForDelete() bool {
 	if m != nil {
-		return m.DeletedAt
+		return m.MarkedForDelete
 	}
-	return nil
+	return false
 }
 
-func (m *GetSpecType) GetDeleteDelay() *google_protobuf1.Duration {
+func (m *GetSpecType) GetDeletionTime() *google_protobuf2.Timestamp {
 	if m != nil {
-		return m.DeleteDelay
+		return m.DeletionTime
 	}
 	return nil
 }
@@ -381,12 +349,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
 		return false
 	}
-	if !this.DeletedAt.Equal(that1.DeletedAt) {
-		return false
-	}
-	if !this.DeleteDelay.Equal(that1.DeleteDelay) {
-		return false
-	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -423,12 +385,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
-		return false
-	}
-	if !this.DeletedAt.Equal(that1.DeletedAt) {
-		return false
-	}
-	if !this.DeleteDelay.Equal(that1.DeleteDelay) {
 		return false
 	}
 	return true
@@ -469,10 +425,10 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
 		return false
 	}
-	if !this.DeletedAt.Equal(that1.DeletedAt) {
+	if this.MarkedForDelete != that1.MarkedForDelete {
 		return false
 	}
-	if !this.DeleteDelay.Equal(that1.DeleteDelay) {
+	if !this.DeletionTime.Equal(that1.DeletionTime) {
 		return false
 	}
 	return true
@@ -504,7 +460,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.CreateSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
@@ -514,12 +470,6 @@ func (this *CreateSpecType) GoString() string {
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
-	if this.DeletedAt != nil {
-		s = append(s, "DeletedAt: "+fmt.Sprintf("%#v", this.DeletedAt)+",\n")
-	}
-	if this.DeleteDelay != nil {
-		s = append(s, "DeleteDelay: "+fmt.Sprintf("%#v", this.DeleteDelay)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -527,7 +477,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.ReplaceSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
@@ -536,12 +486,6 @@ func (this *ReplaceSpecType) GoString() string {
 	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
-	}
-	if this.DeletedAt != nil {
-		s = append(s, "DeletedAt: "+fmt.Sprintf("%#v", this.DeletedAt)+",\n")
-	}
-	if this.DeleteDelay != nil {
-		s = append(s, "DeleteDelay: "+fmt.Sprintf("%#v", this.DeleteDelay)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -560,11 +504,9 @@ func (this *GetSpecType) GoString() string {
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
-	if this.DeletedAt != nil {
-		s = append(s, "DeletedAt: "+fmt.Sprintf("%#v", this.DeletedAt)+",\n")
-	}
-	if this.DeleteDelay != nil {
-		s = append(s, "DeleteDelay: "+fmt.Sprintf("%#v", this.DeleteDelay)+",\n")
+	s = append(s, "MarkedForDelete: "+fmt.Sprintf("%#v", this.MarkedForDelete)+",\n")
+	if this.DeletionTime != nil {
+		s = append(s, "DeletionTime: "+fmt.Sprintf("%#v", this.DeletionTime)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -704,26 +646,6 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n4
 	}
-	if m.DeletedAt != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeletedAt.Size()))
-		n5, err := m.DeletedAt.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if m.DeleteDelay != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeleteDelay.Size()))
-		n6, err := m.DeleteDelay.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
 	return i, nil
 }
 
@@ -773,31 +695,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n7, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		n5, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
-	}
-	if m.DeletedAt != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeletedAt.Size()))
-		n8, err := m.DeletedAt.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n8
-	}
-	if m.DeleteDelay != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeleteDelay.Size()))
-		n9, err := m.DeleteDelay.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n9
+		i += n5
 	}
 	return i, nil
 }
@@ -848,31 +750,31 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n10, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		n6, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n6
 	}
-	if m.DeletedAt != nil {
-		dAtA[i] = 0x2a
+	if m.MarkedForDelete {
+		dAtA[i] = 0x28
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeletedAt.Size()))
-		n11, err := m.DeletedAt.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		if m.MarkedForDelete {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
 		}
-		i += n11
+		i++
 	}
-	if m.DeleteDelay != nil {
+	if m.DeletionTime != nil {
 		dAtA[i] = 0x32
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeleteDelay.Size()))
-		n12, err := m.DeleteDelay.MarshalTo(dAtA[i:])
+		i = encodeVarintTypes(dAtA, i, uint64(m.DeletionTime.Size()))
+		n7, err := m.DeletionTime.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n7
 	}
 	return i, nil
 }
@@ -935,14 +837,6 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.DecryptCacheTimeout.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.DeletedAt != nil {
-		l = m.DeletedAt.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DeleteDelay != nil {
-		l = m.DeleteDelay.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -963,14 +857,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.DecryptCacheTimeout != nil {
 		l = m.DecryptCacheTimeout.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DeletedAt != nil {
-		l = m.DeletedAt.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DeleteDelay != nil {
-		l = m.DeleteDelay.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -995,12 +881,11 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.DecryptCacheTimeout.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.DeletedAt != nil {
-		l = m.DeletedAt.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if m.MarkedForDelete {
+		n += 2
 	}
-	if m.DeleteDelay != nil {
-		l = m.DeleteDelay.Size()
+	if m.DeletionTime != nil {
+		l = m.DeletionTime.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1043,8 +928,6 @@ func (this *CreateSpecType) String() string {
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
-		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1058,8 +941,6 @@ func (this *ReplaceSpecType) String() string {
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
-		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1073,8 +954,8 @@ func (this *GetSpecType) String() string {
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
-		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "google_protobuf1.Duration", 1) + `,`,
+		`MarkedForDelete:` + fmt.Sprintf("%v", this.MarkedForDelete) + `,`,
+		`DeletionTime:` + strings.Replace(fmt.Sprintf("%v", this.DeletionTime), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1438,72 +1319,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DeletedAt == nil {
-				m.DeletedAt = &google_protobuf2.Timestamp{}
-			}
-			if err := m.DeletedAt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeleteDelay", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DeleteDelay == nil {
-				m.DeleteDelay = &google_protobuf1.Duration{}
-			}
-			if err := m.DeleteDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1654,72 +1469,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
 			}
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DeletedAt == nil {
-				m.DeletedAt = &google_protobuf2.Timestamp{}
-			}
-			if err := m.DeletedAt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeleteDelay", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DeleteDelay == nil {
-				m.DeleteDelay = &google_protobuf1.Duration{}
-			}
-			if err := m.DeleteDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1877,10 +1626,10 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MarkedForDelete", wireType)
 			}
-			var msglen int
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1890,28 +1639,15 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				v |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DeletedAt == nil {
-				m.DeletedAt = &google_protobuf2.Timestamp{}
-			}
-			if err := m.DeletedAt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
+			m.MarkedForDelete = bool(v != 0)
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DeleteDelay", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DeletionTime", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1935,10 +1671,10 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.DeleteDelay == nil {
-				m.DeleteDelay = &google_protobuf1.Duration{}
+			if m.DeletionTime == nil {
+				m.DeletionTime = &google_protobuf2.Timestamp{}
 			}
-			if err := m.DeleteDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.DeletionTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2071,43 +1807,47 @@ var (
 func init() { proto.RegisterFile("ves.io/schema/secret_policy/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 604 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0x41, 0x6b, 0xd4, 0x4e,
-	0x18, 0xc6, 0x77, 0x9a, 0xb6, 0xfc, 0xff, 0xb3, 0xba, 0x6a, 0x44, 0xd9, 0x6e, 0xcb, 0xb8, 0x14,
-	0xc4, 0x3d, 0xd8, 0x09, 0xd4, 0x93, 0x22, 0x62, 0xbb, 0xc5, 0xea, 0xa1, 0x88, 0xe9, 0x22, 0xe2,
-	0x25, 0x4c, 0x92, 0xb7, 0xd9, 0xe8, 0xa4, 0x33, 0x4c, 0x26, 0x5b, 0xf7, 0x50, 0x28, 0xf8, 0x05,
-	0xc4, 0x2f, 0xa1, 0xd4, 0x83, 0x77, 0x7b, 0xf1, 0x28, 0x9e, 0x7a, 0x2c, 0x9e, 0x6c, 0xbc, 0xd4,
-	0x5b, 0x3f, 0x82, 0x6c, 0x92, 0x55, 0xd3, 0x16, 0x04, 0xf1, 0xd0, 0xc3, 0xde, 0xe6, 0x9d, 0xf7,
-	0x79, 0x9f, 0x3c, 0x99, 0x5f, 0x02, 0x83, 0xaf, 0xf5, 0x20, 0xa6, 0xa1, 0xb0, 0x62, 0xaf, 0x0b,
-	0x11, 0xb3, 0x62, 0xf0, 0x14, 0x68, 0x47, 0x0a, 0x1e, 0x7a, 0x7d, 0x4b, 0xf7, 0x25, 0xc4, 0x54,
-	0x2a, 0xa1, 0x85, 0x39, 0x9d, 0x0b, 0x69, 0x2e, 0xa4, 0x25, 0x61, 0x63, 0x2e, 0x08, 0x75, 0x37,
-	0x71, 0xa9, 0x27, 0x22, 0x2b, 0x10, 0x81, 0xb0, 0xb2, 0x19, 0x37, 0x59, 0xcb, 0xaa, 0xac, 0xc8,
-	0x56, 0xb9, 0x57, 0x83, 0x04, 0x42, 0x04, 0x1c, 0x7e, 0xa9, 0xfc, 0x44, 0x31, 0x1d, 0x8a, 0xf5,
-	0xa2, 0x7f, 0xe5, 0x68, 0x5f, 0x87, 0x11, 0xc4, 0x9a, 0x45, 0xb2, 0x10, 0x4c, 0x97, 0x53, 0x0b,
-	0x39, 0x18, 0x2e, 0x92, 0x36, 0x9a, 0xe5, 0xe6, 0xf1, 0x77, 0x69, 0x4c, 0x95, 0x15, 0xbf, 0xb7,
-	0x66, 0xca, 0xad, 0x1e, 0xe3, 0xa1, 0xcf, 0x34, 0x9c, 0x6c, 0xdd, 0x0b, 0x61, 0xc3, 0x29, 0x3d,
-	0x7c, 0xf6, 0xbd, 0x81, 0x6b, 0xcb, 0x5c, 0xb8, 0x8c, 0xaf, 0x4a, 0xf0, 0x3a, 0x7d, 0x09, 0xe6,
-	0x13, 0x3c, 0xce, 0x78, 0x20, 0xea, 0xa8, 0x89, 0x5a, 0xb5, 0xf9, 0xeb, 0xb4, 0x7c, 0x90, 0x79,
-	0x3c, 0x6a, 0x27, 0x1c, 0xda, 0x22, 0x72, 0xc3, 0xf5, 0x70, 0x3d, 0x58, 0xe0, 0x81, 0x50, 0xa1,
-	0xee, 0x46, 0x8b, 0x97, 0xf7, 0x36, 0xd1, 0x97, 0x1d, 0x54, 0xbd, 0xf7, 0xc0, 0x5e, 0xed, 0x38,
-	0x2b, 0x0b, 0x9d, 0xf6, 0xfd, 0x83, 0x1d, 0x84, 0xec, 0xcc, 0xd1, 0xec, 0xe0, 0x09, 0x95, 0x70,
-	0x88, 0xeb, 0x63, 0x4d, 0xa3, 0x55, 0x9d, 0x9f, 0x39, 0x62, 0xfd, 0xd0, 0x7d, 0x06, 0x9e, 0xb6,
-	0x61, 0x6d, 0x10, 0x63, 0xb1, 0xb9, 0xbd, 0x69, 0x96, 0xa8, 0x39, 0x83, 0xd9, 0x0f, 0xdf, 0x3f,
-	0x1a, 0x93, 0xaf, 0x91, 0x71, 0x7e, 0x6b, 0xcc, 0xce, 0xcd, 0xcc, 0xab, 0xb8, 0xc6, 0x38, 0x17,
-	0x1b, 0x4e, 0x4f, 0x70, 0x0d, 0x4a, 0xb1, 0xba, 0xd1, 0x44, 0xad, 0xff, 0xec, 0xb3, 0xd9, 0xee,
-	0xe3, 0x62, 0xd3, 0x5c, 0xc1, 0x97, 0x7c, 0xf0, 0x54, 0x5f, 0x6a, 0xc7, 0x63, 0x5e, 0x17, 0x9c,
-	0x01, 0x24, 0x91, 0xe8, 0xfa, 0x78, 0x13, 0xb5, 0xaa, 0xf3, 0x53, 0x34, 0x87, 0x48, 0x87, 0x10,
-	0xe9, 0x52, 0x01, 0xd9, 0xbe, 0x58, 0xcc, 0xb5, 0x07, 0x63, 0x9d, 0x7c, 0xca, 0xbc, 0x89, 0xb1,
-	0x0f, 0x1c, 0x34, 0xf8, 0x0e, 0xd3, 0xf5, 0x89, 0xcc, 0xa3, 0x71, 0xcc, 0xa3, 0x33, 0xfc, 0x10,
-	0xec, 0xff, 0x0b, 0xf5, 0x82, 0x36, 0x6f, 0xe3, 0x33, 0x79, 0xe1, 0xf8, 0xc0, 0x59, 0xbf, 0x3e,
-	0xf9, 0xa7, 0x00, 0xd5, 0x5c, 0xbe, 0x34, 0x50, 0xcf, 0x6e, 0x1b, 0xb8, 0xd6, 0x56, 0xc0, 0x34,
-	0xfc, 0x24, 0x76, 0xf7, 0xef, 0x89, 0x8d, 0xc8, 0xfc, 0x33, 0x32, 0xb7, 0x2e, 0x7c, 0xbe, 0x73,
-	0xe4, 0x5f, 0x9a, 0x7d, 0x67, 0xe0, 0x73, 0x36, 0x48, 0xce, 0xbc, 0x11, 0xad, 0xd3, 0x4f, 0xeb,
-	0x8d, 0x81, 0xab, 0xcb, 0xa0, 0x47, 0xa4, 0x4e, 0x3b, 0xa9, 0xc5, 0x97, 0x68, 0x77, 0x9f, 0x54,
-	0xf6, 0xf6, 0x49, 0xe5, 0x70, 0x9f, 0xa0, 0xad, 0x94, 0xa0, 0xb7, 0x29, 0x41, 0x9f, 0x52, 0x82,
-	0x76, 0x53, 0x82, 0xf6, 0x52, 0x82, 0xbe, 0xa6, 0x04, 0x1d, 0xa4, 0xa4, 0x72, 0x98, 0x12, 0xf4,
-	0xea, 0x1b, 0xa9, 0x3c, 0x7d, 0x14, 0x08, 0xf9, 0x3c, 0xa0, 0xc3, 0x23, 0xa3, 0x49, 0x6c, 0x65,
-	0x8b, 0x35, 0xa1, 0xa2, 0x39, 0xa9, 0x44, 0x2f, 0xf4, 0x41, 0xcd, 0x0d, 0xdb, 0x96, 0x74, 0x03,
-	0x61, 0xc1, 0x0b, 0x3d, 0xbc, 0x68, 0x9c, 0x70, 0xdf, 0x70, 0x27, 0xb3, 0xe0, 0x37, 0x7e, 0x04,
-	0x00, 0x00, 0xff, 0xff, 0xf3, 0xb5, 0xcb, 0xd7, 0x95, 0x08, 0x00, 0x00,
+	// 658 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x3f, 0x6f, 0xd3, 0x4c,
+	0x18, 0xcf, 0x25, 0x6d, 0xdf, 0xbe, 0x97, 0x36, 0xa5, 0x46, 0xa0, 0x34, 0xad, 0x4c, 0x54, 0x09,
+	0x11, 0x21, 0x6a, 0x4b, 0x65, 0x63, 0x00, 0x9a, 0x94, 0x16, 0x86, 0x0a, 0xe1, 0x46, 0x08, 0xb1,
+	0x58, 0x17, 0xfb, 0x89, 0x63, 0x7a, 0xce, 0x59, 0xe7, 0x73, 0x4a, 0x86, 0x4a, 0x95, 0xf8, 0x02,
+	0x88, 0x95, 0x2f, 0x80, 0xd8, 0x60, 0xa4, 0x0b, 0x6c, 0x88, 0xa9, 0x63, 0xc4, 0x44, 0xcd, 0x52,
+	0xb6, 0x7e, 0x04, 0xe4, 0xb3, 0x43, 0x71, 0x1b, 0x01, 0x62, 0x44, 0xdd, 0x7c, 0xcf, 0xef, 0x8f,
+	0x1f, 0x3f, 0x3f, 0xdf, 0x1d, 0xbe, 0xd2, 0x83, 0x40, 0x73, 0x99, 0x1e, 0x58, 0x1d, 0xf0, 0x88,
+	0x1e, 0x80, 0xc5, 0x41, 0x98, 0x3e, 0xa3, 0xae, 0xd5, 0xd7, 0x45, 0xdf, 0x87, 0x40, 0xf3, 0x39,
+	0x13, 0x4c, 0x99, 0x4f, 0x88, 0x5a, 0x42, 0xd4, 0x32, 0xc4, 0xca, 0x92, 0xe3, 0x8a, 0x4e, 0xd8,
+	0xd2, 0x2c, 0xe6, 0xe9, 0x0e, 0x73, 0x98, 0x2e, 0x35, 0xad, 0xb0, 0x2d, 0x57, 0x72, 0x21, 0x9f,
+	0x12, 0xaf, 0x8a, 0xea, 0x30, 0xe6, 0x50, 0x38, 0x66, 0xd9, 0x21, 0x27, 0xc2, 0x65, 0xdd, 0x14,
+	0xbf, 0x74, 0x12, 0x17, 0xae, 0x07, 0x81, 0x20, 0x9e, 0x9f, 0x12, 0xe6, 0xb3, 0x5d, 0x33, 0x3f,
+	0x16, 0xa7, 0x9d, 0x56, 0xaa, 0x59, 0xf0, 0xf4, 0xb7, 0x54, 0xe6, 0xb2, 0x8c, 0x9f, 0xa1, 0x85,
+	0x2c, 0xd4, 0x23, 0xd4, 0xb5, 0x89, 0x80, 0xd1, 0xd6, 0x3d, 0x17, 0xb6, 0xcd, 0xcc, 0xcb, 0x17,
+	0x3f, 0x14, 0x70, 0x69, 0x9d, 0xb2, 0x16, 0xa1, 0x9b, 0x3e, 0x58, 0xcd, 0xbe, 0x0f, 0xca, 0x23,
+	0x3c, 0x46, 0xa8, 0xc3, 0xca, 0xa8, 0x8a, 0x6a, 0xa5, 0xe5, 0x6b, 0x5a, 0x76, 0x90, 0x49, 0x7b,
+	0x9a, 0x11, 0x52, 0x68, 0x30, 0xaf, 0xe5, 0x76, 0xdd, 0xae, 0xb3, 0x42, 0x1d, 0xc6, 0x5d, 0xd1,
+	0xf1, 0xea, 0x17, 0x07, 0x3b, 0xe8, 0xf3, 0x1e, 0x2a, 0xae, 0xdd, 0x33, 0x36, 0x9b, 0xe6, 0xc6,
+	0x4a, 0xb3, 0x71, 0xf7, 0x70, 0x0f, 0x21, 0x43, 0x3a, 0x2a, 0x4d, 0x3c, 0xce, 0x43, 0x0a, 0x41,
+	0x39, 0x5f, 0x2d, 0xd4, 0x8a, 0xcb, 0x0b, 0x27, 0xac, 0xef, 0xb7, 0x9e, 0x80, 0x25, 0x0c, 0x68,
+	0xc7, 0x6d, 0xd4, 0xab, 0xaf, 0x77, 0x94, 0x4c, 0x6a, 0x66, 0xac, 0x7d, 0xf7, 0xed, 0x7d, 0x61,
+	0xe2, 0x05, 0x2a, 0x9c, 0xdb, 0xcd, 0x1b, 0x89, 0x99, 0x72, 0x19, 0x97, 0x08, 0xa5, 0x6c, 0xdb,
+	0xec, 0x31, 0x2a, 0x80, 0x73, 0x52, 0x2e, 0x54, 0x51, 0x6d, 0xd2, 0x98, 0x96, 0xd5, 0x87, 0x69,
+	0x51, 0xd9, 0xc0, 0x17, 0x6c, 0xb0, 0x78, 0xdf, 0x17, 0xa6, 0x45, 0xac, 0x0e, 0x98, 0x71, 0x48,
+	0x2c, 0x14, 0xe5, 0xb1, 0x2a, 0xaa, 0x15, 0x97, 0xe7, 0xb4, 0x24, 0x44, 0x6d, 0x18, 0xa2, 0xb6,
+	0x9a, 0x86, 0x6c, 0x9c, 0x4f, 0x75, 0x8d, 0x58, 0xd6, 0x4c, 0x54, 0x4a, 0x1d, 0x63, 0x1b, 0x28,
+	0x08, 0xb0, 0x4d, 0x22, 0xca, 0xe3, 0xd2, 0xa3, 0x72, 0xca, 0xa3, 0x39, 0xfc, 0x11, 0xea, 0xff,
+	0x0d, 0x76, 0x90, 0x1c, 0xc5, 0xff, 0xa9, 0x6c, 0x45, 0x28, 0x77, 0xf0, 0x54, 0xb2, 0x30, 0x6d,
+	0xa0, 0xa4, 0x5f, 0x9e, 0xf8, 0x4d, 0x27, 0xc7, 0x26, 0xc5, 0x44, 0xb7, 0x1a, 0xcb, 0x16, 0xdf,
+	0xe4, 0x71, 0xa9, 0xc1, 0x81, 0x08, 0xf8, 0x91, 0xe1, 0xed, 0xbf, 0xcf, 0xf0, 0xdf, 0xcb, 0xea,
+	0xc6, 0xec, 0xa7, 0x9b, 0x27, 0x7e, 0xf2, 0xc5, 0xb7, 0x79, 0x3c, 0x63, 0x80, 0x4f, 0x89, 0x75,
+	0x36, 0xb4, 0x3f, 0x1e, 0xda, 0xcb, 0x02, 0x2e, 0xae, 0x83, 0x38, 0x1b, 0xd8, 0xc8, 0x13, 0xe1,
+	0x2a, 0x9e, 0xf5, 0x08, 0xdf, 0x02, 0xdb, 0x6c, 0x33, 0x6e, 0x26, 0x1b, 0x54, 0x1e, 0x0c, 0x93,
+	0xc6, 0x4c, 0x02, 0xac, 0x31, 0xbe, 0x2a, 0xcb, 0xca, 0x2d, 0x3c, 0x2d, 0x09, 0x2e, 0xeb, 0xca,
+	0xb7, 0xa6, 0x5b, 0xff, 0x17, 0x07, 0x88, 0x31, 0x35, 0x14, 0xc4, 0xa5, 0x11, 0xe9, 0xd4, 0x9f,
+	0xa1, 0xfd, 0x03, 0x35, 0x37, 0x38, 0x50, 0x73, 0x47, 0x07, 0x2a, 0xda, 0x8d, 0x54, 0xf4, 0x2a,
+	0x52, 0xd1, 0xc7, 0x48, 0x45, 0xfb, 0x91, 0x8a, 0x06, 0x91, 0x8a, 0xbe, 0x44, 0x2a, 0x3a, 0x8c,
+	0xd4, 0xdc, 0x51, 0xa4, 0xa2, 0xe7, 0x5f, 0xd5, 0xdc, 0xe3, 0x07, 0x0e, 0xf3, 0xb7, 0x1c, 0x6d,
+	0x38, 0x26, 0x2d, 0x0c, 0x74, 0xf9, 0xd0, 0x66, 0xdc, 0x5b, 0xf2, 0x39, 0xeb, 0xb9, 0x36, 0xf0,
+	0xa5, 0x21, 0xac, 0xfb, 0x2d, 0x87, 0xe9, 0xf0, 0x54, 0x0c, 0x2f, 0xdf, 0x11, 0x77, 0x70, 0x6b,
+	0x42, 0xb6, 0x7e, 0xfd, 0x7b, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0a, 0xb8, 0xd0, 0x08, 0xa9, 0x07,
+	0x00, 0x00,
 }

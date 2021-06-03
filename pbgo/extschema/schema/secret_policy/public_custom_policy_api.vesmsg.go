@@ -74,11 +74,11 @@ func (v *ValidateRecoverRequest) NamespaceValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateRecoverRequest) PolicyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateRecoverRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for PolicyName")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
 	}
 
 	return validatorFn, nil
@@ -98,10 +98,10 @@ func (v *ValidateRecoverRequest) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["PolicyName"]; exists {
+	if fv, exists := v.FldValidators["name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("PolicyName"))
-		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -142,16 +142,16 @@ var DefaultRecoverRequestValidator = func() *ValidateRecoverRequest {
 	}
 	v.FldValidators["namespace"] = vFn
 
-	vrhPolicyName := v.PolicyNameValidationRuleHandler
-	rulesPolicyName := map[string]string{
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPolicyName(rulesPolicyName)
+	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RecoverRequest.PolicyName: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RecoverRequest.name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["PolicyName"] = vFn
+	v.FldValidators["name"] = vFn
 
 	return v
 }()
@@ -289,11 +289,11 @@ func (v *ValidateSoftDeleteRequest) NamespaceValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateSoftDeleteRequest) PolicyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSoftDeleteRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for PolicyName")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
 	}
 
 	return validatorFn, nil
@@ -313,10 +313,10 @@ func (v *ValidateSoftDeleteRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["PolicyName"]; exists {
+	if fv, exists := v.FldValidators["name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("PolicyName"))
-		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -357,16 +357,16 @@ var DefaultSoftDeleteRequestValidator = func() *ValidateSoftDeleteRequest {
 	}
 	v.FldValidators["namespace"] = vFn
 
-	vrhPolicyName := v.PolicyNameValidationRuleHandler
-	rulesPolicyName := map[string]string{
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPolicyName(rulesPolicyName)
+	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SoftDeleteRequest.PolicyName: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SoftDeleteRequest.name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["PolicyName"] = vFn
+	v.FldValidators["name"] = vFn
 
 	return v
 }()

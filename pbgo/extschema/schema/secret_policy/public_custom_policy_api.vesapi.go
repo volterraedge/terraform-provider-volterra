@@ -134,7 +134,7 @@ func (c *CustomAPIRestClient) doRPCDeletePolicy(ctx context.Context, callOpts *s
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("PolicyName", fmt.Sprintf("%v", req.PolicyName))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -211,7 +211,7 @@ func (c *CustomAPIRestClient) doRPCRecoverPolicy(ctx context.Context, callOpts *
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("PolicyName", fmt.Sprintf("%v", req.PolicyName))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -417,7 +417,7 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
-        "/public/namespaces/{namespace}/secret_policys/recover": {
+        "/public/namespaces/{namespace}/secret_policys/{name}/recover": {
             "post": {
                 "summary": "RecoverPolicy",
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.RecoverPolicy",
@@ -485,6 +485,12 @@ var CustomAPISwaggerJSON string = `{
                         "type": "string"
                     },
                     {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -506,7 +512,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.secret_policy.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/{namespace}/secret_policys/softdelete": {
+        "/public/namespaces/{namespace}/secret_policys/{name}/softdelete": {
             "post": {
                 "summary": "DeletePolicy",
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.DeletePolicy",
@@ -574,6 +580,12 @@ var CustomAPISwaggerJSON string = `{
                         "type": "string"
                     },
                     {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -604,18 +616,18 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Recover Request",
             "x-ves-proto-message": "ves.io.schema.secret_policy.RecoverRequest",
             "properties": {
-                "PolicyName": {
+                "name": {
                     "type": "string",
-                    "description": " Name of secret policy to recover\n\nExample: - \"policy1\"-\nRequired: YES",
-                    "title": "PolicyName",
-                    "x-displayname": "Policy Name",
-                    "x-ves-example": "policy1",
+                    "description": " Name of the secret policy\n\nExample: - \"site-secret-policy\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "site-secret-policy",
                     "x-ves-required": "true"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace of the policy\n\nExample: - \"system\"-\nRequired: YES",
-                    "title": "Namespace",
+                    "description": " Namespace of the secret policy\n\nExample: - \"system\"-\nRequired: YES",
+                    "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
                     "x-ves-required": "true"
@@ -645,18 +657,18 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Soft Delete Request",
             "x-ves-proto-message": "ves.io.schema.secret_policy.SoftDeleteRequest",
             "properties": {
-                "PolicyName": {
+                "name": {
                     "type": "string",
-                    "description": "\nExample: - \"policy1\"-\nRequired: YES",
-                    "title": "PolicyName",
-                    "x-displayname": "Policy Name",
-                    "x-ves-example": "policy1",
+                    "description": " Name of the secret policy\n\nExample: - \"site-secret-policy\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "site-secret-policy",
                     "x-ves-required": "true"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Namespace of the policy\n\nExample: - \"system\"-\nRequired: YES",
-                    "title": "Namespace",
+                    "description": " Namespace of the secret policy\n\nExample: - \"system\"-\nRequired: YES",
+                    "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "system",
                     "x-ves-required": "true"

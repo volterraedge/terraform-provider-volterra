@@ -34,14 +34,58 @@ resource "volterra_voltstack_site" "example" {
 
   master_nodes = ["master-0"]
 
-  // One of the arguments from this list "custom_network_config default_network_config" must be set
+  // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
 
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
-  default_storage_config = true
 
+  custom_storage_config {
+    // One of the arguments from this list "no_static_routes static_routes" must be set
+
+    static_routes {
+      static_routes {
+        attrs = ["attrs"]
+
+        ip_prefixes = ["ip_prefixes"]
+
+        // One of the arguments from this list "default_gateway ip_address interface" must be set
+        ip_address = "ip_address"
+      }
+    }
+
+    // One of the arguments from this list "default_storage_class storage_class_list" must be set
+
+    storage_class_list {
+      storage_classes {
+        advanced_storage_parameters = {
+          "key1" = "value1"
+        }
+
+        allow_volume_expansion = true
+        default_storage_class  = true
+        description            = "description"
+
+        // One of the arguments from this list "openebs_enterprise netapp_trident pure_service_orchestrator" must be set
+
+        netapp_trident {
+          selector = {
+            "key1" = "value1"
+          }
+
+          storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
+        }
+        reclaim_policy     = "Delete"
+        storage_class_name = "premium"
+        storage_device     = "storage_device"
+      }
+    }
+    // One of the arguments from this list "no_storage_device storage_device_list" must be set
+    no_storage_device = true
+    // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+    no_storage_interfaces = true
+  }
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb          = true
+  allow_all_usb         = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -256,6 +300,10 @@ Use custom networking configuration.
 
 `site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
+`default_sli_config` - (Optional) Use default configuration for site local network (bool).
+
+`sli_config` - (Optional) Configuration for site local inside network. See [Sli Config ](#sli-config) below for details.
+
 `default_config` - (Optional) Use default configuration for site local network (bool).
 
 `slo_config` - (Optional) Configuration for site local network. See [Slo Config ](#slo-config) below for details.
@@ -329,6 +377,10 @@ Interface configuration is done based on certified hardware for this site.
 ### Default Os Version
 
 Will assign latest available OS version.
+
+### Default Sli Config
+
+Use default configuration for site local network.
 
 ### Default Storage Class
 
@@ -612,7 +664,7 @@ Network Policy is disabled for this site..
 
 ### No Static Routes
 
-Static Routes disabled for site local network..
+Static Routes disabled for site local inside network..
 
 ### No Storage Device
 
@@ -724,6 +776,14 @@ Interface belongs to site local network inside.
 
 Interface belongs to site local network (outside).
 
+### Sli Config
+
+Configuration for site local inside network.
+
+`no_static_routes` - (Optional) Static Routes disabled for site local inside network. (bool).
+
+`static_routes` - (Optional) Manage static routes for site local inside network.. See [Static Routes ](#static-routes) below for details.
+
 ### Sli To Global Dr
 
 Site local inside is connected directly to a given global network.
@@ -772,7 +832,7 @@ Interface IP is configured statically.
 
 ### Static Routes
 
-Manage static routes for site local network..
+Manage static routes for site local inside network..
 
 `static_routes` - (Required) List of static routes. See [Static Routes ](#static-routes) below for details.
 

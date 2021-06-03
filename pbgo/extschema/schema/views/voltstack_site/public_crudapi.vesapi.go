@@ -6583,6 +6583,26 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.ReplaceResponse"
         },
+        "voltstack_siteSliVnConfiguration": {
+            "type": "object",
+            "description": "Site local inside network configuration",
+            "title": "SLI Virtual Network Configuration",
+            "x-displayname": "Site Local Inside Network Configuration",
+            "x-ves-oneof-field-static_route_choice": "[\"no_static_routes\",\"static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SliVnConfiguration",
+            "properties": {
+                "no_static_routes": {
+                    "description": "Exclusive with [static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for site local inside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "static_routes": {
+                    "description": "Exclusive with [no_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for site local inside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType"
+                }
+            }
+        },
         "voltstack_siteSpecType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SpecType",
@@ -6736,6 +6756,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interface_config\",\"interface_list\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-sli_choice": "[\"default_sli_config\",\"sli_config\"]",
             "x-ves-oneof-field-slo_choice": "[\"default_config\",\"slo_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssNetworkConfiguration",
             "properties": {
@@ -6771,6 +6792,11 @@ var APISwaggerJSON string = `{
                 "default_interface_config": {
                     "description": "Exclusive with [interface_list]\nx-displayName: \"Bootstrap Interface Configuration\"\nInterface configuration is done based on certified hardware for this site",
                     "title": "Bootstrap Interface Configuration",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "default_sli_config": {
+                    "description": "Exclusive with [sli_config]\nx-displayName: \"Default Configuration\"\nUse default configuration for site local network",
+                    "title": "Default Configuration",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "forward_proxy_allow_all": {
@@ -6823,6 +6849,11 @@ var APISwaggerJSON string = `{
                     "title": "site_to_site_tunnel_ip",
                     "x-displayname": "Site To Site Tunnel IP",
                     "x-ves-example": "10.1.1.1"
+                },
+                "sli_config": {
+                    "description": "Exclusive with [default_sli_config]\nx-displayName: \"Configure Site Local Inside Network\"\nConfiguration for site local inside network",
+                    "title": "Configure Site Local Inside Network",
+                    "$ref": "#/definitions/voltstack_siteSliVnConfiguration"
                 },
                 "slo_config": {
                     "description": "Exclusive with [default_config]\nx-displayName: \"Configure Site Local Network\"\nConfiguration for site local network",

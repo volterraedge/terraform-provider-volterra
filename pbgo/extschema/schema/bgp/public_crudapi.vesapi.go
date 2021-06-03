@@ -2484,7 +2484,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "where": {
-                    "description": " Set of sites in which this configuration is valid and must be present\nRequired: YES",
+                    "description": " Site or virtual site where this BGP configuration should be applied.\nRequired: YES",
                     "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
                     "x-displayname": "Where",
                     "x-ves-required": "true"
@@ -2727,7 +2727,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "where": {
-                    "description": " Set of sites in which this configuration is valid and must be present\nRequired: YES",
+                    "description": " Site or virtual site where this BGP configuration should be applied.\nRequired: YES",
                     "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
                     "x-displayname": "Where",
                     "x-ves-required": "true"
@@ -2790,7 +2790,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "View Version"
                 },
                 "where": {
-                    "description": " Set of sites in which this configuration is valid and must be present\nRequired: YES",
+                    "description": " Site or virtual site where this BGP configuration should be applied.\nRequired: YES",
                     "title": "Where",
                     "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
                     "x-displayname": "Where",
@@ -3226,7 +3226,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "where": {
-                    "description": " Set of sites in which this configuration is valid and must be present\nRequired: YES",
+                    "description": " Site or virtual site where this BGP configuration should be applied.\nRequired: YES",
                     "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
                     "x-displayname": "Where",
                     "x-ves-required": "true"

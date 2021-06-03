@@ -4608,13 +4608,11 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.CustomPorts",
             "properties": {
                 "port_ranges": {
-                    "type": "array",
-                    "description": " List of Port Ranges\n\nExample: - [80, 8080-8085]-\nRequired: YES",
+                    "type": "string",
+                    "description": " Port Ranges\n\nExample: - \"80, 8080-8085\"-\nRequired: YES",
                     "title": "Port Ranges",
-                    "items": {
-                        "type": "string"
-                    },
                     "x-displayname": "Port Ranges",
+                    "x-ves-example": "80, 8080-8085",
                     "x-ves-required": "true"
                 }
             }

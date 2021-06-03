@@ -5379,6 +5379,182 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SliVnConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SliVnConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SliVnConfiguration) DeepCopy() *SliVnConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SliVnConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SliVnConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SliVnConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SliVnConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SliVnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *SliVnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetStaticRouteChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetStaticRouteChoice().(type) {
+	case *SliVnConfiguration_NoStaticRoutes:
+
+	case *SliVnConfiguration_StaticRoutes:
+		odrInfos, err = m.GetStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "static_routes." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+type ValidateSliVnConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSliVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSliVnConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SliVnConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SliVnConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["static_route_choice"]; exists {
+		val := m.GetStaticRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticRouteChoice().(type) {
+	case *SliVnConfiguration_NoStaticRoutes:
+		if fv, exists := v.FldValidators["static_route_choice.no_static_routes"]; exists {
+			val := m.GetStaticRouteChoice().(*SliVnConfiguration_NoStaticRoutes).NoStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_route_choice"),
+				db.WithValidateField("no_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SliVnConfiguration_StaticRoutes:
+		if fv, exists := v.FldValidators["static_route_choice.static_routes"]; exists {
+			val := m.GetStaticRouteChoice().(*SliVnConfiguration_StaticRoutes).StaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_route_choice"),
+				db.WithValidateField("static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSliVnConfigurationValidator = func() *ValidateSliVnConfiguration {
+	v := &ValidateSliVnConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStaticRouteChoice := v.StaticRouteChoiceValidationRuleHandler
+	rulesStaticRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStaticRouteChoice(rulesStaticRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SliVnConfiguration.static_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_route_choice"] = vFn
+
+	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+
+	return v
+}()
+
+func SliVnConfigurationValidator() db.Validator {
+	return DefaultSliVnConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *StaticRoutesListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6314,6 +6490,12 @@ func (m *VssNetworkConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSliChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSloChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -6441,6 +6623,37 @@ func (m *VssNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "active_network_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *VssNetworkConfiguration) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetSliChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetSliChoice().(type) {
+	case *VssNetworkConfiguration_DefaultSliConfig:
+
+	case *VssNetworkConfiguration_SliConfig:
+		odrInfos, err = m.GetSliConfig().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "sli_config." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -6798,6 +7011,32 @@ func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 	}
 
+	switch m.GetSliChoice().(type) {
+	case *VssNetworkConfiguration_DefaultSliConfig:
+		if fv, exists := v.FldValidators["sli_choice.default_sli_config"]; exists {
+			val := m.GetSliChoice().(*VssNetworkConfiguration_DefaultSliConfig).DefaultSliConfig
+			vOpts := append(opts,
+				db.WithValidateField("sli_choice"),
+				db.WithValidateField("default_sli_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VssNetworkConfiguration_SliConfig:
+		if fv, exists := v.FldValidators["sli_choice.sli_config"]; exists {
+			val := m.GetSliChoice().(*VssNetworkConfiguration_SliConfig).SliConfig
+			vOpts := append(opts,
+				db.WithValidateField("sli_choice"),
+				db.WithValidateField("sli_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["slo_choice"]; exists {
 		val := m.GetSloChoice()
 		vOpts := append(opts,
@@ -6996,6 +7235,8 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 	v.FldValidators["interface_choice.interface_list"] = InterfaceListTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
+
+	v.FldValidators["sli_choice.sli_config"] = SliVnConfigurationValidator().Validate
 
 	v.FldValidators["slo_choice.slo_config"] = VnConfigurationValidator().Validate
 

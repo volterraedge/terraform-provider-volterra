@@ -26,8 +26,8 @@ resource "volterra_tcp_loadbalancer" "example" {
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_source_ip_stickiness = true
+  // One of the arguments from this list "hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active" must be set
+  hash_policy_choice_round_robin = true
 }
 
 ```

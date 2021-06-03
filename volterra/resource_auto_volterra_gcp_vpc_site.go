@@ -1885,6 +1885,35 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"k8s_cluster": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_k8s_cluster": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -4791,6 +4820,50 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					globalNetworkChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_NoGlobalNetwork{}
 					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackCluster.GlobalNetworkChoice = globalNetworkChoiceInt
+				}
+
+			}
+
+			k8SClusterChoiceTypeFound := false
+
+			if v, ok := cs["k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+				k8SClusterChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_K8SCluster{}
+				k8SClusterChoiceInt.K8SCluster = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Name = v.(string)
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Namespace = v.(string)
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+
+				if v.(bool) {
+					k8SClusterChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCVoltstackClusterType_NoK8SCluster{}
+					k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
 				}
 
 			}

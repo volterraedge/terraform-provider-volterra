@@ -25,6 +25,7 @@
 		DeleteRequest
 		VerStatusType
 		PodInfoType
+		PortInfoType
 		DiscoveredServiceType
 		TLSClientConfigType
 		RestConfigType

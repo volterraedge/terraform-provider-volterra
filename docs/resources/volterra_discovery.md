@@ -20,100 +20,34 @@ resource "volterra_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "discovery_consul discovery_k8s" must be set
+  // One of the arguments from this list "discovery_k8s discovery_consul" must be set
 
-  discovery_consul {
+  discovery_k8s {
     access_info {
-      connection_info {
-        api_server = "api.acme.com:4430"
+      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
 
-        tls_info {
-          ca_certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
+      kubeconfig_url {
+        blindfold_secret_info_internal {
+          decryption_provider = "decryption_provider"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "store_provider"
+        }
 
-            secret_encoding_type = "secret_encoding_type"
+        secret_encoding_type = "secret_encoding_type"
 
-            // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-            blindfold_secret_info {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-          }
-
-          certificate = "certificate"
-
-          certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-          }
-
-          key_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
-
-          server_name    = "k8s.acme.com"
-          trusted_ca_url = "trusted_ca_url"
+        wingman_secret_info {
+          name = "ChargeBack-API-Key"
         }
       }
 
-      http_basic_auth_info {
-        passwd_url {
-          blindfold_secret_info_internal {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-        }
-
-        user_name = "Joe"
-      }
-
-      scheme = "scheme"
+      // One of the arguments from this list "isolated reachable" must be set
+      isolated = true
     }
 
     publish_info {
-      // One of the arguments from this list "disable publish" must be set
+      // One of the arguments from this list "publish publish_fqdns dns_delegation disable" must be set
       disable = true
     }
   }
