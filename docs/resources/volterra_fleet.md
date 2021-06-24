@@ -26,73 +26,56 @@ resource "volterra_fleet" "example" {
     bond_devices {
       devices = ["devices"]
 
-      // One of the arguments from this list "active_backup lacp" must be set
-
-      lacp {
-        rate = "30"
-      }
+      // One of the arguments from this list "lacp active_backup" must be set
+      active_backup         = true
       link_polling_interval = "1000"
       link_up_delay         = "200"
       name                  = "bond0"
     }
   }
+
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
+
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  device_list {
+    devices {
+      // One of the arguments from this list "network_device" must be set
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-
-  // One of the arguments from this list "default_storage_class storage_class_list" must be set
-
-  storage_class_list {
-    storage_classes {
-      advanced_storage_parameters = {
-        "key1" = "value1"
-      }
-
-      allow_volume_expansion = true
-      default_storage_class  = true
-      description            = "description"
-
-      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
-
-      netapp_trident {
-        selector = {
-          "key1" = "value1"
+      network_device {
+        interface {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
         }
 
-        storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
+        use = "use"
       }
-      reclaim_policy     = "Delete"
-      storage_class_name = "premium"
-      storage_device     = "storage_device"
+
+      name  = "name"
+      owner = "owner"
     }
   }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
+  default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
   deny_all_usb = true
 }
 

@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
   no_challenge = true
 }
 

@@ -22,17 +22,13 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = ["East US"]
 
   // One of the arguments from this list "azure_cred assisted" must be set
+  assisted = true
 
-  azure_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   resource_group          = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     az_nodes {

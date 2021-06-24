@@ -67,6 +67,11 @@ func resourceVolterraRateLimiter() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"burst_multiplier": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"total_number": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -173,6 +178,10 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 		for i, set := range sl {
 			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
 			limitsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+				limits[i].BurstMultiplier = uint32(w.(int))
+			}
 
 			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
 				limits[i].TotalNumber = uint32(w.(int))
@@ -327,6 +336,10 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 		for i, set := range sl {
 			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
 			limitsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+				limits[i].BurstMultiplier = uint32(w.(int))
+			}
 
 			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
 				limits[i].TotalNumber = uint32(w.(int))

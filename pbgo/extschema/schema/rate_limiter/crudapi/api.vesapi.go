@@ -2820,6 +2820,13 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
+                "burst_multiplier": {
+                    "type": "integer",
+                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.",
+                    "title": "burst_multiplier",
+                    "format": "int64",
+                    "x-displayname": "Burst Multiplier"
+                },
                 "total_number": {
                     "type": "integer",
                     "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\nRequired: YES",

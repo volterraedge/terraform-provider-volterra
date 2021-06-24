@@ -21,29 +21,19 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-
-  asn_matcher {
-    asn_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+  any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
+  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
+  any_client = true
 
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
+
   waf_action {
-    // One of the arguments from this list "waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none waf_skip_processing" must be set
-    waf_in_monitoring_mode = true
+    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
+    none = true
   }
 }
 

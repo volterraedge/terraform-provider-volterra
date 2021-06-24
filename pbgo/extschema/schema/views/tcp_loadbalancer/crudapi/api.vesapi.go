@@ -3367,12 +3367,13 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
                 "SITE_NETWORK_INSIDE",
-                "SITE_NETWORK_OUTSIDE"
+                "SITE_NETWORK_OUTSIDE",
+                "SITE_NETWORK_SERVICE"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",

@@ -20,7 +20,7 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cloud_credentials assisted" must be set
+  // One of the arguments from this list "assisted cloud_credentials" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -32,7 +32,7 @@ resource "volterra_gcp_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -42,13 +42,13 @@ resource "volterra_gcp_vpc_site" "example" {
     local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      existing_network {
+        name = "network1"
       }
     }
 
     local_subnet {
-      // One of the arguments from this list "existing_subnet new_subnet" must be set
+      // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
         primary_ipv4 = "10.1.0.0/16"
@@ -297,7 +297,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 `outside_network` - (Optional) Network for the outside interface of the node. See [Outside Network ](#outside-network) below for details.
 
@@ -319,7 +319,7 @@ One interface site is useful when site is only used as ingress gateway to the VP
 
 `local_subnet` - (Optional) Subnet for the local interface of the node.. See [Local Subnet ](#local-subnet) below for details.
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 ### Inside Network
 
@@ -633,7 +633,7 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 

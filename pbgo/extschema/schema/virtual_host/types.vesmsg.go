@@ -599,7 +599,7 @@ var DefaultCaptchaChallengeTypeValidator = func() *ValidateCaptchaChallengeType 
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -2059,7 +2059,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -2121,7 +2121,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -3703,7 +3703,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -3765,7 +3765,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -5664,7 +5664,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -5726,7 +5726,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -6108,7 +6108,7 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -7666,7 +7666,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -7728,7 +7728,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -7901,7 +7901,7 @@ var DefaultTemporaryUserBlockingTypeValidator = func() *ValidateTemporaryUserBlo
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)

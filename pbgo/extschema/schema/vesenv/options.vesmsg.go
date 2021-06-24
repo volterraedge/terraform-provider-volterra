@@ -99,6 +99,15 @@ func (v *ValidateAPIGroupElementInfo) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -258,9 +267,9 @@ func (v *ValidateAPIGroupNameMap) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["rpc_mappings"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("rpc_mappings"))
-		for key, value := range m.GetRpcMappings() {
-			vOpts := append(vOpts, db.WithValidateMapKey(key))
-			if err := fv(ctx, value, vOpts...); err != nil {
+		for idx, item := range m.GetRpcMappings() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -279,6 +288,93 @@ var DefaultAPIGroupNameMapValidator = func() *ValidateAPIGroupNameMap {
 
 func APIGroupNameMapValidator() db.Validator {
 	return DefaultAPIGroupNameMapValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIGroupNameMapItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIGroupNameMapItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIGroupNameMapItem) DeepCopy() *APIGroupNameMapItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIGroupNameMapItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIGroupNameMapItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIGroupNameMapItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIGroupNameMapItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIGroupNameMapItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIGroupNameMapItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIGroupNameMapItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIGroupNameMapItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_names"))
+		if err := fv(ctx, m.GetApiGroupNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rpc_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rpc_name"))
+		if err := fv(ctx, m.GetRpcName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIGroupNameMapItemValidator = func() *ValidateAPIGroupNameMapItem {
+	v := &ValidateAPIGroupNameMapItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIGroupNameMapItemValidator() db.Validator {
+	return DefaultAPIGroupNameMapItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -387,6 +483,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("ves_terraform_job_view_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesK8SClusterArgocdAdminPassword:
+		if fv, exists := v.FldValidators["choice.ves_k8s_cluster_argocd_admin_password"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesK8SClusterArgocdAdminPassword).VesK8SClusterArgocdAdminPassword
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_k8s_cluster_argocd_admin_password"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -600,6 +707,15 @@ func (v *ValidateNameToUid) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
 
@@ -881,6 +997,93 @@ var DefaultReEncryptSecretsTypeValidator = func() *ValidateReEncryptSecretsType 
 
 func ReEncryptSecretsTypeValidator() db.Validator {
 	return DefaultReEncryptSecretsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteTargetInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTargetInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTargetInfo) DeepCopy() *RouteTargetInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTargetInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTargetInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTargetInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTargetInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteTargetInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTargetInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTargetInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTargetInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["for_object_types"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("for_object_types"))
+		if err := fv(ctx, m.GetForObjectTypes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTargetInfoValidator = func() *ValidateRouteTargetInfo {
+	v := &ValidateRouteTargetInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RouteTargetInfoValidator() db.Validator {
+	return DefaultRouteTargetInfoValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -123,7 +123,6 @@ func testPk8sSiteConfig(name string) string {
 			}
 			use_default_psp = false
 			use_default_cluster_roles = true
-			no_cluster_wide_apps = true
 		}
 		resource "volterra_voltstack_site" "this" {
 			name = "%[1]s"

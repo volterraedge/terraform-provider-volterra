@@ -29,10 +29,16 @@ resource "volterra_aws_vpc_site" "example" {
     tenant    = "acmecorp"
   }
   instance_type = ["a1.xlarge"]
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+
+  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
 
   ingress_gw {
     allowed_vip_port {

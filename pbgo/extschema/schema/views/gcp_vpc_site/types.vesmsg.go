@@ -1997,7 +1997,7 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 
 	vrhNodeNumber := v.NodeNumberValidationRuleHandler
 	rulesNodeNumber := map[string]string{
-		"ves.io.schema.rules.uint32.ranges": "1,3",
+		"ves.io.schema.rules.uint32.in": "[1,3]",
 	}
 	vFn, err = vrhNodeNumber(rulesNodeNumber)
 	if err != nil {
@@ -2317,7 +2317,7 @@ var DefaultGCPVPCIngressGwTypeValidator = func() *ValidateGCPVPCIngressGwType {
 
 	vrhNodeNumber := v.NodeNumberValidationRuleHandler
 	rulesNodeNumber := map[string]string{
-		"ves.io.schema.rules.uint32.ranges": "1,3",
+		"ves.io.schema.rules.uint32.in": "[1,3]",
 	}
 	vFn, err = vrhNodeNumber(rulesNodeNumber)
 	if err != nil {
@@ -3539,7 +3539,7 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 
 	vrhNodeNumber := v.NodeNumberValidationRuleHandler
 	rulesNodeNumber := map[string]string{
-		"ves.io.schema.rules.uint32.ranges": "1,3",
+		"ves.io.schema.rules.uint32.in": "[1,3]",
 	}
 	vFn, err = vrhNodeNumber(rulesNodeNumber)
 	if err != nil {

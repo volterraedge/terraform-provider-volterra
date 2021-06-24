@@ -4160,6 +4160,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
 		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
 		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
@@ -5092,6 +5101,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("tf_params"))
 		if err := fv(ctx, m.GetTfParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6400,6 +6418,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.Vpc = f.GetVpc()
@@ -6423,6 +6442,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.Vpc = m1.Vpc

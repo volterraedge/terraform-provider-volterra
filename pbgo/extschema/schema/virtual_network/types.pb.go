@@ -613,11 +613,9 @@ type Srv6NetworkNsParametersType struct {
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
-func (m *Srv6NetworkNsParametersType) Reset()      { *m = Srv6NetworkNsParametersType{} }
-func (*Srv6NetworkNsParametersType) ProtoMessage() {}
-func (*Srv6NetworkNsParametersType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{8}
-}
+func (m *Srv6NetworkNsParametersType) Reset()                    { *m = Srv6NetworkNsParametersType{} }
+func (*Srv6NetworkNsParametersType) ProtoMessage()               {}
+func (*Srv6NetworkNsParametersType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
 
 func (m *Srv6NetworkNsParametersType) GetNamespace() string {
 	if m != nil {

@@ -854,6 +854,26 @@ func (v *ValidateCreateGlobalKubeConfigReq) SiteValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateGlobalKubeConfigReq) ExpirationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
+		}
+		// TODO: lookup configured third-party type validators
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateGlobalKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateGlobalKubeConfigReq)
 	if !ok {
@@ -913,6 +933,18 @@ var DefaultCreateGlobalKubeConfigReqValidator = func() *ValidateCreateGlobalKube
 		panic(errMsg)
 	}
 	v.FldValidators["site"] = vFn
+
+	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
+	rulesExpirationTimestamp := map[string]string{
+		"ves.io.schema.rules.timestamp.gt_now":         "true",
+		"ves.io.schema.rules.timestamp.within.seconds": "31536000",
+	}
+	vFn, err = vrhExpirationTimestamp(rulesExpirationTimestamp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateGlobalKubeConfigReq.expiration_timestamp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_timestamp"] = vFn
 
 	return v
 }()
@@ -4771,6 +4803,15 @@ func (v *ValidateInterfaceStatus) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["link_quality"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("link_quality"))
@@ -4842,6 +4883,8 @@ var DefaultInterfaceStatusValidator = func() *ValidateInterfaceStatus {
 	v := &ValidateInterfaceStatus{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["ip"] = ves_io_schema.IpSubnetTypeValidator().Validate
+
+	v.FldValidators["ipv6"] = ves_io_schema.IpSubnetTypeValidator().Validate
 
 	return v
 }()

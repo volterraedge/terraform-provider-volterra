@@ -21,8 +21,9 @@ resource "volterra_rate_limiter" "example" {
   namespace = "staging"
 
   limits {
-    total_number = "total_number"
-    unit         = "unit"
+    burst_multiplier = "burst_multiplier"
+    total_number     = "total_number"
+    unit             = "unit"
   }
 }
 
@@ -54,6 +55,8 @@ Argument Reference
 ### Limits
 
 A list of RateLimitValues that specifies the total number of allowed requests for each specified period..
+
+`burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
 `total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
 

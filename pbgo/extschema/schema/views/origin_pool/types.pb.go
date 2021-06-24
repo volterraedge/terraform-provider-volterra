@@ -1349,11 +1349,10 @@ type UpstreamTlsParameters_UseMtls struct {
 	UseMtls *TlsCertificatesType `protobuf:"bytes,7,opt,name=use_mtls,json=useMtls,oneof"`
 }
 
-func (*UpstreamTlsParameters_Sni) isUpstreamTlsParameters_SniChoice()                {}
-func (*UpstreamTlsParameters_UseHostHeaderAsSni) isUpstreamTlsParameters_SniChoice() {}
-func (*UpstreamTlsParameters_DisableSni) isUpstreamTlsParameters_SniChoice()         {}
-func (*UpstreamTlsParameters_UseServerVerification) isUpstreamTlsParameters_ServerValidationChoice() {
-}
+func (*UpstreamTlsParameters_Sni) isUpstreamTlsParameters_SniChoice()                                {}
+func (*UpstreamTlsParameters_UseHostHeaderAsSni) isUpstreamTlsParameters_SniChoice()                 {}
+func (*UpstreamTlsParameters_DisableSni) isUpstreamTlsParameters_SniChoice()                         {}
+func (*UpstreamTlsParameters_UseServerVerification) isUpstreamTlsParameters_ServerValidationChoice() {}
 func (*UpstreamTlsParameters_SkipServerVerification) isUpstreamTlsParameters_ServerValidationChoice() {
 }
 func (*UpstreamTlsParameters_VolterraTrustedCa) isUpstreamTlsParameters_ServerValidationChoice() {}
