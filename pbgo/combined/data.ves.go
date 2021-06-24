@@ -244,6 +244,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.ServiceParameters"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "StatusServerParamsType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.StatusServerParamsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SyncServerParamsType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.SyncServerParamsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "UseragentType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -3207,7 +3221,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/{namespace}/validate/api_credentials"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/{namespace}/validate/api_credentials", "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/validate/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ValidateToken")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"] = rpcInfo
@@ -11789,6 +11803,8 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
 		ReEncryptSecrets: make(map[string]uint64),
 	}
+
+	oInfo.ReEncryptSecrets["ves.io.schema.k8s_cluster.Object.spec.gc_spec.apps_choice.cluster_wide_app_list.cluster_wide_apps.app_choice.argo_cd.local_domain.password"] = uint64(1000006)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
@@ -24461,7 +24477,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/sites/{name}/global_access_check"}}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/sites/{name}/global_access_check", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/sites/{name}/global_access_check"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GlobalAccessEnabled")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled"] = rpcInfo
@@ -27860,7 +27876,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/system/users/update_last_login"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/system/users/update_last_login", "/ves.io.schema/introspect/write/private/custom/namespaces/system/users/update_last_login"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpdateLastLogin")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"] = rpcInfo
@@ -28155,6 +28171,32 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.RPCIdx["ves.io.schema.user.CustomAPI.Replace"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ResetPassword",
+		InMsgType:    "ves.io.schema.user.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/password/reset"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ResetPassword")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.CustomAPI.ResetPassword"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ResetPasswordByAdmin",
+		InMsgType:    "ves.io.schema.user.ResetPasswordByAdminRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/password/admin_reset"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ResetPasswordByAdmin")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "SendPasswordEmail",
 		InMsgType:    "ves.io.schema.user.SendPasswordEmailRequest",
 		InStreaming:  false,
@@ -28305,6 +28347,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.user.NamespacesRoleType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ResetPasswordByAdminRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.ResetPasswordByAdminRequest"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SendPasswordEmailRequest",
@@ -28591,6 +28640,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/vesenv/all_route_targets.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/vesenv/all_route_targets.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/vesenv/all_route_targets.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RouteTargetChoice",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.RouteTargetChoice"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/vesenv/all_services.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -28646,6 +28716,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.vesenv.APIGroupNameMap"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "APIGroupNameMapItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.APIGroupNameMapItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "BFSecretChoice",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -28686,6 +28763,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.vesenv.ReEncryptSecretsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RouteTargetInfo",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.RouteTargetInfo"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ServiceInfo",
@@ -32400,6 +32484,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DDoSClientSource",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.DDoSClientSource"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DDoSMitigationRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.DDoSMitigationRule"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DownstreamTlsParamsType",

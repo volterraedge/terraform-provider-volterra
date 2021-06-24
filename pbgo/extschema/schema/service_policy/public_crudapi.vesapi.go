@@ -2936,21 +2936,23 @@ var APISwaggerJSON string = `{
                 },
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']-",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']\"-",
                     "title": "exact values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Exact Values"
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"
                 },
                 "excluded_values": {
                     "type": "array",
-                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']-",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']\"-",
                     "title": "excluded values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Excluded Values"
+                    "x-displayname": "Excluded Values",
+                    "x-ves-example": "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"
                 }
             }
         },

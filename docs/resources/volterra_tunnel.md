@@ -23,17 +23,26 @@ resource "volterra_tunnel" "example" {
   local_ip {
     // One of the arguments from this list "intf ip_address" must be set
 
-    intf {
-      local_intf {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+    ip_address {
+      // One of the arguments from this list "ip_address auto" must be set
+
+      ip_address {
+        // One of the arguments from this list "ipv4 ipv6" must be set
+
+        ipv4 {
+          addr = "192.168.1.1"
+        }
+      }
+
+      virtual_network_type {
+        // One of the arguments from this list "public site_local site_local_inside" must be set
+        site_local_inside = true
       }
     }
   }
 
   remote_ip {
-    // One of the arguments from this list "ip endpoints" must be set
+    // One of the arguments from this list "endpoints ip" must be set
 
     ip {
       // One of the arguments from this list "ipv4 ipv6" must be set

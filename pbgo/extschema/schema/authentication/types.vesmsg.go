@@ -1008,14 +1008,23 @@ func (v *ValidateHMACKeyPair) PrimKeyValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateHMACKeyPair) PrimKeyExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for prim_key_expiry")
 	}
+
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
 		}
+		// TODO: lookup configured third-party type validators
 		return nil
 	}
 
@@ -1045,14 +1054,23 @@ func (v *ValidateHMACKeyPair) SecKeyValidationRuleHandler(rules map[string]strin
 
 func (v *ValidateHMACKeyPair) SecKeyExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "MessageValidationRuleHandler for sec_key_expiry")
 	}
+
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
 		}
+		// TODO: lookup configured third-party type validators
 		return nil
 	}
 

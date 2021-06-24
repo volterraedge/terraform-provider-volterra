@@ -35,7 +35,7 @@ resource "volterra_discovery" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
         wingman_secret_info {
           name = "ChargeBack-API-Key"
@@ -43,11 +43,11 @@ resource "volterra_discovery" "example" {
       }
 
       // One of the arguments from this list "isolated reachable" must be set
-      isolated = true
+      reachable = true
     }
 
     publish_info {
-      // One of the arguments from this list "publish publish_fqdns dns_delegation disable" must be set
+      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
       disable = true
     }
   }

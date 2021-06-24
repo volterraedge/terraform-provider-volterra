@@ -22,10 +22,7 @@ resource "volterra_secret_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "client_name client_selector client_name_matcher" must be set
-
-  client_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-  }
+  client_name = "ver.re01.int.ves.io"
 }
 
 ```

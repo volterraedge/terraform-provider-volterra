@@ -34,58 +34,26 @@ resource "volterra_voltstack_site" "example" {
 
   master_nodes = ["master-0"]
 
-  // One of the arguments from this list "default_network_config custom_network_config" must be set
+  // One of the arguments from this list "custom_network_config default_network_config" must be set
   default_network_config = true
 
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
 
   custom_storage_config {
     // One of the arguments from this list "no_static_routes static_routes" must be set
-
-    static_routes {
-      static_routes {
-        attrs = ["attrs"]
-
-        ip_prefixes = ["ip_prefixes"]
-
-        // One of the arguments from this list "default_gateway ip_address interface" must be set
-        ip_address = "ip_address"
-      }
-    }
+    no_static_routes = true
 
     // One of the arguments from this list "default_storage_class storage_class_list" must be set
+    default_storage_class = true
 
-    storage_class_list {
-      storage_classes {
-        advanced_storage_parameters = {
-          "key1" = "value1"
-        }
-
-        allow_volume_expansion = true
-        default_storage_class  = true
-        description            = "description"
-
-        // One of the arguments from this list "openebs_enterprise netapp_trident pure_service_orchestrator" must be set
-
-        netapp_trident {
-          selector = {
-            "key1" = "value1"
-          }
-
-          storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
-        }
-        reclaim_policy     = "Delete"
-        storage_class_name = "premium"
-        storage_device     = "storage_device"
-      }
-    }
     // One of the arguments from this list "no_storage_device storage_device_list" must be set
     no_storage_device = true
-    // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+
+    // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
     no_storage_interfaces = true
   }
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb         = true
+  deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 

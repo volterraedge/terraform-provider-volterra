@@ -48,6 +48,8 @@
 		ChallengeRule
 		ChallengeRuleList
 		SimpleClientSrcRule
+		DDoSClientSource
+		DDoSMitigationRule
 		CustomIpAllowedList
 		RateLimitConfigType
 		ServicePolicyList

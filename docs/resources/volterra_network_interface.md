@@ -20,7 +20,7 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "tunnel_interface legacy_interface dedicated_management_interface dedicated_interface ethernet_interface" must be set
+  // One of the arguments from this list "dedicated_interface ethernet_interface tunnel_interface legacy_interface dedicated_management_interface" must be set
 
   dedicated_interface {
     device = "eth0"
@@ -29,7 +29,7 @@ resource "volterra_network_interface" "example" {
     monitor_disabled = true
     mtu              = "1450"
 
-    // One of the arguments from this list "cluster node" must be set
+    // One of the arguments from this list "node cluster" must be set
     cluster = true
 
     // One of the arguments from this list "not_primary is_primary" must be set

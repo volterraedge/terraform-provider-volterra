@@ -2329,7 +2329,7 @@ var APISwaggerJSON string = `{
             "description": "Single interface AWS ingress site",
             "title": "AWS Ingress Gateway",
             "x-displayname": "AWS Ingress Gateway",
-            "x-ves-displayorder": "2,3,1",
+            "x-ves-displayorder": "2,1,3",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCIngressGwType",
             "properties": {
                 "allowed_vip_port": {
@@ -5066,6 +5066,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
                 },
+                "user_modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing time when the user\n last modified the object.",
+                    "format": "date-time",
+                    "x-displayname": "User Modification Timestamp"
+                },
                 "vip_params_per_az": {
                     "type": "array",
                     "description": " VIP Parameters Per AZ.",
@@ -5207,6 +5213,13 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "user_modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing time when the user\n last modified the object.",
+                    "title": "user_modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "User Modification Timestamp"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",

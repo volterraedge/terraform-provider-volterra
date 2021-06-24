@@ -27,7 +27,7 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "disk_size"
 
@@ -60,8 +60,17 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
     nodes_per_az  = "2"
+
     // One of the arguments from this list "new_vpc vpc_id" must be set
-    vpc_id = "vpc-12345678901234567"
+
+    new_vpc {
+      allocate_ipv6 = true
+
+      // One of the arguments from this list "name_tag autogenerate" must be set
+      name_tag = "name_tag"
+
+      primary_ipv4 = "10.1.0.0/16"
+    }
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -72,7 +81,7 @@ resource "volterra_aws_tgw_site" "example" {
     }
   }
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
 }
 

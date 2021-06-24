@@ -224,6 +224,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.DaemonTlsParametersType"] = ves_io_schema.DaemonTlsParametersTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.OperMetaType"] = ves_io_schema.OperMetaTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.ServiceParameters"] = ves_io_schema.ServiceParametersValidator()
+	MDR.ValidatorRegistry["ves.io.schema.StatusServerParamsType"] = ves_io_schema.StatusServerParamsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.SyncServerParamsType"] = ves_io_schema.SyncServerParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.UseragentType"] = ves_io_schema.UseragentTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.AppRoleAuthInfoType"] = ves_io_schema.AppRoleAuthInfoTypeValidator()
@@ -2258,6 +2260,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceAccess"] = ves_io_schema_user.NamespaceAccessValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceRoleType"] = ves_io_schema_user.NamespaceRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailRequest"] = ves_io_schema_user.SendPasswordEmailRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailResponse"] = ves_io_schema_user.SendPasswordEmailResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.UserRoleRequest"] = ves_io_schema_user.UserRoleRequestValidator()
@@ -2281,17 +2284,21 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupChoice"] = ves_io_schema_vesenv.APIGroupChoiceValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.RouteTargetChoice"] = ves_io_schema_vesenv.RouteTargetChoiceValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceChoice"] = ves_io_schema_vesenv.ServiceChoiceValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementInfo"] = ves_io_schema_vesenv.APIGroupElementInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementItem"] = ves_io_schema_vesenv.APIGroupElementItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMap"] = ves_io_schema_vesenv.APIGroupNameMapValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMapItem"] = ves_io_schema_vesenv.APIGroupNameMapItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.BFSecretChoice"] = ves_io_schema_vesenv.BFSecretChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.BFSecretInfo"] = ves_io_schema_vesenv.BFSecretInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.NameToUid"] = ves_io_schema_vesenv.NameToUidValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.QuotaResourceKeyInfo"] = ves_io_schema_vesenv.QuotaResourceKeyInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretItemType"] = ves_io_schema_vesenv.ReEncryptSecretItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretsType"] = ves_io_schema_vesenv.ReEncryptSecretsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.RouteTargetInfo"] = ves_io_schema_vesenv.RouteTargetInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceInfo"] = ves_io_schema_vesenv.ServiceInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugChoice"] = ves_io_schema_vesenv.ServiceSlugChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugInfo"] = ves_io_schema_vesenv.ServiceSlugInfoValidator()
@@ -2581,6 +2588,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = ves_io_schema_views_http_loadbalancer.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = ves_io_schema_views_http_loadbalancer.CustomIpAllowedListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DDoSClientSource"] = ves_io_schema_views_http_loadbalancer.DDoSClientSourceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DDoSMitigationRule"] = ves_io_schema_views_http_loadbalancer.DDoSMitigationRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsValidationContext"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContextValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GetSpecType"] = ves_io_schema_views_http_loadbalancer.GetSpecTypeValidator()
@@ -4818,19 +4827,12 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
-			},
-			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
-			},
-			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
-				sets.NewString([]string{"default_port", "port"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4841,19 +4843,12 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
-			},
-			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
-			},
-			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
-				sets.NewString([]string{"default_port", "port"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4878,6 +4873,9 @@ func init() {
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
 			},
+			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
 			},
@@ -4900,6 +4898,9 @@ func init() {
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
+			},
+			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -8386,6 +8387,10 @@ func init() {
 			"spec.blocked_clients": []sets.String{
 				sets.NewString([]string{"as_number", "ip_prefix"}...),
 			},
+			"spec.ddos_mitigation_rules": []sets.String{
+				sets.NewString([]string{"block"}...),
+				sets.NewString([]string{"ddos_client_source", "ip_prefix_list"}...),
+			},
 			"spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
@@ -8507,6 +8512,10 @@ func init() {
 			},
 			"spec.blocked_clients": []sets.String{
 				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.ddos_mitigation_rules": []sets.String{
+				sets.NewString([]string{"block"}...),
+				sets.NewString([]string{"ddos_client_source", "ip_prefix_list"}...),
 			},
 			"spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
@@ -8631,6 +8640,10 @@ func init() {
 			"spec.gc_spec.blocked_clients": []sets.String{
 				sets.NewString([]string{"as_number", "ip_prefix"}...),
 			},
+			"spec.gc_spec.ddos_mitigation_rules": []sets.String{
+				sets.NewString([]string{"block"}...),
+				sets.NewString([]string{"ddos_client_source", "ip_prefix_list"}...),
+			},
 			"spec.gc_spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
@@ -8753,6 +8766,10 @@ func init() {
 			},
 			"spec.gc_spec.blocked_clients": []sets.String{
 				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.gc_spec.ddos_mitigation_rules": []sets.String{
+				sets.NewString([]string{"block"}...),
+				sets.NewString([]string{"ddos_client_source", "ip_prefix_list"}...),
 			},
 			"spec.gc_spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),

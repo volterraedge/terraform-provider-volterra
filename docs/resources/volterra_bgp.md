@@ -35,7 +35,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_type = "bgp_router_id_type"
 
     // One of the arguments from this list "local_address from_site ip_address" must be set
-    from_site = true
+    local_address = true
   }
 
   peers {
@@ -47,11 +47,11 @@ resource "volterra_bgp" "example" {
 
     target_service = "target_service"
 
-    // One of the arguments from this list "internal external" must be set
+    // One of the arguments from this list "external internal" must be set
 
     external {
-      // One of the arguments from this list "subnet_end_offset from_site default_gateway address subnet_begin_offset" must be set
-      subnet_end_offset = "subnet_end_offset"
+      // One of the arguments from this list "default_gateway address subnet_begin_offset subnet_end_offset from_site" must be set
+      address = "address"
 
       asn = "asn"
 

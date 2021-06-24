@@ -2349,10 +2349,10 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to create, either 1 or 3.",
-                    "title": "Number of nodes",
+                    "description": " Number of main nodes to create, either 1 or 3.",
+                    "title": "Number of main nodes",
                     "format": "int64",
-                    "x-displayname": "Number of nodes"
+                    "x-displayname": "Number of main nodes"
                 },
                 "outside_network": {
                     "description": " Network for the outside interface of the node",
@@ -2421,10 +2421,10 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to create, either 1 or 3.",
-                    "title": "Number of nodes",
+                    "description": " Number of main nodes to create, either 1 or 3.",
+                    "title": "Number of main nodes",
                     "format": "int64",
-                    "x-displayname": "Number of nodes"
+                    "x-displayname": "Number of main nodes"
                 }
             }
         },
@@ -2569,10 +2569,10 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to create, either 1 or 3.",
-                    "title": "Number of nodes",
+                    "description": " Number of main nodes to create, either 1 or 3.",
+                    "title": "Number of main nodes",
                     "format": "int64",
-                    "x-displayname": "Number of Nodes"
+                    "x-displayname": "Number of main Nodes"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",

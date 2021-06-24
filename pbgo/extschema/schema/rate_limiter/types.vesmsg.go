@@ -845,6 +845,16 @@ func (v *ValidateRateLimitValue) TotalNumberValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateRateLimitValue) BurstMultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for burst_multiplier")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RateLimitValue)
 	if !ok {
@@ -857,6 +867,15 @@ func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["burst_multiplier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("burst_multiplier"))
+		if err := fv(ctx, m.GetBurstMultiplier(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["total_number"]; exists {
@@ -915,6 +934,18 @@ var DefaultRateLimitValueValidator = func() *ValidateRateLimitValue {
 		panic(errMsg)
 	}
 	v.FldValidators["total_number"] = vFn
+
+	vrhBurstMultiplier := v.BurstMultiplierValidationRuleHandler
+	rulesBurstMultiplier := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhBurstMultiplier(rulesBurstMultiplier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RateLimitValue.burst_multiplier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["burst_multiplier"] = vFn
 
 	return v
 }()

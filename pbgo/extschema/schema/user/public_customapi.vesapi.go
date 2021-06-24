@@ -108,6 +108,24 @@ func (c *CustomAPIGrpcClient) doRPCReplace(ctx context.Context, yamlReq string, 
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCResetPassword(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.Empty", yamlReq)
+	}
+	rsp, err := c.grpcClient.ResetPassword(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCResetPasswordByAdmin(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ResetPasswordByAdminRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.ResetPasswordByAdminRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ResetPasswordByAdmin(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCSendPasswordEmail(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SendPasswordEmailRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -162,6 +180,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["Replace"] = ccl.doRPCReplace
+
+	rpcFns["ResetPassword"] = ccl.doRPCResetPassword
+
+	rpcFns["ResetPasswordByAdmin"] = ccl.doRPCResetPasswordByAdmin
 
 	rpcFns["SendPasswordEmail"] = ccl.doRPCSendPasswordEmail
 
@@ -804,6 +826,157 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.Empty: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ResetPasswordByAdminRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.ResetPasswordByAdminRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("email", fmt.Sprintf("%v", req.Email))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -920,6 +1093,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["Replace"] = ccl.doRPCReplace
+
+	rpcFns["ResetPassword"] = ccl.doRPCResetPassword
+
+	rpcFns["ResetPasswordByAdmin"] = ccl.doRPCResetPasswordByAdmin
 
 	rpcFns["SendPasswordEmail"] = ccl.doRPCSendPasswordEmail
 
@@ -1284,6 +1461,94 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Object", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ResetPassword' operation on 'user'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPassword"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ResetPassword(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswordByAdminRequest, opts ...grpc.CallOption) (*Empty, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.user.ResetPasswordByAdminRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ResetPasswordByAdmin' operation on 'user'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ResetPasswordByAdmin(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.user.Empty", rsp)...)
 
 	return rsp, nil
 }
@@ -2236,6 +2501,174 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "User",
             "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/custom/password/admin_reset": {
+            "post": {
+                "summary": "Reset password by admin",
+                "description": "Reset password by admin resets password for user specified in request.\nThis request is meant to be executed by the tenant's admin.",
+                "operationId": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/schemauserEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userResetPasswordByAdminRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-ResetPasswordByAdmin"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"
+            },
+            "x-displayname": "User",
+            "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/custom/password/reset": {
+            "post": {
+                "summary": "Reset password",
+                "description": "Reset password resets password for user who is making this request.",
+                "operationId": "ves.io.schema.user.CustomAPI.ResetPassword",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/schemauserEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemauserEmpty"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-ResetPassword"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPassword"
+            },
+            "x-displayname": "User",
+            "x-ves-proto-service": "ves.io.schema.user.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -2599,6 +3032,9 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemauserEmpty": {
             "type": "object",
+            "description": "Empty is a message without actual content/body.",
+            "title": "Empty",
+            "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.user.Empty"
         },
         "userAcceptTOSRequest": {
@@ -2969,6 +3405,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
                 },
+                "last_login_timestamp": {
+                    "type": "string",
+                    "description": " Last login timestamp when user successfully login to access VoltConsole. ",
+                    "title": "Last login timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last login timestamp"
+                },
                 "last_name": {
                     "type": "string",
                     "description": " Last name of the customer\n\nExample: - \"value\"-",
@@ -3222,6 +3665,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
                 },
+                "last_login_timestamp": {
+                    "type": "string",
+                    "description": " Last login timestamp when user successfully login to access VoltConsole. ",
+                    "title": "Last login timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last login timestamp"
+                },
                 "last_name": {
                     "type": "string",
                     "description": " Last name of the customer\n\nExample: - \"value\"-",
@@ -3370,6 +3820,23 @@ var CustomAPISwaggerJSON string = `{
                     "title": "system_metadata",
                     "$ref": "#/definitions/schemaSystemObjectMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "userResetPasswordByAdminRequest": {
+            "type": "object",
+            "description": "Reset password by admin request contains email of user for which password will be reset.",
+            "title": "Reset password by admin request",
+            "x-displayname": "Reset password by admin request",
+            "x-ves-proto-message": "ves.io.schema.user.ResetPasswordByAdminRequest",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": " Email of user for which password will be reset.\n\nExample: - \"john@example.com\"-\nRequired: YES",
+                    "title": "Email",
+                    "x-displayname": "Email",
+                    "x-ves-example": "john@example.com",
+                    "x-ves-required": "true"
                 }
             }
         },

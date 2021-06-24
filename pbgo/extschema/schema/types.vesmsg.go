@@ -911,6 +911,7 @@ var DefaultClearSecretInfoTypeValidator = func() *ValidateClearSecretInfoType {
 	vrhUrl := v.UrlValidationRuleHandler
 	rulesUrl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "131072",
 		"ves.io.schema.rules.string.uri_ref":   "true",
 	}
 	vFn, err = vrhUrl(rulesUrl)

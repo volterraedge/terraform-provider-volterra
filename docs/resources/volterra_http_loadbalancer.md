@@ -20,36 +20,157 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
-  advertise_on_public_default_vip = true
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
 
+  policy_based_challenge {
+    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
+    default_captcha_challenge_parameters = true
+
+    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
+    no_challenge = true
+
+    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
+    default_js_challenge_parameters = true
+
+    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
+    default_mitigation_settings = true
+
+    rule_list {
+      rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        spec {
+          arg_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "check_present check_not_present item presence" must be set
+            presence = true
+
+            name = "name"
+          }
+
+          // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
+
+          asn_matcher {
+            asn_sets {
+              name      = "test1"
+              namespace = "staging"
+              tenant    = "acmecorp"
+            }
+          }
+          body_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
+          enable_javascript_challenge = true
+          // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
+          any_client = true
+          cookie_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "check_not_present item presence check_present" must be set
+            presence = true
+
+            name = "Session"
+          }
+          domain_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+          }
+          expiration_timestamp = "0001-01-01T00:00:00Z"
+          headers {
+            invert_matcher = true
+
+            // One of the arguments from this list "item presence check_present check_not_present" must be set
+
+            item {
+              exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+              regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+              transformers = ["transformers"]
+            }
+            name = "Accept-Encoding"
+          }
+          http_method {
+            invert_matcher = true
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
+          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+          any_ip = true
+          path {
+            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
+
+            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
+
+            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
+
+            transformers = ["transformers"]
+          }
+          query_params {
+            invert_matcher = true
+            key            = "sourceid"
+
+            // One of the arguments from this list "item presence check_present check_not_present" must be set
+            presence = true
+          }
+          tls_fingerprint_matcher {
+            classes = ["classes"]
+
+            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+          }
+        }
+      }
+    }
+
+    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
+
+    temporary_user_blocking {
+      custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    }
+  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  source_ip_stickiness = true
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  cookie_stickiness {
+    name = "userid"
+    path = "/Users/userid/browser/cookies"
+    ttl  = "ttl"
+  }
+
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
+  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
+  service_policies_from_namespace = true
 
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  // One of the arguments from this list "waf waf_rule disable_waf" must be set
 
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  waf_rule {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
-  // One of the arguments from this list "disable_waf waf waf_rule" must be set
-  disable_waf = true
 }
 
 ```
@@ -94,6 +215,8 @@ Argument Reference
 `policy_based_challenge` - (Optional) Specifies the settings for policy rule based challenge. See [Policy Based Challenge ](#policy-based-challenge) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+
+`ddos_mitigation_rules` - (Optional) Rules that specify the DDoS clients to be blocked. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
 `default_route_pools` - (Optional) Origin Pools used when no route is specified (default route). See [Default Route Pools ](#default-route-pools) below for details.
 
@@ -323,6 +446,10 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Block
+
+Block user for a duration determined by the expiration time.
+
 ### Blocked Clients
 
 Rules that specify the clients to be blocked.
@@ -502,6 +629,30 @@ Custom selection of TLS versions and cipher suites.
 `max_version` - (Optional) Maximum TLS protocol version. (`String`).
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Ddos Client Source
+
+Combination of Region, ASN and TLS Fingerprints.
+
+`asn_list` - (Optional) The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.. See [Asn List ](#asn-list) below for details.
+
+`country_list` - (Optional) Sources that are located in one of the countries in the given list (`List of Strings`).
+
+`tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
+
+### Ddos Mitigation Rules
+
+Rules that specify the DDoS clients to be blocked.
+
+`expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`block` - (Optional) Block user for a duration determined by the expiration time (bool).
+
+`ddos_client_source` - (Required) Combination of Region, ASN and TLS Fingerprints. See [Ddos Client Source ](#ddos-client-source) below for details.
+
+`ip_prefix_list` - (Required) IPv4 prefix string.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 ### Default Captcha Challenge Parameters
 
@@ -944,6 +1095,8 @@ Rate limiting parameters for this loadbalancer.
 ### Rate Limiter
 
 Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter..
+
+`burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
 `total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
 

@@ -1452,6 +1452,157 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"ddos_mitigation_rules": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"expiration_timestamp": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"block": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ddos_client_source": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_numbers": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeInt,
+													},
+												},
+											},
+										},
+									},
+
+									"country_list": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"tls_fingerprint_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"classes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"exact_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"excluded_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"ip_prefix_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"invert_match": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ip_prefixes": {
+
+										Type: schema.TypeList,
+
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"default_route_pools": {
 
 				Type:     schema.TypeList,
@@ -2423,6 +2574,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"burst_multiplier": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
 
 									"total_number": {
 										Type:     schema.TypeInt,
@@ -5358,6 +5514,182 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//ddos_mitigation_rules
+	if v, ok := d.GetOk("ddos_mitigation_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ddosMitigationRules := make([]*ves_io_schema_views_http_loadbalancer.DDoSMitigationRule, len(sl))
+		createSpec.DdosMitigationRules = ddosMitigationRules
+		for i, set := range sl {
+			ddosMitigationRules[i] = &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule{}
+			ddosMitigationRulesMapStrToI := set.(map[string]interface{})
+
+			if w, ok := ddosMitigationRulesMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
+				ts, err := parseTime(w.(string))
+				if err != nil {
+					return fmt.Errorf("error creating ExpirationTimestamp, timestamp format is wrong: %s", err)
+				}
+				ddosMitigationRules[i].ExpirationTimestamp = ts
+			}
+
+			if v, ok := ddosMitigationRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ddosMitigationRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+			mitigationActionTypeFound := false
+
+			if v, ok := ddosMitigationRulesMapStrToI["block"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+				mitigationActionTypeFound = true
+
+				if v.(bool) {
+					mitigationActionInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_Block{}
+					mitigationActionInt.Block = &ves_io_schema.Empty{}
+					ddosMitigationRules[i].MitigationAction = mitigationActionInt
+				}
+
+			}
+
+			mitigationChoiceTypeFound := false
+
+			if v, ok := ddosMitigationRulesMapStrToI["ddos_client_source"]; ok && !isIntfNil(v) && !mitigationChoiceTypeFound {
+
+				mitigationChoiceTypeFound = true
+				mitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_DdosClientSource{}
+				mitigationChoiceInt.DdosClientSource = &ves_io_schema_views_http_loadbalancer.DDoSClientSource{}
+				ddosMitigationRules[i].MitigationChoice = mitigationChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["asn_list"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						asnList := &ves_io_schema_policy.AsnMatchList{}
+						mitigationChoiceInt.DdosClientSource.AsnList = asnList
+						for _, set := range sl {
+							asnListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
+								ls := make([]uint32, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+
+									ls[i] = uint32(v.(int))
+								}
+								asnList.AsNumbers = ls
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["country_list"]; ok && !isIntfNil(v) {
+
+						country_listList := []ves_io_schema_policy.CountryCode{}
+						for _, j := range v.([]interface{}) {
+							country_listList = append(country_listList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
+						}
+						mitigationChoiceInt.DdosClientSource.CountryList = country_listList
+
+					}
+
+					if v, ok := cs["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+						mitigationChoiceInt.DdosClientSource.TlsFingerprintMatcher = tlsFingerprintMatcher
+						for _, set := range sl {
+							tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+								classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+								for _, j := range v.([]interface{}) {
+									classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+								}
+								tlsFingerprintMatcher.Classes = classesList
+
+							}
+
+							if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								tlsFingerprintMatcher.ExactValues = ls
+							}
+
+							if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								tlsFingerprintMatcher.ExcludedValues = ls
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := ddosMitigationRulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !mitigationChoiceTypeFound {
+
+				mitigationChoiceTypeFound = true
+				mitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_IpPrefixList{}
+				mitigationChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+				ddosMitigationRules[i].MitigationChoice = mitigationChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+						mitigationChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+					}
+
+					if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.IpPrefixes = ls
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	//default_route_pools
 	if v, ok := d.GetOk("default_route_pools"); ok && !isIntfNil(v) {
 
@@ -6637,6 +6969,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				rateLimitChoiceInt.RateLimit.RateLimiter = rateLimiter
 				for _, set := range sl {
 					rateLimiterMapStrToI := set.(map[string]interface{})
+
+					if w, ok := rateLimiterMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+						rateLimiter.BurstMultiplier = uint32(w.(int))
+					}
 
 					if w, ok := rateLimiterMapStrToI["total_number"]; ok && !isIntfNil(w) {
 						rateLimiter.TotalNumber = uint32(w.(int))
@@ -9973,6 +10309,181 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("ddos_mitigation_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ddosMitigationRules := make([]*ves_io_schema_views_http_loadbalancer.DDoSMitigationRule, len(sl))
+		updateSpec.DdosMitigationRules = ddosMitigationRules
+		for i, set := range sl {
+			ddosMitigationRules[i] = &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule{}
+			ddosMitigationRulesMapStrToI := set.(map[string]interface{})
+
+			if w, ok := ddosMitigationRulesMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
+				ts, err := parseTime(w.(string))
+				if err != nil {
+					return fmt.Errorf("error creating ExpirationTimestamp, timestamp format is wrong: %s", err)
+				}
+				ddosMitigationRules[i].ExpirationTimestamp = ts
+			}
+
+			if v, ok := ddosMitigationRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ddosMitigationRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+			mitigationActionTypeFound := false
+
+			if v, ok := ddosMitigationRulesMapStrToI["block"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+				mitigationActionTypeFound = true
+
+				if v.(bool) {
+					mitigationActionInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_Block{}
+					mitigationActionInt.Block = &ves_io_schema.Empty{}
+					ddosMitigationRules[i].MitigationAction = mitigationActionInt
+				}
+
+			}
+
+			mitigationChoiceTypeFound := false
+
+			if v, ok := ddosMitigationRulesMapStrToI["ddos_client_source"]; ok && !isIntfNil(v) && !mitigationChoiceTypeFound {
+
+				mitigationChoiceTypeFound = true
+				mitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_DdosClientSource{}
+				mitigationChoiceInt.DdosClientSource = &ves_io_schema_views_http_loadbalancer.DDoSClientSource{}
+				ddosMitigationRules[i].MitigationChoice = mitigationChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["asn_list"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						asnList := &ves_io_schema_policy.AsnMatchList{}
+						mitigationChoiceInt.DdosClientSource.AsnList = asnList
+						for _, set := range sl {
+							asnListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
+								ls := make([]uint32, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+
+									ls[i] = uint32(v.(int))
+								}
+								asnList.AsNumbers = ls
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["country_list"]; ok && !isIntfNil(v) {
+
+						country_listList := []ves_io_schema_policy.CountryCode{}
+						for _, j := range v.([]interface{}) {
+							country_listList = append(country_listList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
+						}
+						mitigationChoiceInt.DdosClientSource.CountryList = country_listList
+
+					}
+
+					if v, ok := cs["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
+						mitigationChoiceInt.DdosClientSource.TlsFingerprintMatcher = tlsFingerprintMatcher
+						for _, set := range sl {
+							tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+
+							if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+
+								classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+								for _, j := range v.([]interface{}) {
+									classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+								}
+								tlsFingerprintMatcher.Classes = classesList
+
+							}
+
+							if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								tlsFingerprintMatcher.ExactValues = ls
+							}
+
+							if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								tlsFingerprintMatcher.ExcludedValues = ls
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := ddosMitigationRulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !mitigationChoiceTypeFound {
+
+				mitigationChoiceTypeFound = true
+				mitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.DDoSMitigationRule_IpPrefixList{}
+				mitigationChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+				ddosMitigationRules[i].MitigationChoice = mitigationChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+						mitigationChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+					}
+
+					if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.IpPrefixes = ls
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("default_route_pools"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -11242,6 +11753,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				rateLimitChoiceInt.RateLimit.RateLimiter = rateLimiter
 				for _, set := range sl {
 					rateLimiterMapStrToI := set.(map[string]interface{})
+
+					if w, ok := rateLimiterMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+						rateLimiter.BurstMultiplier = uint32(w.(int))
+					}
 
 					if w, ok := rateLimiterMapStrToI["total_number"]; ok && !isIntfNil(w) {
 						rateLimiter.TotalNumber = uint32(w.(int))

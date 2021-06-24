@@ -224,6 +224,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.DaemonTlsParametersType"] = ves_io_schema.DaemonTlsParametersTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.OperMetaType"] = ves_io_schema.OperMetaTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.ServiceParameters"] = ves_io_schema.ServiceParametersValidator()
+	MDR.ValidatorRegistry["ves.io.schema.StatusServerParamsType"] = ves_io_schema.StatusServerParamsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.SyncServerParamsType"] = ves_io_schema.SyncServerParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.UseragentType"] = ves_io_schema.UseragentTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.AppRoleAuthInfoType"] = ves_io_schema.AppRoleAuthInfoTypeValidator()
@@ -2258,6 +2260,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceAccess"] = ves_io_schema_user.NamespaceAccessValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceRoleType"] = ves_io_schema_user.NamespaceRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailRequest"] = ves_io_schema_user.SendPasswordEmailRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailResponse"] = ves_io_schema_user.SendPasswordEmailResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.UserRoleRequest"] = ves_io_schema_user.UserRoleRequestValidator()
@@ -2281,17 +2284,21 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupChoice"] = ves_io_schema_vesenv.APIGroupChoiceValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.RouteTargetChoice"] = ves_io_schema_vesenv.RouteTargetChoiceValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceChoice"] = ves_io_schema_vesenv.ServiceChoiceValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementInfo"] = ves_io_schema_vesenv.APIGroupElementInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementItem"] = ves_io_schema_vesenv.APIGroupElementItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMap"] = ves_io_schema_vesenv.APIGroupNameMapValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMapItem"] = ves_io_schema_vesenv.APIGroupNameMapItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.BFSecretChoice"] = ves_io_schema_vesenv.BFSecretChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.BFSecretInfo"] = ves_io_schema_vesenv.BFSecretInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.NameToUid"] = ves_io_schema_vesenv.NameToUidValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.QuotaResourceKeyInfo"] = ves_io_schema_vesenv.QuotaResourceKeyInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretItemType"] = ves_io_schema_vesenv.ReEncryptSecretItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretsType"] = ves_io_schema_vesenv.ReEncryptSecretsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.RouteTargetInfo"] = ves_io_schema_vesenv.RouteTargetInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceInfo"] = ves_io_schema_vesenv.ServiceInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugChoice"] = ves_io_schema_vesenv.ServiceSlugChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugInfo"] = ves_io_schema_vesenv.ServiceSlugInfoValidator()
@@ -2581,6 +2588,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = ves_io_schema_views_http_loadbalancer.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = ves_io_schema_views_http_loadbalancer.CustomIpAllowedListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DDoSClientSource"] = ves_io_schema_views_http_loadbalancer.DDoSClientSourceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DDoSMitigationRule"] = ves_io_schema_views_http_loadbalancer.DDoSMitigationRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsValidationContext"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContextValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GetSpecType"] = ves_io_schema_views_http_loadbalancer.GetSpecTypeValidator()

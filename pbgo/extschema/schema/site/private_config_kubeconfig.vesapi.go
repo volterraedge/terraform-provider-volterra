@@ -354,6 +354,94 @@ var PrivateConfigKubeConfigAPISwaggerJSON string = `{
             "x-displayname": "Private Site KubeConfig API",
             "x-ves-proto-service": "ves.io.schema.site.PrivateConfigKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/read/private/namespaces/{namespace}/sites/{name}/global_access_check": {
+            "get": {
+                "summary": "Check Global Accesss Enabled",
+                "description": "API to check global access is enabled or not.",
+                "operationId": "ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/siteGlobalAccessCheckResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "PrivateConfigKubeConfigAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-PrivateConfigKubeConfigAPI-GlobalAccessEnabled"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled"
+            },
+            "x-displayname": "Private Site KubeConfig API",
+            "x-ves-proto-service": "ves.io.schema.site.PrivateConfigKubeConfigAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {
