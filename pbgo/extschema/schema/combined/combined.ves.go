@@ -125,6 +125,8 @@ import (
 	ves_io_schema_usb_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy/crudapi"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	ves_io_schema_user_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user/crudapi"
+	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
+	ves_io_schema_user_identification_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification/crudapi"
 	ves_io_schema_vesenv "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
@@ -144,6 +146,7 @@ import (
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_origin_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
+	ves_io_schema_views_rate_limiter_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy/crudapi"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_views_tcp_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi"
 	ves_io_schema_views_terraform_parameters "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
@@ -2282,6 +2285,37 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceReq"] = ves_io_schema_user_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceRsp"] = ves_io_schema_user_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.SpecType"] = ves_io_schema_user_identification.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.CreateRequest"] = ves_io_schema_user_identification.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.CreateResponse"] = ves_io_schema_user_identification.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.DeleteRequest"] = ves_io_schema_user_identification.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.GetRequest"] = ves_io_schema_user_identification.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.GetResponse"] = ves_io_schema_user_identification.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ListRequest"] = ves_io_schema_user_identification.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ListResponse"] = ves_io_schema_user_identification.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ListResponseItem"] = ves_io_schema_user_identification.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ReplaceRequest"] = ves_io_schema_user_identification.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ReplaceResponse"] = ves_io_schema_user_identification.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.CreateSpecType"] = ves_io_schema_user_identification.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.GetSpecType"] = ves_io_schema_user_identification.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.GlobalSpecType"] = ves_io_schema_user_identification.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.ReplaceSpecType"] = ves_io_schema_user_identification.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.UserIdentificationRule"] = ves_io_schema_user_identification.UserIdentificationRuleValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectCreateReq"] = ves_io_schema_user_identification_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectCreateRsp"] = ves_io_schema_user_identification_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectDeleteReq"] = ves_io_schema_user_identification_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectDeleteRsp"] = ves_io_schema_user_identification_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectGetReq"] = ves_io_schema_user_identification_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectGetRsp"] = ves_io_schema_user_identification_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectListReq"] = ves_io_schema_user_identification_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectListRsp"] = ves_io_schema_user_identification_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectListRspItem"] = ves_io_schema_user_identification_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectReplaceReq"] = ves_io_schema_user_identification_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.crudapi.ObjectReplaceRsp"] = ves_io_schema_user_identification_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupChoice"] = ves_io_schema_vesenv.APIGroupChoiceValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.RouteTargetChoice"] = ves_io_schema_vesenv.RouteTargetChoiceValidator()
@@ -2706,12 +2740,37 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceReq"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.SpecType"] = ves_io_schema_views_rate_limiter_policy.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.CreateRequest"] = ves_io_schema_views_rate_limiter_policy.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.CreateResponse"] = ves_io_schema_views_rate_limiter_policy.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.DeleteRequest"] = ves_io_schema_views_rate_limiter_policy.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GetRequest"] = ves_io_schema_views_rate_limiter_policy.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GetResponse"] = ves_io_schema_views_rate_limiter_policy.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ListRequest"] = ves_io_schema_views_rate_limiter_policy.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ListResponse"] = ves_io_schema_views_rate_limiter_policy.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ListResponseItem"] = ves_io_schema_views_rate_limiter_policy.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ReplaceRequest"] = ves_io_schema_views_rate_limiter_policy.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ReplaceResponse"] = ves_io_schema_views_rate_limiter_policy.ReplaceResponseValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.CreateSpecType"] = ves_io_schema_views_rate_limiter_policy.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GetSpecType"] = ves_io_schema_views_rate_limiter_policy.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GlobalSpecType"] = ves_io_schema_views_rate_limiter_policy.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.PolicyList"] = ves_io_schema_views_rate_limiter_policy.PolicyListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.RateLimiterRule"] = ves_io_schema_views_rate_limiter_policy.RateLimiterRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ReplaceSpecType"] = ves_io_schema_views_rate_limiter_policy.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectCreateReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectCreateRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectDeleteReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectDeleteRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectGetReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectGetRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListRspItem"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.tcp_loadbalancer.SpecType"] = ves_io_schema_views_tcp_loadbalancer.SpecTypeValidator()
 
@@ -6414,6 +6473,38 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.user_identification.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.rules": []sets.String{
+				sets.NewString([]string{"client_asn", "client_ip", "cookie_name", "http_header_name", "none", "query_param_key"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.user_identification.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.rules": []sets.String{
+				sets.NewString([]string{"client_asn", "client_ip", "cookie_name", "http_header_name", "none", "query_param_key"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.user_identification.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.rules": []sets.String{
+				sets.NewString([]string{"client_asn", "client_ip", "cookie_name", "http_header_name", "none", "query_param_key"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.user_identification.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.rules": []sets.String{
+				sets.NewString([]string{"client_asn", "client_ip", "cookie_name", "http_header_name", "none", "query_param_key"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
@@ -9153,6 +9244,62 @@ func init() {
 			},
 			"spec.gc_spec.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.rules.spec": []sets.String{
+				sets.NewString([]string{"apply_rate_limiter", "bypass_rate_limiter", "custom_rate_limiter"}...),
+			},
+			"spec.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.rules.spec": []sets.String{
+				sets.NewString([]string{"apply_rate_limiter", "bypass_rate_limiter", "custom_rate_limiter"}...),
+			},
+			"spec.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.gc_spec.rules.spec": []sets.String{
+				sets.NewString([]string{"apply_rate_limiter", "bypass_rate_limiter", "custom_rate_limiter"}...),
+			},
+			"spec.gc_spec.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.gc_spec.rules.spec": []sets.String{
+				sets.NewString([]string{"apply_rate_limiter", "bypass_rate_limiter", "custom_rate_limiter"}...),
+			},
+			"spec.gc_spec.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
 		},
 	}
@@ -12668,6 +12815,47 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.user.Object"] = ves_io_schema_user_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.user_identification.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.user_identification.Object"] = reflect.TypeOf(&ves_io_schema_user_identification.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.user_identification.StatusObject"] = ves_io_schema_user_identification.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.user_identification.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.user_identification.StatusObject"] = reflect.TypeOf(&ves_io_schema_user_identification.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.user_identification.StatusObject"] = ves_io_schema_user_identification.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.user_identification.StatusObject"] = ves_io_schema_user_identification.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.user_identification.API"] = ves_io_schema_user_identification.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.user_identification.API"] = ves_io_schema_user_identification.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.user_identification.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.user_identification.crudapi.API"] = ves_io_schema_user_identification_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.user_identification.crudapi.API"] = ves_io_schema_user_identification_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.user_identification.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.user_identification.Object"] = ves_io_schema_user_identification_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.views.aws_tgw_site.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.views.aws_tgw_site.Object"] = reflect.TypeOf(&ves_io_schema_views_aws_tgw_site.DBObject{})
@@ -13058,6 +13246,47 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.views.origin_pool.Object"] = nil
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.origin_pool.Object"] = ves_io_schema_views_origin_pool_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.views.rate_limiter_policy.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = reflect.TypeOf(&ves_io_schema_views_rate_limiter_policy.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.rate_limiter_policy.StatusObject"] = ves_io_schema_views_rate_limiter_policy.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.views.rate_limiter_policy.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.rate_limiter_policy.StatusObject"] = reflect.TypeOf(&ves_io_schema_views_rate_limiter_policy.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.views.rate_limiter_policy.StatusObject"] = ves_io_schema_views_rate_limiter_policy.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.StatusObject"] = ves_io_schema_views_rate_limiter_policy.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.rate_limiter_policy.API"] = ves_io_schema_views_rate_limiter_policy.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.rate_limiter_policy.API"] = ves_io_schema_views_rate_limiter_policy.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.rate_limiter_policy.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.rate_limiter_policy.crudapi.API"] = ves_io_schema_views_rate_limiter_policy_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.rate_limiter_policy.crudapi.API"] = ves_io_schema_views_rate_limiter_policy_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.rate_limiter_policy.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.views.tcp_loadbalancer.Object"] = ves_io_schema_views_tcp_loadbalancer.NewEntryObject
@@ -15051,6 +15280,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.user_identification.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_user_identification.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_user_identification.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_user_identification.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_user_identification.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.user_identification.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_user_identification_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_user_identification_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_user_identification_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_user_identification_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.views.aws_tgw_site.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_aws_tgw_site.APIServer))
@@ -15324,6 +15577,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_views_origin_pool_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_origin_pool_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.rate_limiter_policy.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_rate_limiter_policy.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_rate_limiter_policy.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_rate_limiter_policy.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_rate_limiter_policy.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.rate_limiter_policy.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_rate_limiter_policy_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_rate_limiter_policy_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_rate_limiter_policy_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_rate_limiter_policy_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
