@@ -21,21 +21,40 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
-  // One of the arguments from this list "allow_list deny_list rule_list legacy_rule_list allow_all_requests deny_all_requests internally_generated" must be set
+  // One of the arguments from this list "legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list deny_list rule_list" must be set
 
-  legacy_rule_list {
-    rules {
+  deny_list {
+    asn_list {
+      as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
+    }
+
+    asn_set {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
-  }
 
-  // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
+    country_list = ["country_list"]
 
-  server_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
+    default_action_next_policy = true
+
+    ip_prefix_set {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    prefix_list {
+      prefixes = ["192.168.20.0/24"]
+    }
+
+    tls_fingerprint_classes = ["tls_fingerprint_classes"]
+
+    tls_fingerprint_values = ["tls_fingerprint_values"]
   }
+  // One of the arguments from this list "server_selector server_name_matcher any_server server_name" must be set
+  any_server = true
 }
 
 ```

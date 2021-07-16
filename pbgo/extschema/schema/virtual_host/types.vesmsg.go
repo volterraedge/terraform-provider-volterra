@@ -5805,7 +5805,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhUserDomains := v.UserDomainsValidationRuleHandler
 	rulesUserDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhUserDomains(rulesUserDomains)

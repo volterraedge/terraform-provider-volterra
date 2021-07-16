@@ -81,6 +81,7 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			  new_tgw {
 				  system_generated = true
 			  }
+			  no_worker_nodes = true
 			}
 			logs_streaming_disabled = true
 			tgw_security {

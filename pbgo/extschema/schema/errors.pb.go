@@ -36,7 +36,6 @@
 		ServiceParameters
 		OperMetaType
 		DaemonEnvironmentType
-		StatusServerParamsType
 		SyncServerParamsType
 		Empty
 		ObjectRefType

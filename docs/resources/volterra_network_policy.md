@@ -21,8 +21,8 @@ resource "volterra_network_policy" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
-    namespace = "namespace"
+    // One of the arguments from this list "outside_endpoints inside_endpoints interface namespace label_selector prefix_list any" must be set
+    any = true
   }
 }
 

@@ -3046,6 +3046,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["client_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_selector"))
+		if err := fv(ctx, m.GetClientSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["description"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("description"))
@@ -3117,6 +3126,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["label_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label_matcher"))
+		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metric_name_label"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metric_name_label"))
@@ -3156,6 +3174,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_selector"))
+		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3263,6 +3290,12 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
 
 	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
+
+	v.FldValidators["client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	return v
 }()

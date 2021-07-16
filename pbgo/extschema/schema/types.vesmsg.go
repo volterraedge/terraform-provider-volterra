@@ -7191,7 +7191,7 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 
 	vrhRetryOn := v.RetryOnValidationRuleHandler
 	rulesRetryOn := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
+		"ves.io.schema.rules.string.in": "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
 	}
 	vFn, err = vrhRetryOn(rulesRetryOn)
 	if err != nil {

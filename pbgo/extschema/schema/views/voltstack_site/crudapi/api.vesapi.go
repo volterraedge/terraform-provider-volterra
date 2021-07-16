@@ -4823,16 +4823,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "static_ip": {
-                    "description": " Interface IP is configured statically",
+                    "description": " Interface IP is configured statically\nRequired: YES",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
-                    "x-displayname": "Static IP"
+                    "x-displayname": "Static IP",
+                    "x-ves-required": "true"
                 },
                 "tunnel": {
-                    "description": " Tunnel Configuration for this Interface",
+                    "description": " Tunnel Configuration for this Interface\nRequired: YES",
                     "title": "Tunnel",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Tunnel"
+                    "x-displayname": "Tunnel",
+                    "x-ves-required": "true"
                 }
             }
         },

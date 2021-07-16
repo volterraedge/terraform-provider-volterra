@@ -2980,6 +2980,29 @@ func (v *ValidateCreateSpecType) SiteTypeValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
+	}
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateCreateSpecType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
+}
+
 func (v *ValidateCreateSpecType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3036,16 +3059,6 @@ func (v *ValidateCreateSpecType) SshKeyValidationRuleHandler(rules map[string]st
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
 	}
 
 	return validatorFn, nil
@@ -3202,15 +3215,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["os"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("os"))
@@ -3303,6 +3307,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *CreateSpecType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*CreateSpecType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*CreateSpecType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*CreateSpecType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -3350,6 +3401,41 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_type"] = vFn
+
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "21",
+	}
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.worker_nodes_nodes_per_az: %s", err)
+		panic(errMsg)
+	}
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
 	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
 	rulesResourceGroup := map[string]string{
@@ -3408,18 +3494,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_key"] = vFn
-
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "21",
-	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.nodes_per_az: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nodes_per_az"] = vFn
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
@@ -3741,6 +3815,29 @@ func (v *ValidateGetSpecType) SiteTypeValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
+	}
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateGetSpecType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
+}
+
 func (v *ValidateGetSpecType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3817,16 +3914,6 @@ func (v *ValidateGetSpecType) SshKeyValidationRuleHandler(rules map[string]strin
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
 	}
 
 	return validatorFn, nil
@@ -4023,15 +4110,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -4141,6 +4219,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *GetSpecType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*GetSpecType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*GetSpecType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*GetSpecType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -4188,6 +4313,41 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_type"] = vFn
+
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "21",
+	}
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.worker_nodes_nodes_per_az: %s", err)
+		panic(errMsg)
+	}
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
 	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
 	rulesResourceGroup := map[string]string{
@@ -4268,18 +4428,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_key"] = vFn
-
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "21",
-	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.nodes_per_az: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nodes_per_az"] = vFn
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
@@ -4721,6 +4869,29 @@ func (v *ValidateGlobalSpecType) SiteTypeValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
+	}
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateGlobalSpecType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
+}
+
 func (v *ValidateGlobalSpecType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -4797,16 +4968,6 @@ func (v *ValidateGlobalSpecType) SshKeyValidationRuleHandler(rules map[string]st
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
 	}
 
 	return validatorFn, nil
@@ -5003,15 +5164,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -5148,6 +5300,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *GlobalSpecType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*GlobalSpecType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*GlobalSpecType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*GlobalSpecType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -5195,6 +5394,41 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_type"] = vFn
+
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "21",
+	}
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.worker_nodes_nodes_per_az: %s", err)
+		panic(errMsg)
+	}
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
 	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
 	rulesResourceGroup := map[string]string{
@@ -5275,18 +5509,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ssh_key"] = vFn
-
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "21",
-	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.nodes_per_az: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nodes_per_az"] = vFn
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
@@ -5545,14 +5767,27 @@ func (v *ValidateReplaceSpecType) SiteTypeValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+func (v *ValidateReplaceSpecType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateReplaceSpecType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
 }
 
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -5633,15 +5868,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -5689,6 +5915,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *ReplaceSpecType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*ReplaceSpecType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ReplaceSpecType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ReplaceSpecType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -5726,17 +5999,40 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["site_type"] = vFn
 
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.nodes_per_az: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.worker_nodes_nodes_per_az: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["nodes_per_az"] = vFn
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -6261,6 +6557,47 @@ func (r *CreateSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetWorkerNodesToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WorkerNodes.(type) {
+	case nil:
+		o.WorkerNodes = nil
+
+	case *CreateSpecType_NoWorkerNodes:
+		o.WorkerNodes = &GlobalSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *CreateSpecType_NodesPerAz:
+		o.WorkerNodes = &GlobalSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *CreateSpecType_TotalNodes:
+		o.WorkerNodes = &GlobalSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WorkerNodes.(type) {
+	case nil:
+		r.WorkerNodes = nil
+
+	case *GlobalSpecType_NoWorkerNodes:
+		r.WorkerNodes = &CreateSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *GlobalSpecType_NodesPerAz:
+		r.WorkerNodes = &CreateSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *GlobalSpecType_TotalNodes:
+		r.WorkerNodes = &CreateSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -6272,13 +6609,13 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DiskSize = f.GetDiskSize()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
-	m.NodesPerAz = f.GetNodesPerAz()
 	m.Os = f.GetOs()
 	m.ResourceGroup = f.GetResourceGroup()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
 	m.Vnet = f.GetVnet()
+	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -6294,13 +6631,13 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DiskSize = m1.DiskSize
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
-	f.NodesPerAz = m1.NodesPerAz
 	f.Os = m1.Os
 	f.ResourceGroup = m1.ResourceGroup
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
 	f.Vnet = m1.Vnet
+	m1.SetWorkerNodesToGlobalSpecType(f)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -6414,6 +6751,47 @@ func (r *GetSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetWorkerNodesToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WorkerNodes.(type) {
+	case nil:
+		o.WorkerNodes = nil
+
+	case *GetSpecType_NoWorkerNodes:
+		o.WorkerNodes = &GlobalSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *GetSpecType_NodesPerAz:
+		o.WorkerNodes = &GlobalSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *GetSpecType_TotalNodes:
+		o.WorkerNodes = &GlobalSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WorkerNodes.(type) {
+	case nil:
+		r.WorkerNodes = nil
+
+	case *GlobalSpecType_NoWorkerNodes:
+		r.WorkerNodes = &GetSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *GlobalSpecType_NodesPerAz:
+		r.WorkerNodes = &GetSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *GlobalSpecType_TotalNodes:
+		r.WorkerNodes = &GetSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -6425,7 +6803,6 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DiskSize = f.GetDiskSize()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
-	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.ResourceGroup = f.GetResourceGroup()
 
@@ -6434,6 +6811,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.Vnet = f.GetVnet()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
+	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -6449,7 +6827,6 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DiskSize = m1.DiskSize
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
-	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.ResourceGroup = m1.ResourceGroup
 
@@ -6458,6 +6835,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.Vnet = m1.Vnet
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+	m1.SetWorkerNodesToGlobalSpecType(f)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -6563,6 +6941,47 @@ func (r *ReplaceSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetWorkerNodesToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WorkerNodes.(type) {
+	case nil:
+		o.WorkerNodes = nil
+
+	case *ReplaceSpecType_NoWorkerNodes:
+		o.WorkerNodes = &GlobalSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *ReplaceSpecType_NodesPerAz:
+		o.WorkerNodes = &GlobalSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *ReplaceSpecType_TotalNodes:
+		o.WorkerNodes = &GlobalSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetWorkerNodesFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WorkerNodes.(type) {
+	case nil:
+		r.WorkerNodes = nil
+
+	case *GlobalSpecType_NoWorkerNodes:
+		r.WorkerNodes = &ReplaceSpecType_NoWorkerNodes{NoWorkerNodes: of.NoWorkerNodes}
+
+	case *GlobalSpecType_NodesPerAz:
+		r.WorkerNodes = &ReplaceSpecType_NodesPerAz{NodesPerAz: of.NodesPerAz}
+
+	case *GlobalSpecType_TotalNodes:
+		r.WorkerNodes = &ReplaceSpecType_TotalNodes{TotalNodes: of.TotalNodes}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -6570,8 +6989,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.NodesPerAz = f.GetNodesPerAz()
 	m.GetSiteTypeFromGlobalSpecType(f)
+	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -6583,6 +7002,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.NodesPerAz = m1.NodesPerAz
 	m1.SetSiteTypeToGlobalSpecType(f)
+	m1.SetWorkerNodesToGlobalSpecType(f)
 }

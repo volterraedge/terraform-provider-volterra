@@ -1060,7 +1060,9 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/virtual_k8s/object.proto", fileDescriptorObject) }
-func init() { golang_proto.RegisterFile("ves.io/schema/virtual_k8s/object.proto", fileDescriptorObject) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/virtual_k8s/object.proto", fileDescriptorObject)
+}
 
 var fileDescriptorObject = []byte{
 	// 495 bytes of a gzipped FileDescriptorProto

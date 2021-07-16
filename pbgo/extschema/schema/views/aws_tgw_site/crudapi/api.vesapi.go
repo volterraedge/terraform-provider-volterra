@@ -2733,6 +2733,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ServicesVPCType",
             "properties": {
                 "assisted": {
@@ -2801,13 +2802,16 @@ var APISwaggerJSON string = `{
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsAWSVPCParamsType"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "title": "No Worker Nodes",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "format": "int64"
                 },
                 "ssh_key": {
                     "type": "string",
@@ -2815,6 +2819,12 @@ var APISwaggerJSON string = `{
                     "title": "Public SSH key",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "title": "Total Number of Worker Nodes for a Site",
+                    "format": "int64"
                 },
                 "vpc_id": {
                     "type": "string",

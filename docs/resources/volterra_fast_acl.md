@@ -20,20 +20,13 @@ resource "volterra_fast_acl" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
+  // One of the arguments from this list "re_acl legacy_acl site_acl" must be set
 
   site_acl {
     fast_acl_rules {
       action {
-        // One of the arguments from this list "policer_action protocol_policer_action simple_action" must be set
-
-        protocol_policer_action {
-          ref {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
+        // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
+        simple_action = "simple_action"
       }
 
       metadata {
@@ -49,7 +42,7 @@ resource "volterra_fast_acl" "example" {
         all = true
       }
 
-      // One of the arguments from this list "ip_prefix_set prefix" must be set
+      // One of the arguments from this list "prefix ip_prefix_set" must be set
 
       prefix {
         prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
@@ -59,7 +52,7 @@ resource "volterra_fast_acl" "example" {
     // One of the arguments from this list "outside_network inside_network" must be set
     outside_network = true
 
-    // One of the arguments from this list "interface_services vip_services all_services" must be set
+    // One of the arguments from this list "all_services interface_services vip_services" must be set
     interface_services = true
   }
 }

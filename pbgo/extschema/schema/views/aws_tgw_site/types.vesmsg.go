@@ -3530,6 +3530,29 @@ func (v *ValidateServicesVPCType) TgwChoiceValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateServicesVPCType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for worker_nodes")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCType) WorkerNodesNodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NodesPerAz, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
+	}
+	return oValidatorFn_NodesPerAz, nil
+}
+func (v *ValidateServicesVPCType) WorkerNodesTotalNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TotalNodes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
+	}
+	return oValidatorFn_TotalNodes, nil
+}
+
 func (v *ValidateServicesVPCType) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3605,16 +3628,6 @@ func (v *ValidateServicesVPCType) AzNodesValidationRuleHandler(rules map[string]
 			return errors.Wrap(err, "items az_nodes")
 		}
 		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateServicesVPCType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
 	}
 
 	return validatorFn, nil
@@ -3724,15 +3737,6 @@ func (v *ValidateServicesVPCType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["service_vpc_choice"]; exists {
 		val := m.GetServiceVpcChoice()
 		vOpts := append(opts,
@@ -3814,6 +3818,53 @@ func (v *ValidateServicesVPCType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["worker_nodes"]; exists {
+		val := m.GetWorkerNodes()
+		vOpts := append(opts,
+			db.WithValidateField("worker_nodes"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWorkerNodes().(type) {
+	case *ServicesVPCType_NodesPerAz:
+		if fv, exists := v.FldValidators["worker_nodes.nodes_per_az"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCType_NodesPerAz).NodesPerAz
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("nodes_per_az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCType_TotalNodes:
+		if fv, exists := v.FldValidators["worker_nodes.total_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCType_TotalNodes).TotalNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("total_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCType_NoWorkerNodes:
+		if fv, exists := v.FldValidators["worker_nodes.no_worker_nodes"]; exists {
+			val := m.GetWorkerNodes().(*ServicesVPCType_NoWorkerNodes).NoWorkerNodes
+			vOpts := append(opts,
+				db.WithValidateField("worker_nodes"),
+				db.WithValidateField("no_worker_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -3875,6 +3926,41 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	}
 	v.FldValidators["tgw_choice"] = vFn
 
+	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
+	rulesWorkerNodes := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWorkerNodes(rulesWorkerNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCType.worker_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["worker_nodes"] = vFn
+
+	vrhWorkerNodesNodesPerAz := v.WorkerNodesNodesPerAzValidationRuleHandler
+	rulesWorkerNodesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "21",
+	}
+	vFnMap["worker_nodes.nodes_per_az"], err = vrhWorkerNodesNodesPerAz(rulesWorkerNodesNodesPerAz)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServicesVPCType.worker_nodes_nodes_per_az: %s", err)
+		panic(errMsg)
+	}
+	vrhWorkerNodesTotalNodes := v.WorkerNodesTotalNodesValidationRuleHandler
+	rulesWorkerNodesTotalNodes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "61",
+	}
+	vFnMap["worker_nodes.total_nodes"], err = vrhWorkerNodesTotalNodes(rulesWorkerNodesTotalNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServicesVPCType.worker_nodes_total_nodes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
+	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
+
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3933,18 +4019,6 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 		panic(errMsg)
 	}
 	v.FldValidators["az_nodes"] = vFn
-
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "21",
-	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCType.nodes_per_az: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nodes_per_az"] = vFn
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{

@@ -182,9 +182,11 @@ type SetTGWInfoRequest struct {
 	TgwInfo *AWSTGWInfoConfigType `protobuf:"bytes,3,opt,name=tgw_info,json=tgwInfo" json:"tgw_info,omitempty"`
 }
 
-func (m *SetTGWInfoRequest) Reset()                    { *m = SetTGWInfoRequest{} }
-func (*SetTGWInfoRequest) ProtoMessage()               {}
-func (*SetTGWInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{4} }
+func (m *SetTGWInfoRequest) Reset()      { *m = SetTGWInfoRequest{} }
+func (*SetTGWInfoRequest) ProtoMessage() {}
+func (*SetTGWInfoRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{4}
+}
 
 func (m *SetTGWInfoRequest) GetNamespace() string {
 	if m != nil {
@@ -245,9 +247,11 @@ type SetVIPInfoRequest struct {
 	VipParamsPerAz []*ves_io_schema_site.PublishVIPParamsPerAz `protobuf:"bytes,3,rep,name=vip_params_per_az,json=vipParamsPerAz" json:"vip_params_per_az,omitempty"`
 }
 
-func (m *SetVIPInfoRequest) Reset()                    { *m = SetVIPInfoRequest{} }
-func (*SetVIPInfoRequest) ProtoMessage()               {}
-func (*SetVIPInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{6} }
+func (m *SetVIPInfoRequest) Reset()      { *m = SetVIPInfoRequest{} }
+func (*SetVIPInfoRequest) ProtoMessage() {}
+func (*SetVIPInfoRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{6}
+}
 
 func (m *SetVIPInfoRequest) GetNamespace() string {
 	if m != nil {

@@ -81,7 +81,7 @@ func resourceVolterraSiteSetVIPInfo() *schema.Resource {
 						},
 						"az_name": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 					},
 				},

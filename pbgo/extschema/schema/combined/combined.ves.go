@@ -227,7 +227,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.DaemonTlsParametersType"] = ves_io_schema.DaemonTlsParametersTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.OperMetaType"] = ves_io_schema.OperMetaTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.ServiceParameters"] = ves_io_schema.ServiceParametersValidator()
-	MDR.ValidatorRegistry["ves.io.schema.StatusServerParamsType"] = ves_io_schema.StatusServerParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SyncServerParamsType"] = ves_io_schema.SyncServerParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.UseragentType"] = ves_io_schema.UseragentTypeValidator()
 
@@ -4886,12 +4885,22 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
+				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
+				sets.NewString([]string{"argo_cd", "dashboard"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4902,12 +4911,22 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.k8s_cluster.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
+				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
 				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
+				sets.NewString([]string{"argo_cd", "dashboard"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
+				sets.NewString([]string{"default_port", "port"}...),
+			},
+			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.local_access_config": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -6514,6 +6533,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
 				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.aws_parameters.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
@@ -6663,6 +6683,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
 				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.aws_parameters.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
@@ -6752,6 +6773,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
 				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.aws_parameters.az_nodes": []sets.String{
 				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
@@ -6838,6 +6860,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -6976,6 +6999,7 @@ func init() {
 			"spec": []sets.String{
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7080,6 +7104,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7219,6 +7244,7 @@ func init() {
 				sets.NewString([]string{"assisted", "aws_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7358,6 +7384,7 @@ func init() {
 				sets.NewString([]string{"assisted", "azure_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7486,6 +7513,7 @@ func init() {
 			"spec": []sets.String{
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7578,6 +7606,7 @@ func init() {
 				sets.NewString([]string{"assisted", "azure_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
@@ -7707,6 +7736,7 @@ func init() {
 				sets.NewString([]string{"assisted", "azure_cred"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),

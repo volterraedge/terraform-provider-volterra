@@ -244,13 +244,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.ServiceParameters"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "StatusServerParamsType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.StatusServerParamsType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "SyncServerParamsType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}

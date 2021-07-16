@@ -4884,6 +4884,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.CreateSpecType",
             "properties": {
                 "address": {
@@ -4942,12 +4943,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
                 },
                 "os": {
                     "description": " Operating System Details",
@@ -4966,6 +4969,11 @@ var APISwaggerJSON string = `{
                     "title": "Volterra Software",
                     "$ref": "#/definitions/viewsVolterraSoftwareType",
                     "x-displayname": "Volterra Software"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
@@ -4986,6 +4994,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GetSpecType",
             "properties": {
                 "address": {
@@ -5044,12 +5053,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -5065,6 +5076,11 @@ var APISwaggerJSON string = `{
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
                 },
                 "user_modification_timestamp": {
                     "type": "string",
@@ -5105,6 +5121,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GlobalSpecType",
             "properties": {
                 "address": {
@@ -5174,13 +5191,16 @@ var APISwaggerJSON string = `{
                     "title": "Disable Logs Receiver",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "title": "No Worker Nodes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "format": "int64"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -5213,6 +5233,12 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "title": "Total Number of Worker Nodes for a Site",
+                    "format": "int64"
                 },
                 "user_modification_timestamp": {
                     "type": "string",
@@ -5263,6 +5289,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace AWS VPC site",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.ReplaceSpecType",
             "properties": {
                 "address": {
@@ -5294,12 +5321,19 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",

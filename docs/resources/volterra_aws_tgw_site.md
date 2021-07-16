@@ -27,7 +27,7 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
+      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "disk_size"
 
@@ -50,7 +50,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "aws_cred assisted" must be set
+    // One of the arguments from this list "assisted aws_cred" must be set
 
     aws_cred {
       name      = "test1"
@@ -59,9 +59,8 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size     = "80"
     instance_type = "a1.xlarge"
-    nodes_per_az  = "2"
 
-    // One of the arguments from this list "new_vpc vpc_id" must be set
+    // One of the arguments from this list "vpc_id new_vpc" must be set
 
     new_vpc {
       allocate_ipv6 = true
@@ -79,9 +78,11 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
+    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+    nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
 
@@ -182,8 +183,6 @@ Configure AWS TGW, services VPC and site nodes parameters..
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
-`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
 `new_vpc` - (Optional) Parameters for creating new VPC. See [New Vpc ](#new-vpc) below for details.
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
@@ -193,6 +192,12 @@ Configure AWS TGW, services VPC and site nodes parameters..
 `existing_tgw` - (Optional) Information about existing TGW. See [Existing Tgw ](#existing-tgw) below for details.
 
 `new_tgw` - (Optional) Parameters for creating new TGW. See [New Tgw ](#new-tgw) below for details.
+
+`no_worker_nodes` - (Optional) Worker nodes is set to zero (bool).
+
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
+
+`total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
 ### Az Nodes
 
@@ -461,6 +466,10 @@ Network Policy is disabled for this site..
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
+
+### No Worker Nodes
+
+Worker nodes is set to zero.
 
 ### Os
 

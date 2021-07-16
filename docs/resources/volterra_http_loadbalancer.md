@@ -21,156 +21,27 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
+  advertise_on_public_default_vip = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  policy_based_challenge {
-    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
-    default_captcha_challenge_parameters = true
-
-    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
-    no_challenge = true
-
-    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
-    default_js_challenge_parameters = true
-
-    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
-    default_mitigation_settings = true
-
-    rule_list {
-      rules {
-        metadata {
-          description = "Virtual Host for acmecorp website"
-          disable     = true
-          name        = "acmecorp-web"
-        }
-
-        spec {
-          arg_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "check_present check_not_present item presence" must be set
-            presence = true
-
-            name = "name"
-          }
-
-          // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
-
-          asn_matcher {
-            asn_sets {
-              name      = "test1"
-              namespace = "staging"
-              tenant    = "acmecorp"
-            }
-          }
-          body_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-            transformers = ["transformers"]
-          }
-          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
-          enable_javascript_challenge = true
-          // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
-          any_client = true
-          cookie_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "check_not_present item presence check_present" must be set
-            presence = true
-
-            name = "Session"
-          }
-          domain_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-          }
-          expiration_timestamp = "0001-01-01T00:00:00Z"
-          headers {
-            invert_matcher = true
-
-            // One of the arguments from this list "item presence check_present check_not_present" must be set
-
-            item {
-              exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-              regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-              transformers = ["transformers"]
-            }
-            name = "Accept-Encoding"
-          }
-          http_method {
-            invert_matcher = true
-
-            methods = ["['GET', 'POST', 'DELETE']"]
-          }
-          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-          any_ip = true
-          path {
-            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
-
-            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
-
-            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
-
-            transformers = ["transformers"]
-          }
-          query_params {
-            invert_matcher = true
-            key            = "sourceid"
-
-            // One of the arguments from this list "item presence check_present check_not_present" must be set
-            presence = true
-          }
-          tls_fingerprint_matcher {
-            classes = ["classes"]
-
-            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
-
-            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
-          }
-        }
-      }
-    }
-
-    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
-
-    temporary_user_blocking {
-      custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    }
-  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  random = true
 
-  cookie_stickiness {
-    name = "userid"
-    path = "/Users/userid/browser/cookies"
-    ttl  = "ttl"
-  }
-
-  // One of the arguments from this list "https_auto_cert https http" must be set
+  // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
-  service_policies_from_namespace = true
-
-  // One of the arguments from this list "waf waf_rule disable_waf" must be set
-
-  waf_rule {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  no_service_policies = true
+  // One of the arguments from this list "disable_waf waf waf_rule" must be set
+  disable_waf = true
 }
 
 ```
@@ -1190,7 +1061,7 @@ Send redirect response.
 
 `path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
 
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+`proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 

@@ -22,23 +22,13 @@ resource "volterra_aws_vpc_site" "example" {
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "aws_cred assisted" must be set
-
-  aws_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  assisted      = true
   instance_type = ["a1.xlarge"]
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
@@ -62,6 +52,8 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
   }
+  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+  nodes_per_az = "2"
 }
 
 ```
@@ -103,8 +95,6 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
-`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
@@ -118,6 +108,12 @@ Argument Reference
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `vpc` - (Optional) Choice of using existing VPC or create new VPC. See [Vpc ](#vpc) below for details.
+
+`no_worker_nodes` - (Optional) Worker nodes is set to zero (bool).
+
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
+
+`total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
 ### Active Forward Proxy Policies
 

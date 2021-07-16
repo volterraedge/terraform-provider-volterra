@@ -118,9 +118,11 @@ type SetVIPInfoRequest struct {
 	VipParamsPerAz []*ves_io_schema_site.PublishVIPParamsPerAz `protobuf:"bytes,3,rep,name=vip_params_per_az,json=vipParamsPerAz" json:"vip_params_per_az,omitempty"`
 }
 
-func (m *SetVIPInfoRequest) Reset()                    { *m = SetVIPInfoRequest{} }
-func (*SetVIPInfoRequest) ProtoMessage()               {}
-func (*SetVIPInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{2} }
+func (m *SetVIPInfoRequest) Reset()      { *m = SetVIPInfoRequest{} }
+func (*SetVIPInfoRequest) ProtoMessage() {}
+func (*SetVIPInfoRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{2}
+}
 
 func (m *SetVIPInfoRequest) GetNamespace() string {
 	if m != nil {

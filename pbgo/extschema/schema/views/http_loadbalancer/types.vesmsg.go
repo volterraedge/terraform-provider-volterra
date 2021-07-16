@@ -2433,7 +2433,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -5021,7 +5021,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -6777,7 +6777,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -9920,7 +9920,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
