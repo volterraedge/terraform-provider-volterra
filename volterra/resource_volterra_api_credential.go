@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -30,7 +29,7 @@ type apiCredentialParams struct {
 	vk8sNS      string
 	vk8sName    string
 	password    string
-	expirydays  *google_protobuf1.Timestamp
+	expirydays  int
 }
 
 // resourceVolterraAPICredential is implementation of Volterra's API Credential Resource
@@ -71,13 +70,6 @@ func resourceVolterraAPICredential() *schema.Resource {
 				Type:     schema.TypeInt,
 				Default:  10,
 				Optional: true,
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
-					v := val.(int)
-					if v < 1 || v > 365 {
-						errs = append(errs, fmt.Errorf("%q must be between 1 and 365 inclusive, got: %d", key, v))
-					}
-					return
-				},
 			},
 		},
 	}
@@ -103,13 +95,8 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("api_credential_password"); ok {
 		apiCredParams.password = v.(string)
 	}
-
 	if v, ok := d.GetOk("expiry_days"); ok {
-		var err error
-		apiCredParams.expirydays, err = parseExpirationTime(v.(int))
-		if err != nil {
-			return fmt.Errorf("Error while parsing expiry days: %s", err)
-		}
+		apiCredParams.expirydays = v.(int)
 	}
 
 	apiCredValue, ok := ves_io_schema_api_credential.APICredentialType_value[apiCredParams.apiCredType]
@@ -118,9 +105,9 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 	}
 
 	apiCredReq := &ves_io_schema_api_credential.CreateRequest{
-		Name:                apiCredParams.name,
-		Namespace:           svcfw.SystemNSVal,
-		ExpirationTimestamp: apiCredParams.expirydays,
+		Name:            apiCredParams.name,
+		Namespace:       svcfw.SystemNSVal,
+		Expiration_Days: apiCredParams.expirydays,
 	}
 
 	apiCredSpec := &ves_io_schema_api_credential.CustomCreateSpecType{
@@ -187,14 +174,4 @@ func resourceVolterraAPICredentialDelete(d *schema.ResourceData, meta interface{
 	log.Printf("[DEBUG] Deleting Volterra API Credential obj with name %+v", d.Id())
 	d.SetId("")
 	return nil
-}
-
-func parseExpirationTime(expiryDays int) (*google_protobuf1.Timestamp, error) {
-	expiryHrs := expiryDays * 24
-	expiryDur, err := time.ParseDuration(fmt.Sprintf("%dh", expiryHrs))
-	if err != nil {
-		return nil, err
-	}
-
-	return google_protobuf1.TimestampProto(time.Now().Add(expiryDur))
 }
