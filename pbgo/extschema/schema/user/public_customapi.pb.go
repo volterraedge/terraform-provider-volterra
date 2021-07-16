@@ -355,9 +355,11 @@ type NamespaceRoleType struct {
 	Role string `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"`
 }
 
-func (m *NamespaceRoleType) Reset()                    { *m = NamespaceRoleType{} }
-func (*NamespaceRoleType) ProtoMessage()               {}
-func (*NamespaceRoleType) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{5} }
+func (m *NamespaceRoleType) Reset()      { *m = NamespaceRoleType{} }
+func (*NamespaceRoleType) ProtoMessage() {}
+func (*NamespaceRoleType) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{5}
+}
 
 func (m *NamespaceRoleType) GetNamespace() string {
 	if m != nil {
@@ -538,9 +540,11 @@ type AssignRoleRequest struct {
 	Username []string `protobuf:"bytes,3,rep,name=username" json:"username,omitempty"`
 }
 
-func (m *AssignRoleRequest) Reset()                    { *m = AssignRoleRequest{} }
-func (*AssignRoleRequest) ProtoMessage()               {}
-func (*AssignRoleRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{8} }
+func (m *AssignRoleRequest) Reset()      { *m = AssignRoleRequest{} }
+func (*AssignRoleRequest) ProtoMessage() {}
+func (*AssignRoleRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{8}
+}
 
 func (m *AssignRoleRequest) GetNamespace() string {
 	if m != nil {
@@ -1330,9 +1334,11 @@ type AcceptTOSRequest struct {
 	TosAccepted string `protobuf:"bytes,2,opt,name=tos_accepted,json=tosAccepted,proto3" json:"tos_accepted,omitempty"`
 }
 
-func (m *AcceptTOSRequest) Reset()                    { *m = AcceptTOSRequest{} }
-func (*AcceptTOSRequest) ProtoMessage()               {}
-func (*AcceptTOSRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{17} }
+func (m *AcceptTOSRequest) Reset()      { *m = AcceptTOSRequest{} }
+func (*AcceptTOSRequest) ProtoMessage() {}
+func (*AcceptTOSRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{17}
+}
 
 func (m *AcceptTOSRequest) GetNamespace() string {
 	if m != nil {

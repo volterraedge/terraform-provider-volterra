@@ -28,7 +28,7 @@ resource "volterra_k8s_cluster_role_binding" "example" {
 
   subjects {
     // One of the arguments from this list "user service_account group" must be set
-    user = "user1@example.com"
+    group = "group1"
   }
 }
 

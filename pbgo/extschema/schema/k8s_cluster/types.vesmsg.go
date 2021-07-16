@@ -989,6 +989,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.cluster_wide_app_list")
+	}
+
 	return nil
 }
 
@@ -1139,6 +1143,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) AppsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for apps_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1199,6 +1211,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["apps_choice"]; exists {
+		val := m.GetAppsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("apps_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAppsChoice().(type) {
+	case *CreateSpecType_NoClusterWideApps:
+		if fv, exists := v.FldValidators["apps_choice.no_cluster_wide_apps"]; exists {
+			val := m.GetAppsChoice().(*CreateSpecType_NoClusterWideApps).NoClusterWideApps
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("no_cluster_wide_apps"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ClusterWideAppList:
+		if fv, exists := v.FldValidators["apps_choice.cluster_wide_app_list"]; exists {
+			val := m.GetAppsChoice().(*CreateSpecType_ClusterWideAppList).ClusterWideAppList
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("cluster_wide_app_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -1432,6 +1480,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
+	rulesAppsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAppsChoice(rulesAppsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.apps_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["apps_choice"] = vFn
+
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1498,6 +1557,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
 
+	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
+
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
@@ -1530,6 +1591,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
+	}
+
+	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.cluster_wide_app_list")
 	}
 
 	return nil
@@ -1682,6 +1747,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) AppsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for apps_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1742,6 +1815,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["apps_choice"]; exists {
+		val := m.GetAppsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("apps_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAppsChoice().(type) {
+	case *GetSpecType_NoClusterWideApps:
+		if fv, exists := v.FldValidators["apps_choice.no_cluster_wide_apps"]; exists {
+			val := m.GetAppsChoice().(*GetSpecType_NoClusterWideApps).NoClusterWideApps
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("no_cluster_wide_apps"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ClusterWideAppList:
+		if fv, exists := v.FldValidators["apps_choice.cluster_wide_app_list"]; exists {
+			val := m.GetAppsChoice().(*GetSpecType_ClusterWideAppList).ClusterWideAppList
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("cluster_wide_app_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -1975,6 +2084,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
+	rulesAppsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAppsChoice(rulesAppsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.apps_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["apps_choice"] = vFn
+
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2040,6 +2160,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
+
+	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
@@ -3866,6 +3988,10 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	if err := m.GetClusterWideAppList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.cluster_wide_app_list")
+	}
+
 	return nil
 }
 
@@ -4016,6 +4142,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) AppsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for apps_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) ClusterRoleBindingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4076,6 +4210,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["apps_choice"]; exists {
+		val := m.GetAppsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("apps_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAppsChoice().(type) {
+	case *ReplaceSpecType_NoClusterWideApps:
+		if fv, exists := v.FldValidators["apps_choice.no_cluster_wide_apps"]; exists {
+			val := m.GetAppsChoice().(*ReplaceSpecType_NoClusterWideApps).NoClusterWideApps
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("no_cluster_wide_apps"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ClusterWideAppList:
+		if fv, exists := v.FldValidators["apps_choice.cluster_wide_app_list"]; exists {
+			val := m.GetAppsChoice().(*ReplaceSpecType_ClusterWideAppList).ClusterWideAppList
+			vOpts := append(opts,
+				db.WithValidateField("apps_choice"),
+				db.WithValidateField("cluster_wide_app_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cluster_role_bindings_choice"]; exists {
@@ -4309,6 +4479,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
+	rulesAppsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAppsChoice(rulesAppsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.apps_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["apps_choice"] = vFn
+
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4375,6 +4556,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
 
+	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
+
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
@@ -4390,6 +4573,41 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetAppsChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AppsChoice.(type) {
+	case nil:
+		o.AppsChoice = nil
+
+	case *CreateSpecType_ClusterWideAppList:
+		o.AppsChoice = &GlobalSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *CreateSpecType_NoClusterWideApps:
+		o.AppsChoice = &GlobalSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetAppsChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AppsChoice.(type) {
+	case nil:
+		r.AppsChoice = nil
+
+	case *GlobalSpecType_ClusterWideAppList:
+		r.AppsChoice = &CreateSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *GlobalSpecType_NoClusterWideApps:
+		r.AppsChoice = &CreateSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -4606,6 +4824,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
@@ -4620,12 +4839,48 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetAppsChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AppsChoice.(type) {
+	case nil:
+		o.AppsChoice = nil
+
+	case *GetSpecType_ClusterWideAppList:
+		o.AppsChoice = &GlobalSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *GetSpecType_NoClusterWideApps:
+		o.AppsChoice = &GlobalSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetAppsChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AppsChoice.(type) {
+	case nil:
+		r.AppsChoice = nil
+
+	case *GlobalSpecType_ClusterWideAppList:
+		r.AppsChoice = &GetSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *GlobalSpecType_NoClusterWideApps:
+		r.AppsChoice = &GetSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -4842,6 +5097,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
@@ -4856,12 +5112,48 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetAppsChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AppsChoice.(type) {
+	case nil:
+		o.AppsChoice = nil
+
+	case *ReplaceSpecType_ClusterWideAppList:
+		o.AppsChoice = &GlobalSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *ReplaceSpecType_NoClusterWideApps:
+		o.AppsChoice = &GlobalSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetAppsChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AppsChoice.(type) {
+	case nil:
+		r.AppsChoice = nil
+
+	case *GlobalSpecType_ClusterWideAppList:
+		r.AppsChoice = &ReplaceSpecType_ClusterWideAppList{ClusterWideAppList: of.ClusterWideAppList}
+
+	case *GlobalSpecType_NoClusterWideApps:
+		r.AppsChoice = &ReplaceSpecType_NoClusterWideApps{NoClusterWideApps: of.NoClusterWideApps}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -5078,6 +5370,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetAppsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
@@ -5092,6 +5385,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetAppsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)

@@ -35,10 +35,14 @@ resource "volterra_discovery" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+        // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
 
-        wingman_secret_info {
-          name = "ChargeBack-API-Key"
+        vault_secret_info {
+          key             = "key_pem"
+          location        = "v1/data/vhost_key"
+          provider        = "vault-vh-provider"
+          secret_encoding = "secret_encoding"
+          version         = "1"
         }
       }
 
@@ -54,7 +58,9 @@ resource "volterra_discovery" "example" {
   where {
     // One of the arguments from this list "virtual_network site virtual_site" must be set
 
-    virtual_network {
+    virtual_site {
+      network_type = "network_type"
+
       ref {
         name      = "test1"
         namespace = "staging"

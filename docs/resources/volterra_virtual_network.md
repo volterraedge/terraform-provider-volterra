@@ -20,13 +20,13 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
+  // One of the arguments from this list "srv6_network global_network site_local_network site_local_inside_network legacy_type" must be set
 
   srv6_network {
     access_network_rtargets {
       // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
 
-      asn2byte_rtarget {
+      asn4byte_rtarget {
         as_number = "as_number"
         value     = "value"
       }
@@ -38,7 +38,7 @@ resource "volterra_virtual_network" "example" {
     enterprise_network_rtargets {
       // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
 
-      asn2byte_rtarget {
+      asn4byte_rtarget {
         as_number = "as_number"
         value     = "value"
       }
@@ -78,7 +78,7 @@ resource "volterra_virtual_network" "example" {
       tenant    = "acmecorp"
     }
 
-    // One of the arguments from this list "site_snat_pool fleet_snat_pool interface_ip_snat_pool" must be set
+    // One of the arguments from this list "interface_ip_snat_pool site_snat_pool fleet_snat_pool" must be set
     interface_ip_snat_pool = true
   }
 }

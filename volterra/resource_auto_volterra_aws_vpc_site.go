@@ -161,11 +161,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"nodes_per_az": {
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-
 			"os": {
 
 				Type:     schema.TypeSet,
@@ -2354,6 +2349,24 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 					},
 				},
 			},
+
+			"no_worker_nodes": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"nodes_per_az": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"total_nodes": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -2550,13 +2563,6 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			createSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	//nodes_per_az
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		createSpec.NodesPerAz =
-			uint32(v.(int))
 	}
 
 	//os
@@ -5631,6 +5637,46 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//worker_nodes
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			createSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_NodesPerAz{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_TotalNodes{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra AwsVpcSite object with struct: %+v", createReq)
 
 	createAwsVpcSiteResp, err := client.CreateObject(context.Background(), ves_io_schema_views_aws_vpc_site.ObjectType, createReq)
@@ -5797,12 +5843,6 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		updateSpec.NodesPerAz =
-			uint32(v.(int))
 	}
 
 	siteTypeTypeFound := false
@@ -8247,6 +8287,44 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
+
+	}
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			updateSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_NodesPerAz{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_TotalNodes{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
 
 	}
 

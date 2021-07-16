@@ -258,11 +258,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							Optional: true,
 						},
 
-						"nodes_per_az": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
 						"new_vpc": {
 
 							Type:     schema.TypeSet,
@@ -365,6 +360,24 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"no_worker_nodes": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"nodes_per_az": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"total_nodes": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
 						},
 					},
 				},
@@ -1788,10 +1801,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 				awsParameters.InstanceType = w.(string)
 			}
 
-			if w, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(w) {
-				awsParameters.NodesPerAz = uint32(w.(int))
-			}
-
 			serviceVpcChoiceTypeFound := false
 
 			if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
@@ -1942,6 +1951,44 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					}
 
 				}
+
+			}
+
+			workerNodesTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+
+				if v.(bool) {
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}
+					workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+					awsParameters.WorkerNodes = workerNodesInt
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NodesPerAz{}
+
+				awsParameters.WorkerNodes = workerNodesInt
+
+				workerNodesInt.NodesPerAz =
+					uint32(v.(int))
+
+			}
+
+			if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TotalNodes{}
+
+				awsParameters.WorkerNodes = workerNodesInt
+
+				workerNodesInt.TotalNodes =
+					uint32(v.(int))
 
 			}
 

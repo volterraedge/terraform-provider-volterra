@@ -21,48 +21,22 @@ resource "volterra_fleet" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
-
-  bond_device_list {
-    bond_devices {
-      devices = ["devices"]
-
-      // One of the arguments from this list "lacp active_backup" must be set
-      active_backup         = true
-      link_polling_interval = "1000"
-      link_up_delay         = "200"
-      name                  = "bond0"
-    }
-  }
+  no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  device_list {
-    devices {
-      // One of the arguments from this list "network_device" must be set
-
-      network_device {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        use = "use"
-      }
-
-      name  = "name"
-      owner = "owner"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -75,7 +49,7 @@ resource "volterra_fleet" "example" {
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb = true
 }
 

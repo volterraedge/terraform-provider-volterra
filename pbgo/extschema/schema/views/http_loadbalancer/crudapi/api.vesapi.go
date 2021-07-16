@@ -4621,7 +4621,7 @@ var APISwaggerJSON string = `{
                 },
                 "proto_redirect": {
                     "type": "string",
-                    "description": "swap proto part of incoming URL in redirect URL\n\nExample: - \"https\"-",
+                    "description": " swap protocol part of incoming URL in redirect URL\n The protocol can be swapped with either http or https\n When incoming-proto option is specified, swapping of protocol is not done.\n\nExample: - \"https\"-",
                     "title": "proto_redirect",
                     "x-displayname": "Protocol",
                     "x-ves-example": "https"

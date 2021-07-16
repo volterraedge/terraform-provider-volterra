@@ -68,6 +68,7 @@ func testVPCIPPrefixes(name string) string {
 			  new_tgw {
 				  system_generated = true
 			  }
+			  no_worker_nodes = true
 			}
 			logs_streaming_disabled = true
 			vpc_attachments {

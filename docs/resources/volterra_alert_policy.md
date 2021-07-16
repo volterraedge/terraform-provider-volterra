@@ -35,7 +35,7 @@ resource "volterra_alert_policy" "example" {
 
     notification_parameters {
       // One of the arguments from this list "default individual ves_io_group custom" must be set
-      default         = true
+      individual      = true
       group_interval  = "1m"
       group_wait      = "30s"
       repeat_interval = "4h"

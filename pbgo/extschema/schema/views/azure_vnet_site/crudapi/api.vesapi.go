@@ -4581,6 +4581,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GlobalSpecType",
             "properties": {
                 "address": {
@@ -4649,13 +4650,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Azure Machine Type for Node",
                     "x-ves-example": "Standard_D3_v2"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "title": "No Worker Nodes",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "format": "int64"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -4696,6 +4700,12 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "title": "Total Number of Worker Nodes for a Site",
+                    "format": "int64"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",

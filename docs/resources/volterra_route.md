@@ -36,7 +36,7 @@ resource "volterra_route" "example" {
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "regex prefix path" must be set
+        // One of the arguments from this list "path regex prefix" must be set
         prefix = "/register/"
       }
 
@@ -64,7 +64,7 @@ resource "volterra_route" "example" {
 
     response_headers_to_remove = ["host"]
 
-    // One of the arguments from this list "route_direct_response route_destination route_redirect" must be set
+    // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
     route_destination {
       buffer_policy {
@@ -109,7 +109,7 @@ resource "volterra_route" "example" {
       }
 
       hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
+        // One of the arguments from this list "cookie source_ip header_name" must be set
         header_name = "host"
 
         terminal = true
@@ -163,7 +163,7 @@ resource "volterra_route" "example" {
       disable = true
     }
     waf_type {
-      // One of the arguments from this list "waf_rules waf" must be set
+      // One of the arguments from this list "waf waf_rules" must be set
 
       waf {
         waf {
@@ -445,7 +445,7 @@ Send redirect response.
 
 `path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
 
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+`proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 

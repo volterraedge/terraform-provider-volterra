@@ -6441,6 +6441,48 @@ func (v *ValidateTunnelInterfaceType) NodeChoiceNodeValidationRuleHandler(rules 
 	return oValidatorFn_Node, nil
 }
 
+func (v *ValidateTunnelInterfaceType) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tunnel")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTunnelInterfaceType) StaticIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for static_ip")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := StaticIPParametersTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTunnelInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -6644,6 +6686,28 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 
 	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
 
+	vrhTunnel := v.TunnelValidationRuleHandler
+	rulesTunnel := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTunnel(rulesTunnel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TunnelInterfaceType.tunnel: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnel"] = vFn
+
+	vrhStaticIp := v.StaticIpValidationRuleHandler
+	rulesStaticIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhStaticIp(rulesStaticIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TunnelInterfaceType.static_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_ip"] = vFn
+
 	vrhMtu := v.MtuValidationRuleHandler
 	rulesMtu := map[string]string{
 		"ves.io.schema.rules.uint32.ranges": "0,512-16384",
@@ -6668,10 +6732,6 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 	v.FldValidators["priority"] = vFn
 
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["tunnel"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["static_ip"] = StaticIPParametersTypeValidator().Validate
 
 	return v
 }()

@@ -249,7 +249,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhSubjects := v.SubjectsValidationRuleHandler
 	rulesSubjects := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -490,7 +490,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhSubjects := v.SubjectsValidationRuleHandler
 	rulesSubjects := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -750,7 +750,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhSubjects := v.SubjectsValidationRuleHandler
 	rulesSubjects := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1003,7 +1003,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhSubjects := v.SubjectsValidationRuleHandler
 	rulesSubjects := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}

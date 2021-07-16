@@ -30,28 +30,17 @@ resource "volterra_voltstack_site" "example" {
   no_k8s_cluster = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
-  master_nodes = ["master-0"]
-
-  // One of the arguments from this list "custom_network_config default_network_config" must be set
-  default_network_config = true
-
-  // One of the arguments from this list "default_storage_config custom_storage_config" must be set
-
-  custom_storage_config {
-    // One of the arguments from this list "no_static_routes static_routes" must be set
-    no_static_routes = true
-
-    // One of the arguments from this list "default_storage_class storage_class_list" must be set
-    default_storage_class = true
-
-    // One of the arguments from this list "no_storage_device storage_device_list" must be set
-    no_storage_device = true
-
-    // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
-    no_storage_interfaces = true
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
+  master_nodes = ["master-0"]
+  // One of the arguments from this list "default_network_config custom_network_config" must be set
+  default_network_config = true
+  // One of the arguments from this list "default_storage_config custom_storage_config" must be set
+  default_storage_config = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
@@ -962,9 +951,9 @@ Tunnel interface, Ipsec tunnels to other networking devices..
 
 `priority` - (Optional) Greater the value, higher the priority (`Int`).
 
-`static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
+`static_ip` - (Required) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
-`tunnel` - (Optional) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
+`tunnel` - (Required) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
 
 ### Untagged
 

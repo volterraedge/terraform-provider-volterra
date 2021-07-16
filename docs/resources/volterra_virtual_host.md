@@ -20,8 +20,12 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
-  no_challenge = true
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+
+  captcha_challenge {
+    cookie_expiry = "cookie_expiry"
+    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  }
 }
 
 ```

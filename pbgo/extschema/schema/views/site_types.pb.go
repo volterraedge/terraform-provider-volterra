@@ -1811,9 +1811,11 @@ type GCPVPCSubnetChoiceType struct {
 	Choice isGCPVPCSubnetChoiceType_Choice `protobuf_oneof:"choice"`
 }
 
-func (m *GCPVPCSubnetChoiceType) Reset()                    { *m = GCPVPCSubnetChoiceType{} }
-func (*GCPVPCSubnetChoiceType) ProtoMessage()               {}
-func (*GCPVPCSubnetChoiceType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{19} }
+func (m *GCPVPCSubnetChoiceType) Reset()      { *m = GCPVPCSubnetChoiceType{} }
+func (*GCPVPCSubnetChoiceType) ProtoMessage() {}
+func (*GCPVPCSubnetChoiceType) Descriptor() ([]byte, []int) {
+	return fileDescriptorSiteTypes, []int{19}
+}
 
 type isGCPVPCSubnetChoiceType_Choice interface {
 	isGCPVPCSubnetChoiceType_Choice()
