@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
