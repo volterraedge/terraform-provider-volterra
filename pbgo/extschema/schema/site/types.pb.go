@@ -1018,7 +1018,6 @@ type PublishVIPParamsPerAz struct {
 	//
 	// x-displayName: "AZ Name"
 	// x-example: "us-east-2a"
-	// x-required
 	// Name of the Availability zone
 	AzName string `protobuf:"bytes,5,opt,name=az_name,json=azName,proto3" json:"az_name,omitempty"`
 }
@@ -4426,11 +4425,9 @@ type SiteStatusMetricsFieldData struct {
 	Value []*ves_io_schema4.MetricValue `protobuf:"bytes,2,rep,name=value" json:"value,omitempty"`
 }
 
-func (m *SiteStatusMetricsFieldData) Reset()      { *m = SiteStatusMetricsFieldData{} }
-func (*SiteStatusMetricsFieldData) ProtoMessage() {}
-func (*SiteStatusMetricsFieldData) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{37}
-}
+func (m *SiteStatusMetricsFieldData) Reset()                    { *m = SiteStatusMetricsFieldData{} }
+func (*SiteStatusMetricsFieldData) ProtoMessage()               {}
+func (*SiteStatusMetricsFieldData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{37} }
 
 func (m *SiteStatusMetricsFieldData) GetKey() map[string]string {
 	if m != nil {

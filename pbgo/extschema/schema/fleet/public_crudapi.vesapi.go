@@ -4140,6 +4140,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetVGPUConfiguration": {
+            "type": "object",
+            "description": "Licensing configuration for NVIDIA vGPU",
+            "title": "vGPU Configuration",
+            "x-displayname": "vGPU Configuration",
+            "x-ves-proto-message": "ves.io.schema.fleet.VGPUConfiguration",
+            "properties": {
+                "feature_type": {
+                    "description": " Set Feature to be enabled\nRequired: YES",
+                    "title": "Feature Type",
+                    "$ref": "#/definitions/fleetVGPUFeatureType",
+                    "x-displayname": "Feature Type",
+                    "x-ves-required": "true"
+                },
+                "server_address": {
+                    "type": "string",
+                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-\nRequired: YES",
+                    "title": "License Server Address",
+                    "x-displayname": "License Server Address",
+                    "x-ves-example": "gridlicense1.example.com",
+                    "x-ves-required": "true"
+                },
+                "server_port": {
+                    "type": "integer",
+                    "description": " Set License Server port number",
+                    "title": "License Server Port Number",
+                    "format": "int64",
+                    "x-displayname": "License Server Port Number"
+                }
+            }
+        },
+        "fleetVGPUFeatureType": {
+            "type": "string",
+            "description": "Set feature to be enabled\n\nOperate with a degraded vGPU performance\nEnable NVIDIA vGPU\nEnable NVIDIA RTX Virtual Workstation\nEnable NVIDIA Virtual Compute Server",
+            "title": "vGPU Feature Type",
+            "enum": [
+                "UNLICENSED",
+                "VGPU",
+                "VWS",
+                "VCS"
+            ],
+            "default": "UNLICENSED",
+            "x-displayname": "Feature Type",
+            "x-ves-proto-enum": "ves.io.schema.fleet.VGPUFeatureType"
+        },
         "googleprotobufEmpty": {
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
@@ -5332,7 +5377,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
@@ -5377,7 +5422,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/fleetFleetDeviceListType"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_default_fleet_config_download": {
@@ -5387,8 +5432,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable Default Fleet Config Download"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "fleet_label": {
                     "type": "string",
@@ -5503,7 +5552,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
@@ -5548,7 +5597,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/fleetFleetDeviceListType"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_default_fleet_config_download": {
@@ -5558,8 +5607,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable Default Fleet Config Download"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "fleet_label": {
                     "type": "string",
@@ -5674,7 +5727,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specifications",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
@@ -5729,7 +5782,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Devices"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this fleet",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this fleet",
                     "title": "GPU Disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -5741,9 +5794,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable Default Fleet Config Download"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",
                     "title": "Member of DC cluster Group",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\nx-displayName: \"vGPU Enabled\"\nEnable NVIDIA vGPU hosted on VMware",
+                    "title": "vGPU Enabled",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "etcd_cluster_network": {
                     "description": " Decided which network is used for etcd clustering",
@@ -5921,7 +5979,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
@@ -5966,7 +6024,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/fleetFleetDeviceListType"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_default_fleet_config_download": {
@@ -5976,8 +6034,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable Default Fleet Config Download"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "inside_virtual_network": {
                     "type": "array",

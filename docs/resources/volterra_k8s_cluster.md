@@ -26,21 +26,18 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
 
-  // One of the arguments from this list "use_custom_cluster_role_list use_default_cluster_roles" must be set
+  // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
+  use_default_cluster_roles = true
 
-  use_custom_cluster_role_list {
-    cluster_roles {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
+
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
   no_insecure_registries = true
+
   // One of the arguments from this list "no_local_access local_access_config" must be set
   no_local_access = true
+
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
@@ -144,6 +141,8 @@ List of cluster wide applications.
 
 `dashboard` - (Optional) Deploy Kubernetes Dashboard application. See [Dashboard ](#dashboard) below for details.
 
+`metrics_server` - (Optional) Deploy Kubernetes Metrics Server application. See [Metrics Server ](#metrics-server) below for details.
+
 ### Dashboard
 
 Deploy Kubernetes Dashboard application.
@@ -181,6 +180,12 @@ Local domain to access argocd for example argocd.localdomain.
 `default_port` - (Optional) Use default port 443 for ArgoCD server. (bool).
 
 `port` - (Optional) Available port range is less than 65000 except reserved ports. (`Int`).
+
+### Metrics Server
+
+Deploy Kubernetes Metrics Server application.
+
+`generated_yaml` - (Optional) Generated YAML (`String`).
 
 ### Password
 

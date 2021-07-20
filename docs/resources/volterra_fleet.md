@@ -23,11 +23,15 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
+  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
 
-  // One of the arguments from this list "disable_gpu enable_gpu" must be set
+  dc_cluster_group {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
@@ -43,7 +47,7 @@ resource "volterra_fleet" "example" {
   logs_streaming_disabled = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
-  // One of the arguments from this list "no_storage_device storage_device_list" must be set
+  // One of the arguments from this list "storage_device_list no_storage_device" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
@@ -91,6 +95,8 @@ Argument Reference
 `disable_gpu` - (Optional) GPU is not enabled for this fleet (bool).
 
 `enable_gpu` - (Optional) GPU is enabled for this fleet (bool).
+
+`enable_vgpu` - (Optional) Enable NVIDIA vGPU hosted on VMware. See [Enable Vgpu ](#enable-vgpu) below for details.
 
 `inside_virtual_network` - (Optional) Default inside (site local) virtual network for the fleet. See [ref](#ref) below for details.
 
@@ -177,6 +183,16 @@ device instance specific sections.
 `name` - (Optional) Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node (`String`).
 
 `owner` - (Required) This option is not yet supported (`String`).
+
+### Enable Vgpu
+
+Enable NVIDIA vGPU hosted on VMware.
+
+`feature_type` - (Required) Set Feature to be enabled (`String`).
+
+`server_address` - (Required) Set License Server Address (`String`).
+
+`server_port` - (Optional) Set License Server port number (`Int`).
 
 ### Interface List
 

@@ -30,6 +30,628 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureVnetIngressEgressGwARType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetIngressEgressGwARType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureVnetIngressEgressGwARType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwARType.global_network_list")
+	}
+
+	return nil
+}
+
+func (m *AzureVnetIngressEgressGwARType) DeepCopy() *AzureVnetIngressEgressGwARType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetIngressEgressGwARType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetIngressEgressGwARType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetIngressEgressGwARType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetIngressEgressGwARTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AzureVnetIngressEgressGwARType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetInsideStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetForwardProxyChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoForwardProxy:
+
+	case *AzureVnetIngressEgressGwARType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetGlobalNetworkChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoGlobalNetwork:
+
+	case *AzureVnetIngressEgressGwARType_GlobalNetworkList:
+		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "global_network_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetInsideStaticRouteChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoInsideStaticRoutes:
+
+	case *AzureVnetIngressEgressGwARType_InsideStaticRoutes:
+		odrInfos, err = m.GetInsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "inside_static_routes." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetNetworkPolicyChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoNetworkPolicy:
+
+	case *AzureVnetIngressEgressGwARType_ActiveNetworkPolicies:
+		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_network_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwARType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoOutsideStaticRoutes:
+
+	case *AzureVnetIngressEgressGwARType_OutsideStaticRoutes:
+		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "outside_static_routes." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+type ValidateAzureVnetIngressEgressGwARType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for global_network_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) InsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) OutsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) AzureCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_certified_hw")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetIngressEgressGwARType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetIngressEgressGwARType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
+		if err := fv(ctx, m.GetAzureCertifiedHw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwARType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwARType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwARType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["global_network_choice"]; exists {
+		val := m.GetGlobalNetworkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("global_network_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoGlobalNetwork:
+		if fv, exists := v.FldValidators["global_network_choice.no_global_network"]; exists {
+			val := m.GetGlobalNetworkChoice().(*AzureVnetIngressEgressGwARType_NoGlobalNetwork).NoGlobalNetwork
+			vOpts := append(opts,
+				db.WithValidateField("global_network_choice"),
+				db.WithValidateField("no_global_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_GlobalNetworkList:
+		if fv, exists := v.FldValidators["global_network_choice.global_network_list"]; exists {
+			val := m.GetGlobalNetworkChoice().(*AzureVnetIngressEgressGwARType_GlobalNetworkList).GlobalNetworkList
+			vOpts := append(opts,
+				db.WithValidateField("global_network_choice"),
+				db.WithValidateField("global_network_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_static_route_choice"]; exists {
+		val := m.GetInsideStaticRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("inside_static_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoInsideStaticRoutes:
+		if fv, exists := v.FldValidators["inside_static_route_choice.no_inside_static_routes"]; exists {
+			val := m.GetInsideStaticRouteChoice().(*AzureVnetIngressEgressGwARType_NoInsideStaticRoutes).NoInsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("inside_static_route_choice"),
+				db.WithValidateField("no_inside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_InsideStaticRoutes:
+		if fv, exists := v.FldValidators["inside_static_route_choice.inside_static_routes"]; exists {
+			val := m.GetInsideStaticRouteChoice().(*AzureVnetIngressEgressGwARType_InsideStaticRoutes).InsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("inside_static_route_choice"),
+				db.WithValidateField("inside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
+		val := m.GetNetworkPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("network_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoNetworkPolicy:
+		if fv, exists := v.FldValidators["network_policy_choice.no_network_policy"]; exists {
+			val := m.GetNetworkPolicyChoice().(*AzureVnetIngressEgressGwARType_NoNetworkPolicy).NoNetworkPolicy
+			vOpts := append(opts,
+				db.WithValidateField("network_policy_choice"),
+				db.WithValidateField("no_network_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_ActiveNetworkPolicies:
+		if fv, exists := v.FldValidators["network_policy_choice.active_network_policies"]; exists {
+			val := m.GetNetworkPolicyChoice().(*AzureVnetIngressEgressGwARType_ActiveNetworkPolicies).ActiveNetworkPolicies
+			vOpts := append(opts,
+				db.WithValidateField("network_policy_choice"),
+				db.WithValidateField("active_network_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
+		val := m.GetOutsideStaticRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("outside_static_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetIngressEgressGwARType_NoOutsideStaticRoutes:
+		if fv, exists := v.FldValidators["outside_static_route_choice.no_outside_static_routes"]; exists {
+			val := m.GetOutsideStaticRouteChoice().(*AzureVnetIngressEgressGwARType_NoOutsideStaticRoutes).NoOutsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("outside_static_route_choice"),
+				db.WithValidateField("no_outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwARType_OutsideStaticRoutes:
+		if fv, exists := v.FldValidators["outside_static_route_choice.outside_static_routes"]; exists {
+			val := m.GetOutsideStaticRouteChoice().(*AzureVnetIngressEgressGwARType_OutsideStaticRoutes).OutsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("outside_static_route_choice"),
+				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIngressEgressGwARType {
+	v := &ValidateAzureVnetIngressEgressGwARType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
+
+	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
+	rulesGlobalNetworkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.global_network_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["global_network_choice"] = vFn
+
+	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
+	rulesInsideStaticRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInsideStaticRouteChoice(rulesInsideStaticRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.inside_static_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_static_route_choice"] = vFn
+
+	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
+	rulesNetworkPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.network_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_policy_choice"] = vFn
+
+	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
+	rulesOutsideStaticRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.outside_static_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhAzureCertifiedHw := v.AzureCertifiedHwValidationRuleHandler
+	rulesAzureCertifiedHw := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"azure-byol-multi-nic-voltmesh\"]",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhAzureCertifiedHw(rulesAzureCertifiedHw)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwARType.azure_certified_hw: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["azure_certified_hw"] = vFn
+
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
+
+	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
+
+	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVnetIngressEgressGwARTypeValidator() db.Validator {
+	return DefaultAzureVnetIngressEgressGwARTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureVnetIngressEgressGwReplaceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1279,6 +1901,126 @@ func AzureVnetIngressEgressGwTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureVnetIngressGwARType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetIngressGwARType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVnetIngressGwARType) DeepCopy() *AzureVnetIngressGwARType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetIngressGwARType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetIngressGwARType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetIngressGwARType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetIngressGwARTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVnetIngressGwARType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetIngressGwARType) AzureCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_certified_hw")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressGwARType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetIngressGwARType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetIngressGwARType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
+		if err := fv(ctx, m.GetAzureCertifiedHw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetIngressGwARTypeValidator = func() *ValidateAzureVnetIngressGwARType {
+	v := &ValidateAzureVnetIngressGwARType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAzureCertifiedHw := v.AzureCertifiedHwValidationRuleHandler
+	rulesAzureCertifiedHw := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"azure-byol-voltmesh\"]",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhAzureCertifiedHw(rulesAzureCertifiedHw)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressGwARType.azure_certified_hw: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["azure_certified_hw"] = vFn
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVnetIngressGwARTypeValidator() db.Validator {
+	return DefaultAzureVnetIngressGwARTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureVnetIngressGwReplaceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1512,6 +2254,662 @@ var DefaultAzureVnetIngressGwTypeValidator = func() *ValidateAzureVnetIngressGwT
 
 func AzureVnetIngressGwTypeValidator() db.Validator {
 	return DefaultAzureVnetIngressGwTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureVnetVoltstackClusterARType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetVoltstackClusterARType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureVnetVoltstackClusterARType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetVoltstackClusterARType.global_network_list")
+	}
+
+	return nil
+}
+
+func (m *AzureVnetVoltstackClusterARType) DeepCopy() *AzureVnetVoltstackClusterARType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetVoltstackClusterARType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetVoltstackClusterARType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetVoltstackClusterARType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetVoltstackClusterARTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AzureVnetVoltstackClusterARType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetOutsideStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetForwardProxyChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoForwardProxy:
+
+	case *AzureVnetVoltstackClusterARType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetVoltstackClusterARType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetGlobalNetworkChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoGlobalNetwork:
+
+	case *AzureVnetVoltstackClusterARType_GlobalNetworkList:
+		odrInfos, err = m.GetGlobalNetworkList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "global_network_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *AzureVnetVoltstackClusterARType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoK8SCluster:
+
+	case *AzureVnetVoltstackClusterARType_K8SCluster:
+
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		odri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetK8SClusterChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AzureVnetVoltstackClusterARType) GetK8SClusterChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoK8SCluster:
+
+	case *AzureVnetVoltstackClusterARType_K8SCluster:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_cluster.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster")
+		}
+
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_cluster.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetNetworkPolicyChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoNetworkPolicy:
+
+	case *AzureVnetVoltstackClusterARType_ActiveNetworkPolicies:
+		odrInfos, err = m.GetActiveNetworkPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_network_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterARType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetOutsideStaticRouteChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoOutsideStaticRoutes:
+
+	case *AzureVnetVoltstackClusterARType_OutsideStaticRoutes:
+		odrInfos, err = m.GetOutsideStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "outside_static_routes." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+type ValidateAzureVnetVoltstackClusterARType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for global_network_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) K8SClusterChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for k8s_cluster_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) OutsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) AzureCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_certified_hw")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterARType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetVoltstackClusterARType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetVoltstackClusterARType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
+		if err := fv(ctx, m.GetAzureCertifiedHw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterARType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterARType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterARType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["global_network_choice"]; exists {
+		val := m.GetGlobalNetworkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("global_network_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetGlobalNetworkChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoGlobalNetwork:
+		if fv, exists := v.FldValidators["global_network_choice.no_global_network"]; exists {
+			val := m.GetGlobalNetworkChoice().(*AzureVnetVoltstackClusterARType_NoGlobalNetwork).NoGlobalNetwork
+			vOpts := append(opts,
+				db.WithValidateField("global_network_choice"),
+				db.WithValidateField("no_global_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_GlobalNetworkList:
+		if fv, exists := v.FldValidators["global_network_choice.global_network_list"]; exists {
+			val := m.GetGlobalNetworkChoice().(*AzureVnetVoltstackClusterARType_GlobalNetworkList).GlobalNetworkList
+			vOpts := append(opts,
+				db.WithValidateField("global_network_choice"),
+				db.WithValidateField("global_network_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["k8s_cluster_choice"]; exists {
+		val := m.GetK8SClusterChoice()
+		vOpts := append(opts,
+			db.WithValidateField("k8s_cluster_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetK8SClusterChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoK8SCluster:
+		if fv, exists := v.FldValidators["k8s_cluster_choice.no_k8s_cluster"]; exists {
+			val := m.GetK8SClusterChoice().(*AzureVnetVoltstackClusterARType_NoK8SCluster).NoK8SCluster
+			vOpts := append(opts,
+				db.WithValidateField("k8s_cluster_choice"),
+				db.WithValidateField("no_k8s_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_K8SCluster:
+		if fv, exists := v.FldValidators["k8s_cluster_choice.k8s_cluster"]; exists {
+			val := m.GetK8SClusterChoice().(*AzureVnetVoltstackClusterARType_K8SCluster).K8SCluster
+			vOpts := append(opts,
+				db.WithValidateField("k8s_cluster_choice"),
+				db.WithValidateField("k8s_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
+		val := m.GetNetworkPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("network_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkPolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoNetworkPolicy:
+		if fv, exists := v.FldValidators["network_policy_choice.no_network_policy"]; exists {
+			val := m.GetNetworkPolicyChoice().(*AzureVnetVoltstackClusterARType_NoNetworkPolicy).NoNetworkPolicy
+			vOpts := append(opts,
+				db.WithValidateField("network_policy_choice"),
+				db.WithValidateField("no_network_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_ActiveNetworkPolicies:
+		if fv, exists := v.FldValidators["network_policy_choice.active_network_policies"]; exists {
+			val := m.GetNetworkPolicyChoice().(*AzureVnetVoltstackClusterARType_ActiveNetworkPolicies).ActiveNetworkPolicies
+			vOpts := append(opts,
+				db.WithValidateField("network_policy_choice"),
+				db.WithValidateField("active_network_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
+		val := m.GetOutsideStaticRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("outside_static_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOutsideStaticRouteChoice().(type) {
+	case *AzureVnetVoltstackClusterARType_NoOutsideStaticRoutes:
+		if fv, exists := v.FldValidators["outside_static_route_choice.no_outside_static_routes"]; exists {
+			val := m.GetOutsideStaticRouteChoice().(*AzureVnetVoltstackClusterARType_NoOutsideStaticRoutes).NoOutsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("outside_static_route_choice"),
+				db.WithValidateField("no_outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterARType_OutsideStaticRoutes:
+		if fv, exists := v.FldValidators["outside_static_route_choice.outside_static_routes"]; exists {
+			val := m.GetOutsideStaticRouteChoice().(*AzureVnetVoltstackClusterARType_OutsideStaticRoutes).OutsideStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("outside_static_route_choice"),
+				db.WithValidateField("outside_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetVoltstackClusterARTypeValidator = func() *ValidateAzureVnetVoltstackClusterARType {
+	v := &ValidateAzureVnetVoltstackClusterARType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
+
+	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
+	rulesGlobalNetworkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.global_network_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["global_network_choice"] = vFn
+
+	vrhK8SClusterChoice := v.K8SClusterChoiceValidationRuleHandler
+	rulesK8SClusterChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhK8SClusterChoice(rulesK8SClusterChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.k8s_cluster_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["k8s_cluster_choice"] = vFn
+
+	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
+	rulesNetworkPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.network_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_policy_choice"] = vFn
+
+	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
+	rulesOutsideStaticRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.outside_static_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_static_route_choice"] = vFn
+
+	vrhAzureCertifiedHw := v.AzureCertifiedHwValidationRuleHandler
+	rulesAzureCertifiedHw := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"azure-byol-voltstack-combo\"]",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhAzureCertifiedHw(rulesAzureCertifiedHw)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterARType.azure_certified_hw: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["azure_certified_hw"] = vFn
+
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
+
+	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
+
+	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVnetVoltstackClusterARTypeValidator() db.Validator {
+	return DefaultAzureVnetVoltstackClusterARTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2728,6 +4126,14 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.voltstack_cluster")
 	}
 
+	if err := m.GetIngressEgressGwAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.ingress_egress_gw_ar")
+	}
+
+	if err := m.GetVoltstackClusterAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.voltstack_cluster_ar")
+	}
+
 	return nil
 }
 
@@ -2947,6 +4353,28 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *CreateSpecType_IngressGwAr:
+
+	case *CreateSpecType_IngressEgressGwAr:
+		odrInfos, err = m.GetIngressEgressGwAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ingress_egress_gw_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *CreateSpecType_VoltstackClusterAr:
+		odrInfos, err = m.GetVoltstackClusterAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltstack_cluster_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -2970,6 +4398,29 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RegionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RegionChoiceAzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AzureRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
+	}
+	return oValidatorFn_AzureRegion, nil
+}
+func (v *ValidateCreateSpecType) RegionChoiceAlternateRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AlternateRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for alternate_region")
+	}
+	return oValidatorFn_AlternateRegion, nil
 }
 
 func (v *ValidateCreateSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3008,16 +4459,6 @@ func (v *ValidateCreateSpecType) ResourceGroupValidationRuleHandler(rules map[st
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) AzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
 	}
 
 	return validatorFn, nil
@@ -3102,15 +4543,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["azure_region"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("azure_region"))
-		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3224,6 +4656,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["region_choice"]; exists {
+		val := m.GetRegionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("region_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRegionChoice().(type) {
+	case *CreateSpecType_AzureRegion:
+		if fv, exists := v.FldValidators["region_choice.azure_region"]; exists {
+			val := m.GetRegionChoice().(*CreateSpecType_AzureRegion).AzureRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("azure_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AlternateRegion:
+		if fv, exists := v.FldValidators["region_choice.alternate_region"]; exists {
+			val := m.GetRegionChoice().(*CreateSpecType_AlternateRegion).AlternateRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("alternate_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["resource_group"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
@@ -3272,6 +4740,39 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("site_type"),
 				db.WithValidateField("voltstack_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_IngressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_gw_ar"]; exists {
+			val := m.GetSiteType().(*CreateSpecType_IngressGwAr).IngressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_IngressEgressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_egress_gw_ar"]; exists {
+			val := m.GetSiteType().(*CreateSpecType_IngressEgressGwAr).IngressEgressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_egress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_VoltstackClusterAr:
+		if fv, exists := v.FldValidators["site_type.voltstack_cluster_ar"]; exists {
+			val := m.GetSiteType().(*CreateSpecType_VoltstackClusterAr).VoltstackClusterAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("voltstack_cluster_ar"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3391,6 +4892,39 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhRegionChoice := v.RegionChoiceValidationRuleHandler
+	rulesRegionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRegionChoice(rulesRegionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.region_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_choice"] = vFn
+
+	vrhRegionChoiceAzureRegion := v.RegionChoiceAzureRegionValidationRuleHandler
+	rulesRegionChoiceAzureRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"westus3\",\"francecentral\",\"southafricanorth\",\"brazilsouth\",\"germanywestcentral\"]",
+	}
+	vFnMap["region_choice.azure_region"], err = vrhRegionChoiceAzureRegion(rulesRegionChoiceAzureRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.region_choice_azure_region: %s", err)
+		panic(errMsg)
+	}
+	vrhRegionChoiceAlternateRegion := v.RegionChoiceAlternateRegionValidationRuleHandler
+	rulesRegionChoiceAlternateRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"northcentralus\",\"koreacentral\",\"centralindia\",\"southindia\",\"australiacentral2\",\"australiacentral\",\"southafricanorth\",\"norwayeast\",\"swedencentral\",\"switzerlandnorth\",\"uaenorth\",\"uaecentral\",\"switzerlandwest\",\"norwaywest\",\"germanynorth\",\"francesouth\",\"canadaeast\",\"koreasouth\"]",
+	}
+	vFnMap["region_choice.alternate_region"], err = vrhRegionChoiceAlternateRegion(rulesRegionChoiceAlternateRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.region_choice_alternate_region: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["region_choice.azure_region"] = vFnMap["region_choice.azure_region"]
+	v.FldValidators["region_choice.alternate_region"] = vFnMap["region_choice.alternate_region"]
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3449,18 +4983,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["resource_group"] = vFn
-
-	vrhAzureRegion := v.AzureRegionValidationRuleHandler
-	rulesAzureRegion := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"francecentral\",\"southafricanorth\"]",
-	}
-	vFn, err = vrhAzureRegion(rulesAzureRegion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.azure_region: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["azure_region"] = vFn
 
 	vrhVnet := v.VnetValidationRuleHandler
 	rulesVnet := map[string]string{
@@ -3524,6 +5046,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
+	v.FldValidators["site_type.ingress_gw_ar"] = AzureVnetIngressGwARTypeValidator().Validate
+	v.FldValidators["site_type.ingress_egress_gw_ar"] = AzureVnetIngressEgressGwARTypeValidator().Validate
+	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterARTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
@@ -3561,6 +5086,14 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.voltstack_cluster")
+	}
+
+	if err := m.GetIngressEgressGwAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.ingress_egress_gw_ar")
+	}
+
+	if err := m.GetVoltstackClusterAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.voltstack_cluster_ar")
 	}
 
 	return nil
@@ -3782,6 +5315,28 @@ func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *GetSpecType_IngressGwAr:
+
+	case *GetSpecType_IngressEgressGwAr:
+		odrInfos, err = m.GetIngressEgressGwAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ingress_egress_gw_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GetSpecType_VoltstackClusterAr:
+		odrInfos, err = m.GetVoltstackClusterAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltstack_cluster_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -3805,6 +5360,29 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RegionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RegionChoiceAzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AzureRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
+	}
+	return oValidatorFn_AzureRegion, nil
+}
+func (v *ValidateGetSpecType) RegionChoiceAlternateRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AlternateRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for alternate_region")
+	}
+	return oValidatorFn_AlternateRegion, nil
 }
 
 func (v *ValidateGetSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3843,16 +5421,6 @@ func (v *ValidateGetSpecType) ResourceGroupValidationRuleHandler(rules map[strin
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) AzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
 	}
 
 	return validatorFn, nil
@@ -4002,15 +5570,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["azure_region"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("azure_region"))
-		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -4119,6 +5678,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["region_choice"]; exists {
+		val := m.GetRegionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("region_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRegionChoice().(type) {
+	case *GetSpecType_AzureRegion:
+		if fv, exists := v.FldValidators["region_choice.azure_region"]; exists {
+			val := m.GetRegionChoice().(*GetSpecType_AzureRegion).AzureRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("azure_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AlternateRegion:
+		if fv, exists := v.FldValidators["region_choice.alternate_region"]; exists {
+			val := m.GetRegionChoice().(*GetSpecType_AlternateRegion).AlternateRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("alternate_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["resource_group"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
@@ -4176,6 +5771,39 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("site_type"),
 				db.WithValidateField("voltstack_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_IngressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_gw_ar"]; exists {
+			val := m.GetSiteType().(*GetSpecType_IngressGwAr).IngressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_IngressEgressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_egress_gw_ar"]; exists {
+			val := m.GetSiteType().(*GetSpecType_IngressEgressGwAr).IngressEgressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_egress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_VoltstackClusterAr:
+		if fv, exists := v.FldValidators["site_type.voltstack_cluster_ar"]; exists {
+			val := m.GetSiteType().(*GetSpecType_VoltstackClusterAr).VoltstackClusterAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("voltstack_cluster_ar"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4303,6 +5931,39 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhRegionChoice := v.RegionChoiceValidationRuleHandler
+	rulesRegionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRegionChoice(rulesRegionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.region_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_choice"] = vFn
+
+	vrhRegionChoiceAzureRegion := v.RegionChoiceAzureRegionValidationRuleHandler
+	rulesRegionChoiceAzureRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"westus3\",\"francecentral\",\"southafricanorth\",\"brazilsouth\",\"germanywestcentral\"]",
+	}
+	vFnMap["region_choice.azure_region"], err = vrhRegionChoiceAzureRegion(rulesRegionChoiceAzureRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.region_choice_azure_region: %s", err)
+		panic(errMsg)
+	}
+	vrhRegionChoiceAlternateRegion := v.RegionChoiceAlternateRegionValidationRuleHandler
+	rulesRegionChoiceAlternateRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"northcentralus\",\"koreacentral\",\"centralindia\",\"southindia\",\"australiacentral2\",\"australiacentral\",\"southafricanorth\",\"norwayeast\",\"swedencentral\",\"switzerlandnorth\",\"uaenorth\",\"uaecentral\",\"switzerlandwest\",\"norwaywest\",\"germanynorth\",\"francesouth\",\"canadaeast\",\"koreasouth\"]",
+	}
+	vFnMap["region_choice.alternate_region"], err = vrhRegionChoiceAlternateRegion(rulesRegionChoiceAlternateRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.region_choice_alternate_region: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["region_choice.azure_region"] = vFnMap["region_choice.azure_region"]
+	v.FldValidators["region_choice.alternate_region"] = vFnMap["region_choice.alternate_region"]
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4361,18 +6022,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["resource_group"] = vFn
-
-	vrhAzureRegion := v.AzureRegionValidationRuleHandler
-	rulesAzureRegion := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"francecentral\",\"southafricanorth\"]",
-	}
-	vFn, err = vrhAzureRegion(rulesAzureRegion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.azure_region: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["azure_region"] = vFn
 
 	vrhVnet := v.VnetValidationRuleHandler
 	rulesVnet := map[string]string{
@@ -4470,6 +6119,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
+	v.FldValidators["site_type.ingress_gw_ar"] = AzureVnetIngressGwARTypeValidator().Validate
+	v.FldValidators["site_type.ingress_egress_gw_ar"] = AzureVnetIngressEgressGwARTypeValidator().Validate
+	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterARTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
@@ -4503,6 +6155,14 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.voltstack_cluster")
+	}
+
+	if err := m.GetIngressEgressGwAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.ingress_egress_gw_ar")
+	}
+
+	if err := m.GetVoltstackClusterAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.voltstack_cluster_ar")
 	}
 
 	return nil
@@ -4736,6 +6396,28 @@ func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *GlobalSpecType_IngressGwAr:
+
+	case *GlobalSpecType_IngressEgressGwAr:
+		odrInfos, err = m.GetIngressEgressGwAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ingress_egress_gw_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_VoltstackClusterAr:
+		odrInfos, err = m.GetVoltstackClusterAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltstack_cluster_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -4861,6 +6543,29 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) RegionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RegionChoiceAzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AzureRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
+	}
+	return oValidatorFn_AzureRegion, nil
+}
+func (v *ValidateGlobalSpecType) RegionChoiceAlternateRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AlternateRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for alternate_region")
+	}
+	return oValidatorFn_AlternateRegion, nil
+}
+
 func (v *ValidateGlobalSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4897,16 +6602,6 @@ func (v *ValidateGlobalSpecType) ResourceGroupValidationRuleHandler(rules map[st
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) AzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
 	}
 
 	return validatorFn, nil
@@ -5056,15 +6751,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["azure_region"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("azure_region"))
-		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -5182,6 +6868,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["region_choice"]; exists {
+		val := m.GetRegionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("region_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRegionChoice().(type) {
+	case *GlobalSpecType_AzureRegion:
+		if fv, exists := v.FldValidators["region_choice.azure_region"]; exists {
+			val := m.GetRegionChoice().(*GlobalSpecType_AzureRegion).AzureRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("azure_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AlternateRegion:
+		if fv, exists := v.FldValidators["region_choice.alternate_region"]; exists {
+			val := m.GetRegionChoice().(*GlobalSpecType_AlternateRegion).AlternateRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("alternate_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["resource_group"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("resource_group"))
@@ -5230,6 +6952,39 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("site_type"),
 				db.WithValidateField("voltstack_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_IngressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_gw_ar"]; exists {
+			val := m.GetSiteType().(*GlobalSpecType_IngressGwAr).IngressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_IngressEgressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_egress_gw_ar"]; exists {
+			val := m.GetSiteType().(*GlobalSpecType_IngressEgressGwAr).IngressEgressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_egress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_VoltstackClusterAr:
+		if fv, exists := v.FldValidators["site_type.voltstack_cluster_ar"]; exists {
+			val := m.GetSiteType().(*GlobalSpecType_VoltstackClusterAr).VoltstackClusterAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("voltstack_cluster_ar"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5384,6 +7139,39 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhRegionChoice := v.RegionChoiceValidationRuleHandler
+	rulesRegionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRegionChoice(rulesRegionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.region_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_choice"] = vFn
+
+	vrhRegionChoiceAzureRegion := v.RegionChoiceAzureRegionValidationRuleHandler
+	rulesRegionChoiceAzureRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"westus3\",\"francecentral\",\"southafricanorth\",\"brazilsouth\",\"germanywestcentral\"]",
+	}
+	vFnMap["region_choice.azure_region"], err = vrhRegionChoiceAzureRegion(rulesRegionChoiceAzureRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.region_choice_azure_region: %s", err)
+		panic(errMsg)
+	}
+	vrhRegionChoiceAlternateRegion := v.RegionChoiceAlternateRegionValidationRuleHandler
+	rulesRegionChoiceAlternateRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"northcentralus\",\"koreacentral\",\"centralindia\",\"southindia\",\"australiacentral2\",\"australiacentral\",\"southafricanorth\",\"norwayeast\",\"swedencentral\",\"switzerlandnorth\",\"uaenorth\",\"uaecentral\",\"switzerlandwest\",\"norwaywest\",\"germanynorth\",\"francesouth\",\"canadaeast\",\"koreasouth\"]",
+	}
+	vFnMap["region_choice.alternate_region"], err = vrhRegionChoiceAlternateRegion(rulesRegionChoiceAlternateRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.region_choice_alternate_region: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["region_choice.azure_region"] = vFnMap["region_choice.azure_region"]
+	v.FldValidators["region_choice.alternate_region"] = vFnMap["region_choice.alternate_region"]
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5442,18 +7230,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["resource_group"] = vFn
-
-	vrhAzureRegion := v.AzureRegionValidationRuleHandler
-	rulesAzureRegion := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"southeastasia\",\"centralus\",\"eastus\",\"eastus2\",\"southcentralus\",\"northeurope\",\"westeurope\",\"japaneast\",\"australiaeast\",\"canadacentral\",\"uksouth\",\"westus2\",\"francecentral\",\"southafricanorth\"]",
-	}
-	vFn, err = vrhAzureRegion(rulesAzureRegion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.azure_region: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["azure_region"] = vFn
 
 	vrhVnet := v.VnetValidationRuleHandler
 	rulesVnet := map[string]string{
@@ -5551,6 +7327,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
+	v.FldValidators["site_type.ingress_gw_ar"] = AzureVnetIngressGwARTypeValidator().Validate
+	v.FldValidators["site_type.ingress_egress_gw_ar"] = AzureVnetIngressEgressGwARTypeValidator().Validate
+	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterARTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
@@ -5592,6 +7371,14 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.voltstack_cluster")
+	}
+
+	if err := m.GetIngressEgressGwAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.ingress_egress_gw_ar")
+	}
+
+	if err := m.GetVoltstackClusterAr().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.voltstack_cluster_ar")
 	}
 
 	return nil
@@ -5739,6 +7526,28 @@ func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "voltstack_cluster." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *ReplaceSpecType_IngressGwAr:
+
+	case *ReplaceSpecType_IngressEgressGwAr:
+		odrInfos, err = m.GetIngressEgressGwAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ingress_egress_gw_ar." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *ReplaceSpecType_VoltstackClusterAr:
+		odrInfos, err = m.GetVoltstackClusterAr().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltstack_cluster_ar." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -5912,6 +7721,39 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_IngressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_gw_ar"]; exists {
+			val := m.GetSiteType().(*ReplaceSpecType_IngressGwAr).IngressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_IngressEgressGwAr:
+		if fv, exists := v.FldValidators["site_type.ingress_egress_gw_ar"]; exists {
+			val := m.GetSiteType().(*ReplaceSpecType_IngressEgressGwAr).IngressEgressGwAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("ingress_egress_gw_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_VoltstackClusterAr:
+		if fv, exists := v.FldValidators["site_type.voltstack_cluster_ar"]; exists {
+			val := m.GetSiteType().(*ReplaceSpecType_VoltstackClusterAr).VoltstackClusterAr
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("voltstack_cluster_ar"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6049,6 +7891,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterReplaceTypeValidator().Validate
+	v.FldValidators["site_type.ingress_egress_gw_ar"] = AzureVnetIngressEgressGwReplaceTypeValidator().Validate
+	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterReplaceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
@@ -6517,6 +8361,41 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetRegionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RegionChoice.(type) {
+	case nil:
+		o.RegionChoice = nil
+
+	case *CreateSpecType_AlternateRegion:
+		o.RegionChoice = &GlobalSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *CreateSpecType_AzureRegion:
+		o.RegionChoice = &GlobalSpecType_AzureRegion{AzureRegion: of.AzureRegion}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetRegionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RegionChoice.(type) {
+	case nil:
+		r.RegionChoice = nil
+
+	case *GlobalSpecType_AlternateRegion:
+		r.RegionChoice = &CreateSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *GlobalSpecType_AzureRegion:
+		r.RegionChoice = &CreateSpecType_AzureRegion{AzureRegion: of.AzureRegion}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -6525,11 +8404,20 @@ func (r *CreateSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_IngressEgressGw:
 		o.SiteType = &GlobalSpecType_IngressEgressGw{IngressEgressGw: of.IngressEgressGw}
 
+	case *CreateSpecType_IngressEgressGwAr:
+		o.SiteType = &GlobalSpecType_IngressEgressGwAr{IngressEgressGwAr: of.IngressEgressGwAr}
+
 	case *CreateSpecType_IngressGw:
 		o.SiteType = &GlobalSpecType_IngressGw{IngressGw: of.IngressGw}
 
+	case *CreateSpecType_IngressGwAr:
+		o.SiteType = &GlobalSpecType_IngressGwAr{IngressGwAr: of.IngressGwAr}
+
 	case *CreateSpecType_VoltstackCluster:
 		o.SiteType = &GlobalSpecType_VoltstackCluster{VoltstackCluster: of.VoltstackCluster}
+
+	case *CreateSpecType_VoltstackClusterAr:
+		o.SiteType = &GlobalSpecType_VoltstackClusterAr{VoltstackClusterAr: of.VoltstackClusterAr}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6545,11 +8433,20 @@ func (r *CreateSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error 
 	case *GlobalSpecType_IngressEgressGw:
 		r.SiteType = &CreateSpecType_IngressEgressGw{IngressEgressGw: of.IngressEgressGw}
 
+	case *GlobalSpecType_IngressEgressGwAr:
+		r.SiteType = &CreateSpecType_IngressEgressGwAr{IngressEgressGwAr: of.IngressEgressGwAr}
+
 	case *GlobalSpecType_IngressGw:
 		r.SiteType = &CreateSpecType_IngressGw{IngressGw: of.IngressGw}
 
+	case *GlobalSpecType_IngressGwAr:
+		r.SiteType = &CreateSpecType_IngressGwAr{IngressGwAr: of.IngressGwAr}
+
 	case *GlobalSpecType_VoltstackCluster:
 		r.SiteType = &CreateSpecType_VoltstackCluster{VoltstackCluster: of.VoltstackCluster}
+
+	case *GlobalSpecType_VoltstackClusterAr:
+		r.SiteType = &CreateSpecType_VoltstackClusterAr{VoltstackClusterAr: of.VoltstackClusterAr}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6603,13 +8500,13 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.Address = f.GetAddress()
-	m.AzureRegion = f.GetAzureRegion()
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
 	m.Os = f.GetOs()
+	m.GetRegionChoiceFromGlobalSpecType(f)
 	m.ResourceGroup = f.GetResourceGroup()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
@@ -6625,13 +8522,13 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.Address = m1.Address
-	f.AzureRegion = m1.AzureRegion
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
 	f.Os = m1.Os
+	m1.SetRegionChoiceToGlobalSpecType(f)
 	f.ResourceGroup = m1.ResourceGroup
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
@@ -6711,6 +8608,41 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetRegionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RegionChoice.(type) {
+	case nil:
+		o.RegionChoice = nil
+
+	case *GetSpecType_AlternateRegion:
+		o.RegionChoice = &GlobalSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *GetSpecType_AzureRegion:
+		o.RegionChoice = &GlobalSpecType_AzureRegion{AzureRegion: of.AzureRegion}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetRegionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RegionChoice.(type) {
+	case nil:
+		r.RegionChoice = nil
+
+	case *GlobalSpecType_AlternateRegion:
+		r.RegionChoice = &GetSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *GlobalSpecType_AzureRegion:
+		r.RegionChoice = &GetSpecType_AzureRegion{AzureRegion: of.AzureRegion}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -6719,11 +8651,20 @@ func (r *GetSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_IngressEgressGw:
 		o.SiteType = &GlobalSpecType_IngressEgressGw{IngressEgressGw: of.IngressEgressGw}
 
+	case *GetSpecType_IngressEgressGwAr:
+		o.SiteType = &GlobalSpecType_IngressEgressGwAr{IngressEgressGwAr: of.IngressEgressGwAr}
+
 	case *GetSpecType_IngressGw:
 		o.SiteType = &GlobalSpecType_IngressGw{IngressGw: of.IngressGw}
 
+	case *GetSpecType_IngressGwAr:
+		o.SiteType = &GlobalSpecType_IngressGwAr{IngressGwAr: of.IngressGwAr}
+
 	case *GetSpecType_VoltstackCluster:
 		o.SiteType = &GlobalSpecType_VoltstackCluster{VoltstackCluster: of.VoltstackCluster}
+
+	case *GetSpecType_VoltstackClusterAr:
+		o.SiteType = &GlobalSpecType_VoltstackClusterAr{VoltstackClusterAr: of.VoltstackClusterAr}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6739,11 +8680,20 @@ func (r *GetSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error {
 	case *GlobalSpecType_IngressEgressGw:
 		r.SiteType = &GetSpecType_IngressEgressGw{IngressEgressGw: of.IngressEgressGw}
 
+	case *GlobalSpecType_IngressEgressGwAr:
+		r.SiteType = &GetSpecType_IngressEgressGwAr{IngressEgressGwAr: of.IngressEgressGwAr}
+
 	case *GlobalSpecType_IngressGw:
 		r.SiteType = &GetSpecType_IngressGw{IngressGw: of.IngressGw}
 
+	case *GlobalSpecType_IngressGwAr:
+		r.SiteType = &GetSpecType_IngressGwAr{IngressGwAr: of.IngressGwAr}
+
 	case *GlobalSpecType_VoltstackCluster:
 		r.SiteType = &GetSpecType_VoltstackCluster{VoltstackCluster: of.VoltstackCluster}
+
+	case *GlobalSpecType_VoltstackClusterAr:
+		r.SiteType = &GetSpecType_VoltstackClusterAr{VoltstackClusterAr: of.VoltstackClusterAr}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6797,13 +8747,13 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.Address = f.GetAddress()
-	m.AzureRegion = f.GetAzureRegion()
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.GetRegionChoiceFromGlobalSpecType(f)
 	m.ResourceGroup = f.GetResourceGroup()
 
 	m.GetSiteTypeFromGlobalSpecType(f)
@@ -6821,13 +8771,13 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.Address = m1.Address
-	f.AzureRegion = m1.AzureRegion
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	m1.SetRegionChoiceToGlobalSpecType(f)
 	f.ResourceGroup = m1.ResourceGroup
 
 	m1.SetSiteTypeToGlobalSpecType(f)
@@ -6888,6 +8838,8 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		of.IngressEgressGw.ToAzureVnetIngressEgressGwType(f1)
 		o.SiteType = &GlobalSpecType_IngressEgressGw{IngressEgressGw: f1}
 
+	case *ReplaceSpecType_IngressEgressGwAr:
+
 	case *ReplaceSpecType_IngressGw:
 
 		f1 := o.GetIngressGw()
@@ -6897,6 +8849,8 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		of.IngressGw.ToAzureVnetIngressGwType(f1)
 		o.SiteType = &GlobalSpecType_IngressGw{IngressGw: f1}
 
+	case *ReplaceSpecType_IngressGwAr:
+
 	case *ReplaceSpecType_VoltstackCluster:
 
 		f1 := o.GetVoltstackCluster()
@@ -6905,6 +8859,8 @@ func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 		}
 		of.VoltstackCluster.ToAzureVnetVoltstackClusterType(f1)
 		o.SiteType = &GlobalSpecType_VoltstackCluster{VoltstackCluster: f1}
+
+	case *ReplaceSpecType_VoltstackClusterAr:
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6923,17 +8879,23 @@ func (r *ReplaceSpecType) GetSiteTypeFromGlobalSpecType(o *GlobalSpecType) error
 		f1.FromAzureVnetIngressEgressGwType(of.IngressEgressGw)
 		r.SiteType = &ReplaceSpecType_IngressEgressGw{IngressEgressGw: f1}
 
+	case *GlobalSpecType_IngressEgressGwAr:
+
 	case *GlobalSpecType_IngressGw:
 
 		f1 := &AzureVnetIngressGwReplaceType{}
 		f1.FromAzureVnetIngressGwType(of.IngressGw)
 		r.SiteType = &ReplaceSpecType_IngressGw{IngressGw: f1}
 
+	case *GlobalSpecType_IngressGwAr:
+
 	case *GlobalSpecType_VoltstackCluster:
 
 		f1 := &AzureVnetVoltstackClusterReplaceType{}
 		f1.FromAzureVnetVoltstackClusterType(of.VoltstackCluster)
 		r.SiteType = &ReplaceSpecType_VoltstackCluster{VoltstackCluster: f1}
+
+	case *GlobalSpecType_VoltstackClusterAr:
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

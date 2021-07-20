@@ -2110,6 +2110,89 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "azure_vnet_siteAzureVnetIngressEgressGwARType": {
+            "type": "object",
+            "description": "Two interface Azure ingress/egress site on Alternate Region with no support for zones",
+            "title": "Azure Ingress Egress Gateway on Alternate Region",
+            "x-displayname": "Azure Ingress/Egress Gateway on Alternate Region",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
+            "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType",
+            "properties": {
+                "active_forward_proxy_policies": {
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "title": "Enable Forward Proxy and Manage Policies",
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                },
+                "active_network_policies": {
+                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "title": "Manage Network Policy",
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                },
+                "azure_certified_hw": {
+                    "type": "string",
+                    "description": " Name for Azure certified hardware.\n\nExample: - \"azure-byol-multi-nic-voltmesh\"-\nRequired: YES",
+                    "title": "Azure Certified Hardware",
+                    "x-displayname": "Azure Certified Hardware",
+                    "x-ves-example": "azure-byol-multi-nic-voltmesh",
+                    "x-ves-required": "true"
+                },
+                "forward_proxy_allow_all": {
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "title": "Enable Forward Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "global_network_list": {
+                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "title": "Connect Global Networks",
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                },
+                "inside_static_routes": {
+                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                },
+                "no_forward_proxy": {
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "title": "Disable Forward Proxy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_global_network": {
+                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_inside_static_routes": {
+                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_network_policy": {
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "title": "Do Not Manage Network Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_outside_static_routes": {
+                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "node": {
+                    "description": " Ingress/Egress Gateway (Two Interface) Node information.",
+                    "title": "Node Information",
+                    "$ref": "#/definitions/viewsAzureVnetTwoInterfaceNodeARType",
+                    "x-displayname": "Ingress/Egress Gateway (Two Interface) Node information"
+                },
+                "outside_static_routes": {
+                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                }
+            }
+        },
         "azure_vnet_siteAzureVnetIngressEgressGwReplaceType": {
             "type": "object",
             "description": "Two interface Azure ingress/egress site",
@@ -2182,8 +2265,8 @@ var APISwaggerJSON string = `{
         "azure_vnet_siteAzureVnetIngressEgressGwType": {
             "type": "object",
             "description": "Two interface Azure ingress/egress site",
-            "title": "Azure Ingress Egress Gateway",
-            "x-displayname": "Azure Ingress/Egress Gateway",
+            "title": "Azure Ingress Egress Gateway on Recommended Region",
+            "x-displayname": "Azure Ingress/Egress Gateway on Recommended Region",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
@@ -2265,6 +2348,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "azure_vnet_siteAzureVnetIngressGwARType": {
+            "type": "object",
+            "description": "Single interface Azure ingress site",
+            "title": "Azure Ingress Gateway on Alternate Region",
+            "x-displayname": "Azure Ingress Gateway on Alternate Region",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType",
+            "properties": {
+                "azure_certified_hw": {
+                    "type": "string",
+                    "description": " Name for Azure certified hardware.\n\nExample: - \"azure-byol-voltmesh\"-\nRequired: YES",
+                    "title": "Azure Certified Hardware",
+                    "x-displayname": "Azure Certified Hardware",
+                    "x-ves-example": "azure-byol-voltmesh",
+                    "x-ves-required": "true"
+                },
+                "node": {
+                    "description": " Ingress Gateway (One Interface) Node information",
+                    "title": "Node Information",
+                    "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeARType",
+                    "x-displayname": "Ingress Gateway (One Interface) Node information"
+                }
+            }
+        },
         "azure_vnet_siteAzureVnetIngressGwReplaceType": {
             "type": "object",
             "description": "Single interface Azure ingress site",
@@ -2274,9 +2381,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetIngressGwType": {
             "type": "object",
-            "description": "Single interface Azure ingress site",
-            "title": "Azure Ingress Gateway",
-            "x-displayname": "Azure Ingress Gateway",
+            "description": "Single interface Azure ingress site on on Recommended Region",
+            "title": "Azure Ingress Gateway on Recommended Region",
+            "x-displayname": "Azure Ingress Gateway on Recommended Region",
             "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType",
             "properties": {
@@ -2296,6 +2403,89 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Azure Certified Hardware",
                     "x-ves-example": "azure-byol-voltmesh",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "azure_vnet_siteAzureVnetVoltstackClusterARType": {
+            "type": "object",
+            "description": "Voltstack Cluster of single interface Azure nodes",
+            "title": "Azure Voltstack Cluster on Alternate Region",
+            "x-displayname": "Azure Voltstack Cluster on Alternate Region",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
+            "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType",
+            "properties": {
+                "active_forward_proxy_policies": {
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "title": "Enable Forward Proxy and Manage Policies",
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                },
+                "active_network_policies": {
+                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "title": "Manage Network Policy",
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                },
+                "azure_certified_hw": {
+                    "type": "string",
+                    "description": " Name for Azure certified hardware.\n\nExample: - \"azure-byol-voltstack-combo\"-\nRequired: YES",
+                    "title": "Azure Certified Hardware",
+                    "x-displayname": "Azure Certified Hardware",
+                    "x-ves-example": "azure-byol-voltstack-combo",
+                    "x-ves-required": "true"
+                },
+                "forward_proxy_allow_all": {
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "title": "Enable Forward Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "global_network_list": {
+                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "title": "Connect Global Networks",
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                },
+                "k8s_cluster": {
+                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "title": "Enable Site Local K8s API access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "no_forward_proxy": {
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "title": "Disable Forward Proxy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_global_network": {
+                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_k8s_cluster": {
+                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "title": "Disable Site Local K8s API access",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_network_policy": {
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "title": "Do Not Manage Network Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_outside_static_routes": {
+                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "node": {
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.",
+                    "title": "Node Information",
+                    "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeARType",
+                    "x-displayname": "Ingress Gateway (One Interface) Node information"
+                },
+                "outside_static_routes": {
+                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 }
             }
         },
@@ -2360,8 +2550,8 @@ var APISwaggerJSON string = `{
         "azure_vnet_siteAzureVnetVoltstackClusterType": {
             "type": "object",
             "description": "Voltstack Cluster of single interface Azure nodes",
-            "title": "Azure Voltstack Cluster",
-            "x-displayname": "Azure Voltstack Cluster",
+            "title": "Azure Voltstack Cluster on Recommended Region",
+            "x-displayname": "Azure Voltstack Cluster on Recommended Region",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
@@ -4284,11 +4474,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\nRequired: YES",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
-                    "x-ves-example": "us-east-2a",
-                    "x-ves-required": "true"
+                    "x-ves-example": "us-east-2a"
                 },
                 "inside_vip": {
                     "type": "array",
@@ -4415,6 +4604,46 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsAzureVnetOneInterfaceNodeARType": {
+            "type": "object",
+            "description": "Parameters for creating Single interface Node for Alternate Region",
+            "title": "Single Interface Node for Alternate Region",
+            "x-displayname": "Single Interface Node for Alternate Region",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetOneInterfaceNodeARType",
+            "properties": {
+                "fault_domain": {
+                    "type": "integer",
+                    "description": " Namuber of fault domains to be used while creating the availability set\n\nExample: - \"1\"-",
+                    "title": "Number of fault domains",
+                    "format": "int64",
+                    "x-displayname": "Number of fault domains",
+                    "x-ves-example": "1"
+                },
+                "local_subnet": {
+                    "description": " Subnets for the site local interface of the node",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsAzureSubnetChoiceType",
+                    "x-displayname": "Subnet for local Interface"
+                },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of main nodes to create, either 1 or 3.\nRequired: YES",
+                    "title": "Number of main nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of main nodes",
+                    "x-ves-required": "true"
+                },
+                "update_domain": {
+                    "type": "integer",
+                    "description": " Namuber of update domains to be used while creating the availability set\n\nExample: - \"1\"-",
+                    "title": "Number of update domains",
+                    "format": "int64",
+                    "x-displayname": "Number of update domains",
+                    "x-ves-example": "1"
+                }
+            }
+        },
         "viewsAzureVnetOneInterfaceNodeType": {
             "type": "object",
             "description": "Parameters for creating Single interface Node in one AZ",
@@ -4472,6 +4701,52 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IPv4 CIDR block",
                     "x-ves-example": "10.1.0.0/16",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "viewsAzureVnetTwoInterfaceNodeARType": {
+            "type": "object",
+            "description": "Parameters for creating two interface Node in one AZ",
+            "title": "Two Interface Node",
+            "x-displayname": "Two Interface Node",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetTwoInterfaceNodeARType",
+            "properties": {
+                "fault_domain": {
+                    "type": "integer",
+                    "description": " Namuber of fault domains to be used while creating the availability set\n\nExample: - \"1\"-",
+                    "title": "Number of fault domains",
+                    "format": "int64",
+                    "x-displayname": "Number of fault domains",
+                    "x-ves-example": "1"
+                },
+                "inside_subnet": {
+                    "description": " Subnets for the inside interface of the node",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsAzureSubnetChoiceType",
+                    "x-displayname": "Subnet for Inside Interface"
+                },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of main nodes to create, either 1 or 3.\nRequired: YES",
+                    "title": "Number of main nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of main nodes",
+                    "x-ves-required": "true"
+                },
+                "outside_subnet": {
+                    "description": " Subnets for the outside interface of the node",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsAzureSubnetChoiceType",
+                    "x-displayname": "Subnet for Outside Interface"
+                },
+                "update_domain": {
+                    "type": "integer",
+                    "description": " Namuber of update domains to be used while creating the availability set\n\nExample: - \"1\"-",
+                    "title": "Number of update domains",
+                    "format": "int64",
+                    "x-displayname": "Number of update domains",
+                    "x-ves-example": "1"
                 }
             }
         },
@@ -4714,7 +4989,8 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Azure Vnet site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-region_choice": "[\"alternate_region\",\"azure_region\"]",
+            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_egress_gw_ar\",\"ingress_gw\",\"ingress_gw_ar\",\"voltstack_cluster\",\"voltstack_cluster_ar\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.CreateSpecType",
             "properties": {
@@ -4723,6 +4999,10 @@ var APISwaggerJSON string = `{
                     "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code"
+                },
+                "alternate_region": {
+                    "type": "string",
+                    "description": "Exclusive with [azure_region]\n"
                 },
                 "assisted": {
                     "description": "Exclusive with [azure_cred]\n",
@@ -4734,10 +5014,7 @@ var APISwaggerJSON string = `{
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": " name for azure region in which this site will be launched.\n\nExample: - \"East US\"-\nRequired: YES",
-                    "x-displayname": "Azure Region",
-                    "x-ves-example": "East US",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [alternate_region]\n"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -4752,12 +5029,20 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "80"
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_gw voltstack_cluster]\n",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
                 },
+                "ingress_egress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\n",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "ingress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
@@ -4819,8 +5104,12 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                },
+                "voltstack_cluster_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
                 }
             }
         },
@@ -4831,7 +5120,8 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Azure Vnet site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-region_choice": "[\"alternate_region\",\"azure_region\"]",
+            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_egress_gw_ar\",\"ingress_gw\",\"ingress_gw_ar\",\"voltstack_cluster\",\"voltstack_cluster_ar\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GetSpecType",
             "properties": {
@@ -4840,6 +5130,10 @@ var APISwaggerJSON string = `{
                     "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code"
+                },
+                "alternate_region": {
+                    "type": "string",
+                    "description": "Exclusive with [azure_region]\n"
                 },
                 "assisted": {
                     "description": "Exclusive with [azure_cred]\n",
@@ -4851,10 +5145,7 @@ var APISwaggerJSON string = `{
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": " name for azure region in which this site will be launched.\n\nExample: - \"East US\"-\nRequired: YES",
-                    "x-displayname": "Azure Region",
-                    "x-ves-example": "East US",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [alternate_region]\n"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -4869,12 +5160,20 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "80"
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_gw voltstack_cluster]\n",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
                 },
+                "ingress_egress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\n",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "ingress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
@@ -4947,8 +5246,12 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                },
+                "voltstack_cluster_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\n",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
                 }
             }
         },
@@ -4959,7 +5262,8 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-region_choice": "[\"alternate_region\",\"azure_region\"]",
+            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_egress_gw_ar\",\"ingress_gw\",\"ingress_gw_ar\",\"voltstack_cluster\",\"voltstack_cluster_ar\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GlobalSpecType",
             "properties": {
@@ -4969,6 +5273,11 @@ var APISwaggerJSON string = `{
                     "title": "address",
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code"
+                },
+                "alternate_region": {
+                    "type": "string",
+                    "description": "Exclusive with [azure_region]\nx-displayName: \"Alternate Azure Region Name\"\nx-example: \"northcentralus\"\nName of the azure region which does not support availability zones.",
+                    "title": "Alternate Azure Region Name"
                 },
                 "assisted": {
                     "description": "Exclusive with [azure_cred]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
@@ -4982,11 +5291,8 @@ var APISwaggerJSON string = `{
                 },
                 "azure_region": {
                     "type": "string",
-                    "description": " name for azure region in which this site will be launched.\n\nExample: - \"East US\"-\nRequired: YES",
-                    "title": "Azure Region",
-                    "x-displayname": "Azure Region",
-                    "x-ves-example": "East US",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [alternate_region]\nx-displayName: \"Recommended Azure Region Name\"\nx-example: \"eastus\"\nName of the azure region which supports availability zones.",
+                    "title": "Recommended Azure Region Name"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -5003,14 +5309,24 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "80"
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_gw voltstack_cluster]\nx-displayName: \"Ingress/Egress Gateway (Two Interface)\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
-                    "title": "Two Interface Site",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Recommended Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "title": "Ingress/Egress Gateway on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType"
                 },
+                "ingress_egress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Alternate Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "title": "Ingress/Egress Gateway on Alternate Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType"
+                },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway (One Interface)\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
-                    "title": "Ingress Gateway",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Recommended Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "title": "Ingress Gateway on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "ingress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Alternate Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "title": "Ingress Gateway on Alternate Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
@@ -5116,9 +5432,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\nx-displayName: \"Voltstack Cluster (One Interface) on Recommended Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "Voltstack Cluster on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
+                },
+                "voltstack_cluster_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\nx-displayName: \"Voltstack Cluster (One Interface) on Alternate Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "Voltstack Cluster on Alternate Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARType"
                 }
             }
         },
@@ -5128,7 +5449,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace Azure Vnet site",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_egress_gw_ar\",\"ingress_gw\",\"ingress_gw_ar\",\"voltstack_cluster\",\"voltstack_cluster_ar\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ReplaceSpecType",
             "properties": {
@@ -5144,13 +5465,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_gw voltstack_cluster]\nx-displayName: \"Ingress Egress Gateway\"\nIngress-egress gateway choice can not be changed, edit networking config.",
-                    "title": "Ingress Egress Gateway",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Egress Gateway on Recommended Region\"\nIngress-egress gateway choice can not be changed, edit networking config.",
+                    "title": "Ingress Egress Gateway on Recommended Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwReplaceType"
+                },
+                "ingress_egress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Alternate Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "title": "Ingress/Egress Gateway on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwReplaceType"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway\"\nIngress gateway choice can not be changed (no config available for editing)",
-                    "title": "Ingress Gateway",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway on Recommended Region\"\nIngress gateway choice can not be changed (no config available for editing)",
+                    "title": "Ingress Gateway on Recommended Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType"
+                },
+                "ingress_gw_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Alternate Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "title": "Ingress Gateway on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType"
                 },
                 "log_receiver": {
@@ -5176,8 +5507,13 @@ var APISwaggerJSON string = `{
                     "format": "int64"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
-                    "title": "Voltstack Cluster",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster_ar]\nx-displayName: \"Voltstack Cluster (One Interface) on Recommended Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "Voltstack Cluster on Recommended Region",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType"
+                },
+                "voltstack_cluster_ar": {
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\nx-displayName: \"Voltstack Cluster (One Interface) on Alternate Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
+                    "title": "Voltstack Cluster on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType"
                 }
             }

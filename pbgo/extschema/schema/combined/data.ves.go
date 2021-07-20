@@ -10639,6 +10639,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType"] = mInfo
 	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VGPUConfiguration",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.VGPUConfiguration"] = mInfo
+	}
 
 	pInfo = &svcfw.PkgInfo{
 		Name:      svcfw.PkgName("ves.io.schema.fleet.crudapi"),
@@ -12023,6 +12030,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.k8s_cluster.ApplicationDashboardType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ApplicationMetricsServerType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.k8s_cluster.ApplicationMetricsServerType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ClusterRoleBindingListType",
@@ -27862,6 +27876,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "CascadeDelete",
+		InMsgType:    "ves.io.schema.user.PrivateCascadeDeleteRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.CascadeDeleteResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/write/namespaces/{namespace}/users/cascade_delete"}}
+	aInfo.RPCsInfo[svcfw.RPCName("CascadeDelete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.CustomPrivateAPI.CascadeDelete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "UpdateLastLogin",
 		InMsgType:    "ves.io.schema.user.LastLoginUpdateRequest",
 		InStreaming:  false,
@@ -27893,6 +27920,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.user.LastLoginUpdateResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PrivateCascadeDeleteRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.PrivateCascadeDeleteRequest"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{
@@ -28319,13 +28353,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.user.ListUserRoleResponseItem"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "NamespaceAccess",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.user.NamespaceAccess"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "NamespaceRoleType",
@@ -29353,6 +29380,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.AzureVnetChoiceType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetOneInterfaceNodeARType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AzureVnetOneInterfaceNodeARType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetOneInterfaceNodeType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -29365,6 +29399,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.AzureVnetParamsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetTwoInterfaceNodeARType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AzureVnetTwoInterfaceNodeARType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetTwoInterfaceNodeType",
@@ -31217,6 +31258,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetIngressEgressGwARType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetIngressEgressGwReplaceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -31231,6 +31279,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetIngressGwARType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetIngressGwReplaceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -31243,6 +31298,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetVoltstackClusterARType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetVoltstackClusterReplaceType",
@@ -35469,6 +35531,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.FileIdx["ves.io/schema/views/terraform_parameters/azure_types.proto"] = fInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AvailabilitySetsInfoType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.AvailabilitySetsInfoType"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureExistingSubnetParamType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),

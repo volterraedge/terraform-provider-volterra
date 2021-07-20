@@ -1030,6 +1030,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDeviceNetappTridentType"] = ves_io_schema_fleet.StorageDeviceNetappTridentTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDeviceOpenebsEnterpriseType"] = ves_io_schema_fleet.StorageDeviceOpenebsEnterpriseTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType"] = ves_io_schema_fleet.StorageDevicePureStorageServiceOrchestratorTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.fleet.VGPUConfiguration"] = ves_io_schema_fleet.VGPUConfigurationValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectCreateReq"] = ves_io_schema_fleet_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectCreateRsp"] = ves_io_schema_fleet_crudapi.ObjectCreateRspValidator()
@@ -1120,6 +1121,7 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationArgoCDType"] = ves_io_schema_k8s_cluster.ApplicationArgoCDTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationDashboardType"] = ves_io_schema_k8s_cluster.ApplicationDashboardTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationMetricsServerType"] = ves_io_schema_k8s_cluster.ApplicationMetricsServerTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterRoleBindingListType"] = ves_io_schema_k8s_cluster.ClusterRoleBindingListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterRoleListType"] = ves_io_schema_k8s_cluster.ClusterRoleListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterWideAppListType"] = ves_io_schema_k8s_cluster.ClusterWideAppListTypeValidator()
@@ -2232,6 +2234,7 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.user.LastLoginUpdateRequest"] = ves_io_schema_user.LastLoginUpdateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.LastLoginUpdateResponse"] = ves_io_schema_user.LastLoginUpdateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.PrivateCascadeDeleteRequest"] = ves_io_schema_user.PrivateCascadeDeleteRequestValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.user.CreateRequest"] = ves_io_schema_user.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.CreateResponse"] = ves_io_schema_user.CreateResponseValidator()
@@ -2259,7 +2262,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleRequest"] = ves_io_schema_user.ListUserRoleRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponse"] = ves_io_schema_user.ListUserRoleResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponseItem"] = ves_io_schema_user.ListUserRoleResponseItemValidator()
-	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceAccess"] = ves_io_schema_user.NamespaceAccessValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceRoleType"] = ves_io_schema_user.NamespaceRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
@@ -2346,8 +2348,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureSubnetChoiceType"] = ves_io_schema_views.AzureSubnetChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureSubnetType"] = ves_io_schema_views.AzureSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetChoiceType"] = ves_io_schema_views.AzureVnetChoiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetOneInterfaceNodeARType"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetOneInterfaceNodeType"] = ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetParamsType"] = ves_io_schema_views.AzureVnetParamsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetTwoInterfaceNodeARType"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetTwoInterfaceNodeType"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetType"] = ves_io_schema_views.AzureVnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.CloudSubnetParamType"] = ves_io_schema_views.CloudSubnetParamTypeValidator()
@@ -2496,10 +2500,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.CreateSpecType"] = ves_io_schema_views_azure_vnet_site.CreateSpecTypeValidator()
@@ -2813,6 +2820,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.CloudSubnetType"] = ves_io_schema_views_terraform_parameters.CloudSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.SubnetType"] = ves_io_schema_views_terraform_parameters.SubnetTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AvailabilitySetsInfoType"] = ves_io_schema_views_terraform_parameters.AvailabilitySetsInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureExistingSubnetParamTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureInstanceType"] = ves_io_schema_views_terraform_parameters.AzureInstanceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetChoice"] = ves_io_schema_views_terraform_parameters.AzureSubnetChoiceValidator()
@@ -4428,7 +4436,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_config", "device_list", "interface_list"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
 				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
@@ -4518,7 +4526,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_config", "device_list", "interface_list"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
 				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
@@ -4608,7 +4616,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
 				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
@@ -4727,7 +4735,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
 				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
@@ -4894,7 +4902,7 @@ func init() {
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
 			},
 			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
+				sets.NewString([]string{"argo_cd", "dashboard", "metrics_server"}...),
 			},
 			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4920,7 +4928,7 @@ func init() {
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
 			},
 			"spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
+				sets.NewString([]string{"argo_cd", "dashboard", "metrics_server"}...),
 			},
 			"spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4946,7 +4954,7 @@ func init() {
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
+				sets.NewString([]string{"argo_cd", "dashboard", "metrics_server"}...),
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -4972,7 +4980,7 @@ func init() {
 				sets.NewString([]string{"use_custom_psp_list", "use_default_psp"}...),
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps": []sets.String{
-				sets.NewString([]string{"argo_cd", "dashboard"}...),
+				sets.NewString([]string{"argo_cd", "dashboard", "metrics_server"}...),
 			},
 			"spec.gc_spec.cluster_wide_app_list.cluster_wide_apps.argo_cd.local_domain": []sets.String{
 				sets.NewString([]string{"default_port", "port"}...),
@@ -7381,8 +7389,9 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
+				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"assisted", "azure_cred"}...),
-				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
@@ -7444,10 +7453,74 @@ func init() {
 			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.ingress_egress_gw_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.node.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw_ar.node.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.ingress_egress_gw_ar.node.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw_ar.node.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 			"spec.ingress_gw.az_nodes.local_subnet": []sets.String{
 				sets.NewString([]string{"subnet", "subnet_param"}...),
 			},
 			"spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.ingress_gw_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_gw_ar.node.local_subnet.subnet": []sets.String{
 				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
 			},
 			"spec.os": []sets.String{
@@ -7505,13 +7578,56 @@ func init() {
 			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.voltstack_cluster_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.voltstack_cluster_ar.node.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 		},
 	}
 
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
@@ -7561,6 +7677,52 @@ func init() {
 			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.ingress_egress_gw_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 			"spec.voltstack_cluster": []sets.String{
 				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
 				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
@@ -7597,14 +7759,51 @@ func init() {
 			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.voltstack_cluster_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 		},
 	}
 
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"assisted", "azure_cred"}...),
-				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
@@ -7666,10 +7865,74 @@ func init() {
 			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.gc_spec.ingress_egress_gw_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
 				sets.NewString([]string{"subnet", "subnet_param"}...),
 			},
 			"spec.gc_spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_gw_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet": []sets.String{
 				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
 			},
 			"spec.gc_spec.os": []sets.String{
@@ -7725,6 +7988,49 @@ func init() {
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 		},
@@ -7733,8 +8039,9 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"assisted", "azure_cred"}...),
-				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
 			},
@@ -7796,10 +8103,74 @@ func init() {
 			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
+			"spec.gc_spec.ingress_egress_gw_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
 			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
 				sets.NewString([]string{"subnet", "subnet_param"}...),
 			},
 			"spec.gc_spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_gw_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet": []sets.String{
 				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
 			},
 			"spec.gc_spec.os": []sets.String{
@@ -7855,6 +8226,49 @@ func init() {
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.node.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster_ar.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 		},
@@ -9433,7 +9847,7 @@ func init() {
 				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
 				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
 				sets.NewString([]string{"custom_storage_config", "default_storage_config"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"local_control_plane", "no_local_control_plane"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
@@ -9662,7 +10076,7 @@ func init() {
 				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
 				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
 				sets.NewString([]string{"custom_storage_config", "default_storage_config"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"local_control_plane", "no_local_control_plane"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
@@ -9885,7 +10299,7 @@ func init() {
 				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
 				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
 				sets.NewString([]string{"custom_storage_config", "default_storage_config"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"local_control_plane", "no_local_control_plane"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
@@ -10114,7 +10528,7 @@ func init() {
 				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
 				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
 				sets.NewString([]string{"custom_storage_config", "default_storage_config"}...),
-				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"k8s_cluster", "no_k8s_cluster"}...),
 				sets.NewString([]string{"local_control_plane", "no_local_control_plane"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),

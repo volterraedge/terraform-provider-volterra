@@ -387,6 +387,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
 		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -466,6 +467,7 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
 		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -778,6 +780,7 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
 		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -856,6 +859,7 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
 		q.Add("expiration_timestamp", fmt.Sprintf("%v", req.ExpirationTimestamp))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -2620,6 +2624,14 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.api_credential.CreateRequest",
             "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": "Qty of days of service credential expiration.\n\nExample: -\"value\"-",
+                    "title": "Expiry in days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in days",
+                    "x-ves-example": "value"
+                },
                 "expiration_timestamp": {
                     "type": "string",
                     "description": "Timestamp of credential expiration.",
@@ -2676,13 +2688,20 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Create Service Credentials Request",
             "x-ves-proto-message": "ves.io.schema.api_credential.CreateServiceCredentialsRequest",
             "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": " Qty of days of service credential expiration.\n\nExample: - \"value\"-",
+                    "title": "Expiry in days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in days",
+                    "x-ves-example": "value"
+                },
                 "expiration_timestamp": {
                     "type": "string",
-                    "description": " Timestamp of service credential expiration.\n\nExample: - \"value\"-",
+                    "description": " Timestamp of credential expiration.",
                     "title": "Expiry timestamp",
                     "format": "date-time",
-                    "x-displayname": "Expiry timestamp",
-                    "x-ves-example": "value"
+                    "x-displayname": "Expiry timestamp"
                 },
                 "name": {
                     "type": "string",
@@ -2908,6 +2927,14 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Renew Credentials",
             "x-ves-proto-message": "ves.io.schema.api_credential.RenewRequest",
             "properties": {
+                "expiration_days": {
+                    "type": "integer",
+                    "description": " Qty of days of service credential expiration.\n\nExample: - \"value\"-",
+                    "title": "Expiry in days",
+                    "format": "int64",
+                    "x-displayname": "Expiry in days",
+                    "x-ves-example": "value"
+                },
                 "expiration_timestamp": {
                     "type": "string",
                     "description": " Timestamp of credential expiration.",

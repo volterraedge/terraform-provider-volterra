@@ -2829,6 +2829,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "k8s_clusterApplicationMetricsServerType": {
+            "type": "object",
+            "description": "description\nParameters for Kubernetes Metrics Server application",
+            "title": "K8s Metrics Server configuration",
+            "x-displayname": "K8s Metrics Server configuration",
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.ApplicationMetricsServerType",
+            "properties": {
+                "generated_yaml": {
+                    "type": "string",
+                    "description": " Generated YAML",
+                    "title": "Generated YAML",
+                    "x-displayname": "Generated YAML"
+                }
+            }
+        },
         "k8s_clusterClusterRoleBindingListType": {
             "type": "object",
             "description": "List of active cluster role binding list for a K8s cluster",
@@ -2891,18 +2906,23 @@ var APISwaggerJSON string = `{
             "description": "Cluster wide application configuration",
             "title": "Cluster Wide Application",
             "x-displayname": "Cluster Wide Application",
-            "x-ves-oneof-field-app_choice": "[\"argo_cd\",\"dashboard\"]",
+            "x-ves-oneof-field-app_choice": "[\"argo_cd\",\"dashboard\",\"metrics_server\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ClusterWideAppType",
             "properties": {
                 "argo_cd": {
-                    "description": "Exclusive with [dashboard]\nx-displayName: \"Argo CD\"\nDeploy Argo Continuous Deployment(CD) application",
+                    "description": "Exclusive with [dashboard metrics_server]\nx-displayName: \"Argo CD\"\nDeploy Argo Continuous Deployment(CD) application",
                     "title": "Argo CD",
                     "$ref": "#/definitions/k8s_clusterApplicationArgoCDType"
                 },
                 "dashboard": {
-                    "description": "Exclusive with [argo_cd]\nx-displayName: \"K8s Dashboard\"\nDeploy Kubernetes Dashboard application",
+                    "description": "Exclusive with [argo_cd metrics_server]\nx-displayName: \"K8s Dashboard\"\nDeploy Kubernetes Dashboard application",
                     "title": "K8s Dashboard",
                     "$ref": "#/definitions/k8s_clusterApplicationDashboardType"
+                },
+                "metrics_server": {
+                    "description": "Exclusive with [argo_cd dashboard]\nx-displayName: \"K8s Metrics Server\"\nDeploy Kubernetes Metrics Server application",
+                    "title": "K8s Metrics Server",
+                    "$ref": "#/definitions/k8s_clusterApplicationMetricsServerType"
                 }
             }
         },

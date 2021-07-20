@@ -36,6 +36,15 @@ type CustomPrivateAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomPrivateAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &PrivateCascadeDeleteRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.PrivateCascadeDeleteRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomPrivateAPIGrpcClient) doRPCUpdateLastLogin(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LastLoginUpdateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -75,6 +84,8 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomPrivateAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
 	rpcFns["UpdateLastLogin"] = ccl.doRPCUpdateLastLogin
 
 	ccl.rpcFns = rpcFns
@@ -88,6 +99,84 @@ type CustomPrivateAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &PrivateCascadeDeleteRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.PrivateCascadeDeleteRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("email", fmt.Sprintf("%v", req.Email))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("tenant_name", fmt.Sprintf("%v", req.TenantName))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CascadeDeleteResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomPrivateAPIRestClient) doRPCUpdateLastLogin(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -192,6 +281,8 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
 	rpcFns["UpdateLastLogin"] = ccl.doRPCUpdateLastLogin
 
 	ccl.rpcFns = rpcFns
@@ -206,6 +297,34 @@ type CustomPrivateAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *CustomPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
+	cah, ok := ah.(CustomPrivateAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPISrv", ah)
+	}
+
+	var (
+		rsp *CascadeDeleteResponse
+		err error
+	)
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.CascadeDelete"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CascadeDelete(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 func (c *CustomPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest, opts ...grpc.CallOption) (*LastLoginUpdateResponse, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
 	cah, ok := ah.(CustomPrivateAPIServer)
@@ -352,6 +471,96 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         },
+        "/ves.io.schema/introspect/write/namespaces/{namespace}/users/cascade_delete": {
+            "post": {
+                "summary": "CascadeDelete",
+                "description": "CascadeDelete deletes the user and associated namespace roles for this user.\nUse this only if the user and its referenced objects need to be wiped out altogether.\nNote: users will always be in the system namespace.",
+                "operationId": "ves.io.schema.user.CustomPrivateAPI.CascadeDelete",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/userCascadeDeleteResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userPrivateCascadeDeleteRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomPrivateAPI-CascadeDelete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.CascadeDelete"
+            },
+            "x-displayname": "Custom Private API",
+            "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/ves.io.schema/introspect/write/private/custom/namespaces/system/users/update_last_login": {
             "post": {
                 "summary": "Update Last Login",
@@ -438,6 +647,69 @@ var CustomPrivateAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "userCascadeDeleteItemType": {
+            "type": "object",
+            "description": "CascadeDeleteItemType contains details of object that was handled as part of cascade delete\nof user and whether it was successfully deleted",
+            "title": "CascadeDeleteItemType",
+            "x-displayname": "Cascade Deletion of User and Associated Namespace Roles",
+            "x-ves-proto-message": "ves.io.schema.user.CascadeDeleteItemType",
+            "properties": {
+                "error_message": {
+                    "type": "string",
+                    "description": " informative error message about the success or failure of the object's deletion response\n\nExample: - \"value\"-",
+                    "title": "error message",
+                    "x-displayname": "Error Message",
+                    "x-ves-example": "value"
+                },
+                "object_name": {
+                    "type": "string",
+                    "description": " Name of the object\n\nExample: - \"value\"-",
+                    "title": "object's name",
+                    "x-displayname": "Object Name",
+                    "x-ves-example": "value"
+                },
+                "object_type": {
+                    "type": "string",
+                    "description": " The type of the object\n\nExample: - \"value\"-",
+                    "title": "object's type",
+                    "x-displayname": "Object Type",
+                    "x-ves-example": "value"
+                },
+                "object_uid": {
+                    "type": "string",
+                    "description": " The uid of the object\n\nExample: - \"value\"-",
+                    "title": "object's uid",
+                    "x-displayname": "Object Uid",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "userCascadeDeleteResponse": {
+            "type": "object",
+            "description": "CascadeDeleteResponse contains a list of user objects that were deleted\nand possibly any errors when attempting to delete those objects.",
+            "title": "CascadeDeleteResponse",
+            "x-displayname": "Delete Response for the User and Associated Namespace Roles",
+            "x-ves-proto-message": "ves.io.schema.user.CascadeDeleteResponse",
+            "properties": {
+                "delete_ok": {
+                    "type": "boolean",
+                    "description": " status of the deleted objects. \n \"true\" value indicates that the operation had been successful for all the objects.\n \"false\" value indicates that at least one of the delete operations had been unsuccessful.\n\nExample: - \"true\"-",
+                    "title": "delete_ok",
+                    "format": "boolean",
+                    "x-displayname": "Delete Ok",
+                    "x-ves-example": "true"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " The objects deleted for the specific user",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/userCascadeDeleteItemType"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
         "userLastLoginUpdateRequest": {
             "type": "object",
             "description": "Request to update user login timestamp.",
@@ -473,6 +745,37 @@ var CustomPrivateAPISwaggerJSON string = `{
             "title": "LastLoginUpdateResponse",
             "x-displayname": "Last Login Update Response",
             "x-ves-proto-message": "ves.io.schema.user.LastLoginUpdateResponse"
+        },
+        "userPrivateCascadeDeleteRequest": {
+            "type": "object",
+            "description": "PrivateCascadeDeleteRequest is the request to delete the user along with the associated namespace role objects.",
+            "title": "PrivateCascadeDeleteRequest",
+            "x-displayname": "Delete the User and Associated Namespace Roles",
+            "x-ves-proto-message": "ves.io.schema.user.PrivateCascadeDeleteRequest",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "description": " email of the user requesting for\n\nExample: - \"value\"-\nRequired: YES",
+                    "title": "email of the user",
+                    "x-displayname": "Email",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Value of namespace is always \"system\"\n\nExample: - \"value\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "tenant_name": {
+                    "type": "string",
+                    "description": " User deletion will be executed within this tenant.\nRequired: YES",
+                    "title": "Tenant name",
+                    "x-displayname": "Tenant name",
+                    "x-ves-required": "true"
+                }
+            }
         }
     },
     "x-displayname": "User custom private API",
