@@ -351,6 +351,90 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-displayname": "Custom Private API",
             "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/write/private/custom/namespaces/system/users/update_last_login": {
+            "post": {
+                "summary": "Update Last Login",
+                "description": "API to update last login timestamp of user",
+                "operationId": "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/userLastLoginUpdateResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userLastLoginUpdateRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomPrivateAPI-UpdateLastLogin"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"
+            },
+            "x-displayname": "Custom Private API",
+            "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {

@@ -161,6 +161,11 @@ func (n *nsCustomAPIServer) EvaluateAPIAccess(context.Context,
 	return &ves_io_schema_ns.EvaluateAPIAccessResp{}, nil
 }
 
+func (n *nsCustomAPIServer) UpdateAllowAdvertiseOnPublic(context.Context,
+	*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicReq) (*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp, error) {
+	return &ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp{}, nil
+}
+
 var _ ves_io_schema_ns.CustomAPIServer = &nsCustomAPIServer{}
 
 // ves.io.schema.namespace.CustomAPI handling - end

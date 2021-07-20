@@ -161,11 +161,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"nodes_per_az": {
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-
 			"os": {
 
 				Type:     schema.TypeSet,
@@ -1838,6 +1833,35 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"k8s_cluster": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_k8s_cluster": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -2153,6 +2177,24 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 					},
 				},
 			},
+
+			"no_worker_nodes": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"nodes_per_az": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"total_nodes": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -2349,13 +2391,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.MachineType =
 			v.(string)
-	}
-
-	//nodes_per_az
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		createSpec.NodesPerAz =
-			uint32(v.(int))
 	}
 
 	//os
@@ -4667,6 +4702,50 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			k8SClusterChoiceTypeFound := false
+
+			if v, ok := cs["k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+				k8SClusterChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_K8SCluster{}
+				k8SClusterChoiceInt.K8SCluster = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Name = v.(string)
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Namespace = v.(string)
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+
+				if v.(bool) {
+					k8SClusterChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_NoK8SCluster{}
+					k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -5114,6 +5193,46 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//worker_nodes
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			createSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_NodesPerAz{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_TotalNodes{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra AzureVnetSite object with struct: %+v", createReq)
 
 	createAzureVnetSiteResp, err := client.CreateObject(context.Background(), ves_io_schema_views_azure_vnet_site.ObjectType, createReq)
@@ -5280,12 +5399,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		updateSpec.NodesPerAz =
-			uint32(v.(int))
 	}
 
 	siteTypeTypeFound := false
@@ -7441,6 +7554,44 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			}
 
 		}
+
+	}
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			updateSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_NodesPerAz{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_TotalNodes{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
 
 	}
 

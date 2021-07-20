@@ -30,14 +30,14 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        exact = "application/json"
+        regex = "regex"
       }
 
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "regex prefix path" must be set
-        regex = "regex"
+        // One of the arguments from this list "path regex prefix" must be set
+        prefix = "/register/"
       }
 
       query_params {
@@ -109,7 +109,7 @@ resource "volterra_route" "example" {
       }
 
       hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
+        // One of the arguments from this list "cookie source_ip header_name" must be set
         header_name = "host"
 
         terminal = true
@@ -445,7 +445,7 @@ Send redirect response.
 
 `path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
 
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+`proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 

@@ -2428,7 +2428,7 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 
 	vrhProtoRedirect := v.ProtoRedirectValidationRuleHandler
 	rulesProtoRedirect := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"http\",\"https\"]",
+		"ves.io.schema.rules.string.in": "[\"incoming-proto\",\"http\",\"https\"]",
 	}
 	vFn, err = vrhProtoRedirect(rulesProtoRedirect)
 	if err != nil {

@@ -599,7 +599,7 @@ var DefaultCaptchaChallengeTypeValidator = func() *ValidateCaptchaChallengeType 
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -2059,7 +2059,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -2121,7 +2121,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -2187,6 +2187,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
@@ -2294,6 +2296,16 @@ type ValidateDynamicReverseProxyType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDynamicReverseProxyType) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DynamicReverseProxyType)
 	if !ok {
@@ -2306,6 +2318,15 @@ func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm inter
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["connection_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_timeout"))
+		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["resolution_network"]; exists {
@@ -2344,6 +2365,25 @@ func (v *ValidateDynamicReverseProxyType) Validate(ctx context.Context, pm inter
 // Well-known symbol for default validator implementation
 var DefaultDynamicReverseProxyTypeValidator = func() *ValidateDynamicReverseProxyType {
 	v := &ValidateDynamicReverseProxyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnectionTimeout := v.ConnectionTimeoutValidationRuleHandler
+	rulesConnectionTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionTimeout(rulesConnectionTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DynamicReverseProxyType.connection_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_timeout"] = vFn
 
 	return v
 }()
@@ -3663,7 +3703,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -3725,7 +3765,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -3791,6 +3831,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
@@ -5622,7 +5664,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -5684,7 +5726,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -5763,7 +5805,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhUserDomains := v.UserDomainsValidationRuleHandler
 	rulesUserDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhUserDomains(rulesUserDomains)
@@ -5797,6 +5839,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
@@ -6064,7 +6108,7 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -7622,7 +7666,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -7684,7 +7728,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "16384",
+		"ves.io.schema.rules.map.values.string.max_len": "65536",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -7750,6 +7794,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
+
+	v.FldValidators["dynamic_reverse_proxy"] = DynamicReverseProxyTypeValidator().Validate
 
 	v.FldValidators["compression_params"] = CompressionTypeValidator().Validate
 
@@ -7855,7 +7901,7 @@ var DefaultTemporaryUserBlockingTypeValidator = func() *ValidateTemporaryUserBlo
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "16384",
+		"ves.io.schema.rules.string.max_len": "65536",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)

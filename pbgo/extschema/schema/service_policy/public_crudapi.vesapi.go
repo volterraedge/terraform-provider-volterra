@@ -2936,21 +2936,23 @@ var APISwaggerJSON string = `{
                 },
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']-",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']\"-",
                     "title": "exact values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Exact Values"
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"
                 },
                 "excluded_values": {
                     "type": "array",
-                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']-",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']\"-",
                     "title": "excluded values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Excluded Values"
+                    "x-displayname": "Excluded Values",
+                    "x-ves-example": "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"
                 }
             }
         },
@@ -5169,6 +5171,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyRoleMatcherType",
                     "x-displayname": "Client Role"
                 },
+                "client_selector": {
+                    "description": " A label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\n expressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\n This is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\n client labels rather than being limited to relying on patterns in the client name.\n The predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "title": "client selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Clients by Label Selector"
+                },
                 "description": {
                     "type": "string",
                     "description": " Description for the rule.\n\nExample: - \"Deny access to Facebook\"-",
@@ -5223,6 +5231,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyL4DestMatcherType",
                     "x-displayname": "L4 Destination Matcher"
                 },
+                "label_matcher": {
+                    "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
+                    "title": "label matcher",
+                    "$ref": "#/definitions/schemaLabelMatcherType",
+                    "x-displayname": "Label Matcher",
+                    "x-ves-example": "['environment', 'location', 'deployment']"
+                },
                 "metric_name_label": {
                     "type": "string",
                     "description": " Name label to use in service policy rule metrics generated for this simple rule.",
@@ -5256,6 +5271,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Scheme",
                     "x-ves-example": "HTTPS"
+                },
+                "server_selector": {
+                    "description": " A label selector that describes the expected set of servers.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "title": "server selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",

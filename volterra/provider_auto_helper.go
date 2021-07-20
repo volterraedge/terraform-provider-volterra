@@ -48,6 +48,7 @@ import (
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
+	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
@@ -56,6 +57,7 @@ import (
 	ves_io_schema_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_network_policy_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
 	ves_io_schema_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
@@ -107,6 +109,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_token":                     resourceVolterraToken(),
 		"volterra_usb_policy":                resourceVolterraUsbPolicy(),
 		"volterra_user":                      resourceVolterraUser(),
+		"volterra_user_identification":       resourceVolterraUserIdentification(),
 		"volterra_aws_tgw_site":              resourceVolterraAwsTgwSite(),
 		"volterra_aws_vpc_site":              resourceVolterraAwsVpcSite(),
 		"volterra_azure_vnet_site":           resourceVolterraAzureVnetSite(),
@@ -115,6 +118,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_http_loadbalancer":         resourceVolterraHttpLoadbalancer(),
 		"volterra_network_policy_view":       resourceVolterraNetworkPolicyView(),
 		"volterra_origin_pool":               resourceVolterraOriginPool(),
+		"volterra_rate_limiter_policy":       resourceVolterraRateLimiterPolicy(),
 		"volterra_tcp_loadbalancer":          resourceVolterraTcpLoadbalancer(),
 		"volterra_voltstack_site":            resourceVolterraVoltstackSite(),
 		"volterra_virtual_host":              resourceVolterraVirtualHost(),
@@ -168,6 +172,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_token.ObjectType,
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user.ObjectType,
+		ves_io_schema_user_identification.ObjectType,
 		ves_io_schema_aws_tgw_site.ObjectType,
 		ves_io_schema_aws_vpc_site.ObjectType,
 		ves_io_schema_azure_vnet_site.ObjectType,
@@ -176,6 +181,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_http_loadbalancer.ObjectType,
 		ves_io_schema_network_policy_view.ObjectType,
 		ves_io_schema_origin_pool.ObjectType,
+		ves_io_schema_rate_limiter_policy.ObjectType,
 		ves_io_schema_tcp_loadbalancer.ObjectType,
 		ves_io_schema_voltstack_site.ObjectType,
 		ves_io_schema_virtual_host.ObjectType,

@@ -90,12 +90,40 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 				disk_size = "100"
 				inside_subnet {
 					subnet_param {
-						ipv4 = "192.168.0.0/24"
+						ipv4 = "192.168.0.0/25"
 					}
 				}
 				outside_subnet {
 					subnet_param {
-						ipv4 = "192.168.1.0/24"
+						ipv4 = "192.168.1.0/25"
+					}
+				}
+			}
+			az_nodes {
+				aws_az_name = "us-west-2b"
+				disk_size = "100"
+				inside_subnet {
+					subnet_param {
+						ipv4 = "192.168.0.128/25"
+					}
+				}
+				outside_subnet {
+					subnet_param {
+						ipv4 = "192.168.1.128/25"
+					}
+				}
+			}
+			az_nodes {
+				aws_az_name = "us-west-2c"
+				disk_size = "100"
+				inside_subnet {
+					subnet_param {
+						ipv4 = "192.168.2.128/25"
+					}
+				}
+				outside_subnet {
+					subnet_param {
+						ipv4 = "192.168.3.128/25"
 					}
 				}
 			}
@@ -104,9 +132,15 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			no_network_policy = true
 			no_outside_static_routes = true
 			no_forward_proxy = true
+			allowed_vip_port {
+				custom_ports {
+					port_ranges = "8080-8082,9095"
+				}
+			}
 		  }
 		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
+		  total_nodes = 2
 
 		}`, resourceName, name, cloudCred)
 }
@@ -141,6 +175,7 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 		  }
 		}
 		logs_streaming_disabled = true
+		no_worker_nodes = true
 	  }`, resourceName, name, cloudCred)
 }
 

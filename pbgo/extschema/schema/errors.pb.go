@@ -36,6 +36,7 @@
 		ServiceParameters
 		OperMetaType
 		DaemonEnvironmentType
+		SyncServerParamsType
 		Empty
 		ObjectRefType
 		LabelSelectorType

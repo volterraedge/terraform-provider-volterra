@@ -459,6 +459,18 @@ func (v *ValidateOperMetaType) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["annotations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("annotations"))
+		for key, value := range m.GetAnnotations() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["creation_timestamp"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("creation_timestamp"))
@@ -612,6 +624,145 @@ var DefaultServiceParametersValidator = func() *ValidateServiceParameters {
 
 func ServiceParametersValidator() db.Validator {
 	return DefaultServiceParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SyncServerParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SyncServerParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SyncServerParamsType) DeepCopy() *SyncServerParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SyncServerParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SyncServerParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SyncServerParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SyncServerParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSyncServerParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSyncServerParamsType) SyncServerListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ServiceParameters, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ServiceParametersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for sync_server_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ServiceParameters)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ServiceParameters, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated sync_server_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items sync_server_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSyncServerParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SyncServerParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SyncServerParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sync_server_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("sync_server_list"))
+		if err := fv(ctx, m.GetSyncServerList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSyncServerParamsTypeValidator = func() *ValidateSyncServerParamsType {
+	v := &ValidateSyncServerParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSyncServerList := v.SyncServerListValidationRuleHandler
+	rulesSyncServerList := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "2",
+		"ves.io.schema.rules.repeated.min_items": "2",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhSyncServerList(rulesSyncServerList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SyncServerParamsType.sync_server_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sync_server_list"] = vFn
+
+	return v
+}()
+
+func SyncServerParamsTypeValidator() db.Validator {
+	return DefaultSyncServerParamsTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

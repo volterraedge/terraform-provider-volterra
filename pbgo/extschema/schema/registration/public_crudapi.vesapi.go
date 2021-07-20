@@ -2701,7 +2701,7 @@ var APISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nVolterra HW device.",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nVolterra HW device.\nIBM Cloud instance.",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -2711,7 +2711,8 @@ var APISwaggerJSON string = `{
                 "VMWARE",
                 "KVM",
                 "OTHER",
-                "VOLTERRA"
+                "VOLTERRA",
+                "IBMCLOUD"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",

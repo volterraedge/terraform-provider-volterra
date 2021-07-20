@@ -30,16 +30,17 @@ resource "volterra_voltstack_site" "example" {
   no_k8s_cluster = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   master_nodes = ["master-0"]
-
-  // One of the arguments from this list "custom_network_config default_network_config" must be set
+  // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
@@ -256,6 +257,10 @@ Use custom networking configuration.
 
 `site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
+`default_sli_config` - (Optional) Use default configuration for site local network (bool).
+
+`sli_config` - (Optional) Configuration for site local inside network. See [Sli Config ](#sli-config) below for details.
+
 `default_config` - (Optional) Use default configuration for site local network (bool).
 
 `slo_config` - (Optional) Configuration for site local network. See [Slo Config ](#slo-config) below for details.
@@ -329,6 +334,10 @@ Interface configuration is done based on certified hardware for this site.
 ### Default Os Version
 
 Will assign latest available OS version.
+
+### Default Sli Config
+
+Use default configuration for site local network.
 
 ### Default Storage Class
 
@@ -612,7 +621,7 @@ Network Policy is disabled for this site..
 
 ### No Static Routes
 
-Static Routes disabled for site local network..
+Static Routes disabled for site local inside network..
 
 ### No Storage Device
 
@@ -724,6 +733,14 @@ Interface belongs to site local network inside.
 
 Interface belongs to site local network (outside).
 
+### Sli Config
+
+Configuration for site local inside network.
+
+`no_static_routes` - (Optional) Static Routes disabled for site local inside network. (bool).
+
+`static_routes` - (Optional) Manage static routes for site local inside network.. See [Static Routes ](#static-routes) below for details.
+
 ### Sli To Global Dr
 
 Site local inside is connected directly to a given global network.
@@ -772,7 +789,7 @@ Interface IP is configured statically.
 
 ### Static Routes
 
-Manage static routes for site local network..
+Manage static routes for site local inside network..
 
 `static_routes` - (Required) List of static routes. See [Static Routes ](#static-routes) below for details.
 
@@ -934,9 +951,9 @@ Tunnel interface, Ipsec tunnels to other networking devices..
 
 `priority` - (Optional) Greater the value, higher the priority (`Int`).
 
-`static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
+`static_ip` - (Required) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
-`tunnel` - (Optional) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
+`tunnel` - (Required) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
 
 ### Untagged
 

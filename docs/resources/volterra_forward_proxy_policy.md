@@ -20,44 +20,31 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "network_connector proxy_label_selector drp_http_connect any_proxy" must be set
+  // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
+  any_proxy = true
 
-  proxy_label_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-  }
+  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
 
-  // One of the arguments from this list "deny_list rule_list allow_all allow_list" must be set
+  rule_list {
+    rules {
+      action = "action"
 
-  allow_list {
-    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
-    default_action_next_policy = true
+      // One of the arguments from this list "dst_asn_set dst_asn_list dst_label_selector all_destinations tls_list http_list dst_ip_prefix_set dst_prefix_list" must be set
 
-    dest_list {
-      port_ranges = "80,443,8080-8191,9080"
-
-      prefixes = ["prefixes"]
-    }
-
-    http_list {
-      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
-      exact_value = "abc.zyz.com"
-
-      // One of the arguments from this list "path_regex_value any_path path_exact_value path_prefix_value" must be set
-      path_exact_value = "/abc/zyz"
-    }
-
-    metadata {
-      description = "Virtual Host for acmecorp website"
-      disable     = true
-      name        = "acmecorp-web"
-    }
-
-    rule_description = "Rule to block example.com"
-    rule_name        = "my-policy-allow-github.com"
-
-    tls_list {
-      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
-      exact_value = "abc.zyz.com"
+      dst_label_selector {
+        expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+      }
+      // One of the arguments from this list "port_matcher no_http_connect_port" must be set
+      no_http_connect_port = true
+      metadata {
+        description = "Virtual Host for acmecorp website"
+        disable     = true
+        name        = "acmecorp-web"
+      }
+      rule_description = "Rule to block example.com"
+      rule_name        = "my-policy-allow-github.com"
+      // One of the arguments from this list "all_sources prefix_list inside_sources interface namespace label_selector ip_prefix_set" must be set
+      all_sources = true
     }
   }
 }
@@ -121,12 +108,6 @@ List of allowed connections.
 
 `http_list` - (Optional) URLs for HTTP connections. See [Http List ](#http-list) below for details.
 
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`rule_description` - (Optional) Human readable description for the rule (`String`).
-
-`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
-
 `tls_list` - (Optional) Domains in SNI for TLS connections. See [Tls List ](#tls-list) below for details.
 
 ### Any Path
@@ -158,12 +139,6 @@ List of denied connections.
 `dest_list` - (Optional) L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI. See [Dest List ](#dest-list) below for details.
 
 `http_list` - (Optional) URLs for HTTP connections. See [Http List ](#http-list) below for details.
-
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`rule_description` - (Optional) Human readable description for the rule (`String`).
-
-`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `tls_list` - (Optional) Domains in SNI for TLS connections. See [Tls List ](#tls-list) below for details.
 

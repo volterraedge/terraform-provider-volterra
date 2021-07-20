@@ -22,18 +22,24 @@ resource "volterra_service_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-  any_asn          = true
+
+  asn_list {
+    as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
+  }
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
-  any_client = true
 
-  // One of the arguments from this list "ip_matcher any_ip ip_prefix_list" must be set
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
+  // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
-
   waf_action {
-    // One of the arguments from this list "waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none waf_skip_processing" must be set
-    none = true
+    // One of the arguments from this list "waf_in_monitoring_mode none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
+    waf_in_monitoring_mode = true
   }
 }
 

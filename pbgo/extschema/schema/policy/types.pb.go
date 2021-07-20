@@ -2149,13 +2149,13 @@ type TlsFingerprintMatcherType struct {
 	// exact values
 	//
 	// x-displayName: "Exact Values"
-	// x-example: "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']
+	// x-example: "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"
 	// A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.
 	ExactValues []string `protobuf:"bytes,2,rep,name=exact_values,json=exactValues" json:"exact_values,omitempty"`
 	// excluded values
 	//
 	// x-displayName: "Excluded Values"
-	// x-example: "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']
+	// x-example: "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"
 	// A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one
 	// or more known TLS fingerprint classes in the enclosing matcher.
 	ExcludedValues []string `protobuf:"bytes,3,rep,name=excluded_values,json=excludedValues" json:"excluded_values,omitempty"`

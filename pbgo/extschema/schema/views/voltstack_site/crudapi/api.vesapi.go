@@ -2075,6 +2075,490 @@ var APISwaggerJSON string = `{
             "x-ves-object-type": "ves.io.schema.views.voltstack_site.Object",
             "x-ves-proto-service": "ves.io.schema.views.voltstack_site.crudapi.API",
             "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.voltstack_site/introspect/read/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.views.voltstack_site.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Get"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "voltstack_site",
+            "x-ves-object-type": "ves.io.schema.views.voltstack_site.Object",
+            "x-ves-proto-service": "ves.io.schema.views.voltstack_site.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.voltstack_site/introspect/read/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.views.voltstack_site.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.List"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "voltstack_site",
+            "x-ves-object-type": "ves.io.schema.views.voltstack_site.Object",
+            "x-ves-proto-service": "ves.io.schema.views.voltstack_site.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.voltstack_site/introspect/write/Object/{object_uid}": {
+            "delete": {
+                "operationId": "ves.io.schema.views.voltstack_site.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.views.voltstack_site.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "voltstack_site",
+            "x-ves-object-type": "ves.io.schema.views.voltstack_site.Object",
+            "x-ves-proto-service": "ves.io.schema.views.voltstack_site.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.voltstack_site/introspect/write/Objects": {
+            "post": {
+                "operationId": "ves.io.schema.views.voltstack_site.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-crudapi-API-Create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "voltstack_site",
+            "x-ves-object-type": "ves.io.schema.views.voltstack_site.Object",
+            "x-ves-proto-service": "ves.io.schema.views.voltstack_site.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
         }
     },
     "definitions": {
@@ -4339,16 +4823,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "static_ip": {
-                    "description": " Interface IP is configured statically",
+                    "description": " Interface IP is configured statically\nRequired: YES",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
-                    "x-displayname": "Static IP"
+                    "x-displayname": "Static IP",
+                    "x-ves-required": "true"
                 },
                 "tunnel": {
-                    "description": " Tunnel Configuration for this Interface",
+                    "description": " Tunnel Configuration for this Interface\nRequired: YES",
                     "title": "Tunnel",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Tunnel"
+                    "x-displayname": "Tunnel",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -5686,6 +6172,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "voltstack_siteSliVnConfiguration": {
+            "type": "object",
+            "description": "Site local inside network configuration",
+            "title": "SLI Virtual Network Configuration",
+            "x-displayname": "Site Local Inside Network Configuration",
+            "x-ves-oneof-field-static_route_choice": "[\"no_static_routes\",\"static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SliVnConfiguration",
+            "properties": {
+                "no_static_routes": {
+                    "description": "Exclusive with [static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for site local inside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "static_routes": {
+                    "description": "Exclusive with [no_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for site local inside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/voltstack_siteStaticRoutesListType"
+                }
+            }
+        },
         "voltstack_siteSpecType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SpecType",
@@ -5839,6 +6345,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interface_config\",\"interface_list\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-sli_choice": "[\"default_sli_config\",\"sli_config\"]",
             "x-ves-oneof-field-slo_choice": "[\"default_config\",\"slo_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssNetworkConfiguration",
             "properties": {
@@ -5874,6 +6381,11 @@ var APISwaggerJSON string = `{
                 "default_interface_config": {
                     "description": "Exclusive with [interface_list]\nx-displayName: \"Bootstrap Interface Configuration\"\nInterface configuration is done based on certified hardware for this site",
                     "title": "Bootstrap Interface Configuration",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_sli_config": {
+                    "description": "Exclusive with [sli_config]\nx-displayName: \"Default Configuration\"\nUse default configuration for site local network",
+                    "title": "Default Configuration",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "forward_proxy_allow_all": {
@@ -5926,6 +6438,11 @@ var APISwaggerJSON string = `{
                     "title": "site_to_site_tunnel_ip",
                     "x-displayname": "Site To Site Tunnel IP",
                     "x-ves-example": "10.1.1.1"
+                },
+                "sli_config": {
+                    "description": "Exclusive with [default_sli_config]\nx-displayName: \"Configure Site Local Inside Network\"\nConfiguration for site local inside network",
+                    "title": "Configure Site Local Inside Network",
+                    "$ref": "#/definitions/voltstack_siteSliVnConfiguration"
                 },
                 "slo_config": {
                     "description": "Exclusive with [default_config]\nx-displayName: \"Configure Site Local Network\"\nConfiguration for site local network",

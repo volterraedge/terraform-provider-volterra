@@ -21,14 +21,10 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "cloud_credentials assisted" must be set
-
-  cloud_credentials {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  assisted      = true
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
@@ -40,10 +36,10 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
+      // One of the arguments from this list "new_network existing_network new_network_autogenerate" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      new_network {
+        name = "network1"
       }
     }
 
@@ -297,7 +293,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 `outside_network` - (Optional) Network for the outside interface of the node. See [Outside Network ](#outside-network) below for details.
 
@@ -319,7 +315,7 @@ One interface site is useful when site is only used as ingress gateway to the VP
 
 `local_subnet` - (Optional) Subnet for the local interface of the node.. See [Local Subnet ](#local-subnet) below for details.
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 ### Inside Network
 
@@ -438,6 +434,10 @@ Static Routes disabled for inside network..
 ### No Interception
 
 No TLS interception is enabled for this network connector.
+
+### No K8s Cluster
+
+Site Local K8s API access is disabled.
 
 ### No Network Policy
 
@@ -621,11 +621,15 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 

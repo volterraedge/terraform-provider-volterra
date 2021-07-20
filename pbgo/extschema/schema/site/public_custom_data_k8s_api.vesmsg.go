@@ -843,15 +843,6 @@ func (v *ValidatePersistentVolumeListRequest) Validate(ctx context.Context, pm i
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["namespace"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("namespace"))
-		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site"))

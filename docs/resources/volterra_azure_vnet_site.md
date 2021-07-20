@@ -22,30 +22,29 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = ["East US"]
 
   // One of the arguments from this list "azure_cred assisted" must be set
-
-  azure_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  assisted = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  resource_group = ["my-resources"]
+  logs_streaming_disabled = true
+  resource_group          = ["my-resources"]
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
+  ingress_egress_gw {
     az_nodes {
       azure_az  = "1"
       disk_size = "disk_size"
 
-      local_subnet {
+      inside_subnet {
+        // One of the arguments from this list "subnet_param subnet" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
+      outside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -55,10 +54,25 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies" must be set
+    no_network_policy = true
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
   }
   vnet {
-    // One of the arguments from this list "existing_vnet new_vnet" must be set
+    // One of the arguments from this list "new_vnet existing_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
@@ -67,6 +81,8 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  nodes_per_az = "2"
 }
 
 ```
@@ -108,8 +124,6 @@ Argument Reference
 
 `machine_type` - (Optional) Select Instance size based on performance needed (`String`).
 
-`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
@@ -125,6 +139,12 @@ Argument Reference
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `vnet` - (Required) Choice of using existing Vnet or create new Vnet. See [Vnet ](#vnet) below for details.
+
+`no_worker_nodes` - (Optional) Worker nodes is set to zero (bool).
+
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
+
+`total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
 ### Active Forward Proxy Policies
 
@@ -410,6 +430,10 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
+### No K8s Cluster
+
+Site Local K8s API access is disabled.
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -593,6 +617,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
 
 `no_global_network` - (Optional) No global network to connect (bool).
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

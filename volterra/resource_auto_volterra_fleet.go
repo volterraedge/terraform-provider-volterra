@@ -3474,7 +3474,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 							if v, ok := cs["replication"]; ok && !isIntfNil(v) {
 
-								deviceChoiceInt.OpenebsEnterprise.Replication = v.(int32)
+								deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
 							}
 
 						}

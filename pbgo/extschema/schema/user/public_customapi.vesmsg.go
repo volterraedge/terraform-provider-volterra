@@ -1253,6 +1253,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
+		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["last_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("last_name"))
@@ -1318,6 +1327,18 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 		vOpts := append(opts, db.WithValidateField("tenant"))
 		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_flags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_flags"))
+		for key, value := range m.GetTenantFlags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1648,6 +1669,15 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 
 		vOpts := append(opts, db.WithValidateField("idm_type"))
 		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_login_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_login_timestamp"))
+		if err := fv(ctx, m.GetLastLoginTimestamp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2050,6 +2080,113 @@ var DefaultNamespacesRoleTypeValidator = func() *ValidateNamespacesRoleType {
 
 func NamespacesRoleTypeValidator() db.Validator {
 	return DefaultNamespacesRoleTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ResetPasswordByAdminRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ResetPasswordByAdminRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ResetPasswordByAdminRequest) DeepCopy() *ResetPasswordByAdminRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ResetPasswordByAdminRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ResetPasswordByAdminRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ResetPasswordByAdminRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ResetPasswordByAdminRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateResetPasswordByAdminRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateResetPasswordByAdminRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateResetPasswordByAdminRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ResetPasswordByAdminRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ResetPasswordByAdminRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("email"))
+		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultResetPasswordByAdminRequestValidator = func() *ValidateResetPasswordByAdminRequest {
+	v := &ValidateResetPasswordByAdminRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEmail := v.EmailValidationRuleHandler
+	rulesEmail := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEmail(rulesEmail)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ResetPasswordByAdminRequest.email: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["email"] = vFn
+
+	return v
+}()
+
+func ResetPasswordByAdminRequestValidator() db.Validator {
+	return DefaultResetPasswordByAdminRequestValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -20,65 +20,26 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   advertise_on_public_default_vip = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  captcha_challenge {
-    cookie_expiry = "cookie_expiry"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
-  round_robin = true
+
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  https {
-    add_hsts      = true
-    http_redirect = true
-
-    // One of the arguments from this list "server_name append_server_name pass_through default_header" must be set
-    default_header = true
-
-    tls_parameters {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "certificate_url"
-        description     = "description"
-
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "decryption_provider"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "store_provider"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "custom_security default_security medium_security low_security" must be set
-        default_security = true
-      }
-    }
+  http {
+    dns_volterra_managed = true
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
-  service_policies_from_namespace = true
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  no_service_policies = true
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
   disable_waf = true
 }
@@ -125,6 +86,8 @@ Argument Reference
 `policy_based_challenge` - (Optional) Specifies the settings for policy rule based challenge. See [Policy Based Challenge ](#policy-based-challenge) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+
+`ddos_mitigation_rules` - (Optional) Rules that specify the DDoS clients to be blocked. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
 `default_route_pools` - (Optional) Origin Pools used when no route is specified (default route). See [Default Route Pools ](#default-route-pools) below for details.
 
@@ -354,6 +317,10 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Block
+
+Block user for a duration determined by the expiration time.
+
 ### Blocked Clients
 
 Rules that specify the clients to be blocked.
@@ -533,6 +500,30 @@ Custom selection of TLS versions and cipher suites.
 `max_version` - (Optional) Maximum TLS protocol version. (`String`).
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Ddos Client Source
+
+Combination of Region, ASN and TLS Fingerprints.
+
+`asn_list` - (Optional) The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.. See [Asn List ](#asn-list) below for details.
+
+`country_list` - (Optional) Sources that are located in one of the countries in the given list (`List of Strings`).
+
+`tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
+
+### Ddos Mitigation Rules
+
+Rules that specify the DDoS clients to be blocked.
+
+`expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`block` - (Optional) Block user for a duration determined by the expiration time (bool).
+
+`ddos_client_source` - (Required) Combination of Region, ASN and TLS Fingerprints. See [Ddos Client Source ](#ddos-client-source) below for details.
+
+`ip_prefix_list` - (Required) IPv4 prefix string.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 ### Default Captcha Challenge Parameters
 
@@ -976,6 +967,8 @@ Rate limiting parameters for this loadbalancer.
 
 Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter..
 
+`burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
+
 `total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
@@ -1068,7 +1061,7 @@ Send redirect response.
 
 `path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
 
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+`proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 

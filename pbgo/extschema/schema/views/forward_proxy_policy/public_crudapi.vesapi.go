@@ -2349,7 +2349,7 @@ var APISwaggerJSON string = `{
             "description": "URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP)",
             "title": "Forward Proxy Rule",
             "x-displayname": "Forward Proxy Rule",
-            "x-ves-displayorder": "10,1,2,3,6",
+            "x-ves-displayorder": "1,2,3,6",
             "x-ves-oneof-field-default_action_choice": "[\"default_action_allow\",\"default_action_deny\",\"default_action_next_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ForwardProxySimpleRuleType",
             "properties": {
@@ -2385,27 +2385,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/forward_proxy_policyURLType"
                     },
                     "x-displayname": "HTTP URLs"
-                },
-                "metadata": {
-                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true"
-                },
-                "rule_description": {
-                    "type": "string",
-                    "description": " Human readable description for the rule\n\nExample: - \"Rule to block example.com\"-",
-                    "title": "Description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Rule to block example.com"
-                },
-                "rule_name": {
-                    "type": "string",
-                    "description": " Rule Name that will be used to query metrics for this rule.\n\nExample: - \"my-policy-allow-github.com\"-",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "my-policy-allow-github.com"
                 },
                 "tls_list": {
                     "type": "array",

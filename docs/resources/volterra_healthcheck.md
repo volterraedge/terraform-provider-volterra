@@ -22,9 +22,17 @@ resource "volterra_healthcheck" "example" {
 
   // One of the arguments from this list "http_health_check tcp_health_check" must be set
 
-  tcp_health_check {
-    expected_response = "00000034"
-    send_payload      = "000000FF"
+  http_health_check {
+    headers = {
+      "key1" = "value1"
+    }
+
+    // One of the arguments from this list "use_origin_server_name host_header" must be set
+    use_origin_server_name = true
+    path                   = "/healthcheck"
+
+    request_headers_to_remove = ["user-agent"]
+    use_http2                 = true
   }
   healthy_threshold   = ["2"]
   interval            = ["10"]

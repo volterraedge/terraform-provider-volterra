@@ -2153,10 +2153,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "allowed_vip_port": {
-                    "description": " Allowed VIP Port Configuration",
-                    "title": "Allowed VIP Port Configuration",
+                    "description": " Allowed VIP Port Configuration for Outside Network",
+                    "title": "Allowed VIP Port Configuration for Outside Network",
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
-                    "x-displayname": "Allowed VIP Port Configuration"
+                    "x-displayname": "Allowed VIP Port Configuration for Outside Network"
+                },
+                "allowed_vip_port_sli": {
+                    "description": " Allowed VIP Port Configuration for Inside Network",
+                    "title": "Allowed VIP Port Configuration for Inside Network",
+                    "$ref": "#/definitions/viewsAllowedVIPPorts",
+                    "x-displayname": "Allowed VIP Port Configuration for Inside Network"
                 },
                 "forward_proxy_allow_all": {
                     "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
@@ -2228,10 +2234,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "allowed_vip_port": {
-                    "description": " Allowed VIP Port Configuration",
-                    "title": "Allowed VIP Port Configuration",
+                    "description": " Allowed VIP Port Configuration for Outside Network",
+                    "title": "Allowed VIP Port Configuration for Outside Network",
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
-                    "x-displayname": "Allowed VIP Port Configuration"
+                    "x-displayname": "Allowed VIP Port Configuration for Outside Network"
+                },
+                "allowed_vip_port_sli": {
+                    "description": " Allowed VIP Port Configuration for Inside Network",
+                    "title": "Allowed VIP Port Configuration for Inside Network",
+                    "$ref": "#/definitions/viewsAllowedVIPPorts",
+                    "x-displayname": "Allowed VIP Port Configuration for Inside Network"
                 },
                 "aws_certified_hw": {
                     "type": "string",
@@ -2317,7 +2329,7 @@ var APISwaggerJSON string = `{
             "description": "Single interface AWS ingress site",
             "title": "AWS Ingress Gateway",
             "x-displayname": "AWS Ingress Gateway",
-            "x-ves-displayorder": "2,3,1",
+            "x-ves-displayorder": "2,1,3",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCIngressGwType",
             "properties": {
                 "allowed_vip_port": {
@@ -2417,6 +2429,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS  Voltstack Cluster",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
@@ -2470,6 +2483,11 @@ var APISwaggerJSON string = `{
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
+                "k8s_cluster": {
+                    "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
+                    "title": "Enable Site Local K8s API access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
                 "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
@@ -2478,6 +2496,11 @@ var APISwaggerJSON string = `{
                 "no_global_network": {
                     "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
                     "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_k8s_cluster": {
+                    "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
+                    "title": "Disable Site Local K8s API access",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_network_policy": {
@@ -4625,13 +4648,11 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.CustomPorts",
             "properties": {
                 "port_ranges": {
-                    "type": "array",
-                    "description": " List of Port Ranges\n\nExample: - [80, 8080-8085]-\nRequired: YES",
+                    "type": "string",
+                    "description": " Port Ranges\n\nExample: - \"80, 8080-8085\"-\nRequired: YES",
                     "title": "Port Ranges",
-                    "items": {
-                        "type": "string"
-                    },
                     "x-displayname": "Port Ranges",
+                    "x-ves-example": "80, 8080-8085",
                     "x-ves-required": "true"
                 }
             }
@@ -4863,6 +4884,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.CreateSpecType",
             "properties": {
                 "address": {
@@ -4921,12 +4943,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
                 },
                 "os": {
                     "description": " Operating System Details",
@@ -4945,6 +4969,11 @@ var APISwaggerJSON string = `{
                     "title": "Volterra Software",
                     "$ref": "#/definitions/viewsVolterraSoftwareType",
                     "x-displayname": "Volterra Software"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
@@ -4965,6 +4994,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GetSpecType",
             "properties": {
                 "address": {
@@ -5023,12 +5053,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -5044,6 +5076,17 @@ var APISwaggerJSON string = `{
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
+                },
+                "user_modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing time when the user\n last modified the object.",
+                    "format": "date-time",
+                    "x-displayname": "User Modification Timestamp"
                 },
                 "vip_params_per_az": {
                     "type": "array",
@@ -5078,6 +5121,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GlobalSpecType",
             "properties": {
                 "address": {
@@ -5147,13 +5191,16 @@ var APISwaggerJSON string = `{
                     "title": "Disable Logs Receiver",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\nx-displayName: \"No Worker Nodes\"\nWorker nodes is set to zero",
+                    "title": "No Worker Nodes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\nx-displayName: \"Desired Worker Nodes Per AZ\"\nx-example: \"2\"\nDesired Worker Nodes Per AZ. Max limit is up to 21",
                     "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "format": "int64"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -5186,6 +5233,19 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\nx-displayName: \"Total Number of Worker Nodes for a Site\"\nx-example: \"1\"\nTotal number of worker nodes to be deployed across all AZ's used in the Site",
+                    "title": "Total Number of Worker Nodes for a Site",
+                    "format": "int64"
+                },
+                "user_modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing time when the user\n last modified the object.",
+                    "title": "user_modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "User Modification Timestamp"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",
@@ -5229,6 +5289,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace AWS VPC site",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
+            "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.ReplaceSpecType",
             "properties": {
                 "address": {
@@ -5260,12 +5321,19 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_worker_nodes": {
+                    "description": "Exclusive with [nodes_per_az total_nodes]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2"
+                    "description": "Exclusive with [no_worker_nodes total_nodes]\n",
+                    "format": "int64"
+                },
+                "total_nodes": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_worker_nodes nodes_per_az]\n",
+                    "format": "int64"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",

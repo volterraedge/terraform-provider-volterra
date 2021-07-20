@@ -161,11 +161,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"nodes_per_az": {
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-
 			"os": {
 
 				Type:     schema.TypeSet,
@@ -210,13 +205,51 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"port_ranges": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
 
-													Type: schema.TypeList,
+									"use_http_https_port": {
 
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_http_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_https_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"allowed_vip_port_sli": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_ports": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"port_ranges": {
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -1274,13 +1307,8 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"port_ranges": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -1393,13 +1421,8 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"port_ranges": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -1935,6 +1958,35 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"k8s_cluster": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"no_k8s_cluster": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -2297,6 +2349,24 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 					},
 				},
 			},
+
+			"no_worker_nodes": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"nodes_per_az": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"total_nodes": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -2495,13 +2565,6 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	//nodes_per_az
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		createSpec.NodesPerAz =
-			uint32(v.(int))
-	}
-
 	//os
 	if v, ok := d.GetOk("os"); ok && !isIntfNil(v) {
 
@@ -2578,12 +2641,7 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -2622,6 +2680,76 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
 							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
 							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+				siteTypeInt.IngressEgressGw.AllowedVipPortSli = allowedVipPortSli
+				for _, set := range sl {
+					allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+					portChoiceTypeFound := false
+
+					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+						allowedVipPortSli.PortChoice = portChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -4049,12 +4177,7 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -4215,12 +4338,7 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -4960,6 +5078,50 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			k8SClusterChoiceTypeFound := false
+
+			if v, ok := cs["k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+				k8SClusterChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_K8SCluster{}
+				k8SClusterChoiceInt.K8SCluster = &ves_io_schema_views.ObjectRefType{}
+				siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Name = v.(string)
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Namespace = v.(string)
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						k8SClusterChoiceInt.K8SCluster.Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["no_k8s_cluster"]; ok && !isIntfNil(v) && !k8SClusterChoiceTypeFound {
+
+				k8SClusterChoiceTypeFound = true
+
+				if v.(bool) {
+					k8SClusterChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCVoltstackClusterType_NoK8SCluster{}
+					k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.K8SClusterChoice = k8SClusterChoiceInt
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -5475,6 +5637,46 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//worker_nodes
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			createSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_NodesPerAz{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_TotalNodes{}
+
+		createSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra AwsVpcSite object with struct: %+v", createReq)
 
 	createAwsVpcSiteResp, err := client.CreateObject(context.Background(), ves_io_schema_views_aws_vpc_site.ObjectType, createReq)
@@ -5643,12 +5845,6 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		updateSpec.NodesPerAz =
-			uint32(v.(int))
-	}
-
 	siteTypeTypeFound := false
 
 	if v, ok := d.GetOk("ingress_egress_gw"); ok && !siteTypeTypeFound {
@@ -5685,12 +5881,7 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -5729,6 +5920,76 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
 							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
 							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+				siteTypeInt.IngressEgressGw.AllowedVipPortSli = allowedVipPortSli
+				for _, set := range sl {
+					allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+					portChoiceTypeFound := false
+
+					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+						allowedVipPortSli.PortChoice = portChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -6963,12 +7224,7 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -7053,12 +7309,7 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								portChoiceInt.CustomPorts.PortRanges = ls
-
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
 							}
 
 						}
@@ -8036,6 +8287,44 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
+
+	}
+
+	workerNodesTypeFound := false
+
+	if v, ok := d.GetOk("no_worker_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+
+		if v.(bool) {
+			workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_NoWorkerNodes{}
+			workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+			updateSpec.WorkerNodes = workerNodesInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_NodesPerAz{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.NodesPerAz =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+
+		workerNodesTypeFound = true
+		workerNodesInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_TotalNodes{}
+
+		updateSpec.WorkerNodes = workerNodesInt
+
+		workerNodesInt.TotalNodes =
+			uint32(v.(int))
 
 	}
 

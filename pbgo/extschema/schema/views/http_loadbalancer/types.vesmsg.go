@@ -1807,6 +1807,46 @@ func (v *ValidateCreateSpecType) TrustedClientsValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1958,6 +1998,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2385,7 +2433,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -2410,7 +2458,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
@@ -2455,6 +2503,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_clients"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -2689,6 +2749,430 @@ var DefaultCustomIpAllowedListValidator = func() *ValidateCustomIpAllowedList {
 
 func CustomIpAllowedListValidator() db.Validator {
 	return DefaultCustomIpAllowedListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DDoSClientSource) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DDoSClientSource) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DDoSClientSource) DeepCopy() *DDoSClientSource {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DDoSClientSource{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DDoSClientSource) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DDoSClientSource) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DDoSClientSourceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDDoSClientSource struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDDoSClientSource) CountryListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.CountryCode)
+		return int32(i)
+	}
+	// ves_io_schema_policy.CountryCode_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_policy.CountryCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for country_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_policy.CountryCode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for country_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_policy.CountryCode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_policy.CountryCode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated country_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items country_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDDoSClientSource) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DDoSClientSource)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DDoSClientSource got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["asn_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn_list"))
+		if err := fv(ctx, m.GetAsnList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["country_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("country_list"))
+		if err := fv(ctx, m.GetCountryList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
+		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDDoSClientSourceValidator = func() *ValidateDDoSClientSource {
+	v := &ValidateDDoSClientSource{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCountryList := v.CountryListValidationRuleHandler
+	rulesCountryList := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[0]",
+		"ves.io.schema.rules.repeated.max_items":               "64",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhCountryList(rulesCountryList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DDoSClientSource.country_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["country_list"] = vFn
+
+	v.FldValidators["asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+
+	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+
+	return v
+}()
+
+func DDoSClientSourceValidator() db.Validator {
+	return DefaultDDoSClientSourceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DDoSMitigationRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DDoSMitigationRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DDoSMitigationRule) DeepCopy() *DDoSMitigationRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DDoSMitigationRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DDoSMitigationRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DDoSMitigationRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DDoSMitigationRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDDoSMitigationRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDDoSMitigationRule) MitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mitigation_action")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDDoSMitigationRule) MitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDDoSMitigationRule) MitigationChoiceDdosClientSourceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return DDoSClientSourceValidator().Validate, nil
+}
+func (v *ValidateDDoSMitigationRule) MitigationChoiceIpPrefixListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema_policy.PrefixMatchListValidator().Validate, nil
+}
+
+func (v *ValidateDDoSMitigationRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDDoSMitigationRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DDoSMitigationRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DDoSMitigationRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mitigation_action"]; exists {
+		val := m.GetMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMitigationAction().(type) {
+	case *DDoSMitigationRule_Block:
+		if fv, exists := v.FldValidators["mitigation_action.block"]; exists {
+			val := m.GetMitigationAction().(*DDoSMitigationRule_Block).Block
+			vOpts := append(opts,
+				db.WithValidateField("mitigation_action"),
+				db.WithValidateField("block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mitigation_choice"]; exists {
+		val := m.GetMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMitigationChoice().(type) {
+	case *DDoSMitigationRule_DdosClientSource:
+		if fv, exists := v.FldValidators["mitigation_choice.ddos_client_source"]; exists {
+			val := m.GetMitigationChoice().(*DDoSMitigationRule_DdosClientSource).DdosClientSource
+			vOpts := append(opts,
+				db.WithValidateField("mitigation_choice"),
+				db.WithValidateField("ddos_client_source"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DDoSMitigationRule_IpPrefixList:
+		if fv, exists := v.FldValidators["mitigation_choice.ip_prefix_list"]; exists {
+			val := m.GetMitigationChoice().(*DDoSMitigationRule_IpPrefixList).IpPrefixList
+			vOpts := append(opts,
+				db.WithValidateField("mitigation_choice"),
+				db.WithValidateField("ip_prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
+	v := &ValidateDDoSMitigationRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMitigationAction := v.MitigationActionValidationRuleHandler
+	rulesMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMitigationAction(rulesMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DDoSMitigationRule.mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mitigation_action"] = vFn
+
+	vrhMitigationChoice := v.MitigationChoiceValidationRuleHandler
+	rulesMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMitigationChoice(rulesMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DDoSMitigationRule.mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mitigation_choice"] = vFn
+
+	vrhMitigationChoiceDdosClientSource := v.MitigationChoiceDdosClientSourceValidationRuleHandler
+	rulesMitigationChoiceDdosClientSource := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["mitigation_choice.ddos_client_source"], err = vrhMitigationChoiceDdosClientSource(rulesMitigationChoiceDdosClientSource)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DDoSMitigationRule.mitigation_choice_ddos_client_source: %s", err)
+		panic(errMsg)
+	}
+	vrhMitigationChoiceIpPrefixList := v.MitigationChoiceIpPrefixListValidationRuleHandler
+	rulesMitigationChoiceIpPrefixList := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["mitigation_choice.ip_prefix_list"], err = vrhMitigationChoiceIpPrefixList(rulesMitigationChoiceIpPrefixList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DDoSMitigationRule.mitigation_choice_ip_prefix_list: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["mitigation_choice.ddos_client_source"] = vFnMap["mitigation_choice.ddos_client_source"]
+	v.FldValidators["mitigation_choice.ip_prefix_list"] = vFnMap["mitigation_choice.ip_prefix_list"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DDoSMitigationRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	return v
+}()
+
+func DDoSMitigationRuleValidator() db.Validator {
+	return DefaultDDoSMitigationRuleValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3863,6 +4347,46 @@ func (v *ValidateGetSpecType) TrustedClientsValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4032,6 +4556,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4489,7 +5021,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -4514,7 +5046,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
@@ -4559,6 +5091,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_clients"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -5501,6 +6045,46 @@ func (v *ValidateGlobalSpecType) TrustedClientsValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5670,6 +6254,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6185,7 +6777,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -6210,7 +6802,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
@@ -6255,6 +6847,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_clients"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -8690,6 +9294,46 @@ func (v *ValidateReplaceSpecType) TrustedClientsValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -8841,6 +9485,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
 		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9268,7 +9920,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.repeated.items.string.max_len":   "256",
 		"ves.io.schema.rules.repeated.items.string.min_len":   "1",
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "32",
 		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
@@ -9293,7 +9945,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
@@ -9338,6 +9990,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["trusted_clients"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -12314,6 +12978,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
@@ -12340,6 +13005,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.BlockedClients = m1.BlockedClients
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
@@ -12677,6 +13343,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
@@ -12708,6 +13375,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.BlockedClients = m1.BlockedClients
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
@@ -13046,6 +13714,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
@@ -13072,6 +13741,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.BlockedClients = m1.BlockedClients
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)

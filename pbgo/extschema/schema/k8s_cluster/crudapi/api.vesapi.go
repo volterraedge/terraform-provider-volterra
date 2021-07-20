@@ -2075,6 +2075,490 @@ var APISwaggerJSON string = `{
             "x-ves-object-type": "ves.io.schema.k8s_cluster.Object",
             "x-ves-proto-service": "ves.io.schema.k8s_cluster.crudapi.API",
             "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.k8s_cluster/introspect/read/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.k8s_cluster.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-crudapi-API-Get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.crudapi.API.Get"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "k8s_cluster",
+            "x-ves-object-type": "ves.io.schema.k8s_cluster.Object",
+            "x-ves-proto-service": "ves.io.schema.k8s_cluster.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.k8s_cluster/introspect/read/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.k8s_cluster.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-crudapi-API-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.crudapi.API.List"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "k8s_cluster",
+            "x-ves-object-type": "ves.io.schema.k8s_cluster.Object",
+            "x-ves-proto-service": "ves.io.schema.k8s_cluster.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.k8s_cluster/introspect/write/Object/{object_uid}": {
+            "delete": {
+                "operationId": "ves.io.schema.k8s_cluster.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-crudapi-API-Delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.k8s_cluster.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-crudapi-API-Replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "k8s_cluster",
+            "x-ves-object-type": "ves.io.schema.k8s_cluster.Object",
+            "x-ves-proto-service": "ves.io.schema.k8s_cluster.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.k8s_cluster/introspect/write/Objects": {
+            "post": {
+                "operationId": "ves.io.schema.k8s_cluster.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster-crudapi-API-Create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.k8s_cluster.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "k8s_cluster",
+            "x-ves-object-type": "ves.io.schema.k8s_cluster.Object",
+            "x-ves-proto-service": "ves.io.schema.k8s_cluster.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
         }
     },
     "definitions": {
@@ -2321,6 +2805,12 @@ var APISwaggerJSON string = `{
                     "description": " Generated YAML",
                     "title": "Generated YAML",
                     "x-displayname": "Generated YAML"
+                },
+                "local_domain": {
+                    "description": " Local domain to access argocd for example argocd.localdomain",
+                    "title": "ArgoCD Local Domain",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessArgoCDType",
+                    "x-displayname": "ArgoCD Local Domain"
                 }
             }
         },
@@ -2410,7 +2900,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/k8s_clusterApplicationArgoCDType"
                 },
                 "dashboard": {
-                    "description": "Exclusive with [argo_cd]\nx-displayName: \"K8s Dashboard\"\nDeploy Argo Continuous Deployment(CD) application",
+                    "description": "Exclusive with [argo_cd]\nx-displayName: \"K8s Dashboard\"\nDeploy Kubernetes Dashboard application",
                     "title": "K8s Dashboard",
                     "$ref": "#/definitions/k8s_clusterApplicationDashboardType"
                 }
@@ -2431,8 +2921,8 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
             "properties": {
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"K8s Cluster Role Bindings\"\nSelect K8s cluster role bindings for this K8s cluster",
-                    "title": "Custom Pod Security Policies",
+                    "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"Add Cluster Wide Applications\"\nSelect cluster wide applications to be deployed",
+                    "title": "Add Cluster Wide Applications",
                     "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
                 },
                 "final_cluster_role_bindings": {
@@ -2478,7 +2968,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\nx-displayName: \"No Cluster Wide Applications\"\nThere are o cluster wide applications to be deployed",
+                    "description": "Exclusive with [cluster_wide_app_list]\nx-displayName: \"No Cluster Wide Applications\"\nThere are no cluster wide applications to be deployed",
                     "title": "No Cluster Wide Applications",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2552,6 +3042,42 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Docker Insecure Registry List",
                     "x-ves-example": "example.com:5000",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "k8s_clusterLocalAccessArgoCDType": {
+            "type": "object",
+            "description": "Parameters required to enable local access",
+            "title": "Local Access ArgoCD Configuration",
+            "x-displayname": "Local Access Configuration",
+            "x-ves-oneof-field-port_choice": "[\"default_port\",\"port\"]",
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.LocalAccessArgoCDType",
+            "properties": {
+                "default_port": {
+                    "description": "Exclusive with [port]\nx-displayName: \"Default ArgoCD Port\"\nUse default port 443 for ArgoCD server.",
+                    "title": "Default ArgoCD Port",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "local_domain": {
+                    "type": "string",
+                    "description": " ArgoCD will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\nRequired: YES",
+                    "title": "Local Domain",
+                    "x-displayname": "Local Domain",
+                    "x-ves-example": "example.com",
+                    "x-ves-required": "true"
+                },
+                "password": {
+                    "description": " Select blindfold or clear text password for ArgoCD admin.\nRequired: YES",
+                    "title": "Admin Password for ArgoCD",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password for ArgoCD",
+                    "x-ves-required": "true"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom ArgoCD Port\"\nx-example: \"443\"\nUse custom ArgoCD port.\nAvailable port range is less than 65000 except reserved ports.",
+                    "title": "Custom ArgoCD Port",
+                    "format": "int64"
                 }
             }
         },
@@ -2662,6 +3188,61 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -2833,6 +3414,60 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone",
+            "x-displayname": "Secret Encoding",
+            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "vault_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3053,6 +3688,53 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "x-displayname": "Vault Secret",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
+                    "title": "Key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "key_pem"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "v1/data/vhost_key",
+                    "x-ves-required": "true"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "vault-vh-provider",
+                    "x-ves-required": "true"
+                },
+                "secret_encoding": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "title": "Version",
+                    "format": "int64",
+                    "x-displayname": "Version",
+                    "x-ves-example": "1"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -3087,6 +3769,23 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "x-displayname": "Wingman Secret",
+            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ChargeBack-API-Key",
+                    "x-ves-required": "true"
                 }
             }
         },

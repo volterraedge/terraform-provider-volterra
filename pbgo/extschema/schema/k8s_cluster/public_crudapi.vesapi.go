@@ -2198,6 +2198,12 @@ var APISwaggerJSON string = `{
                     "description": " Generated YAML",
                     "title": "Generated YAML",
                     "x-displayname": "Generated YAML"
+                },
+                "local_domain": {
+                    "description": " Local domain to access argocd for example argocd.localdomain",
+                    "title": "ArgoCD Local Domain",
+                    "$ref": "#/definitions/k8s_clusterLocalAccessArgoCDType",
+                    "x-displayname": "ArgoCD Local Domain"
                 }
             }
         },
@@ -2287,7 +2293,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/k8s_clusterApplicationArgoCDType"
                 },
                 "dashboard": {
-                    "description": "Exclusive with [argo_cd]\nx-displayName: \"K8s Dashboard\"\nDeploy Argo Continuous Deployment(CD) application",
+                    "description": "Exclusive with [argo_cd]\nx-displayName: \"K8s Dashboard\"\nDeploy Kubernetes Dashboard application",
                     "title": "K8s Dashboard",
                     "$ref": "#/definitions/k8s_clusterApplicationDashboardType"
                 }
@@ -2343,6 +2349,7 @@ var APISwaggerJSON string = `{
             "description": "Create k8s_cluster will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create k8s_cluster",
             "x-displayname": "Create Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2351,6 +2358,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.CreateSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2362,6 +2373,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
@@ -2519,6 +2534,7 @@ var APISwaggerJSON string = `{
             "description": "Get k8s_cluster will get the object from the storage backend for namespace metadata.namespace",
             "title": "Get k8s_cluster",
             "x-displayname": "Get Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2527,6 +2543,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GetSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2538,6 +2558,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
@@ -2592,8 +2616,8 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
             "properties": {
                 "cluster_wide_app_list": {
-                    "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"K8s Cluster Role Bindings\"\nSelect K8s cluster role bindings for this K8s cluster",
-                    "title": "Custom Pod Security Policies",
+                    "description": "Exclusive with [no_cluster_wide_apps]\nx-displayName: \"Add Cluster Wide Applications\"\nSelect cluster wide applications to be deployed",
+                    "title": "Add Cluster Wide Applications",
                     "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
                 },
                 "final_cluster_role_bindings": {
@@ -2639,7 +2663,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
                 },
                 "no_cluster_wide_apps": {
-                    "description": "Exclusive with [cluster_wide_app_list]\nx-displayName: \"No Cluster Wide Applications\"\nThere are o cluster wide applications to be deployed",
+                    "description": "Exclusive with [cluster_wide_app_list]\nx-displayName: \"No Cluster Wide Applications\"\nThere are no cluster wide applications to be deployed",
                     "title": "No Cluster Wide Applications",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -2844,6 +2868,42 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "k8s_clusterLocalAccessArgoCDType": {
+            "type": "object",
+            "description": "Parameters required to enable local access",
+            "title": "Local Access ArgoCD Configuration",
+            "x-displayname": "Local Access Configuration",
+            "x-ves-oneof-field-port_choice": "[\"default_port\",\"port\"]",
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.LocalAccessArgoCDType",
+            "properties": {
+                "default_port": {
+                    "description": "Exclusive with [port]\nx-displayName: \"Default ArgoCD Port\"\nUse default port 443 for ArgoCD server.",
+                    "title": "Default ArgoCD Port",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "local_domain": {
+                    "type": "string",
+                    "description": " ArgoCD will be accessible at \u003csite name\u003e.\u003clocal domain\u003e.\n\nExample: - \"example.com\"-\nRequired: YES",
+                    "title": "Local Domain",
+                    "x-displayname": "Local Domain",
+                    "x-ves-example": "example.com",
+                    "x-ves-required": "true"
+                },
+                "password": {
+                    "description": " Select blindfold or clear text password for ArgoCD admin.\nRequired: YES",
+                    "title": "Admin Password for ArgoCD",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password for ArgoCD",
+                    "x-ves-required": "true"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom ArgoCD Port\"\nx-example: \"443\"\nUse custom ArgoCD port.\nAvailable port range is less than 65000 except reserved ports.",
+                    "title": "Custom ArgoCD Port",
+                    "format": "int64"
+                }
+            }
+        },
         "k8s_clusterLocalAccessConfigType": {
             "type": "object",
             "description": "Parameters required to enable local access",
@@ -2956,6 +3016,7 @@ var APISwaggerJSON string = `{
             "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace k8s_cluster",
             "x-displayname": "Replace Configuration Specification",
+            "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
@@ -2964,6 +3025,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ReplaceSpecType",
             "properties": {
+                "cluster_wide_app_list": {
+                    "description": "Exclusive with [no_cluster_wide_apps]\n",
+                    "$ref": "#/definitions/k8s_clusterClusterWideAppListType"
+                },
                 "global_access_enable": {
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
@@ -2975,6 +3040,10 @@ var APISwaggerJSON string = `{
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
+                },
+                "no_cluster_wide_apps": {
+                    "description": "Exclusive with [cluster_wide_app_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
@@ -3073,6 +3142,61 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3422,6 +3546,60 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone",
+            "x-displayname": "Secret Encoding",
+            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "vault_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                }
+            }
+        },
         "schemaStatusMetaType": {
             "type": "object",
             "description": "StatusMetaType is metadata that all status must have.",
@@ -3727,6 +3905,53 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "x-displayname": "Vault Secret",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
+                    "title": "Key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "key_pem"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "v1/data/vhost_key",
+                    "x-ves-required": "true"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "vault-vh-provider",
+                    "x-ves-required": "true"
+                },
+                "secret_encoding": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "title": "Version",
+                    "format": "int64",
+                    "x-displayname": "Version",
+                    "x-ves-example": "1"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -3761,6 +3986,23 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "x-displayname": "Wingman Secret",
+            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ChargeBack-API-Key",
+                    "x-ves-required": "true"
                 }
             }
         },

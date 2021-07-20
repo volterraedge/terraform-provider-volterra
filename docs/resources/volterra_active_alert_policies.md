@@ -3,10 +3,10 @@
 page_title: "Volterra: active_alert_policies"
 
 description: "The active_alert_policies allows setting of Active Alert Policies for a namespace on Volterra SaaS"
----------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
 
 Resource volterra_active_alert_policies
-=========================================
+=======================================
 
 The active alert policies allows you to set a list of active alert policies on a certain namespace
 

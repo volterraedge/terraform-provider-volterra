@@ -21,24 +21,12 @@ resource "volterra_fleet" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  no_bond_devices = true
 
-  bond_device_list {
-    bond_devices {
-      devices = ["devices"]
-
-      // One of the arguments from this list "lacp active_backup" must be set
-
-      lacp {
-        rate = "30"
-      }
-      link_polling_interval = "1000"
-      link_up_delay         = "200"
-      name                  = "bond0"
-    }
-  }
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
+
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 

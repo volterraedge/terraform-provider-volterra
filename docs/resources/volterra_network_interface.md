@@ -415,9 +415,9 @@ Tunnel interface, Ipsec tunnels to other networking devices..
 
 `priority` - (Optional) Greater the value, higher the priority (`Int`).
 
-`static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
+`static_ip` - (Required) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
-`tunnel` - (Optional) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
+`tunnel` - (Required) Tunnel Configuration for this Interface. See [ref](#ref) below for details.
 
 ### Untagged
 

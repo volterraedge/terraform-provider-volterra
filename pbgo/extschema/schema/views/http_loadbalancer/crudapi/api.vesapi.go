@@ -2075,6 +2075,490 @@ var APISwaggerJSON string = `{
             "x-ves-object-type": "ves.io.schema.views.http_loadbalancer.Object",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.crudapi.API",
             "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.http_loadbalancer/introspect/read/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.views.http_loadbalancer.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Get"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "http_loadbalancer",
+            "x-ves-object-type": "ves.io.schema.views.http_loadbalancer.Object",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.http_loadbalancer/introspect/read/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.views.http_loadbalancer.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.List"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "http_loadbalancer",
+            "x-ves-object-type": "ves.io.schema.views.http_loadbalancer.Object",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.http_loadbalancer/introspect/write/Object/{object_uid}": {
+            "delete": {
+                "operationId": "ves.io.schema.views.http_loadbalancer.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "http_loadbalancer",
+            "x-ves-object-type": "ves.io.schema.views.http_loadbalancer.Object",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.http_loadbalancer/introspect/write/Objects": {
+            "post": {
+                "operationId": "ves.io.schema.views.http_loadbalancer.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "http_loadbalancer",
+            "x-ves-object-type": "ves.io.schema.views.http_loadbalancer.Object",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
         }
     },
     "definitions": {
@@ -2423,6 +2907,79 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "List of IP Prefix Sets",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerDDoSClientSource": {
+            "type": "object",
+            "description": "DDoS Mitigation sources to be blocked",
+            "title": "DDoSClientSource",
+            "x-displayname": "DDoS Client Source Choice",
+            "x-ves-displayorder": "1,3,5",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DDoSClientSource",
+            "properties": {
+                "asn_list": {
+                    "description": " Addresses that belong to the ASNs in the given list\n The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.",
+                    "title": "asn_list",
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "ASN List"
+                },
+                "country_list": {
+                    "type": "array",
+                    "description": " Sources that are located in one of the countries in the given list",
+                    "title": "country_list",
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    },
+                    "x-displayname": "Country List"
+                },
+                "tls_fingerprint_matcher": {
+                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "title": "TLS JA3 fingerprint matcher",
+                    "$ref": "#/definitions/policyTlsFingerprintMatcherType",
+                    "x-displayname": "TLS Fingerprint Matcher"
+                }
+            }
+        },
+        "http_loadbalancerDDoSMitigationRule": {
+            "type": "object",
+            "description": "DDoS Mitigation Rule specifies the sources to be blocked",
+            "title": "DDoSMitigationRule",
+            "x-displayname": "DDoS Mitigation Rule",
+            "x-ves-displayorder": "1,2,7,10",
+            "x-ves-oneof-field-mitigation_action": "[\"block\"]",
+            "x-ves-oneof-field-mitigation_choice": "[\"ddos_client_source\",\"ip_prefix_list\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DDoSMitigationRule",
+            "properties": {
+                "block": {
+                    "description": "Exclusive with []\nx-displayName: \"Block User\"\nBlock user for a duration determined by the expiration time",
+                    "title": "Block User",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ddos_client_source": {
+                    "description": "Exclusive with [ip_prefix_list]\nx-displayName: \"DDoS Client Source\"\nx-required\nCombination of Region, ASN and TLS Fingerprints",
+                    "title": "ddos_client_source",
+                    "$ref": "#/definitions/http_loadbalancerDDoSClientSource"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in\n the configuration but is not applied anymore.\n\nExample: - \"2019-12-31:44:34.171543432Z\"-",
+                    "title": "expiration timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Expiration Timestamp",
+                    "x-ves-example": "2019-12-31:44:34.171543432Z"
+                },
+                "ip_prefix_list": {
+                    "description": "Exclusive with [ddos_client_source]\nx-displayName: \"IP Source\"\nx-required\nIPv4 prefix string.",
+                    "title": "ip source",
+                    "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
                     "x-ves-required": "true"
                 }
             }
@@ -3227,6 +3784,270 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyCountryCode": {
+            "type": "string",
+            "description": "ISO 3166 Aplpha-2 country codes\n",
+            "title": "CountryCode",
+            "enum": [
+                "COUNTRY_NONE",
+                "COUNTRY_AD",
+                "COUNTRY_AE",
+                "COUNTRY_AF",
+                "COUNTRY_AG",
+                "COUNTRY_AI",
+                "COUNTRY_AL",
+                "COUNTRY_AM",
+                "COUNTRY_AN",
+                "COUNTRY_AO",
+                "COUNTRY_AQ",
+                "COUNTRY_AR",
+                "COUNTRY_AS",
+                "COUNTRY_AT",
+                "COUNTRY_AU",
+                "COUNTRY_AW",
+                "COUNTRY_AX",
+                "COUNTRY_AZ",
+                "COUNTRY_BA",
+                "COUNTRY_BB",
+                "COUNTRY_BD",
+                "COUNTRY_BE",
+                "COUNTRY_BF",
+                "COUNTRY_BG",
+                "COUNTRY_BH",
+                "COUNTRY_BI",
+                "COUNTRY_BJ",
+                "COUNTRY_BL",
+                "COUNTRY_BM",
+                "COUNTRY_BN",
+                "COUNTRY_BO",
+                "COUNTRY_BQ",
+                "COUNTRY_BR",
+                "COUNTRY_BS",
+                "COUNTRY_BT",
+                "COUNTRY_BV",
+                "COUNTRY_BW",
+                "COUNTRY_BY",
+                "COUNTRY_BZ",
+                "COUNTRY_CA",
+                "COUNTRY_CC",
+                "COUNTRY_CD",
+                "COUNTRY_CF",
+                "COUNTRY_CG",
+                "COUNTRY_CH",
+                "COUNTRY_CI",
+                "COUNTRY_CK",
+                "COUNTRY_CL",
+                "COUNTRY_CM",
+                "COUNTRY_CN",
+                "COUNTRY_CO",
+                "COUNTRY_CR",
+                "COUNTRY_CS",
+                "COUNTRY_CU",
+                "COUNTRY_CV",
+                "COUNTRY_CW",
+                "COUNTRY_CX",
+                "COUNTRY_CY",
+                "COUNTRY_CZ",
+                "COUNTRY_DE",
+                "COUNTRY_DJ",
+                "COUNTRY_DK",
+                "COUNTRY_DM",
+                "COUNTRY_DO",
+                "COUNTRY_DZ",
+                "COUNTRY_EC",
+                "COUNTRY_EE",
+                "COUNTRY_EG",
+                "COUNTRY_EH",
+                "COUNTRY_ER",
+                "COUNTRY_ES",
+                "COUNTRY_ET",
+                "COUNTRY_FI",
+                "COUNTRY_FJ",
+                "COUNTRY_FK",
+                "COUNTRY_FM",
+                "COUNTRY_FO",
+                "COUNTRY_FR",
+                "COUNTRY_GA",
+                "COUNTRY_GB",
+                "COUNTRY_GD",
+                "COUNTRY_GE",
+                "COUNTRY_GF",
+                "COUNTRY_GG",
+                "COUNTRY_GH",
+                "COUNTRY_GI",
+                "COUNTRY_GL",
+                "COUNTRY_GM",
+                "COUNTRY_GN",
+                "COUNTRY_GP",
+                "COUNTRY_GQ",
+                "COUNTRY_GR",
+                "COUNTRY_GS",
+                "COUNTRY_GT",
+                "COUNTRY_GU",
+                "COUNTRY_GW",
+                "COUNTRY_GY",
+                "COUNTRY_HK",
+                "COUNTRY_HM",
+                "COUNTRY_HN",
+                "COUNTRY_HR",
+                "COUNTRY_HT",
+                "COUNTRY_HU",
+                "COUNTRY_ID",
+                "COUNTRY_IE",
+                "COUNTRY_IL",
+                "COUNTRY_IM",
+                "COUNTRY_IN",
+                "COUNTRY_IO",
+                "COUNTRY_IQ",
+                "COUNTRY_IR",
+                "COUNTRY_IS",
+                "COUNTRY_IT",
+                "COUNTRY_JE",
+                "COUNTRY_JM",
+                "COUNTRY_JO",
+                "COUNTRY_JP",
+                "COUNTRY_KE",
+                "COUNTRY_KG",
+                "COUNTRY_KH",
+                "COUNTRY_KI",
+                "COUNTRY_KM",
+                "COUNTRY_KN",
+                "COUNTRY_KP",
+                "COUNTRY_KR",
+                "COUNTRY_KW",
+                "COUNTRY_KY",
+                "COUNTRY_KZ",
+                "COUNTRY_LA",
+                "COUNTRY_LB",
+                "COUNTRY_LC",
+                "COUNTRY_LI",
+                "COUNTRY_LK",
+                "COUNTRY_LR",
+                "COUNTRY_LS",
+                "COUNTRY_LT",
+                "COUNTRY_LU",
+                "COUNTRY_LV",
+                "COUNTRY_LY",
+                "COUNTRY_MA",
+                "COUNTRY_MC",
+                "COUNTRY_MD",
+                "COUNTRY_ME",
+                "COUNTRY_MF",
+                "COUNTRY_MG",
+                "COUNTRY_MH",
+                "COUNTRY_MK",
+                "COUNTRY_ML",
+                "COUNTRY_MM",
+                "COUNTRY_MN",
+                "COUNTRY_MO",
+                "COUNTRY_MP",
+                "COUNTRY_MQ",
+                "COUNTRY_MR",
+                "COUNTRY_MS",
+                "COUNTRY_MT",
+                "COUNTRY_MU",
+                "COUNTRY_MV",
+                "COUNTRY_MW",
+                "COUNTRY_MX",
+                "COUNTRY_MY",
+                "COUNTRY_MZ",
+                "COUNTRY_NA",
+                "COUNTRY_NC",
+                "COUNTRY_NE",
+                "COUNTRY_NF",
+                "COUNTRY_NG",
+                "COUNTRY_NI",
+                "COUNTRY_NL",
+                "COUNTRY_NO",
+                "COUNTRY_NP",
+                "COUNTRY_NR",
+                "COUNTRY_NU",
+                "COUNTRY_NZ",
+                "COUNTRY_OM",
+                "COUNTRY_PA",
+                "COUNTRY_PE",
+                "COUNTRY_PF",
+                "COUNTRY_PG",
+                "COUNTRY_PH",
+                "COUNTRY_PK",
+                "COUNTRY_PL",
+                "COUNTRY_PM",
+                "COUNTRY_PN",
+                "COUNTRY_PR",
+                "COUNTRY_PS",
+                "COUNTRY_PT",
+                "COUNTRY_PW",
+                "COUNTRY_PY",
+                "COUNTRY_QA",
+                "COUNTRY_RE",
+                "COUNTRY_RO",
+                "COUNTRY_RS",
+                "COUNTRY_RU",
+                "COUNTRY_RW",
+                "COUNTRY_SA",
+                "COUNTRY_SB",
+                "COUNTRY_SC",
+                "COUNTRY_SD",
+                "COUNTRY_SE",
+                "COUNTRY_SG",
+                "COUNTRY_SH",
+                "COUNTRY_SI",
+                "COUNTRY_SJ",
+                "COUNTRY_SK",
+                "COUNTRY_SL",
+                "COUNTRY_SM",
+                "COUNTRY_SN",
+                "COUNTRY_SO",
+                "COUNTRY_SR",
+                "COUNTRY_SS",
+                "COUNTRY_ST",
+                "COUNTRY_SV",
+                "COUNTRY_SX",
+                "COUNTRY_SY",
+                "COUNTRY_SZ",
+                "COUNTRY_TC",
+                "COUNTRY_TD",
+                "COUNTRY_TF",
+                "COUNTRY_TG",
+                "COUNTRY_TH",
+                "COUNTRY_TJ",
+                "COUNTRY_TK",
+                "COUNTRY_TL",
+                "COUNTRY_TM",
+                "COUNTRY_TN",
+                "COUNTRY_TO",
+                "COUNTRY_TR",
+                "COUNTRY_TT",
+                "COUNTRY_TV",
+                "COUNTRY_TW",
+                "COUNTRY_TZ",
+                "COUNTRY_UA",
+                "COUNTRY_UG",
+                "COUNTRY_UM",
+                "COUNTRY_US",
+                "COUNTRY_UY",
+                "COUNTRY_UZ",
+                "COUNTRY_VA",
+                "COUNTRY_VC",
+                "COUNTRY_VE",
+                "COUNTRY_VG",
+                "COUNTRY_VI",
+                "COUNTRY_VN",
+                "COUNTRY_VU",
+                "COUNTRY_WF",
+                "COUNTRY_WS",
+                "COUNTRY_XK",
+                "COUNTRY_XT",
+                "COUNTRY_YE",
+                "COUNTRY_YT",
+                "COUNTRY_ZA",
+                "COUNTRY_ZM",
+                "COUNTRY_ZW"
+            ],
+            "default": "COUNTRY_NONE",
+            "x-displayname": "Country Code",
+            "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
+        },
         "policyHttpMethodMatcherType": {
             "type": "object",
             "description": "A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list.\nThe result of the match based on the method list is inverted if invert_matcher is true.",
@@ -3480,21 +4301,23 @@ var APISwaggerJSON string = `{
                 },
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']-",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']\"-",
                     "title": "exact values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Exact Values"
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"
                 },
                 "excluded_values": {
                     "type": "array",
-                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']-",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']\"-",
                     "title": "excluded values",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Excluded Values"
+                    "x-displayname": "Excluded Values",
+                    "x-ves-example": "['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"
                 }
             }
         },
@@ -3618,6 +4441,13 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
+                "burst_multiplier": {
+                    "type": "integer",
+                    "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.",
+                    "title": "burst_multiplier",
+                    "format": "int64",
+                    "x-displayname": "Burst Multiplier"
+                },
                 "total_number": {
                     "type": "integer",
                     "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\nRequired: YES",
@@ -3791,7 +4621,7 @@ var APISwaggerJSON string = `{
                 },
                 "proto_redirect": {
                     "type": "string",
-                    "description": "swap proto part of incoming URL in redirect URL\n\nExample: - \"https\"-",
+                    "description": " swap protocol part of incoming URL in redirect URL\n The protocol can be swapped with either http or https\n When incoming-proto option is specified, swapping of protocol is not done.\n\nExample: - \"https\"-",
                     "title": "proto_redirect",
                     "x-displayname": "Protocol",
                     "x-ves-example": "https"
@@ -5239,12 +6069,13 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
                 "SITE_NETWORK_INSIDE",
-                "SITE_NETWORK_OUTSIDE"
+                "SITE_NETWORK_OUTSIDE",
+                "SITE_NETWORK_SERVICE"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
@@ -5547,6 +6378,15 @@ var APISwaggerJSON string = `{
                     "title": "Cross-Origin Resource Sharing (CORS) configuration for requests",
                     "$ref": "#/definitions/schemaCorsPolicy",
                     "x-displayname": "CORS Policy"
+                },
+                "ddos_mitigation_rules": {
+                    "type": "array",
+                    "description": " Rules that specify the DDoS clients to be blocked",
+                    "title": "DDoS Mitigation Rules",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerDDoSMitigationRule"
+                    },
+                    "x-displayname": "DDoS Mitigation Rules"
                 },
                 "default_route_pools": {
                     "type": "array",

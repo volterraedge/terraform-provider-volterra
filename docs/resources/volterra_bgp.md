@@ -51,22 +51,17 @@ resource "volterra_bgp" "example" {
 
     external {
       // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      default_gateway = true
-      asn             = "asn"
+      from_site = true
+      asn       = "asn"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
-        disable = true
+        enable = true
       }
 
       // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
-
-      interface {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-      port = "port"
+      inside_interfaces = true
+      port              = "port"
     }
   }
 
@@ -110,7 +105,7 @@ Argument Reference
 
 `peers` - (Required) BGP parameters for peer. See [Peers ](#peers) below for details.
 
-`where` - (Required) Set of sites in which this configuration is valid and must be present. See [Where ](#where) below for details.
+`where` - (Required) Site or virtual site where this BGP configuration should be applied.. See [Where ](#where) below for details.
 
 ### Bgp Parameters
 
@@ -324,7 +319,7 @@ Direct reference to virtual site object.
 
 ### Where
 
-Set of sites in which this configuration is valid and must be present.
+Site or virtual site where this BGP configuration should be applied..
 
 `site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
 

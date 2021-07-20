@@ -20,8 +20,67 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
-  site_local_network = true
+  // One of the arguments from this list "srv6_network global_network site_local_network site_local_inside_network legacy_type" must be set
+
+  srv6_network {
+    access_network_rtargets {
+      // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
+
+      asn4byte_rtarget {
+        as_number = "as_number"
+        value     = "value"
+      }
+    }
+
+    // One of the arguments from this list "interface_ip_vip anycast_vip fleet_vip" must be set
+    interface_ip_vip = true
+
+    enterprise_network_rtargets {
+      // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
+
+      asn4byte_rtarget {
+        as_number = "as_number"
+        value     = "value"
+      }
+    }
+
+    export_rtargets {
+      // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
+
+      asn2byte_rtarget {
+        as_number = "as_number"
+        value     = "value"
+      }
+    }
+
+    fleets {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    internet_rtargets {
+      // One of the arguments from this list "asn2byte_rtarget ipv4_addr_rtarget asn4byte_rtarget" must be set
+
+      asn2byte_rtarget {
+        as_number = "as_number"
+        value     = "value"
+      }
+    }
+
+    // One of the arguments from this list "no_namespace_network srv6_network_ns_params" must be set
+    no_namespace_network  = true
+    remote_sid_stats_plen = "72"
+
+    slice {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "interface_ip_snat_pool site_snat_pool fleet_snat_pool" must be set
+    interface_ip_snat_pool = true
+  }
 }
 
 ```

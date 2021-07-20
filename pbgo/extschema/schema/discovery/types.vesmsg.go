@@ -1031,6 +1031,18 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["ports"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ports"))
+		for idx, item := range m.GetPorts() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_name"))
@@ -1133,6 +1145,8 @@ var DefaultDiscoveredServiceTypeValidator = func() *ValidateDiscoveredServiceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["port_map"] = vFn
+
+	v.FldValidators["ports"] = PortInfoTypeValidator().Validate
 
 	return v
 }()
@@ -2606,6 +2620,177 @@ var DefaultPodInfoTypeValidator = func() *ValidatePodInfoType {
 
 func PodInfoTypeValidator() db.Validator {
 	return DefaultPodInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PortInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PortInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PortInfoType) DeepCopy() *PortInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PortInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PortInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PortInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PortInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePortInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePortInfoType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePortInfoType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePortInfoType) TargetPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for target_port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePortInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PortInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PortInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["target_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("target_port"))
+		if err := fv(ctx, m.GetTargetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPortInfoTypeValidator = func() *ValidatePortInfoType {
+	v := &ValidatePortInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PortInfoType.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhProtocol := v.ProtocolValidationRuleHandler
+	rulesProtocol := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhProtocol(rulesProtocol)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PortInfoType.protocol: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protocol"] = vFn
+
+	vrhTargetPort := v.TargetPortValidationRuleHandler
+	rulesTargetPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhTargetPort(rulesTargetPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PortInfoType.target_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["target_port"] = vFn
+
+	return v
+}()
+
+func PortInfoTypeValidator() db.Validator {
+	return DefaultPortInfoTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

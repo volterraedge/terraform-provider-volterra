@@ -20,16 +20,16 @@ resource "volterra_network_connector" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "slo_to_global_dr slo_to_global_snat sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat" must be set
+  // One of the arguments from this list "slo_to_global_snat sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat slo_to_global_dr" must be set
 
-  sli_to_slo_snat {
-    // One of the arguments from this list "interface_ip snat_pool snat_pool_allocator" must be set
-    snat_pool = "snat_pool"
-
-    // One of the arguments from this list "default_gw_snat dynamic_routing" must be set
-    default_gw_snat = true
+  sli_to_global_dr {
+    global_vn {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
-  // One of the arguments from this list "enable_forward_proxy disable_forward_proxy" must be set
+  // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
   disable_forward_proxy = true
 }
 
