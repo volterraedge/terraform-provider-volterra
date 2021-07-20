@@ -1030,6 +1030,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDeviceNetappTridentType"] = ves_io_schema_fleet.StorageDeviceNetappTridentTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDeviceOpenebsEnterpriseType"] = ves_io_schema_fleet.StorageDeviceOpenebsEnterpriseTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType"] = ves_io_schema_fleet.StorageDevicePureStorageServiceOrchestratorTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.fleet.VGPUConfiguration"] = ves_io_schema_fleet.VGPUConfigurationValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectCreateReq"] = ves_io_schema_fleet_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectCreateRsp"] = ves_io_schema_fleet_crudapi.ObjectCreateRspValidator()
@@ -1120,6 +1121,7 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationArgoCDType"] = ves_io_schema_k8s_cluster.ApplicationArgoCDTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationDashboardType"] = ves_io_schema_k8s_cluster.ApplicationDashboardTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ApplicationMetricsServerType"] = ves_io_schema_k8s_cluster.ApplicationMetricsServerTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterRoleBindingListType"] = ves_io_schema_k8s_cluster.ClusterRoleBindingListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterRoleListType"] = ves_io_schema_k8s_cluster.ClusterRoleListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ClusterWideAppListType"] = ves_io_schema_k8s_cluster.ClusterWideAppListTypeValidator()
@@ -2232,6 +2234,7 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.user.LastLoginUpdateRequest"] = ves_io_schema_user.LastLoginUpdateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.LastLoginUpdateResponse"] = ves_io_schema_user.LastLoginUpdateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.PrivateCascadeDeleteRequest"] = ves_io_schema_user.PrivateCascadeDeleteRequestValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.user.CreateRequest"] = ves_io_schema_user.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.CreateResponse"] = ves_io_schema_user.CreateResponseValidator()
@@ -2259,7 +2262,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleRequest"] = ves_io_schema_user.ListUserRoleRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponse"] = ves_io_schema_user.ListUserRoleResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponseItem"] = ves_io_schema_user.ListUserRoleResponseItemValidator()
-	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceAccess"] = ves_io_schema_user.NamespaceAccessValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespaceRoleType"] = ves_io_schema_user.NamespaceRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
@@ -2346,8 +2348,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureSubnetChoiceType"] = ves_io_schema_views.AzureSubnetChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureSubnetType"] = ves_io_schema_views.AzureSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetChoiceType"] = ves_io_schema_views.AzureVnetChoiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetOneInterfaceNodeARType"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetOneInterfaceNodeType"] = ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetParamsType"] = ves_io_schema_views.AzureVnetParamsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetTwoInterfaceNodeARType"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetTwoInterfaceNodeType"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AzureVnetType"] = ves_io_schema_views.AzureVnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.CloudSubnetParamType"] = ves_io_schema_views.CloudSubnetParamTypeValidator()
@@ -2496,10 +2500,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.CreateSpecType"] = ves_io_schema_views_azure_vnet_site.CreateSpecTypeValidator()
@@ -2813,6 +2820,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.CloudSubnetType"] = ves_io_schema_views_terraform_parameters.CloudSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.SubnetType"] = ves_io_schema_views_terraform_parameters.SubnetTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AvailabilitySetsInfoType"] = ves_io_schema_views_terraform_parameters.AvailabilitySetsInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureExistingSubnetParamTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureInstanceType"] = ves_io_schema_views_terraform_parameters.AzureInstanceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetChoice"] = ves_io_schema_views_terraform_parameters.AzureSubnetChoiceValidator()

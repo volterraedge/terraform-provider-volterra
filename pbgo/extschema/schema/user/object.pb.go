@@ -17,6 +17,7 @@
 		StatusObject
 		LastLoginUpdateRequest
 		LastLoginUpdateResponse
+		PrivateCascadeDeleteRequest
 		CreateRequest
 		CreateResponse
 		ReplaceRequest
@@ -39,7 +40,6 @@
 		ListUserRoleResponseItem
 		GetUserRoleRequest
 		GetUserRoleResponse
-		NamespaceAccess
 		CascadeDeleteRequest
 		CascadeDeleteResponse
 		CascadeDeleteItemType

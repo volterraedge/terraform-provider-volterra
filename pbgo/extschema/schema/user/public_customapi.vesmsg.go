@@ -1289,18 +1289,6 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
-	if fv, exists := v.FldValidators["namespace_access"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("namespace_access"))
-		for key, value := range m.GetNamespaceAccess() {
-			vOpts := append(vOpts, db.WithValidateMapKey(key))
-			if err := fv(ctx, value, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["namespace_roles"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace_roles"))
@@ -1772,87 +1760,6 @@ var DefaultListUserRoleResponseItemValidator = func() *ValidateListUserRoleRespo
 
 func ListUserRoleResponseItemValidator() db.Validator {
 	return DefaultListUserRoleResponseItemValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *NamespaceAccess) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *NamespaceAccess) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *NamespaceAccess) DeepCopy() *NamespaceAccess {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &NamespaceAccess{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *NamespaceAccess) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *NamespaceAccess) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return NamespaceAccessValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateNamespaceAccess struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateNamespaceAccess) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*NamespaceAccess)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *NamespaceAccess got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["roles"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("roles"))
-		for idx, item := range m.GetRoles() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultNamespaceAccessValidator = func() *ValidateNamespaceAccess {
-	v := &ValidateNamespaceAccess{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func NamespaceAccessValidator() db.Validator {
-	return DefaultNamespaceAccessValidator
 }
 
 // augmented methods on protoc/std generated struct

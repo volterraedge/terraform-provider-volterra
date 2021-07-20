@@ -94,6 +94,15 @@ func (v *ValidateCreateRequest) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
@@ -362,6 +371,15 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
@@ -1408,6 +1426,15 @@ func (v *ValidateRenewRequest) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["expiration_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_days"))
+		if err := fv(ctx, m.GetExpirationDays(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {

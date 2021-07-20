@@ -1341,6 +1341,187 @@ func AzureVnetChoiceTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureVnetOneInterfaceNodeARType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetOneInterfaceNodeARType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVnetOneInterfaceNodeARType) DeepCopy() *AzureVnetOneInterfaceNodeARType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetOneInterfaceNodeARType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetOneInterfaceNodeARType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetOneInterfaceNodeARType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetOneInterfaceNodeARTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVnetOneInterfaceNodeARType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetOneInterfaceNodeARType) NodeNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_number")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetOneInterfaceNodeARType) FaultDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetOneInterfaceNodeARType) UpdateDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetOneInterfaceNodeARType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetOneInterfaceNodeARType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetOneInterfaceNodeARType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["fault_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fault_domain"))
+		if err := fv(ctx, m.GetFaultDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_subnet"))
+		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_number"))
+		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["update_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("update_domain"))
+		if err := fv(ctx, m.GetUpdateDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetOneInterfaceNodeARTypeValidator = func() *ValidateAzureVnetOneInterfaceNodeARType {
+	v := &ValidateAzureVnetOneInterfaceNodeARType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeNumber := v.NodeNumberValidationRuleHandler
+	rulesNodeNumber := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.in":        "[1,3]",
+	}
+	vFn, err = vrhNodeNumber(rulesNodeNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetOneInterfaceNodeARType.node_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_number"] = vFn
+
+	vrhFaultDomain := v.FaultDomainValidationRuleHandler
+	rulesFaultDomain := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "3",
+	}
+	vFn, err = vrhFaultDomain(rulesFaultDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetOneInterfaceNodeARType.fault_domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fault_domain"] = vFn
+
+	vrhUpdateDomain := v.UpdateDomainValidationRuleHandler
+	rulesUpdateDomain := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "20",
+	}
+	vFn, err = vrhUpdateDomain(rulesUpdateDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetOneInterfaceNodeARType.update_domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["update_domain"] = vFn
+
+	v.FldValidators["local_subnet"] = AzureSubnetChoiceTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVnetOneInterfaceNodeARTypeValidator() db.Validator {
+	return DefaultAzureVnetOneInterfaceNodeARTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureVnetOneInterfaceNodeType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1672,6 +1853,198 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 
 func AzureVnetParamsTypeValidator() db.Validator {
 	return DefaultAzureVnetParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureVnetTwoInterfaceNodeARType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetTwoInterfaceNodeARType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVnetTwoInterfaceNodeARType) DeepCopy() *AzureVnetTwoInterfaceNodeARType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetTwoInterfaceNodeARType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetTwoInterfaceNodeARType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetTwoInterfaceNodeARType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetTwoInterfaceNodeARTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVnetTwoInterfaceNodeARType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetTwoInterfaceNodeARType) NodeNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_number")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetTwoInterfaceNodeARType) FaultDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetTwoInterfaceNodeARType) UpdateDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetTwoInterfaceNodeARType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetTwoInterfaceNodeARType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetTwoInterfaceNodeARType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["fault_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fault_domain"))
+		if err := fv(ctx, m.GetFaultDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_subnet"))
+		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_number"))
+		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_subnet"))
+		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["update_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("update_domain"))
+		if err := fv(ctx, m.GetUpdateDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetTwoInterfaceNodeARTypeValidator = func() *ValidateAzureVnetTwoInterfaceNodeARType {
+	v := &ValidateAzureVnetTwoInterfaceNodeARType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeNumber := v.NodeNumberValidationRuleHandler
+	rulesNodeNumber := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.in":        "[1,3]",
+	}
+	vFn, err = vrhNodeNumber(rulesNodeNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetTwoInterfaceNodeARType.node_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_number"] = vFn
+
+	vrhFaultDomain := v.FaultDomainValidationRuleHandler
+	rulesFaultDomain := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "3",
+	}
+	vFn, err = vrhFaultDomain(rulesFaultDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetTwoInterfaceNodeARType.fault_domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fault_domain"] = vFn
+
+	vrhUpdateDomain := v.UpdateDomainValidationRuleHandler
+	rulesUpdateDomain := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "20",
+	}
+	vFn, err = vrhUpdateDomain(rulesUpdateDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetTwoInterfaceNodeARType.update_domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["update_domain"] = vFn
+
+	v.FldValidators["inside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["outside_subnet"] = AzureSubnetChoiceTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVnetTwoInterfaceNodeARTypeValidator() db.Validator {
+	return DefaultAzureVnetTwoInterfaceNodeARTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

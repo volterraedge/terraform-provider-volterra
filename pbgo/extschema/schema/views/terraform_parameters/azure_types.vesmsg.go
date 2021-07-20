@@ -27,6 +27,175 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AvailabilitySetsInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AvailabilitySetsInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AvailabilitySetsInfoType) DeepCopy() *AvailabilitySetsInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AvailabilitySetsInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AvailabilitySetsInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AvailabilitySetsInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AvailabilitySetsInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAvailabilitySetsInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAvailabilitySetsInfoType) EnableValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAvailabilitySetsInfoType) FaultDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fault_domains")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAvailabilitySetsInfoType) UpdateDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for update_domains")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAvailabilitySetsInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AvailabilitySetsInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AvailabilitySetsInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable"))
+		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fault_domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fault_domains"))
+		if err := fv(ctx, m.GetFaultDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["update_domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("update_domains"))
+		if err := fv(ctx, m.GetUpdateDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAvailabilitySetsInfoTypeValidator = func() *ValidateAvailabilitySetsInfoType {
+	v := &ValidateAvailabilitySetsInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnable := v.EnableValidationRuleHandler
+	rulesEnable := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"true\",\"false\"]",
+	}
+	vFn, err = vrhEnable(rulesEnable)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AvailabilitySetsInfoType.enable: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable"] = vFn
+
+	vrhFaultDomains := v.FaultDomainsValidationRuleHandler
+	rulesFaultDomains := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "3",
+	}
+	vFn, err = vrhFaultDomains(rulesFaultDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AvailabilitySetsInfoType.fault_domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fault_domains"] = vFn
+
+	vrhUpdateDomains := v.UpdateDomainsValidationRuleHandler
+	rulesUpdateDomains := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "20",
+	}
+	vFn, err = vrhUpdateDomains(rulesUpdateDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AvailabilitySetsInfoType.update_domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["update_domains"] = vFn
+
+	return v
+}()
+
+func AvailabilitySetsInfoTypeValidator() db.Validator {
+	return DefaultAvailabilitySetsInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureExistingSubnetParamType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -938,6 +1107,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["availability_set"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("availability_set"))
+		if err := fv(ctx, m.GetAvailabilitySet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["azure_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_name"))
@@ -1099,6 +1277,8 @@ var DefaultAzureVnetSiteTypeValidator = func() *ValidateAzureVnetSiteType {
 	v.FldValidators["inside_vip_port_config"] = VIPPortConfigValidator().Validate
 
 	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
+
+	v.FldValidators["availability_set"] = AvailabilitySetsInfoTypeValidator().Validate
 
 	return v
 }()

@@ -17,25 +17,31 @@ Example Usage
 
 ```hcl
 resource "volterra_azure_vnet_site" "example" {
-  name         = "acmecorp-web"
-  namespace    = "staging"
-  azure_region = ["East US"]
+  name      = "acmecorp-web"
+  namespace = "staging"
 
   // One of the arguments from this list "azure_cred assisted" must be set
-  assisted = true
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  azure_cred {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
-  resource_group          = ["my-resources"]
+  // One of the arguments from this list "azure_region alternate_region" must be set
+  alternate_region = "northcentralus"
+  resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  ingress_egress_gw {
-    az_nodes {
-      azure_az  = "1"
-      disk_size = "disk_size"
+  ingress_gw_ar {
+    azure_certified_hw = "azure-byol-voltmesh"
 
-      inside_subnet {
+    node {
+      fault_domain = "1"
+
+      local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -44,32 +50,9 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
-      outside_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
+      node_number   = "node_number"
+      update_domain = "1"
     }
-
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-    no_network_policy = true
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -82,7 +65,7 @@ resource "volterra_azure_vnet_site" "example" {
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+  no_worker_nodes = true
 }
 
 ```
@@ -108,8 +91,6 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`azure_region` - (Required) name for azure region in which this site will be launched. (`String`).
-
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
 `assisted` - (Optional) In assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script. (bool).
@@ -126,13 +107,23 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
+`alternate_region` - (Optional) Name of the azure region which does not support availability zones. (`String`).
+
+`azure_region` - (Optional) Name of the azure region which supports availability zones. (`String`).
+
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
+`ingress_egress_gw_ar` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw Ar ](#ingress-egress-gw-ar) below for details.
+
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the Vnet.. See [Ingress Gw ](#ingress-gw) below for details.
 
+`ingress_gw_ar` - (Optional) One interface site is useful when site is only used as ingress gateway to the Vnet.. See [Ingress Gw Ar ](#ingress-gw-ar) below for details.
+
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
+
+`voltstack_cluster_ar` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
@@ -342,6 +333,36 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+### Ingress Egress Gw Ar
+
+Two interface site is useful when site is used as ingress/egress gateway to the Vnet..
+
+`azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
+
+`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
+
+`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
+
+`global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
+
+`no_global_network` - (Optional) No global network to connect (bool).
+
+`inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
+
+`no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+
+`node` - (Optional) Ingress/Egress Gateway (Two Interface) Node information.. See [Node ](#node) below for details.
+
+`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
+
+`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
 ### Ingress Gw
 
 One interface site is useful when site is only used as ingress gateway to the Vnet..
@@ -349,6 +370,14 @@ One interface site is useful when site is only used as ingress gateway to the Vn
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+### Ingress Gw Ar
+
+One interface site is useful when site is only used as ingress gateway to the Vnet..
+
+`azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`node` - (Optional) Ingress Gateway (One Interface) Node information. See [Node ](#node) below for details.
 
 ### Inside Static Routes
 
@@ -441,6 +470,20 @@ Network Policy is disabled for this site..
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
+
+### Node
+
+Ingress/Egress Gateway (Two Interface) Node information..
+
+`fault_domain` - (Optional) Namuber of fault domains to be used while creating the availability set (`Int`).
+
+`inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
+
+`node_number` - (Required) Number of main nodes to create, either 1 or 3. (`Int`).
+
+`outside_subnet` - (Optional) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
+
+`update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
 
 ### Os
 
@@ -625,6 +668,36 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+
+`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
+
+`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+### Voltstack Cluster Ar
+
+Voltstack Cluster using single interface, useful for deploying K8s cluster..
+
+`azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
+
+`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
+
+`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
+
+`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
+
+`global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
+
+`no_global_network` - (Optional) No global network to connect (bool).
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+
+`active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
+
+`node` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Node ](#node) below for details.
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 

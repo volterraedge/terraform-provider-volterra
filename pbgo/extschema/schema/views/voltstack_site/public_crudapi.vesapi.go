@@ -3565,6 +3565,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetVGPUConfiguration": {
+            "type": "object",
+            "description": "Licensing configuration for NVIDIA vGPU",
+            "title": "vGPU Configuration",
+            "x-displayname": "vGPU Configuration",
+            "x-ves-proto-message": "ves.io.schema.fleet.VGPUConfiguration",
+            "properties": {
+                "feature_type": {
+                    "description": " Set Feature to be enabled\nRequired: YES",
+                    "title": "Feature Type",
+                    "$ref": "#/definitions/fleetVGPUFeatureType",
+                    "x-displayname": "Feature Type",
+                    "x-ves-required": "true"
+                },
+                "server_address": {
+                    "type": "string",
+                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-\nRequired: YES",
+                    "title": "License Server Address",
+                    "x-displayname": "License Server Address",
+                    "x-ves-example": "gridlicense1.example.com",
+                    "x-ves-required": "true"
+                },
+                "server_port": {
+                    "type": "integer",
+                    "description": " Set License Server port number",
+                    "title": "License Server Port Number",
+                    "format": "int64",
+                    "x-displayname": "License Server Port Number"
+                }
+            }
+        },
+        "fleetVGPUFeatureType": {
+            "type": "string",
+            "description": "Set feature to be enabled\n\nOperate with a degraded vGPU performance\nEnable NVIDIA vGPU\nEnable NVIDIA RTX Virtual Workstation\nEnable NVIDIA Virtual Compute Server",
+            "title": "vGPU Feature Type",
+            "enum": [
+                "UNLICENSED",
+                "VGPU",
+                "VWS",
+                "VCS"
+            ],
+            "default": "UNLICENSED",
+            "x-displayname": "Feature Type",
+            "x-ves-proto-enum": "ves.io.schema.fleet.VGPUFeatureType"
+        },
         "googleprotobufEmpty": {
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
@@ -5572,7 +5617,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create voltstack site VPC site",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5621,12 +5666,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "k8s_cluster": {
                     "description": "Exclusive with [no_k8s_cluster]\n",
@@ -5706,7 +5755,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get voltstack site VPC site",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5755,12 +5804,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "k8s_cluster": {
                     "description": "Exclusive with [no_k8s_cluster]\n",
@@ -5843,7 +5896,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5901,14 +5954,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this Site",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this Site",
                     "title": "GPU Disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this Site",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this Site",
                     "title": "GPU Enabled",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\nx-displayName: \"vGPU Enabled\"\nEnable NVIDIA vGPU hosted on VMware",
+                    "title": "vGPU Enabled",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "k8s_cluster": {
                     "description": "Exclusive with [no_k8s_cluster]\nx-displayName: \"Enable Site Local K8s API access\"\nSite Local K8s API access is enabled, using k8s_cluster object",
@@ -6019,7 +6077,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace voltstack site VPC site",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -6068,12 +6126,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\n",
+                    "description": "Exclusive with [enable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\n",
+                    "description": "Exclusive with [disable_gpu enable_vgpu]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_vgpu": {
+                    "description": "Exclusive with [disable_gpu enable_gpu]\n",
+                    "$ref": "#/definitions/fleetVGPUConfiguration"
                 },
                 "k8s_cluster": {
                     "description": "Exclusive with [no_k8s_cluster]\n",

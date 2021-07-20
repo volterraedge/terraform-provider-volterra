@@ -432,11 +432,9 @@ type DynamicReverseProxyListType struct {
 	Drps []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=drps" json:"drps,omitempty"`
 }
 
-func (m *DynamicReverseProxyListType) Reset()      { *m = DynamicReverseProxyListType{} }
-func (*DynamicReverseProxyListType) ProtoMessage() {}
-func (*DynamicReverseProxyListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
-}
+func (m *DynamicReverseProxyListType) Reset()                    { *m = DynamicReverseProxyListType{} }
+func (*DynamicReverseProxyListType) ProtoMessage()               {}
+func (*DynamicReverseProxyListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 func (m *DynamicReverseProxyListType) GetDrps() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {

@@ -4213,11 +4213,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\nRequired: YES",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
-                    "x-ves-example": "us-east-2a",
-                    "x-ves-required": "true"
+                    "x-ves-example": "us-east-2a"
                 },
                 "inside_vip": {
                     "type": "array",

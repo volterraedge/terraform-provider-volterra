@@ -3433,12 +3433,6 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "value"
                 },
-                "namespace_access": {
-                    "type": "object",
-                    "description": " A map of NamespaceAccess which contains access information for current user on a namespace.",
-                    "title": "Namespace Access Map",
-                    "x-displayname": "Namespace Access Map"
-                },
                 "namespace_roles": {
                     "type": "array",
                     "description": " Namespace roles for the user",
@@ -3727,21 +3721,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "User type",
                     "$ref": "#/definitions/userUserType",
                     "x-displayname": "User Type"
-                }
-            }
-        },
-        "userNamespaceAccess": {
-            "type": "object",
-            "description": "x-displayName: \"Namespace Access\"\nInformation needed to access a namespace",
-            "title": "Namespace Access",
-            "properties": {
-                "roles": {
-                    "type": "array",
-                    "description": "x-displayName: \"User's Roles\"\nx-example: \"value\"\nUser's roles in a namespace",
-                    "title": "User's Roles",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },

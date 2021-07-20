@@ -57,6 +57,7 @@
 		FleetBondDeviceType
 		FleetBondDevicesListType
 		FleetStorageStaticRoutesListType
+		VGPUConfiguration
 		BGPConfiguration
 		LocalControlPlaneType
 		GlobalSpecType

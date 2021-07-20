@@ -25,6 +25,7 @@
 		DeleteRequest
 		ApplicationArgoCDType
 		ApplicationDashboardType
+		ApplicationMetricsServerType
 		ClusterWideAppType
 		ClusterWideAppListType
 		LocalAccessConfigType
@@ -1065,9 +1066,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/k8s_cluster/object.proto", fileDescriptorObject) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/k8s_cluster/object.proto", fileDescriptorObject)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/k8s_cluster/object.proto", fileDescriptorObject) }
 
 var fileDescriptorObject = []byte{
 	// 584 bytes of a gzipped FileDescriptorProto

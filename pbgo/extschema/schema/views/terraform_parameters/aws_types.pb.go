@@ -28,6 +28,7 @@
 		AzureSubnetType
 		AzureVnetParamsType
 		AzureVnetInfoType
+		AvailabilitySetsInfoType
 		AzureVnetSiteType
 		GCPInstanceType
 		GCPSubnetParamType

@@ -54,9 +54,7 @@ var MetricType_value = map[string]int32{
 	"TX_THROUGHPUT_PACKETS": 1,
 }
 
-func (MetricType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomDataApi, []int{0}
-}
+func (MetricType) EnumDescriptor() ([]byte, []int) { return fileDescriptorPublicCustomDataApi, []int{0} }
 
 // Metric Label
 //

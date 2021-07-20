@@ -269,6 +269,114 @@ func ApplicationDashboardTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApplicationMetricsServerType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApplicationMetricsServerType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApplicationMetricsServerType) DeepCopy() *ApplicationMetricsServerType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApplicationMetricsServerType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApplicationMetricsServerType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApplicationMetricsServerType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApplicationMetricsServerTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApplicationMetricsServerType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApplicationMetricsServerType) GeneratedYamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for generated_yaml")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApplicationMetricsServerType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApplicationMetricsServerType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApplicationMetricsServerType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["generated_yaml"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("generated_yaml"))
+		if err := fv(ctx, m.GetGeneratedYaml(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApplicationMetricsServerTypeValidator = func() *ValidateApplicationMetricsServerType {
+	v := &ValidateApplicationMetricsServerType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhGeneratedYaml := v.GeneratedYamlValidationRuleHandler
+	rulesGeneratedYaml := map[string]string{
+		"ves.io.schema.rules.string.max_len": "4096",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhGeneratedYaml(rulesGeneratedYaml)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApplicationMetricsServerType.generated_yaml: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["generated_yaml"] = vFn
+
+	return v
+}()
+
+func ApplicationMetricsServerTypeValidator() db.Validator {
+	return DefaultApplicationMetricsServerTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ClusterRoleBindingListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -933,6 +1041,17 @@ func (v *ValidateClusterWideAppType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *ClusterWideAppType_MetricsServer:
+		if fv, exists := v.FldValidators["app_choice.metrics_server"]; exists {
+			val := m.GetAppChoice().(*ClusterWideAppType_MetricsServer).MetricsServer
+			vOpts := append(opts,
+				db.WithValidateField("app_choice"),
+				db.WithValidateField("metrics_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -964,6 +1083,7 @@ var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 
 	v.FldValidators["app_choice.argo_cd"] = ApplicationArgoCDTypeValidator().Validate
 	v.FldValidators["app_choice.dashboard"] = ApplicationDashboardTypeValidator().Validate
+	v.FldValidators["app_choice.metrics_server"] = ApplicationMetricsServerTypeValidator().Validate
 
 	return v
 }()

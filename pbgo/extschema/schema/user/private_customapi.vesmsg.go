@@ -187,3 +187,149 @@ var DefaultLastLoginUpdateResponseValidator = func() *ValidateLastLoginUpdateRes
 func LastLoginUpdateResponseValidator() db.Validator {
 	return DefaultLastLoginUpdateResponseValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *PrivateCascadeDeleteRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateCascadeDeleteRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateCascadeDeleteRequest) DeepCopy() *PrivateCascadeDeleteRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateCascadeDeleteRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateCascadeDeleteRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateCascadeDeleteRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateCascadeDeleteRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePrivateCascadeDeleteRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateCascadeDeleteRequest) TenantNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateCascadeDeleteRequest) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateCascadeDeleteRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateCascadeDeleteRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateCascadeDeleteRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("email"))
+		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_name"))
+		if err := fv(ctx, m.GetTenantName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateCascadeDeleteRequestValidator = func() *ValidatePrivateCascadeDeleteRequest {
+	v := &ValidatePrivateCascadeDeleteRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTenantName := v.TenantNameValidationRuleHandler
+	rulesTenantName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTenantName(rulesTenantName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateCascadeDeleteRequest.tenant_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_name"] = vFn
+
+	vrhEmail := v.EmailValidationRuleHandler
+	rulesEmail := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEmail(rulesEmail)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateCascadeDeleteRequest.email: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["email"] = vFn
+
+	return v
+}()
+
+func PrivateCascadeDeleteRequestValidator() db.Validator {
+	return DefaultPrivateCascadeDeleteRequestValidator
+}

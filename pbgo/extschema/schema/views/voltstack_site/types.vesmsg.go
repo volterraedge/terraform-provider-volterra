@@ -684,6 +684,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_EnableVgpu:
+		if fv, exists := v.FldValidators["gpu_choice.enable_vgpu"]; exists {
+			val := m.GetGpuChoice().(*CreateSpecType_EnableVgpu).EnableVgpu
+			vOpts := append(opts,
+				db.WithValidateField("gpu_choice"),
+				db.WithValidateField("enable_vgpu"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1090,6 +1101,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
+
+	v.FldValidators["gpu_choice.enable_vgpu"] = ves_io_schema_fleet.VGPUConfigurationValidator().Validate
 
 	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1789,6 +1802,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_EnableVgpu:
+		if fv, exists := v.FldValidators["gpu_choice.enable_vgpu"]; exists {
+			val := m.GetGpuChoice().(*GetSpecType_EnableVgpu).EnableVgpu
+			vOpts := append(opts,
+				db.WithValidateField("gpu_choice"),
+				db.WithValidateField("enable_vgpu"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2226,6 +2250,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
+
+	v.FldValidators["gpu_choice.enable_vgpu"] = ves_io_schema_fleet.VGPUConfigurationValidator().Validate
 
 	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3401,6 +3427,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_EnableVgpu:
+		if fv, exists := v.FldValidators["gpu_choice.enable_vgpu"]; exists {
+			val := m.GetGpuChoice().(*GlobalSpecType_EnableVgpu).EnableVgpu
+			vOpts := append(opts,
+				db.WithValidateField("gpu_choice"),
+				db.WithValidateField("enable_vgpu"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3856,6 +3893,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
+
+	v.FldValidators["gpu_choice.enable_vgpu"] = ves_io_schema_fleet.VGPUConfigurationValidator().Validate
 
 	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4967,6 +5006,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_EnableVgpu:
+		if fv, exists := v.FldValidators["gpu_choice.enable_vgpu"]; exists {
+			val := m.GetGpuChoice().(*ReplaceSpecType_EnableVgpu).EnableVgpu
+			vOpts := append(opts,
+				db.WithValidateField("gpu_choice"),
+				db.WithValidateField("enable_vgpu"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5355,6 +5405,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
+
+	v.FldValidators["gpu_choice.enable_vgpu"] = ves_io_schema_fleet.VGPUConfigurationValidator().Validate
 
 	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7692,6 +7744,9 @@ func (r *CreateSpecType) SetGpuChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_EnableGpu:
 		o.GpuChoice = &GlobalSpecType_EnableGpu{EnableGpu: of.EnableGpu}
 
+	case *CreateSpecType_EnableVgpu:
+		o.GpuChoice = &GlobalSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -7708,6 +7763,9 @@ func (r *CreateSpecType) GetGpuChoiceFromGlobalSpecType(o *GlobalSpecType) error
 
 	case *GlobalSpecType_EnableGpu:
 		r.GpuChoice = &CreateSpecType_EnableGpu{EnableGpu: of.EnableGpu}
+
+	case *GlobalSpecType_EnableVgpu:
+		r.GpuChoice = &CreateSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -8022,6 +8080,9 @@ func (r *GetSpecType) SetGpuChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_EnableGpu:
 		o.GpuChoice = &GlobalSpecType_EnableGpu{EnableGpu: of.EnableGpu}
 
+	case *GetSpecType_EnableVgpu:
+		o.GpuChoice = &GlobalSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -8038,6 +8099,9 @@ func (r *GetSpecType) GetGpuChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_EnableGpu:
 		r.GpuChoice = &GetSpecType_EnableGpu{EnableGpu: of.EnableGpu}
+
+	case *GlobalSpecType_EnableVgpu:
+		r.GpuChoice = &GetSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -8354,6 +8418,9 @@ func (r *ReplaceSpecType) SetGpuChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case *ReplaceSpecType_EnableGpu:
 		o.GpuChoice = &GlobalSpecType_EnableGpu{EnableGpu: of.EnableGpu}
 
+	case *ReplaceSpecType_EnableVgpu:
+		o.GpuChoice = &GlobalSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -8370,6 +8437,9 @@ func (r *ReplaceSpecType) GetGpuChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_EnableGpu:
 		r.GpuChoice = &ReplaceSpecType_EnableGpu{EnableGpu: of.EnableGpu}
+
+	case *GlobalSpecType_EnableVgpu:
+		r.GpuChoice = &ReplaceSpecType_EnableVgpu{EnableVgpu: of.EnableVgpu}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

@@ -27,8 +27,11 @@
 		SetVIPInfoRequest
 		SetVIPInfoResponse
 		AzureVnetIngressGwType
+		AzureVnetIngressGwARType
 		AzureVnetIngressEgressGwType
+		AzureVnetIngressEgressGwARType
 		AzureVnetVoltstackClusterType
+		AzureVnetVoltstackClusterARType
 		AzureVnetIngressGwReplaceType
 		AzureVnetIngressEgressGwReplaceType
 		AzureVnetVoltstackClusterReplaceType

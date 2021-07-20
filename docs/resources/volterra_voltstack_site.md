@@ -23,25 +23,24 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "disable_gpu enable_gpu" must be set
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
   no_k8s_cluster = true
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  logs_streaming_disabled = true
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
   master_nodes = ["master-0"]
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+
+  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -78,6 +77,8 @@ Argument Reference
 `disable_gpu` - (Optional) GPU is not enabled for this Site (bool).
 
 `enable_gpu` - (Optional) GPU is enabled for this Site (bool).
+
+`enable_vgpu` - (Optional) Enable NVIDIA vGPU hosted on VMware. See [Enable Vgpu ](#enable-vgpu) below for details.
 
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
@@ -430,6 +431,16 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
+
+### Enable Vgpu
+
+Enable NVIDIA vGPU hosted on VMware.
+
+`feature_type` - (Required) Set Feature to be enabled (`String`).
+
+`server_address` - (Required) Set License Server Address (`String`).
+
+`server_port` - (Optional) Set License Server port number (`Int`).
 
 ### Ethernet Interface
 

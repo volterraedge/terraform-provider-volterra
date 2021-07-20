@@ -207,6 +207,31 @@ func resourceVolterraFleet() *schema.Resource {
 				Optional: true,
 			},
 
+			"enable_vgpu": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"feature_type": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"server_address": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"server_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"inside_virtual_network": {
 
 				Type:     schema.TypeList,
@@ -3030,6 +3055,37 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			gpuChoiceInt := &ves_io_schema_fleet.CreateSpecType_EnableGpu{}
 			gpuChoiceInt.EnableGpu = &ves_io_schema.Empty{}
 			createSpec.GpuChoice = gpuChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_vgpu"); ok && !gpuChoiceTypeFound {
+
+		gpuChoiceTypeFound = true
+		gpuChoiceInt := &ves_io_schema_fleet.CreateSpecType_EnableVgpu{}
+		gpuChoiceInt.EnableVgpu = &ves_io_schema_fleet.VGPUConfiguration{}
+		createSpec.GpuChoice = gpuChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["feature_type"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.FeatureType = ves_io_schema_fleet.VGPUFeatureType(ves_io_schema_fleet.VGPUFeatureType_value[v.(string)])
+
+			}
+
+			if v, ok := cs["server_address"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.ServerAddress = v.(string)
+			}
+
+			if v, ok := cs["server_port"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.ServerPort = uint32(v.(int))
+			}
+
 		}
 
 	}
@@ -6514,6 +6570,37 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	if v, ok := d.GetOk("enable_vgpu"); ok && !gpuChoiceTypeFound {
+
+		gpuChoiceTypeFound = true
+		gpuChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_EnableVgpu{}
+		gpuChoiceInt.EnableVgpu = &ves_io_schema_fleet.VGPUConfiguration{}
+		updateSpec.GpuChoice = gpuChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["feature_type"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.FeatureType = ves_io_schema_fleet.VGPUFeatureType(ves_io_schema_fleet.VGPUFeatureType_value[v.(string)])
+
+			}
+
+			if v, ok := cs["server_address"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.ServerAddress = v.(string)
+			}
+
+			if v, ok := cs["server_port"]; ok && !isIntfNil(v) {
+
+				gpuChoiceInt.EnableVgpu.ServerPort = uint32(v.(int))
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("inside_virtual_network"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -6943,7 +7030,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 							if v, ok := cs["replication"]; ok && !isIntfNil(v) {
 
-								deviceChoiceInt.OpenebsEnterprise.Replication = v.(int32)
+								deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
 							}
 
 						}

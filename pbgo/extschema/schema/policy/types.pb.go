@@ -387,9 +387,7 @@ var KnownTlsFingerprintClass_value = map[string]int32{
 	"TRICKBOT":                  13,
 }
 
-func (KnownTlsFingerprintClass) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{4}
-}
+func (KnownTlsFingerprintClass) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 // CountryCode
 //
