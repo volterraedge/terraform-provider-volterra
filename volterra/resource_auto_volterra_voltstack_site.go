@@ -2134,6 +2134,21 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 													Optional: true,
 												},
 
+												"custom_storage": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"yaml": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"netapp_trident": {
 
 													Type:     schema.TypeSet,
@@ -2242,6 +2257,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 												"advanced_advanced_parameters": {
 													Type:     schema.TypeMap,
+													Optional: true,
+												},
+
+												"custom_storage": {
+
+													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
@@ -7777,6 +7798,26 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 							deviceChoiceTypeFound := false
 
+							if v, ok := storageClassesMapStrToI["custom_storage"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+								deviceChoiceInt := &ves_io_schema_fleet.FleetStorageClassType_CustomStorage{}
+								deviceChoiceInt.CustomStorage = &ves_io_schema_fleet.StorageClassCustomType{}
+								storageClasses[i].DeviceChoice = deviceChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["yaml"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.CustomStorage.Yaml = v.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := storageClassesMapStrToI["netapp_trident"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
 
 								deviceChoiceTypeFound = true
@@ -7924,6 +7965,18 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 							}
 
 							deviceChoiceTypeFound := false
+
+							if v, ok := storageDevicesMapStrToI["custom_storage"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+
+								if v.(bool) {
+									deviceChoiceInt := &ves_io_schema_fleet.FleetStorageDeviceType_CustomStorage{}
+									deviceChoiceInt.CustomStorage = &ves_io_schema.Empty{}
+									storageDevices[i].DeviceChoice = deviceChoiceInt
+								}
+
+							}
 
 							if v, ok := storageDevicesMapStrToI["netapp_trident"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
 
@@ -14119,6 +14172,26 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 							deviceChoiceTypeFound := false
 
+							if v, ok := storageClassesMapStrToI["custom_storage"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+								deviceChoiceInt := &ves_io_schema_fleet.FleetStorageClassType_CustomStorage{}
+								deviceChoiceInt.CustomStorage = &ves_io_schema_fleet.StorageClassCustomType{}
+								storageClasses[i].DeviceChoice = deviceChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["yaml"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.CustomStorage.Yaml = v.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := storageClassesMapStrToI["netapp_trident"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
 
 								deviceChoiceTypeFound = true
@@ -14266,6 +14339,18 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 							}
 
 							deviceChoiceTypeFound := false
+
+							if v, ok := storageDevicesMapStrToI["custom_storage"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+
+								if v.(bool) {
+									deviceChoiceInt := &ves_io_schema_fleet.FleetStorageDeviceType_CustomStorage{}
+									deviceChoiceInt.CustomStorage = &ves_io_schema.Empty{}
+									storageDevices[i].DeviceChoice = deviceChoiceInt
+								}
+
+							}
 
 							if v, ok := storageDevicesMapStrToI["netapp_trident"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
 

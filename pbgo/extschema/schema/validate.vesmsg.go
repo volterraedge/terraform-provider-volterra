@@ -1993,6 +1993,15 @@ func (v *ValidateMessageRules) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["required_one_nonzero_field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("required_one_nonzero_field"))
+		if err := fv(ctx, m.GetRequiredOneNonzeroField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["required_oneof"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("required_oneof"))

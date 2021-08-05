@@ -1153,9 +1153,11 @@ type StaticIpParametersFleetType struct {
 	DnsServer string `protobuf:"bytes,3,opt,name=dns_server,json=dnsServer,proto3" json:"dns_server,omitempty"`
 }
 
-func (m *StaticIpParametersFleetType) Reset()                    { *m = StaticIpParametersFleetType{} }
-func (*StaticIpParametersFleetType) ProtoMessage()               {}
-func (*StaticIpParametersFleetType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *StaticIpParametersFleetType) Reset()      { *m = StaticIpParametersFleetType{} }
+func (*StaticIpParametersFleetType) ProtoMessage() {}
+func (*StaticIpParametersFleetType) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{9}
+}
 
 func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocator() *ves_io_schema_views.ObjectRefType {
 	if m != nil {

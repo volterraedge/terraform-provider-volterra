@@ -11187,7 +11187,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_IngressEgressGwAr{}
-		siteTypeInt.IngressEgressGwAr = &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType{}
+		siteTypeInt.IngressEgressGwAr = &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType{}
 		updateSpec.SiteType = siteTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -11199,7 +11199,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
 				forwardProxyChoiceTypeFound = true
-				forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies{}
+				forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_ActiveForwardProxyPolicies{}
 				forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 				siteTypeInt.IngressEgressGwAr.ForwardProxyChoice = forwardProxyChoiceInt
 
@@ -11242,7 +11242,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				forwardProxyChoiceTypeFound = true
 
 				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll{}
+					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_ForwardProxyAllowAll{}
 					forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.ForwardProxyChoice = forwardProxyChoiceInt
 				}
@@ -11254,7 +11254,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				forwardProxyChoiceTypeFound = true
 
 				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoForwardProxy{}
+					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoForwardProxy{}
 					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.ForwardProxyChoice = forwardProxyChoiceInt
 				}
@@ -11266,7 +11266,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
 
 				globalNetworkChoiceTypeFound = true
-				globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_GlobalNetworkList{}
+				globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_GlobalNetworkList{}
 				globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
 				siteTypeInt.IngressEgressGwAr.GlobalNetworkChoice = globalNetworkChoiceInt
 
@@ -11804,7 +11804,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				globalNetworkChoiceTypeFound = true
 
 				if v.(bool) {
-					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoGlobalNetwork{}
+					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoGlobalNetwork{}
 					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.GlobalNetworkChoice = globalNetworkChoiceInt
 				}
@@ -11816,7 +11816,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
 
 				insideStaticRouteChoiceTypeFound = true
-				insideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_InsideStaticRoutes{}
+				insideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_InsideStaticRoutes{}
 				insideStaticRouteChoiceInt.InsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
 				siteTypeInt.IngressEgressGwAr.InsideStaticRouteChoice = insideStaticRouteChoiceInt
 
@@ -12062,7 +12062,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				insideStaticRouteChoiceTypeFound = true
 
 				if v.(bool) {
-					insideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoInsideStaticRoutes{}
+					insideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoInsideStaticRoutes{}
 					insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.InsideStaticRouteChoice = insideStaticRouteChoiceInt
 				}
@@ -12074,7 +12074,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_ActiveNetworkPolicies{}
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_ActiveNetworkPolicies{}
 				networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
 				siteTypeInt.IngressEgressGwAr.NetworkPolicyChoice = networkPolicyChoiceInt
 
@@ -12117,7 +12117,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				networkPolicyChoiceTypeFound = true
 
 				if v.(bool) {
-					networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoNetworkPolicy{}
+					networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoNetworkPolicy{}
 					networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.NetworkPolicyChoice = networkPolicyChoiceInt
 				}
@@ -12131,7 +12131,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				outsideStaticRouteChoiceTypeFound = true
 
 				if v.(bool) {
-					outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_NoOutsideStaticRoutes{}
+					outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_NoOutsideStaticRoutes{}
 					outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGwAr.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
 				}
@@ -12141,7 +12141,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
 
 				outsideStaticRouteChoiceTypeFound = true
-				outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_OutsideStaticRoutes{}
+				outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_OutsideStaticRoutes{}
 				outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
 				siteTypeInt.IngressEgressGwAr.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
 
@@ -13347,7 +13347,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_VoltstackClusterAr{}
-		siteTypeInt.VoltstackClusterAr = &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType{}
+		siteTypeInt.VoltstackClusterAr = &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType{}
 		updateSpec.SiteType = siteTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -13359,7 +13359,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
 				forwardProxyChoiceTypeFound = true
-				forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies{}
+				forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_ActiveForwardProxyPolicies{}
 				forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 				siteTypeInt.VoltstackClusterAr.ForwardProxyChoice = forwardProxyChoiceInt
 
@@ -13402,7 +13402,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				forwardProxyChoiceTypeFound = true
 
 				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll{}
+					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_ForwardProxyAllowAll{}
 					forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackClusterAr.ForwardProxyChoice = forwardProxyChoiceInt
 				}
@@ -13414,7 +13414,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				forwardProxyChoiceTypeFound = true
 
 				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoForwardProxy{}
+					forwardProxyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoForwardProxy{}
 					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackClusterAr.ForwardProxyChoice = forwardProxyChoiceInt
 				}
@@ -13426,7 +13426,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
 
 				globalNetworkChoiceTypeFound = true
-				globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_GlobalNetworkList{}
+				globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_GlobalNetworkList{}
 				globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
 				siteTypeInt.VoltstackClusterAr.GlobalNetworkChoice = globalNetworkChoiceInt
 
@@ -13964,7 +13964,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				globalNetworkChoiceTypeFound = true
 
 				if v.(bool) {
-					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoGlobalNetwork{}
+					globalNetworkChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoGlobalNetwork{}
 					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackClusterAr.GlobalNetworkChoice = globalNetworkChoiceInt
 				}
@@ -13976,7 +13976,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_ActiveNetworkPolicies{}
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_ActiveNetworkPolicies{}
 				networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
 				siteTypeInt.VoltstackClusterAr.NetworkPolicyChoice = networkPolicyChoiceInt
 
@@ -14019,7 +14019,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				networkPolicyChoiceTypeFound = true
 
 				if v.(bool) {
-					networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoNetworkPolicy{}
+					networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoNetworkPolicy{}
 					networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackClusterAr.NetworkPolicyChoice = networkPolicyChoiceInt
 				}
@@ -14033,7 +14033,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				outsideStaticRouteChoiceTypeFound = true
 
 				if v.(bool) {
-					outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_NoOutsideStaticRoutes{}
+					outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_NoOutsideStaticRoutes{}
 					outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackClusterAr.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
 				}
@@ -14043,7 +14043,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
 
 				outsideStaticRouteChoiceTypeFound = true
-				outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_OutsideStaticRoutes{}
+				outsideStaticRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_OutsideStaticRoutes{}
 				outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
 				siteTypeInt.VoltstackClusterAr.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
 

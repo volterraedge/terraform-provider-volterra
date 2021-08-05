@@ -20,12 +20,8 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-
-  captcha_challenge {
-    cookie_expiry = "cookie_expiry"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
+  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
+  no_challenge = true
 }
 
 ```
@@ -116,6 +112,12 @@ Argument Reference
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
 `waf_type` - (Optional) Enable/Disable individual WAF security rules. See [Waf Type ](#waf-type) below for details.
+
+### App Firewall
+
+A direct reference to an Application Firewall configuration object.
+
+`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Auth Hmac
 
@@ -367,6 +369,8 @@ Indicates that the virtual_host has a retry policy..
 
 `retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
 
+`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
+
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
 ### Sec Key
@@ -456,6 +460,8 @@ A set of direct references of WAF Rules objects.
 ```
  Enable/Disable individual WAF security rules.
 ```
+
+`app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
 `waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
 

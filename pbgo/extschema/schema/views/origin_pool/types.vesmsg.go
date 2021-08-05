@@ -2022,7 +2022,7 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	vrhConnectionTimeout := v.ConnectionTimeoutValidationRuleHandler
 	rulesConnectionTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "600000",
+		"ves.io.schema.rules.uint32.lte": "1800000",
 	}
 	vFn, err = vrhConnectionTimeout(rulesConnectionTimeout)
 	if err != nil {

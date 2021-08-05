@@ -253,9 +253,11 @@ type FastACLHitsId struct {
 	Site string `protobuf:"bytes,4,opt,name=site,proto3" json:"site,omitempty"`
 }
 
-func (m *FastACLHitsId) Reset()                    { *m = FastACLHitsId{} }
-func (*FastACLHitsId) ProtoMessage()               {}
-func (*FastACLHitsId) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomDataApi, []int{2} }
+func (m *FastACLHitsId) Reset()      { *m = FastACLHitsId{} }
+func (*FastACLHitsId) ProtoMessage() {}
+func (*FastACLHitsId) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomDataApi, []int{2}
+}
 
 func (m *FastACLHitsId) GetNamespace() string {
 	if m != nil {

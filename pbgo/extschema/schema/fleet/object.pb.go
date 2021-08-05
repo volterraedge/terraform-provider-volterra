@@ -51,6 +51,7 @@
 		StorageClassOpenebsEnterpriseType
 		StorageClassNetappTridentType
 		StorageClassPureServiceOrchestratorType
+		StorageClassCustomType
 		FleetStorageClassType
 		FleetStorageClassListType
 		BondLacpType

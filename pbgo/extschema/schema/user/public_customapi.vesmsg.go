@@ -1310,6 +1310,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant"))

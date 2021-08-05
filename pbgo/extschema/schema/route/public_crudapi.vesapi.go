@@ -3121,6 +3121,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaAppFirewallRefType": {
+            "type": "object",
+            "description": "A list of references to the app_firewall configuration objects",
+            "title": "AppFirewallRefType",
+            "x-displayname": "WAF Rules Reference",
+            "x-ves-proto-message": "ves.io.schema.AppFirewallRefType",
+            "properties": {
+                "app_firewall": {
+                    "type": "array",
+                    "description": " References to an Application Firewall configuration object",
+                    "title": "app_firewall",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Application Firewall"
+                }
+            }
+        },
         "schemaBufferConfigType": {
             "type": "object",
             "description": "Some upstream applications are not capable of handling streamed data. This config\nenables buffering the entire request before sending to upstream application. We can\nspecify the maximum buffer size and buffer interval with this config.\n\nBuffering can be enabled and disabled at VirtualHost and Route levels\nRoute level buffer configuration takes precedence.",
@@ -3828,7 +3846,7 @@ var APISwaggerJSON string = `{
             "description": "Retry policy configuration for route destination.",
             "title": "RetryPolicyType",
             "x-displayname": "Retry Policy",
-            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-displayorder": "1,6,2,3,4,5",
             "x-ves-proto-message": "ves.io.schema.RetryPolicyType",
             "properties": {
                 "back_off": {
@@ -3860,6 +3878,16 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "Status Code to Retry"
+                },
+                "retry_condition": {
+                    "type": "array",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "title": "retry_condition",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Retry Condition",
+                    "x-ves-example": "5xx"
                 },
                 "retry_on": {
                     "type": "string",
@@ -4224,6 +4252,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -4305,16 +4339,21 @@ var APISwaggerJSON string = `{
             "description": "WAF instance will be pointing to either Waf object (high level) or waf_rules Object",
             "title": "WafType",
             "x-displayname": "WAF Instance",
-            "x-ves-oneof-field-ref_type": "[\"waf\",\"waf_rules\"]",
+            "x-ves-oneof-field-ref_type": "[\"app_firewall\",\"waf\",\"waf_rules\"]",
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
+                "app_firewall": {
+                    "description": "Exclusive with [waf waf_rules]\nx-displayName: \"Application Firewall\"\nA direct reference to an Application Firewall configuration object",
+                    "title": "app_firewall",
+                    "$ref": "#/definitions/schemaAppFirewallRefType"
+                },
                 "waf": {
-                    "description": "Exclusive with [waf_rules]\nx-displayName: \"WAF\"\nA WAF object direct reference",
+                    "description": "Exclusive with [app_firewall waf_rules]\nx-displayName: \"WAF\"\nA WAF object direct reference",
                     "title": "waf",
                     "$ref": "#/definitions/schemaWafRefType"
                 },
                 "waf_rules": {
-                    "description": "Exclusive with [waf]\nx-displayName: \"WAF Rules\"\nA set of direct references of WAF Rules objects",
+                    "description": "Exclusive with [app_firewall waf]\nx-displayName: \"WAF Rules\"\nA set of direct references of WAF Rules objects",
                     "title": "waf_rules",
                     "$ref": "#/definitions/schemaWafRulesRefType"
                 }

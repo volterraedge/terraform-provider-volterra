@@ -230,6 +230,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.SyncServerParamsType"] = ves_io_schema.SyncServerParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.UseragentType"] = ves_io_schema.UseragentTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.AppFirewallRefType"] = ves_io_schema.AppFirewallRefTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.AppRoleAuthInfoType"] = ves_io_schema.AppRoleAuthInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.AuthnTypeBasicAuth"] = ves_io_schema.AuthnTypeBasicAuthValidator()
 	MDR.ValidatorRegistry["ves.io.schema.AuthnTypeHeaders"] = ves_io_schema.AuthnTypeHeadersValidator()
@@ -1018,6 +1019,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.fleet.OpenebsMayastorPoolType"] = ves_io_schema_fleet.OpenebsMayastorPoolTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.PsoArrayConfiguration"] = ves_io_schema_fleet.PsoArrayConfigurationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.ReplaceSpecType"] = ves_io_schema_fleet.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageClassCustomType"] = ves_io_schema_fleet.StorageClassCustomTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageClassDellIsilonF800Type"] = ves_io_schema_fleet.StorageClassDellIsilonF800TypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageClassHPENimbusStorageAf40Type"] = ves_io_schema_fleet.StorageClassHPENimbusStorageAf40TypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.StorageClassNetappTridentType"] = ves_io_schema_fleet.StorageClassNetappTridentTypeValidator()
@@ -2500,12 +2502,15 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoRequest"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.SetVIPInfoResponse"] = ves_io_schema_views_azure_vnet_site.SetVIPInfoResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwARReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType"] = ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterReplaceType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType"] = ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterTypeValidator()
@@ -4449,10 +4454,10 @@ func init() {
 				sets.NewString([]string{"network_device"}...),
 			},
 			"spec.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -4539,10 +4544,10 @@ func init() {
 				sets.NewString([]string{"network_device"}...),
 			},
 			"spec.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -4658,10 +4663,10 @@ func init() {
 				sets.NewString([]string{"disable", "enable"}...),
 			},
 			"spec.gc_spec.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -4777,10 +4782,10 @@ func init() {
 				sets.NewString([]string{"disable", "enable"}...),
 			},
 			"spec.gc_spec.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -5913,7 +5918,7 @@ func init() {
 				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
 			},
 			"spec.routes.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -5943,7 +5948,7 @@ func init() {
 				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
 			},
 			"spec.routes.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -5973,7 +5978,7 @@ func init() {
 				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
 			},
 			"spec.gc_spec.routes.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -6003,7 +6008,7 @@ func init() {
 				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
 			},
 			"spec.gc_spec.routes.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -8903,10 +8908,10 @@ func init() {
 			"spec": []sets.String{
 				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
@@ -8996,13 +9001,13 @@ func init() {
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 			},
 			"spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
 				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
 				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
 				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
 				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
 				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
@@ -9029,10 +9034,10 @@ func init() {
 			"spec": []sets.String{
 				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
@@ -9122,13 +9127,13 @@ func init() {
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 			},
 			"spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
 				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
 				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
 				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
 				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
 				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
@@ -9155,11 +9160,11 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
@@ -9249,13 +9254,13 @@ func init() {
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 			},
 			"spec.gc_spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
 				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
 				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
 				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
 				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
 				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
@@ -9282,11 +9287,11 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
@@ -9376,13 +9381,13 @@ func init() {
 				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
 			},
 			"spec.gc_spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"app_firewall", "disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
 				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
 				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
 				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
 				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
-				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
 				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
@@ -9948,10 +9953,10 @@ func init() {
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.custom_storage_config.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -10177,10 +10182,10 @@ func init() {
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.custom_storage_config.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -10400,10 +10405,10 @@ func init() {
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -10629,10 +10634,10 @@ func init() {
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_class_list.storage_classes": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices": []sets.String{
-				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+				sets.NewString([]string{"custom_storage", "netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident": []sets.String{
 				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
@@ -10774,7 +10779,7 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -10803,7 +10808,7 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -10849,7 +10854,7 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}
@@ -10895,7 +10900,7 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.waf_type": []sets.String{
-				sets.NewString([]string{"waf", "waf_rules"}...),
+				sets.NewString([]string{"app_firewall", "waf", "waf_rules"}...),
 			},
 		},
 	}

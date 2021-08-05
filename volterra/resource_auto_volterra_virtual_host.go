@@ -947,6 +947,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							},
 						},
 
+						"retry_condition": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"retry_on": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -1296,6 +1306,44 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"app_firewall": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"app_firewall": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 
 						"waf": {
 
@@ -2475,6 +2523,14 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				retryPolicy.RetriableStatusCodes = ls
 			}
 
+			if w, ok := retryPolicyMapStrToI["retry_condition"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				retryPolicy.RetryCondition = ls
+			}
+
 			if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
 				retryPolicy.RetryOn = w.(string)
 			}
@@ -2892,6 +2948,53 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			wafTypeMapStrToI := set.(map[string]interface{})
 
 			refTypeTypeFound := false
+
+			if v, ok := wafTypeMapStrToI["app_firewall"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+
+				refTypeTypeFound = true
+				refTypeInt := &ves_io_schema.WafType_AppFirewall{}
+				refTypeInt.AppFirewall = &ves_io_schema.AppFirewallRefType{}
+				wafType.RefType = refTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["app_firewall"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						appFirewallInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refTypeInt.AppFirewall.AppFirewall = appFirewallInt
+						for i, ps := range sl {
+
+							afMapToStrVal := ps.(map[string]interface{})
+							appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
+
+							appFirewallInt[i].Kind = "app_firewall"
+
+							if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Name = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
@@ -4107,6 +4210,14 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				retryPolicy.RetriableStatusCodes = ls
 			}
 
+			if w, ok := retryPolicyMapStrToI["retry_condition"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				retryPolicy.RetryCondition = ls
+			}
+
 			if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
 				retryPolicy.RetryOn = w.(string)
 			}
@@ -4517,6 +4628,53 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			wafTypeMapStrToI := set.(map[string]interface{})
 
 			refTypeTypeFound := false
+
+			if v, ok := wafTypeMapStrToI["app_firewall"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+
+				refTypeTypeFound = true
+				refTypeInt := &ves_io_schema.WafType_AppFirewall{}
+				refTypeInt.AppFirewall = &ves_io_schema.AppFirewallRefType{}
+				wafType.RefType = refTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["app_firewall"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						appFirewallInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refTypeInt.AppFirewall.AppFirewall = appFirewallInt
+						for i, ps := range sl {
+
+							afMapToStrVal := ps.(map[string]interface{})
+							appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
+
+							appFirewallInt[i].Kind = "app_firewall"
+
+							if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Name = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								appFirewallInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 

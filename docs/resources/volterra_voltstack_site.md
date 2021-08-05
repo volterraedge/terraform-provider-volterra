@@ -24,23 +24,28 @@ resource "volterra_voltstack_site" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
 
-  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
-  no_k8s_cluster = true
+  enable_vgpu {
+    feature_type   = "feature_type"
+    server_address = "gridlicense1.example.com"
+    server_port    = "server_port"
+  }
 
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+
+  k8s_cluster {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-
   master_nodes = ["master-0"]
-
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
-  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -270,6 +275,12 @@ Use custom networking configuration.
 
 `vip_vrrp_mode` - (Optional) When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP. (`String`).
 
+### Custom Storage
+
+Storage configuration for Custom Storage.
+
+`yaml` - (Optional) K8s YAML for StorageClass (`String`).
+
 ### Custom Storage Config
 
 Use custom storage configuration.
@@ -438,7 +449,7 @@ Enable NVIDIA vGPU hosted on VMware.
 
 `feature_type` - (Required) Set Feature to be enabled (`String`).
 
-`server_address` - (Required) Set License Server Address (`String`).
+`server_address` - (Optional) Set License Server Address (`String`).
 
 `server_port` - (Optional) Set License Server port number (`Int`).
 
@@ -822,6 +833,8 @@ List of custom storage classes.
 
 `description` - (Optional) Description for this storage class (`String`).
 
+`custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
+
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
 `openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
@@ -845,6 +858,8 @@ Add all storage devices belonging to this site.
 List of custom storage devices.
 
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
+
+`custom_storage` - (Optional) Device configuration for Custom Storage (bool).
 
 `netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 

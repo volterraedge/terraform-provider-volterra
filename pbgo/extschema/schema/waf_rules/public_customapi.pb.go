@@ -96,9 +96,11 @@ type WafRulesStatusReq struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
-func (m *WafRulesStatusReq) Reset()                    { *m = WafRulesStatusReq{} }
-func (*WafRulesStatusReq) ProtoMessage()               {}
-func (*WafRulesStatusReq) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{2} }
+func (m *WafRulesStatusReq) Reset()      { *m = WafRulesStatusReq{} }
+func (*WafRulesStatusReq) ProtoMessage() {}
+func (*WafRulesStatusReq) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{2}
+}
 
 func (m *WafRulesStatusReq) GetNamespace() string {
 	if m != nil {
@@ -127,9 +129,11 @@ type WafRulesStatusRsp struct {
 	WafRulesStatus *WafRulesStatus `protobuf:"bytes,1,opt,name=waf_rules_status,json=wafRulesStatus" json:"waf_rules_status,omitempty"`
 }
 
-func (m *WafRulesStatusRsp) Reset()                    { *m = WafRulesStatusRsp{} }
-func (*WafRulesStatusRsp) ProtoMessage()               {}
-func (*WafRulesStatusRsp) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{3} }
+func (m *WafRulesStatusRsp) Reset()      { *m = WafRulesStatusRsp{} }
+func (*WafRulesStatusRsp) ProtoMessage() {}
+func (*WafRulesStatusRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{3}
+}
 
 func (m *WafRulesStatusRsp) GetWafRulesStatus() *WafRulesStatus {
 	if m != nil {

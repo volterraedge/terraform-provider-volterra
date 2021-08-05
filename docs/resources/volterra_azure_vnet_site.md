@@ -27,19 +27,24 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
+
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   // One of the arguments from this list "azure_region alternate_region" must be set
-  alternate_region = "northcentralus"
+  azure_region = "eastus"
   resource_group = ["my-resources"]
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  ingress_gw_ar {
-    azure_certified_hw = "azure-byol-voltmesh"
-
-    node {
-      fault_domain = "1"
+  voltstack_cluster {
+    az_nodes {
+      azure_az  = "1"
+      disk_size = "disk_size"
 
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -49,10 +54,37 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      node_number   = "node_number"
-      update_domain = "1"
     }
+
+    azure_certified_hw = "azure-byol-voltstack-combo"
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+
+    global_network_list {
+      global_network_connections {
+        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
+
+        sli_to_global_dr {
+          global_vn {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+
+        // One of the arguments from this list "enable_forward_proxy disable_forward_proxy" must be set
+        disable_forward_proxy = true
+      }
+    }
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+    no_k8s_cluster = true
+    // One of the arguments from this list "active_network_policies no_network_policy" must be set
+    no_network_policy = true
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -65,7 +97,7 @@ resource "volterra_azure_vnet_site" "example" {
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  no_worker_nodes = true
+  nodes_per_az = "2"
 }
 
 ```

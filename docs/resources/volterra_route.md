@@ -30,7 +30,7 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        regex = "regex"
+        exact = "application/json"
       }
 
       http_method = "http_method"
@@ -109,7 +109,7 @@ resource "volterra_route" "example" {
       }
 
       hash_policy {
-        // One of the arguments from this list "cookie source_ip header_name" must be set
+        // One of the arguments from this list "header_name cookie source_ip" must be set
         header_name = "host"
 
         terminal = true
@@ -144,7 +144,9 @@ resource "volterra_route" "example" {
         per_try_timeout = "per_try_timeout"
 
         retriable_status_codes = ["retriable_status_codes"]
-        retry_on               = "5xx"
+
+        retry_condition = ["5xx"]
+        retry_on        = "5xx"
       }
 
       spdy_config {
@@ -163,7 +165,7 @@ resource "volterra_route" "example" {
       disable = true
     }
     waf_type {
-      // One of the arguments from this list "waf waf_rules" must be set
+      // One of the arguments from this list "waf waf_rules app_firewall" must be set
 
       waf {
         waf {
@@ -198,6 +200,12 @@ Argument Reference
 ### Spec Argument Reference
 
 `routes` - (Required) List of routes to match for incoming request. See [Routes ](#routes) below for details.
+
+### App Firewall
+
+A direct reference to an Application Firewall configuration object.
+
+`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Back Off
 
@@ -391,6 +399,8 @@ Indicates that the route has a retry policy..
 
 `retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
 
+`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
+
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
 ### Route Destination
@@ -518,6 +528,8 @@ A set of direct references of WAF Rules objects.
 ### Waf Type
 
 waf_type specified at route level overrides waf configuration at VirtualHost level.
+
+`app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
 `waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
 

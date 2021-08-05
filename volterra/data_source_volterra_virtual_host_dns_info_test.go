@@ -73,6 +73,7 @@ func testConfigDataSourceVHDNSInfo(name, ns string) string {
 			}
 		}
 		port = 80
+		protocol = "TCP"
 	}
 
 	resource "volterra_virtual_host" "%[1]s" {

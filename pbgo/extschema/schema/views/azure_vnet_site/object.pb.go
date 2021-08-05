@@ -33,8 +33,11 @@
 		AzureVnetVoltstackClusterType
 		AzureVnetVoltstackClusterARType
 		AzureVnetIngressGwReplaceType
+		AzureVnetIngressGwARReplaceType
 		AzureVnetIngressEgressGwReplaceType
+		AzureVnetIngressEgressGwARReplaceType
 		AzureVnetVoltstackClusterReplaceType
+		AzureVnetVoltstackClusterARReplaceType
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType
