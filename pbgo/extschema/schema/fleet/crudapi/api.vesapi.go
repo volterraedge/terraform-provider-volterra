@@ -3483,7 +3483,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageClassType",
             "properties": {
                 "advanced_storage_parameters": {
@@ -3499,6 +3499,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Allow Volume Expansion"
                 },
+                "custom_storage": {
+                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\nx-displayName: \"Custom Storage\"\nStorage configuration for Custom Storage",
+                    "title": "Custom Storage",
+                    "$ref": "#/definitions/fleetStorageClassCustomType"
+                },
                 "default_storage_class": {
                     "type": "boolean",
                     "description": " Make this storage class default storage class for the K8s cluster",
@@ -3513,17 +3518,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Storage Class Description"
                 },
                 "netapp_trident": {
-                    "description": "Exclusive with [openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageClassNetappTridentType"
                 },
                 "openebs_enterprise": {
-                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
                     "title": "OpenEBS Enterprise",
                     "$ref": "#/definitions/fleetStorageClassOpenebsEnterpriseType"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType"
                 },
@@ -3574,7 +3579,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of storage device",
             "title": "Storage Device",
             "x-displayname": "Storage Device",
-            "x-ves-oneof-field-device_choice": "[\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageDeviceType",
             "properties": {
                 "advanced_advanced_parameters": {
@@ -3583,18 +3588,23 @@ var APISwaggerJSON string = `{
                     "title": "Advanced Parameters",
                     "x-displayname": "Advanced Parameters"
                 },
+                "custom_storage": {
+                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\nx-displayName: \"Custom Storage\"\nDevice configuration for Custom Storage",
+                    "title": "Custom Storage",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "netapp_trident": {
-                    "description": "Exclusive with [openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nDevice configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nDevice configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageDeviceNetappTridentType"
                 },
                 "openebs_enterprise": {
-                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nDevice configuration for Pure Storage Service Orchestrator",
                     "title": "OpenEBS Enterprise",
                     "$ref": "#/definitions/fleetStorageDeviceOpenebsEnterpriseType"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nDevice configuration for Pure Storage Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType"
                 },
@@ -3937,6 +3947,21 @@ var APISwaggerJSON string = `{
                     "title": "status",
                     "$ref": "#/definitions/fleetFleetStatus",
                     "x-displayname": "Status"
+                }
+            }
+        },
+        "fleetStorageClassCustomType": {
+            "type": "object",
+            "description": "Custom Storage Class allows to insert Kubernetes storageclass definition which will be applied into given site.",
+            "title": "Custom StorageClass",
+            "x-displayname": "Custom StorageClass",
+            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassCustomType",
+            "properties": {
+                "yaml": {
+                    "type": "string",
+                    "description": " K8s YAML for StorageClass",
+                    "title": "Storage Class YAML",
+                    "x-displayname": "Storage Class YAML"
                 }
             }
         },
@@ -4412,11 +4437,10 @@ var APISwaggerJSON string = `{
                 },
                 "server_address": {
                     "type": "string",
-                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-\nRequired: YES",
+                    "description": " Set License Server Address\n\nExample: - \"gridlicense1.example.com\"-",
                     "title": "License Server Address",
                     "x-displayname": "License Server Address",
-                    "x-ves-example": "gridlicense1.example.com",
-                    "x-ves-required": "true"
+                    "x-ves-example": "gridlicense1.example.com"
                 },
                 "server_port": {
                     "type": "integer",
@@ -5247,6 +5271,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -5453,6 +5483,15 @@ var APISwaggerJSON string = `{
                     "title": "Fleet type",
                     "$ref": "#/definitions/fleetFleetType",
                     "x-displayname": "Fleet Type"
+                },
+                "generated_yamls": {
+                    "type": "array",
+                    "description": " K8s YAML for CustomStorageClass",
+                    "title": "K8s YAMLs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "K8s YAMLs"
                 },
                 "inside_virtual_network": {
                     "type": "array",

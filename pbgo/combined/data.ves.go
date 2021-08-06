@@ -272,6 +272,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AppFirewallRefType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.AppFirewallRefType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AppRoleAuthInfoType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -10554,6 +10561,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.fleet.ReplaceSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StorageClassCustomType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.StorageClassCustomType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "StorageClassDellIsilonF800Type",
@@ -28236,6 +28250,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.CustomAPI.SendPasswordEmail"] = rpcInfo
 	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SyncUser",
+		InMsgType:    "ves.io.schema.user.Empty",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.user.Empty",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/custom/idm/user/sync"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SyncUser")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.user.CustomAPI.SyncUser"] = rpcInfo
+	}
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	if mdr.APIIdx != nil {
@@ -31258,6 +31285,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetIngressEgressGwARReplaceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARReplaceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetIngressEgressGwARType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -31279,6 +31313,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetIngressGwARReplaceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARReplaceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetIngressGwARType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -31298,6 +31339,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureVnetVoltstackClusterARReplaceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARReplaceType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureVnetVoltstackClusterARType",

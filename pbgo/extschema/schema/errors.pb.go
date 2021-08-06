@@ -92,6 +92,7 @@
 		RouteMatch
 		WafRefType
 		WafRulesRefType
+		AppFirewallRefType
 		WafType
 		AppRoleAuthInfoType
 		VaultAuthInfoType

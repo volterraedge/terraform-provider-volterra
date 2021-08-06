@@ -1440,6 +1440,24 @@ func (m *CreateSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *CreateSpecType_DisableWaf:
 
+	case *CreateSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		odri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -1499,6 +1517,30 @@ func (m *CreateSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 		}
 
 	case *CreateSpecType_DisableWaf:
+
+	case *CreateSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -2324,6 +2366,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*CreateSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2535,6 +2588,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -3137,7 +3191,8 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 
 	vrhMitigationChoiceDdosClientSource := v.MitigationChoiceDdosClientSourceValidationRuleHandler
 	rulesMitigationChoiceDdosClientSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required":                   "true",
+		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
 	}
 	vFnMap["mitigation_choice.ddos_client_source"], err = vrhMitigationChoiceDdosClientSource(rulesMitigationChoiceDdosClientSource)
 	if err != nil {
@@ -3980,6 +4035,24 @@ func (m *GetSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GetSpecType_DisableWaf:
 
+	case *GetSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		odri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -4039,6 +4112,30 @@ func (m *GetSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface)
 		}
 
 	case *GetSpecType_DisableWaf:
+
+	case *GetSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -4912,6 +5009,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*GetSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5123,6 +5231,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -5670,6 +5779,24 @@ func (m *GlobalSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GlobalSpecType_DisableWaf:
 
+	case *GlobalSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		odri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -5729,6 +5856,30 @@ func (m *GlobalSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 		}
 
 	case *GlobalSpecType_DisableWaf:
+
+	case *GlobalSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -6656,6 +6807,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*GlobalSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6879,6 +7041,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -8927,6 +9090,24 @@ func (m *ReplaceSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *ReplaceSpecType_DisableWaf:
 
+	case *ReplaceSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		odri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -8986,6 +9167,30 @@ func (m *ReplaceSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interf
 		}
 
 	case *ReplaceSpecType_DisableWaf:
+
+	case *ReplaceSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -9811,6 +10016,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*ReplaceSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -10022,6 +10238,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -10165,6 +10382,24 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfo() ([]db.DRefInfo, erro
 		}
 		odrInfos = append(odrInfos, odri)
 
+	case *RouteSimpleAdvancedOptions_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		odri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -10213,6 +10448,30 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, 
 		}
 		ref := &ves_io_schema.ObjectRefType{
 			Kind:      "waf_rules.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *RouteSimpleAdvancedOptions_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -10919,6 +11178,17 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
+	case *RouteSimpleAdvancedOptions_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -11169,6 +11439,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -12934,6 +13205,9 @@ func (r *CreateSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.WafChoice = nil
 
+	case *CreateSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
 	case *CreateSpecType_DisableWaf:
 		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
 
@@ -12953,6 +13227,9 @@ func (r *CreateSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	switch of := o.WafChoice.(type) {
 	case nil:
 		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &CreateSpecType_AppFirewall{AppFirewall: of.AppFirewall}
 
 	case *GlobalSpecType_DisableWaf:
 		r.WafChoice = &CreateSpecType_DisableWaf{DisableWaf: of.DisableWaf}
@@ -13297,6 +13574,9 @@ func (r *GetSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.WafChoice = nil
 
+	case *GetSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
 	case *GetSpecType_DisableWaf:
 		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
 
@@ -13316,6 +13596,9 @@ func (r *GetSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.WafChoice.(type) {
 	case nil:
 		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &GetSpecType_AppFirewall{AppFirewall: of.AppFirewall}
 
 	case *GlobalSpecType_DisableWaf:
 		r.WafChoice = &GetSpecType_DisableWaf{DisableWaf: of.DisableWaf}
@@ -13670,6 +13953,9 @@ func (r *ReplaceSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case nil:
 		o.WafChoice = nil
 
+	case *ReplaceSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
 	case *ReplaceSpecType_DisableWaf:
 		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
 
@@ -13689,6 +13975,9 @@ func (r *ReplaceSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 	switch of := o.WafChoice.(type) {
 	case nil:
 		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &ReplaceSpecType_AppFirewall{AppFirewall: of.AppFirewall}
 
 	case *GlobalSpecType_DisableWaf:
 		r.WafChoice = &ReplaceSpecType_DisableWaf{DisableWaf: of.DisableWaf}

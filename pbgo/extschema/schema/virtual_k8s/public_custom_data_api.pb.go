@@ -316,9 +316,11 @@ type PVCMetricData struct {
 	Data []*PVCMetricTypeData `protobuf:"bytes,2,rep,name=data" json:"data,omitempty"`
 }
 
-func (m *PVCMetricData) Reset()                    { *m = PVCMetricData{} }
-func (*PVCMetricData) ProtoMessage()               {}
-func (*PVCMetricData) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomDataApi, []int{3} }
+func (m *PVCMetricData) Reset()      { *m = PVCMetricData{} }
+func (*PVCMetricData) ProtoMessage() {}
+func (*PVCMetricData) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomDataApi, []int{3}
+}
 
 func (m *PVCMetricData) GetType() PVCMetricType {
 	if m != nil {

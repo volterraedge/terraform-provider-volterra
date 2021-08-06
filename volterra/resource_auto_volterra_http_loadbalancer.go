@@ -3197,6 +3197,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																},
 															},
 
+															"retry_condition": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
 															"retry_on": {
 																Type:     schema.TypeString,
 																Optional: true,
@@ -3232,6 +3242,29 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"timeout": {
 													Type:     schema.TypeInt,
 													Optional: true,
+												},
+
+												"app_firewall": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"disable_waf": {
@@ -3551,6 +3584,29 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 			},
 
 			"user_identification": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"app_firewall": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
@@ -7757,6 +7813,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := cs["retry_condition"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										retryPolicyChoiceInt.RetryPolicy.RetryCondition = ls
+
+									}
+
 									if v, ok := cs["retry_on"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.RetryOn = v.(string)
@@ -7822,6 +7888,36 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							}
 
 							wafChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["app_firewall"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+
+								wafChoiceTypeFound = true
+								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_AppFirewall{}
+								wafChoiceInt.AppFirewall = &ves_io_schema_views.ObjectRefType{}
+								advancedOptions.WafChoice = wafChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Name = v.(string)
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Namespace = v.(string)
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Tenant = v.(string)
+									}
+
+								}
+
+							}
 
 							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
@@ -8294,6 +8390,36 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	//waf_choice
 
 	wafChoiceTypeFound := false
+
+	if v, ok := d.GetOk("app_firewall"); ok && !wafChoiceTypeFound {
+
+		wafChoiceTypeFound = true
+		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_AppFirewall{}
+		wafChoiceInt.AppFirewall = &ves_io_schema_views.ObjectRefType{}
+		createSpec.WafChoice = wafChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Tenant = v.(string)
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("disable_waf"); ok && !wafChoiceTypeFound {
 
@@ -12540,6 +12666,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := cs["retry_condition"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										retryPolicyChoiceInt.RetryPolicy.RetryCondition = ls
+
+									}
+
 									if v, ok := cs["retry_on"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.RetryOn = v.(string)
@@ -12605,6 +12741,36 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							}
 
 							wafChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["app_firewall"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+
+								wafChoiceTypeFound = true
+								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_AppFirewall{}
+								wafChoiceInt.AppFirewall = &ves_io_schema_views.ObjectRefType{}
+								advancedOptions.WafChoice = wafChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Name = v.(string)
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Namespace = v.(string)
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										wafChoiceInt.AppFirewall.Tenant = v.(string)
+									}
+
+								}
+
+							}
 
 							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
@@ -13071,6 +13237,36 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	}
 
 	wafChoiceTypeFound := false
+
+	if v, ok := d.GetOk("app_firewall"); ok && !wafChoiceTypeFound {
+
+		wafChoiceTypeFound = true
+		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_AppFirewall{}
+		wafChoiceInt.AppFirewall = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.WafChoice = wafChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				wafChoiceInt.AppFirewall.Tenant = v.(string)
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("disable_waf"); ok && !wafChoiceTypeFound {
 

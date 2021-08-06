@@ -4757,6 +4757,17 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
+	case *FleetStorageClassType_CustomStorage:
+		if fv, exists := v.FldValidators["device_choice.custom_storage"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageClassType_CustomStorage).CustomStorage
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("custom_storage"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4878,6 +4889,7 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 	v.FldValidators["device_choice.netapp_trident"] = StorageClassNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageClassPureServiceOrchestratorTypeValidator().Validate
 	v.FldValidators["device_choice.openebs_enterprise"] = StorageClassOpenebsEnterpriseTypeValidator().Validate
+	v.FldValidators["device_choice.custom_storage"] = StorageClassCustomTypeValidator().Validate
 
 	return v
 }()
@@ -5222,6 +5234,17 @@ func (v *ValidateFleetStorageDeviceType) Validate(ctx context.Context, pm interf
 			vOpts := append(opts,
 				db.WithValidateField("device_choice"),
 				db.WithValidateField("openebs_enterprise"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FleetStorageDeviceType_CustomStorage:
+		if fv, exists := v.FldValidators["device_choice.custom_storage"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageDeviceType_CustomStorage).CustomStorage
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("custom_storage"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8352,6 +8375,48 @@ func (v *ValidateGlobalSpecType) SingleSiteValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) GeneratedYamlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for generated_yamls")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for generated_yamls")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated generated_yamls")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items generated_yamls")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -8488,6 +8553,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("fleet_type"))
 		if err := fv(ctx, m.GetFleetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["generated_yamls"]; exists {
+		vOpts := append(opts, db.WithValidateField("generated_yamls"))
+		if err := fv(ctx, m.GetGeneratedYamls(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9123,6 +9196,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["single_site"] = vFn
+
+	vrhGeneratedYamls := v.GeneratedYamlsValidationRuleHandler
+	rulesGeneratedYamls := map[string]string{
+		"ves.io.schema.rules.string.max_len": "4096",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhGeneratedYamls(rulesGeneratedYamls)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.generated_yamls: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["generated_yamls"] = vFn
 
 	v.FldValidators["bond_choice.bond_device_list"] = FleetBondDevicesListTypeValidator().Validate
 
@@ -11914,6 +11999,114 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StorageClassCustomType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StorageClassCustomType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StorageClassCustomType) DeepCopy() *StorageClassCustomType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StorageClassCustomType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StorageClassCustomType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StorageClassCustomType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StorageClassCustomTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStorageClassCustomType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStorageClassCustomType) YamlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for yaml")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassCustomType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StorageClassCustomType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StorageClassCustomType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["yaml"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("yaml"))
+		if err := fv(ctx, m.GetYaml(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStorageClassCustomTypeValidator = func() *ValidateStorageClassCustomType {
+	v := &ValidateStorageClassCustomType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhYaml := v.YamlValidationRuleHandler
+	rulesYaml := map[string]string{
+		"ves.io.schema.rules.string.max_len": "4096",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhYaml(rulesYaml)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassCustomType.yaml: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["yaml"] = vFn
+
+	return v
+}()
+
+func StorageClassCustomTypeValidator() db.Validator {
+	return DefaultStorageClassCustomTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -15356,7 +15549,6 @@ var DefaultVGPUConfigurationValidator = func() *ValidateVGPUConfiguration {
 
 	vrhServerAddress := v.ServerAddressValidationRuleHandler
 	rulesServerAddress := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
 		"ves.io.schema.rules.string.hostname_or_ip": "true",
 	}
 	vFn, err = vrhServerAddress(rulesServerAddress)

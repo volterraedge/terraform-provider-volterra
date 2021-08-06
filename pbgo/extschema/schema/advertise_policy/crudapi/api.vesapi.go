@@ -2577,7 +2577,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Optional. port to advertise. If not specified, system will assume 80.\n\nExample: - \"80\"-",
+                    "description": " Port to advertise.\n\nExample: - \"80\"-",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
@@ -2585,7 +2585,7 @@ var APISwaggerJSON string = `{
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Optional. protocol to advertise. If not specified, system will assume TCP.\n Remove Hidden when more protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to advertise.\n\nExample: - \"TCP\"-",
                     "title": "protocol",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP"
@@ -3492,6 +3492,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

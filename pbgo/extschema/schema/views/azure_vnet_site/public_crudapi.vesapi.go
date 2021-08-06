@@ -2110,6 +2110,75 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "azure_vnet_siteAzureVnetIngressEgressGwARReplaceType": {
+            "type": "object",
+            "description": "Two interface Azure ingress/egress site for Alternate Region",
+            "title": "Azure Ingress Egress Gateway for Alternate Region",
+            "x-displayname": "Azure Ingress/Egress Gateway for Alternate Region",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
+            "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARReplaceType",
+            "properties": {
+                "active_forward_proxy_policies": {
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "title": "Enable Forward Proxy and Manage Policies",
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                },
+                "active_network_policies": {
+                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "title": "Manage Network Policy",
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                },
+                "forward_proxy_allow_all": {
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "title": "Enable Forward Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "global_network_list": {
+                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "title": "Connect Global Networks",
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                },
+                "inside_static_routes": {
+                    "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                },
+                "no_forward_proxy": {
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "title": "Disable Forward Proxy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_global_network": {
+                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_inside_static_routes": {
+                    "description": "Exclusive with [inside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for inside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_network_policy": {
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "title": "Do Not Manage Network Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_outside_static_routes": {
+                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "outside_static_routes": {
+                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                }
+            }
+        },
         "azure_vnet_siteAzureVnetIngressEgressGwARType": {
             "type": "object",
             "description": "Two interface Azure ingress/egress site on Alternate Region with no support for zones",
@@ -2348,6 +2417,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "azure_vnet_siteAzureVnetIngressGwARReplaceType": {
+            "type": "object",
+            "description": "Single interface Azure ingress site for Alternate Region",
+            "title": "Azure Ingress Gateway for Alternate Region",
+            "x-displayname": "Azure Ingress Gateway for Alternate Region",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARReplaceType"
+        },
         "azure_vnet_siteAzureVnetIngressGwARType": {
             "type": "object",
             "description": "Single interface Azure ingress site",
@@ -2403,6 +2479,64 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Azure Certified Hardware",
                     "x-ves-example": "azure-byol-voltmesh",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "azure_vnet_siteAzureVnetVoltstackClusterARReplaceType": {
+            "type": "object",
+            "description": "Voltstack cluster of single interface Azure nodes",
+            "title": "Azure VoltStack Cluster for Alternate Region",
+            "x-displayname": "Azure VoltStack Cluster for Alternate Region",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
+            "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARReplaceType",
+            "properties": {
+                "active_forward_proxy_policies": {
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "title": "Enable Forward Proxy and Manage Policies",
+                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
+                },
+                "active_network_policies": {
+                    "description": "Exclusive with [no_network_policy]\nx-displayName: \"Active Network Policies\"\nNetwork Policies active for  this site.",
+                    "title": "Manage Network Policy",
+                    "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
+                },
+                "forward_proxy_allow_all": {
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "title": "Enable Forward Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "global_network_list": {
+                    "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
+                    "title": "Connect Global Networks",
+                    "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
+                },
+                "no_forward_proxy": {
+                    "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
+                    "title": "Disable Forward Proxy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_global_network": {
+                    "description": "Exclusive with [global_network_list]\nx-displayName: \"Do Not Connect Global Networks\"\nNo global network to connect",
+                    "title": "Do not Connect Global Networks",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_network_policy": {
+                    "description": "Exclusive with [active_network_policies]\nx-displayName: \"Disable Network Policy\"\nNetwork Policy is disabled for this site.",
+                    "title": "Do Not Manage Network Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_outside_static_routes": {
+                    "description": "Exclusive with [outside_static_routes]\nx-displayName: \"Disable Static Routes\"\nStatic Routes disabled for outside network.",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "outside_static_routes": {
+                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 }
             }
         },
@@ -4189,6 +4323,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -5472,7 +5612,7 @@ var APISwaggerJSON string = `{
                 "ingress_egress_gw_ar": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress/Egress Gateway (Two Interface) on Alternate Region\"\nTwo interface site is useful when site is used as ingress/egress gateway to the Vnet.",
                     "title": "Ingress/Egress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARReplaceType"
                 },
                 "ingress_gw": {
                     "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway on Recommended Region\"\nIngress gateway choice can not be changed (no config available for editing)",
@@ -5482,7 +5622,7 @@ var APISwaggerJSON string = `{
                 "ingress_gw_ar": {
                     "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\nx-displayName: \"Ingress Gateway (One Interface) on Alternate Region\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARReplaceType"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
@@ -5514,7 +5654,7 @@ var APISwaggerJSON string = `{
                 "voltstack_cluster_ar": {
                     "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster]\nx-displayName: \"Voltstack Cluster (One Interface) on Alternate Region\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster on Alternate Region",
-                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterReplaceType"
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterARReplaceType"
                 }
             }
         }

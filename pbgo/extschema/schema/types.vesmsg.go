@@ -26,6 +26,194 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AppFirewallRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AppFirewallRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AppFirewallRefType) DeepCopy() *AppFirewallRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AppFirewallRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AppFirewallRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AppFirewallRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AppFirewallRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AppFirewallRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppFirewallDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *AppFirewallRefType) GetAppFirewallDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetAppFirewall() {
+		if ref == nil {
+			return nil, fmt.Errorf("AppFirewallRefType.app_firewall[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "app_firewall",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetAppFirewallDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AppFirewallRefType) GetAppFirewallDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+	}
+	for _, ref := range m.GetAppFirewall() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateAppFirewallRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAppFirewallRefType) AppFirewallValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for app_firewall")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated app_firewall")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items app_firewall")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AppFirewallRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AppFirewallRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_firewall"]; exists {
+		vOpts := append(opts, db.WithValidateField("app_firewall"))
+		if err := fv(ctx, m.GetAppFirewall(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAppFirewallRefTypeValidator = func() *ValidateAppFirewallRefType {
+	v := &ValidateAppFirewallRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAppFirewall := v.AppFirewallValidationRuleHandler
+	rulesAppFirewall := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhAppFirewall(rulesAppFirewall)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallRefType.app_firewall: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["app_firewall"] = vFn
+
+	return v
+}()
+
+func AppFirewallRefTypeValidator() db.Validator {
+	return DefaultAppFirewallRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AppRoleAuthInfoType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5980,6 +6168,14 @@ type ValidatePathMatcherType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidatePathMatcherType) PathMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path_match")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidatePathMatcherType) PathMatchPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Prefix, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -6014,6 +6210,16 @@ func (v *ValidatePathMatcherType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["path_match"]; exists {
+		val := m.GetPathMatch()
+		vOpts := append(opts,
+			db.WithValidateField("path_match"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetPathMatch().(type) {
@@ -6067,6 +6273,17 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPathMatch := v.PathMatchValidationRuleHandler
+	rulesPathMatch := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPathMatch(rulesPathMatch)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PathMatcherType.path_match: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path_match"] = vFn
 
 	vrhPathMatchPrefix := v.PathMatchPrefixValidationRuleHandler
 	rulesPathMatchPrefix := map[string]string{
@@ -7116,6 +7333,48 @@ func (v *ValidateRetryPolicyType) RetriableStatusCodesValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateRetryPolicyType) RetryConditionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for retry_condition")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for retry_condition")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated retry_condition")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items retry_condition")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRetryPolicyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RetryPolicyType)
 	if !ok {
@@ -7160,6 +7419,14 @@ func (v *ValidateRetryPolicyType) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["retriable_status_codes"]; exists {
 		vOpts := append(opts, db.WithValidateField("retriable_status_codes"))
 		if err := fv(ctx, m.GetRetriableStatusCodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["retry_condition"]; exists {
+		vOpts := append(opts, db.WithValidateField("retry_condition"))
+		if err := fv(ctx, m.GetRetryCondition(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7225,6 +7492,7 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 	vrhRetriableStatusCodes := v.RetriableStatusCodesValidationRuleHandler
 	rulesRetriableStatusCodes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRetriableStatusCodes(rulesRetriableStatusCodes)
 	if err != nil {
@@ -7232,6 +7500,19 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 		panic(errMsg)
 	}
 	v.FldValidators["retriable_status_codes"] = vFn
+
+	vrhRetryCondition := v.RetryConditionValidationRuleHandler
+	rulesRetryCondition := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "6",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.in":          "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
+	}
+	vFn, err = vrhRetryCondition(rulesRetryCondition)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RetryPolicyType.retry_condition: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["retry_condition"] = vFn
 
 	v.FldValidators["back_off"] = RetryBackOffValidator().Validate
 
@@ -9261,6 +9542,11 @@ func (m *SystemObjectMetaType) SetUid(in string) {
 	m.Uid = in
 }
 
+// SetVtrpId sets the field
+func (m *SystemObjectMetaType) SetVtrpId(in string) {
+	m.VtrpId = in
+}
+
 func (m *SystemObjectMetaType) GetNamespaceDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 	for i, ref := range m.GetNamespace() {
@@ -9492,6 +9778,15 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("uid"))
 		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vtrp_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vtrp_id"))
+		if err := fv(ctx, m.GetVtrpId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12549,6 +12844,16 @@ func (m *WafType) GetRefTypeDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *WafType_AppFirewall:
+		odrInfos, err = m.GetAppFirewall().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "app_firewall." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -12595,6 +12900,17 @@ func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...
 				return err
 			}
 		}
+	case *WafType_AppFirewall:
+		if fv, exists := v.FldValidators["ref_type.app_firewall"]; exists {
+			val := m.GetRefType().(*WafType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("ref_type"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -12607,6 +12923,7 @@ var DefaultWafTypeValidator = func() *ValidateWafType {
 
 	v.FldValidators["ref_type.waf"] = WafRefTypeValidator().Validate
 	v.FldValidators["ref_type.waf_rules"] = WafRulesRefTypeValidator().Validate
+	v.FldValidators["ref_type.app_firewall"] = AppFirewallRefTypeValidator().Validate
 
 	return v
 }()

@@ -23,16 +23,17 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
+
+  enable_vgpu {
+    feature_type   = "feature_type"
+    server_address = "gridlicense1.example.com"
+    server_port    = "server_port"
+  }
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
@@ -47,14 +48,20 @@ resource "volterra_fleet" "example" {
   logs_streaming_disabled = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
-  // One of the arguments from this list "storage_device_list no_storage_device" must be set
+  // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb = true
+
+  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
+
+  usb_policy {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -168,6 +175,12 @@ List of bond devices for this fleet.
 
 `name` - (Required) Bond device name (`String`).
 
+### Custom Storage
+
+Storage configuration for Custom Storage.
+
+`yaml` - (Optional) K8s YAML for StorageClass (`String`).
+
 ### Device List
 
 Add device for all interfaces belonging to this fleet.
@@ -190,7 +203,7 @@ Enable NVIDIA vGPU hosted on VMware.
 
 `feature_type` - (Required) Set Feature to be enabled (`String`).
 
-`server_address` - (Required) Set License Server Address (`String`).
+`server_address` - (Optional) Set License Server Address (`String`).
 
 `server_port` - (Optional) Set License Server port number (`Int`).
 
@@ -298,6 +311,8 @@ List of custom storage classes.
 
 `description` - (Optional) Description for this storage class (`String`).
 
+`custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
+
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
 `openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
@@ -321,6 +336,8 @@ Add all storage devices belonging to this fleet.
 List of custom storage devices.
 
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
+
+`custom_storage` - (Optional) Device configuration for Custom Storage (bool).
 
 `netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 

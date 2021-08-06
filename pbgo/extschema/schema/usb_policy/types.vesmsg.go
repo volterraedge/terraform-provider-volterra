@@ -143,9 +143,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAllowedDevices := v.AllowedDevicesValidationRuleHandler
 	rulesAllowedDevices := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.message.required":                                  "true",
+		"ves.io.schema.rules.repeated.items.message.required_one_nonzero_field": "true",
+		"ves.io.schema.rules.repeated.max_items":                                "32",
+		"ves.io.schema.rules.repeated.min_items":                                "1",
 	}
 	vFn, err = vrhAllowedDevices(rulesAllowedDevices)
 	if err != nil {
@@ -281,9 +282,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAllowedDevices := v.AllowedDevicesValidationRuleHandler
 	rulesAllowedDevices := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.message.required":                                  "true",
+		"ves.io.schema.rules.repeated.items.message.required_one_nonzero_field": "true",
+		"ves.io.schema.rules.repeated.max_items":                                "32",
+		"ves.io.schema.rules.repeated.min_items":                                "1",
 	}
 	vFn, err = vrhAllowedDevices(rulesAllowedDevices)
 	if err != nil {
@@ -419,9 +421,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAllowedDevices := v.AllowedDevicesValidationRuleHandler
 	rulesAllowedDevices := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.message.required":                                  "true",
+		"ves.io.schema.rules.repeated.items.message.required_one_nonzero_field": "true",
+		"ves.io.schema.rules.repeated.max_items":                                "32",
+		"ves.io.schema.rules.repeated.min_items":                                "1",
 	}
 	vFn, err = vrhAllowedDevices(rulesAllowedDevices)
 	if err != nil {
@@ -557,9 +560,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAllowedDevices := v.AllowedDevicesValidationRuleHandler
 	rulesAllowedDevices := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.message.required":                                  "true",
+		"ves.io.schema.rules.repeated.items.message.required_one_nonzero_field": "true",
+		"ves.io.schema.rules.repeated.max_items":                                "32",
+		"ves.io.schema.rules.repeated.min_items":                                "1",
 	}
 	vFn, err = vrhAllowedDevices(rulesAllowedDevices)
 	if err != nil {

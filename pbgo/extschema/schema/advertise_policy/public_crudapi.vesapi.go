@@ -2180,7 +2180,6 @@ var APISwaggerJSON string = `{
             "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
             "title": "Create advertise policy",
             "x-displayname": "Create Advertise Policy",
-            "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.CreateSpecType",
             "properties": {
                 "address": {
@@ -2191,14 +2190,14 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Optional. port to advertise. If not specified, system will assume 80.\n\nExample: - \"80\"-",
+                    "description": " Port to advertise.\n\nExample: - \"80\"-",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
                     "x-ves-example": "80"
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Optional. protocol to advertise. If not specified, system will assume TCP.\n Remove Hidden when more protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to advertise.\n\nExample: - \"TCP\"-",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP"
                 },
@@ -2347,7 +2346,6 @@ var APISwaggerJSON string = `{
             "description": "Get advertise_policy read a given object from storage backend for metadata.namespace",
             "title": "Get advertise policy",
             "x-displayname": "Get Advertise Policy",
-            "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.GetSpecType",
             "properties": {
                 "address": {
@@ -2358,14 +2356,14 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Optional. port to advertise. If not specified, system will assume 80.\n\nExample: - \"80\"-",
+                    "description": " Port to advertise.\n\nExample: - \"80\"-",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
                     "x-ves-example": "80"
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Optional. protocol to advertise. If not specified, system will assume TCP.\n Remove Hidden when more protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to advertise.\n\nExample: - \"TCP\"-",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP"
                 },
@@ -2411,7 +2409,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Optional. port to advertise. If not specified, system will assume 80.\n\nExample: - \"80\"-",
+                    "description": " Port to advertise.\n\nExample: - \"80\"-",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
@@ -2419,7 +2417,7 @@ var APISwaggerJSON string = `{
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Optional. protocol to advertise. If not specified, system will assume TCP.\n Remove Hidden when more protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to advertise.\n\nExample: - \"TCP\"-",
                     "title": "protocol",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP"
@@ -2648,7 +2646,6 @@ var APISwaggerJSON string = `{
             "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
             "title": "Replace advertise policy",
             "x-displayname": "Replace Advertise Policy",
-            "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.ReplaceSpecType",
             "properties": {
                 "address": {
@@ -2659,14 +2656,14 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Optional. port to advertise. If not specified, system will assume 80.\n\nExample: - \"80\"-",
+                    "description": " Port to advertise.\n\nExample: - \"80\"-",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
                     "x-ves-example": "80"
                 },
                 "protocol": {
                     "type": "string",
-                    "description": " Optional. protocol to advertise. If not specified, system will assume TCP.\n Remove Hidden when more protocols are supported\n\nExample: - \"TCP\"-",
+                    "description": " Protocol to advertise.\n\nExample: - \"TCP\"-",
                     "x-displayname": "Protocol",
                     "x-ves-example": "TCP"
                 },
@@ -3656,6 +3653,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },

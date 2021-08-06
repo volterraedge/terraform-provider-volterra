@@ -173,9 +173,11 @@ type RuntimeClassStrategyOptions struct {
 	DefaultRuntimeClassName string `protobuf:"bytes,2,opt,name=default_runtime_class_name,json=defaultRuntimeClassName,proto3" json:"default_runtime_class_name,omitempty"`
 }
 
-func (m *RuntimeClassStrategyOptions) Reset()                    { *m = RuntimeClassStrategyOptions{} }
-func (*RuntimeClassStrategyOptions) ProtoMessage()               {}
-func (*RuntimeClassStrategyOptions) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *RuntimeClassStrategyOptions) Reset()      { *m = RuntimeClassStrategyOptions{} }
+func (*RuntimeClassStrategyOptions) ProtoMessage() {}
+func (*RuntimeClassStrategyOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{4}
+}
 
 func (m *RuntimeClassStrategyOptions) GetAllowedRuntimeClassNames() []string {
 	if m != nil {
@@ -574,12 +576,13 @@ func (*PodSecurityPolicySpecType_NoSupplementalGroups) isPodSecurityPolicySpecTy
 }
 func (*PodSecurityPolicySpecType_SupplementalGroups) isPodSecurityPolicySpecType_SupplementalGroupChoice() {
 }
-func (*PodSecurityPolicySpecType_NoFsGroups) isPodSecurityPolicySpecType_FsGroupChoice()             {}
-func (*PodSecurityPolicySpecType_FsGroupStrategyOptions) isPodSecurityPolicySpecType_FsGroupChoice() {}
-func (*PodSecurityPolicySpecType_NoSeLinuxOptions) isPodSecurityPolicySpecType_SeLinuxChoice()       {}
-func (*PodSecurityPolicySpecType_SeLinuxOptions) isPodSecurityPolicySpecType_SeLinuxChoice()         {}
-func (*PodSecurityPolicySpecType_NoRuntimeClass) isPodSecurityPolicySpecType_RuntimeClassChoice()    {}
-func (*PodSecurityPolicySpecType_RuntimeClass) isPodSecurityPolicySpecType_RuntimeClassChoice()      {}
+func (*PodSecurityPolicySpecType_NoFsGroups) isPodSecurityPolicySpecType_FsGroupChoice() {}
+func (*PodSecurityPolicySpecType_FsGroupStrategyOptions) isPodSecurityPolicySpecType_FsGroupChoice() {
+}
+func (*PodSecurityPolicySpecType_NoSeLinuxOptions) isPodSecurityPolicySpecType_SeLinuxChoice()    {}
+func (*PodSecurityPolicySpecType_SeLinuxOptions) isPodSecurityPolicySpecType_SeLinuxChoice()      {}
+func (*PodSecurityPolicySpecType_NoRuntimeClass) isPodSecurityPolicySpecType_RuntimeClassChoice() {}
+func (*PodSecurityPolicySpecType_RuntimeClass) isPodSecurityPolicySpecType_RuntimeClassChoice()   {}
 
 func (m *PodSecurityPolicySpecType) GetDefaultCapabilitiesChoice() isPodSecurityPolicySpecType_DefaultCapabilitiesChoice {
 	if m != nil {

@@ -79,1211 +79,1277 @@ func (v *ValidateRouteTargetChoice) Validate(ctx context.Context, pm interface{}
 	}
 
 	switch m.GetChoice().(type) {
-	case *RouteTargetChoice_Rt_1:
-		if fv, exists := v.FldValidators["choice.rt_1"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_1).Rt_1
+	case *RouteTargetChoice_Rt_1001:
+		if fv, exists := v.FldValidators["choice.rt_1001"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1001).Rt_1001
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_1"),
+				db.WithValidateField("rt_1001"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_2:
-		if fv, exists := v.FldValidators["choice.rt_2"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_2).Rt_2
+	case *RouteTargetChoice_Rt_1002:
+		if fv, exists := v.FldValidators["choice.rt_1002"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1002).Rt_1002
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_2"),
+				db.WithValidateField("rt_1002"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_3:
-		if fv, exists := v.FldValidators["choice.rt_3"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_3).Rt_3
+	case *RouteTargetChoice_Rt_1003:
+		if fv, exists := v.FldValidators["choice.rt_1003"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1003).Rt_1003
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_3"),
+				db.WithValidateField("rt_1003"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_4:
-		if fv, exists := v.FldValidators["choice.rt_4"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_4).Rt_4
+	case *RouteTargetChoice_Rt_1004:
+		if fv, exists := v.FldValidators["choice.rt_1004"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1004).Rt_1004
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_4"),
+				db.WithValidateField("rt_1004"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_5:
-		if fv, exists := v.FldValidators["choice.rt_5"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_5).Rt_5
+	case *RouteTargetChoice_Rt_1005:
+		if fv, exists := v.FldValidators["choice.rt_1005"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1005).Rt_1005
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_5"),
+				db.WithValidateField("rt_1005"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_6:
-		if fv, exists := v.FldValidators["choice.rt_6"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_6).Rt_6
+	case *RouteTargetChoice_Rt_1006:
+		if fv, exists := v.FldValidators["choice.rt_1006"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1006).Rt_1006
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_6"),
+				db.WithValidateField("rt_1006"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_7:
-		if fv, exists := v.FldValidators["choice.rt_7"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_7).Rt_7
+	case *RouteTargetChoice_Rt_1007:
+		if fv, exists := v.FldValidators["choice.rt_1007"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1007).Rt_1007
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_7"),
+				db.WithValidateField("rt_1007"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_8:
-		if fv, exists := v.FldValidators["choice.rt_8"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_8).Rt_8
+	case *RouteTargetChoice_Rt_1008:
+		if fv, exists := v.FldValidators["choice.rt_1008"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1008).Rt_1008
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_8"),
+				db.WithValidateField("rt_1008"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_9:
-		if fv, exists := v.FldValidators["choice.rt_9"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_9).Rt_9
+	case *RouteTargetChoice_Rt_1009:
+		if fv, exists := v.FldValidators["choice.rt_1009"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1009).Rt_1009
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_9"),
+				db.WithValidateField("rt_1009"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_10:
-		if fv, exists := v.FldValidators["choice.rt_10"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_10).Rt_10
+	case *RouteTargetChoice_Rt_1010:
+		if fv, exists := v.FldValidators["choice.rt_1010"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1010).Rt_1010
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_10"),
+				db.WithValidateField("rt_1010"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_11:
-		if fv, exists := v.FldValidators["choice.rt_11"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_11).Rt_11
+	case *RouteTargetChoice_Rt_1011:
+		if fv, exists := v.FldValidators["choice.rt_1011"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1011).Rt_1011
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_11"),
+				db.WithValidateField("rt_1011"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_12:
-		if fv, exists := v.FldValidators["choice.rt_12"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_12).Rt_12
+	case *RouteTargetChoice_Rt_1012:
+		if fv, exists := v.FldValidators["choice.rt_1012"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1012).Rt_1012
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_12"),
+				db.WithValidateField("rt_1012"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_13:
-		if fv, exists := v.FldValidators["choice.rt_13"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_13).Rt_13
+	case *RouteTargetChoice_Rt_1013:
+		if fv, exists := v.FldValidators["choice.rt_1013"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1013).Rt_1013
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_13"),
+				db.WithValidateField("rt_1013"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_14:
-		if fv, exists := v.FldValidators["choice.rt_14"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_14).Rt_14
+	case *RouteTargetChoice_Rt_1014:
+		if fv, exists := v.FldValidators["choice.rt_1014"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1014).Rt_1014
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_14"),
+				db.WithValidateField("rt_1014"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_15:
-		if fv, exists := v.FldValidators["choice.rt_15"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_15).Rt_15
+	case *RouteTargetChoice_Rt_1015:
+		if fv, exists := v.FldValidators["choice.rt_1015"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1015).Rt_1015
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_15"),
+				db.WithValidateField("rt_1015"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_16:
-		if fv, exists := v.FldValidators["choice.rt_16"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_16).Rt_16
+	case *RouteTargetChoice_Rt_1016:
+		if fv, exists := v.FldValidators["choice.rt_1016"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1016).Rt_1016
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_16"),
+				db.WithValidateField("rt_1016"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_17:
-		if fv, exists := v.FldValidators["choice.rt_17"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_17).Rt_17
+	case *RouteTargetChoice_Rt_1017:
+		if fv, exists := v.FldValidators["choice.rt_1017"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1017).Rt_1017
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_17"),
+				db.WithValidateField("rt_1017"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_18:
-		if fv, exists := v.FldValidators["choice.rt_18"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_18).Rt_18
+	case *RouteTargetChoice_Rt_1018:
+		if fv, exists := v.FldValidators["choice.rt_1018"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1018).Rt_1018
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_18"),
+				db.WithValidateField("rt_1018"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_19:
-		if fv, exists := v.FldValidators["choice.rt_19"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_19).Rt_19
+	case *RouteTargetChoice_Rt_1019:
+		if fv, exists := v.FldValidators["choice.rt_1019"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1019).Rt_1019
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_19"),
+				db.WithValidateField("rt_1019"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_20:
-		if fv, exists := v.FldValidators["choice.rt_20"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_20).Rt_20
+	case *RouteTargetChoice_Rt_1020:
+		if fv, exists := v.FldValidators["choice.rt_1020"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1020).Rt_1020
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_20"),
+				db.WithValidateField("rt_1020"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_21:
-		if fv, exists := v.FldValidators["choice.rt_21"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_21).Rt_21
+	case *RouteTargetChoice_Rt_1021:
+		if fv, exists := v.FldValidators["choice.rt_1021"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1021).Rt_1021
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_21"),
+				db.WithValidateField("rt_1021"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_22:
-		if fv, exists := v.FldValidators["choice.rt_22"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_22).Rt_22
+	case *RouteTargetChoice_Rt_1022:
+		if fv, exists := v.FldValidators["choice.rt_1022"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1022).Rt_1022
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_22"),
+				db.WithValidateField("rt_1022"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_23:
-		if fv, exists := v.FldValidators["choice.rt_23"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_23).Rt_23
+	case *RouteTargetChoice_Rt_1023:
+		if fv, exists := v.FldValidators["choice.rt_1023"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1023).Rt_1023
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_23"),
+				db.WithValidateField("rt_1023"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_24:
-		if fv, exists := v.FldValidators["choice.rt_24"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_24).Rt_24
+	case *RouteTargetChoice_Rt_1024:
+		if fv, exists := v.FldValidators["choice.rt_1024"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1024).Rt_1024
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_24"),
+				db.WithValidateField("rt_1024"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_25:
-		if fv, exists := v.FldValidators["choice.rt_25"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_25).Rt_25
+	case *RouteTargetChoice_Rt_1025:
+		if fv, exists := v.FldValidators["choice.rt_1025"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1025).Rt_1025
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_25"),
+				db.WithValidateField("rt_1025"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_26:
-		if fv, exists := v.FldValidators["choice.rt_26"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_26).Rt_26
+	case *RouteTargetChoice_Rt_1026:
+		if fv, exists := v.FldValidators["choice.rt_1026"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1026).Rt_1026
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_26"),
+				db.WithValidateField("rt_1026"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_27:
-		if fv, exists := v.FldValidators["choice.rt_27"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_27).Rt_27
+	case *RouteTargetChoice_Rt_1027:
+		if fv, exists := v.FldValidators["choice.rt_1027"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1027).Rt_1027
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_27"),
+				db.WithValidateField("rt_1027"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_28:
-		if fv, exists := v.FldValidators["choice.rt_28"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_28).Rt_28
+	case *RouteTargetChoice_Rt_1028:
+		if fv, exists := v.FldValidators["choice.rt_1028"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1028).Rt_1028
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_28"),
+				db.WithValidateField("rt_1028"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_29:
-		if fv, exists := v.FldValidators["choice.rt_29"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_29).Rt_29
+	case *RouteTargetChoice_Rt_1029:
+		if fv, exists := v.FldValidators["choice.rt_1029"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1029).Rt_1029
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_29"),
+				db.WithValidateField("rt_1029"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_30:
-		if fv, exists := v.FldValidators["choice.rt_30"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_30).Rt_30
+	case *RouteTargetChoice_Rt_1030:
+		if fv, exists := v.FldValidators["choice.rt_1030"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1030).Rt_1030
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_30"),
+				db.WithValidateField("rt_1030"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_31:
-		if fv, exists := v.FldValidators["choice.rt_31"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_31).Rt_31
+	case *RouteTargetChoice_Rt_1031:
+		if fv, exists := v.FldValidators["choice.rt_1031"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1031).Rt_1031
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_31"),
+				db.WithValidateField("rt_1031"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_32:
-		if fv, exists := v.FldValidators["choice.rt_32"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_32).Rt_32
+	case *RouteTargetChoice_Rt_1032:
+		if fv, exists := v.FldValidators["choice.rt_1032"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1032).Rt_1032
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_32"),
+				db.WithValidateField("rt_1032"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_33:
-		if fv, exists := v.FldValidators["choice.rt_33"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_33).Rt_33
+	case *RouteTargetChoice_Rt_1033:
+		if fv, exists := v.FldValidators["choice.rt_1033"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1033).Rt_1033
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_33"),
+				db.WithValidateField("rt_1033"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_34:
-		if fv, exists := v.FldValidators["choice.rt_34"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_34).Rt_34
+	case *RouteTargetChoice_Rt_1034:
+		if fv, exists := v.FldValidators["choice.rt_1034"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1034).Rt_1034
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_34"),
+				db.WithValidateField("rt_1034"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_35:
-		if fv, exists := v.FldValidators["choice.rt_35"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_35).Rt_35
+	case *RouteTargetChoice_Rt_1035:
+		if fv, exists := v.FldValidators["choice.rt_1035"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1035).Rt_1035
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_35"),
+				db.WithValidateField("rt_1035"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_36:
-		if fv, exists := v.FldValidators["choice.rt_36"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_36).Rt_36
+	case *RouteTargetChoice_Rt_1036:
+		if fv, exists := v.FldValidators["choice.rt_1036"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1036).Rt_1036
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_36"),
+				db.WithValidateField("rt_1036"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_37:
-		if fv, exists := v.FldValidators["choice.rt_37"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_37).Rt_37
+	case *RouteTargetChoice_Rt_1037:
+		if fv, exists := v.FldValidators["choice.rt_1037"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1037).Rt_1037
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_37"),
+				db.WithValidateField("rt_1037"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_38:
-		if fv, exists := v.FldValidators["choice.rt_38"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_38).Rt_38
+	case *RouteTargetChoice_Rt_1038:
+		if fv, exists := v.FldValidators["choice.rt_1038"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1038).Rt_1038
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_38"),
+				db.WithValidateField("rt_1038"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_39:
-		if fv, exists := v.FldValidators["choice.rt_39"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_39).Rt_39
+	case *RouteTargetChoice_Rt_1039:
+		if fv, exists := v.FldValidators["choice.rt_1039"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1039).Rt_1039
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_39"),
+				db.WithValidateField("rt_1039"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_40:
-		if fv, exists := v.FldValidators["choice.rt_40"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_40).Rt_40
+	case *RouteTargetChoice_Rt_1040:
+		if fv, exists := v.FldValidators["choice.rt_1040"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1040).Rt_1040
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_40"),
+				db.WithValidateField("rt_1040"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_41:
-		if fv, exists := v.FldValidators["choice.rt_41"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_41).Rt_41
+	case *RouteTargetChoice_Rt_1041:
+		if fv, exists := v.FldValidators["choice.rt_1041"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1041).Rt_1041
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_41"),
+				db.WithValidateField("rt_1041"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_42:
-		if fv, exists := v.FldValidators["choice.rt_42"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_42).Rt_42
+	case *RouteTargetChoice_Rt_1042:
+		if fv, exists := v.FldValidators["choice.rt_1042"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1042).Rt_1042
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_42"),
+				db.WithValidateField("rt_1042"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_43:
-		if fv, exists := v.FldValidators["choice.rt_43"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_43).Rt_43
+	case *RouteTargetChoice_Rt_1043:
+		if fv, exists := v.FldValidators["choice.rt_1043"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1043).Rt_1043
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_43"),
+				db.WithValidateField("rt_1043"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_44:
-		if fv, exists := v.FldValidators["choice.rt_44"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_44).Rt_44
+	case *RouteTargetChoice_Rt_1044:
+		if fv, exists := v.FldValidators["choice.rt_1044"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1044).Rt_1044
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_44"),
+				db.WithValidateField("rt_1044"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_45:
-		if fv, exists := v.FldValidators["choice.rt_45"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_45).Rt_45
+	case *RouteTargetChoice_Rt_1045:
+		if fv, exists := v.FldValidators["choice.rt_1045"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1045).Rt_1045
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_45"),
+				db.WithValidateField("rt_1045"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_46:
-		if fv, exists := v.FldValidators["choice.rt_46"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_46).Rt_46
+	case *RouteTargetChoice_Rt_1046:
+		if fv, exists := v.FldValidators["choice.rt_1046"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1046).Rt_1046
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_46"),
+				db.WithValidateField("rt_1046"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_47:
-		if fv, exists := v.FldValidators["choice.rt_47"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_47).Rt_47
+	case *RouteTargetChoice_Rt_1047:
+		if fv, exists := v.FldValidators["choice.rt_1047"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1047).Rt_1047
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_47"),
+				db.WithValidateField("rt_1047"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_48:
-		if fv, exists := v.FldValidators["choice.rt_48"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_48).Rt_48
+	case *RouteTargetChoice_Rt_1048:
+		if fv, exists := v.FldValidators["choice.rt_1048"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1048).Rt_1048
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_48"),
+				db.WithValidateField("rt_1048"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_49:
-		if fv, exists := v.FldValidators["choice.rt_49"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_49).Rt_49
+	case *RouteTargetChoice_Rt_1049:
+		if fv, exists := v.FldValidators["choice.rt_1049"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1049).Rt_1049
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_49"),
+				db.WithValidateField("rt_1049"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_50:
-		if fv, exists := v.FldValidators["choice.rt_50"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_50).Rt_50
+	case *RouteTargetChoice_Rt_1050:
+		if fv, exists := v.FldValidators["choice.rt_1050"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1050).Rt_1050
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_50"),
+				db.WithValidateField("rt_1050"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_51:
-		if fv, exists := v.FldValidators["choice.rt_51"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_51).Rt_51
+	case *RouteTargetChoice_Rt_1051:
+		if fv, exists := v.FldValidators["choice.rt_1051"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1051).Rt_1051
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_51"),
+				db.WithValidateField("rt_1051"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_52:
-		if fv, exists := v.FldValidators["choice.rt_52"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_52).Rt_52
+	case *RouteTargetChoice_Rt_1052:
+		if fv, exists := v.FldValidators["choice.rt_1052"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1052).Rt_1052
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_52"),
+				db.WithValidateField("rt_1052"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_53:
-		if fv, exists := v.FldValidators["choice.rt_53"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_53).Rt_53
+	case *RouteTargetChoice_Rt_1053:
+		if fv, exists := v.FldValidators["choice.rt_1053"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1053).Rt_1053
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_53"),
+				db.WithValidateField("rt_1053"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_54:
-		if fv, exists := v.FldValidators["choice.rt_54"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_54).Rt_54
+	case *RouteTargetChoice_Rt_1054:
+		if fv, exists := v.FldValidators["choice.rt_1054"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1054).Rt_1054
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_54"),
+				db.WithValidateField("rt_1054"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_55:
-		if fv, exists := v.FldValidators["choice.rt_55"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_55).Rt_55
+	case *RouteTargetChoice_Rt_1055:
+		if fv, exists := v.FldValidators["choice.rt_1055"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1055).Rt_1055
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_55"),
+				db.WithValidateField("rt_1055"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_56:
-		if fv, exists := v.FldValidators["choice.rt_56"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_56).Rt_56
+	case *RouteTargetChoice_Rt_1056:
+		if fv, exists := v.FldValidators["choice.rt_1056"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1056).Rt_1056
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_56"),
+				db.WithValidateField("rt_1056"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_57:
-		if fv, exists := v.FldValidators["choice.rt_57"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_57).Rt_57
+	case *RouteTargetChoice_Rt_1057:
+		if fv, exists := v.FldValidators["choice.rt_1057"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1057).Rt_1057
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_57"),
+				db.WithValidateField("rt_1057"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_58:
-		if fv, exists := v.FldValidators["choice.rt_58"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_58).Rt_58
+	case *RouteTargetChoice_Rt_1058:
+		if fv, exists := v.FldValidators["choice.rt_1058"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1058).Rt_1058
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_58"),
+				db.WithValidateField("rt_1058"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_59:
-		if fv, exists := v.FldValidators["choice.rt_59"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_59).Rt_59
+	case *RouteTargetChoice_Rt_1059:
+		if fv, exists := v.FldValidators["choice.rt_1059"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1059).Rt_1059
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_59"),
+				db.WithValidateField("rt_1059"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_60:
-		if fv, exists := v.FldValidators["choice.rt_60"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_60).Rt_60
+	case *RouteTargetChoice_Rt_1060:
+		if fv, exists := v.FldValidators["choice.rt_1060"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1060).Rt_1060
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_60"),
+				db.WithValidateField("rt_1060"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_61:
-		if fv, exists := v.FldValidators["choice.rt_61"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_61).Rt_61
+	case *RouteTargetChoice_Rt_1061:
+		if fv, exists := v.FldValidators["choice.rt_1061"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1061).Rt_1061
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_61"),
+				db.WithValidateField("rt_1061"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_62:
-		if fv, exists := v.FldValidators["choice.rt_62"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_62).Rt_62
+	case *RouteTargetChoice_Rt_1062:
+		if fv, exists := v.FldValidators["choice.rt_1062"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1062).Rt_1062
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_62"),
+				db.WithValidateField("rt_1062"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_63:
-		if fv, exists := v.FldValidators["choice.rt_63"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_63).Rt_63
+	case *RouteTargetChoice_Rt_1063:
+		if fv, exists := v.FldValidators["choice.rt_1063"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1063).Rt_1063
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_63"),
+				db.WithValidateField("rt_1063"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_64:
-		if fv, exists := v.FldValidators["choice.rt_64"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_64).Rt_64
+	case *RouteTargetChoice_Rt_1064:
+		if fv, exists := v.FldValidators["choice.rt_1064"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1064).Rt_1064
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_64"),
+				db.WithValidateField("rt_1064"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_65:
-		if fv, exists := v.FldValidators["choice.rt_65"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_65).Rt_65
+	case *RouteTargetChoice_Rt_1065:
+		if fv, exists := v.FldValidators["choice.rt_1065"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1065).Rt_1065
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_65"),
+				db.WithValidateField("rt_1065"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_66:
-		if fv, exists := v.FldValidators["choice.rt_66"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_66).Rt_66
+	case *RouteTargetChoice_Rt_1066:
+		if fv, exists := v.FldValidators["choice.rt_1066"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1066).Rt_1066
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_66"),
+				db.WithValidateField("rt_1066"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_67:
-		if fv, exists := v.FldValidators["choice.rt_67"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_67).Rt_67
+	case *RouteTargetChoice_Rt_1067:
+		if fv, exists := v.FldValidators["choice.rt_1067"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1067).Rt_1067
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_67"),
+				db.WithValidateField("rt_1067"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_68:
-		if fv, exists := v.FldValidators["choice.rt_68"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_68).Rt_68
+	case *RouteTargetChoice_Rt_1068:
+		if fv, exists := v.FldValidators["choice.rt_1068"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1068).Rt_1068
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_68"),
+				db.WithValidateField("rt_1068"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_69:
-		if fv, exists := v.FldValidators["choice.rt_69"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_69).Rt_69
+	case *RouteTargetChoice_Rt_1069:
+		if fv, exists := v.FldValidators["choice.rt_1069"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1069).Rt_1069
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_69"),
+				db.WithValidateField("rt_1069"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_70:
-		if fv, exists := v.FldValidators["choice.rt_70"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_70).Rt_70
+	case *RouteTargetChoice_Rt_1070:
+		if fv, exists := v.FldValidators["choice.rt_1070"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1070).Rt_1070
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_70"),
+				db.WithValidateField("rt_1070"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_71:
-		if fv, exists := v.FldValidators["choice.rt_71"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_71).Rt_71
+	case *RouteTargetChoice_Rt_1071:
+		if fv, exists := v.FldValidators["choice.rt_1071"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1071).Rt_1071
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_71"),
+				db.WithValidateField("rt_1071"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_72:
-		if fv, exists := v.FldValidators["choice.rt_72"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_72).Rt_72
+	case *RouteTargetChoice_Rt_1072:
+		if fv, exists := v.FldValidators["choice.rt_1072"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1072).Rt_1072
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_72"),
+				db.WithValidateField("rt_1072"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_73:
-		if fv, exists := v.FldValidators["choice.rt_73"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_73).Rt_73
+	case *RouteTargetChoice_Rt_1073:
+		if fv, exists := v.FldValidators["choice.rt_1073"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1073).Rt_1073
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_73"),
+				db.WithValidateField("rt_1073"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_74:
-		if fv, exists := v.FldValidators["choice.rt_74"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_74).Rt_74
+	case *RouteTargetChoice_Rt_1074:
+		if fv, exists := v.FldValidators["choice.rt_1074"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1074).Rt_1074
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_74"),
+				db.WithValidateField("rt_1074"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_75:
-		if fv, exists := v.FldValidators["choice.rt_75"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_75).Rt_75
+	case *RouteTargetChoice_Rt_1075:
+		if fv, exists := v.FldValidators["choice.rt_1075"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1075).Rt_1075
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_75"),
+				db.WithValidateField("rt_1075"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_76:
-		if fv, exists := v.FldValidators["choice.rt_76"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_76).Rt_76
+	case *RouteTargetChoice_Rt_1076:
+		if fv, exists := v.FldValidators["choice.rt_1076"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1076).Rt_1076
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_76"),
+				db.WithValidateField("rt_1076"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_77:
-		if fv, exists := v.FldValidators["choice.rt_77"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_77).Rt_77
+	case *RouteTargetChoice_Rt_1077:
+		if fv, exists := v.FldValidators["choice.rt_1077"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1077).Rt_1077
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_77"),
+				db.WithValidateField("rt_1077"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_78:
-		if fv, exists := v.FldValidators["choice.rt_78"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_78).Rt_78
+	case *RouteTargetChoice_Rt_1078:
+		if fv, exists := v.FldValidators["choice.rt_1078"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1078).Rt_1078
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_78"),
+				db.WithValidateField("rt_1078"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_79:
-		if fv, exists := v.FldValidators["choice.rt_79"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_79).Rt_79
+	case *RouteTargetChoice_Rt_1079:
+		if fv, exists := v.FldValidators["choice.rt_1079"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1079).Rt_1079
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_79"),
+				db.WithValidateField("rt_1079"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_80:
-		if fv, exists := v.FldValidators["choice.rt_80"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_80).Rt_80
+	case *RouteTargetChoice_Rt_1080:
+		if fv, exists := v.FldValidators["choice.rt_1080"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1080).Rt_1080
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_80"),
+				db.WithValidateField("rt_1080"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_81:
-		if fv, exists := v.FldValidators["choice.rt_81"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_81).Rt_81
+	case *RouteTargetChoice_Rt_1081:
+		if fv, exists := v.FldValidators["choice.rt_1081"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1081).Rt_1081
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_81"),
+				db.WithValidateField("rt_1081"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_82:
-		if fv, exists := v.FldValidators["choice.rt_82"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_82).Rt_82
+	case *RouteTargetChoice_Rt_1082:
+		if fv, exists := v.FldValidators["choice.rt_1082"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1082).Rt_1082
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_82"),
+				db.WithValidateField("rt_1082"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_83:
-		if fv, exists := v.FldValidators["choice.rt_83"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_83).Rt_83
+	case *RouteTargetChoice_Rt_1083:
+		if fv, exists := v.FldValidators["choice.rt_1083"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1083).Rt_1083
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_83"),
+				db.WithValidateField("rt_1083"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_84:
-		if fv, exists := v.FldValidators["choice.rt_84"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_84).Rt_84
+	case *RouteTargetChoice_Rt_1084:
+		if fv, exists := v.FldValidators["choice.rt_1084"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1084).Rt_1084
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_84"),
+				db.WithValidateField("rt_1084"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_85:
-		if fv, exists := v.FldValidators["choice.rt_85"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_85).Rt_85
+	case *RouteTargetChoice_Rt_1085:
+		if fv, exists := v.FldValidators["choice.rt_1085"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1085).Rt_1085
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_85"),
+				db.WithValidateField("rt_1085"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_86:
-		if fv, exists := v.FldValidators["choice.rt_86"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_86).Rt_86
+	case *RouteTargetChoice_Rt_1086:
+		if fv, exists := v.FldValidators["choice.rt_1086"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1086).Rt_1086
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_86"),
+				db.WithValidateField("rt_1086"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_87:
-		if fv, exists := v.FldValidators["choice.rt_87"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_87).Rt_87
+	case *RouteTargetChoice_Rt_1087:
+		if fv, exists := v.FldValidators["choice.rt_1087"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1087).Rt_1087
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_87"),
+				db.WithValidateField("rt_1087"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_88:
-		if fv, exists := v.FldValidators["choice.rt_88"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_88).Rt_88
+	case *RouteTargetChoice_Rt_1088:
+		if fv, exists := v.FldValidators["choice.rt_1088"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1088).Rt_1088
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_88"),
+				db.WithValidateField("rt_1088"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_89:
-		if fv, exists := v.FldValidators["choice.rt_89"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_89).Rt_89
+	case *RouteTargetChoice_Rt_1089:
+		if fv, exists := v.FldValidators["choice.rt_1089"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1089).Rt_1089
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_89"),
+				db.WithValidateField("rt_1089"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_90:
-		if fv, exists := v.FldValidators["choice.rt_90"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_90).Rt_90
+	case *RouteTargetChoice_Rt_1090:
+		if fv, exists := v.FldValidators["choice.rt_1090"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1090).Rt_1090
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_90"),
+				db.WithValidateField("rt_1090"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_91:
-		if fv, exists := v.FldValidators["choice.rt_91"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_91).Rt_91
+	case *RouteTargetChoice_Rt_1091:
+		if fv, exists := v.FldValidators["choice.rt_1091"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1091).Rt_1091
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_91"),
+				db.WithValidateField("rt_1091"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_92:
-		if fv, exists := v.FldValidators["choice.rt_92"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_92).Rt_92
+	case *RouteTargetChoice_Rt_1092:
+		if fv, exists := v.FldValidators["choice.rt_1092"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1092).Rt_1092
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_92"),
+				db.WithValidateField("rt_1092"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_93:
-		if fv, exists := v.FldValidators["choice.rt_93"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_93).Rt_93
+	case *RouteTargetChoice_Rt_1093:
+		if fv, exists := v.FldValidators["choice.rt_1093"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1093).Rt_1093
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_93"),
+				db.WithValidateField("rt_1093"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_94:
-		if fv, exists := v.FldValidators["choice.rt_94"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_94).Rt_94
+	case *RouteTargetChoice_Rt_1094:
+		if fv, exists := v.FldValidators["choice.rt_1094"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1094).Rt_1094
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_94"),
+				db.WithValidateField("rt_1094"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_95:
-		if fv, exists := v.FldValidators["choice.rt_95"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_95).Rt_95
+	case *RouteTargetChoice_Rt_1095:
+		if fv, exists := v.FldValidators["choice.rt_1095"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1095).Rt_1095
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_95"),
+				db.WithValidateField("rt_1095"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_96:
-		if fv, exists := v.FldValidators["choice.rt_96"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_96).Rt_96
+	case *RouteTargetChoice_Rt_1096:
+		if fv, exists := v.FldValidators["choice.rt_1096"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1096).Rt_1096
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_96"),
+				db.WithValidateField("rt_1096"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_97:
-		if fv, exists := v.FldValidators["choice.rt_97"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_97).Rt_97
+	case *RouteTargetChoice_Rt_1097:
+		if fv, exists := v.FldValidators["choice.rt_1097"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1097).Rt_1097
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_97"),
+				db.WithValidateField("rt_1097"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_98:
-		if fv, exists := v.FldValidators["choice.rt_98"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_98).Rt_98
+	case *RouteTargetChoice_Rt_1098:
+		if fv, exists := v.FldValidators["choice.rt_1098"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1098).Rt_1098
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_98"),
+				db.WithValidateField("rt_1098"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_99:
-		if fv, exists := v.FldValidators["choice.rt_99"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_99).Rt_99
+	case *RouteTargetChoice_Rt_1099:
+		if fv, exists := v.FldValidators["choice.rt_1099"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1099).Rt_1099
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_99"),
+				db.WithValidateField("rt_1099"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_100:
-		if fv, exists := v.FldValidators["choice.rt_100"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_100).Rt_100
+	case *RouteTargetChoice_Rt_1100:
+		if fv, exists := v.FldValidators["choice.rt_1100"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1100).Rt_1100
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_100"),
+				db.WithValidateField("rt_1100"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_101:
-		if fv, exists := v.FldValidators["choice.rt_101"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_101).Rt_101
+	case *RouteTargetChoice_Rt_1101:
+		if fv, exists := v.FldValidators["choice.rt_1101"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1101).Rt_1101
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_101"),
+				db.WithValidateField("rt_1101"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_102:
-		if fv, exists := v.FldValidators["choice.rt_102"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_102).Rt_102
+	case *RouteTargetChoice_Rt_1102:
+		if fv, exists := v.FldValidators["choice.rt_1102"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1102).Rt_1102
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_102"),
+				db.WithValidateField("rt_1102"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_103:
-		if fv, exists := v.FldValidators["choice.rt_103"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_103).Rt_103
+	case *RouteTargetChoice_Rt_1103:
+		if fv, exists := v.FldValidators["choice.rt_1103"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1103).Rt_1103
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_103"),
+				db.WithValidateField("rt_1103"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_104:
-		if fv, exists := v.FldValidators["choice.rt_104"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_104).Rt_104
+	case *RouteTargetChoice_Rt_1104:
+		if fv, exists := v.FldValidators["choice.rt_1104"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1104).Rt_1104
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_104"),
+				db.WithValidateField("rt_1104"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_105:
-		if fv, exists := v.FldValidators["choice.rt_105"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_105).Rt_105
+	case *RouteTargetChoice_Rt_1105:
+		if fv, exists := v.FldValidators["choice.rt_1105"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1105).Rt_1105
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_105"),
+				db.WithValidateField("rt_1105"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_106:
-		if fv, exists := v.FldValidators["choice.rt_106"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_106).Rt_106
+	case *RouteTargetChoice_Rt_1106:
+		if fv, exists := v.FldValidators["choice.rt_1106"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1106).Rt_1106
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_106"),
+				db.WithValidateField("rt_1106"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_107:
-		if fv, exists := v.FldValidators["choice.rt_107"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_107).Rt_107
+	case *RouteTargetChoice_Rt_1107:
+		if fv, exists := v.FldValidators["choice.rt_1107"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1107).Rt_1107
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_107"),
+				db.WithValidateField("rt_1107"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_108:
-		if fv, exists := v.FldValidators["choice.rt_108"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_108).Rt_108
+	case *RouteTargetChoice_Rt_1108:
+		if fv, exists := v.FldValidators["choice.rt_1108"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1108).Rt_1108
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_108"),
+				db.WithValidateField("rt_1108"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_109:
-		if fv, exists := v.FldValidators["choice.rt_109"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_109).Rt_109
+	case *RouteTargetChoice_Rt_1109:
+		if fv, exists := v.FldValidators["choice.rt_1109"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1109).Rt_1109
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_109"),
+				db.WithValidateField("rt_1109"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *RouteTargetChoice_Rt_110:
-		if fv, exists := v.FldValidators["choice.rt_110"]; exists {
-			val := m.GetChoice().(*RouteTargetChoice_Rt_110).Rt_110
+	case *RouteTargetChoice_Rt_1110:
+		if fv, exists := v.FldValidators["choice.rt_1110"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_1110).Rt_1110
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("rt_110"),
+				db.WithValidateField("rt_1110"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2001:
+		if fv, exists := v.FldValidators["choice.rt_2001"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2001).Rt_2001
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2001"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2002:
+		if fv, exists := v.FldValidators["choice.rt_2002"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2002).Rt_2002
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2002"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2003:
+		if fv, exists := v.FldValidators["choice.rt_2003"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2003).Rt_2003
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2003"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2004:
+		if fv, exists := v.FldValidators["choice.rt_2004"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2004).Rt_2004
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2004"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2005:
+		if fv, exists := v.FldValidators["choice.rt_2005"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2005).Rt_2005
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2005"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2006:
+		if fv, exists := v.FldValidators["choice.rt_2006"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2006).Rt_2006
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2006"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

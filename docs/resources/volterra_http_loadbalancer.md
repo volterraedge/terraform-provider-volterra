@@ -21,7 +21,7 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  advertise_on_public_default_vip = true
+  do_not_advertise = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
   no_challenge = true
@@ -29,7 +29,7 @@ resource "volterra_http_loadbalancer" "example" {
   domains = ["www.foo.com"]
 
   // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  random = true
+  source_ip_stickiness = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -39,9 +39,15 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
-  // One of the arguments from this list "disable_waf waf waf_rule" must be set
-  disable_waf = true
+  service_policies_from_namespace = true
+
+  // One of the arguments from this list "waf waf_rule app_firewall disable_waf" must be set
+
+  app_firewall {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -131,6 +137,8 @@ Argument Reference
 
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
+`app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
+
 `disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
 
 `waf` - (Optional) Reference to WAF intent configuration object. See [ref](#ref) below for details.
@@ -194,6 +202,8 @@ Configure Advanced per route options.
 `enable_spdy` - (Optional) SPDY upgrade is enabled (bool).
 
 `timeout` - (Optional) Should be set to a high value or 0 (infinite timeout) for server-side streaming. (`Int`).
+
+`app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
 
 `disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
 
@@ -1036,6 +1046,8 @@ Configure custom retry policy.
 `per_try_timeout` - (Optional) Specifies a non-zero timeout per retry attempt. In milliseconds (`Int`).
 
 `retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
+
+`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 

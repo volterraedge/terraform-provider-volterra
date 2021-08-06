@@ -3199,10 +3199,15 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
             "x-ves-oneof-field-rewrite_choice": "[\"disable_prefix_rewrite\",\"prefix_rewrite\"]",
             "x-ves-oneof-field-spdy_choice": "[\"disable_spdy\",\"enable_spdy\"]",
-            "x-ves-oneof-field-waf_choice": "[\"disable_waf\",\"waf\",\"waf_rule\"]",
+            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\",\"waf\",\"waf_rule\"]",
             "x-ves-oneof-field-websocket_choice": "[\"disable_web_socket_config\",\"web_socket_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions",
             "properties": {
+                "app_firewall": {
+                    "description": "Exclusive with [disable_waf waf waf_rule]\nx-displayName: \"App Firewall\"\nReference to App Firewall configuration object",
+                    "title": "app_firewall",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
                 "buffer_policy": {
                     "description": "Exclusive with [common_buffering]\nx-displayName: \"Route Specific Buffering Configuration\"\nBuffering configuration for requests\nSome upstream applications are not capable of handling streamed data. This config\nenables buffering the entire request before sending to upstream application. We can\nspecify the maximum buffer size and buffer interval with this config.\nRoute level buffer configuration overrides any configuration at VirtualHost level.",
                     "title": "Route Specific Buffering Configuration",
@@ -3252,7 +3257,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_waf": {
-                    "description": "Exclusive with [waf waf_rule]\nx-displayName: \"Disable WAF\"\nNo WAF configuration for this load balancer",
+                    "description": "Exclusive with [app_firewall waf waf_rule]\nx-displayName: \"Disable WAF\"\nNo WAF configuration for this load balancer",
                     "title": "Disable WAF",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3354,12 +3359,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Timeout"
                 },
                 "waf": {
-                    "description": "Exclusive with [disable_waf waf_rule]\nx-displayName: \"Specify WAF Intent\"\nReference to WAF intent configuration object",
+                    "description": "Exclusive with [app_firewall disable_waf waf_rule]\nx-displayName: \"Specify WAF Intent\"\nReference to WAF intent configuration object",
                     "title": "WAF",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "waf_rule": {
-                    "description": "Exclusive with [disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
+                    "description": "Exclusive with [app_firewall disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
                     "title": "waf_rules",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -5182,7 +5187,7 @@ var APISwaggerJSON string = `{
             "description": "Retry policy configuration for route destination.",
             "title": "RetryPolicyType",
             "x-displayname": "Retry Policy",
-            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-displayorder": "1,6,2,3,4,5",
             "x-ves-proto-message": "ves.io.schema.RetryPolicyType",
             "properties": {
                 "back_off": {
@@ -5214,6 +5219,16 @@ var APISwaggerJSON string = `{
                         "format": "int64"
                     },
                     "x-displayname": "Status Code to Retry"
+                },
+                "retry_condition": {
+                    "type": "array",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
+                    "title": "retry_condition",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Retry Condition",
+                    "x-ves-example": "5xx"
                 },
                 "retry_on": {
                     "type": "string",
@@ -5504,6 +5519,12 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 }
             }
         },
@@ -6306,7 +6327,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
-            "x-ves-oneof-field-waf_choice": "[\"disable_waf\",\"waf\",\"waf_rule\"]",
+            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\",\"waf\",\"waf_rule\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GlobalSpecType",
             "properties": {
                 "active_service_policies": {
@@ -6336,6 +6357,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\nx-displayName: \"Advertise On Internet\"\nAdvertise this loadbalancer on public network with default VIP",
                     "title": "Advertise On Public Default VIP",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "app_firewall": {
+                    "description": "Exclusive with [disable_waf waf waf_rule]\nx-displayName: \"App Firewall\"\nReference to App Firewall configuration object",
+                    "title": "app_firewall",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "auto_cert_info": {
                     "description": " Auto certificate related information",
@@ -6408,7 +6434,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_waf": {
-                    "description": "Exclusive with [waf waf_rule]\nx-displayName: \"Disable WAF\"\nNo WAF configuration for this load balancer",
+                    "description": "Exclusive with [app_firewall waf waf_rule]\nx-displayName: \"Disable WAF\"\nNo WAF configuration for this load balancer",
                     "title": "Disable WAF",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -6568,7 +6594,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "View Internal"
                 },
                 "waf": {
-                    "description": "Exclusive with [disable_waf waf_rule]\nx-displayName: \"Specify WAF Intent\"\nReference to WAF intent configuration object",
+                    "description": "Exclusive with [app_firewall disable_waf waf_rule]\nx-displayName: \"Specify WAF Intent\"\nReference to WAF intent configuration object",
                     "title": "WAF",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -6582,7 +6608,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "WAF Exclusion Rules"
                 },
                 "waf_rule": {
-                    "description": "Exclusive with [disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
+                    "description": "Exclusive with [app_firewall disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
                     "title": "waf_rules",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
