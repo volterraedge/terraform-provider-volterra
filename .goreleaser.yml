@@ -25,6 +25,8 @@ builds:
       goarch: '386'
     - goarch: arm
     - goarch: '386'
+    - goos: windows
+      goarch: amd64
   binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
 - format: zip
