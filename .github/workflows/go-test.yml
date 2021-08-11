@@ -2,8 +2,22 @@ name: Go Unit Tests
 on:
   push:
     branches:
-    - "*"
-
+      - "*"
+    paths-ignore:
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/workflows/**'
+      - '.goreleaser.yml'
+      - 'README.md'
+  pull_request:
+    branches:
+      - "*"
+    paths-ignore:
+      - 'docs/**'
+      - 'examples/**'
+      - '.github/workflows/**'
+      - '.goreleaser.yml'
+      - 'README.md'
 jobs:
   tests:
     name: Go Tests
