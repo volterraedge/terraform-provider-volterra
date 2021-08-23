@@ -131,7 +131,6 @@ func resourceVolterraBgpAsnSetCreate(d *schema.ResourceData, meta interface{}) e
 
 		ls := make([]uint32, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-
 			ls[i] = uint32(v.(int))
 		}
 		createSpec.AsNumbers = ls
@@ -240,7 +239,6 @@ func resourceVolterraBgpAsnSetUpdate(d *schema.ResourceData, meta interface{}) e
 
 		ls := make([]uint32, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-
 			ls[i] = uint32(v.(int))
 		}
 		updateSpec.AsNumbers = ls

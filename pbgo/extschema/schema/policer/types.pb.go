@@ -3,29 +3,31 @@
 
 package policer
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // PolicerType
 //
@@ -42,11 +44,14 @@ const (
 var PolicerType_name = map[int32]string{
 	0: "POLICER_SINGLE_RATE_TWO_COLOR",
 }
+
 var PolicerType_value = map[string]int32{
 	"POLICER_SINGLE_RATE_TWO_COLOR": 0,
 }
 
-func (PolicerType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (PolicerType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{0}
+}
 
 // PolicerMode
 //
@@ -70,12 +75,15 @@ var PolicerMode_name = map[int32]string{
 	0: "POLICER_MODE_NOT_SHARED",
 	1: "POLICER_MODE_SHARED",
 }
+
 var PolicerMode_value = map[string]int32{
 	"POLICER_MODE_NOT_SHARED": 0,
 	"POLICER_MODE_SHARED":     1,
 }
 
-func (PolicerMode) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (PolicerMode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{1}
+}
 
 // SingleRateTwoColorType
 //
@@ -94,9 +102,33 @@ type SingleRateTwoColorType struct {
 	BurstSize uint32 `protobuf:"varint,2,opt,name=burst_size,json=burstSize,proto3" json:"burst_size,omitempty"`
 }
 
-func (m *SingleRateTwoColorType) Reset()                    { *m = SingleRateTwoColorType{} }
-func (*SingleRateTwoColorType) ProtoMessage()               {}
-func (*SingleRateTwoColorType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *SingleRateTwoColorType) Reset()      { *m = SingleRateTwoColorType{} }
+func (*SingleRateTwoColorType) ProtoMessage() {}
+func (*SingleRateTwoColorType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{0}
+}
+func (m *SingleRateTwoColorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SingleRateTwoColorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SingleRateTwoColorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SingleRateTwoColorType.Merge(m, src)
+}
+func (m *SingleRateTwoColorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *SingleRateTwoColorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_SingleRateTwoColorType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SingleRateTwoColorType proto.InternalMessageInfo
 
 func (m *SingleRateTwoColorType) GetCommittedInformationRate() uint32 {
 	if m != nil {
@@ -152,9 +184,33 @@ type GlobalSpecType struct {
 	PolicerMode PolicerMode `protobuf:"varint,4,opt,name=policer_mode,json=policerMode,proto3,enum=ves.io.schema.policer.PolicerMode" json:"policer_mode,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{1}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetPolicerType() PolicerType {
 	if m != nil {
@@ -195,9 +251,33 @@ type CreateSpecType struct {
 	PolicerMode              PolicerMode `protobuf:"varint,4,opt,name=policer_mode,json=policerMode,proto3,enum=ves.io.schema.policer.PolicerMode" json:"policer_mode,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{2}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetPolicerType() PolicerType {
 	if m != nil {
@@ -238,9 +318,33 @@ type ReplaceSpecType struct {
 	PolicerMode              PolicerMode `protobuf:"varint,4,opt,name=policer_mode,json=policerMode,proto3,enum=ves.io.schema.policer.PolicerMode" json:"policer_mode,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{3}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 func (m *ReplaceSpecType) GetPolicerType() PolicerType {
 	if m != nil {
@@ -281,9 +385,33 @@ type GetSpecType struct {
 	PolicerMode              PolicerMode `protobuf:"varint,4,opt,name=policer_mode,json=policerMode,proto3,enum=ves.io.schema.policer.PolicerMode" json:"policer_mode,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_74140bc32f775aa6, []int{4}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetPolicerType() PolicerType {
 	if m != nil {
@@ -314,6 +442,10 @@ func (m *GetSpecType) GetPolicerMode() PolicerMode {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.policer.PolicerType", PolicerType_name, PolicerType_value)
+	golang_proto.RegisterEnum("ves.io.schema.policer.PolicerType", PolicerType_name, PolicerType_value)
+	proto.RegisterEnum("ves.io.schema.policer.PolicerMode", PolicerMode_name, PolicerMode_value)
+	golang_proto.RegisterEnum("ves.io.schema.policer.PolicerMode", PolicerMode_name, PolicerMode_value)
 	proto.RegisterType((*SingleRateTwoColorType)(nil), "ves.io.schema.policer.SingleRateTwoColorType")
 	golang_proto.RegisterType((*SingleRateTwoColorType)(nil), "ves.io.schema.policer.SingleRateTwoColorType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.policer.GlobalSpecType")
@@ -324,11 +456,58 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.policer.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.policer.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.policer.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.policer.PolicerType", PolicerType_name, PolicerType_value)
-	golang_proto.RegisterEnum("ves.io.schema.policer.PolicerType", PolicerType_name, PolicerType_value)
-	proto.RegisterEnum("ves.io.schema.policer.PolicerMode", PolicerMode_name, PolicerMode_value)
-	golang_proto.RegisterEnum("ves.io.schema.policer.PolicerMode", PolicerMode_name, PolicerMode_value)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/policer/types.proto", fileDescriptor_74140bc32f775aa6) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/policer/types.proto", fileDescriptor_74140bc32f775aa6)
+}
+
+var fileDescriptor_74140bc32f775aa6 = []byte{
+	// 648 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x95, 0x4f, 0x4f, 0x13, 0x4f,
+	0x1c, 0xc6, 0x77, 0x4a, 0xf9, 0xf1, 0x63, 0xd0, 0x4a, 0xd6, 0x28, 0xa5, 0x95, 0x09, 0xf4, 0x54,
+	0x1b, 0xd8, 0x8d, 0x60, 0x3c, 0x18, 0x43, 0x02, 0x65, 0x03, 0x8d, 0x85, 0x92, 0x6d, 0x13, 0x13,
+	0x2f, 0x9b, 0xdd, 0xf6, 0xcb, 0x32, 0x71, 0xdb, 0xd9, 0xec, 0x4e, 0x8b, 0x70, 0xe2, 0xea, 0xc1,
+	0xc4, 0x8b, 0xfa, 0x16, 0xbc, 0x78, 0xf2, 0x26, 0x17, 0x8e, 0xc6, 0x13, 0x47, 0xe2, 0x49, 0xb6,
+	0x17, 0xbd, 0x11, 0x5f, 0x81, 0xd9, 0x3f, 0x40, 0x17, 0xb0, 0x1a, 0xe3, 0x4d, 0x4f, 0xdd, 0xc9,
+	0xf3, 0x7c, 0xff, 0x3c, 0x9f, 0xee, 0x66, 0xf0, 0x54, 0x07, 0x5c, 0x89, 0x32, 0xd9, 0xad, 0x6f,
+	0x42, 0x53, 0x97, 0x6d, 0x66, 0xd1, 0x3a, 0x38, 0x32, 0xdf, 0xb6, 0xc1, 0x95, 0x6c, 0x87, 0x71,
+	0x26, 0xde, 0x08, 0x2d, 0x52, 0x68, 0x91, 0x22, 0x4b, 0x66, 0xc6, 0xa4, 0x7c, 0xb3, 0x6d, 0x48,
+	0x75, 0xd6, 0x94, 0x4d, 0x66, 0x32, 0x39, 0x70, 0x1b, 0xed, 0x8d, 0xe0, 0x14, 0x1c, 0x82, 0xa7,
+	0xb0, 0x4b, 0x66, 0x2c, 0x3e, 0xa8, 0x05, 0x3c, 0x12, 0xb2, 0x71, 0x81, 0xd9, 0x9c, 0xb2, 0x56,
+	0x34, 0x3b, 0x33, 0x1e, 0x17, 0x7b, 0xd6, 0xca, 0xdc, 0x8a, 0x4b, 0x1d, 0xdd, 0xa2, 0x0d, 0x9d,
+	0x43, 0xa4, 0x4e, 0x9e, 0x53, 0x29, 0x6c, 0x69, 0xb1, 0xd6, 0xb9, 0xe7, 0x08, 0xdf, 0xac, 0xd2,
+	0x96, 0x69, 0x81, 0xaa, 0x73, 0xa8, 0x6d, 0xb1, 0x22, 0xb3, 0x98, 0x53, 0xdb, 0xb6, 0x41, 0x5c,
+	0xc1, 0x99, 0x3a, 0x6b, 0x36, 0x29, 0xe7, 0xd0, 0xd0, 0x68, 0x6b, 0x83, 0x39, 0x4d, 0xdd, 0x2f,
+	0xd5, 0x1c, 0x9d, 0x43, 0x1a, 0x4d, 0xa2, 0xfc, 0xd5, 0x45, 0xfc, 0xfe, 0xeb, 0xfe, 0xc0, 0x60,
+	0x61, 0x20, 0xbf, 0xfb, 0xbf, 0x9a, 0x3e, 0x75, 0x97, 0xce, 0xcc, 0x7e, 0x57, 0xf1, 0x36, 0xc6,
+	0x46, 0xdb, 0x71, 0xb9, 0xe6, 0xd2, 0x1d, 0x48, 0x27, 0x2e, 0x54, 0x0e, 0x07, 0x6a, 0x95, 0xee,
+	0x40, 0xee, 0x5d, 0x02, 0xa7, 0x96, 0x2d, 0x66, 0xe8, 0x56, 0xd5, 0x86, 0x7a, 0xb0, 0x87, 0x82,
+	0xaf, 0x44, 0xb4, 0x35, 0x3f, 0x79, 0x30, 0x39, 0x35, 0x9b, 0x93, 0x2e, 0xfd, 0x43, 0xa4, 0xf5,
+	0xf0, 0xd7, 0xaf, 0x54, 0x47, 0xec, 0xb3, 0x83, 0x58, 0xee, 0x1b, 0x27, 0x5c, 0x2a, 0xe5, 0x2f,
+	0x35, 0x5c, 0x18, 0x4a, 0xef, 0xbe, 0xf5, 0x92, 0x79, 0xd4, 0x27, 0x52, 0x3e, 0x16, 0x69, 0x20,
+	0xa8, 0x1e, 0xf6, 0xab, 0x93, 0x85, 0x44, 0x1e, 0xf5, 0x24, 0x12, 0x8d, 0xb3, 0xf5, 0x9b, 0xac,
+	0x01, 0xe9, 0xe4, 0xaf, 0xac, 0xbf, 0xca, 0x1a, 0xb0, 0x98, 0xfd, 0xb4, 0x87, 0xc6, 0xd6, 0x2b,
+	0xe5, 0x52, 0x51, 0x51, 0xb5, 0xd5, 0xca, 0x92, 0xa2, 0xad, 0x55, 0x6a, 0x5a, 0x75, 0x65, 0x41,
+	0x55, 0x96, 0x4e, 0xb3, 0xf9, 0xce, 0xdc, 0xab, 0x04, 0x4e, 0x15, 0x1d, 0xd0, 0x39, 0xfc, 0x69,
+	0x6a, 0x0f, 0x7e, 0x4e, 0xad, 0x0f, 0xa5, 0x89, 0x8b, 0x94, 0x7a, 0xd1, 0x28, 0xbf, 0x8b, 0x26,
+	0x96, 0xfe, 0xfe, 0xf8, 0xc7, 0xf9, 0x73, 0xef, 0xcc, 0xb7, 0xf9, 0xc1, 0xbb, 0xd3, 0xb3, 0xd3,
+	0x73, 0xb9, 0xd7, 0x09, 0x7c, 0x4d, 0x05, 0xdb, 0xd2, 0xeb, 0xff, 0xc8, 0xc4, 0xc9, 0xbc, 0x4c,
+	0xe0, 0x91, 0x65, 0xe0, 0x7f, 0x23, 0x95, 0xec, 0x25, 0x54, 0x86, 0xee, 0x4c, 0x07, 0x5c, 0x0a,
+	0xf7, 0xf0, 0x48, 0x4f, 0x38, 0x71, 0x0a, 0x4f, 0x9c, 0x7c, 0x81, 0xd5, 0xd2, 0xda, 0x72, 0x59,
+	0xd1, 0xd4, 0x85, 0x9a, 0xa2, 0xd5, 0x1e, 0x55, 0xb4, 0x62, 0xa5, 0x5c, 0x51, 0x47, 0x85, 0x4c,
+	0x72, 0x7f, 0x0f, 0x09, 0x85, 0xd2, 0x69, 0x9d, 0x3f, 0x43, 0xcc, 0xe2, 0x1f, 0x7d, 0xb9, 0xa3,
+	0x82, 0x38, 0x86, 0xaf, 0xc7, 0xc4, 0x48, 0x40, 0x61, 0xab, 0xc5, 0x67, 0xe8, 0xe0, 0x88, 0x08,
+	0x87, 0x47, 0x44, 0x38, 0x3e, 0x22, 0x68, 0xd7, 0x23, 0xe8, 0x8d, 0x47, 0xd0, 0x07, 0x8f, 0xa0,
+	0x03, 0x8f, 0xa0, 0x43, 0x8f, 0xa0, 0xcf, 0x1e, 0x41, 0x5f, 0x3c, 0x22, 0x1c, 0x7b, 0x04, 0xbd,
+	0xe8, 0x12, 0x61, 0xbf, 0x4b, 0xd0, 0x41, 0x97, 0x08, 0x87, 0x5d, 0x22, 0x3c, 0x7e, 0x68, 0x32,
+	0xfb, 0x89, 0x29, 0x75, 0x98, 0xc5, 0xc1, 0x71, 0x74, 0xa9, 0xed, 0xca, 0xc1, 0x83, 0x8f, 0x7a,
+	0xc6, 0x76, 0x58, 0x87, 0x36, 0xc0, 0x99, 0x39, 0x91, 0x65, 0xdb, 0x30, 0x99, 0x0c, 0x4f, 0x79,
+	0x74, 0x47, 0xc4, 0xaf, 0x40, 0xe3, 0xbf, 0xe0, 0x9a, 0x98, 0xfb, 0x1e, 0x00, 0x00, 0xff, 0xff,
+	0xec, 0xe2, 0x9b, 0x20, 0x22, 0x07, 0x00, 0x00,
+}
+
 func (x PolicerType) String() string {
 	s, ok := PolicerType_name[int32(x)]
 	if ok {
@@ -576,7 +755,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *SingleRateTwoColorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -584,27 +763,32 @@ func (m *SingleRateTwoColorType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SingleRateTwoColorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SingleRateTwoColorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.CommittedInformationRate != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
-	}
 	if m.BurstSize != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstSize))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.CommittedInformationRate != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -612,37 +796,42 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.PolicerType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
-	}
-	if m.CommittedInformationRate != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+	if m.PolicerMode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+		i--
+		dAtA[i] = 0x20
 	}
 	if m.BurstSize != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstSize))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.PolicerMode != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+	if m.CommittedInformationRate != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.PolicerType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -650,37 +839,42 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.PolicerType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
-	}
-	if m.CommittedInformationRate != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+	if m.PolicerMode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+		i--
+		dAtA[i] = 0x20
 	}
 	if m.BurstSize != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstSize))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.PolicerMode != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+	if m.CommittedInformationRate != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.PolicerType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -688,37 +882,42 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.PolicerType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
-	}
-	if m.CommittedInformationRate != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+	if m.PolicerMode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+		i--
+		dAtA[i] = 0x20
 	}
 	if m.BurstSize != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstSize))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.PolicerMode != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+	if m.CommittedInformationRate != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.PolicerType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -726,43 +925,53 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.PolicerType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
-	}
-	if m.CommittedInformationRate != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+	if m.PolicerMode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+		i--
+		dAtA[i] = 0x20
 	}
 	if m.BurstSize != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstSize))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.PolicerMode != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerMode))
+	if m.CommittedInformationRate != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CommittedInformationRate))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.PolicerType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PolicerType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *SingleRateTwoColorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CommittedInformationRate != 0 {
@@ -775,6 +984,9 @@ func (m *SingleRateTwoColorType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicerType != 0 {
@@ -793,6 +1005,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicerType != 0 {
@@ -811,6 +1026,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicerType != 0 {
@@ -829,6 +1047,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicerType != 0 {
@@ -847,14 +1068,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -945,7 +1159,7 @@ func (m *SingleRateTwoColorType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -973,7 +1187,7 @@ func (m *SingleRateTwoColorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CommittedInformationRate |= (uint32(b) & 0x7F) << shift
+				m.CommittedInformationRate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -992,7 +1206,7 @@ func (m *SingleRateTwoColorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstSize |= (uint32(b) & 0x7F) << shift
+				m.BurstSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1004,6 +1218,9 @@ func (m *SingleRateTwoColorType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1033,7 +1250,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1061,7 +1278,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerType |= (PolicerType(b) & 0x7F) << shift
+				m.PolicerType |= PolicerType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1080,7 +1297,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CommittedInformationRate |= (uint32(b) & 0x7F) << shift
+				m.CommittedInformationRate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1099,7 +1316,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstSize |= (uint32(b) & 0x7F) << shift
+				m.BurstSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1118,7 +1335,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerMode |= (PolicerMode(b) & 0x7F) << shift
+				m.PolicerMode |= PolicerMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1130,6 +1347,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1159,7 +1379,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1187,7 +1407,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerType |= (PolicerType(b) & 0x7F) << shift
+				m.PolicerType |= PolicerType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1206,7 +1426,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CommittedInformationRate |= (uint32(b) & 0x7F) << shift
+				m.CommittedInformationRate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1225,7 +1445,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstSize |= (uint32(b) & 0x7F) << shift
+				m.BurstSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1244,7 +1464,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerMode |= (PolicerMode(b) & 0x7F) << shift
+				m.PolicerMode |= PolicerMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1256,6 +1476,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1285,7 +1508,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1313,7 +1536,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerType |= (PolicerType(b) & 0x7F) << shift
+				m.PolicerType |= PolicerType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1332,7 +1555,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CommittedInformationRate |= (uint32(b) & 0x7F) << shift
+				m.CommittedInformationRate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1351,7 +1574,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstSize |= (uint32(b) & 0x7F) << shift
+				m.BurstSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1370,7 +1593,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerMode |= (PolicerMode(b) & 0x7F) << shift
+				m.PolicerMode |= PolicerMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1382,6 +1605,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1411,7 +1637,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1439,7 +1665,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerType |= (PolicerType(b) & 0x7F) << shift
+				m.PolicerType |= PolicerType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1458,7 +1684,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CommittedInformationRate |= (uint32(b) & 0x7F) << shift
+				m.CommittedInformationRate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1477,7 +1703,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstSize |= (uint32(b) & 0x7F) << shift
+				m.BurstSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1496,7 +1722,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicerMode |= (PolicerMode(b) & 0x7F) << shift
+				m.PolicerMode |= PolicerMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1508,6 +1734,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1525,6 +1754,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1556,10 +1786,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1576,101 +1804,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/policer/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/policer/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 641 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x95, 0x4f, 0x4f, 0x13, 0x4f,
-	0x1c, 0xc6, 0x77, 0x4a, 0xf9, 0xf1, 0x63, 0xd0, 0x4a, 0xd6, 0x28, 0xa5, 0x95, 0x09, 0xf4, 0x54,
-	0x1b, 0xd8, 0x8d, 0x60, 0x3c, 0x18, 0x43, 0x02, 0x65, 0x03, 0x8d, 0x85, 0x92, 0x6d, 0x13, 0x13,
-	0x2f, 0x9b, 0xdd, 0xf6, 0xcb, 0x32, 0x71, 0xb7, 0xb3, 0xd9, 0x9d, 0x16, 0xe1, 0x84, 0x2f, 0xc0,
-	0xc4, 0x8b, 0xfa, 0x16, 0xbc, 0x78, 0xf2, 0x26, 0x17, 0x8e, 0xc6, 0x13, 0x47, 0xe2, 0x49, 0x96,
-	0x8b, 0xde, 0x88, 0xaf, 0xc0, 0xec, 0x1f, 0xa0, 0x0b, 0x88, 0xc6, 0x78, 0xd3, 0x53, 0x77, 0xf2,
-	0x3c, 0xdf, 0x3f, 0xcf, 0xa7, 0xbb, 0x19, 0x3c, 0xd1, 0x05, 0x4f, 0xa2, 0x4c, 0xf6, 0x9a, 0xeb,
-	0x60, 0xeb, 0xb2, 0xc3, 0x2c, 0xda, 0x04, 0x57, 0xe6, 0x9b, 0x0e, 0x78, 0x92, 0xe3, 0x32, 0xce,
-	0xc4, 0x1b, 0x91, 0x45, 0x8a, 0x2c, 0x52, 0x6c, 0xc9, 0x4d, 0x99, 0x94, 0xaf, 0x77, 0x0c, 0xa9,
-	0xc9, 0x6c, 0xd9, 0x64, 0x26, 0x93, 0x43, 0xb7, 0xd1, 0x59, 0x0b, 0x4f, 0xe1, 0x21, 0x7c, 0x8a,
-	0xba, 0xe4, 0x46, 0x92, 0x83, 0xda, 0xc0, 0x63, 0x21, 0x9f, 0x14, 0x98, 0xc3, 0x29, 0x6b, 0xc7,
-	0xb3, 0x73, 0xa3, 0x49, 0xb1, 0x67, 0xad, 0xdc, 0xad, 0xa4, 0xd4, 0xd5, 0x2d, 0xda, 0xd2, 0x39,
-	0xc4, 0xea, 0xf8, 0x19, 0x95, 0xc2, 0x86, 0x96, 0x68, 0x5d, 0x78, 0x8e, 0xf0, 0xcd, 0x3a, 0x6d,
-	0x9b, 0x16, 0xa8, 0x3a, 0x87, 0xc6, 0x06, 0x2b, 0x33, 0x8b, 0xb9, 0x8d, 0x4d, 0x07, 0xc4, 0x25,
-	0x9c, 0x6b, 0x32, 0xdb, 0xa6, 0x9c, 0x43, 0x4b, 0xa3, 0xed, 0x35, 0xe6, 0xda, 0x7a, 0x50, 0xaa,
-	0xb9, 0x3a, 0x87, 0x2c, 0x1a, 0x47, 0xc5, 0xab, 0xf3, 0xf8, 0xfd, 0xd7, 0xdd, 0xbe, 0xfe, 0x52,
-	0x5f, 0x71, 0xfb, 0x7f, 0x35, 0x7b, 0xe2, 0xae, 0x9c, 0x9a, 0x83, 0xae, 0xe2, 0x6d, 0x8c, 0x8d,
-	0x8e, 0xeb, 0x71, 0xcd, 0xa3, 0x5b, 0x90, 0x4d, 0x9d, 0xab, 0x1c, 0x0c, 0xd5, 0x3a, 0xdd, 0x82,
-	0xc2, 0xbb, 0x14, 0xce, 0x2c, 0x5a, 0xcc, 0xd0, 0xad, 0xba, 0x03, 0xcd, 0x70, 0x0f, 0x05, 0x5f,
-	0x89, 0x69, 0x6b, 0x41, 0xf2, 0x70, 0x72, 0x66, 0xba, 0x20, 0x5d, 0xf8, 0x87, 0x48, 0xab, 0xd1,
-	0x6f, 0x50, 0xa9, 0x0e, 0x39, 0xa7, 0x07, 0xb1, 0x7a, 0x69, 0x9c, 0x68, 0xa9, 0x4c, 0xb0, 0xd4,
-	0x60, 0x69, 0x20, 0xbb, 0xfd, 0xd6, 0x4f, 0x17, 0xd1, 0x25, 0x91, 0x8a, 0x89, 0x48, 0x7d, 0x61,
-	0xf5, 0x60, 0x50, 0x9d, 0x2e, 0xa5, 0x8a, 0xa8, 0x27, 0x91, 0x68, 0x9c, 0xae, 0x6f, 0xb3, 0x16,
-	0x64, 0xd3, 0xbf, 0xb2, 0xfe, 0x32, 0x6b, 0xc1, 0x7c, 0xfe, 0xd3, 0x0e, 0x1a, 0x59, 0xad, 0x55,
-	0x2b, 0x65, 0x45, 0xd5, 0x96, 0x6b, 0x0b, 0x8a, 0xb6, 0x52, 0x6b, 0x68, 0xf5, 0xa5, 0x39, 0x55,
-	0x59, 0x38, 0xc9, 0x16, 0x38, 0x0b, 0xaf, 0x52, 0x38, 0x53, 0x76, 0x41, 0xe7, 0xf0, 0xa7, 0xa9,
-	0x3d, 0xf8, 0x39, 0xb5, 0x4b, 0x28, 0x8d, 0x9d, 0xa7, 0xd4, 0x8b, 0x46, 0xf9, 0x5d, 0x34, 0x89,
-	0xf4, 0xf7, 0x47, 0x3f, 0xce, 0x9e, 0x79, 0x67, 0xbe, 0xcd, 0xf6, 0xdf, 0x9d, 0x9c, 0x9e, 0x9c,
-	0x29, 0xbc, 0x4e, 0xe1, 0x6b, 0x2a, 0x38, 0x96, 0xde, 0xfc, 0x47, 0x26, 0x49, 0xe6, 0x65, 0x0a,
-	0x0f, 0x2d, 0x02, 0xff, 0x1b, 0xa9, 0xe4, 0x2f, 0xa0, 0x32, 0x70, 0x67, 0x32, 0xe4, 0x52, 0xba,
-	0x87, 0x87, 0x7a, 0xc2, 0x89, 0x13, 0x78, 0xec, 0xf8, 0x0b, 0xac, 0x57, 0x56, 0x16, 0xab, 0x8a,
-	0xa6, 0xce, 0x35, 0x14, 0xad, 0xf1, 0xa8, 0xa6, 0x95, 0x6b, 0xd5, 0x9a, 0x3a, 0x2c, 0xe4, 0xd2,
-	0xbb, 0x3b, 0x48, 0x28, 0x55, 0x4e, 0xea, 0x82, 0x19, 0x62, 0x1e, 0xff, 0xe8, 0xcb, 0x1d, 0x16,
-	0xc4, 0x11, 0x7c, 0x3d, 0x21, 0xc6, 0x02, 0x8a, 0x5a, 0xcd, 0x3f, 0x43, 0x7b, 0x07, 0x44, 0xd8,
-	0x3f, 0x20, 0xc2, 0xd1, 0x01, 0x41, 0xdb, 0x3e, 0x41, 0x6f, 0x7c, 0x82, 0x3e, 0xf8, 0x04, 0xed,
-	0xf9, 0x04, 0xed, 0xfb, 0x04, 0x7d, 0xf6, 0x09, 0xfa, 0xe2, 0x13, 0xe1, 0xc8, 0x27, 0xe8, 0xc5,
-	0x21, 0x11, 0x76, 0x0f, 0x09, 0x7a, 0xfc, 0xd0, 0x64, 0xce, 0x13, 0x53, 0xea, 0x32, 0x8b, 0x83,
-	0xeb, 0xea, 0x52, 0xc7, 0x93, 0xc3, 0x87, 0x00, 0xf1, 0x94, 0xe3, 0xb2, 0x2e, 0x6d, 0x81, 0x3b,
-	0x75, 0x2c, 0xcb, 0x8e, 0x61, 0x32, 0x19, 0x9e, 0xf2, 0xf8, 0x6e, 0x48, 0x5e, 0x7d, 0xc6, 0x7f,
-	0xe1, 0xf5, 0x30, 0xf3, 0x3d, 0x00, 0x00, 0xff, 0xff, 0xa0, 0x69, 0x50, 0xfc, 0x1a, 0x07, 0x00,
-	0x00,
-}

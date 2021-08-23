@@ -3,27 +3,30 @@
 
 package secret_policy
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf1 "github.com/gogo/protobuf/types"
-import google_protobuf2 "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GlobalSpecType
 //
@@ -38,13 +41,13 @@ type GlobalSpecType struct {
 	// - FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified
 	// - ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action
 	// - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action
-	Algo ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Algo policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
 	// Rules
 	//
 	// x-displayName: "Secret Policy Rules"
 	// A list of references to secret_policy_rule objects.
 	// The order of evaluation of the rules depends on the rule combining algorithm.
-	Rules []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
+	Rules []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Allow Volterra
 	//
 	// x-displayName: "Allow Volterra"
@@ -57,33 +60,57 @@ type GlobalSpecType struct {
 	// x-example: "6h"
 	// decrypt_cache_timeout contains the amount of time a decrypted secret is cached in wingman.
 	// Value for this parameter is a string ending in the suffix "s" (indicating seconds), suffix "m" (indicating minutes) or suffix "h" (indicating hours)
-	DecryptCacheTimeout *google_protobuf1.Duration `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
+	DecryptCacheTimeout *types.Duration `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
 	// Deleted At
 	//
 	// x-displayName: "Deleted At"
 	// deleted_at is set when the secret policy object is marked for delete, based on this value
 	// object marked for delete will be deleted after delete_delay
-	DeletedAt *google_protobuf2.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt" json:"deleted_at,omitempty"`
+	DeletedAt *types.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
 	// Delete Delay
 	//
 	// x-displayName: "Delete Delay"
 	// deleted_delay is set when the secret policy object is marked for delete, based on this value
 	// object marked for delete will be deleted after delete_delay
-	DeleteDelay *google_protobuf1.Duration `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay" json:"delete_delay,omitempty"`
+	DeleteDelay *types.Duration `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay,proto3" json:"delete_delay,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetAlgo() ves_io_schema_policy.RuleCombiningAlgorithm {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
 	}
-	return ves_io_schema_policy.FIRST_MATCH
+	return policy.FIRST_MATCH
 }
 
-func (m *GlobalSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetRules() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Rules
 	}
@@ -97,21 +124,21 @@ func (m *GlobalSpecType) GetAllowVolterra() bool {
 	return false
 }
 
-func (m *GlobalSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+func (m *GlobalSpecType) GetDecryptCacheTimeout() *types.Duration {
 	if m != nil {
 		return m.DecryptCacheTimeout
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDeletedAt() *google_protobuf2.Timestamp {
+func (m *GlobalSpecType) GetDeletedAt() *types.Timestamp {
 	if m != nil {
 		return m.DeletedAt
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDeleteDelay() *google_protobuf1.Duration {
+func (m *GlobalSpecType) GetDeleteDelay() *types.Duration {
 	if m != nil {
 		return m.DeleteDelay
 	}
@@ -123,24 +150,48 @@ func (m *GlobalSpecType) GetDeleteDelay() *google_protobuf1.Duration {
 // x-displayName: "Create Secret Policy"
 // Create secret_policy creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
-	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
+	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetAlgo() ves_io_schema_policy.RuleCombiningAlgorithm {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
 	}
-	return ves_io_schema_policy.FIRST_MATCH
+	return policy.FIRST_MATCH
 }
 
-func (m *CreateSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetRules() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Rules
 	}
@@ -154,7 +205,7 @@ func (m *CreateSpecType) GetAllowVolterra() bool {
 	return false
 }
 
-func (m *CreateSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+func (m *CreateSpecType) GetDecryptCacheTimeout() *types.Duration {
 	if m != nil {
 		return m.DecryptCacheTimeout
 	}
@@ -166,24 +217,48 @@ func (m *CreateSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
 // x-displayName: "Replace Secret Policy"
 // Replace secret_policy replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
-	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
+	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
 
-func (m *ReplaceSpecType) GetAlgo() ves_io_schema_policy.RuleCombiningAlgorithm {
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
+
+func (m *ReplaceSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
 	}
-	return ves_io_schema_policy.FIRST_MATCH
+	return policy.FIRST_MATCH
 }
 
-func (m *ReplaceSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetRules() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Rules
 	}
@@ -197,7 +272,7 @@ func (m *ReplaceSpecType) GetAllowVolterra() bool {
 	return false
 }
 
-func (m *ReplaceSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+func (m *ReplaceSpecType) GetDecryptCacheTimeout() *types.Duration {
 	if m != nil {
 		return m.DecryptCacheTimeout
 	}
@@ -209,26 +284,50 @@ func (m *ReplaceSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
 // x-displayName: "Get Secret Policy"
 // Get secret_policy reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
-	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
-	MarkedForDelete     bool                                        `protobuf:"varint,5,opt,name=marked_for_delete,json=markedForDelete,proto3" json:"marked_for_delete,omitempty"`
-	DeletionTime        *google_protobuf2.Timestamp                 `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime" json:"deletion_time,omitempty"`
+	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
+	MarkedForDelete     bool                          `protobuf:"varint,5,opt,name=marked_for_delete,json=markedForDelete,proto3" json:"marked_for_delete,omitempty"`
+	DeletionTime        *types.Timestamp              `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime,proto3" json:"deletion_time,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetAlgo() ves_io_schema_policy.RuleCombiningAlgorithm {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
 	}
-	return ves_io_schema_policy.FIRST_MATCH
+	return policy.FIRST_MATCH
 }
 
-func (m *GetSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetRules() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Rules
 	}
@@ -242,7 +341,7 @@ func (m *GetSpecType) GetAllowVolterra() bool {
 	return false
 }
 
-func (m *GetSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+func (m *GetSpecType) GetDecryptCacheTimeout() *types.Duration {
 	if m != nil {
 		return m.DecryptCacheTimeout
 	}
@@ -256,7 +355,7 @@ func (m *GetSpecType) GetMarkedForDelete() bool {
 	return false
 }
 
-func (m *GetSpecType) GetDeletionTime() *google_protobuf2.Timestamp {
+func (m *GetSpecType) GetDeletionTime() *types.Timestamp {
 	if m != nil {
 		return m.DeletionTime
 	}
@@ -269,6 +368,57 @@ func init() {
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.secret_policy.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.secret_policy.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/secret_policy/types.proto", fileDescriptor_2cbc9232abd5bc5d)
+}
+
+var fileDescriptor_2cbc9232abd5bc5d = []byte{
+	// 666 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0xbf, 0x6f, 0xd3, 0x4c,
+	0x18, 0xce, 0x25, 0x6d, 0xbf, 0x7e, 0x97, 0x36, 0xfd, 0xea, 0x4f, 0xa0, 0x34, 0xad, 0x8e, 0xa8,
+	0x12, 0x22, 0x42, 0xd4, 0x96, 0xca, 0xc6, 0x00, 0x34, 0x29, 0x2d, 0x0c, 0x15, 0xc2, 0x8d, 0x10,
+	0x62, 0xb1, 0x2e, 0xf6, 0x1b, 0xc7, 0xf4, 0x9c, 0xb3, 0x2e, 0x97, 0x94, 0x0c, 0x95, 0xba, 0xb3,
+	0x20, 0x56, 0xfe, 0x01, 0xc4, 0x06, 0x23, 0x5d, 0x60, 0x43, 0x4c, 0x1d, 0x23, 0x26, 0xea, 0x2e,
+	0x65, 0xeb, 0x9f, 0x80, 0x7c, 0x76, 0x28, 0x6e, 0x23, 0x40, 0x8c, 0xa8, 0xdb, 0xdd, 0xfb, 0x3e,
+	0xcf, 0x73, 0xef, 0xbd, 0xcf, 0xfd, 0xc0, 0x57, 0x7a, 0xd0, 0xd1, 0x3d, 0x6e, 0x74, 0xec, 0x16,
+	0xf8, 0xd4, 0xe8, 0x80, 0x2d, 0x40, 0x5a, 0x01, 0x67, 0x9e, 0xdd, 0x37, 0x64, 0x3f, 0x80, 0x8e,
+	0x1e, 0x08, 0x2e, 0xb9, 0x36, 0x1f, 0x03, 0xf5, 0x18, 0xa8, 0xa7, 0x80, 0xa5, 0x25, 0xd7, 0x93,
+	0xad, 0x6e, 0x43, 0xb7, 0xb9, 0x6f, 0xb8, 0xdc, 0xe5, 0x86, 0xe2, 0x34, 0xba, 0x4d, 0x35, 0x53,
+	0x13, 0x35, 0x8a, 0xb5, 0x4a, 0xc4, 0xe5, 0xdc, 0x65, 0x70, 0x82, 0x72, 0xba, 0x82, 0x4a, 0x8f,
+	0xb7, 0x93, 0xfc, 0xa5, 0xd3, 0x79, 0xe9, 0xf9, 0xd0, 0x91, 0xd4, 0x0f, 0x12, 0xc0, 0x7c, 0xba,
+	0x6a, 0x1e, 0x44, 0xe4, 0xa4, 0xd2, 0x52, 0x39, 0x9d, 0x3c, 0xbb, 0x97, 0xd2, 0x5c, 0x1a, 0xf1,
+	0x63, 0x6a, 0x21, 0x9d, 0xea, 0x51, 0xe6, 0x39, 0x54, 0xc2, 0x68, 0xe9, 0x9e, 0x07, 0xdb, 0x56,
+	0x6a, 0xf1, 0xc5, 0x0f, 0x39, 0x5c, 0x58, 0x67, 0xbc, 0x41, 0xd9, 0x66, 0x00, 0x76, 0xbd, 0x1f,
+	0x80, 0xf6, 0x08, 0x8f, 0x51, 0xe6, 0xf2, 0x22, 0x2a, 0xa3, 0x4a, 0x61, 0xf9, 0x9a, 0x9e, 0x6e,
+	0x64, 0x5c, 0x9e, 0x6e, 0x76, 0x19, 0xd4, 0xb8, 0xdf, 0xf0, 0xda, 0x5e, 0xdb, 0x5d, 0x61, 0x2e,
+	0x17, 0x9e, 0x6c, 0xf9, 0xd5, 0x8b, 0x83, 0x1d, 0xf4, 0x79, 0x0f, 0xe5, 0xd7, 0xee, 0x99, 0x9b,
+	0x75, 0x6b, 0x63, 0xa5, 0x5e, 0xbb, 0x7b, 0xb4, 0x87, 0x90, 0xa9, 0x14, 0xb5, 0x3a, 0x1e, 0x17,
+	0x5d, 0x06, 0x9d, 0x62, 0xb6, 0x9c, 0xab, 0xe4, 0x97, 0x17, 0x4e, 0x49, 0xdf, 0x6f, 0x3c, 0x01,
+	0x5b, 0x9a, 0xd0, 0x8c, 0xca, 0xa8, 0x96, 0x5f, 0xef, 0x68, 0x29, 0xd7, 0xac, 0x88, 0xfb, 0xee,
+	0xeb, 0xfb, 0xdc, 0xc4, 0x0b, 0x94, 0xfb, 0x6f, 0x37, 0x6b, 0xc6, 0x62, 0xda, 0x65, 0x5c, 0xa0,
+	0x8c, 0xf1, 0x6d, 0xab, 0xc7, 0x99, 0x04, 0x21, 0x68, 0x31, 0x57, 0x46, 0x95, 0x49, 0x73, 0x5a,
+	0x45, 0x1f, 0x26, 0x41, 0x6d, 0x03, 0x5f, 0x70, 0xc0, 0x16, 0xfd, 0x40, 0x5a, 0x36, 0xb5, 0x5b,
+	0x60, 0x45, 0x26, 0xf1, 0xae, 0x2c, 0x8e, 0x95, 0x51, 0x25, 0xbf, 0x3c, 0xa7, 0xc7, 0x26, 0xea,
+	0x43, 0x13, 0xf5, 0xd5, 0xc4, 0x64, 0xf3, 0xff, 0x84, 0x57, 0x8b, 0x68, 0xf5, 0x98, 0xa5, 0x55,
+	0x31, 0x76, 0x80, 0x81, 0x04, 0xc7, 0xa2, 0xb2, 0x38, 0xae, 0x34, 0x4a, 0x67, 0x34, 0xea, 0xc3,
+	0x83, 0x50, 0xfd, 0x67, 0xb0, 0x83, 0x54, 0x2b, 0xfe, 0x4d, 0x68, 0x2b, 0x52, 0xbb, 0x83, 0xa7,
+	0xe2, 0x89, 0xe5, 0x00, 0xa3, 0xfd, 0xe2, 0xc4, 0x2f, 0x2a, 0x39, 0x11, 0xc9, 0xc7, 0xbc, 0xd5,
+	0x88, 0xb6, 0xf8, 0x26, 0x8b, 0x0b, 0x35, 0x01, 0x54, 0xc2, 0x77, 0x0f, 0x6f, 0xff, 0xb9, 0x87,
+	0x7f, 0x9f, 0x57, 0x37, 0x66, 0x3f, 0xdd, 0x3c, 0x75, 0xc8, 0x17, 0xdf, 0x66, 0xf1, 0x8c, 0x09,
+	0x01, 0xa3, 0xf6, 0x79, 0xd3, 0x7e, 0xbb, 0x69, 0x2f, 0x73, 0x38, 0xbf, 0x0e, 0xf2, 0xbc, 0x61,
+	0x23, 0x5f, 0x84, 0xab, 0x78, 0xd6, 0xa7, 0x62, 0x0b, 0x1c, 0xab, 0xc9, 0x85, 0x15, 0x5f, 0x50,
+	0xf5, 0x30, 0x4c, 0x9a, 0x33, 0x71, 0x62, 0x8d, 0x8b, 0x55, 0x15, 0xd6, 0x6e, 0xe1, 0x69, 0x05,
+	0xf0, 0x78, 0x5b, 0xad, 0x9a, 0x5c, 0xfd, 0x9f, 0x3c, 0x20, 0xe6, 0xd4, 0x90, 0x10, 0x85, 0x46,
+	0xb8, 0x53, 0x7d, 0x86, 0xf6, 0x0f, 0x48, 0x66, 0x70, 0x40, 0x32, 0xc7, 0x07, 0x04, 0xed, 0x86,
+	0x04, 0xbd, 0x0a, 0x09, 0xfa, 0x18, 0x12, 0xb4, 0x1f, 0x12, 0x34, 0x08, 0x09, 0xfa, 0x12, 0x12,
+	0x74, 0x14, 0x92, 0xcc, 0x71, 0x48, 0xd0, 0xf3, 0x43, 0x92, 0xd9, 0x3f, 0x24, 0x99, 0xc1, 0x21,
+	0xc9, 0x3c, 0x7e, 0xe0, 0xf2, 0x60, 0xcb, 0xd5, 0x87, 0xed, 0xd2, 0xbb, 0x1d, 0x43, 0x0d, 0x9a,
+	0x5c, 0xf8, 0x4b, 0x81, 0xe0, 0x3d, 0xcf, 0x01, 0xb1, 0x34, 0x4c, 0x1b, 0x41, 0xc3, 0xe5, 0x06,
+	0x3c, 0x95, 0xc3, 0x4f, 0x78, 0xc4, 0x5f, 0xdc, 0x98, 0x50, 0x5b, 0xb8, 0xfe, 0x2d, 0x00, 0x00,
+	0xff, 0xff, 0x80, 0x37, 0x7a, 0x35, 0xb1, 0x07, 0x00, 0x00,
+}
+
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -522,7 +672,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -530,74 +680,87 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Algo != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
-	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DeleteDelay != nil {
+		{
+			size, err := m.DeleteDelay.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.DeletedAt != nil {
+		{
+			size, err := m.DeletedAt.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.DecryptCacheTimeout != nil {
+		{
+			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.AllowVolterra {
-		dAtA[i] = 0x18
-		i++
+		i--
 		if m.AllowVolterra {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.DecryptCacheTimeout != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n1, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n1
 	}
-	if m.DeletedAt != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeletedAt.Size()))
-		n2, err := m.DeletedAt.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
+	if m.Algo != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
+		i--
+		dAtA[i] = 0x8
 	}
-	if m.DeleteDelay != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeleteDelay.Size()))
-		n3, err := m.DeleteDelay.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -605,54 +768,63 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Algo != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
-	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DecryptCacheTimeout != nil {
+		{
+			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.AllowVolterra {
-		dAtA[i] = 0x18
-		i++
+		i--
 		if m.AllowVolterra {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.DecryptCacheTimeout != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n4, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n4
 	}
-	return i, nil
+	if m.Algo != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -660,54 +832,63 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Algo != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
-	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DecryptCacheTimeout != nil {
+		{
+			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.AllowVolterra {
-		dAtA[i] = 0x18
-		i++
+		i--
 		if m.AllowVolterra {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.DecryptCacheTimeout != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n5, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n5
 	}
-	return i, nil
+	if m.Algo != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -715,80 +896,96 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Algo != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
-	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DeletionTime != nil {
+		{
+			size, err := m.DeletionTime.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if m.AllowVolterra {
-		dAtA[i] = 0x18
-		i++
-		if m.AllowVolterra {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if m.DecryptCacheTimeout != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
-		n6, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
+		i--
+		dAtA[i] = 0x32
 	}
 	if m.MarkedForDelete {
-		dAtA[i] = 0x28
-		i++
+		i--
 		if m.MarkedForDelete {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x28
 	}
-	if m.DeletionTime != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeletionTime.Size()))
-		n7, err := m.DeletionTime.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.DecryptCacheTimeout != nil {
+		{
+			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	if m.AllowVolterra {
+		i--
+		if m.AllowVolterra {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Algo != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Algo != 0 {
@@ -819,6 +1016,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Algo != 0 {
@@ -841,6 +1041,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Algo != 0 {
@@ -863,6 +1066,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Algo != 0 {
@@ -892,14 +1098,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -908,13 +1107,18 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*ObjectRefType{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
-		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
-		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
-		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "google_protobuf1.Duration", 1) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
+		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "types.Timestamp", 1) + `,`,
+		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "types.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -923,11 +1127,16 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*ObjectRefType{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
-		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -936,11 +1145,16 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*ObjectRefType{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
-		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -949,13 +1163,18 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*ObjectRefType{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
-		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
 		`MarkedForDelete:` + fmt.Sprintf("%v", this.MarkedForDelete) + `,`,
-		`DeletionTime:` + strings.Replace(fmt.Sprintf("%v", this.DeletionTime), "Timestamp", "google_protobuf2.Timestamp", 1) + `,`,
+		`DeletionTime:` + strings.Replace(fmt.Sprintf("%v", this.DeletionTime), "Timestamp", "types.Timestamp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -983,7 +1202,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1011,7 +1230,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Algo |= (ves_io_schema_policy.RuleCombiningAlgorithm(b) & 0x7F) << shift
+				m.Algo |= policy.RuleCombiningAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1030,7 +1249,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1039,10 +1258,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Rules = append(m.Rules, &ves_io_schema4.ObjectRefType{})
+			m.Rules = append(m.Rules, &schema.ObjectRefType{})
 			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1061,7 +1283,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1081,7 +1303,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1090,11 +1312,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DecryptCacheTimeout == nil {
-				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+				m.DecryptCacheTimeout = &types.Duration{}
 			}
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1114,7 +1339,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1123,11 +1348,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DeletedAt == nil {
-				m.DeletedAt = &google_protobuf2.Timestamp{}
+				m.DeletedAt = &types.Timestamp{}
 			}
 			if err := m.DeletedAt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1147,7 +1375,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1156,11 +1384,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DeleteDelay == nil {
-				m.DeleteDelay = &google_protobuf1.Duration{}
+				m.DeleteDelay = &types.Duration{}
 			}
 			if err := m.DeleteDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1173,6 +1404,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1202,7 +1436,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1230,7 +1464,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Algo |= (ves_io_schema_policy.RuleCombiningAlgorithm(b) & 0x7F) << shift
+				m.Algo |= policy.RuleCombiningAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1249,7 +1483,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1258,10 +1492,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Rules = append(m.Rules, &ves_io_schema4.ObjectRefType{})
+			m.Rules = append(m.Rules, &schema.ObjectRefType{})
 			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1280,7 +1517,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1300,7 +1537,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1309,11 +1546,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DecryptCacheTimeout == nil {
-				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+				m.DecryptCacheTimeout = &types.Duration{}
 			}
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1326,6 +1566,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1355,7 +1598,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1383,7 +1626,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Algo |= (ves_io_schema_policy.RuleCombiningAlgorithm(b) & 0x7F) << shift
+				m.Algo |= policy.RuleCombiningAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1402,7 +1645,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1411,10 +1654,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Rules = append(m.Rules, &ves_io_schema4.ObjectRefType{})
+			m.Rules = append(m.Rules, &schema.ObjectRefType{})
 			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1433,7 +1679,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1453,7 +1699,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1462,11 +1708,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DecryptCacheTimeout == nil {
-				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+				m.DecryptCacheTimeout = &types.Duration{}
 			}
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1479,6 +1728,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1508,7 +1760,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1536,7 +1788,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Algo |= (ves_io_schema_policy.RuleCombiningAlgorithm(b) & 0x7F) << shift
+				m.Algo |= policy.RuleCombiningAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1555,7 +1807,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1564,10 +1816,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Rules = append(m.Rules, &ves_io_schema4.ObjectRefType{})
+			m.Rules = append(m.Rules, &schema.ObjectRefType{})
 			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1586,7 +1841,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1606,7 +1861,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1615,11 +1870,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DecryptCacheTimeout == nil {
-				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+				m.DecryptCacheTimeout = &types.Duration{}
 			}
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1639,7 +1897,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1659,7 +1917,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1668,11 +1926,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DeletionTime == nil {
-				m.DeletionTime = &google_protobuf2.Timestamp{}
+				m.DeletionTime = &types.Timestamp{}
 			}
 			if err := m.DeletionTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1685,6 +1946,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1702,6 +1966,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1733,10 +1998,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1753,101 +2016,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/secret_policy/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 658 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x3f, 0x6f, 0xd3, 0x4c,
-	0x18, 0xcf, 0x25, 0x6d, 0xdf, 0xbe, 0x97, 0x36, 0xa5, 0x46, 0xa0, 0x34, 0xad, 0x4c, 0x54, 0x09,
-	0x11, 0x21, 0x6a, 0x4b, 0x65, 0x63, 0x00, 0x9a, 0x94, 0x16, 0x86, 0x0a, 0xe1, 0x46, 0x08, 0xb1,
-	0x58, 0x17, 0xfb, 0x89, 0x63, 0x7a, 0xce, 0x59, 0xe7, 0x73, 0x4a, 0x86, 0x4a, 0x95, 0xf8, 0x02,
-	0x88, 0x95, 0x2f, 0x80, 0xd8, 0x60, 0xa4, 0x0b, 0x6c, 0x88, 0xa9, 0x63, 0xc4, 0x44, 0xcd, 0x52,
-	0xb6, 0x7e, 0x04, 0xe4, 0xb3, 0x43, 0x71, 0x1b, 0x01, 0x62, 0x44, 0xdd, 0x7c, 0xcf, 0xef, 0x8f,
-	0x1f, 0x3f, 0x3f, 0xdf, 0x1d, 0xbe, 0xd2, 0x83, 0x40, 0x73, 0x99, 0x1e, 0x58, 0x1d, 0xf0, 0x88,
-	0x1e, 0x80, 0xc5, 0x41, 0x98, 0x3e, 0xa3, 0xae, 0xd5, 0xd7, 0x45, 0xdf, 0x87, 0x40, 0xf3, 0x39,
-	0x13, 0x4c, 0x99, 0x4f, 0x88, 0x5a, 0x42, 0xd4, 0x32, 0xc4, 0xca, 0x92, 0xe3, 0x8a, 0x4e, 0xd8,
-	0xd2, 0x2c, 0xe6, 0xe9, 0x0e, 0x73, 0x98, 0x2e, 0x35, 0xad, 0xb0, 0x2d, 0x57, 0x72, 0x21, 0x9f,
-	0x12, 0xaf, 0x8a, 0xea, 0x30, 0xe6, 0x50, 0x38, 0x66, 0xd9, 0x21, 0x27, 0xc2, 0x65, 0xdd, 0x14,
-	0xbf, 0x74, 0x12, 0x17, 0xae, 0x07, 0x81, 0x20, 0x9e, 0x9f, 0x12, 0xe6, 0xb3, 0x5d, 0x33, 0x3f,
-	0x16, 0xa7, 0x9d, 0x56, 0xaa, 0x59, 0xf0, 0xf4, 0xb7, 0x54, 0xe6, 0xb2, 0x8c, 0x9f, 0xa1, 0x85,
-	0x2c, 0xd4, 0x23, 0xd4, 0xb5, 0x89, 0x80, 0xd1, 0xd6, 0x3d, 0x17, 0xb6, 0xcd, 0xcc, 0xcb, 0x17,
-	0x3f, 0x14, 0x70, 0x69, 0x9d, 0xb2, 0x16, 0xa1, 0x9b, 0x3e, 0x58, 0xcd, 0xbe, 0x0f, 0xca, 0x23,
-	0x3c, 0x46, 0xa8, 0xc3, 0xca, 0xa8, 0x8a, 0x6a, 0xa5, 0xe5, 0x6b, 0x5a, 0x76, 0x90, 0x49, 0x7b,
-	0x9a, 0x11, 0x52, 0x68, 0x30, 0xaf, 0xe5, 0x76, 0xdd, 0xae, 0xb3, 0x42, 0x1d, 0xc6, 0x5d, 0xd1,
-	0xf1, 0xea, 0x17, 0x07, 0x3b, 0xe8, 0xf3, 0x1e, 0x2a, 0xae, 0xdd, 0x33, 0x36, 0x9b, 0xe6, 0xc6,
-	0x4a, 0xb3, 0x71, 0xf7, 0x70, 0x0f, 0x21, 0x43, 0x3a, 0x2a, 0x4d, 0x3c, 0xce, 0x43, 0x0a, 0x41,
-	0x39, 0x5f, 0x2d, 0xd4, 0x8a, 0xcb, 0x0b, 0x27, 0xac, 0xef, 0xb7, 0x9e, 0x80, 0x25, 0x0c, 0x68,
-	0xc7, 0x6d, 0xd4, 0xab, 0xaf, 0x77, 0x94, 0x4c, 0x6a, 0x66, 0xac, 0x7d, 0xf7, 0xed, 0x7d, 0x61,
-	0xe2, 0x05, 0x2a, 0x9c, 0xdb, 0xcd, 0x1b, 0x89, 0x99, 0x72, 0x19, 0x97, 0x08, 0xa5, 0x6c, 0xdb,
-	0xec, 0x31, 0x2a, 0x80, 0x73, 0x52, 0x2e, 0x54, 0x51, 0x6d, 0xd2, 0x98, 0x96, 0xd5, 0x87, 0x69,
-	0x51, 0xd9, 0xc0, 0x17, 0x6c, 0xb0, 0x78, 0xdf, 0x17, 0xa6, 0x45, 0xac, 0x0e, 0x98, 0x71, 0x48,
-	0x2c, 0x14, 0xe5, 0xb1, 0x2a, 0xaa, 0x15, 0x97, 0xe7, 0xb4, 0x24, 0x44, 0x6d, 0x18, 0xa2, 0xb6,
-	0x9a, 0x86, 0x6c, 0x9c, 0x4f, 0x75, 0x8d, 0x58, 0xd6, 0x4c, 0x54, 0x4a, 0x1d, 0x63, 0x1b, 0x28,
-	0x08, 0xb0, 0x4d, 0x22, 0xca, 0xe3, 0xd2, 0xa3, 0x72, 0xca, 0xa3, 0x39, 0xfc, 0x11, 0xea, 0xff,
-	0x0d, 0x76, 0x90, 0x1c, 0xc5, 0xff, 0xa9, 0x6c, 0x45, 0x28, 0x77, 0xf0, 0x54, 0xb2, 0x30, 0x6d,
-	0xa0, 0xa4, 0x5f, 0x9e, 0xf8, 0x4d, 0x27, 0xc7, 0x26, 0xc5, 0x44, 0xb7, 0x1a, 0xcb, 0x16, 0xdf,
-	0xe4, 0x71, 0xa9, 0xc1, 0x81, 0x08, 0xf8, 0x91, 0xe1, 0xed, 0xbf, 0xcf, 0xf0, 0xdf, 0xcb, 0xea,
-	0xc6, 0xec, 0xa7, 0x9b, 0x27, 0x7e, 0xf2, 0xc5, 0xb7, 0x79, 0x3c, 0x63, 0x80, 0x4f, 0x89, 0x75,
-	0x36, 0xb4, 0x3f, 0x1e, 0xda, 0xcb, 0x02, 0x2e, 0xae, 0x83, 0x38, 0x1b, 0xd8, 0xc8, 0x13, 0xe1,
-	0x2a, 0x9e, 0xf5, 0x08, 0xdf, 0x02, 0xdb, 0x6c, 0x33, 0x6e, 0x26, 0x1b, 0x54, 0x1e, 0x0c, 0x93,
-	0xc6, 0x4c, 0x02, 0xac, 0x31, 0xbe, 0x2a, 0xcb, 0xca, 0x2d, 0x3c, 0x2d, 0x09, 0x2e, 0xeb, 0xca,
-	0xb7, 0xa6, 0x5b, 0xff, 0x17, 0x07, 0x88, 0x31, 0x35, 0x14, 0xc4, 0xa5, 0x11, 0xe9, 0xd4, 0x9f,
-	0xa1, 0xfd, 0x03, 0x35, 0x37, 0x38, 0x50, 0x73, 0x47, 0x07, 0x2a, 0xda, 0x8d, 0x54, 0xf4, 0x2a,
-	0x52, 0xd1, 0xc7, 0x48, 0x45, 0xfb, 0x91, 0x8a, 0x06, 0x91, 0x8a, 0xbe, 0x44, 0x2a, 0x3a, 0x8c,
-	0xd4, 0xdc, 0x51, 0xa4, 0xa2, 0xe7, 0x5f, 0xd5, 0xdc, 0xe3, 0x07, 0x0e, 0xf3, 0xb7, 0x1c, 0x6d,
-	0x38, 0x26, 0x2d, 0x0c, 0x74, 0xf9, 0xd0, 0x66, 0xdc, 0x5b, 0xf2, 0x39, 0xeb, 0xb9, 0x36, 0xf0,
-	0xa5, 0x21, 0xac, 0xfb, 0x2d, 0x87, 0xe9, 0xf0, 0x54, 0x0c, 0x2f, 0xdf, 0x11, 0x77, 0x70, 0x6b,
-	0x42, 0xb6, 0x7e, 0xfd, 0x7b, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0a, 0xb8, 0xd0, 0x08, 0xa9, 0x07,
-	0x00, 0x00,
-}

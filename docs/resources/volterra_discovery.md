@@ -35,14 +35,12 @@ resource "volterra_discovery" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+        // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
 
-        vault_secret_info {
-          key             = "key_pem"
-          location        = "v1/data/vhost_key"
-          provider        = "vault-vh-provider"
-          secret_encoding = "secret_encoding"
-          version         = "1"
+        blindfold_secret_info {
+          decryption_provider = "decryption_provider"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "store_provider"
         }
       }
 
@@ -52,13 +50,16 @@ resource "volterra_discovery" "example" {
 
     publish_info {
       // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-      disable = true
+
+      publish {
+        namespace = "namespace"
+      }
     }
   }
   where {
     // One of the arguments from this list "virtual_network site virtual_site" must be set
 
-    virtual_site {
+    site {
       network_type = "network_type"
 
       ref {

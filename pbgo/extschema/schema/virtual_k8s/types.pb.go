@@ -3,27 +3,31 @@
 
 package virtual_k8s
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GlobalSpecType
 //
@@ -37,7 +41,7 @@ type GlobalSpecType struct {
 	// Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object
 	// annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the
 	// Kubernetes API resource object
-	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	VsiteRefs []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs,proto3" json:"vsite_refs,omitempty"`
 	// service_isolation_choice
 	//
 	// x-displayName: "Choose Service Isolation"
@@ -51,12 +55,36 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Default Workload Flavor"
 	// Default workfload flavor for all workloads launched in this Virtual K8s
-	DefaultFlavorRef *ves_io_schema_views.ObjectRefType `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
+	DefaultFlavorRef *views.ObjectRefType `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef,proto3" json:"default_flavor_ref,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7e4f06cd55f3e971, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_ServiceIsolationChoice interface {
 	isGlobalSpecType_ServiceIsolationChoice()
@@ -66,10 +94,10 @@ type isGlobalSpecType_ServiceIsolationChoice interface {
 }
 
 type GlobalSpecType_Isolated struct {
-	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+	Isolated *schema.Empty `protobuf:"bytes,3,opt,name=isolated,proto3,oneof" json:"isolated,omitempty"`
 }
 type GlobalSpecType_Disabled struct {
-	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+	Disabled *schema.Empty `protobuf:"bytes,4,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
 
 func (*GlobalSpecType_Isolated) isGlobalSpecType_ServiceIsolationChoice() {}
@@ -82,106 +110,40 @@ func (m *GlobalSpecType) GetServiceIsolationChoice() isGlobalSpecType_ServiceIso
 	return nil
 }
 
-func (m *GlobalSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetVsiteRefs() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VsiteRefs
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetIsolated() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetIsolated() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GlobalSpecType_Isolated); ok {
 		return x.Isolated
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisabled() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GlobalSpecType_Disabled); ok {
 		return x.Disabled
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetDefaultFlavorRef() *views.ObjectRefType {
 	if m != nil {
 		return m.DefaultFlavorRef
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_Isolated)(nil),
 		(*GlobalSpecType_Disabled)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *GlobalSpecType_Isolated:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Isolated); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Disabled:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disabled); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ServiceIsolationChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 3: // service_isolation_choice.isolated
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &GlobalSpecType_Isolated{msg}
-		return true, err
-	case 4: // service_isolation_choice.disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &GlobalSpecType_Disabled{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *GlobalSpecType_Isolated:
-		s := proto.Size(x.Isolated)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Disabled:
-		s := proto.Size(x.Disabled)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create Virtual K8s
@@ -189,17 +151,41 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Create Virtual Kubernetes"
 // Create virtual_k8s will create the object in the storage backend for namespace metadata.namespace
 type CreateSpecType struct {
-	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	VsiteRefs []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs,proto3" json:"vsite_refs,omitempty"`
 	// Types that are valid to be assigned to ServiceIsolationChoice:
 	//	*CreateSpecType_Isolated
 	//	*CreateSpecType_Disabled
 	ServiceIsolationChoice isCreateSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
-	DefaultFlavorRef       *ves_io_schema_views.ObjectRefType      `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
+	DefaultFlavorRef       *views.ObjectRefType                    `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef,proto3" json:"default_flavor_ref,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7e4f06cd55f3e971, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_ServiceIsolationChoice interface {
 	isCreateSpecType_ServiceIsolationChoice()
@@ -209,10 +195,10 @@ type isCreateSpecType_ServiceIsolationChoice interface {
 }
 
 type CreateSpecType_Isolated struct {
-	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+	Isolated *schema.Empty `protobuf:"bytes,3,opt,name=isolated,proto3,oneof" json:"isolated,omitempty"`
 }
 type CreateSpecType_Disabled struct {
-	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+	Disabled *schema.Empty `protobuf:"bytes,4,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
 
 func (*CreateSpecType_Isolated) isCreateSpecType_ServiceIsolationChoice() {}
@@ -225,106 +211,40 @@ func (m *CreateSpecType) GetServiceIsolationChoice() isCreateSpecType_ServiceIso
 	return nil
 }
 
-func (m *CreateSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetVsiteRefs() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VsiteRefs
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetIsolated() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetIsolated() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*CreateSpecType_Isolated); ok {
 		return x.Isolated
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDisabled() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*CreateSpecType_Disabled); ok {
 		return x.Disabled
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetDefaultFlavorRef() *views.ObjectRefType {
 	if m != nil {
 		return m.DefaultFlavorRef
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_Isolated)(nil),
 		(*CreateSpecType_Disabled)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *CreateSpecType_Isolated:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Isolated); err != nil {
-			return err
-		}
-	case *CreateSpecType_Disabled:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disabled); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ServiceIsolationChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 3: // service_isolation_choice.isolated
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &CreateSpecType_Isolated{msg}
-		return true, err
-	case 4: // service_isolation_choice.disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &CreateSpecType_Disabled{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *CreateSpecType_Isolated:
-		s := proto.Size(x.Isolated)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Disabled:
-		s := proto.Size(x.Disabled)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Virtual K8s
@@ -333,17 +253,41 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 // Replacing an endpoint object will update the object by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 type ReplaceSpecType struct {
-	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	VsiteRefs []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs,proto3" json:"vsite_refs,omitempty"`
 	// Types that are valid to be assigned to ServiceIsolationChoice:
 	//	*ReplaceSpecType_Isolated
 	//	*ReplaceSpecType_Disabled
 	ServiceIsolationChoice isReplaceSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
-	DefaultFlavorRef       *ves_io_schema_views.ObjectRefType       `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
+	DefaultFlavorRef       *views.ObjectRefType                     `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef,proto3" json:"default_flavor_ref,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7e4f06cd55f3e971, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_ServiceIsolationChoice interface {
 	isReplaceSpecType_ServiceIsolationChoice()
@@ -353,10 +297,10 @@ type isReplaceSpecType_ServiceIsolationChoice interface {
 }
 
 type ReplaceSpecType_Isolated struct {
-	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+	Isolated *schema.Empty `protobuf:"bytes,3,opt,name=isolated,proto3,oneof" json:"isolated,omitempty"`
 }
 type ReplaceSpecType_Disabled struct {
-	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+	Disabled *schema.Empty `protobuf:"bytes,4,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
 
 func (*ReplaceSpecType_Isolated) isReplaceSpecType_ServiceIsolationChoice() {}
@@ -369,106 +313,40 @@ func (m *ReplaceSpecType) GetServiceIsolationChoice() isReplaceSpecType_ServiceI
 	return nil
 }
 
-func (m *ReplaceSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetVsiteRefs() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VsiteRefs
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetIsolated() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetIsolated() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*ReplaceSpecType_Isolated); ok {
 		return x.Isolated
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisabled() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*ReplaceSpecType_Disabled); ok {
 		return x.Disabled
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetDefaultFlavorRef() *views.ObjectRefType {
 	if m != nil {
 		return m.DefaultFlavorRef
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_Isolated)(nil),
 		(*ReplaceSpecType_Disabled)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *ReplaceSpecType_Isolated:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Isolated); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Disabled:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disabled); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ServiceIsolationChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 3: // service_isolation_choice.isolated
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &ReplaceSpecType_Isolated{msg}
-		return true, err
-	case 4: // service_isolation_choice.disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &ReplaceSpecType_Disabled{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *ReplaceSpecType_Isolated:
-		s := proto.Size(x.Isolated)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Disabled:
-		s := proto.Size(x.Disabled)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Virtual K8s
@@ -476,17 +354,41 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Get Virtual Kubernetes"
 // Get virtual_k8s will get the object from the storage backend for namesapce metadata.namespace
 type GetSpecType struct {
-	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	VsiteRefs []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs,proto3" json:"vsite_refs,omitempty"`
 	// Types that are valid to be assigned to ServiceIsolationChoice:
 	//	*GetSpecType_Isolated
 	//	*GetSpecType_Disabled
 	ServiceIsolationChoice isGetSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
-	DefaultFlavorRef       *ves_io_schema_views.ObjectRefType   `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
+	DefaultFlavorRef       *views.ObjectRefType                 `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef,proto3" json:"default_flavor_ref,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7e4f06cd55f3e971, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_ServiceIsolationChoice interface {
 	isGetSpecType_ServiceIsolationChoice()
@@ -496,10 +398,10 @@ type isGetSpecType_ServiceIsolationChoice interface {
 }
 
 type GetSpecType_Isolated struct {
-	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+	Isolated *schema.Empty `protobuf:"bytes,3,opt,name=isolated,proto3,oneof" json:"isolated,omitempty"`
 }
 type GetSpecType_Disabled struct {
-	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+	Disabled *schema.Empty `protobuf:"bytes,4,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
 
 func (*GetSpecType_Isolated) isGetSpecType_ServiceIsolationChoice() {}
@@ -512,106 +414,40 @@ func (m *GetSpecType) GetServiceIsolationChoice() isGetSpecType_ServiceIsolation
 	return nil
 }
 
-func (m *GetSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetVsiteRefs() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VsiteRefs
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetIsolated() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetIsolated() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GetSpecType_Isolated); ok {
 		return x.Isolated
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDisabled() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GetSpecType_Disabled); ok {
 		return x.Disabled
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetDefaultFlavorRef() *views.ObjectRefType {
 	if m != nil {
 		return m.DefaultFlavorRef
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_Isolated)(nil),
 		(*GetSpecType_Disabled)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *GetSpecType_Isolated:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Isolated); err != nil {
-			return err
-		}
-	case *GetSpecType_Disabled:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disabled); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ServiceIsolationChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 3: // service_isolation_choice.isolated
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &GetSpecType_Isolated{msg}
-		return true, err
-	case 4: // service_isolation_choice.disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServiceIsolationChoice = &GetSpecType_Disabled{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// service_isolation_choice
-	switch x := m.ServiceIsolationChoice.(type) {
-	case *GetSpecType_Isolated:
-		s := proto.Size(x.Isolated)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Disabled:
-		s := proto.Size(x.Disabled)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -624,6 +460,55 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.virtual_k8s.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.virtual_k8s.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptor_7e4f06cd55f3e971)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptor_7e4f06cd55f3e971)
+}
+
+var fileDescriptor_7e4f06cd55f3e971 = []byte{
+	// 579 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x95, 0x41, 0x6b, 0xd4, 0x4e,
+	0x18, 0xc6, 0x33, 0x49, 0xfb, 0xa7, 0xff, 0x54, 0xba, 0x35, 0x88, 0x6c, 0xd7, 0x32, 0x2e, 0x05,
+	0xa1, 0xa0, 0x4d, 0xa0, 0xf5, 0x50, 0x3c, 0x78, 0x58, 0xd1, 0x8a, 0x08, 0x85, 0x28, 0x1e, 0xbc,
+	0x84, 0x49, 0xf2, 0x26, 0x3b, 0x36, 0xdb, 0x09, 0x33, 0xb3, 0x59, 0xf7, 0x50, 0x28, 0xde, 0x05,
+	0xf1, 0x53, 0x48, 0x3f, 0x82, 0x7b, 0xd9, 0xa3, 0x78, 0xda, 0xe3, 0x1e, 0xdd, 0xec, 0x45, 0x0f,
+	0x42, 0xcf, 0x22, 0x28, 0x9b, 0xcd, 0x96, 0x6e, 0x16, 0x0b, 0xe2, 0x61, 0x2f, 0xbd, 0xcd, 0xe4,
+	0x7d, 0x9e, 0x67, 0xe6, 0xfd, 0xbd, 0x81, 0xd1, 0x6f, 0x25, 0x20, 0x4c, 0xca, 0x2c, 0xe1, 0xd5,
+	0xa1, 0x41, 0xac, 0x84, 0x72, 0xd9, 0x24, 0x91, 0x73, 0xb0, 0x2b, 0x2c, 0xd9, 0x8e, 0x41, 0x98,
+	0x31, 0x67, 0x92, 0x19, 0x6b, 0x63, 0x99, 0x39, 0x96, 0x99, 0xe7, 0x64, 0x95, 0xad, 0x90, 0xca,
+	0x7a, 0xd3, 0x35, 0x3d, 0xd6, 0xb0, 0x42, 0x16, 0x32, 0x2b, 0x73, 0xb8, 0xcd, 0x20, 0xdb, 0x65,
+	0x9b, 0x6c, 0x35, 0x4e, 0xaa, 0xdc, 0x98, 0x3e, 0x90, 0xc5, 0x92, 0xb2, 0xc3, 0xfc, 0x98, 0xca,
+	0xda, 0x74, 0xf1, 0xdc, 0x0d, 0x2a, 0xeb, 0x85, 0x8b, 0x92, 0x88, 0xfa, 0x44, 0x42, 0x5e, 0xad,
+	0x16, 0xdb, 0x80, 0x96, 0x33, 0x1d, 0x7d, 0x73, 0x56, 0x31, 0xd5, 0xe2, 0xc6, 0x77, 0x55, 0x5f,
+	0xd9, 0x8b, 0x98, 0x4b, 0xa2, 0x67, 0x31, 0x78, 0xcf, 0xdb, 0x31, 0x18, 0x2f, 0x74, 0x3d, 0x11,
+	0x54, 0x82, 0xc3, 0x21, 0x10, 0x65, 0x54, 0xd5, 0x36, 0x97, 0xb7, 0xd7, 0xcd, 0x69, 0x14, 0xfb,
+	0xee, 0x2b, 0xf0, 0xa4, 0x0d, 0xc1, 0xc8, 0x51, 0x5b, 0x3b, 0x39, 0xba, 0x32, 0x81, 0x33, 0x72,
+	0x7e, 0xfc, 0xd6, 0xd5, 0x16, 0xdf, 0x23, 0x75, 0xb5, 0x6a, 0xff, 0x9f, 0x45, 0xd9, 0x10, 0x08,
+	0x63, 0x5b, 0x5f, 0xa2, 0x82, 0x45, 0x44, 0x82, 0x5f, 0xd6, 0xaa, 0x68, 0x73, 0x79, 0xfb, 0x5a,
+	0x21, 0xf5, 0x61, 0x23, 0x96, 0xed, 0xc7, 0x8a, 0x7d, 0xa6, 0x1b, 0x79, 0x7c, 0x2a, 0x88, 0x1b,
+	0x81, 0x5f, 0x5e, 0xb8, 0xd8, 0x33, 0xd1, 0x19, 0x75, 0xdd, 0xf0, 0x21, 0x20, 0xcd, 0x48, 0x3a,
+	0x41, 0x44, 0x12, 0xc6, 0x47, 0x8d, 0x94, 0x17, 0x33, 0xf7, 0x86, 0x59, 0x1c, 0x29, 0xb4, 0x44,
+	0xa1, 0x9b, 0xeb, 0x27, 0x47, 0xa5, 0x16, 0xe3, 0x07, 0x11, 0x23, 0x7e, 0x9e, 0xd0, 0xed, 0x20,
+	0x64, 0xaf, 0xe6, 0xa9, 0x8f, 0xb2, 0x4f, 0x36, 0x04, 0xb5, 0xdb, 0x7a, 0x59, 0x00, 0x4f, 0xa8,
+	0x07, 0xce, 0xf8, 0xc6, 0x94, 0x1d, 0x3a, 0x5e, 0x9d, 0x51, 0x0f, 0x8c, 0x52, 0xb7, 0x83, 0x16,
+	0x7a, 0x1d, 0xa4, 0xa6, 0x1d, 0xa4, 0xed, 0xdc, 0xb9, 0xfb, 0x64, 0x61, 0x49, 0x5d, 0xd5, 0x36,
+	0x7e, 0xa9, 0xfa, 0xca, 0x03, 0x0e, 0x44, 0xc2, 0x19, 0xef, 0xa7, 0x7f, 0xcd, 0xbb, 0x54, 0xe0,
+	0x3d, 0x0f, 0xca, 0xfe, 0x3f, 0x52, 0x36, 0x66, 0x29, 0xcf, 0x12, 0xbe, 0x77, 0xf5, 0xf3, 0xfd,
+	0xc2, 0xef, 0x59, 0xdb, 0xbd, 0x00, 0xfa, 0xfa, 0x9b, 0x1f, 0xe8, 0x8f, 0xd5, 0x7c, 0x02, 0xc7,
+	0x9a, 0x5e, 0xb2, 0x21, 0x8e, 0x88, 0x77, 0x39, 0x82, 0x39, 0x8d, 0xe0, 0xa7, 0xaa, 0x2f, 0xef,
+	0x81, 0xbc, 0xc4, 0x3f, 0x17, 0xfc, 0xb5, 0xb7, 0xa8, 0x37, 0xc0, 0x4a, 0x7f, 0x80, 0x95, 0xd3,
+	0x01, 0x46, 0xc7, 0x29, 0x46, 0x1f, 0x52, 0x8c, 0x3e, 0xa5, 0x18, 0xf5, 0x52, 0x8c, 0xfa, 0x29,
+	0x46, 0x5f, 0x52, 0x8c, 0xbe, 0xa6, 0x58, 0x39, 0x4d, 0x31, 0x7a, 0x37, 0xc4, 0x4a, 0x77, 0x88,
+	0x51, 0x6f, 0x88, 0x95, 0xfe, 0x10, 0x2b, 0x2f, 0xf7, 0x43, 0x16, 0x1f, 0x84, 0x66, 0xc2, 0x22,
+	0x09, 0x9c, 0x13, 0xb3, 0x29, 0xac, 0x6c, 0x11, 0x30, 0xde, 0xd8, 0x8a, 0x39, 0x4b, 0xa8, 0x0f,
+	0x7c, 0x6b, 0x52, 0xb6, 0x62, 0x37, 0x64, 0x16, 0xbc, 0x96, 0xf9, 0x13, 0x34, 0xfb, 0xe4, 0xba,
+	0xff, 0x65, 0x4f, 0xd1, 0xce, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0xda, 0x99, 0x03, 0xd4, 0x96,
+	0x07, 0x00, 0x00,
+}
+
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1127,7 +1012,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1135,74 +1020,99 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VsiteRefs) > 0 {
-		for _, msg := range m.VsiteRefs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DefaultFlavorRef != nil {
+		{
+			size, err := m.DefaultFlavorRef.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn1, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ServiceIsolationChoice.Size()
+			i -= size
+			if _, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	if m.DefaultFlavorRef != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
-		n2, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.VsiteRefs) > 0 {
+		for iNdEx := len(m.VsiteRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VsiteRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Isolated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Isolated != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n3, err := m.Isolated.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Isolated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disabled != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n4, err := m.Disabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1210,74 +1120,99 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VsiteRefs) > 0 {
-		for _, msg := range m.VsiteRefs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DefaultFlavorRef != nil {
+		{
+			size, err := m.DefaultFlavorRef.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn5, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ServiceIsolationChoice.Size()
+			i -= size
+			if _, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn5
 	}
-	if m.DefaultFlavorRef != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
-		n6, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.VsiteRefs) > 0 {
+		for iNdEx := len(m.VsiteRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VsiteRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n6
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Isolated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Isolated != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n7, err := m.Isolated.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Isolated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disabled != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n8, err := m.Disabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1285,74 +1220,99 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VsiteRefs) > 0 {
-		for _, msg := range m.VsiteRefs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DefaultFlavorRef != nil {
+		{
+			size, err := m.DefaultFlavorRef.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn9, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ServiceIsolationChoice.Size()
+			i -= size
+			if _, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn9
 	}
-	if m.DefaultFlavorRef != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
-		n10, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.VsiteRefs) > 0 {
+		for iNdEx := len(m.VsiteRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VsiteRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n10
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Isolated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Isolated != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n11, err := m.Isolated.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Isolated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disabled != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n12, err := m.Disabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1360,80 +1320,110 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VsiteRefs) > 0 {
-		for _, msg := range m.VsiteRefs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DefaultFlavorRef != nil {
+		{
+			size, err := m.DefaultFlavorRef.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn13, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ServiceIsolationChoice.Size()
+			i -= size
+			if _, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn13
 	}
-	if m.DefaultFlavorRef != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
-		n14, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.VsiteRefs) > 0 {
+		for iNdEx := len(m.VsiteRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VsiteRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n14
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Isolated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Isolated != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n15, err := m.Isolated.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Isolated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disabled != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n16, err := m.Disabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VsiteRefs) > 0 {
@@ -1453,6 +1443,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_Isolated) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Isolated != nil {
@@ -1462,6 +1455,9 @@ func (m *GlobalSpecType_Isolated) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Disabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disabled != nil {
@@ -1471,6 +1467,9 @@ func (m *GlobalSpecType_Disabled) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VsiteRefs) > 0 {
@@ -1490,6 +1489,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_Isolated) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Isolated != nil {
@@ -1499,6 +1501,9 @@ func (m *CreateSpecType_Isolated) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Disabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disabled != nil {
@@ -1508,6 +1513,9 @@ func (m *CreateSpecType_Disabled) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VsiteRefs) > 0 {
@@ -1527,6 +1535,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_Isolated) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Isolated != nil {
@@ -1536,6 +1547,9 @@ func (m *ReplaceSpecType_Isolated) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Disabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disabled != nil {
@@ -1545,6 +1559,9 @@ func (m *ReplaceSpecType_Disabled) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VsiteRefs) > 0 {
@@ -1564,6 +1581,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_Isolated) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Isolated != nil {
@@ -1573,6 +1593,9 @@ func (m *GetSpecType_Isolated) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Disabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disabled != nil {
@@ -1583,14 +1606,7 @@ func (m *GetSpecType_Disabled) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1599,10 +1615,15 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVsiteRefs := "[]*ObjectRefType{"
+	for _, f := range this.VsiteRefs {
+		repeatedStringForVsiteRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVsiteRefs += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VsiteRefs:` + repeatedStringForVsiteRefs + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
-		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1612,7 +1633,7 @@ func (this *GlobalSpecType_Isolated) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Isolated{`,
-		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1622,7 +1643,7 @@ func (this *GlobalSpecType_Disabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Disabled{`,
-		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1631,10 +1652,15 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVsiteRefs := "[]*ObjectRefType{"
+	for _, f := range this.VsiteRefs {
+		repeatedStringForVsiteRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVsiteRefs += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VsiteRefs:` + repeatedStringForVsiteRefs + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
-		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1644,7 +1670,7 @@ func (this *CreateSpecType_Isolated) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Isolated{`,
-		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1654,7 +1680,7 @@ func (this *CreateSpecType_Disabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Disabled{`,
-		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1663,10 +1689,15 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVsiteRefs := "[]*ObjectRefType{"
+	for _, f := range this.VsiteRefs {
+		repeatedStringForVsiteRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVsiteRefs += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VsiteRefs:` + repeatedStringForVsiteRefs + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
-		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1676,7 +1707,7 @@ func (this *ReplaceSpecType_Isolated) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_Isolated{`,
-		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1686,7 +1717,7 @@ func (this *ReplaceSpecType_Disabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_Disabled{`,
-		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1695,10 +1726,15 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVsiteRefs := "[]*ObjectRefType{"
+	for _, f := range this.VsiteRefs {
+		repeatedStringForVsiteRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVsiteRefs += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VsiteRefs:` + repeatedStringForVsiteRefs + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
-		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1708,7 +1744,7 @@ func (this *GetSpecType_Isolated) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Isolated{`,
-		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1718,7 +1754,7 @@ func (this *GetSpecType_Disabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Disabled{`,
-		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1746,7 +1782,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1774,7 +1810,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1783,10 +1819,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VsiteRefs = append(m.VsiteRefs, &ves_io_schema4.ObjectRefType{})
+			m.VsiteRefs = append(m.VsiteRefs, &schema.ObjectRefType{})
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1805,7 +1844,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1814,10 +1853,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1837,7 +1879,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1846,10 +1888,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1869,7 +1914,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1878,11 +1923,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DefaultFlavorRef == nil {
-				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+				m.DefaultFlavorRef = &views.ObjectRefType{}
 			}
 			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1895,6 +1943,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1924,7 +1975,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1952,7 +2003,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1961,10 +2012,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VsiteRefs = append(m.VsiteRefs, &ves_io_schema4.ObjectRefType{})
+			m.VsiteRefs = append(m.VsiteRefs, &schema.ObjectRefType{})
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1983,7 +2037,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1992,10 +2046,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2015,7 +2072,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2024,10 +2081,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2047,7 +2107,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2056,11 +2116,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DefaultFlavorRef == nil {
-				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+				m.DefaultFlavorRef = &views.ObjectRefType{}
 			}
 			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2073,6 +2136,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2102,7 +2168,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2130,7 +2196,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2139,10 +2205,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VsiteRefs = append(m.VsiteRefs, &ves_io_schema4.ObjectRefType{})
+			m.VsiteRefs = append(m.VsiteRefs, &schema.ObjectRefType{})
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2161,7 +2230,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2170,10 +2239,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2193,7 +2265,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2202,10 +2274,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2225,7 +2300,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2234,11 +2309,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DefaultFlavorRef == nil {
-				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+				m.DefaultFlavorRef = &views.ObjectRefType{}
 			}
 			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2251,6 +2329,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2280,7 +2361,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2308,7 +2389,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2317,10 +2398,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VsiteRefs = append(m.VsiteRefs, &ves_io_schema4.ObjectRefType{})
+			m.VsiteRefs = append(m.VsiteRefs, &schema.ObjectRefType{})
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2339,7 +2423,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2348,10 +2432,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2371,7 +2458,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2380,10 +2467,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2403,7 +2493,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2412,11 +2502,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.DefaultFlavorRef == nil {
-				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+				m.DefaultFlavorRef = &views.ObjectRefType{}
 			}
 			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2429,6 +2522,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2446,6 +2542,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2477,10 +2574,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2497,96 +2592,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 572 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x95, 0x41, 0x6b, 0x13, 0x4f,
-	0x18, 0xc6, 0x33, 0xbb, 0xed, 0x9f, 0xfe, 0xb7, 0xd2, 0xd4, 0x45, 0x24, 0x8d, 0x65, 0x0c, 0x01,
-	0xa1, 0xa0, 0xd9, 0x85, 0xd4, 0x43, 0xf1, 0xe0, 0x21, 0xa2, 0x15, 0x11, 0x0a, 0xab, 0x78, 0xf0,
-	0xb2, 0xcc, 0xee, 0xbe, 0xbb, 0x19, 0xb3, 0xe9, 0x2c, 0x33, 0x93, 0x8d, 0x39, 0x14, 0x8a, 0xe0,
-	0x5d, 0xfc, 0x14, 0xd2, 0x8f, 0x60, 0x2e, 0x39, 0x8a, 0xa7, 0x1c, 0x7b, 0x34, 0xdb, 0x8b, 0x1e,
-	0x84, 0x9e, 0x45, 0x50, 0xb2, 0xd9, 0x94, 0x66, 0x83, 0x05, 0xf1, 0x90, 0x4b, 0x6f, 0x33, 0xfb,
-	0x3e, 0xcf, 0x33, 0xf3, 0xfe, 0xde, 0x85, 0xd1, 0x6e, 0xc5, 0x20, 0x0c, 0xca, 0x4c, 0xe1, 0x36,
-	0xa1, 0x4d, 0xcc, 0x98, 0x72, 0xd9, 0x21, 0xa1, 0xdd, 0xda, 0x11, 0xa6, 0xec, 0x45, 0x20, 0x8c,
-	0x88, 0x33, 0xc9, 0xf4, 0x8d, 0x89, 0xcc, 0x98, 0xc8, 0x8c, 0x73, 0xb2, 0x72, 0x2d, 0xa0, 0xb2,
-	0xd9, 0x71, 0x0c, 0x97, 0xb5, 0xcd, 0x80, 0x05, 0xcc, 0x4c, 0x1d, 0x4e, 0xc7, 0x4f, 0x77, 0xe9,
-	0x26, 0x5d, 0x4d, 0x92, 0xca, 0x37, 0x66, 0x0f, 0x64, 0x91, 0xa4, 0x6c, 0x3f, 0x3b, 0xa6, 0xbc,
-	0x31, 0x5b, 0x3c, 0x77, 0x83, 0xf2, 0x66, 0xee, 0xa2, 0x24, 0xa4, 0x1e, 0x91, 0x90, 0x55, 0x2b,
-	0xf9, 0x36, 0xa0, 0x6b, 0xcf, 0x46, 0xdf, 0x9c, 0x57, 0xcc, 0xb4, 0x58, 0xfd, 0xae, 0x68, 0x6b,
-	0xbb, 0x21, 0x73, 0x48, 0xf8, 0x2c, 0x02, 0xf7, 0x79, 0x2f, 0x02, 0xfd, 0x85, 0xa6, 0xc5, 0x82,
-	0x4a, 0xb0, 0x39, 0xf8, 0xa2, 0x84, 0x2a, 0xea, 0xd6, 0x6a, 0x7d, 0xd3, 0x98, 0x45, 0xb1, 0xe7,
-	0xbc, 0x02, 0x57, 0x5a, 0xe0, 0x8f, 0x1d, 0x8d, 0x8d, 0xa3, 0x83, 0x2b, 0x53, 0x38, 0x63, 0xe7,
-	0xc7, 0x6f, 0x03, 0x75, 0xf9, 0x3d, 0x52, 0xd6, 0x2b, 0xd6, 0xff, 0x69, 0x94, 0x05, 0xbe, 0xd0,
-	0xeb, 0xda, 0x0a, 0x15, 0x2c, 0x24, 0x12, 0xbc, 0x92, 0x5a, 0x41, 0x5b, 0xab, 0xf5, 0x6b, 0xb9,
-	0xd4, 0x87, 0xed, 0x48, 0xf6, 0x1e, 0x17, 0xac, 0x33, 0xdd, 0xd8, 0xe3, 0x51, 0x41, 0x9c, 0x10,
-	0xbc, 0xd2, 0xd2, 0xc5, 0x9e, 0xa9, 0x4e, 0x6f, 0x6a, 0xba, 0x07, 0x3e, 0xe9, 0x84, 0xd2, 0xf6,
-	0x43, 0x12, 0x33, 0x3e, 0x6e, 0xa4, 0xb4, 0x9c, 0xba, 0xab, 0x46, 0x7e, 0xa4, 0xd0, 0x15, 0xb9,
-	0x6e, 0xae, 0x1f, 0x1d, 0x14, 0xbb, 0x8c, 0xb7, 0x42, 0x46, 0xbc, 0x2c, 0x61, 0xd0, 0x47, 0xc8,
-	0x5a, 0xcf, 0x52, 0x1f, 0xa5, 0x9f, 0x2c, 0xf0, 0x1b, 0xb7, 0xb5, 0x92, 0x00, 0x1e, 0x53, 0x17,
-	0xec, 0xc9, 0x8d, 0x29, 0xdb, 0xb7, 0xdd, 0x26, 0xa3, 0x2e, 0xe8, 0xc5, 0x41, 0x1f, 0x2d, 0x0d,
-	0xfb, 0x48, 0x49, 0xfa, 0x48, 0xdd, 0xbe, 0x73, 0xf7, 0xc9, 0xd2, 0x8a, 0xb2, 0xae, 0x56, 0x7f,
-	0x29, 0xda, 0xda, 0x03, 0x0e, 0x44, 0xc2, 0x19, 0xef, 0xa7, 0x7f, 0xcd, 0xbb, 0x98, 0xe3, 0xbd,
-	0x08, 0xca, 0xde, 0x3f, 0x52, 0xd6, 0xe7, 0x29, 0xcf, 0x13, 0xbe, 0x77, 0xf5, 0xf3, 0xfd, 0xdc,
-	0xef, 0xd9, 0xd8, 0xb9, 0x00, 0xfa, 0xe6, 0x9b, 0x1f, 0xe8, 0x8f, 0xd5, 0x6c, 0x02, 0x87, 0xaa,
-	0x56, 0xb4, 0x20, 0x0a, 0x89, 0x7b, 0x39, 0x82, 0x05, 0x8d, 0xe0, 0xa7, 0xa2, 0xad, 0xee, 0x82,
-	0xbc, 0xc4, 0xbf, 0x10, 0xfc, 0x8d, 0xb7, 0x68, 0x38, 0xc2, 0x85, 0xe3, 0x11, 0x2e, 0x9c, 0x8e,
-	0x30, 0x3a, 0x4c, 0x30, 0xfa, 0x90, 0x60, 0xf4, 0x29, 0xc1, 0x68, 0x98, 0x60, 0x74, 0x9c, 0x60,
-	0xf4, 0x25, 0xc1, 0xe8, 0x6b, 0x82, 0x0b, 0xa7, 0x09, 0x46, 0xef, 0x4e, 0x70, 0x61, 0x70, 0x82,
-	0xd1, 0xcb, 0xbd, 0x80, 0x45, 0xad, 0xc0, 0x88, 0x59, 0x28, 0x81, 0x73, 0x62, 0x74, 0x84, 0x99,
-	0x2e, 0x7c, 0xc6, 0xdb, 0xb5, 0x88, 0xb3, 0x98, 0x7a, 0xc0, 0x6b, 0xd3, 0xb2, 0x19, 0x39, 0x01,
-	0x33, 0xe1, 0xb5, 0xcc, 0x9e, 0x9e, 0xf9, 0xa7, 0xd6, 0xf9, 0x2f, 0x7d, 0x82, 0xb6, 0x7f, 0x07,
-	0x00, 0x00, 0xff, 0xff, 0x04, 0x69, 0xd1, 0x76, 0x8e, 0x07, 0x00, 0x00,
-}

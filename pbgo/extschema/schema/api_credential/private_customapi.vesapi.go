@@ -274,7 +274,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialValidateTokenResponse"
                         }
@@ -331,9 +331,11 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -364,7 +366,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialValidateTokenResponse"
                         }
@@ -421,9 +423,11 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

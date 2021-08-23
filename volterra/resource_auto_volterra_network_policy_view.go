@@ -1033,6 +1033,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 					if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 						trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
 					}
 
 				}
@@ -1092,16 +1093,19 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Tenant = v.(string)
+
 					}
 
 				}
@@ -1494,6 +1498,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 					if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 						trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
 					}
 
 				}
@@ -1910,6 +1915,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 					if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 						trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
 					}
 
 				}
@@ -1968,16 +1974,19 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						endpointChoiceInt.Interface.Tenant = v.(string)
+
 					}
 
 				}
@@ -2369,6 +2378,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 					if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 						trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
 					}
 
 				}

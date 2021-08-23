@@ -860,16 +860,19 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 							}
 
 						}
@@ -972,16 +975,19 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 					}
 
 				}
@@ -1137,16 +1143,19 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 							}
 
 						}
@@ -1217,11 +1226,13 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 				forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 				forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 			}
 
 			tlsInterceptionChoiceTypeFound := false
@@ -1380,11 +1391,13 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 								signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 							}
 
 							if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 								signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 							}
 
 							if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -1441,16 +1454,19 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -1471,11 +1487,13 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -1496,16 +1514,19 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1517,6 +1538,7 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1537,6 +1559,7 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -1596,7 +1619,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -1836,16 +1858,19 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 							}
 
 						}
@@ -1948,16 +1973,19 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 					}
 
 				}
@@ -2113,16 +2141,19 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								poolChoiceInt.SnatPoolAllocator.Tenant = v.(string)
+
 							}
 
 						}
@@ -2191,11 +2222,13 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 				forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 				forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 			}
 
 			tlsInterceptionChoiceTypeFound := false
@@ -2354,11 +2387,13 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 								signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 							}
 
 							if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 								signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 							}
 
 							if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -2415,16 +2450,19 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -2445,11 +2483,13 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -2470,16 +2510,19 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2491,6 +2534,7 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -2511,6 +2555,7 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -2570,7 +2615,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls

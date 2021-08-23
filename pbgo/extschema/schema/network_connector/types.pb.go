@@ -3,32 +3,33 @@
 
 package network_connector
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Network Connector Types
 //
@@ -55,13 +56,16 @@ var NetworkConnectorType_name = map[int32]string{
 	1: "NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY_SNAT",
 	2: "NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY",
 }
+
 var NetworkConnectorType_value = map[string]int32{
 	"NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT": 0,
 	"NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY_SNAT": 1,
 	"NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY":      2,
 }
 
-func (NetworkConnectorType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (NetworkConnectorType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{0}
+}
 
 // Network Connector Snat Pool Type
 //
@@ -84,13 +88,14 @@ var NetworkConnectorSNATPoolType_name = map[int32]string{
 	0: "NETWORK_CONNECTOR_SNAT_SIP_USE_INTERFACE",
 	1: "NETWORK_CONNECTOR_SNAT_SIP_USE_POOL",
 }
+
 var NetworkConnectorSNATPoolType_value = map[string]int32{
 	"NETWORK_CONNECTOR_SNAT_SIP_USE_INTERFACE": 0,
 	"NETWORK_CONNECTOR_SNAT_SIP_USE_POOL":      1,
 }
 
 func (NetworkConnectorSNATPoolType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_1f3237484de1033e, []int{1}
 }
 
 // Network Connector Proxy Type
@@ -118,6 +123,7 @@ var NetworkConnectorProxyType_name = map[int32]string{
 	1: "NETWORK_CONNECTOR_DYNAMIC_REVERSE_PROXY",
 	2: "NETWORK_CONNECTOR_FORWARD_PROXY",
 }
+
 var NetworkConnectorProxyType_value = map[string]int32{
 	"NETWORK_CONNECTOR_NO_PROXY":              0,
 	"NETWORK_CONNECTOR_DYNAMIC_REVERSE_PROXY": 1,
@@ -125,7 +131,7 @@ var NetworkConnectorProxyType_value = map[string]int32{
 }
 
 func (NetworkConnectorProxyType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
+	return fileDescriptor_1f3237484de1033e, []int{2}
 }
 
 // SNAT configuration
@@ -157,9 +163,33 @@ type SnatConnectorType struct {
 	PoolChoice isSnatConnectorType_PoolChoice `protobuf_oneof:"pool_choice"`
 }
 
-func (m *SnatConnectorType) Reset()                    { *m = SnatConnectorType{} }
-func (*SnatConnectorType) ProtoMessage()               {}
-func (*SnatConnectorType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *SnatConnectorType) Reset()      { *m = SnatConnectorType{} }
+func (*SnatConnectorType) ProtoMessage() {}
+func (*SnatConnectorType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{0}
+}
+func (m *SnatConnectorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SnatConnectorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SnatConnectorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SnatConnectorType.Merge(m, src)
+}
+func (m *SnatConnectorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *SnatConnectorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_SnatConnectorType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SnatConnectorType proto.InternalMessageInfo
 
 type isSnatConnectorType_RoutingChoice interface {
 	isSnatConnectorType_RoutingChoice()
@@ -175,19 +205,19 @@ type isSnatConnectorType_PoolChoice interface {
 }
 
 type SnatConnectorType_DefaultGwSnat struct {
-	DefaultGwSnat *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=default_gw_snat,json=defaultGwSnat,oneof"`
+	DefaultGwSnat *schema.Empty `protobuf:"bytes,2,opt,name=default_gw_snat,json=defaultGwSnat,proto3,oneof" json:"default_gw_snat,omitempty"`
 }
 type SnatConnectorType_DynamicRouting struct {
-	DynamicRouting *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=dynamic_routing,json=dynamicRouting,oneof"`
+	DynamicRouting *schema.Empty `protobuf:"bytes,3,opt,name=dynamic_routing,json=dynamicRouting,proto3,oneof" json:"dynamic_routing,omitempty"`
 }
 type SnatConnectorType_InterfaceIp struct {
-	InterfaceIp *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=interface_ip,json=interfaceIp,oneof"`
+	InterfaceIp *schema.Empty `protobuf:"bytes,5,opt,name=interface_ip,json=interfaceIp,proto3,oneof" json:"interface_ip,omitempty"`
 }
 type SnatConnectorType_SnatPool struct {
-	SnatPool string `protobuf:"bytes,6,opt,name=snat_pool,json=snatPool,proto3,oneof"`
+	SnatPool string `protobuf:"bytes,6,opt,name=snat_pool,json=snatPool,proto3,oneof" json:"snat_pool,omitempty"`
 }
 type SnatConnectorType_SnatPoolAllocator struct {
-	SnatPoolAllocator *ves_io_schema_views.ObjectRefType `protobuf:"bytes,7,opt,name=snat_pool_allocator,json=snatPoolAllocator,oneof"`
+	SnatPoolAllocator *views.ObjectRefType `protobuf:"bytes,7,opt,name=snat_pool_allocator,json=snatPoolAllocator,proto3,oneof" json:"snat_pool_allocator,omitempty"`
 }
 
 func (*SnatConnectorType_DefaultGwSnat) isSnatConnectorType_RoutingChoice()  {}
@@ -209,21 +239,21 @@ func (m *SnatConnectorType) GetPoolChoice() isSnatConnectorType_PoolChoice {
 	return nil
 }
 
-func (m *SnatConnectorType) GetDefaultGwSnat() *ves_io_schema4.Empty {
+func (m *SnatConnectorType) GetDefaultGwSnat() *schema.Empty {
 	if x, ok := m.GetRoutingChoice().(*SnatConnectorType_DefaultGwSnat); ok {
 		return x.DefaultGwSnat
 	}
 	return nil
 }
 
-func (m *SnatConnectorType) GetDynamicRouting() *ves_io_schema4.Empty {
+func (m *SnatConnectorType) GetDynamicRouting() *schema.Empty {
 	if x, ok := m.GetRoutingChoice().(*SnatConnectorType_DynamicRouting); ok {
 		return x.DynamicRouting
 	}
 	return nil
 }
 
-func (m *SnatConnectorType) GetInterfaceIp() *ves_io_schema4.Empty {
+func (m *SnatConnectorType) GetInterfaceIp() *schema.Empty {
 	if x, ok := m.GetPoolChoice().(*SnatConnectorType_InterfaceIp); ok {
 		return x.InterfaceIp
 	}
@@ -237,150 +267,22 @@ func (m *SnatConnectorType) GetSnatPool() string {
 	return ""
 }
 
-func (m *SnatConnectorType) GetSnatPoolAllocator() *ves_io_schema_views.ObjectRefType {
+func (m *SnatConnectorType) GetSnatPoolAllocator() *views.ObjectRefType {
 	if x, ok := m.GetPoolChoice().(*SnatConnectorType_SnatPoolAllocator); ok {
 		return x.SnatPoolAllocator
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*SnatConnectorType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SnatConnectorType_OneofMarshaler, _SnatConnectorType_OneofUnmarshaler, _SnatConnectorType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SnatConnectorType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*SnatConnectorType_DefaultGwSnat)(nil),
 		(*SnatConnectorType_DynamicRouting)(nil),
 		(*SnatConnectorType_InterfaceIp)(nil),
 		(*SnatConnectorType_SnatPool)(nil),
 		(*SnatConnectorType_SnatPoolAllocator)(nil),
 	}
-}
-
-func _SnatConnectorType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SnatConnectorType)
-	// routing_choice
-	switch x := m.RoutingChoice.(type) {
-	case *SnatConnectorType_DefaultGwSnat:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultGwSnat); err != nil {
-			return err
-		}
-	case *SnatConnectorType_DynamicRouting:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DynamicRouting); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("SnatConnectorType.RoutingChoice has unexpected type %T", x)
-	}
-	// pool_choice
-	switch x := m.PoolChoice.(type) {
-	case *SnatConnectorType_InterfaceIp:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceIp); err != nil {
-			return err
-		}
-	case *SnatConnectorType_SnatPool:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.SnatPool)
-	case *SnatConnectorType_SnatPoolAllocator:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SnatPoolAllocator); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("SnatConnectorType.PoolChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _SnatConnectorType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SnatConnectorType)
-	switch tag {
-	case 2: // routing_choice.default_gw_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RoutingChoice = &SnatConnectorType_DefaultGwSnat{msg}
-		return true, err
-	case 3: // routing_choice.dynamic_routing
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RoutingChoice = &SnatConnectorType_DynamicRouting{msg}
-		return true, err
-	case 5: // pool_choice.interface_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PoolChoice = &SnatConnectorType_InterfaceIp{msg}
-		return true, err
-	case 6: // pool_choice.snat_pool
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.PoolChoice = &SnatConnectorType_SnatPool{x}
-		return true, err
-	case 7: // pool_choice.snat_pool_allocator
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.PoolChoice = &SnatConnectorType_SnatPoolAllocator{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _SnatConnectorType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SnatConnectorType)
-	// routing_choice
-	switch x := m.RoutingChoice.(type) {
-	case *SnatConnectorType_DefaultGwSnat:
-		s := proto.Size(x.DefaultGwSnat)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SnatConnectorType_DynamicRouting:
-		s := proto.Size(x.DynamicRouting)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// pool_choice
-	switch x := m.PoolChoice.(type) {
-	case *SnatConnectorType_InterfaceIp:
-		s := proto.Size(x.InterfaceIp)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SnatConnectorType_SnatPool:
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.SnatPool)))
-		n += len(x.SnatPool)
-	case *SnatConnectorType_SnatPoolAllocator:
-		s := proto.Size(x.SnatPoolAllocator)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Global SNAT Configuration
@@ -393,19 +295,43 @@ type GlobalSnatConnectorType struct {
 	// x-displayName: "Global Virtual Network"
 	// x-required
 	// Select Virtual Network of Global Type
-	GlobalVn *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=global_vn,json=globalVn" json:"global_vn,omitempty"`
+	GlobalVn *views.ObjectRefType `protobuf:"bytes,1,opt,name=global_vn,json=globalVn,proto3" json:"global_vn,omitempty"`
 	// SNAT Configuration
 	//
 	// x-displayName: "SNAT Configuration"
 	// SNAT configuration to connect to global network
-	SnatConfig *SnatConnectorType `protobuf:"bytes,2,opt,name=snat_config,json=snatConfig" json:"snat_config,omitempty"`
+	SnatConfig *SnatConnectorType `protobuf:"bytes,2,opt,name=snat_config,json=snatConfig,proto3" json:"snat_config,omitempty"`
 }
 
-func (m *GlobalSnatConnectorType) Reset()                    { *m = GlobalSnatConnectorType{} }
-func (*GlobalSnatConnectorType) ProtoMessage()               {}
-func (*GlobalSnatConnectorType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GlobalSnatConnectorType) Reset()      { *m = GlobalSnatConnectorType{} }
+func (*GlobalSnatConnectorType) ProtoMessage() {}
+func (*GlobalSnatConnectorType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{1}
+}
+func (m *GlobalSnatConnectorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSnatConnectorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSnatConnectorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSnatConnectorType.Merge(m, src)
+}
+func (m *GlobalSnatConnectorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSnatConnectorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSnatConnectorType.DiscardUnknown(m)
+}
 
-func (m *GlobalSnatConnectorType) GetGlobalVn() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_GlobalSnatConnectorType proto.InternalMessageInfo
+
+func (m *GlobalSnatConnectorType) GetGlobalVn() *views.ObjectRefType {
 	if m != nil {
 		return m.GlobalVn
 	}
@@ -429,16 +355,38 @@ type DynamicReverseProxyListType struct {
 	// x-displayName: "List of Dynamic Reverse Proxies"
 	// x-required
 	// Select dynamic reverse proxies
-	Drps []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=drps" json:"drps,omitempty"`
+	Drps []*views.ObjectRefType `protobuf:"bytes,1,rep,name=drps,proto3" json:"drps,omitempty"`
 }
 
 func (m *DynamicReverseProxyListType) Reset()      { *m = DynamicReverseProxyListType{} }
 func (*DynamicReverseProxyListType) ProtoMessage() {}
 func (*DynamicReverseProxyListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
+	return fileDescriptor_1f3237484de1033e, []int{2}
+}
+func (m *DynamicReverseProxyListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DynamicReverseProxyListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DynamicReverseProxyListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DynamicReverseProxyListType.Merge(m, src)
+}
+func (m *DynamicReverseProxyListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *DynamicReverseProxyListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_DynamicReverseProxyListType.DiscardUnknown(m)
 }
 
-func (m *DynamicReverseProxyListType) GetDrps() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_DynamicReverseProxyListType proto.InternalMessageInfo
+
+func (m *DynamicReverseProxyListType) GetDrps() []*views.ObjectRefType {
 	if m != nil {
 		return m.Drps
 	}
@@ -465,13 +413,13 @@ type GlobalSpecType struct {
 	// is not well known like per site virtual network outside_network reference need to be specified
 	//
 	// outside_network_type can be one of type VIRTUAL_NETWORK_SITE_LOCAL, VIRTUAL_NETWORK_SITE_LOCAL_INSIDE, VIRTUAL_NETWORK_PER_SITE, VIRTUAL_NETWORK_PUBLIC or VIRTUAL_NETWORK_GLOBAL
-	OutsideNetworkType ves_io_schema3.VirtualNetworkType `protobuf:"varint,2,opt,name=outside_network_type,json=outsideNetworkType,proto3,enum=ves.io.schema.VirtualNetworkType" json:"outside_network_type,omitempty"`
+	OutsideNetworkType schema.VirtualNetworkType `protobuf:"varint,2,opt,name=outside_network_type,json=outsideNetworkType,proto3,enum=ves.io.schema.VirtualNetworkType" json:"outside_network_type,omitempty"`
 	// Outside VN
 	//
 	// x-displayName: "Outside Virtual Network"
 	// Reference to outside network. Reference is valid only when the network type is per site virtual network or
 	// global virtual network. It is ignored for all other network types
-	OutsideNetwork []*ves_io_schema4.ObjectRefType `protobuf:"bytes,3,rep,name=outside_network,json=outsideNetwork" json:"outside_network,omitempty"`
+	OutsideNetwork []*schema.ObjectRefType `protobuf:"bytes,3,rep,name=outside_network,json=outsideNetwork,proto3" json:"outside_network,omitempty"`
 	// Inside VN Type
 	//
 	// x-displayName: "Inside Virtual Network Type"
@@ -482,14 +430,14 @@ type GlobalSpecType struct {
 	//
 	// inside_network_type can be one of type VIRTUAL_NETWORK_SITE_LOCAL, VIRTUAL_NETWORK_SITE_LOCAL_INSIDE or VIRTUAL_NETWORK_PER_SITE
 	// When inside_network_type is VIRTUAL_NETWORK_SITE_LOCAL outside_network_type can only be VIRTUAL_NETWORK_GLOBAL
-	InsideNetworkType ves_io_schema3.VirtualNetworkType `protobuf:"varint,4,opt,name=inside_network_type,json=insideNetworkType,proto3,enum=ves.io.schema.VirtualNetworkType" json:"inside_network_type,omitempty"`
+	InsideNetworkType schema.VirtualNetworkType `protobuf:"varint,4,opt,name=inside_network_type,json=insideNetworkType,proto3,enum=ves.io.schema.VirtualNetworkType" json:"inside_network_type,omitempty"`
 	// Inside VN
 	//
 	// x-displayName: "Inside Virtual Network"
 	// Reference to inside network. Reference is valid only when the network type is per site virtual network or
 	// global virtual network. It is ignored for all other network types. public virtual network is not allowed
 	// as inside network
-	InsideNetwork []*ves_io_schema4.ObjectRefType `protobuf:"bytes,5,rep,name=inside_network,json=insideNetwork" json:"inside_network,omitempty"`
+	InsideNetwork []*schema.ObjectRefType `protobuf:"bytes,5,rep,name=inside_network,json=insideNetwork,proto3" json:"inside_network,omitempty"`
 	// Snat Pool Type
 	//
 	// x-displayName: "Snat Pool Type"
@@ -501,7 +449,7 @@ type GlobalSpecType struct {
 	// x-displayName: "Nat Pool"
 	// Nat pool is valid only if snat_pool_type is set to Use NAT Pool.
 	// It is ignored if snat_pool_type is set to Use Interface IP.
-	NatPool []*ves_io_schema3.Ipv4SubnetType `protobuf:"bytes,7,rep,name=nat_pool,json=natPool" json:"nat_pool,omitempty"`
+	NatPool []*schema.Ipv4SubnetType `protobuf:"bytes,7,rep,name=nat_pool,json=natPool,proto3" json:"nat_pool,omitempty"`
 	// Proxy Type
 	//
 	// x-displayName: "Proxy Type"
@@ -516,17 +464,41 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Dynamic Reverse Proxy"
 	// Vhost to be used for dynamic reverse proxy configuration
-	DynamicReverseProxy []*ves_io_schema4.ObjectRefType `protobuf:"bytes,9,rep,name=dynamic_reverse_proxy,json=dynamicReverseProxy" json:"dynamic_reverse_proxy,omitempty"`
+	DynamicReverseProxy []*schema.ObjectRefType `protobuf:"bytes,9,rep,name=dynamic_reverse_proxy,json=dynamicReverseProxy,proto3" json:"dynamic_reverse_proxy,omitempty"`
 	// Forward Proxy Configuration
 	//
 	// x-displayName: "Forward Proxy Configuration"
 	// Configuration, applicable only for forward proxy, fine tunes the forward proxy behavior
-	ForwardProxy *ves_io_schema4.ForwardProxyConfigType `protobuf:"bytes,10,opt,name=forward_proxy,json=forwardProxy" json:"forward_proxy,omitempty"`
+	ForwardProxy *schema.ForwardProxyConfigType `protobuf:"bytes,10,opt,name=forward_proxy,json=forwardProxy,proto3" json:"forward_proxy,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{3}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetConnectorType() NetworkConnectorType {
 	if m != nil {
@@ -535,28 +507,28 @@ func (m *GlobalSpecType) GetConnectorType() NetworkConnectorType {
 	return NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT
 }
 
-func (m *GlobalSpecType) GetOutsideNetworkType() ves_io_schema3.VirtualNetworkType {
+func (m *GlobalSpecType) GetOutsideNetworkType() schema.VirtualNetworkType {
 	if m != nil {
 		return m.OutsideNetworkType
 	}
-	return ves_io_schema3.VIRTUAL_NETWORK_SITE_LOCAL
+	return schema.VIRTUAL_NETWORK_SITE_LOCAL
 }
 
-func (m *GlobalSpecType) GetOutsideNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetOutsideNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.OutsideNetwork
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetInsideNetworkType() ves_io_schema3.VirtualNetworkType {
+func (m *GlobalSpecType) GetInsideNetworkType() schema.VirtualNetworkType {
 	if m != nil {
 		return m.InsideNetworkType
 	}
-	return ves_io_schema3.VIRTUAL_NETWORK_SITE_LOCAL
+	return schema.VIRTUAL_NETWORK_SITE_LOCAL
 }
 
-func (m *GlobalSpecType) GetInsideNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetInsideNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InsideNetwork
 	}
@@ -570,7 +542,7 @@ func (m *GlobalSpecType) GetSnatPoolType() NetworkConnectorSNATPoolType {
 	return NETWORK_CONNECTOR_SNAT_SIP_USE_INTERFACE
 }
 
-func (m *GlobalSpecType) GetNatPool() []*ves_io_schema3.Ipv4SubnetType {
+func (m *GlobalSpecType) GetNatPool() []*schema.Ipv4SubnetType {
 	if m != nil {
 		return m.NatPool
 	}
@@ -584,14 +556,14 @@ func (m *GlobalSpecType) GetProxyType() NetworkConnectorProxyType {
 	return NETWORK_CONNECTOR_NO_PROXY
 }
 
-func (m *GlobalSpecType) GetDynamicReverseProxy() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetDynamicReverseProxy() []*schema.ObjectRefType {
 	if m != nil {
 		return m.DynamicReverseProxy
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetForwardProxy() *ves_io_schema4.ForwardProxyConfigType {
+func (m *GlobalSpecType) GetForwardProxy() *schema.ForwardProxyConfigType {
 	if m != nil {
 		return m.ForwardProxy
 	}
@@ -629,9 +601,33 @@ type CreateSpecType struct {
 	ForwardProxyChoice isCreateSpecType_ForwardProxyChoice `protobuf_oneof:"forward_proxy_choice"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{4}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_ConnectorChoice interface {
 	isCreateSpecType_ConnectorChoice()
@@ -647,28 +643,28 @@ type isCreateSpecType_ForwardProxyChoice interface {
 }
 
 type CreateSpecType_SliToSloSnat struct {
-	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,oneof"`
+	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,proto3,oneof" json:"sli_to_slo_snat,omitempty"`
 }
 type CreateSpecType_SliToSloDr struct {
-	SliToSloDr *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,oneof"`
+	SliToSloDr *schema.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,proto3,oneof" json:"sli_to_slo_dr,omitempty"`
 }
 type CreateSpecType_SliToGlobalDr struct {
-	SliToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,oneof"`
+	SliToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,proto3,oneof" json:"sli_to_global_dr,omitempty"`
 }
 type CreateSpecType_SliToGlobalSnat struct {
-	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,oneof"`
+	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,proto3,oneof" json:"sli_to_global_snat,omitempty"`
 }
 type CreateSpecType_SloToGlobalDr struct {
-	SloToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,oneof"`
+	SloToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,proto3,oneof" json:"slo_to_global_dr,omitempty"`
 }
 type CreateSpecType_SloToGlobalSnat struct {
-	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,oneof"`
+	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,proto3,oneof" json:"slo_to_global_snat,omitempty"`
 }
 type CreateSpecType_DisableForwardProxy struct {
-	DisableForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,oneof"`
+	DisableForwardProxy *schema.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,proto3,oneof" json:"disable_forward_proxy,omitempty"`
 }
 type CreateSpecType_EnableForwardProxy struct {
-	EnableForwardProxy *ves_io_schema4.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,oneof"`
+	EnableForwardProxy *schema.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,proto3,oneof" json:"enable_forward_proxy,omitempty"`
 }
 
 func (*CreateSpecType_SliToSloSnat) isCreateSpecType_ConnectorChoice()           {}
@@ -700,14 +696,14 @@ func (m *CreateSpecType) GetSliToSloSnat() *SnatConnectorType {
 	return nil
 }
 
-func (m *CreateSpecType) GetSliToSloDr() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetSliToSloDr() *schema.Empty {
 	if x, ok := m.GetConnectorChoice().(*CreateSpecType_SliToSloDr); ok {
 		return x.SliToSloDr
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetSliToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *CreateSpecType) GetSliToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*CreateSpecType_SliToGlobalDr); ok {
 		return x.SliToGlobalDr
 	}
@@ -721,7 +717,7 @@ func (m *CreateSpecType) GetSliToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *CreateSpecType) GetSloToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *CreateSpecType) GetSloToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*CreateSpecType_SloToGlobalDr); ok {
 		return x.SloToGlobalDr
 	}
@@ -735,23 +731,23 @@ func (m *CreateSpecType) GetSloToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableForwardProxy() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*CreateSpecType_DisableForwardProxy); ok {
 		return x.DisableForwardProxy
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetEnableForwardProxy() *ves_io_schema4.ForwardProxyConfigType {
+func (m *CreateSpecType) GetEnableForwardProxy() *schema.ForwardProxyConfigType {
 	if x, ok := m.GetForwardProxyChoice().(*CreateSpecType_EnableForwardProxy); ok {
 		return x.EnableForwardProxy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_SliToSloSnat)(nil),
 		(*CreateSpecType_SliToSloDr)(nil),
 		(*CreateSpecType_SliToGlobalDr)(nil),
@@ -761,192 +757,6 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_DisableForwardProxy)(nil),
 		(*CreateSpecType_EnableForwardProxy)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *CreateSpecType_SliToSloSnat:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloSnat); err != nil {
-			return err
-		}
-	case *CreateSpecType_SliToSloDr:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloDr); err != nil {
-			return err
-		}
-	case *CreateSpecType_SliToGlobalDr:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalDr); err != nil {
-			return err
-		}
-	case *CreateSpecType_SliToGlobalSnat:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalSnat); err != nil {
-			return err
-		}
-	case *CreateSpecType_SloToGlobalDr:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalDr); err != nil {
-			return err
-		}
-	case *CreateSpecType_SloToGlobalSnat:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalSnat); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ConnectorChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *CreateSpecType_DisableForwardProxy:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxy); err != nil {
-			return err
-		}
-	case *CreateSpecType_EnableForwardProxy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableForwardProxy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 17: // connector_choice.sli_to_slo_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SliToSloSnat{msg}
-		return true, err
-	case 18: // connector_choice.sli_to_slo_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SliToSloDr{msg}
-		return true, err
-	case 19: // connector_choice.sli_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SliToGlobalDr{msg}
-		return true, err
-	case 20: // connector_choice.sli_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SliToGlobalSnat{msg}
-		return true, err
-	case 21: // connector_choice.slo_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SloToGlobalDr{msg}
-		return true, err
-	case 22: // connector_choice.slo_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &CreateSpecType_SloToGlobalSnat{msg}
-		return true, err
-	case 24: // forward_proxy_choice.disable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &CreateSpecType_DisableForwardProxy{msg}
-		return true, err
-	case 25: // forward_proxy_choice.enable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.ForwardProxyConfigType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &CreateSpecType_EnableForwardProxy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *CreateSpecType_SliToSloSnat:
-		s := proto.Size(x.SliToSloSnat)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SliToSloDr:
-		s := proto.Size(x.SliToSloDr)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SliToGlobalDr:
-		s := proto.Size(x.SliToGlobalDr)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SliToGlobalSnat:
-		s := proto.Size(x.SliToGlobalSnat)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SloToGlobalDr:
-		s := proto.Size(x.SloToGlobalDr)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SloToGlobalSnat:
-		s := proto.Size(x.SloToGlobalSnat)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *CreateSpecType_DisableForwardProxy:
-		s := proto.Size(x.DisableForwardProxy)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_EnableForwardProxy:
-		s := proto.Size(x.EnableForwardProxy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Network Connector
@@ -980,9 +790,33 @@ type ReplaceSpecType struct {
 	ForwardProxyChoice isReplaceSpecType_ForwardProxyChoice `protobuf_oneof:"forward_proxy_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{5}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_ConnectorChoice interface {
 	isReplaceSpecType_ConnectorChoice()
@@ -998,28 +832,28 @@ type isReplaceSpecType_ForwardProxyChoice interface {
 }
 
 type ReplaceSpecType_SliToSloSnat struct {
-	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,oneof"`
+	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,proto3,oneof" json:"sli_to_slo_snat,omitempty"`
 }
 type ReplaceSpecType_SliToSloDr struct {
-	SliToSloDr *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,oneof"`
+	SliToSloDr *schema.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,proto3,oneof" json:"sli_to_slo_dr,omitempty"`
 }
 type ReplaceSpecType_SliToGlobalDr struct {
-	SliToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,oneof"`
+	SliToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,proto3,oneof" json:"sli_to_global_dr,omitempty"`
 }
 type ReplaceSpecType_SliToGlobalSnat struct {
-	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,oneof"`
+	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,proto3,oneof" json:"sli_to_global_snat,omitempty"`
 }
 type ReplaceSpecType_SloToGlobalDr struct {
-	SloToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,oneof"`
+	SloToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,proto3,oneof" json:"slo_to_global_dr,omitempty"`
 }
 type ReplaceSpecType_SloToGlobalSnat struct {
-	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,oneof"`
+	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,proto3,oneof" json:"slo_to_global_snat,omitempty"`
 }
 type ReplaceSpecType_DisableForwardProxy struct {
-	DisableForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,oneof"`
+	DisableForwardProxy *schema.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,proto3,oneof" json:"disable_forward_proxy,omitempty"`
 }
 type ReplaceSpecType_EnableForwardProxy struct {
-	EnableForwardProxy *ves_io_schema4.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,oneof"`
+	EnableForwardProxy *schema.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,proto3,oneof" json:"enable_forward_proxy,omitempty"`
 }
 
 func (*ReplaceSpecType_SliToSloSnat) isReplaceSpecType_ConnectorChoice()           {}
@@ -1051,14 +885,14 @@ func (m *ReplaceSpecType) GetSliToSloSnat() *SnatConnectorType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetSliToSloDr() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetSliToSloDr() *schema.Empty {
 	if x, ok := m.GetConnectorChoice().(*ReplaceSpecType_SliToSloDr); ok {
 		return x.SliToSloDr
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetSliToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *ReplaceSpecType) GetSliToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*ReplaceSpecType_SliToGlobalDr); ok {
 		return x.SliToGlobalDr
 	}
@@ -1072,7 +906,7 @@ func (m *ReplaceSpecType) GetSliToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetSloToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *ReplaceSpecType) GetSloToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*ReplaceSpecType_SloToGlobalDr); ok {
 		return x.SloToGlobalDr
 	}
@@ -1086,23 +920,23 @@ func (m *ReplaceSpecType) GetSloToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableForwardProxy() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*ReplaceSpecType_DisableForwardProxy); ok {
 		return x.DisableForwardProxy
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEnableForwardProxy() *ves_io_schema4.ForwardProxyConfigType {
+func (m *ReplaceSpecType) GetEnableForwardProxy() *schema.ForwardProxyConfigType {
 	if x, ok := m.GetForwardProxyChoice().(*ReplaceSpecType_EnableForwardProxy); ok {
 		return x.EnableForwardProxy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_SliToSloSnat)(nil),
 		(*ReplaceSpecType_SliToSloDr)(nil),
 		(*ReplaceSpecType_SliToGlobalDr)(nil),
@@ -1112,192 +946,6 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_DisableForwardProxy)(nil),
 		(*ReplaceSpecType_EnableForwardProxy)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *ReplaceSpecType_SliToSloSnat:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloSnat); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SliToSloDr:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloDr); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SliToGlobalDr:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalDr); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SliToGlobalSnat:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalSnat); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SloToGlobalDr:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalDr); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SloToGlobalSnat:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalSnat); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ConnectorChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *ReplaceSpecType_DisableForwardProxy:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxy); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_EnableForwardProxy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableForwardProxy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 17: // connector_choice.sli_to_slo_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SliToSloSnat{msg}
-		return true, err
-	case 18: // connector_choice.sli_to_slo_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SliToSloDr{msg}
-		return true, err
-	case 19: // connector_choice.sli_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SliToGlobalDr{msg}
-		return true, err
-	case 20: // connector_choice.sli_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SliToGlobalSnat{msg}
-		return true, err
-	case 21: // connector_choice.slo_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SloToGlobalDr{msg}
-		return true, err
-	case 22: // connector_choice.slo_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &ReplaceSpecType_SloToGlobalSnat{msg}
-		return true, err
-	case 24: // forward_proxy_choice.disable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &ReplaceSpecType_DisableForwardProxy{msg}
-		return true, err
-	case 25: // forward_proxy_choice.enable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.ForwardProxyConfigType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &ReplaceSpecType_EnableForwardProxy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *ReplaceSpecType_SliToSloSnat:
-		s := proto.Size(x.SliToSloSnat)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SliToSloDr:
-		s := proto.Size(x.SliToSloDr)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SliToGlobalDr:
-		s := proto.Size(x.SliToGlobalDr)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SliToGlobalSnat:
-		s := proto.Size(x.SliToGlobalSnat)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SloToGlobalDr:
-		s := proto.Size(x.SloToGlobalDr)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SloToGlobalSnat:
-		s := proto.Size(x.SloToGlobalSnat)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *ReplaceSpecType_DisableForwardProxy:
-		s := proto.Size(x.DisableForwardProxy)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_EnableForwardProxy:
-		s := proto.Size(x.EnableForwardProxy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Network Connector
@@ -1331,9 +979,33 @@ type GetSpecType struct {
 	ForwardProxyChoice isGetSpecType_ForwardProxyChoice `protobuf_oneof:"forward_proxy_choice"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{6}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_ConnectorChoice interface {
 	isGetSpecType_ConnectorChoice()
@@ -1349,28 +1021,28 @@ type isGetSpecType_ForwardProxyChoice interface {
 }
 
 type GetSpecType_SliToSloSnat struct {
-	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,oneof"`
+	SliToSloSnat *SnatConnectorType `protobuf:"bytes,17,opt,name=sli_to_slo_snat,json=sliToSloSnat,proto3,oneof" json:"sli_to_slo_snat,omitempty"`
 }
 type GetSpecType_SliToSloDr struct {
-	SliToSloDr *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,oneof"`
+	SliToSloDr *schema.Empty `protobuf:"bytes,18,opt,name=sli_to_slo_dr,json=sliToSloDr,proto3,oneof" json:"sli_to_slo_dr,omitempty"`
 }
 type GetSpecType_SliToGlobalDr struct {
-	SliToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,oneof"`
+	SliToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,19,opt,name=sli_to_global_dr,json=sliToGlobalDr,proto3,oneof" json:"sli_to_global_dr,omitempty"`
 }
 type GetSpecType_SliToGlobalSnat struct {
-	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,oneof"`
+	SliToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,20,opt,name=sli_to_global_snat,json=sliToGlobalSnat,proto3,oneof" json:"sli_to_global_snat,omitempty"`
 }
 type GetSpecType_SloToGlobalDr struct {
-	SloToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,oneof"`
+	SloToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,21,opt,name=slo_to_global_dr,json=sloToGlobalDr,proto3,oneof" json:"slo_to_global_dr,omitempty"`
 }
 type GetSpecType_SloToGlobalSnat struct {
-	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,oneof"`
+	SloToGlobalSnat *GlobalSnatConnectorType `protobuf:"bytes,22,opt,name=slo_to_global_snat,json=sloToGlobalSnat,proto3,oneof" json:"slo_to_global_snat,omitempty"`
 }
 type GetSpecType_DisableForwardProxy struct {
-	DisableForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,oneof"`
+	DisableForwardProxy *schema.Empty `protobuf:"bytes,24,opt,name=disable_forward_proxy,json=disableForwardProxy,proto3,oneof" json:"disable_forward_proxy,omitempty"`
 }
 type GetSpecType_EnableForwardProxy struct {
-	EnableForwardProxy *ves_io_schema4.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,oneof"`
+	EnableForwardProxy *schema.ForwardProxyConfigType `protobuf:"bytes,25,opt,name=enable_forward_proxy,json=enableForwardProxy,proto3,oneof" json:"enable_forward_proxy,omitempty"`
 }
 
 func (*GetSpecType_SliToSloSnat) isGetSpecType_ConnectorChoice()           {}
@@ -1402,14 +1074,14 @@ func (m *GetSpecType) GetSliToSloSnat() *SnatConnectorType {
 	return nil
 }
 
-func (m *GetSpecType) GetSliToSloDr() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetSliToSloDr() *schema.Empty {
 	if x, ok := m.GetConnectorChoice().(*GetSpecType_SliToSloDr); ok {
 		return x.SliToSloDr
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetSliToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *GetSpecType) GetSliToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*GetSpecType_SliToGlobalDr); ok {
 		return x.SliToGlobalDr
 	}
@@ -1423,7 +1095,7 @@ func (m *GetSpecType) GetSliToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *GetSpecType) GetSloToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *GetSpecType) GetSloToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectorChoice().(*GetSpecType_SloToGlobalDr); ok {
 		return x.SloToGlobalDr
 	}
@@ -1437,23 +1109,23 @@ func (m *GetSpecType) GetSloToGlobalSnat() *GlobalSnatConnectorType {
 	return nil
 }
 
-func (m *GetSpecType) GetDisableForwardProxy() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GetSpecType_DisableForwardProxy); ok {
 		return x.DisableForwardProxy
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetEnableForwardProxy() *ves_io_schema4.ForwardProxyConfigType {
+func (m *GetSpecType) GetEnableForwardProxy() *schema.ForwardProxyConfigType {
 	if x, ok := m.GetForwardProxyChoice().(*GetSpecType_EnableForwardProxy); ok {
 		return x.EnableForwardProxy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_SliToSloSnat)(nil),
 		(*GetSpecType_SliToSloDr)(nil),
 		(*GetSpecType_SliToGlobalDr)(nil),
@@ -1463,192 +1135,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_DisableForwardProxy)(nil),
 		(*GetSpecType_EnableForwardProxy)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *GetSpecType_SliToSloSnat:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloSnat); err != nil {
-			return err
-		}
-	case *GetSpecType_SliToSloDr:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToSloDr); err != nil {
-			return err
-		}
-	case *GetSpecType_SliToGlobalDr:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalDr); err != nil {
-			return err
-		}
-	case *GetSpecType_SliToGlobalSnat:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliToGlobalSnat); err != nil {
-			return err
-		}
-	case *GetSpecType_SloToGlobalDr:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalDr); err != nil {
-			return err
-		}
-	case *GetSpecType_SloToGlobalSnat:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalSnat); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ConnectorChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GetSpecType_DisableForwardProxy:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxy); err != nil {
-			return err
-		}
-	case *GetSpecType_EnableForwardProxy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableForwardProxy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 17: // connector_choice.sli_to_slo_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SliToSloSnat{msg}
-		return true, err
-	case 18: // connector_choice.sli_to_slo_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SliToSloDr{msg}
-		return true, err
-	case 19: // connector_choice.sli_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SliToGlobalDr{msg}
-		return true, err
-	case 20: // connector_choice.sli_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SliToGlobalSnat{msg}
-		return true, err
-	case 21: // connector_choice.slo_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SloToGlobalDr{msg}
-		return true, err
-	case 22: // connector_choice.slo_to_global_snat
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GlobalSnatConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectorChoice = &GetSpecType_SloToGlobalSnat{msg}
-		return true, err
-	case 24: // forward_proxy_choice.disable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GetSpecType_DisableForwardProxy{msg}
-		return true, err
-	case 25: // forward_proxy_choice.enable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.ForwardProxyConfigType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GetSpecType_EnableForwardProxy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// connector_choice
-	switch x := m.ConnectorChoice.(type) {
-	case *GetSpecType_SliToSloSnat:
-		s := proto.Size(x.SliToSloSnat)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SliToSloDr:
-		s := proto.Size(x.SliToSloDr)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SliToGlobalDr:
-		s := proto.Size(x.SliToGlobalDr)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SliToGlobalSnat:
-		s := proto.Size(x.SliToGlobalSnat)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SloToGlobalDr:
-		s := proto.Size(x.SloToGlobalDr)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SloToGlobalSnat:
-		s := proto.Size(x.SloToGlobalSnat)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GetSpecType_DisableForwardProxy:
-		s := proto.Size(x.DisableForwardProxy)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_EnableForwardProxy:
-		s := proto.Size(x.EnableForwardProxy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Network Connector Status
@@ -1663,9 +1149,33 @@ type NetworkConnectorStatus struct {
 	Installed string `protobuf:"bytes,1,opt,name=installed,proto3" json:"installed,omitempty"`
 }
 
-func (m *NetworkConnectorStatus) Reset()                    { *m = NetworkConnectorStatus{} }
-func (*NetworkConnectorStatus) ProtoMessage()               {}
-func (*NetworkConnectorStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *NetworkConnectorStatus) Reset()      { *m = NetworkConnectorStatus{} }
+func (*NetworkConnectorStatus) ProtoMessage() {}
+func (*NetworkConnectorStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1f3237484de1033e, []int{7}
+}
+func (m *NetworkConnectorStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkConnectorStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NetworkConnectorStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkConnectorStatus.Merge(m, src)
+}
+func (m *NetworkConnectorStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkConnectorStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkConnectorStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NetworkConnectorStatus proto.InternalMessageInfo
 
 func (m *NetworkConnectorStatus) GetInstalled() string {
 	if m != nil {
@@ -1675,6 +1185,12 @@ func (m *NetworkConnectorStatus) GetInstalled() string {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorType", NetworkConnectorType_name, NetworkConnectorType_value)
+	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorType", NetworkConnectorType_name, NetworkConnectorType_value)
+	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorSNATPoolType", NetworkConnectorSNATPoolType_name, NetworkConnectorSNATPoolType_value)
+	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorSNATPoolType", NetworkConnectorSNATPoolType_name, NetworkConnectorSNATPoolType_value)
+	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorProxyType", NetworkConnectorProxyType_name, NetworkConnectorProxyType_value)
+	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorProxyType", NetworkConnectorProxyType_name, NetworkConnectorProxyType_value)
 	proto.RegisterType((*SnatConnectorType)(nil), "ves.io.schema.network_connector.SnatConnectorType")
 	golang_proto.RegisterType((*SnatConnectorType)(nil), "ves.io.schema.network_connector.SnatConnectorType")
 	proto.RegisterType((*GlobalSnatConnectorType)(nil), "ves.io.schema.network_connector.GlobalSnatConnectorType")
@@ -1691,13 +1207,116 @@ func init() {
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.network_connector.GetSpecType")
 	proto.RegisterType((*NetworkConnectorStatus)(nil), "ves.io.schema.network_connector.NetworkConnectorStatus")
 	golang_proto.RegisterType((*NetworkConnectorStatus)(nil), "ves.io.schema.network_connector.NetworkConnectorStatus")
-	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorType", NetworkConnectorType_name, NetworkConnectorType_value)
-	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorType", NetworkConnectorType_name, NetworkConnectorType_value)
-	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorSNATPoolType", NetworkConnectorSNATPoolType_name, NetworkConnectorSNATPoolType_value)
-	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorSNATPoolType", NetworkConnectorSNATPoolType_name, NetworkConnectorSNATPoolType_value)
-	proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorProxyType", NetworkConnectorProxyType_name, NetworkConnectorProxyType_value)
-	golang_proto.RegisterEnum("ves.io.schema.network_connector.NetworkConnectorProxyType", NetworkConnectorProxyType_name, NetworkConnectorProxyType_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/network_connector/types.proto", fileDescriptor_1f3237484de1033e)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/network_connector/types.proto", fileDescriptor_1f3237484de1033e)
+}
+
+var fileDescriptor_1f3237484de1033e = []byte{
+	// 1549 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcb, 0x53, 0xdb, 0xde,
+	0x15, 0xd6, 0xf5, 0x03, 0x9b, 0x0b, 0xd8, 0xb2, 0x20, 0x3f, 0x84, 0x01, 0x41, 0xc8, 0xa4, 0xa1,
+	0xc4, 0xb1, 0x8b, 0xf3, 0xce, 0x4c, 0x33, 0x63, 0x83, 0x79, 0xb8, 0xa9, 0xcd, 0xc8, 0x26, 0x94,
+	0x66, 0xa1, 0xca, 0xf6, 0xb5, 0x51, 0x22, 0x74, 0x55, 0xe9, 0xda, 0x84, 0xce, 0x30, 0xd3, 0x61,
+	0xdf, 0x99, 0x4e, 0xfb, 0x2f, 0x74, 0xd1, 0xc9, 0x5f, 0xd0, 0xa9, 0xbb, 0x60, 0xda, 0x4d, 0xa6,
+	0x2b, 0x96, 0x2c, 0x1b, 0xb3, 0x49, 0x76, 0x59, 0x76, 0xd9, 0xd1, 0x95, 0x6c, 0x2c, 0x3b, 0x3c,
+	0x92, 0xfe, 0x36, 0x99, 0x61, 0x27, 0xeb, 0x9c, 0xf3, 0x7d, 0xe7, 0x3b, 0xba, 0xe7, 0xdc, 0x7b,
+	0x0d, 0xef, 0x36, 0x90, 0x19, 0x57, 0x70, 0xc2, 0x2c, 0xef, 0xa0, 0x5d, 0x39, 0xa1, 0x21, 0xb2,
+	0x87, 0x8d, 0x37, 0x52, 0x19, 0x6b, 0x1a, 0x2a, 0x13, 0x6c, 0x24, 0xc8, 0xbe, 0x8e, 0xcc, 0xb8,
+	0x6e, 0x60, 0x82, 0xb9, 0x19, 0xdb, 0x39, 0x6e, 0x3b, 0xc7, 0xfb, 0x9c, 0xa3, 0xf7, 0x6a, 0x0a,
+	0xd9, 0xa9, 0x97, 0xe2, 0x65, 0xbc, 0x9b, 0xa8, 0xe1, 0x1a, 0x4e, 0xd0, 0xb8, 0x52, 0xbd, 0x4a,
+	0x7f, 0xd1, 0x1f, 0xf4, 0xc9, 0xc6, 0x8b, 0xce, 0xd4, 0x30, 0xae, 0xa9, 0xe8, 0xcc, 0x8b, 0x28,
+	0xbb, 0xc8, 0x24, 0xf2, 0xae, 0xee, 0x38, 0x8c, 0xf7, 0x65, 0xe7, 0x18, 0x26, 0xdd, 0x06, 0xac,
+	0x13, 0x05, 0x6b, 0x4e, 0x9a, 0xd1, 0x69, 0xb7, 0x51, 0x6f, 0x10, 0xa9, 0x4b, 0x45, 0x74, 0xc2,
+	0x6d, 0xee, 0x36, 0x4d, 0xb9, 0x4d, 0x0d, 0x59, 0x55, 0x2a, 0x32, 0x41, 0x8e, 0x75, 0xb6, 0xc7,
+	0xaa, 0xa0, 0x3d, 0xc9, 0xcd, 0x3c, 0xd3, 0xef, 0x61, 0x76, 0x13, 0xcc, 0xbd, 0xf7, 0xc2, 0x48,
+	0x41, 0x93, 0xc9, 0x52, 0xbb, 0x64, 0xc5, 0x7d, 0x1d, 0x71, 0xcf, 0x61, 0xb8, 0x82, 0xaa, 0x72,
+	0x5d, 0x25, 0x52, 0x6d, 0x4f, 0x32, 0x35, 0x99, 0xf0, 0x9e, 0x59, 0x30, 0x3f, 0x94, 0x1c, 0x8b,
+	0xbb, 0x2b, 0x9e, 0xd9, 0xd5, 0xc9, 0xfe, 0x1a, 0x23, 0x8e, 0x38, 0xee, 0xab, 0x7b, 0x16, 0x18,
+	0xb7, 0x06, 0xc3, 0x95, 0x7d, 0x4d, 0xde, 0x55, 0xca, 0x92, 0x81, 0xeb, 0x44, 0xd1, 0x6a, 0xbc,
+	0xf7, 0xfc, 0xf8, 0x74, 0xe0, 0xe4, 0x00, 0x7c, 0x6c, 0x02, 0xb0, 0xc6, 0x88, 0x21, 0x27, 0x4e,
+	0xb4, 0xc3, 0xb8, 0xa7, 0x70, 0x58, 0xd1, 0x08, 0x32, 0xaa, 0x72, 0x19, 0x49, 0x8a, 0xce, 0xfb,
+	0x2f, 0x48, 0x03, 0x88, 0x43, 0x1d, 0xdf, 0x75, 0x9d, 0x5b, 0x80, 0x83, 0x56, 0xe6, 0x92, 0x8e,
+	0xb1, 0xca, 0x0f, 0xcc, 0x82, 0xf9, 0xc1, 0xf4, 0x90, 0x43, 0xf4, 0xdf, 0x26, 0x60, 0xd6, 0x80,
+	0x18, 0xb4, 0xec, 0x1b, 0x18, 0xab, 0xdc, 0x6f, 0xe1, 0x68, 0xc7, 0x57, 0x92, 0x55, 0x15, 0x97,
+	0x65, 0x82, 0x0d, 0x3e, 0x40, 0xd9, 0xe6, 0x7a, 0xd8, 0x68, 0x15, 0xe3, 0xf9, 0xd2, 0x6b, 0x54,
+	0x26, 0x22, 0xaa, 0x5a, 0x15, 0x4b, 0x4f, 0xbe, 0x3b, 0x88, 0xc8, 0x95, 0x8a, 0x81, 0x4c, 0xf3,
+	0x2c, 0xbe, 0x2d, 0x0b, 0x88, 0x91, 0x36, 0x53, 0xaa, 0x6d, 0x4b, 0xdf, 0x84, 0x21, 0xa7, 0x36,
+	0x52, 0x79, 0x07, 0x2b, 0x65, 0xc4, 0x85, 0x8f, 0x9a, 0xc0, 0x73, 0xdc, 0x04, 0xa0, 0xd5, 0x04,
+	0xde, 0x64, 0xec, 0x7e, 0x7a, 0x16, 0x0e, 0xd1, 0x84, 0x1c, 0x7b, 0xe4, 0xa8, 0x09, 0xfc, 0xc7,
+	0x4d, 0xe0, 0x6b, 0x35, 0x81, 0xff, 0x61, 0xec, 0x51, 0xec, 0x71, 0xd6, 0x17, 0x04, 0xac, 0x27,
+	0xeb, 0x0b, 0xfa, 0x58, 0xff, 0xdc, 0xbf, 0x00, 0x1c, 0x5f, 0x55, 0x71, 0x49, 0x56, 0xfb, 0x3f,
+	0x68, 0x01, 0x0e, 0xd6, 0xa8, 0x49, 0x6a, 0x68, 0x3c, 0xb8, 0xb2, 0x2a, 0xee, 0xdd, 0x41, 0xb8,
+	0xa1, 0x18, 0xa4, 0x2e, 0xab, 0x92, 0xd3, 0x5c, 0x62, 0xd0, 0x06, 0x7a, 0xa9, 0x71, 0x05, 0x38,
+	0x44, 0x8b, 0x56, 0xc6, 0x5a, 0x55, 0xa9, 0x39, 0x2b, 0x24, 0x19, 0xbf, 0xa4, 0x27, 0xe3, 0x7d,
+	0xd9, 0x89, 0xd0, 0xb4, 0x5f, 0x55, 0x95, 0xda, 0xdc, 0xef, 0xe0, 0xe4, 0xb2, 0xb3, 0x04, 0x50,
+	0x03, 0x19, 0x26, 0xda, 0x30, 0xf0, 0xdb, 0xfd, 0x17, 0x8a, 0x49, 0xa8, 0x90, 0x57, 0xd0, 0x57,
+	0x31, 0x74, 0x93, 0x07, 0xb3, 0xde, 0x2b, 0x6a, 0xb8, 0xf5, 0xee, 0x60, 0xb8, 0xad, 0x61, 0x07,
+	0x9b, 0xe4, 0xef, 0x9f, 0x8e, 0xbc, 0xfe, 0x3f, 0x01, 0x0f, 0x0b, 0xda, 0x4f, 0x41, 0x20, 0x52,
+	0xd0, 0xb9, 0x4f, 0x01, 0x18, 0x72, 0x2a, 0xa8, 0xa3, 0x32, 0xe5, 0x7b, 0x0d, 0x43, 0x9d, 0xcc,
+	0x69, 0xd3, 0xd2, 0xea, 0x85, 0x92, 0x0f, 0x2f, 0x95, 0x99, 0xb3, 0xdf, 0xb8, 0x94, 0xa6, 0x87,
+	0x2d, 0xce, 0xc0, 0x21, 0xf0, 0x45, 0x3d, 0x8c, 0x47, 0x1c, 0x29, 0xbb, 0x3e, 0x52, 0x05, 0x8e,
+	0xe1, 0x3a, 0x31, 0x95, 0x0a, 0x6a, 0x17, 0xdb, 0x66, 0xf4, 0x50, 0xc6, 0x9b, 0x3d, 0x8c, 0x2f,
+	0x6d, 0x4d, 0x0e, 0x0d, 0x45, 0x0f, 0x5b, 0xe8, 0xf0, 0x10, 0x04, 0xa2, 0x7e, 0x06, 0x78, 0xbc,
+	0x3e, 0x91, 0x73, 0xf0, 0xba, 0x9c, 0xb8, 0x32, 0x0c, 0xf7, 0xb0, 0xf0, 0x5e, 0x5a, 0xcc, 0xa9,
+	0x1e, 0x02, 0x77, 0x19, 0xa7, 0xfa, 0x97, 0xc2, 0x59, 0x25, 0xc5, 0x90, 0x9b, 0x88, 0xfb, 0x0d,
+	0x1c, 0x55, 0xb4, 0x7e, 0x25, 0xbe, 0xab, 0x2a, 0x19, 0xb1, 0xb0, 0x83, 0x87, 0xc0, 0x1f, 0xf5,
+	0x32, 0xc0, 0x23, 0x46, 0x6c, 0xb0, 0x6e, 0x19, 0x32, 0x0c, 0xb9, 0x19, 0x78, 0xff, 0xff, 0xad,
+	0x62, 0xc4, 0x45, 0xc3, 0xe9, 0x30, 0x74, 0x36, 0x14, 0x68, 0xfe, 0x03, 0x34, 0xff, 0x9f, 0x7f,
+	0xf5, 0xb7, 0x2f, 0xe4, 0x52, 0x45, 0xab, 0xfb, 0x69, 0x0e, 0x43, 0x16, 0xe3, 0xc0, 0x21, 0xf0,
+	0x46, 0x01, 0x23, 0x0e, 0xb7, 0x07, 0x03, 0x15, 0xb5, 0x09, 0x83, 0x9d, 0x89, 0x15, 0xa0, 0x72,
+	0xa6, 0x7b, 0xb8, 0xd6, 0xf5, 0xc6, 0x83, 0x42, 0xbd, 0xa4, 0x21, 0x62, 0x8f, 0x1d, 0x67, 0xc4,
+	0x74, 0x44, 0x04, 0xdb, 0x4f, 0x3c, 0x10, 0x03, 0xed, 0xe9, 0xb6, 0x0d, 0xa1, 0x6e, 0x75, 0x91,
+	0x2d, 0x22, 0x48, 0x45, 0x3c, 0xfb, 0x6a, 0x11, 0xb4, 0x11, 0x69, 0xbf, 0x0e, 0xea, 0xed, 0x47,
+	0xee, 0x0d, 0xbc, 0xd1, 0x99, 0xf4, 0x76, 0xbf, 0x4a, 0xd4, 0xc8, 0x0f, 0x5e, 0xe1, 0x6b, 0x4c,
+	0x9c, 0xdb, 0x9a, 0xe2, 0x68, 0xa5, 0x7f, 0x08, 0x70, 0x59, 0x38, 0x52, 0xc5, 0xc6, 0x9e, 0x6c,
+	0x54, 0x1c, 0x12, 0x48, 0x47, 0xce, 0xed, 0x1e, 0x92, 0x15, 0xdb, 0x87, 0xc6, 0xd8, 0x53, 0x85,
+	0x66, 0x3d, 0x5c, 0xed, 0x7a, 0x3f, 0xd7, 0x0c, 0xc0, 0xd0, 0x92, 0x81, 0x64, 0x82, 0x3a, 0xbd,
+	0xfe, 0x0a, 0x86, 0x4d, 0x55, 0x91, 0x08, 0x96, 0x4c, 0x15, 0xdb, 0xbb, 0x5e, 0xe4, 0x5b, 0x67,
+	0xda, 0x9a, 0xf5, 0x69, 0x55, 0xa5, 0x88, 0x0b, 0x2a, 0xa6, 0x5b, 0x62, 0x1a, 0x8e, 0x74, 0x81,
+	0x57, 0x0c, 0x9e, 0xbb, 0xda, 0x86, 0x08, 0xdb, 0x28, 0xcb, 0x06, 0x57, 0x80, 0xac, 0x83, 0xe1,
+	0x0c, 0xf3, 0x8a, 0xc1, 0x8f, 0x52, 0x98, 0xf9, 0x2f, 0x0e, 0x42, 0x7b, 0x96, 0xf5, 0xe6, 0x35,
+	0x42, 0x11, 0x6d, 0xdb, 0xb2, 0xc1, 0xe9, 0x90, 0x73, 0x83, 0x52, 0xe1, 0x63, 0x14, 0xf6, 0xc9,
+	0xa5, 0xc2, 0xcf, 0xd9, 0x70, 0xba, 0x15, 0x84, 0xbb, 0xf8, 0x68, 0x29, 0xa8, 0x0c, 0xec, 0x96,
+	0x71, 0xe3, 0x5b, 0x64, 0xe0, 0x5e, 0x19, 0xb8, 0x57, 0xc6, 0x0f, 0x3f, 0xaa, 0x0c, 0xec, 0x92,
+	0x91, 0x85, 0x37, 0x2a, 0x8a, 0x29, 0x97, 0x54, 0x24, 0xb9, 0x57, 0x25, 0x7f, 0xe1, 0x19, 0x65,
+	0xd4, 0x09, 0xea, 0x5e, 0xa5, 0xdc, 0x36, 0x1c, 0x43, 0xda, 0x17, 0xa0, 0x26, 0xbe, 0x62, 0x81,
+	0xaf, 0x01, 0x91, 0xb3, 0x41, 0xba, 0xed, 0xcf, 0xb6, 0xfe, 0xfd, 0xbc, 0x67, 0x53, 0xfb, 0x67,
+	0x13, 0xa4, 0xe1, 0x6d, 0x38, 0xe3, 0x34, 0xf8, 0x6c, 0x47, 0xf2, 0xac, 0x0d, 0x56, 0x37, 0x64,
+	0xeb, 0x0c, 0xc9, 0x79, 0x16, 0x1f, 0xc1, 0x09, 0x38, 0x4a, 0x61, 0x7a, 0x4d, 0xc9, 0xfb, 0xe9,
+	0x45, 0xc8, 0x9e, 0x6d, 0x8d, 0xce, 0x11, 0x65, 0xfa, 0xa8, 0x09, 0x22, 0xc7, 0x4d, 0xc0, 0xb6,
+	0x9a, 0x20, 0xb2, 0xf8, 0x38, 0xb6, 0xf8, 0x24, 0xb6, 0xf8, 0x34, 0x96, 0xfc, 0x59, 0x2c, 0xb9,
+	0x18, 0x4b, 0x26, 0xd3, 0x3f, 0x85, 0x63, 0x2e, 0x7d, 0xdd, 0x27, 0x1b, 0xfe, 0xb8, 0x09, 0xc6,
+	0xad, 0x93, 0x4d, 0xf2, 0x41, 0x2c, 0xf9, 0x30, 0xeb, 0x0b, 0xb2, 0x6c, 0x24, 0xeb, 0x0b, 0x8e,
+	0xb3, 0x7c, 0xd6, 0x17, 0x8c, 0xb2, 0x93, 0x59, 0x5f, 0x70, 0x92, 0x9d, 0xca, 0xfa, 0x82, 0x53,
+	0xec, 0xf4, 0xdc, 0x3f, 0x02, 0x30, 0x2c, 0x22, 0x5d, 0x95, 0xcb, 0xd7, 0xed, 0x7b, 0xdd, 0xbe,
+	0xd7, 0xed, 0xfb, 0x9d, 0xb5, 0xef, 0xdf, 0x02, 0x70, 0x68, 0x15, 0x91, 0xeb, 0xd6, 0xbd, 0x6e,
+	0xdd, 0xeb, 0xd6, 0xfd, 0xbe, 0x5a, 0xf7, 0x11, 0xfc, 0xa1, 0xef, 0x76, 0x43, 0x64, 0x52, 0x37,
+	0xb9, 0x29, 0x38, 0xa8, 0x68, 0x26, 0x91, 0x55, 0x15, 0x55, 0xe8, 0x2d, 0x79, 0x50, 0x3c, 0x7b,
+	0xb1, 0xf0, 0x17, 0x00, 0xc7, 0xbe, 0x74, 0x25, 0xe6, 0x12, 0xf0, 0x6e, 0x2e, 0x53, 0xdc, 0xca,
+	0x8b, 0xbf, 0x90, 0x96, 0xf2, 0xb9, 0x5c, 0x66, 0xa9, 0x98, 0x17, 0xa5, 0xe2, 0xf6, 0x46, 0x46,
+	0x5a, 0xce, 0xac, 0xa4, 0x36, 0x5f, 0x14, 0xa5, 0xd5, 0x54, 0x31, 0xb3, 0x95, 0xda, 0x96, 0xac,
+	0x5b, 0x14, 0xcb, 0x5c, 0x14, 0xb0, 0x9d, 0x4b, 0xfd, 0x72, 0x7d, 0xc9, 0x1d, 0x00, 0xb8, 0x05,
+	0xf8, 0x93, 0xab, 0x05, 0xb0, 0x9e, 0x85, 0x3a, 0x9c, 0xba, 0xe8, 0xf2, 0xc6, 0xc5, 0xe0, 0x7c,
+	0x3f, 0x96, 0xe5, 0x21, 0x15, 0xd6, 0x37, 0xa4, 0xcd, 0x42, 0x46, 0x5a, 0xcf, 0x15, 0x33, 0xe2,
+	0x4a, 0x6a, 0x29, 0xc3, 0x32, 0xdc, 0x1d, 0x78, 0xeb, 0x12, 0xef, 0x8d, 0x7c, 0xfe, 0x05, 0x0b,
+	0x16, 0xfe, 0x00, 0xe0, 0xc4, 0xb9, 0xf7, 0x2d, 0x4e, 0x80, 0xd1, 0x7e, 0x98, 0x5c, 0x5e, 0xda,
+	0x10, 0xf3, 0xbf, 0xda, 0x66, 0x19, 0xee, 0x2e, 0xbc, 0xd3, 0x6f, 0x6f, 0x6b, 0x13, 0x33, 0x2f,
+	0x33, 0xa2, 0xc5, 0x44, 0x9d, 0x01, 0x77, 0x0b, 0xce, 0xf4, 0x3b, 0xaf, 0xe4, 0xc5, 0xad, 0x94,
+	0xb8, 0xec, 0x38, 0x79, 0xd2, 0x7f, 0x06, 0xc7, 0x1f, 0x04, 0xe6, 0xe4, 0x83, 0xc0, 0x7c, 0xfe,
+	0x20, 0x80, 0xdf, 0xb7, 0x04, 0xf0, 0xd7, 0x96, 0x00, 0xde, 0xb7, 0x04, 0x70, 0xdc, 0x12, 0xc0,
+	0x49, 0x4b, 0x00, 0xff, 0x69, 0x09, 0xe0, 0x63, 0x4b, 0x60, 0x3e, 0xb7, 0x04, 0xf0, 0xc7, 0x53,
+	0x81, 0x39, 0x3a, 0x15, 0xc0, 0xf1, 0xa9, 0xc0, 0x9c, 0x9c, 0x0a, 0xcc, 0xaf, 0x37, 0x6b, 0x58,
+	0x7f, 0x53, 0x8b, 0x37, 0xb0, 0x4a, 0x90, 0x61, 0xc8, 0xf1, 0xba, 0x99, 0xa0, 0x0f, 0x55, 0x6c,
+	0xec, 0xde, 0xd3, 0x0d, 0xdc, 0x50, 0x2a, 0xc8, 0xb8, 0xd7, 0x36, 0x27, 0xf4, 0x52, 0x0d, 0x27,
+	0xd0, 0x5b, 0xe2, 0xfc, 0x4b, 0x79, 0xde, 0x5f, 0xbf, 0xa5, 0x01, 0xfa, 0x9f, 0xe5, 0xfd, 0xff,
+	0x05, 0x00, 0x00, 0xff, 0xff, 0xdb, 0x98, 0xf3, 0xd8, 0x24, 0x16, 0x00, 0x00,
+}
+
 func (x NetworkConnectorType) String() string {
 	s, ok := NetworkConnectorType_name[int32(x)]
 	if ok {
@@ -3091,7 +2710,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *SnatConnectorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3099,95 +2718,138 @@ func (m *SnatConnectorType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SnatConnectorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.RoutingChoice != nil {
-		nn1, err := m.RoutingChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
-	}
 	if m.PoolChoice != nil {
-		nn2, err := m.PoolChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.PoolChoice.Size()
+			i -= size
+			if _, err := m.PoolChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn2
 	}
-	return i, nil
+	if m.RoutingChoice != nil {
+		{
+			size := m.RoutingChoice.Size()
+			i -= size
+			if _, err := m.RoutingChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *SnatConnectorType_DefaultGwSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType_DefaultGwSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultGwSnat != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultGwSnat.Size()))
-		n3, err := m.DefaultGwSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultGwSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SnatConnectorType_DynamicRouting) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType_DynamicRouting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DynamicRouting != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DynamicRouting.Size()))
-		n4, err := m.DynamicRouting.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DynamicRouting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SnatConnectorType_InterfaceIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType_InterfaceIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceIp != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceIp.Size()))
-		n5, err := m.InterfaceIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SnatConnectorType_SnatPool) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x32
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType_SnatPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.SnatPool)
+	copy(dAtA[i:], m.SnatPool)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.SnatPool)))
-	i += copy(dAtA[i:], m.SnatPool)
-	return i, nil
+	i--
+	dAtA[i] = 0x32
+	return len(dAtA) - i, nil
 }
 func (m *SnatConnectorType_SnatPoolAllocator) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SnatConnectorType_SnatPoolAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SnatPoolAllocator != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SnatPoolAllocator.Size()))
-		n6, err := m.SnatPoolAllocator.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SnatPoolAllocator.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSnatConnectorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3195,37 +2857,46 @@ func (m *GlobalSnatConnectorType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSnatConnectorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSnatConnectorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.GlobalVn != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalVn.Size()))
-		n7, err := m.GlobalVn.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-	}
 	if m.SnatConfig != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SnatConfig.Size()))
-		n8, err := m.SnatConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SnatConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.GlobalVn != nil {
+		{
+			size, err := m.GlobalVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *DynamicReverseProxyListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3233,29 +2904,36 @@ func (m *DynamicReverseProxyListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DynamicReverseProxyListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DynamicReverseProxyListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Drps) > 0 {
-		for _, msg := range m.Drps {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Drps) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Drps[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3263,100 +2941,115 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ConnectorType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectorType))
-	}
-	if m.OutsideNetworkType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideNetworkType))
-	}
-	if len(m.OutsideNetwork) > 0 {
-		for _, msg := range m.OutsideNetwork {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ForwardProxy != nil {
+		{
+			size, err := m.ForwardProxy.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x52
 	}
-	if m.InsideNetworkType != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideNetworkType))
-	}
-	if len(m.InsideNetwork) > 0 {
-		for _, msg := range m.InsideNetwork {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.DynamicReverseProxy) > 0 {
+		for iNdEx := len(m.DynamicReverseProxy) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DynamicReverseProxy[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
-		}
-	}
-	if m.SnatPoolType != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SnatPoolType))
-	}
-	if len(m.NatPool) > 0 {
-		for _, msg := range m.NatPool {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+			i--
+			dAtA[i] = 0x4a
 		}
 	}
 	if m.ProxyType != 0 {
-		dAtA[i] = 0x40
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ProxyType))
+		i--
+		dAtA[i] = 0x40
 	}
-	if len(m.DynamicReverseProxy) > 0 {
-		for _, msg := range m.DynamicReverseProxy {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.NatPool) > 0 {
+		for iNdEx := len(m.NatPool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NatPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x3a
 		}
 	}
-	if m.ForwardProxy != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxy.Size()))
-		n9, err := m.ForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n9
+	if m.SnatPoolType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SnatPoolType))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if len(m.InsideNetwork) > 0 {
+		for iNdEx := len(m.InsideNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if m.InsideNetworkType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.InsideNetworkType))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.OutsideNetwork) > 0 {
+		for iNdEx := len(m.OutsideNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.OutsideNetworkType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideNetworkType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.ConnectorType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectorType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3364,159 +3057,224 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ConnectorChoice != nil {
-		nn10, err := m.ConnectorChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn10
-	}
 	if m.ForwardProxyChoice != nil {
-		nn11, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn11
 	}
-	return i, nil
+	if m.ConnectorChoice != nil {
+		{
+			size := m.ConnectorChoice.Size()
+			i -= size
+			if _, err := m.ConnectorChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_SliToSloSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SliToSloSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloSnat != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloSnat.Size()))
-		n12, err := m.SliToSloSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_SliToSloDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SliToSloDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloDr != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloDr.Size()))
-		n13, err := m.SliToSloDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_SliToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SliToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalDr != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalDr.Size()))
-		n14, err := m.SliToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_SliToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SliToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalSnat != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalSnat.Size()))
-		n15, err := m.SliToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_SloToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SloToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalDr != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalDr.Size()))
-		n16, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_SloToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SloToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalSnat != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalSnat.Size()))
-		n17, err := m.SloToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DisableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxy != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxy.Size()))
-		n18, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_EnableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableForwardProxy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableForwardProxy.Size()))
-		n19, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3524,159 +3282,224 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ConnectorChoice != nil {
-		nn20, err := m.ConnectorChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn20
-	}
 	if m.ForwardProxyChoice != nil {
-		nn21, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn21
 	}
-	return i, nil
+	if m.ConnectorChoice != nil {
+		{
+			size := m.ConnectorChoice.Size()
+			i -= size
+			if _, err := m.ConnectorChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_SliToSloSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SliToSloSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloSnat != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloSnat.Size()))
-		n22, err := m.SliToSloSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_SliToSloDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SliToSloDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloDr != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloDr.Size()))
-		n23, err := m.SliToSloDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_SliToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SliToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalDr != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalDr.Size()))
-		n24, err := m.SliToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_SliToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SliToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalSnat != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalSnat.Size()))
-		n25, err := m.SliToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_SloToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SloToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalDr != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalDr.Size()))
-		n26, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n26
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_SloToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SloToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalSnat != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalSnat.Size()))
-		n27, err := m.SloToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DisableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxy != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxy.Size()))
-		n28, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n28
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_EnableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableForwardProxy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableForwardProxy.Size()))
-		n29, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n29
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3684,159 +3507,224 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ConnectorChoice != nil {
-		nn30, err := m.ConnectorChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn30
-	}
 	if m.ForwardProxyChoice != nil {
-		nn31, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn31
 	}
-	return i, nil
+	if m.ConnectorChoice != nil {
+		{
+			size := m.ConnectorChoice.Size()
+			i -= size
+			if _, err := m.ConnectorChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_SliToSloSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SliToSloSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloSnat != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloSnat.Size()))
-		n32, err := m.SliToSloSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n32
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_SliToSloDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SliToSloDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToSloDr != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToSloDr.Size()))
-		n33, err := m.SliToSloDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToSloDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n33
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_SliToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SliToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalDr != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalDr.Size()))
-		n34, err := m.SliToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_SliToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SliToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliToGlobalSnat != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliToGlobalSnat.Size()))
-		n35, err := m.SliToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_SloToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SloToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalDr != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalDr.Size()))
-		n36, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_SloToGlobalSnat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SloToGlobalSnat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalSnat != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalSnat.Size()))
-		n37, err := m.SloToGlobalSnat.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalSnat.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DisableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxy != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxy.Size()))
-		n38, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n38
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_EnableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableForwardProxy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableForwardProxy.Size()))
-		n39, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n39
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *NetworkConnectorStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3844,29 +3732,40 @@ func (m *NetworkConnectorStatus) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NetworkConnectorStatus) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkConnectorStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Installed) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.Installed)
+		copy(dAtA[i:], m.Installed)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Installed)))
-		i += copy(dAtA[i:], m.Installed)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *SnatConnectorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RoutingChoice != nil {
@@ -3879,6 +3778,9 @@ func (m *SnatConnectorType) Size() (n int) {
 }
 
 func (m *SnatConnectorType_DefaultGwSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultGwSnat != nil {
@@ -3888,6 +3790,9 @@ func (m *SnatConnectorType_DefaultGwSnat) Size() (n int) {
 	return n
 }
 func (m *SnatConnectorType_DynamicRouting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DynamicRouting != nil {
@@ -3897,6 +3802,9 @@ func (m *SnatConnectorType_DynamicRouting) Size() (n int) {
 	return n
 }
 func (m *SnatConnectorType_InterfaceIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceIp != nil {
@@ -3906,6 +3814,9 @@ func (m *SnatConnectorType_InterfaceIp) Size() (n int) {
 	return n
 }
 func (m *SnatConnectorType_SnatPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SnatPool)
@@ -3913,6 +3824,9 @@ func (m *SnatConnectorType_SnatPool) Size() (n int) {
 	return n
 }
 func (m *SnatConnectorType_SnatPoolAllocator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SnatPoolAllocator != nil {
@@ -3922,6 +3836,9 @@ func (m *SnatConnectorType_SnatPoolAllocator) Size() (n int) {
 	return n
 }
 func (m *GlobalSnatConnectorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalVn != nil {
@@ -3936,6 +3853,9 @@ func (m *GlobalSnatConnectorType) Size() (n int) {
 }
 
 func (m *DynamicReverseProxyListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Drps) > 0 {
@@ -3948,6 +3868,9 @@ func (m *DynamicReverseProxyListType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ConnectorType != 0 {
@@ -3997,6 +3920,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ConnectorChoice != nil {
@@ -4009,6 +3935,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_SliToSloSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloSnat != nil {
@@ -4018,6 +3947,9 @@ func (m *CreateSpecType_SliToSloSnat) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_SliToSloDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloDr != nil {
@@ -4027,6 +3959,9 @@ func (m *CreateSpecType_SliToSloDr) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_SliToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalDr != nil {
@@ -4036,6 +3971,9 @@ func (m *CreateSpecType_SliToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_SliToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalSnat != nil {
@@ -4045,6 +3983,9 @@ func (m *CreateSpecType_SliToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_SloToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalDr != nil {
@@ -4054,6 +3995,9 @@ func (m *CreateSpecType_SloToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_SloToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalSnat != nil {
@@ -4063,6 +4007,9 @@ func (m *CreateSpecType_SloToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DisableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxy != nil {
@@ -4072,6 +4019,9 @@ func (m *CreateSpecType_DisableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_EnableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableForwardProxy != nil {
@@ -4081,6 +4031,9 @@ func (m *CreateSpecType_EnableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ConnectorChoice != nil {
@@ -4093,6 +4046,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_SliToSloSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloSnat != nil {
@@ -4102,6 +4058,9 @@ func (m *ReplaceSpecType_SliToSloSnat) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_SliToSloDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloDr != nil {
@@ -4111,6 +4070,9 @@ func (m *ReplaceSpecType_SliToSloDr) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_SliToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalDr != nil {
@@ -4120,6 +4082,9 @@ func (m *ReplaceSpecType_SliToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_SliToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalSnat != nil {
@@ -4129,6 +4094,9 @@ func (m *ReplaceSpecType_SliToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_SloToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalDr != nil {
@@ -4138,6 +4106,9 @@ func (m *ReplaceSpecType_SloToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_SloToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalSnat != nil {
@@ -4147,6 +4118,9 @@ func (m *ReplaceSpecType_SloToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DisableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxy != nil {
@@ -4156,6 +4130,9 @@ func (m *ReplaceSpecType_DisableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_EnableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableForwardProxy != nil {
@@ -4165,6 +4142,9 @@ func (m *ReplaceSpecType_EnableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ConnectorChoice != nil {
@@ -4177,6 +4157,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_SliToSloSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloSnat != nil {
@@ -4186,6 +4169,9 @@ func (m *GetSpecType_SliToSloSnat) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_SliToSloDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToSloDr != nil {
@@ -4195,6 +4181,9 @@ func (m *GetSpecType_SliToSloDr) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_SliToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalDr != nil {
@@ -4204,6 +4193,9 @@ func (m *GetSpecType_SliToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_SliToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliToGlobalSnat != nil {
@@ -4213,6 +4205,9 @@ func (m *GetSpecType_SliToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_SloToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalDr != nil {
@@ -4222,6 +4217,9 @@ func (m *GetSpecType_SloToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_SloToGlobalSnat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalSnat != nil {
@@ -4231,6 +4229,9 @@ func (m *GetSpecType_SloToGlobalSnat) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DisableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxy != nil {
@@ -4240,6 +4241,9 @@ func (m *GetSpecType_DisableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_EnableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableForwardProxy != nil {
@@ -4249,6 +4253,9 @@ func (m *GetSpecType_EnableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *NetworkConnectorStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Installed)
@@ -4259,14 +4266,7 @@ func (m *NetworkConnectorStatus) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -4287,7 +4287,7 @@ func (this *SnatConnectorType_DefaultGwSnat) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SnatConnectorType_DefaultGwSnat{`,
-		`DefaultGwSnat:` + strings.Replace(fmt.Sprintf("%v", this.DefaultGwSnat), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultGwSnat:` + strings.Replace(fmt.Sprintf("%v", this.DefaultGwSnat), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4297,7 +4297,7 @@ func (this *SnatConnectorType_DynamicRouting) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SnatConnectorType_DynamicRouting{`,
-		`DynamicRouting:` + strings.Replace(fmt.Sprintf("%v", this.DynamicRouting), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DynamicRouting:` + strings.Replace(fmt.Sprintf("%v", this.DynamicRouting), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4307,7 +4307,7 @@ func (this *SnatConnectorType_InterfaceIp) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SnatConnectorType_InterfaceIp{`,
-		`InterfaceIp:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceIp), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`InterfaceIp:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceIp), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4327,7 +4327,7 @@ func (this *SnatConnectorType_SnatPoolAllocator) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SnatConnectorType_SnatPoolAllocator{`,
-		`SnatPoolAllocator:` + strings.Replace(fmt.Sprintf("%v", this.SnatPoolAllocator), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`SnatPoolAllocator:` + strings.Replace(fmt.Sprintf("%v", this.SnatPoolAllocator), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4337,8 +4337,8 @@ func (this *GlobalSnatConnectorType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSnatConnectorType{`,
-		`GlobalVn:` + strings.Replace(fmt.Sprintf("%v", this.GlobalVn), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`SnatConfig:` + strings.Replace(fmt.Sprintf("%v", this.SnatConfig), "SnatConnectorType", "SnatConnectorType", 1) + `,`,
+		`GlobalVn:` + strings.Replace(fmt.Sprintf("%v", this.GlobalVn), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`SnatConfig:` + strings.Replace(this.SnatConfig.String(), "SnatConnectorType", "SnatConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4347,8 +4347,13 @@ func (this *DynamicReverseProxyListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDrps := "[]*ObjectRefType{"
+	for _, f := range this.Drps {
+		repeatedStringForDrps += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForDrps += "}"
 	s := strings.Join([]string{`&DynamicReverseProxyListType{`,
-		`Drps:` + strings.Replace(fmt.Sprintf("%v", this.Drps), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Drps:` + repeatedStringForDrps + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4357,17 +4362,37 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOutsideNetwork := "[]*ObjectRefType{"
+	for _, f := range this.OutsideNetwork {
+		repeatedStringForOutsideNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOutsideNetwork += "}"
+	repeatedStringForInsideNetwork := "[]*ObjectRefType{"
+	for _, f := range this.InsideNetwork {
+		repeatedStringForInsideNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInsideNetwork += "}"
+	repeatedStringForNatPool := "[]*Ipv4SubnetType{"
+	for _, f := range this.NatPool {
+		repeatedStringForNatPool += strings.Replace(fmt.Sprintf("%v", f), "Ipv4SubnetType", "schema.Ipv4SubnetType", 1) + ","
+	}
+	repeatedStringForNatPool += "}"
+	repeatedStringForDynamicReverseProxy := "[]*ObjectRefType{"
+	for _, f := range this.DynamicReverseProxy {
+		repeatedStringForDynamicReverseProxy += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForDynamicReverseProxy += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`ConnectorType:` + fmt.Sprintf("%v", this.ConnectorType) + `,`,
 		`OutsideNetworkType:` + fmt.Sprintf("%v", this.OutsideNetworkType) + `,`,
-		`OutsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`OutsideNetwork:` + repeatedStringForOutsideNetwork + `,`,
 		`InsideNetworkType:` + fmt.Sprintf("%v", this.InsideNetworkType) + `,`,
-		`InsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`InsideNetwork:` + repeatedStringForInsideNetwork + `,`,
 		`SnatPoolType:` + fmt.Sprintf("%v", this.SnatPoolType) + `,`,
-		`NatPool:` + strings.Replace(fmt.Sprintf("%v", this.NatPool), "Ipv4SubnetType", "ves_io_schema3.Ipv4SubnetType", 1) + `,`,
+		`NatPool:` + repeatedStringForNatPool + `,`,
 		`ProxyType:` + fmt.Sprintf("%v", this.ProxyType) + `,`,
-		`DynamicReverseProxy:` + strings.Replace(fmt.Sprintf("%v", this.DynamicReverseProxy), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`ForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxy), "ForwardProxyConfigType", "ves_io_schema4.ForwardProxyConfigType", 1) + `,`,
+		`DynamicReverseProxy:` + repeatedStringForDynamicReverseProxy + `,`,
+		`ForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxy), "ForwardProxyConfigType", "schema.ForwardProxyConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4398,7 +4423,7 @@ func (this *CreateSpecType_SliToSloDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_SliToSloDr{`,
-		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4408,7 +4433,7 @@ func (this *CreateSpecType_SliToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_SliToGlobalDr{`,
-		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4428,7 +4453,7 @@ func (this *CreateSpecType_SloToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_SloToGlobalDr{`,
-		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4448,7 +4473,7 @@ func (this *CreateSpecType_DisableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableForwardProxy{`,
-		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4458,7 +4483,7 @@ func (this *CreateSpecType_EnableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_EnableForwardProxy{`,
-		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "ves_io_schema4.ForwardProxyConfigType", 1) + `,`,
+		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "schema.ForwardProxyConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4489,7 +4514,7 @@ func (this *ReplaceSpecType_SliToSloDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_SliToSloDr{`,
-		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4499,7 +4524,7 @@ func (this *ReplaceSpecType_SliToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_SliToGlobalDr{`,
-		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4519,7 +4544,7 @@ func (this *ReplaceSpecType_SloToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_SloToGlobalDr{`,
-		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4539,7 +4564,7 @@ func (this *ReplaceSpecType_DisableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableForwardProxy{`,
-		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4549,7 +4574,7 @@ func (this *ReplaceSpecType_EnableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_EnableForwardProxy{`,
-		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "ves_io_schema4.ForwardProxyConfigType", 1) + `,`,
+		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "schema.ForwardProxyConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4580,7 +4605,7 @@ func (this *GetSpecType_SliToSloDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_SliToSloDr{`,
-		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`SliToSloDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToSloDr), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4590,7 +4615,7 @@ func (this *GetSpecType_SliToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_SliToGlobalDr{`,
-		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SliToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SliToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4610,7 +4635,7 @@ func (this *GetSpecType_SloToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_SloToGlobalDr{`,
-		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4630,7 +4655,7 @@ func (this *GetSpecType_DisableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableForwardProxy{`,
-		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4640,7 +4665,7 @@ func (this *GetSpecType_EnableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_EnableForwardProxy{`,
-		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "ves_io_schema4.ForwardProxyConfigType", 1) + `,`,
+		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "schema.ForwardProxyConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4678,7 +4703,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4706,7 +4731,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4715,10 +4740,13 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4738,7 +4766,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4747,10 +4775,13 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4770,7 +4801,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4779,10 +4810,13 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4802,7 +4836,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4812,6 +4846,9 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4831,7 +4868,7 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4840,10 +4877,13 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4856,6 +4896,9 @@ func (m *SnatConnectorType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4885,7 +4928,7 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4913,7 +4956,7 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4922,11 +4965,14 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.GlobalVn == nil {
-				m.GlobalVn = &ves_io_schema_views.ObjectRefType{}
+				m.GlobalVn = &views.ObjectRefType{}
 			}
 			if err := m.GlobalVn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4946,7 +4992,7 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4955,6 +5001,9 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4972,6 +5021,9 @@ func (m *GlobalSnatConnectorType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5001,7 +5053,7 @@ func (m *DynamicReverseProxyListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5029,7 +5081,7 @@ func (m *DynamicReverseProxyListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5038,10 +5090,13 @@ func (m *DynamicReverseProxyListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Drps = append(m.Drps, &ves_io_schema_views.ObjectRefType{})
+			m.Drps = append(m.Drps, &views.ObjectRefType{})
 			if err := m.Drps[len(m.Drps)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5053,6 +5108,9 @@ func (m *DynamicReverseProxyListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5082,7 +5140,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5110,7 +5168,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectorType |= (NetworkConnectorType(b) & 0x7F) << shift
+				m.ConnectorType |= NetworkConnectorType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5129,7 +5187,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OutsideNetworkType |= (ves_io_schema3.VirtualNetworkType(b) & 0x7F) << shift
+				m.OutsideNetworkType |= schema.VirtualNetworkType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5148,7 +5206,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5157,10 +5215,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OutsideNetwork = append(m.OutsideNetwork, &ves_io_schema4.ObjectRefType{})
+			m.OutsideNetwork = append(m.OutsideNetwork, &schema.ObjectRefType{})
 			if err := m.OutsideNetwork[len(m.OutsideNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5179,7 +5240,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.InsideNetworkType |= (ves_io_schema3.VirtualNetworkType(b) & 0x7F) << shift
+				m.InsideNetworkType |= schema.VirtualNetworkType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5198,7 +5259,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5207,10 +5268,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InsideNetwork = append(m.InsideNetwork, &ves_io_schema4.ObjectRefType{})
+			m.InsideNetwork = append(m.InsideNetwork, &schema.ObjectRefType{})
 			if err := m.InsideNetwork[len(m.InsideNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5229,7 +5293,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SnatPoolType |= (NetworkConnectorSNATPoolType(b) & 0x7F) << shift
+				m.SnatPoolType |= NetworkConnectorSNATPoolType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5248,7 +5312,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5257,10 +5321,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NatPool = append(m.NatPool, &ves_io_schema3.Ipv4SubnetType{})
+			m.NatPool = append(m.NatPool, &schema.Ipv4SubnetType{})
 			if err := m.NatPool[len(m.NatPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5279,7 +5346,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ProxyType |= (NetworkConnectorProxyType(b) & 0x7F) << shift
+				m.ProxyType |= NetworkConnectorProxyType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5298,7 +5365,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5307,10 +5374,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DynamicReverseProxy = append(m.DynamicReverseProxy, &ves_io_schema4.ObjectRefType{})
+			m.DynamicReverseProxy = append(m.DynamicReverseProxy, &schema.ObjectRefType{})
 			if err := m.DynamicReverseProxy[len(m.DynamicReverseProxy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5329,7 +5399,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5338,11 +5408,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ForwardProxy == nil {
-				m.ForwardProxy = &ves_io_schema4.ForwardProxyConfigType{}
+				m.ForwardProxy = &schema.ForwardProxyConfigType{}
 			}
 			if err := m.ForwardProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5355,6 +5428,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5384,7 +5460,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5412,7 +5488,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5421,6 +5497,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5444,7 +5523,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5453,10 +5532,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5476,7 +5558,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5485,10 +5567,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5508,7 +5593,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5517,6 +5602,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5540,7 +5628,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5549,10 +5637,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5572,7 +5663,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5581,6 +5672,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5604,7 +5698,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5613,10 +5707,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5636,7 +5733,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5645,10 +5742,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.ForwardProxyConfigType{}
+			v := &schema.ForwardProxyConfigType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5661,6 +5761,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5690,7 +5793,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5718,7 +5821,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5727,6 +5830,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5750,7 +5856,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5759,10 +5865,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5782,7 +5891,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5791,10 +5900,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5814,7 +5926,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5823,6 +5935,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5846,7 +5961,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5855,10 +5970,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5878,7 +5996,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5887,6 +6005,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5910,7 +6031,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5919,10 +6040,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5942,7 +6066,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5951,10 +6075,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.ForwardProxyConfigType{}
+			v := &schema.ForwardProxyConfigType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5967,6 +6094,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5996,7 +6126,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6024,7 +6154,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6033,6 +6163,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6056,7 +6189,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6065,10 +6198,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6088,7 +6224,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6097,10 +6233,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6120,7 +6259,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6129,6 +6268,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6152,7 +6294,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6161,10 +6303,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6184,7 +6329,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6193,6 +6338,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6216,7 +6364,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6225,10 +6373,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6248,7 +6399,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6257,10 +6408,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.ForwardProxyConfigType{}
+			v := &schema.ForwardProxyConfigType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6273,6 +6427,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6302,7 +6459,7 @@ func (m *NetworkConnectorStatus) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6330,7 +6487,7 @@ func (m *NetworkConnectorStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6340,6 +6497,9 @@ func (m *NetworkConnectorStatus) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6352,6 +6512,9 @@ func (m *NetworkConnectorStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6369,6 +6532,7 @@ func (m *NetworkConnectorStatus) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -6400,10 +6564,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -6420,159 +6582,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/network_connector/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/network_connector/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1543 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4b, 0x6f, 0xdb, 0xc6,
-	0x16, 0xd6, 0xe8, 0x61, 0xc9, 0x63, 0x5b, 0xa2, 0x68, 0x27, 0xa6, 0x65, 0x5b, 0x76, 0x1c, 0xe4,
-	0xc6, 0xd7, 0x51, 0xa4, 0x6b, 0xe5, 0x1d, 0xe0, 0x06, 0x90, 0x6c, 0xf9, 0xa1, 0x9b, 0x2b, 0x19,
-	0x94, 0x1c, 0xd7, 0xcd, 0x82, 0xa5, 0xc4, 0x91, 0xcc, 0x84, 0xe6, 0xb0, 0xe4, 0x48, 0x8e, 0x0b,
-	0x18, 0x28, 0xbc, 0x2d, 0x0a, 0x14, 0xfd, 0x0d, 0x5d, 0x14, 0xf9, 0x05, 0x45, 0xd5, 0x85, 0xd1,
-	0x6e, 0x82, 0xae, 0xbc, 0xcc, 0xb2, 0x51, 0x36, 0xc9, 0x2e, 0xcb, 0x2e, 0x0b, 0x0e, 0x29, 0x59,
-	0x94, 0xe2, 0x47, 0xd2, 0x6e, 0x02, 0x78, 0x47, 0xf1, 0x9c, 0xf3, 0x7d, 0xe7, 0x3b, 0x9c, 0x73,
-	0x66, 0x46, 0xf0, 0x5a, 0x1d, 0x19, 0x71, 0x19, 0x27, 0x8c, 0xf2, 0x16, 0xda, 0x16, 0x13, 0x2a,
-	0x22, 0x3b, 0x58, 0x7f, 0x2a, 0x94, 0xb1, 0xaa, 0xa2, 0x32, 0xc1, 0x7a, 0x82, 0xec, 0x6a, 0xc8,
-	0x88, 0x6b, 0x3a, 0x26, 0x98, 0x9d, 0xb2, 0x9c, 0xe3, 0x96, 0x73, 0xbc, 0xc7, 0x39, 0x72, 0xbd,
-	0x2a, 0x93, 0xad, 0x5a, 0x29, 0x5e, 0xc6, 0xdb, 0x89, 0x2a, 0xae, 0xe2, 0x04, 0x8d, 0x2b, 0xd5,
-	0x2a, 0xf4, 0x17, 0xfd, 0x41, 0x9f, 0x2c, 0xbc, 0xc8, 0x54, 0x15, 0xe3, 0xaa, 0x82, 0x8e, 0xbc,
-	0x88, 0xbc, 0x8d, 0x0c, 0x22, 0x6e, 0x6b, 0xb6, 0xc3, 0x68, 0x4f, 0x76, 0xb6, 0x61, 0xdc, 0x69,
-	0xc0, 0x1a, 0x91, 0xb1, 0x6a, 0xa7, 0x19, 0x99, 0x74, 0x1a, 0xb5, 0x3a, 0x11, 0x3a, 0x54, 0x44,
-	0xc6, 0x9c, 0xe6, 0x4e, 0xd3, 0x84, 0xd3, 0x54, 0x17, 0x15, 0x59, 0x12, 0x09, 0xb2, 0xad, 0xd3,
-	0x5d, 0x56, 0x19, 0xed, 0x08, 0x4e, 0xe6, 0xa9, 0x5e, 0x0f, 0xa3, 0x93, 0x60, 0xe6, 0x85, 0x07,
-	0x86, 0x0b, 0xaa, 0x48, 0x16, 0x5a, 0x25, 0x2b, 0xee, 0x6a, 0x88, 0x7d, 0x00, 0x43, 0x12, 0xaa,
-	0x88, 0x35, 0x85, 0x08, 0xd5, 0x1d, 0xc1, 0x50, 0x45, 0xc2, 0xb9, 0xa7, 0xc1, 0xec, 0x40, 0x72,
-	0x24, 0xee, 0xac, 0x78, 0x66, 0x5b, 0x23, 0xbb, 0x2b, 0x2e, 0x7e, 0xc8, 0x76, 0x5f, 0xde, 0x31,
-	0xc1, 0xd8, 0x15, 0x18, 0x92, 0x76, 0x55, 0x71, 0x5b, 0x2e, 0x0b, 0x3a, 0xae, 0x11, 0x59, 0xad,
-	0x72, 0x9e, 0xe3, 0xe3, 0xd3, 0xfe, 0x97, 0x7b, 0xe0, 0x4d, 0x03, 0x80, 0x15, 0x17, 0x1f, 0xb4,
-	0xe3, 0x78, 0x2b, 0x8c, 0xbd, 0x07, 0x07, 0x65, 0x95, 0x20, 0xbd, 0x22, 0x96, 0x91, 0x20, 0x6b,
-	0x9c, 0xef, 0x84, 0x34, 0x00, 0x3f, 0xd0, 0xf6, 0x5d, 0xd5, 0xd8, 0x39, 0xd8, 0x6f, 0x66, 0x2e,
-	0x68, 0x18, 0x2b, 0x5c, 0xdf, 0x34, 0x98, 0xed, 0x4f, 0x0f, 0xd8, 0x44, 0x7f, 0x36, 0x80, 0x6b,
-	0x05, 0xf0, 0x01, 0xd3, 0xbe, 0x86, 0xb1, 0xc2, 0x7e, 0x09, 0x87, 0xdb, 0xbe, 0x82, 0xa8, 0x28,
-	0xb8, 0x2c, 0x12, 0xac, 0x73, 0x7e, 0xca, 0x36, 0xd3, 0xc5, 0x46, 0xab, 0x18, 0xcf, 0x97, 0x9e,
-	0xa0, 0x32, 0xe1, 0x51, 0xc5, 0xac, 0x58, 0x7a, 0xfc, 0xf9, 0x5e, 0x58, 0x94, 0x24, 0x1d, 0x19,
-	0xc6, 0x51, 0x7c, 0x4b, 0x16, 0xe0, 0xc3, 0x2d, 0xa6, 0x54, 0xcb, 0x96, 0xbe, 0x04, 0x83, 0x76,
-	0x6d, 0x84, 0xf2, 0x16, 0x96, 0xcb, 0x88, 0x0d, 0x1d, 0x34, 0x80, 0xfb, 0xb0, 0x01, 0x40, 0xb3,
-	0x01, 0x3c, 0xc9, 0xd8, 0x8d, 0xf4, 0x34, 0x1c, 0xa0, 0x09, 0xd9, 0xf6, 0xf0, 0x41, 0x03, 0xf8,
-	0x0e, 0x1b, 0xc0, 0xdb, 0x6c, 0x00, 0xdf, 0xad, 0xd8, 0xed, 0xd8, 0x9d, 0xac, 0x37, 0x00, 0x18,
-	0x77, 0xd6, 0x1b, 0xf0, 0x32, 0xbe, 0x99, 0xdf, 0x00, 0x1c, 0x5d, 0x56, 0x70, 0x49, 0x54, 0x7a,
-	0x3f, 0x68, 0x01, 0xf6, 0x57, 0xa9, 0x49, 0xa8, 0xab, 0x1c, 0x38, 0xb3, 0x2a, 0xf6, 0xf9, 0x5e,
-	0xa8, 0x2e, 0xeb, 0xa4, 0x26, 0x2a, 0x82, 0xdd, 0x5c, 0x7c, 0xc0, 0x02, 0x7a, 0xa4, 0xb2, 0x05,
-	0x38, 0x40, 0x8b, 0x56, 0xc6, 0x6a, 0x45, 0xae, 0xda, 0x2b, 0x24, 0x19, 0x3f, 0xa5, 0x27, 0xe3,
-	0x3d, 0xd9, 0xf1, 0xd0, 0xb0, 0x5e, 0x55, 0xe4, 0xea, 0xcc, 0x57, 0x70, 0x7c, 0xd1, 0x5e, 0x02,
-	0xa8, 0x8e, 0x74, 0x03, 0xad, 0xe9, 0xf8, 0xd9, 0xee, 0x43, 0xd9, 0x20, 0x54, 0xc8, 0x63, 0xe8,
-	0x95, 0x74, 0xcd, 0xe0, 0xc0, 0xb4, 0xe7, 0x8c, 0x1a, 0x2e, 0x3f, 0xdf, 0x1b, 0x6c, 0x69, 0xd8,
-	0xc2, 0x06, 0xf9, 0xf9, 0xed, 0x81, 0xc7, 0xf7, 0x3d, 0x70, 0x33, 0xa0, 0xf5, 0x14, 0x00, 0x3c,
-	0x05, 0x9d, 0x79, 0xeb, 0x87, 0x41, 0xbb, 0x82, 0x1a, 0x2a, 0x53, 0xbe, 0x27, 0x30, 0xd8, 0xce,
-	0x9c, 0x36, 0x2d, 0xad, 0x5e, 0x30, 0x79, 0xeb, 0x54, 0x99, 0x39, 0xeb, 0x8d, 0x43, 0x69, 0x7a,
-	0xd0, 0xe4, 0xf4, 0xef, 0x03, 0x6f, 0xc4, 0xed, 0x72, 0xf3, 0x43, 0x65, 0xc7, 0x47, 0x92, 0xe0,
-	0x08, 0xae, 0x11, 0x43, 0x96, 0x50, 0xab, 0xd8, 0x16, 0xa3, 0x9b, 0x32, 0x5e, 0xea, 0x62, 0x7c,
-	0x64, 0x69, 0xb2, 0x69, 0x28, 0x7a, 0xc8, 0x44, 0x87, 0xfb, 0xc0, 0x1f, 0xf1, 0xb9, 0x80, 0xdb,
-	0xe3, 0xe5, 0x59, 0x1b, 0xaf, 0xc3, 0x89, 0x2d, 0xc3, 0x50, 0x17, 0x0b, 0xe7, 0xa1, 0xc5, 0x9c,
-	0xe8, 0x22, 0x70, 0x96, 0x71, 0xa2, 0x77, 0x29, 0x1c, 0x55, 0x92, 0x0f, 0x3a, 0x89, 0xd8, 0x2f,
-	0xe0, 0xb0, 0xac, 0xf6, 0x2a, 0xf1, 0x9e, 0x55, 0xc9, 0x90, 0x89, 0x1d, 0xd8, 0x07, 0xbe, 0x88,
-	0xc7, 0x05, 0xdc, 0x7c, 0xd8, 0x02, 0xeb, 0x94, 0x21, 0xc2, 0xa0, 0x93, 0x81, 0xf3, 0xfd, 0x6d,
-	0x15, 0x43, 0x0e, 0x1a, 0x56, 0x83, 0xc1, 0xa3, 0xa1, 0x40, 0xf3, 0xef, 0xa3, 0xf9, 0xff, 0xf7,
-	0x83, 0xbf, 0x7d, 0x21, 0x97, 0x2a, 0x9a, 0xdd, 0x4f, 0x73, 0x18, 0x30, 0x19, 0xfb, 0xf6, 0x81,
-	0x27, 0x02, 0x5c, 0xfc, 0x60, 0x6b, 0x30, 0x50, 0x51, 0xeb, 0x30, 0xd0, 0x9e, 0x58, 0x7e, 0x2a,
-	0x67, 0xb2, 0x8b, 0x6b, 0x55, 0xab, 0xdf, 0x2c, 0xd4, 0x4a, 0x2a, 0x22, 0xd6, 0xd8, 0xb1, 0x47,
-	0x4c, 0x5b, 0x44, 0xa0, 0xf5, 0xc4, 0x01, 0xde, 0xdf, 0x9a, 0x6e, 0x9b, 0x10, 0x6a, 0x66, 0x17,
-	0x59, 0x22, 0x02, 0x54, 0xc4, 0xfd, 0x0f, 0x16, 0x41, 0x1b, 0x91, 0xf6, 0x6b, 0xbf, 0xd6, 0x7a,
-	0x64, 0x9f, 0xc2, 0x0b, 0xed, 0x49, 0x6f, 0xf5, 0xab, 0x40, 0x8d, 0x5c, 0xff, 0x19, 0xbe, 0xc6,
-	0xd8, 0xb1, 0xad, 0xc9, 0x0f, 0x4b, 0xbd, 0x43, 0x80, 0xcd, 0xc2, 0xa1, 0x0a, 0xd6, 0x77, 0x44,
-	0x5d, 0xb2, 0x49, 0x20, 0x1d, 0x39, 0x57, 0xba, 0x48, 0x96, 0x2c, 0x1f, 0x1a, 0x63, 0x4d, 0x15,
-	0x9a, 0xf5, 0x60, 0xa5, 0xe3, 0xfd, 0x4c, 0xc3, 0x0f, 0x83, 0x0b, 0x3a, 0x12, 0x09, 0x6a, 0xf7,
-	0xfa, 0x63, 0x18, 0x32, 0x14, 0x59, 0x20, 0x58, 0x30, 0x14, 0x6c, 0xed, 0x7a, 0xe1, 0x8f, 0x9d,
-	0x69, 0x2b, 0xe6, 0xa7, 0x55, 0xe4, 0x22, 0x2e, 0x28, 0x98, 0x6e, 0x89, 0x69, 0x38, 0xd4, 0x01,
-	0x2e, 0xe9, 0x1c, 0x7b, 0xb6, 0x0d, 0x11, 0xb6, 0x50, 0x16, 0x75, 0xb6, 0x00, 0x19, 0x1b, 0xc3,
-	0x1e, 0xe6, 0x92, 0xce, 0x0d, 0x53, 0x98, 0xd9, 0xf7, 0x0e, 0x42, 0x6b, 0x96, 0x75, 0xe7, 0x35,
-	0x44, 0x11, 0x2d, 0xdb, 0xa2, 0xce, 0x6a, 0x90, 0x75, 0x82, 0x52, 0xe1, 0x23, 0x14, 0xf6, 0xee,
-	0xa9, 0xc2, 0x8f, 0xd9, 0x70, 0x3a, 0x15, 0x84, 0x3a, 0xf8, 0x68, 0x29, 0xa8, 0x0c, 0xec, 0x94,
-	0x71, 0xe1, 0x63, 0x64, 0xe0, 0x6e, 0x19, 0xb8, 0x5b, 0xc6, 0xc5, 0x7f, 0x54, 0x06, 0x76, 0xc8,
-	0xc8, 0xc2, 0x0b, 0x92, 0x6c, 0x88, 0x25, 0x05, 0x09, 0xce, 0x55, 0xc9, 0x9d, 0x78, 0x46, 0x19,
-	0xb6, 0x83, 0x3a, 0x57, 0x29, 0xbb, 0x09, 0x47, 0x90, 0xfa, 0x1e, 0xa8, 0xb1, 0x0f, 0x58, 0xe0,
-	0x2b, 0x80, 0x67, 0x2d, 0x90, 0x4e, 0xfb, 0xfd, 0x8d, 0xdf, 0x1f, 0x74, 0x6d, 0x6a, 0xbf, 0x36,
-	0x40, 0x1a, 0x5e, 0x81, 0x53, 0x76, 0x83, 0x4f, 0xb7, 0x25, 0x4f, 0x5b, 0x60, 0x35, 0x5d, 0x34,
-	0xcf, 0x90, 0xac, 0x7b, 0xfe, 0x36, 0x1c, 0x83, 0xc3, 0x14, 0xa6, 0xdb, 0x94, 0xbc, 0x91, 0x9e,
-	0x87, 0xcc, 0xd1, 0xd6, 0x68, 0x1f, 0x51, 0x26, 0x0f, 0x1a, 0x20, 0x7c, 0xd8, 0x00, 0x4c, 0xb3,
-	0x01, 0xc2, 0xf3, 0x77, 0x62, 0xf3, 0x77, 0x63, 0xf3, 0xf7, 0x62, 0xc9, 0xff, 0xc4, 0x92, 0xf3,
-	0xb1, 0x64, 0x32, 0xfd, 0x6f, 0x38, 0xe2, 0xd0, 0xd7, 0x79, 0xb2, 0xe1, 0x0e, 0x1b, 0x60, 0xd4,
-	0x3c, 0xd9, 0x24, 0x6f, 0xc6, 0x92, 0xb7, 0xb2, 0xde, 0x00, 0xc3, 0x84, 0xb3, 0xde, 0xc0, 0x28,
-	0xc3, 0x65, 0xbd, 0x81, 0x08, 0x33, 0x9e, 0xf5, 0x06, 0xc6, 0x99, 0x89, 0xac, 0x37, 0x30, 0xc1,
-	0x4c, 0xce, 0xfc, 0xe2, 0x87, 0x21, 0x1e, 0x69, 0x8a, 0x58, 0x3e, 0x6f, 0xdf, 0xf3, 0xf6, 0x3d,
-	0x6f, 0xdf, 0x4f, 0xac, 0x7d, 0x7f, 0xf2, 0xc3, 0x81, 0x65, 0x44, 0xce, 0x5b, 0xf7, 0xbc, 0x75,
-	0xcf, 0x5b, 0xf7, 0xd3, 0x6a, 0xdd, 0xdb, 0xf0, 0x62, 0xcf, 0xed, 0x86, 0x88, 0xa4, 0x66, 0xb0,
-	0x13, 0xb0, 0x5f, 0x56, 0x0d, 0x22, 0x2a, 0x0a, 0x92, 0xe8, 0x2d, 0xb9, 0x9f, 0x3f, 0x7a, 0x31,
-	0xf7, 0x03, 0x80, 0x23, 0xef, 0xbb, 0x12, 0xb3, 0x09, 0x78, 0x2d, 0x97, 0x29, 0x6e, 0xe4, 0xf9,
-	0xff, 0x09, 0x0b, 0xf9, 0x5c, 0x2e, 0xb3, 0x50, 0xcc, 0xf3, 0x42, 0x71, 0x73, 0x2d, 0x23, 0x2c,
-	0x66, 0x96, 0x52, 0xeb, 0x0f, 0x8b, 0xc2, 0x72, 0xaa, 0x98, 0xd9, 0x48, 0x6d, 0x0a, 0xe6, 0x2d,
-	0x8a, 0x71, 0x9d, 0x14, 0xb0, 0x99, 0x4b, 0xfd, 0x7f, 0x75, 0xc1, 0x19, 0x00, 0xd8, 0x39, 0xf8,
-	0xaf, 0xb3, 0x05, 0x30, 0xee, 0xb9, 0x1a, 0x9c, 0x38, 0xe9, 0xf2, 0xc6, 0xc6, 0xe0, 0x6c, 0x2f,
-	0x96, 0xe9, 0x21, 0x14, 0x56, 0xd7, 0x84, 0xf5, 0x42, 0x46, 0x58, 0xcd, 0x15, 0x33, 0xfc, 0x52,
-	0x6a, 0x21, 0xc3, 0xb8, 0xd8, 0xab, 0xf0, 0xf2, 0x29, 0xde, 0x6b, 0xf9, 0xfc, 0x43, 0x06, 0xcc,
-	0x7d, 0x0b, 0xe0, 0xd8, 0xb1, 0xf7, 0x2d, 0x36, 0x0a, 0x23, 0xbd, 0x30, 0xb9, 0xbc, 0xb0, 0xc6,
-	0xe7, 0x3f, 0xdb, 0x64, 0x5c, 0xec, 0x35, 0x78, 0xb5, 0xd7, 0xde, 0xd2, 0xc6, 0x67, 0x1e, 0x65,
-	0x78, 0x93, 0x89, 0x3a, 0x03, 0xf6, 0x32, 0x9c, 0xea, 0x75, 0x5e, 0xca, 0xf3, 0x1b, 0x29, 0x7e,
-	0xd1, 0x76, 0x72, 0xa7, 0xbf, 0x01, 0x87, 0xaf, 0xa2, 0xae, 0x97, 0xaf, 0xa2, 0xae, 0x77, 0xaf,
-	0xa2, 0xe0, 0xeb, 0x66, 0x14, 0xfc, 0xd8, 0x8c, 0x82, 0x17, 0xcd, 0x28, 0x38, 0x6c, 0x46, 0xc1,
-	0xcb, 0x66, 0x14, 0xfc, 0xd1, 0x8c, 0x82, 0x37, 0xcd, 0xa8, 0xeb, 0x5d, 0x33, 0x0a, 0xbe, 0x7b,
-	0x1d, 0x75, 0x1d, 0xbc, 0x8e, 0x82, 0xcf, 0xd7, 0xab, 0x58, 0x7b, 0x5a, 0x8d, 0xd7, 0xb1, 0x42,
-	0x90, 0xae, 0x8b, 0xf1, 0x9a, 0x91, 0xa0, 0x0f, 0x15, 0xac, 0x6f, 0x5f, 0xd7, 0x74, 0x5c, 0x97,
-	0x25, 0xa4, 0x5f, 0x6f, 0x99, 0x13, 0x5a, 0xa9, 0x8a, 0x13, 0xe8, 0x19, 0xb1, 0xff, 0x9d, 0x3c,
-	0xee, 0x2f, 0xdf, 0x52, 0x1f, 0xfd, 0xaf, 0xf2, 0xc6, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x57,
-	0x40, 0xe9, 0x70, 0x1c, 0x16, 0x00, 0x00,
-}

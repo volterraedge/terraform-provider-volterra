@@ -3,28 +3,31 @@
 
 package rate_limiter
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // RateLimiterMode
 //
@@ -48,12 +51,15 @@ var RateLimiterMode_name = map[int32]string{
 	0: "RATE_LIMITER_MODE_NOT_SHARED",
 	1: "RATE_LIMITER_MODE_SHARED",
 }
+
 var RateLimiterMode_value = map[string]int32{
 	"RATE_LIMITER_MODE_NOT_SHARED": 0,
 	"RATE_LIMITER_MODE_SHARED":     1,
 }
 
-func (RateLimiterMode) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (RateLimiterMode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{0}
+}
 
 // RateLimitPeriodUnit
 //
@@ -90,6 +96,7 @@ var RateLimitPeriodUnit_name = map[int32]string{
 	2: "HOUR",
 	3: "DAY",
 }
+
 var RateLimitPeriodUnit_value = map[string]int32{
 	"SECOND": 0,
 	"MINUTE": 1,
@@ -97,7 +104,9 @@ var RateLimitPeriodUnit_value = map[string]int32{
 	"DAY":    3,
 }
 
-func (RateLimitPeriodUnit) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (RateLimitPeriodUnit) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{1}
+}
 
 // RateLimitValue
 //
@@ -123,9 +132,33 @@ type RateLimitValue struct {
 	BurstMultiplier uint32 `protobuf:"varint,3,opt,name=burst_multiplier,json=burstMultiplier,proto3" json:"burst_multiplier,omitempty"`
 }
 
-func (m *RateLimitValue) Reset()                    { *m = RateLimitValue{} }
-func (*RateLimitValue) ProtoMessage()               {}
-func (*RateLimitValue) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *RateLimitValue) Reset()      { *m = RateLimitValue{} }
+func (*RateLimitValue) ProtoMessage() {}
+func (*RateLimitValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{0}
+}
+func (m *RateLimitValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimitValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RateLimitValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimitValue.Merge(m, src)
+}
+func (m *RateLimitValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimitValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimitValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimitValue proto.InternalMessageInfo
 
 func (m *RateLimitValue) GetUnit() RateLimitPeriodUnit {
 	if m != nil {
@@ -158,13 +191,13 @@ type GlobalSpecType struct {
 	// x-displayName: "Rate Limit Values"
 	// x-required
 	// A list of RateLimitValues that specifies the total number of allowed requests for each specified period.
-	Limits []*RateLimitValue `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
+	Limits []*RateLimitValue `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty"`
 	// user_identification
 	//
 	// x-displayName: "User Identification Policy"
 	// A reference to user_identification object.
 	// The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.
-	UserIdentification []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification" json:"user_identification,omitempty"`
+	UserIdentification []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
 	// mode
 	//
 	// x-displayName: "Rate Limiter Mode"
@@ -172,9 +205,33 @@ type GlobalSpecType struct {
 	Mode RateLimiterMode `protobuf:"varint,3,opt,name=mode,proto3,enum=ves.io.schema.rate_limiter.RateLimiterMode" json:"mode,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{1}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetLimits() []*RateLimitValue {
 	if m != nil {
@@ -183,7 +240,7 @@ func (m *GlobalSpecType) GetLimits() []*RateLimitValue {
 	return nil
 }
 
-func (m *GlobalSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetUserIdentification() []*schema.ObjectRefType {
 	if m != nil {
 		return m.UserIdentification
 	}
@@ -202,13 +259,37 @@ func (m *GlobalSpecType) GetMode() RateLimiterMode {
 // x-displayName: "Create Rate Limiter"
 // Create rate_limiter creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
-	UserIdentification []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification" json:"user_identification,omitempty"`
+	Limits             []*RateLimitValue       `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty"`
+	UserIdentification []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{2}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetLimits() []*RateLimitValue {
 	if m != nil {
@@ -217,7 +298,7 @@ func (m *CreateSpecType) GetLimits() []*RateLimitValue {
 	return nil
 }
 
-func (m *CreateSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetUserIdentification() []*schema.ObjectRefType {
 	if m != nil {
 		return m.UserIdentification
 	}
@@ -229,13 +310,37 @@ func (m *CreateSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType
 // x-displayName: "Replace Rate Limiter"
 // Replace rate_limiter replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
-	UserIdentification []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification" json:"user_identification,omitempty"`
+	Limits             []*RateLimitValue       `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty"`
+	UserIdentification []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{3}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 func (m *ReplaceSpecType) GetLimits() []*RateLimitValue {
 	if m != nil {
@@ -244,7 +349,7 @@ func (m *ReplaceSpecType) GetLimits() []*RateLimitValue {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetUserIdentification() []*schema.ObjectRefType {
 	if m != nil {
 		return m.UserIdentification
 	}
@@ -256,13 +361,37 @@ func (m *ReplaceSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefTyp
 // x-displayName: "Get Rate Limiter"
 // Get rate_limiter reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
-	UserIdentification []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification" json:"user_identification,omitempty"`
+	Limits             []*RateLimitValue       `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty"`
+	UserIdentification []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=user_identification,json=userIdentification,proto3" json:"user_identification,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{4}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetLimits() []*RateLimitValue {
 	if m != nil {
@@ -271,7 +400,7 @@ func (m *GetSpecType) GetLimits() []*RateLimitValue {
 	return nil
 }
 
-func (m *GetSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetUserIdentification() []*schema.ObjectRefType {
 	if m != nil {
 		return m.UserIdentification
 	}
@@ -279,6 +408,10 @@ func (m *GetSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimiterMode", RateLimiterMode_name, RateLimiterMode_value)
+	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimiterMode", RateLimiterMode_name, RateLimiterMode_value)
+	proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
+	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
 	proto.RegisterType((*RateLimitValue)(nil), "ves.io.schema.rate_limiter.RateLimitValue")
 	golang_proto.RegisterType((*RateLimitValue)(nil), "ves.io.schema.rate_limiter.RateLimitValue")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.rate_limiter.GlobalSpecType")
@@ -289,11 +422,63 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.rate_limiter.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.rate_limiter.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.rate_limiter.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimiterMode", RateLimiterMode_name, RateLimiterMode_value)
-	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimiterMode", RateLimiterMode_name, RateLimiterMode_value)
-	proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
-	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/rate_limiter/types.proto", fileDescriptor_79d4234d464550a7)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/rate_limiter/types.proto", fileDescriptor_79d4234d464550a7)
+}
+
+var fileDescriptor_79d4234d464550a7 = []byte{
+	// 691 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x55, 0x31, 0x6f, 0x1a, 0x49,
+	0x14, 0xde, 0x07, 0x1c, 0x27, 0x8d, 0xcf, 0xc0, 0xad, 0x9b, 0x3d, 0x0e, 0x8d, 0x10, 0xc5, 0xc9,
+	0xe2, 0xce, 0xbb, 0x32, 0x57, 0x9d, 0x0b, 0xeb, 0x8c, 0x41, 0x36, 0x92, 0x01, 0xdf, 0x1a, 0x9f,
+	0x94, 0x34, 0xab, 0x5d, 0x18, 0xf0, 0x24, 0x0b, 0xb3, 0x1a, 0x66, 0x49, 0x5c, 0x58, 0xf2, 0x2f,
+	0x88, 0xa2, 0xb4, 0xf9, 0x03, 0x51, 0xda, 0x48, 0x89, 0x14, 0x1a, 0x97, 0x51, 0x2a, 0x97, 0xc8,
+	0x55, 0xbc, 0x34, 0x4e, 0x67, 0xe5, 0x17, 0x44, 0x0c, 0x04, 0x19, 0x42, 0x24, 0xcb, 0x9d, 0xbb,
+	0x79, 0xfa, 0xbe, 0xf7, 0xbd, 0xef, 0x7d, 0xa0, 0xb7, 0xe8, 0x8f, 0x1e, 0xe9, 0xea, 0x94, 0x19,
+	0xdd, 0xfa, 0x11, 0x69, 0xdb, 0x06, 0xb7, 0x05, 0xb1, 0x5c, 0xda, 0xa6, 0x82, 0x70, 0x43, 0x1c,
+	0x7b, 0xa4, 0xab, 0x7b, 0x9c, 0x09, 0xa6, 0x26, 0xc7, 0x3c, 0x7d, 0xcc, 0xd3, 0x6f, 0xf2, 0x92,
+	0x6b, 0x2d, 0x2a, 0x8e, 0x7c, 0x47, 0xaf, 0xb3, 0xb6, 0xd1, 0x62, 0x2d, 0x66, 0xc8, 0x16, 0xc7,
+	0x6f, 0xca, 0x4a, 0x16, 0xf2, 0x35, 0x96, 0x4a, 0xfe, 0x3e, 0x3b, 0x92, 0x79, 0x82, 0xb2, 0xce,
+	0x64, 0x4e, 0xf2, 0xb7, 0x59, 0xf0, 0x86, 0x85, 0x64, 0x6a, 0x16, 0xea, 0xd9, 0x2e, 0x6d, 0xd8,
+	0x82, 0x4c, 0xd0, 0xf4, 0x1c, 0x4a, 0xc9, 0x13, 0x6b, 0x46, 0x3a, 0x33, 0x00, 0x14, 0x33, 0x6d,
+	0x41, 0xf6, 0x46, 0xb6, 0xff, 0xb7, 0x5d, 0x9f, 0xa8, 0x55, 0x14, 0xf1, 0x3b, 0x54, 0x68, 0x90,
+	0x86, 0xd5, 0x58, 0xce, 0xd0, 0x7f, 0xbc, 0xa4, 0x3e, 0xed, 0xdc, 0x27, 0x9c, 0xb2, 0xc6, 0x61,
+	0x87, 0x8a, 0x3c, 0xba, 0xe8, 0x43, 0xf4, 0xa0, 0xb8, 0x5d, 0xad, 0x14, 0x4c, 0x29, 0xa4, 0xe6,
+	0xd0, 0x2f, 0x82, 0x09, 0xdb, 0xb5, 0x3a, 0x7e, 0xdb, 0x21, 0x5c, 0x0b, 0xa5, 0x61, 0x75, 0x39,
+	0x1f, 0xbf, 0xe8, 0x03, 0xac, 0xbf, 0xff, 0x7c, 0x16, 0xfe, 0x29, 0x1b, 0xd6, 0x4e, 0xff, 0x35,
+	0x97, 0x24, 0xa9, 0x22, 0x39, 0xea, 0x3f, 0x28, 0xe1, 0xf8, 0xbc, 0x2b, 0xac, 0xb6, 0xef, 0x0a,
+	0xea, 0xb9, 0x94, 0x70, 0x2d, 0x2c, 0xfb, 0x62, 0xd3, 0xbe, 0x48, 0x36, 0xa4, 0x35, 0xcc, 0xb8,
+	0xe4, 0x95, 0xa7, 0xb4, 0x8d, 0xe8, 0x97, 0xcd, 0x70, 0xee, 0xaf, 0xf5, 0xcc, 0xcb, 0x10, 0x8a,
+	0xed, 0xb8, 0xcc, 0xb1, 0xdd, 0x03, 0x8f, 0xd4, 0x6b, 0xc7, 0x1e, 0x51, 0x2b, 0x28, 0x2a, 0xad,
+	0x77, 0x35, 0x48, 0x87, 0x57, 0x97, 0x72, 0xd9, 0x5b, 0x2d, 0x27, 0x63, 0xc9, 0x23, 0x69, 0xf5,
+	0x05, 0x84, 0x12, 0x60, 0x4e, 0x54, 0x54, 0x86, 0x56, 0xfc, 0x2e, 0xe1, 0x16, 0x6d, 0x90, 0x8e,
+	0xa0, 0x4d, 0x5a, 0xb7, 0x47, 0xd9, 0x6a, 0x21, 0x29, 0x9e, 0x9a, 0x13, 0xaf, 0x3a, 0x8f, 0x48,
+	0x5d, 0x98, 0xa4, 0x39, 0xb2, 0x92, 0x4f, 0xbf, 0x3e, 0x59, 0xd4, 0x7b, 0x63, 0x88, 0x3a, 0x82,
+	0x4b, 0x33, 0xa8, 0xba, 0x8b, 0x22, 0x6d, 0xd6, 0x20, 0x32, 0x8a, 0x58, 0xee, 0xcf, 0x5b, 0xd9,
+	0x27, 0xbc, 0xcc, 0x1a, 0x24, 0xff, 0xf3, 0xe0, 0x04, 0xae, 0xfa, 0x00, 0xa6, 0x54, 0xc8, 0xbc,
+	0x05, 0x14, 0xdb, 0xe6, 0xc4, 0x16, 0x64, 0x9a, 0x4e, 0xfe, 0xee, 0xe9, 0x4c, 0x13, 0x29, 0xdf,
+	0x39, 0x91, 0x45, 0xfb, 0x6e, 0xfc, 0xfa, 0x71, 0x73, 0xee, 0x37, 0xcc, 0xbc, 0x03, 0x14, 0x37,
+	0x89, 0xe7, 0xda, 0xf5, 0xfb, 0xe6, 0xfc, 0x0d, 0xa0, 0xa5, 0x1d, 0x22, 0xee, 0x97, 0xeb, 0xec,
+	0x7f, 0x28, 0x3e, 0xf7, 0x57, 0x52, 0xd3, 0x28, 0x65, 0x6e, 0xd5, 0x8a, 0xd6, 0x5e, 0xa9, 0x5c,
+	0xaa, 0x15, 0x4d, 0xab, 0x5c, 0x2d, 0x14, 0xad, 0x4a, 0xb5, 0x66, 0x1d, 0xec, 0x6e, 0x99, 0xc5,
+	0x42, 0x42, 0x51, 0x53, 0x48, 0xfb, 0x9e, 0x31, 0x41, 0x21, 0xbb, 0x87, 0x56, 0x16, 0x5c, 0x0e,
+	0x15, 0xa1, 0xc9, 0xdd, 0x48, 0x28, 0xa3, 0x77, 0xb9, 0x54, 0x39, 0xac, 0x15, 0x13, 0xa0, 0xc6,
+	0x50, 0x64, 0xb7, 0x7a, 0x68, 0x26, 0x42, 0xc9, 0xc8, 0x59, 0x1f, 0x40, 0x5d, 0x46, 0xe1, 0xc2,
+	0xd6, 0x83, 0x44, 0x78, 0x5c, 0xe6, 0x9f, 0xc1, 0xf9, 0x25, 0x56, 0x06, 0x97, 0x58, 0xb9, 0xbe,
+	0xc4, 0x70, 0x1a, 0x60, 0x78, 0x15, 0x60, 0xf8, 0x10, 0x60, 0x38, 0x0f, 0x30, 0x0c, 0x02, 0x0c,
+	0x9f, 0x02, 0x0c, 0x57, 0x01, 0x56, 0xae, 0x03, 0x0c, 0xcf, 0x87, 0x58, 0x39, 0x1b, 0x62, 0x38,
+	0x1f, 0x62, 0x65, 0x30, 0xc4, 0xca, 0xc3, 0xfd, 0x16, 0xf3, 0x1e, 0xb7, 0xf4, 0x1e, 0x73, 0x05,
+	0xe1, 0xdc, 0xd6, 0xfd, 0xae, 0x21, 0x1f, 0x4d, 0xc6, 0xdb, 0x6b, 0x1e, 0x67, 0x3d, 0xda, 0x20,
+	0x7c, 0xed, 0x1b, 0x6c, 0x78, 0x4e, 0x8b, 0x19, 0xe4, 0xa9, 0x98, 0x9c, 0xd4, 0x05, 0x9f, 0x08,
+	0x27, 0x2a, 0x4f, 0xeb, 0xdf, 0x5f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x5d, 0xc9, 0x1b, 0x55, 0x47,
+	0x06, 0x00, 0x00,
+}
+
 func (x RateLimiterMode) String() string {
 	s, ok := RateLimiterMode_name[int32(x)]
 	if ok {
@@ -573,7 +758,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *RateLimitValue) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -581,32 +766,37 @@ func (m *RateLimitValue) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RateLimitValue) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Unit != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Unit))
+	if m.BurstMultiplier != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BurstMultiplier))
+		i--
+		dAtA[i] = 0x18
 	}
 	if m.TotalNumber != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TotalNumber))
+		i--
+		dAtA[i] = 0x10
 	}
-	if m.BurstMultiplier != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BurstMultiplier))
+	if m.Unit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Unit))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -614,46 +804,55 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Limits) > 0 {
-		for _, msg := range m.Limits {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x18
 	}
 	if len(m.UserIdentification) > 0 {
-		for _, msg := range m.UserIdentification {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.UserIdentification) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UserIdentification[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.Mode != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+	if len(m.Limits) > 0 {
+		for iNdEx := len(m.Limits) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Limits[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -661,41 +860,50 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Limits) > 0 {
-		for _, msg := range m.Limits {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	if len(m.UserIdentification) > 0 {
-		for _, msg := range m.UserIdentification {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.UserIdentification) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UserIdentification[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Limits) > 0 {
+		for iNdEx := len(m.Limits) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Limits[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -703,41 +911,50 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Limits) > 0 {
-		for _, msg := range m.Limits {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	if len(m.UserIdentification) > 0 {
-		for _, msg := range m.UserIdentification {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.UserIdentification) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UserIdentification[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Limits) > 0 {
+		for iNdEx := len(m.Limits) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Limits[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -745,47 +962,61 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Limits) > 0 {
-		for _, msg := range m.Limits {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	if len(m.UserIdentification) > 0 {
-		for _, msg := range m.UserIdentification {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.UserIdentification) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UserIdentification[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Limits) > 0 {
+		for iNdEx := len(m.Limits) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Limits[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *RateLimitValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Unit != 0 {
@@ -801,6 +1032,9 @@ func (m *RateLimitValue) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Limits) > 0 {
@@ -822,6 +1056,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Limits) > 0 {
@@ -840,6 +1077,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Limits) > 0 {
@@ -858,6 +1098,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Limits) > 0 {
@@ -876,14 +1119,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -904,9 +1140,19 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForLimits := "[]*RateLimitValue{"
+	for _, f := range this.Limits {
+		repeatedStringForLimits += strings.Replace(f.String(), "RateLimitValue", "RateLimitValue", 1) + ","
+	}
+	repeatedStringForLimits += "}"
+	repeatedStringForUserIdentification := "[]*ObjectRefType{"
+	for _, f := range this.UserIdentification {
+		repeatedStringForUserIdentification += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForUserIdentification += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Limits:` + strings.Replace(fmt.Sprintf("%v", this.Limits), "RateLimitValue", "RateLimitValue", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Limits:` + repeatedStringForLimits + `,`,
+		`UserIdentification:` + repeatedStringForUserIdentification + `,`,
 		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
 		`}`,
 	}, "")
@@ -916,9 +1162,19 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForLimits := "[]*RateLimitValue{"
+	for _, f := range this.Limits {
+		repeatedStringForLimits += strings.Replace(f.String(), "RateLimitValue", "RateLimitValue", 1) + ","
+	}
+	repeatedStringForLimits += "}"
+	repeatedStringForUserIdentification := "[]*ObjectRefType{"
+	for _, f := range this.UserIdentification {
+		repeatedStringForUserIdentification += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForUserIdentification += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Limits:` + strings.Replace(fmt.Sprintf("%v", this.Limits), "RateLimitValue", "RateLimitValue", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Limits:` + repeatedStringForLimits + `,`,
+		`UserIdentification:` + repeatedStringForUserIdentification + `,`,
 		`}`,
 	}, "")
 	return s
@@ -927,9 +1183,19 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForLimits := "[]*RateLimitValue{"
+	for _, f := range this.Limits {
+		repeatedStringForLimits += strings.Replace(f.String(), "RateLimitValue", "RateLimitValue", 1) + ","
+	}
+	repeatedStringForLimits += "}"
+	repeatedStringForUserIdentification := "[]*ObjectRefType{"
+	for _, f := range this.UserIdentification {
+		repeatedStringForUserIdentification += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForUserIdentification += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Limits:` + strings.Replace(fmt.Sprintf("%v", this.Limits), "RateLimitValue", "RateLimitValue", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Limits:` + repeatedStringForLimits + `,`,
+		`UserIdentification:` + repeatedStringForUserIdentification + `,`,
 		`}`,
 	}, "")
 	return s
@@ -938,9 +1204,19 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForLimits := "[]*RateLimitValue{"
+	for _, f := range this.Limits {
+		repeatedStringForLimits += strings.Replace(f.String(), "RateLimitValue", "RateLimitValue", 1) + ","
+	}
+	repeatedStringForLimits += "}"
+	repeatedStringForUserIdentification := "[]*ObjectRefType{"
+	for _, f := range this.UserIdentification {
+		repeatedStringForUserIdentification += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForUserIdentification += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Limits:` + strings.Replace(fmt.Sprintf("%v", this.Limits), "RateLimitValue", "RateLimitValue", 1) + `,`,
-		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Limits:` + repeatedStringForLimits + `,`,
+		`UserIdentification:` + repeatedStringForUserIdentification + `,`,
 		`}`,
 	}, "")
 	return s
@@ -968,7 +1244,7 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -996,7 +1272,7 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Unit |= (RateLimitPeriodUnit(b) & 0x7F) << shift
+				m.Unit |= RateLimitPeriodUnit(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1015,7 +1291,7 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TotalNumber |= (uint32(b) & 0x7F) << shift
+				m.TotalNumber |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1034,7 +1310,7 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BurstMultiplier |= (uint32(b) & 0x7F) << shift
+				m.BurstMultiplier |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1046,6 +1322,9 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1075,7 +1354,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1103,7 +1382,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1112,6 +1391,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1134,7 +1416,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1143,10 +1425,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UserIdentification = append(m.UserIdentification, &ves_io_schema4.ObjectRefType{})
+			m.UserIdentification = append(m.UserIdentification, &schema.ObjectRefType{})
 			if err := m.UserIdentification[len(m.UserIdentification)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1165,7 +1450,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (RateLimiterMode(b) & 0x7F) << shift
+				m.Mode |= RateLimiterMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1177,6 +1462,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1206,7 +1494,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1234,7 +1522,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1243,6 +1531,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1265,7 +1556,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1274,10 +1565,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UserIdentification = append(m.UserIdentification, &ves_io_schema4.ObjectRefType{})
+			m.UserIdentification = append(m.UserIdentification, &schema.ObjectRefType{})
 			if err := m.UserIdentification[len(m.UserIdentification)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1289,6 +1583,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1318,7 +1615,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1346,7 +1643,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1355,6 +1652,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1377,7 +1677,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1386,10 +1686,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UserIdentification = append(m.UserIdentification, &ves_io_schema4.ObjectRefType{})
+			m.UserIdentification = append(m.UserIdentification, &schema.ObjectRefType{})
 			if err := m.UserIdentification[len(m.UserIdentification)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1401,6 +1704,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1430,7 +1736,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1458,7 +1764,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1467,6 +1773,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1489,7 +1798,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1498,10 +1807,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UserIdentification = append(m.UserIdentification, &ves_io_schema4.ObjectRefType{})
+			m.UserIdentification = append(m.UserIdentification, &schema.ObjectRefType{})
 			if err := m.UserIdentification[len(m.UserIdentification)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1513,6 +1825,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1530,6 +1845,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1561,10 +1877,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1581,103 +1895,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/rate_limiter/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/rate_limiter/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 681 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x55, 0x41, 0x6f, 0x12, 0x5d,
-	0x14, 0xe5, 0x02, 0x1f, 0x5f, 0xf2, 0x6a, 0x01, 0xa7, 0x9b, 0x11, 0xc9, 0x84, 0xb0, 0x30, 0x0d,
-	0xda, 0x99, 0x14, 0x57, 0x76, 0xd1, 0x58, 0x0a, 0x69, 0x49, 0x0a, 0xd4, 0x29, 0x35, 0xd1, 0xcd,
-	0x64, 0x06, 0x1e, 0xf4, 0xe9, 0x0c, 0x6f, 0xf2, 0xe6, 0x0d, 0xda, 0x45, 0x93, 0xae, 0x5c, 0x1b,
-	0xb7, 0xfe, 0x01, 0xe3, 0xd6, 0x44, 0x13, 0xd9, 0x74, 0x69, 0x5c, 0x75, 0x49, 0xba, 0xb2, 0xd3,
-	0x4d, 0xdd, 0x35, 0xfe, 0x02, 0xc3, 0x03, 0x49, 0x41, 0x4c, 0x9a, 0xee, 0xba, 0x7b, 0x37, 0xe7,
-	0xdc, 0x73, 0xcf, 0x3d, 0x90, 0x3b, 0xe8, 0x5e, 0x17, 0x7b, 0x2a, 0xa1, 0x9a, 0xd7, 0xd8, 0xc3,
-	0x8e, 0xa9, 0x31, 0x93, 0x63, 0xc3, 0x26, 0x0e, 0xe1, 0x98, 0x69, 0x7c, 0xdf, 0xc5, 0x9e, 0xea,
-	0x32, 0xca, 0xa9, 0x94, 0x1a, 0xf2, 0xd4, 0x21, 0x4f, 0xbd, 0xcc, 0x4b, 0x2d, 0xb5, 0x09, 0xdf,
-	0xf3, 0x2d, 0xb5, 0x41, 0x1d, 0xad, 0x4d, 0xdb, 0x54, 0x13, 0x2d, 0x96, 0xdf, 0x12, 0x95, 0x28,
-	0xc4, 0x6b, 0x28, 0x95, 0xba, 0x3b, 0x39, 0x92, 0xba, 0x9c, 0xd0, 0xce, 0x68, 0x4e, 0xea, 0xce,
-	0x24, 0x78, 0xc9, 0x42, 0x2a, 0x3d, 0x09, 0x75, 0x4d, 0x9b, 0x34, 0x4d, 0x8e, 0x47, 0x68, 0x66,
-	0x0a, 0x25, 0xf8, 0x95, 0x31, 0x21, 0x9d, 0xed, 0x03, 0x8a, 0xeb, 0x26, 0xc7, 0x5b, 0x03, 0xdb,
-	0x4f, 0x4d, 0xdb, 0xc7, 0x52, 0x0d, 0x45, 0xfd, 0x0e, 0xe1, 0x32, 0x64, 0x60, 0x31, 0x9e, 0xd7,
-	0xd4, 0x7f, 0x2f, 0xa9, 0x8e, 0x3b, 0xb7, 0x31, 0x23, 0xb4, 0xb9, 0xdb, 0x21, 0xbc, 0x80, 0x4e,
-	0x7a, 0x10, 0xdb, 0x29, 0xad, 0xd7, 0xaa, 0x45, 0x5d, 0x08, 0x49, 0x79, 0x74, 0x8b, 0x53, 0x6e,
-	0xda, 0x46, 0xc7, 0x77, 0x2c, 0xcc, 0xe4, 0x70, 0x06, 0x16, 0xe7, 0x0b, 0x89, 0x93, 0x1e, 0xc0,
-	0xf2, 0xd7, 0x9f, 0x47, 0x91, 0xff, 0x72, 0x11, 0xf9, 0xf0, 0xb1, 0x3e, 0x27, 0x48, 0x55, 0xc1,
-	0x91, 0x1e, 0xa1, 0xa4, 0xe5, 0x33, 0x8f, 0x1b, 0x8e, 0x6f, 0x73, 0xe2, 0xda, 0x04, 0x33, 0x39,
-	0x22, 0xfa, 0xe2, 0xe3, 0xbe, 0x68, 0x2e, 0x2c, 0x37, 0xf5, 0x84, 0xe0, 0x55, 0xc6, 0xb4, 0x95,
-	0xd8, 0xaf, 0xd5, 0x48, 0xfe, 0xc1, 0x72, 0xf6, 0x7d, 0x18, 0xc5, 0x37, 0x6c, 0x6a, 0x99, 0xf6,
-	0x8e, 0x8b, 0x1b, 0xf5, 0x7d, 0x17, 0x4b, 0x55, 0x14, 0x13, 0xd6, 0x3d, 0x19, 0x32, 0x91, 0xc5,
-	0xb9, 0x7c, 0xee, 0x4a, 0xcb, 0x89, 0x58, 0x0a, 0x48, 0x58, 0x7d, 0x07, 0xe1, 0x24, 0xe8, 0x23,
-	0x15, 0x89, 0xa2, 0x05, 0xdf, 0xc3, 0xcc, 0x20, 0x4d, 0xdc, 0xe1, 0xa4, 0x45, 0x1a, 0xe6, 0x20,
-	0x5b, 0x39, 0x2c, 0xc4, 0xd3, 0x53, 0xe2, 0x35, 0xeb, 0x05, 0x6e, 0x70, 0x1d, 0xb7, 0x06, 0x56,
-	0x0a, 0x99, 0x8f, 0x07, 0xb3, 0x7a, 0x2f, 0x0d, 0x91, 0x06, 0x70, 0x79, 0x02, 0x95, 0x36, 0x51,
-	0xd4, 0xa1, 0x4d, 0x2c, 0xa2, 0x88, 0xe7, 0xef, 0x5f, 0xc9, 0x3e, 0x66, 0x15, 0xda, 0xc4, 0x85,
-	0xff, 0xfb, 0x07, 0x70, 0xde, 0x03, 0xd0, 0x85, 0x42, 0xf6, 0x33, 0xa0, 0xf8, 0x3a, 0xc3, 0x26,
-	0xc7, 0xe3, 0x74, 0x0a, 0xd7, 0x4f, 0x67, 0x9c, 0x48, 0xe5, 0xda, 0x89, 0xcc, 0xda, 0x77, 0xe5,
-	0xf6, 0xf7, 0xd5, 0xa9, 0xdf, 0x30, 0xfb, 0x05, 0x50, 0x42, 0xc7, 0xae, 0x6d, 0x36, 0x6e, 0x9a,
-	0xf3, 0x4f, 0x80, 0xe6, 0x36, 0x30, 0xbf, 0x59, 0xae, 0x73, 0x4f, 0x50, 0x62, 0xea, 0xaf, 0x24,
-	0x65, 0x50, 0x5a, 0x5f, 0xab, 0x97, 0x8c, 0xad, 0x72, 0xa5, 0x5c, 0x2f, 0xe9, 0x46, 0xa5, 0x56,
-	0x2c, 0x19, 0xd5, 0x5a, 0xdd, 0xd8, 0xd9, 0x5c, 0xd3, 0x4b, 0xc5, 0x64, 0x48, 0x4a, 0x23, 0xf9,
-	0x6f, 0xc6, 0x08, 0x85, 0xdc, 0x16, 0x5a, 0x98, 0x71, 0x39, 0x24, 0x84, 0x46, 0x77, 0x23, 0x19,
-	0x1a, 0xbc, 0x2b, 0xe5, 0xea, 0x6e, 0xbd, 0x94, 0x04, 0x29, 0x8e, 0xa2, 0x9b, 0xb5, 0x5d, 0x3d,
-	0x19, 0x4e, 0x45, 0x8f, 0x7a, 0x00, 0xd2, 0x3c, 0x8a, 0x14, 0xd7, 0x9e, 0x25, 0x23, 0xc3, 0xb2,
-	0xf0, 0x06, 0x8e, 0x4f, 0x95, 0x50, 0xff, 0x54, 0x09, 0x5d, 0x9c, 0x2a, 0x70, 0x18, 0x28, 0xf0,
-	0x21, 0x50, 0xe0, 0x5b, 0xa0, 0xc0, 0x71, 0xa0, 0x40, 0x3f, 0x50, 0xe0, 0x47, 0xa0, 0xc0, 0x79,
-	0xa0, 0x84, 0x2e, 0x02, 0x05, 0xde, 0x9e, 0x29, 0xa1, 0xa3, 0x33, 0x05, 0x9e, 0x6f, 0xb7, 0xa9,
-	0xfb, 0xb2, 0xad, 0x76, 0xa9, 0xcd, 0x31, 0x63, 0xa6, 0xea, 0x7b, 0x9a, 0x78, 0xb4, 0x28, 0x73,
-	0x96, 0x5c, 0x46, 0xbb, 0xa4, 0x89, 0xd9, 0xd2, 0x1f, 0x58, 0x73, 0xad, 0x36, 0xd5, 0xf0, 0x6b,
-	0x3e, 0x3a, 0xa5, 0x33, 0x3e, 0x0d, 0x56, 0x4c, 0x9c, 0xd4, 0x87, 0xbf, 0x03, 0x00, 0x00, 0xff,
-	0xff, 0xd0, 0x61, 0x10, 0x84, 0x3f, 0x06, 0x00, 0x00,
-}

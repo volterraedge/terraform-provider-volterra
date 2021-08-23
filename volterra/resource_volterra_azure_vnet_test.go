@@ -123,7 +123,10 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
 		  nodes_per_az = 2
-
+		  coordinates {
+			latitude = 37.404989
+			longitude = -121.942300
+		  }
 		}
 		resource "volterra_tf_params_action" "%[1]s" {
 			site_name = "%[2]s"

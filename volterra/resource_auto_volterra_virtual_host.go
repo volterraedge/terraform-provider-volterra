@@ -1485,6 +1485,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.AddLocation =
 			v.(bool)
+
 	}
 
 	//advertise_policies
@@ -1583,11 +1584,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["cookie_refresh_interval"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.CookieRefreshInterval = uint32(v.(int))
+
 					}
 
 					secretChoiceTypeFound := false
@@ -1657,16 +1660,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -1687,11 +1693,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -1712,16 +1720,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1733,6 +1744,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1753,6 +1765,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -1826,16 +1839,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -1856,11 +1872,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -1881,16 +1899,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1902,6 +1923,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1922,6 +1944,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -1985,6 +2008,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["session_expiry"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.SessionExpiry = uint32(v.(int))
+
 					}
 
 				}
@@ -2087,11 +2111,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
+
 			}
 
 		}
@@ -2112,16 +2138,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
+
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.JsScriptDelay = uint32(v.(int))
+
 			}
 
 		}
@@ -2223,7 +2252,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			}
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-				corsPolicy.MaximumAge = w.(int32)
+				corsPolicy.MaximumAge = int32(w.(int))
 			}
 
 		}
@@ -2237,6 +2266,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.DisableDefaultErrorPages =
 			v.(bool)
+
 	}
 
 	//disable_dns_resolve
@@ -2244,6 +2274,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.DisableDnsResolve =
 			v.(bool)
+
 	}
 
 	//domains
@@ -2321,6 +2352,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.IdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	//max_request_header_size
@@ -2328,6 +2360,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.MaxRequestHeaderSize =
 			uint32(v.(int))
+
 	}
 
 	//proxy
@@ -2517,7 +2550,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
 				ls := make([]uint32, len(w.([]interface{})))
 				for i, v := range w.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				retryPolicy.RetriableStatusCodes = ls
@@ -2747,16 +2779,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -2777,11 +2812,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -2802,16 +2839,19 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2823,6 +2863,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -2843,6 +2884,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -3196,6 +3238,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.AddLocation =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("advertise_policies"); ok && !isIntfNil(v) {
@@ -3291,11 +3334,13 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["cookie_refresh_interval"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.CookieRefreshInterval = uint32(v.(int))
+
 					}
 
 					secretChoiceTypeFound := false
@@ -3365,16 +3410,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -3395,11 +3443,13 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -3420,16 +3470,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3441,6 +3494,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -3461,6 +3515,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -3534,16 +3589,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -3564,11 +3622,13 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -3589,16 +3649,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3610,6 +3673,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -3630,6 +3694,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -3693,6 +3758,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["session_expiry"]; ok && !isIntfNil(v) {
 
 						cookieParamsChoiceInt.CookieParams.SessionExpiry = uint32(v.(int))
+
 					}
 
 				}
@@ -3792,11 +3858,13 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
+
 			}
 
 		}
@@ -3817,16 +3885,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
+
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.JsScriptDelay = uint32(v.(int))
+
 			}
 
 		}
@@ -3926,7 +3997,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			}
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-				corsPolicy.MaximumAge = w.(int32)
+				corsPolicy.MaximumAge = int32(w.(int))
 			}
 
 		}
@@ -3937,12 +4008,14 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.DisableDefaultErrorPages =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("disable_dns_resolve"); ok && !isIntfNil(v) {
 
 		updateSpec.DisableDnsResolve =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {
@@ -4017,12 +4090,14 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.IdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("max_request_header_size"); ok && !isIntfNil(v) {
 
 		updateSpec.MaxRequestHeaderSize =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("proxy"); ok && !isIntfNil(v) {
@@ -4204,7 +4279,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
 				ls := make([]uint32, len(w.([]interface{})))
 				for i, v := range w.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				retryPolicy.RetriableStatusCodes = ls
@@ -4429,16 +4503,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -4459,11 +4536,13 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -4484,16 +4563,19 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4505,6 +4587,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -4525,6 +4608,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}

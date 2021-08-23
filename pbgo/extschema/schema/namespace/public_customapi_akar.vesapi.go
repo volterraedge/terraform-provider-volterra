@@ -1236,7 +1236,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceGetActiveAlertPoliciesResponse"
                         }
@@ -1293,9 +1293,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -1313,7 +1315,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceSetActiveAlertPoliciesResponse"
                         }
@@ -1370,9 +1372,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1403,7 +1407,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceGetActiveNetworkPoliciesResponse"
                         }
@@ -1460,9 +1464,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -1480,7 +1486,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceSetActiveNetworkPoliciesResponse"
                         }
@@ -1537,9 +1543,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1570,7 +1578,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceGetActiveServicePoliciesResponse"
                         }
@@ -1627,9 +1635,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -1647,7 +1657,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceSetActiveServicePoliciesResponse"
                         }
@@ -1704,9 +1714,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1737,7 +1749,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceGetFastACLsForInternetVIPsResponse"
                         }
@@ -1794,9 +1806,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -1814,7 +1828,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceSetFastACLsForInternetVIPsResponse"
                         }
@@ -1871,9 +1885,11 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

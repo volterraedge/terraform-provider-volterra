@@ -423,7 +423,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.RecoverPolicy",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/secret_policyRecoverResponse"
                         }
@@ -480,15 +480,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-required\nx-example: \"system\"\nNamespace of the secret policy",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-required\nx-example: \"site-secret-policy\"\nName of the secret policy",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -518,7 +522,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.DeletePolicy",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/secret_policySoftDeleteResponse"
                         }
@@ -575,15 +579,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-required\nx-example: \"system\"\nNamespace of the secret policy",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-required\nx-example: \"site-secret-policy\"\nName of the secret policy",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

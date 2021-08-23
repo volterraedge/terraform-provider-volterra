@@ -207,6 +207,7 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 
 		createSpec.Email =
 			v.(string)
+
 	}
 
 	//first_name
@@ -214,6 +215,7 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 
 		createSpec.FirstName =
 			v.(string)
+
 	}
 
 	//last_name
@@ -221,6 +223,7 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 
 		createSpec.LastName =
 			v.(string)
+
 	}
 
 	//locale
@@ -228,6 +231,7 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 
 		createSpec.Locale =
 			v.(string)
+
 	}
 
 	//type
@@ -371,18 +375,21 @@ func resourceVolterraUserUpdate(d *schema.ResourceData, meta interface{}) error 
 
 		updateSpec.FirstName =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("last_name"); ok && !isIntfNil(v) {
 
 		updateSpec.LastName =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("locale"); ok && !isIntfNil(v) {
 
 		updateSpec.Locale =
 			v.(string)
+
 	}
 
 	log.Printf("[DEBUG] Updating Volterra User obj with struct: %+v", updateReq)

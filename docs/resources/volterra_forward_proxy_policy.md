@@ -24,29 +24,7 @@ resource "volterra_forward_proxy_policy" "example" {
   any_proxy = true
 
   // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
-
-  rule_list {
-    rules {
-      action = "action"
-
-      // One of the arguments from this list "dst_asn_set dst_asn_list dst_label_selector all_destinations tls_list http_list dst_ip_prefix_set dst_prefix_list" must be set
-
-      dst_label_selector {
-        expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-      }
-      // One of the arguments from this list "port_matcher no_http_connect_port" must be set
-      no_http_connect_port = true
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-      rule_description = "Rule to block example.com"
-      rule_name        = "my-policy-allow-github.com"
-      // One of the arguments from this list "all_sources prefix_list inside_sources interface namespace label_selector ip_prefix_set" must be set
-      all_sources = true
-    }
-  }
+  allow_all = true
 }
 
 ```

@@ -1207,16 +1207,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["connection_limit"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.ConnectionLimit = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["max_requests"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.MaxRequests = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["pending_requests"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.PendingRequests = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
@@ -1228,6 +1231,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["retries"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.Retries = uint32(v.(int))
+
 					}
 
 				}
@@ -1298,26 +1302,31 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["base_ejection_time"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.BaseEjectionTime = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["consecutive_5xx"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.Consecutive_5Xx = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["consecutive_gateway_failure"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.ConsecutiveGatewayFailure = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["interval"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.Interval = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["max_ejection_percent"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.MaxEjectionPercent = uint32(v.(int))
+
 					}
 
 				}
@@ -1345,8 +1354,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 				advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
-				panicThresholdTypeInt.PanicThreshold =
-					uint32(v.(int))
+				panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
 
 			}
 
@@ -1472,8 +1480,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 		createSpec.HealthCheckPortChoice = healthCheckPortChoiceInt
 
-		healthCheckPortChoiceInt.HealthCheckPort =
-			uint32(v.(int))
+		healthCheckPortChoiceInt.HealthCheckPort = uint32(v.(int))
 
 	}
 
@@ -1575,6 +1582,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.ConsulService.ServiceName = v.(string)
+
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -1601,16 +1609,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -1631,16 +1642,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -1744,6 +1758,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.K8SService.ServiceName = v.(string)
+
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -1770,16 +1785,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -1800,16 +1818,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -1838,6 +1859,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.PrivateIp.Ip = v.(string)
+
 					}
 
 					networkChoiceTypeFound := false
@@ -1890,16 +1912,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -1920,16 +1945,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -1958,6 +1986,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PrivateName.DnsName = v.(string)
+
 					}
 
 					networkChoiceTypeFound := false
@@ -2010,16 +2039,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -2040,16 +2072,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -2078,6 +2113,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicIp.Ip = v.(string)
+
 					}
 
 				}
@@ -2098,6 +2134,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicName.DnsName = v.(string)
+
 					}
 
 				}
@@ -2118,6 +2155,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.VnPrivateIp.Ip = v.(string)
+
 					}
 
 					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
@@ -2160,6 +2198,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.VnPrivateName.DnsName = v.(string)
+
 					}
 
 					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
@@ -2205,6 +2244,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 		createSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	//tls_choice
@@ -2330,16 +2370,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -2360,11 +2403,13 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -2385,16 +2430,19 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2406,6 +2454,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -2426,6 +2475,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -2472,6 +2522,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+
 					}
 
 				}
@@ -2740,16 +2791,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["connection_limit"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.ConnectionLimit = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["max_requests"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.MaxRequests = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["pending_requests"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.PendingRequests = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
@@ -2761,6 +2815,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["retries"]; ok && !isIntfNil(v) {
 
 						circuitBreakerChoiceInt.CircuitBreaker.Retries = uint32(v.(int))
+
 					}
 
 				}
@@ -2831,26 +2886,31 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["base_ejection_time"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.BaseEjectionTime = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["consecutive_5xx"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.Consecutive_5Xx = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["consecutive_gateway_failure"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.ConsecutiveGatewayFailure = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["interval"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.Interval = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["max_ejection_percent"]; ok && !isIntfNil(v) {
 
 						outlierDetectionChoiceInt.OutlierDetection.MaxEjectionPercent = uint32(v.(int))
+
 					}
 
 				}
@@ -2878,8 +2938,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 				advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
-				panicThresholdTypeInt.PanicThreshold =
-					uint32(v.(int))
+				panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
 
 			}
 
@@ -3002,8 +3061,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 		updateSpec.HealthCheckPortChoice = healthCheckPortChoiceInt
 
-		healthCheckPortChoiceInt.HealthCheckPort =
-			uint32(v.(int))
+		healthCheckPortChoiceInt.HealthCheckPort = uint32(v.(int))
 
 	}
 
@@ -3102,6 +3160,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.ConsulService.ServiceName = v.(string)
+
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -3128,16 +3187,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -3158,16 +3220,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -3271,6 +3336,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.K8SService.ServiceName = v.(string)
+
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -3297,16 +3363,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -3327,16 +3396,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -3365,6 +3437,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.PrivateIp.Ip = v.(string)
+
 					}
 
 					networkChoiceTypeFound := false
@@ -3417,16 +3490,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -3447,16 +3523,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -3485,6 +3564,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PrivateName.DnsName = v.(string)
+
 					}
 
 					networkChoiceTypeFound := false
@@ -3537,16 +3617,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -3567,16 +3650,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceInt.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -3605,6 +3691,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicIp.Ip = v.(string)
+
 					}
 
 				}
@@ -3625,6 +3712,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicName.DnsName = v.(string)
+
 					}
 
 				}
@@ -3645,6 +3733,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 						choiceInt.VnPrivateIp.Ip = v.(string)
+
 					}
 
 					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
@@ -3687,6 +3776,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.VnPrivateName.DnsName = v.(string)
+
 					}
 
 					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
@@ -3731,6 +3821,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 		updateSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	tlsChoiceTypeFound := false
@@ -3854,16 +3945,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -3884,11 +3978,13 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -3909,16 +4005,19 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3930,6 +4029,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -3950,6 +4050,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -3996,6 +4097,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+
 					}
 
 				}

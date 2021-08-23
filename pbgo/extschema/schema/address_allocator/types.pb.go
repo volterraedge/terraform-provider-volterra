@@ -3,31 +3,32 @@
 
 package address_allocator
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Allocator Mode
 //
@@ -48,12 +49,15 @@ var AllocatorMode_name = map[int32]string{
 	0: "LOCAL",
 	1: "GLOBAL_PER_SITE_NODE",
 }
+
 var AllocatorMode_value = map[string]int32{
 	"LOCAL":                0,
 	"GLOBAL_PER_SITE_NODE": 1,
 }
 
-func (AllocatorMode) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (AllocatorMode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{0}
+}
 
 // Local Interface Address
 //
@@ -82,13 +86,14 @@ var LocalInterfaceAddressType_name = map[int32]string{
 	0: "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
 	1: "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END",
 }
+
 var LocalInterfaceAddressType_value = map[string]int32{
 	"LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN": 0,
 	"LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END":   1,
 }
 
 func (LocalInterfaceAddressType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_bf718da8d8994be9, []int{1}
 }
 
 // Address Allocation Scheme
@@ -128,9 +133,33 @@ type AllocationScheme struct {
 	LocalInterfaceAddressOffset uint32 `protobuf:"varint,3,opt,name=local_interface_address_offset,json=localInterfaceAddressOffset,proto3" json:"local_interface_address_offset,omitempty"`
 }
 
-func (m *AllocationScheme) Reset()                    { *m = AllocationScheme{} }
-func (*AllocationScheme) ProtoMessage()               {}
-func (*AllocationScheme) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *AllocationScheme) Reset()      { *m = AllocationScheme{} }
+func (*AllocationScheme) ProtoMessage() {}
+func (*AllocationScheme) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{0}
+}
+func (m *AllocationScheme) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AllocationScheme) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AllocationScheme) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllocationScheme.Merge(m, src)
+}
+func (m *AllocationScheme) XXX_Size() int {
+	return m.Size()
+}
+func (m *AllocationScheme) XXX_DiscardUnknown() {
+	xxx_messageInfo_AllocationScheme.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AllocationScheme proto.InternalMessageInfo
 
 func (m *AllocationScheme) GetAllocationUnit() uint32 {
 	if m != nil {
@@ -165,9 +194,33 @@ type NodePrefixType struct {
 	Prefix string `protobuf:"bytes,1,opt,name=prefix,proto3" json:"prefix,omitempty"`
 }
 
-func (m *NodePrefixType) Reset()                    { *m = NodePrefixType{} }
-func (*NodePrefixType) ProtoMessage()               {}
-func (*NodePrefixType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *NodePrefixType) Reset()      { *m = NodePrefixType{} }
+func (*NodePrefixType) ProtoMessage() {}
+func (*NodePrefixType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{1}
+}
+func (m *NodePrefixType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NodePrefixType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NodePrefixType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodePrefixType.Merge(m, src)
+}
+func (m *NodePrefixType) XXX_Size() int {
+	return m.Size()
+}
+func (m *NodePrefixType) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodePrefixType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodePrefixType proto.InternalMessageInfo
 
 func (m *NodePrefixType) GetPrefix() string {
 	if m != nil {
@@ -185,12 +238,36 @@ type NodePrefixMapType struct {
 	//
 	// x-displayName: "Node Prefix Map"
 	// Map of site:node to node prefix
-	Endpoints map[string]*NodePrefixType `protobuf:"bytes,2,rep,name=endpoints" json:"endpoints,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+	Endpoints map[string]*NodePrefixType `protobuf:"bytes,2,rep,name=endpoints,proto3" json:"endpoints,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *NodePrefixMapType) Reset()                    { *m = NodePrefixMapType{} }
-func (*NodePrefixMapType) ProtoMessage()               {}
-func (*NodePrefixMapType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *NodePrefixMapType) Reset()      { *m = NodePrefixMapType{} }
+func (*NodePrefixMapType) ProtoMessage() {}
+func (*NodePrefixMapType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{2}
+}
+func (m *NodePrefixMapType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NodePrefixMapType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NodePrefixMapType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodePrefixMapType.Merge(m, src)
+}
+func (m *NodePrefixMapType) XXX_Size() int {
+	return m.Size()
+}
+func (m *NodePrefixMapType) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodePrefixMapType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodePrefixMapType proto.InternalMessageInfo
 
 func (m *NodePrefixMapType) GetEndpoints() map[string]*NodePrefixType {
 	if m != nil {
@@ -218,23 +295,47 @@ type GlobalSpecType struct {
 	// x-example: "10.1.1.0/24"
 	// x-required
 	// Address pool from which the allocator carves out subnets or addresses to its clients.
-	AddressPool []string `protobuf:"bytes,4,rep,name=address_pool,json=addressPool" json:"address_pool,omitempty"`
+	AddressPool []string `protobuf:"bytes,4,rep,name=address_pool,json=addressPool,proto3" json:"address_pool,omitempty"`
 	// Address Allocation Scheme
 	//
 	// x-displayName: "Address Allocation Scheme"
 	// x-required
 	// Configures the scheme to be used to allocate addresses from the configured address pool.
-	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme" json:"address_allocation_scheme,omitempty"`
+	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme,proto3" json:"address_allocation_scheme,omitempty"`
 	// Internal allocation
 	//
 	// x-displayName: "Internal allocation"
 	// Per Site:Node Allocation in global per site node mode.
-	AllocationMap *NodePrefixMapType `protobuf:"bytes,5,opt,name=allocation_map,json=allocationMap" json:"allocation_map,omitempty"`
+	AllocationMap *NodePrefixMapType `protobuf:"bytes,5,opt,name=allocation_map,json=allocationMap,proto3" json:"allocation_map,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{3}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetMode() AllocatorMode {
 	if m != nil {
@@ -270,13 +371,37 @@ func (m *GlobalSpecType) GetAllocationMap() *NodePrefixMapType {
 // Create Address Allocator will create an address allocator object in 'system' namespace of the user
 type CreateSpecType struct {
 	Mode                    AllocatorMode     `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.address_allocator.AllocatorMode" json:"mode,omitempty"`
-	AddressPool             []string          `protobuf:"bytes,4,rep,name=address_pool,json=addressPool" json:"address_pool,omitempty"`
-	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme" json:"address_allocation_scheme,omitempty"`
+	AddressPool             []string          `protobuf:"bytes,4,rep,name=address_pool,json=addressPool,proto3" json:"address_pool,omitempty"`
+	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme,proto3" json:"address_allocation_scheme,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{4}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetMode() AllocatorMode {
 	if m != nil {
@@ -305,13 +430,37 @@ func (m *CreateSpecType) GetAddressAllocationScheme() *AllocationScheme {
 // Get Address Allocator will get address allocator object from system namespace
 type GetSpecType struct {
 	Mode                    AllocatorMode     `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.address_allocator.AllocatorMode" json:"mode,omitempty"`
-	AddressPool             []string          `protobuf:"bytes,4,rep,name=address_pool,json=addressPool" json:"address_pool,omitempty"`
-	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme" json:"address_allocation_scheme,omitempty"`
+	AddressPool             []string          `protobuf:"bytes,4,rep,name=address_pool,json=addressPool,proto3" json:"address_pool,omitempty"`
+	AddressAllocationScheme *AllocationScheme `protobuf:"bytes,3,opt,name=address_allocation_scheme,json=addressAllocationScheme,proto3" json:"address_allocation_scheme,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bf718da8d8994be9, []int{5}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetMode() AllocatorMode {
 	if m != nil {
@@ -335,23 +484,92 @@ func (m *GetSpecType) GetAddressAllocationScheme() *AllocationScheme {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.address_allocator.AllocatorMode", AllocatorMode_name, AllocatorMode_value)
+	golang_proto.RegisterEnum("ves.io.schema.address_allocator.AllocatorMode", AllocatorMode_name, AllocatorMode_value)
+	proto.RegisterEnum("ves.io.schema.address_allocator.LocalInterfaceAddressType", LocalInterfaceAddressType_name, LocalInterfaceAddressType_value)
+	golang_proto.RegisterEnum("ves.io.schema.address_allocator.LocalInterfaceAddressType", LocalInterfaceAddressType_name, LocalInterfaceAddressType_value)
 	proto.RegisterType((*AllocationScheme)(nil), "ves.io.schema.address_allocator.AllocationScheme")
 	golang_proto.RegisterType((*AllocationScheme)(nil), "ves.io.schema.address_allocator.AllocationScheme")
 	proto.RegisterType((*NodePrefixType)(nil), "ves.io.schema.address_allocator.NodePrefixType")
 	golang_proto.RegisterType((*NodePrefixType)(nil), "ves.io.schema.address_allocator.NodePrefixType")
 	proto.RegisterType((*NodePrefixMapType)(nil), "ves.io.schema.address_allocator.NodePrefixMapType")
 	golang_proto.RegisterType((*NodePrefixMapType)(nil), "ves.io.schema.address_allocator.NodePrefixMapType")
+	proto.RegisterMapType((map[string]*NodePrefixType)(nil), "ves.io.schema.address_allocator.NodePrefixMapType.EndpointsEntry")
+	golang_proto.RegisterMapType((map[string]*NodePrefixType)(nil), "ves.io.schema.address_allocator.NodePrefixMapType.EndpointsEntry")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.address_allocator.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.address_allocator.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.address_allocator.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.address_allocator.CreateSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.address_allocator.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.address_allocator.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.address_allocator.AllocatorMode", AllocatorMode_name, AllocatorMode_value)
-	golang_proto.RegisterEnum("ves.io.schema.address_allocator.AllocatorMode", AllocatorMode_name, AllocatorMode_value)
-	proto.RegisterEnum("ves.io.schema.address_allocator.LocalInterfaceAddressType", LocalInterfaceAddressType_name, LocalInterfaceAddressType_value)
-	golang_proto.RegisterEnum("ves.io.schema.address_allocator.LocalInterfaceAddressType", LocalInterfaceAddressType_name, LocalInterfaceAddressType_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/address_allocator/types.proto", fileDescriptor_bf718da8d8994be9)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/address_allocator/types.proto", fileDescriptor_bf718da8d8994be9)
+}
+
+var fileDescriptor_bf718da8d8994be9 = []byte{
+	// 873 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0x31, 0x6f, 0xdb, 0x46,
+	0x14, 0xd6, 0x23, 0x2d, 0x3b, 0x3a, 0xd9, 0x2a, 0x4d, 0x14, 0x08, 0xa5, 0xb8, 0x2c, 0xcb, 0x2e,
+	0x86, 0x5b, 0x93, 0x8d, 0xe2, 0x02, 0xad, 0x87, 0x02, 0xa2, 0x4d, 0x19, 0x2e, 0x64, 0xc9, 0xa0,
+	0xe4, 0xa5, 0x0b, 0x41, 0x49, 0x27, 0x85, 0x08, 0xc5, 0x23, 0xa8, 0x93, 0x1a, 0xa3, 0x08, 0xe0,
+	0x0e, 0xdd, 0x8b, 0x64, 0xcb, 0x2f, 0xe8, 0xd8, 0xb9, 0x59, 0x82, 0x4e, 0x45, 0x27, 0x8f, 0x1e,
+	0x6b, 0x79, 0x49, 0xb7, 0x4c, 0x45, 0xbb, 0x15, 0x3c, 0x52, 0x91, 0x69, 0x47, 0x70, 0x0d, 0x14,
+	0xe8, 0xd0, 0xed, 0x1d, 0xbf, 0xf7, 0xbe, 0xef, 0xbb, 0xf7, 0x1e, 0x45, 0xa1, 0x8f, 0xc6, 0x78,
+	0xa8, 0xb9, 0x44, 0x1f, 0x76, 0x1e, 0xe2, 0x81, 0xa3, 0x3b, 0xdd, 0x6e, 0x88, 0x87, 0x43, 0xdb,
+	0xf1, 0x3c, 0xd2, 0x71, 0x28, 0x09, 0x75, 0x7a, 0x1c, 0xe0, 0xa1, 0x16, 0x84, 0x84, 0x12, 0xf1,
+	0xfd, 0x38, 0x59, 0x8b, 0x93, 0xb5, 0x6b, 0xc9, 0xa5, 0xcd, 0xbe, 0x4b, 0x1f, 0x8e, 0xda, 0x5a,
+	0x87, 0x0c, 0xf4, 0x3e, 0xe9, 0x13, 0x9d, 0xd5, 0xb5, 0x47, 0x3d, 0x76, 0x62, 0x07, 0x16, 0xc5,
+	0x7c, 0xa5, 0xbb, 0x69, 0x71, 0x1f, 0xd3, 0x04, 0xb8, 0x97, 0x06, 0x48, 0x40, 0x5d, 0xe2, 0x27,
+	0x2e, 0x4a, 0xef, 0xa5, 0xc1, 0x60, 0x4c, 0xed, 0x4b, 0x26, 0x4b, 0xc5, 0x34, 0x7c, 0x19, 0x5a,
+	0x4b, 0x43, 0x63, 0xc7, 0x73, 0xbb, 0x0e, 0xc5, 0x09, 0xaa, 0x5c, 0x41, 0x5d, 0xfc, 0xb5, 0x9d,
+	0x52, 0x56, 0x9f, 0x71, 0x48, 0xa8, 0xc4, 0x97, 0x75, 0x89, 0xdf, 0x8c, 0xf2, 0xb0, 0x58, 0x46,
+	0xef, 0x38, 0x6f, 0x9e, 0xd9, 0x23, 0xdf, 0xa5, 0x12, 0x28, 0xb0, 0xbe, 0x62, 0xe4, 0x7e, 0xfa,
+	0xfd, 0x25, 0xbf, 0xb0, 0xc1, 0x49, 0x8a, 0x55, 0x98, 0x65, 0x1c, 0xf9, 0x2e, 0x15, 0xbf, 0x41,
+	0x6b, 0xd1, 0xd9, 0xb3, 0x5d, 0x9f, 0xe2, 0xb0, 0xe7, 0x74, 0xb0, 0x3d, 0x6d, 0x66, 0xe4, 0x57,
+	0xe2, 0x14, 0x58, 0x2f, 0x94, 0xb7, 0xb5, 0x1b, 0xfa, 0xad, 0xd5, 0x22, 0x92, 0xfd, 0x29, 0x47,
+	0x25, 0xc6, 0x5b, 0xc7, 0x01, 0xb6, 0x8a, 0xde, 0x3c, 0x48, 0xac, 0x23, 0x79, 0x9e, 0x38, 0xe9,
+	0xf5, 0x86, 0x98, 0x4a, 0xfc, 0x55, 0xff, 0xf7, 0xde, 0xca, 0xd6, 0x60, 0xd9, 0xea, 0x16, 0x2a,
+	0xd4, 0x49, 0x17, 0x1f, 0x86, 0xb8, 0xe7, 0x3e, 0x66, 0x0a, 0x2a, 0x5a, 0x0c, 0xd8, 0x89, 0x75,
+	0x22, 0x67, 0xa0, 0x88, 0x29, 0x1b, 0xf2, 0x7f, 0x02, 0x58, 0x09, 0xa2, 0x7e, 0xcb, 0xa1, 0xd5,
+	0x59, 0xd9, 0x81, 0x13, 0xb0, 0xca, 0x27, 0x28, 0x87, 0xfd, 0x6e, 0x40, 0x5c, 0x9f, 0x0e, 0x25,
+	0x4e, 0xe1, 0xd7, 0xf3, 0xe5, 0xca, 0x8d, 0x5d, 0xb8, 0x46, 0xa3, 0x99, 0x53, 0x0e, 0xd3, 0xa7,
+	0xe1, 0xb1, 0xb1, 0x16, 0xe9, 0x2f, 0x3f, 0x87, 0x9c, 0xba, 0x14, 0x66, 0x05, 0x90, 0x4e, 0xb8,
+	0xe8, 0xc1, 0xe2, 0x73, 0xe0, 0x85, 0x13, 0xb0, 0x66, 0x8a, 0xa5, 0x01, 0x2a, 0xa4, 0x4b, 0x45,
+	0x01, 0xf1, 0x8f, 0xf0, 0x71, 0x7c, 0x0f, 0x2b, 0x0a, 0x45, 0x13, 0x65, 0xc7, 0x8e, 0x37, 0x8a,
+	0x87, 0x94, 0x2f, 0xeb, 0xb7, 0xb0, 0xc7, 0x26, 0x13, 0x57, 0x6f, 0x73, 0x9f, 0x81, 0xfa, 0x23,
+	0x8f, 0x0a, 0x7b, 0x1e, 0x69, 0x3b, 0x5e, 0x33, 0xc0, 0x1d, 0xd6, 0x00, 0x03, 0x2d, 0x0c, 0x48,
+	0x17, 0x33, 0xc1, 0x42, 0x59, 0xbb, 0x91, 0xbc, 0x32, 0x8d, 0x0e, 0x48, 0x17, 0x5b, 0xac, 0x56,
+	0xac, 0xa2, 0xe5, 0x69, 0x62, 0x40, 0x88, 0x27, 0x2d, 0x28, 0xfc, 0x7a, 0xce, 0xf8, 0x30, 0xba,
+	0x33, 0x7a, 0x0a, 0x4b, 0x6a, 0x3c, 0x09, 0x36, 0x93, 0xa7, 0xc0, 0x09, 0xca, 0x34, 0xba, 0x03,
+	0x56, 0x3e, 0x29, 0x3c, 0x24, 0xc4, 0x13, 0x07, 0xa8, 0x78, 0x45, 0x30, 0xda, 0x70, 0x66, 0x05,
+	0xb3, 0x1d, 0xc9, 0x97, 0xef, 0xff, 0x53, 0x83, 0x6f, 0xde, 0x17, 0xeb, 0x6e, 0x92, 0x73, 0xed,
+	0x45, 0x6a, 0xa3, 0x4b, 0xaf, 0x89, 0x3d, 0x70, 0x02, 0x29, 0xcb, 0x34, 0xca, 0xb7, 0x5f, 0x00,
+	0x63, 0xe9, 0xec, 0x09, 0xbc, 0x7a, 0x01, 0x60, 0xad, 0xcc, 0x28, 0x0f, 0x9c, 0x60, 0xfb, 0xf3,
+	0x9f, 0x5f, 0xc0, 0xa7, 0x48, 0x41, 0xc5, 0x64, 0x85, 0x95, 0x99, 0x0b, 0x25, 0xb1, 0xc1, 0xdf,
+	0xff, 0xf8, 0x01, 0x5a, 0x45, 0xcb, 0xd3, 0x0c, 0xd6, 0x0a, 0xd8, 0xfa, 0x72, 0xe1, 0x0e, 0x27,
+	0xf0, 0xea, 0x5f, 0x80, 0x0a, 0x3b, 0x21, 0x76, 0x28, 0xfe, 0x57, 0x47, 0xf6, 0xc1, 0xdb, 0x46,
+	0xf6, 0x5f, 0x4e, 0x63, 0x7b, 0xf5, 0xd7, 0x2f, 0xae, 0xec, 0xa6, 0xfa, 0x07, 0xa0, 0xfc, 0x1e,
+	0xa6, 0xff, 0xbb, 0x8b, 0x6f, 0x6c, 0xa1, 0x95, 0x94, 0x77, 0x31, 0x87, 0xb2, 0xb5, 0xc6, 0x4e,
+	0xa5, 0x26, 0x64, 0x44, 0x09, 0xbd, 0xbb, 0x57, 0x6b, 0x18, 0x95, 0x9a, 0x7d, 0x68, 0x5a, 0x76,
+	0x73, 0xbf, 0x65, 0xda, 0xf5, 0xc6, 0xae, 0x29, 0xc0, 0xc6, 0x77, 0x80, 0x8a, 0x73, 0x7f, 0xa0,
+	0xc5, 0x2d, 0xf4, 0x09, 0xa3, 0xb0, 0xf7, 0xeb, 0x2d, 0xd3, 0xaa, 0x56, 0x76, 0x4c, 0xbb, 0xb2,
+	0xbb, 0x6b, 0x99, 0xcd, 0xa6, 0xdd, 0xa8, 0x56, 0x9b, 0x66, 0xcb, 0xae, 0x5a, 0x8d, 0x03, 0xbb,
+	0x79, 0x64, 0xd4, 0xcd, 0x96, 0x6d, 0x98, 0x7b, 0xfb, 0x75, 0x21, 0x23, 0x96, 0x91, 0x76, 0x8b,
+	0x2a, 0xb3, 0xbe, 0x2b, 0x80, 0xf1, 0x0c, 0x4e, 0xcf, 0xe5, 0xcc, 0xd9, 0xb9, 0x9c, 0x79, 0x7d,
+	0x2e, 0xc3, 0xc9, 0x44, 0x86, 0x1f, 0x26, 0x32, 0xfc, 0x32, 0x91, 0xe1, 0x74, 0x22, 0xc3, 0xd9,
+	0x44, 0x86, 0xdf, 0x26, 0x32, 0xbc, 0x9a, 0xc8, 0x99, 0xd7, 0x13, 0x19, 0xbe, 0xbf, 0x90, 0x33,
+	0x2f, 0x2f, 0x64, 0x38, 0xbd, 0x90, 0x33, 0x67, 0x17, 0x72, 0xe6, 0xab, 0xa3, 0x3e, 0x09, 0x1e,
+	0xf5, 0xb5, 0x31, 0xf1, 0x28, 0x0e, 0x43, 0x47, 0x1b, 0x0d, 0x75, 0x16, 0xf4, 0x48, 0x38, 0xd8,
+	0x0c, 0x42, 0x32, 0x76, 0xbb, 0x38, 0xdc, 0x9c, 0xc2, 0x7a, 0xd0, 0xee, 0x13, 0x1d, 0x3f, 0xa6,
+	0xc9, 0x57, 0x74, 0xde, 0xff, 0x8a, 0xf6, 0x22, 0xfb, 0xa4, 0x3e, 0xf8, 0x3b, 0x00, 0x00, 0xff,
+	0xff, 0x5e, 0x35, 0x37, 0x51, 0x81, 0x08, 0x00, 0x00,
+}
+
 func (x AllocatorMode) String() string {
 	s, ok := AllocatorMode_name[int32(x)]
 	if ok {
@@ -589,7 +807,7 @@ func (this *NodePrefixMapType) GoString() string {
 	for k, _ := range this.Endpoints {
 		keysForEndpoints = append(keysForEndpoints, k)
 	}
-	sortkeys.Strings(keysForEndpoints)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
 	mapStringForEndpoints := "map[string]*NodePrefixType{"
 	for _, k := range keysForEndpoints {
 		mapStringForEndpoints += fmt.Sprintf("%#v: %#v,", k, this.Endpoints[k])
@@ -657,7 +875,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *AllocationScheme) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -665,32 +883,37 @@ func (m *AllocationScheme) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AllocationScheme) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AllocationScheme) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AllocationUnit != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllocationUnit))
+	if m.LocalInterfaceAddressOffset != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LocalInterfaceAddressOffset))
+		i--
+		dAtA[i] = 0x18
 	}
 	if m.LocalInterfaceAddressType != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.LocalInterfaceAddressType))
+		i--
+		dAtA[i] = 0x10
 	}
-	if m.LocalInterfaceAddressOffset != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalInterfaceAddressOffset))
+	if m.AllocationUnit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AllocationUnit))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *NodePrefixType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -698,23 +921,29 @@ func (m *NodePrefixType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NodePrefixType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NodePrefixType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Prefix) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.Prefix)
+		copy(dAtA[i:], m.Prefix)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Prefix)))
-		i += copy(dAtA[i:], m.Prefix)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *NodePrefixMapType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -722,50 +951,53 @@ func (m *NodePrefixMapType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NodePrefixMapType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NodePrefixMapType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
 		keysForEndpoints := make([]string, 0, len(m.Endpoints))
-		for k, _ := range m.Endpoints {
+		for k := range m.Endpoints {
 			keysForEndpoints = append(keysForEndpoints, string(k))
 		}
-		sortkeys.Strings(keysForEndpoints)
-		for _, k := range keysForEndpoints {
-			dAtA[i] = 0x12
-			i++
-			v := m.Endpoints[string(k)]
-			msgSize := 0
+		github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
+		for iNdEx := len(keysForEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Endpoints[string(keysForEndpoints[iNdEx])]
+			baseI := i
 			if v != nil {
-				msgSize = v.Size()
-				msgSize += 1 + sovTypes(uint64(msgSize))
-			}
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + msgSize
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			if v != nil {
-				dAtA[i] = 0x12
-				i++
-				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
-				n1, err := v.MarshalTo(dAtA[i:])
-				if err != nil {
-					return 0, err
+				{
+					size, err := v.MarshalToSizedBuffer(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintTypes(dAtA, i, uint64(size))
 				}
-				i += n1
+				i--
+				dAtA[i] = 0x12
 			}
+			i -= len(keysForEndpoints[iNdEx])
+			copy(dAtA[i:], keysForEndpoints[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForEndpoints[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -773,57 +1005,60 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-	}
-	if m.AddressAllocationScheme != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AddressAllocationScheme.Size()))
-		n2, err := m.AddressAllocationScheme.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.AllocationMap != nil {
+		{
+			size, err := m.AllocationMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.AddressPool) > 0 {
-		for _, s := range m.AddressPool {
+		for iNdEx := len(m.AddressPool) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AddressPool[iNdEx])
+			copy(dAtA[i:], m.AddressPool[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AddressPool[iNdEx])))
+			i--
 			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+		}
+	}
+	if m.AddressAllocationScheme != nil {
+		{
+			size, err := m.AddressAllocationScheme.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
-	if m.AllocationMap != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllocationMap.Size()))
-		n3, err := m.AllocationMap.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -831,47 +1066,48 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+	if len(m.AddressPool) > 0 {
+		for iNdEx := len(m.AddressPool) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AddressPool[iNdEx])
+			copy(dAtA[i:], m.AddressPool[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AddressPool[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if m.AddressAllocationScheme != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AddressAllocationScheme.Size()))
-		n4, err := m.AddressAllocationScheme.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	if len(m.AddressPool) > 0 {
-		for _, s := range m.AddressPool {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+		{
+			size, err := m.AddressAllocationScheme.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -879,53 +1115,59 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+	if len(m.AddressPool) > 0 {
+		for iNdEx := len(m.AddressPool) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AddressPool[iNdEx])
+			copy(dAtA[i:], m.AddressPool[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AddressPool[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if m.AddressAllocationScheme != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AddressAllocationScheme.Size()))
-		n5, err := m.AddressAllocationScheme.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if len(m.AddressPool) > 0 {
-		for _, s := range m.AddressPool {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+		{
+			size, err := m.AddressAllocationScheme.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *AllocationScheme) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllocationUnit != 0 {
@@ -941,6 +1183,9 @@ func (m *AllocationScheme) Size() (n int) {
 }
 
 func (m *NodePrefixType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Prefix)
@@ -951,6 +1196,9 @@ func (m *NodePrefixType) Size() (n int) {
 }
 
 func (m *NodePrefixMapType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -970,6 +1218,9 @@ func (m *NodePrefixMapType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -993,6 +1244,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1012,6 +1266,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1031,14 +1288,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1073,7 +1323,7 @@ func (this *NodePrefixMapType) String() string {
 	for k, _ := range this.Endpoints {
 		keysForEndpoints = append(keysForEndpoints, k)
 	}
-	sortkeys.Strings(keysForEndpoints)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
 	mapStringForEndpoints := "map[string]*NodePrefixType{"
 	for _, k := range keysForEndpoints {
 		mapStringForEndpoints += fmt.Sprintf("%v: %v,", k, this.Endpoints[k])
@@ -1091,9 +1341,9 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`AddressAllocationScheme:` + strings.Replace(fmt.Sprintf("%v", this.AddressAllocationScheme), "AllocationScheme", "AllocationScheme", 1) + `,`,
+		`AddressAllocationScheme:` + strings.Replace(this.AddressAllocationScheme.String(), "AllocationScheme", "AllocationScheme", 1) + `,`,
 		`AddressPool:` + fmt.Sprintf("%v", this.AddressPool) + `,`,
-		`AllocationMap:` + strings.Replace(fmt.Sprintf("%v", this.AllocationMap), "NodePrefixMapType", "NodePrefixMapType", 1) + `,`,
+		`AllocationMap:` + strings.Replace(this.AllocationMap.String(), "NodePrefixMapType", "NodePrefixMapType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1104,7 +1354,7 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`AddressAllocationScheme:` + strings.Replace(fmt.Sprintf("%v", this.AddressAllocationScheme), "AllocationScheme", "AllocationScheme", 1) + `,`,
+		`AddressAllocationScheme:` + strings.Replace(this.AddressAllocationScheme.String(), "AllocationScheme", "AllocationScheme", 1) + `,`,
 		`AddressPool:` + fmt.Sprintf("%v", this.AddressPool) + `,`,
 		`}`,
 	}, "")
@@ -1116,7 +1366,7 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
-		`AddressAllocationScheme:` + strings.Replace(fmt.Sprintf("%v", this.AddressAllocationScheme), "AllocationScheme", "AllocationScheme", 1) + `,`,
+		`AddressAllocationScheme:` + strings.Replace(this.AddressAllocationScheme.String(), "AllocationScheme", "AllocationScheme", 1) + `,`,
 		`AddressPool:` + fmt.Sprintf("%v", this.AddressPool) + `,`,
 		`}`,
 	}, "")
@@ -1145,7 +1395,7 @@ func (m *AllocationScheme) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1173,7 +1423,7 @@ func (m *AllocationScheme) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AllocationUnit |= (uint32(b) & 0x7F) << shift
+				m.AllocationUnit |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1192,7 +1442,7 @@ func (m *AllocationScheme) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LocalInterfaceAddressType |= (LocalInterfaceAddressType(b) & 0x7F) << shift
+				m.LocalInterfaceAddressType |= LocalInterfaceAddressType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1211,7 +1461,7 @@ func (m *AllocationScheme) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LocalInterfaceAddressOffset |= (uint32(b) & 0x7F) << shift
+				m.LocalInterfaceAddressOffset |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1223,6 +1473,9 @@ func (m *AllocationScheme) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1252,7 +1505,7 @@ func (m *NodePrefixType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1280,7 +1533,7 @@ func (m *NodePrefixType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1290,6 +1543,9 @@ func (m *NodePrefixType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1302,6 +1558,9 @@ func (m *NodePrefixType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1331,7 +1590,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1359,7 +1618,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1368,6 +1627,9 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1388,7 +1650,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1405,7 +1667,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1415,6 +1677,9 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -1431,7 +1696,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						mapmsglen |= (int(b) & 0x7F) << shift
+						mapmsglen |= int(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1440,7 +1705,7 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postmsgIndex := iNdEx + mapmsglen
-					if mapmsglen < 0 {
+					if postmsgIndex < 0 {
 						return ErrInvalidLengthTypes
 					}
 					if postmsgIndex > l {
@@ -1477,6 +1742,9 @@ func (m *NodePrefixMapType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1504,7 +1772,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1532,7 +1800,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (AllocatorMode(b) & 0x7F) << shift
+				m.Mode |= AllocatorMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1551,7 +1819,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1560,6 +1828,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1584,7 +1855,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1594,6 +1865,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1613,7 +1887,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1622,6 +1896,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1639,6 +1916,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1668,7 +1948,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1696,7 +1976,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (AllocatorMode(b) & 0x7F) << shift
+				m.Mode |= AllocatorMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1715,7 +1995,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1724,6 +2004,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1748,7 +2031,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1758,6 +2041,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1770,6 +2056,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1799,7 +2088,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1827,7 +2116,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (AllocatorMode(b) & 0x7F) << shift
+				m.Mode |= AllocatorMode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1846,7 +2135,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1855,6 +2144,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1879,7 +2171,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1889,6 +2181,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1901,6 +2196,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1918,6 +2216,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1949,10 +2248,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1969,116 +2266,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/address_allocator/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/address_allocator/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 861 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0xbf, 0x6f, 0xe3, 0x54,
-	0x1c, 0xcf, 0xd7, 0x6e, 0xda, 0xcb, 0x4b, 0x1b, 0x5c, 0x0b, 0xe9, 0x9c, 0x5c, 0x31, 0xc6, 0x2c,
-	0x55, 0xa1, 0x36, 0x97, 0x2b, 0x12, 0x74, 0x40, 0x8a, 0x5b, 0xa7, 0x2a, 0x4a, 0x93, 0xca, 0x49,
-	0x17, 0x16, 0xcb, 0x49, 0x5e, 0x72, 0xd6, 0x39, 0x7e, 0x96, 0xf3, 0x12, 0xae, 0x42, 0x27, 0x95,
-	0x81, 0x89, 0x05, 0x1d, 0xdb, 0xfd, 0x05, 0x8c, 0xcc, 0xdc, 0x72, 0x62, 0x42, 0x4c, 0x37, 0x76,
-	0xa4, 0xb9, 0xe5, 0xd8, 0x6e, 0x42, 0xb0, 0x21, 0x3f, 0xdb, 0x97, 0xba, 0xbd, 0xaa, 0x74, 0x44,
-	0xb7, 0xbd, 0xe7, 0xcf, 0x8f, 0xef, 0x4f, 0xc7, 0x41, 0x1f, 0x4d, 0xf1, 0x58, 0x73, 0x89, 0x3e,
-	0xee, 0xdd, 0xc7, 0x23, 0x47, 0x77, 0xfa, 0xfd, 0x10, 0x8f, 0xc7, 0xb6, 0xe3, 0x79, 0xa4, 0xe7,
-	0x50, 0x12, 0xea, 0xf4, 0x38, 0xc0, 0x63, 0x2d, 0x08, 0x09, 0x25, 0xe2, 0xfb, 0x31, 0x59, 0x8b,
-	0xc9, 0xda, 0x25, 0x72, 0x65, 0x73, 0xe8, 0xd2, 0xfb, 0x93, 0xae, 0xd6, 0x23, 0x23, 0x7d, 0x48,
-	0x86, 0x44, 0x67, 0xba, 0xee, 0x64, 0xc0, 0x6e, 0xec, 0xc2, 0x4e, 0xb1, 0x5f, 0xe5, 0x76, 0x36,
-	0xb8, 0x8f, 0x69, 0x02, 0xdc, 0xc9, 0x02, 0x24, 0xa0, 0x2e, 0xf1, 0x93, 0x2c, 0x2a, 0xef, 0x65,
-	0xc1, 0x60, 0x4a, 0xed, 0x73, 0x49, 0x56, 0xca, 0x59, 0xf8, 0x3c, 0xb4, 0x96, 0x85, 0xa6, 0x8e,
-	0xe7, 0xf6, 0x1d, 0x8a, 0x13, 0x54, 0xb9, 0x80, 0xba, 0xf8, 0x6b, 0x3b, 0x13, 0x59, 0xfd, 0x91,
-	0x43, 0x42, 0x2d, 0x2e, 0xd6, 0x25, 0x7e, 0x3b, 0xe2, 0x61, 0xb1, 0x8a, 0xde, 0x71, 0x5e, 0x3f,
-	0xb3, 0x27, 0xbe, 0x4b, 0x25, 0x50, 0x60, 0x7d, 0xc5, 0x28, 0xfc, 0xf2, 0xe7, 0x33, 0x7e, 0x61,
-	0x83, 0x93, 0x14, 0xab, 0x34, 0x67, 0x1c, 0xf9, 0x2e, 0x15, 0xbf, 0x41, 0x6b, 0xd1, 0xdd, 0xb3,
-	0x5d, 0x9f, 0xe2, 0x70, 0xe0, 0xf4, 0xb0, 0x9d, 0x36, 0x33, 0xca, 0x57, 0xe2, 0x14, 0x58, 0x2f,
-	0x55, 0xb7, 0xb5, 0x6b, 0xfa, 0xad, 0x35, 0x22, 0x93, 0xfd, 0xd4, 0xa3, 0x16, 0xe3, 0x9d, 0xe3,
-	0x00, 0x5b, 0x65, 0xef, 0x2a, 0x48, 0x6c, 0x22, 0xf9, 0xaa, 0xe0, 0x64, 0x30, 0x18, 0x63, 0x2a,
-	0xf1, 0x17, 0xf3, 0xbf, 0xf3, 0x46, 0xb7, 0x16, 0x63, 0xab, 0x5b, 0xa8, 0xd4, 0x24, 0x7d, 0x7c,
-	0x18, 0xe2, 0x81, 0xfb, 0x90, 0x45, 0x50, 0xd1, 0x62, 0xc0, 0x6e, 0xac, 0x13, 0x05, 0x03, 0x45,
-	0x4e, 0xf9, 0x90, 0xff, 0x1b, 0xc0, 0x4a, 0x10, 0xf5, 0x5b, 0x0e, 0xad, 0xce, 0x65, 0x07, 0x4e,
-	0xc0, 0x94, 0x8f, 0x50, 0x01, 0xfb, 0xfd, 0x80, 0xb8, 0x3e, 0x1d, 0x4b, 0x9c, 0xc2, 0xaf, 0x17,
-	0xab, 0xb5, 0x6b, 0xbb, 0x70, 0xc9, 0x46, 0x33, 0x53, 0x0f, 0xd3, 0xa7, 0xe1, 0xb1, 0xb1, 0x16,
-	0xc5, 0x5f, 0x7e, 0x02, 0x05, 0x75, 0x29, 0xcc, 0x0b, 0x20, 0x9d, 0x70, 0xd1, 0x83, 0xc5, 0x27,
-	0xc0, 0x0b, 0x27, 0x60, 0xcd, 0x23, 0x56, 0x46, 0xa8, 0x94, 0x95, 0x8a, 0x02, 0xe2, 0x1f, 0xe0,
-	0xe3, 0xb8, 0x0e, 0x2b, 0x3a, 0x8a, 0x26, 0xca, 0x4f, 0x1d, 0x6f, 0x12, 0x0f, 0xa9, 0x58, 0xd5,
-	0x6f, 0x90, 0x1e, 0x9b, 0x4c, 0xac, 0xde, 0xe6, 0x3e, 0x03, 0xf5, 0x67, 0x1e, 0x95, 0xf6, 0x3c,
-	0xd2, 0x75, 0xbc, 0x76, 0x80, 0x7b, 0xac, 0x01, 0x06, 0x5a, 0x18, 0x91, 0x3e, 0x66, 0x01, 0x4b,
-	0x55, 0xed, 0x5a, 0xf3, 0x5a, 0x7a, 0x3a, 0x20, 0x7d, 0x6c, 0x31, 0xad, 0x38, 0x42, 0xe5, 0x0b,
-	0xc4, 0x68, 0x33, 0x99, 0x05, 0x66, 0xb3, 0x2d, 0x56, 0xef, 0xfe, 0x57, 0xe3, 0xd7, 0x7b, 0x6e,
-	0xdd, 0x4e, 0x38, 0x97, 0x5e, 0x80, 0x3a, 0x5a, 0x4e, 0xe5, 0x01, 0x21, 0x9e, 0xb4, 0xa0, 0xf0,
-	0xeb, 0x05, 0xe3, 0xc3, 0xa8, 0xc5, 0xe8, 0x31, 0x2c, 0xa9, 0xf1, 0xe0, 0xd9, 0x0a, 0x3c, 0x06,
-	0x4e, 0x50, 0xd2, 0xd3, 0x2d, 0xb0, 0x8a, 0x89, 0xf0, 0x90, 0x10, 0x4f, 0xec, 0xa2, 0x73, 0xaf,
-	0x89, 0x3d, 0x72, 0x02, 0x29, 0xcf, 0x72, 0xad, 0xde, 0x7c, 0x01, 0x8c, 0xa5, 0xd3, 0x47, 0xf0,
-	0xf2, 0x29, 0x80, 0xb5, 0x32, 0xb7, 0x3c, 0x70, 0x82, 0xed, 0xcf, 0x7f, 0x7d, 0x0a, 0x9f, 0x22,
-	0x05, 0x95, 0x93, 0x15, 0x56, 0xe6, 0xd5, 0x28, 0x49, 0x39, 0xfc, 0xdd, 0x8f, 0xef, 0xa1, 0x55,
-	0xb4, 0x9c, 0x32, 0x58, 0x6e, 0xb0, 0xf5, 0xe5, 0xc2, 0x2d, 0x4e, 0xe0, 0xd5, 0x7f, 0x00, 0x95,
-	0x76, 0x42, 0xec, 0x50, 0xfc, 0x7f, 0x1e, 0xd9, 0x07, 0x6f, 0x1a, 0x59, 0x66, 0x1a, 0xdb, 0xab,
-	0xbf, 0x7f, 0x71, 0x61, 0x37, 0xd5, 0xbf, 0x00, 0x15, 0xf7, 0x30, 0x7d, 0xeb, 0x0a, 0xdf, 0xd8,
-	0x42, 0x2b, 0x99, 0xdc, 0xc5, 0x02, 0xca, 0x37, 0x5a, 0x3b, 0xb5, 0x86, 0x90, 0x13, 0x25, 0xf4,
-	0xee, 0x5e, 0xa3, 0x65, 0xd4, 0x1a, 0xf6, 0xa1, 0x69, 0xd9, 0xed, 0xfd, 0x8e, 0x69, 0x37, 0x5b,
-	0xbb, 0xa6, 0x00, 0x1b, 0xdf, 0x01, 0x2a, 0x5f, 0xf9, 0x03, 0x2d, 0x6e, 0xa1, 0x4f, 0x98, 0x85,
-	0xbd, 0xdf, 0xec, 0x98, 0x56, 0xbd, 0xb6, 0x63, 0xda, 0xb5, 0xdd, 0x5d, 0xcb, 0x6c, 0xb7, 0xed,
-	0x56, 0xbd, 0xde, 0x36, 0x3b, 0x76, 0xdd, 0x6a, 0x1d, 0xd8, 0xed, 0x23, 0xa3, 0x69, 0x76, 0x6c,
-	0xc3, 0xdc, 0xdb, 0x6f, 0x0a, 0x39, 0xb1, 0x8a, 0xb4, 0x1b, 0xa8, 0xcc, 0xe6, 0xae, 0x00, 0xc6,
-	0xf7, 0xf0, 0xfc, 0x4c, 0xce, 0x9d, 0x9e, 0xc9, 0xb9, 0x57, 0x67, 0x32, 0x9c, 0xcc, 0x64, 0xf8,
-	0x69, 0x26, 0xc3, 0x6f, 0x33, 0x19, 0x9e, 0xcf, 0x64, 0x38, 0x9d, 0xc9, 0xf0, 0xc7, 0x4c, 0x86,
-	0x97, 0x33, 0x39, 0xf7, 0x6a, 0x26, 0xc3, 0x0f, 0x2f, 0xe4, 0xdc, 0xb3, 0x17, 0x32, 0x7c, 0x75,
-	0x34, 0x24, 0xc1, 0x83, 0xa1, 0x36, 0x25, 0x1e, 0xc5, 0x61, 0xe8, 0x68, 0x93, 0xb1, 0xce, 0x0e,
-	0x03, 0x12, 0x8e, 0x36, 0x83, 0x90, 0x4c, 0xdd, 0x3e, 0x0e, 0x37, 0x53, 0x58, 0x0f, 0xba, 0x43,
-	0xa2, 0xe3, 0x87, 0x34, 0xf9, 0x7a, 0x5e, 0xf5, 0x7f, 0xa2, 0xbb, 0xc8, 0x3e, 0xa5, 0xf7, 0xfe,
-	0x0d, 0x00, 0x00, 0xff, 0xff, 0xb4, 0x28, 0xf0, 0xd5, 0x79, 0x08, 0x00, 0x00,
-}

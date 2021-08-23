@@ -3,32 +3,33 @@
 
 package certified_hardware
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Hardware Device Types
 //
@@ -69,6 +70,7 @@ var HardwareDeviceType_name = map[int32]string{
 	5: "HARDWARE_DEVICE_EXTERNAL_ISCSI_STORTAGE",
 	6: "HARDWARE_DEVICE_NVIDIA_GPU",
 }
+
 var HardwareDeviceType_value = map[string]int32{
 	"HARDWARE_DEVICE_INVALID":                 0,
 	"HARDWARE_DEVICE_ETHERNET":                1,
@@ -79,7 +81,9 @@ var HardwareDeviceType_value = map[string]int32{
 	"HARDWARE_DEVICE_NVIDIA_GPU":              6,
 }
 
-func (HardwareDeviceType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (HardwareDeviceType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{0}
+}
 
 // Hardware Device Instance Use
 //
@@ -140,6 +144,7 @@ var HardwareDeviceInstanceUseType_name = map[int32]string{
 	10: "HARDWARE_NETWORK_DEVICE_USE_STORAGE",
 	11: "HARDWARE_NETWORK_DEVICE_USE_FALLBACK_MANAGEMENT",
 }
+
 var HardwareDeviceInstanceUseType_value = map[string]int32{
 	"HARDWARE_DEVICE_USE_REGULAR":                     0,
 	"HARDWARE_DEVICE_USE_INTERNAL":                    1,
@@ -156,7 +161,7 @@ var HardwareDeviceInstanceUseType_value = map[string]int32{
 }
 
 func (HardwareDeviceInstanceUseType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_30cf7db1740c5af8, []int{1}
 }
 
 // Certified Hardware Types
@@ -179,13 +184,16 @@ var HardwareType_name = map[int32]string{
 	1: "VOLTSTACK_COMBO",
 	2: "CLOUD_MARKET_PLACE",
 }
+
 var HardwareType_value = map[string]int32{
 	"VOLTMESH":           0,
 	"VOLTSTACK_COMBO":    1,
 	"CLOUD_MARKET_PLACE": 2,
 }
 
-func (HardwareType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (HardwareType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{2}
+}
 
 // Memory Page Size
 //
@@ -214,6 +222,7 @@ var MemPageSize_name = map[int32]string{
 	2: "HARDWARE_MEM_PAGE_SIZE_2MB",
 	3: "HARDWARE_MEM_PAGE_SIZE_1GB",
 }
+
 var MemPageSize_value = map[string]int32{
 	"HARDWARE_MEM_PAGE_SIZE_INVALID": 0,
 	"HARDWARE_MEM_PAGE_SIZE_4KB":     1,
@@ -221,7 +230,9 @@ var MemPageSize_value = map[string]int32{
 	"HARDWARE_MEM_PAGE_SIZE_1GB":     3,
 }
 
-func (MemPageSize) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (MemPageSize) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{3}
+}
 
 // Device Type
 //
@@ -260,12 +271,36 @@ type DeviceType struct {
 	//
 	// x-displayName: "Device List"
 	// In case of logical boot strap devices like LACP Link aggregation or RAID
-	DeviceList []string `protobuf:"bytes,6,rep,name=device_list,json=deviceList" json:"device_list,omitempty"`
+	DeviceList []string `protobuf:"bytes,6,rep,name=device_list,json=deviceList,proto3" json:"device_list,omitempty"`
 }
 
-func (m *DeviceType) Reset()                    { *m = DeviceType{} }
-func (*DeviceType) ProtoMessage()               {}
-func (*DeviceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *DeviceType) Reset()      { *m = DeviceType{} }
+func (*DeviceType) ProtoMessage() {}
+func (*DeviceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{0}
+}
+func (m *DeviceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DeviceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DeviceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeviceType.Merge(m, src)
+}
+func (m *DeviceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *DeviceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeviceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeviceType proto.InternalMessageInfo
 
 func (m *DeviceType) GetType() HardwareDeviceType {
 	if m != nil {
@@ -326,9 +361,33 @@ type HardwareVendorModel struct {
 	Model string `protobuf:"bytes,2,opt,name=model,proto3" json:"model,omitempty"`
 }
 
-func (m *HardwareVendorModel) Reset()                    { *m = HardwareVendorModel{} }
-func (*HardwareVendorModel) ProtoMessage()               {}
-func (*HardwareVendorModel) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *HardwareVendorModel) Reset()      { *m = HardwareVendorModel{} }
+func (*HardwareVendorModel) ProtoMessage() {}
+func (*HardwareVendorModel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{1}
+}
+func (m *HardwareVendorModel) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HardwareVendorModel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HardwareVendorModel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HardwareVendorModel.Merge(m, src)
+}
+func (m *HardwareVendorModel) XXX_Size() int {
+	return m.Size()
+}
+func (m *HardwareVendorModel) XXX_DiscardUnknown() {
+	xxx_messageInfo_HardwareVendorModel.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HardwareVendorModel proto.InternalMessageInfo
 
 func (m *HardwareVendorModel) GetVendor() string {
 	if m != nil {
@@ -354,13 +413,13 @@ type ImageType struct {
 	// x-displayName: "Name"
 	// x-example: "ami-0f99d090261d2acd5"
 	// Image name to use for this hardware
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` // Deprecated: Do not use.
 	// Provider
 	//
 	// x-displayName: "Provider"
 	// x-example: "Volterra"
 	// Image provider Volterra, Cloud provider like AWS or Azure
-	Provider string `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`
+	Provider string `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"` // Deprecated: Do not use.
 	// CloudProvider
 	//
 	// x-displayName: "Cloud Provider"
@@ -373,9 +432,33 @@ type ImageType struct {
 	CloudProvider isImageType_CloudProvider `protobuf_oneof:"cloud_provider"`
 }
 
-func (m *ImageType) Reset()                    { *m = ImageType{} }
-func (*ImageType) ProtoMessage()               {}
-func (*ImageType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ImageType) Reset()      { *m = ImageType{} }
+func (*ImageType) ProtoMessage() {}
+func (*ImageType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{2}
+}
+func (m *ImageType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ImageType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ImageType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageType.Merge(m, src)
+}
+func (m *ImageType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ImageType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImageType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImageType proto.InternalMessageInfo
 
 type isImageType_CloudProvider interface {
 	isImageType_CloudProvider()
@@ -385,13 +468,13 @@ type isImageType_CloudProvider interface {
 }
 
 type ImageType_Azure struct {
-	Azure *Azure `protobuf:"bytes,3,opt,name=azure,oneof"`
+	Azure *Azure `protobuf:"bytes,3,opt,name=azure,proto3,oneof" json:"azure,omitempty"`
 }
 type ImageType_Aws struct {
-	Aws *Aws `protobuf:"bytes,4,opt,name=aws,oneof"`
+	Aws *Aws `protobuf:"bytes,4,opt,name=aws,proto3,oneof" json:"aws,omitempty"`
 }
 type ImageType_Gcp struct {
-	Gcp *Gcp `protobuf:"bytes,5,opt,name=gcp,oneof"`
+	Gcp *Gcp `protobuf:"bytes,5,opt,name=gcp,proto3,oneof" json:"gcp,omitempty"`
 }
 
 func (*ImageType_Azure) isImageType_CloudProvider() {}
@@ -405,6 +488,7 @@ func (m *ImageType) GetCloudProvider() isImageType_CloudProvider {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *ImageType) GetName() string {
 	if m != nil {
 		return m.Name
@@ -412,6 +496,7 @@ func (m *ImageType) GetName() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *ImageType) GetProvider() string {
 	if m != nil {
 		return m.Provider
@@ -440,97 +525,13 @@ func (m *ImageType) GetGcp() *Gcp {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ImageType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ImageType_OneofMarshaler, _ImageType_OneofUnmarshaler, _ImageType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ImageType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ImageType_Azure)(nil),
 		(*ImageType_Aws)(nil),
 		(*ImageType_Gcp)(nil),
 	}
-}
-
-func _ImageType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ImageType)
-	// cloud_provider
-	switch x := m.CloudProvider.(type) {
-	case *ImageType_Azure:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Azure); err != nil {
-			return err
-		}
-	case *ImageType_Aws:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Aws); err != nil {
-			return err
-		}
-	case *ImageType_Gcp:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Gcp); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ImageType.CloudProvider has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ImageType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ImageType)
-	switch tag {
-	case 3: // cloud_provider.azure
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Azure)
-		err := b.DecodeMessage(msg)
-		m.CloudProvider = &ImageType_Azure{msg}
-		return true, err
-	case 4: // cloud_provider.aws
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Aws)
-		err := b.DecodeMessage(msg)
-		m.CloudProvider = &ImageType_Aws{msg}
-		return true, err
-	case 5: // cloud_provider.gcp
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Gcp)
-		err := b.DecodeMessage(msg)
-		m.CloudProvider = &ImageType_Gcp{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ImageType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ImageType)
-	// cloud_provider
-	switch x := m.CloudProvider.(type) {
-	case *ImageType_Azure:
-		s := proto.Size(x.Azure)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ImageType_Aws:
-		s := proto.Size(x.Aws)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ImageType_Gcp:
-		s := proto.Size(x.Gcp)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Azure
@@ -544,9 +545,33 @@ type Azure struct {
 	Image isAzure_Image `protobuf_oneof:"image"`
 }
 
-func (m *Azure) Reset()                    { *m = Azure{} }
-func (*Azure) ProtoMessage()               {}
-func (*Azure) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *Azure) Reset()      { *m = Azure{} }
+func (*Azure) ProtoMessage() {}
+func (*Azure) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{3}
+}
+func (m *Azure) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Azure) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Azure) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Azure.Merge(m, src)
+}
+func (m *Azure) XXX_Size() int {
+	return m.Size()
+}
+func (m *Azure) XXX_DiscardUnknown() {
+	xxx_messageInfo_Azure.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Azure proto.InternalMessageInfo
 
 type isAzure_Image interface {
 	isAzure_Image()
@@ -556,10 +581,10 @@ type isAzure_Image interface {
 }
 
 type Azure_Marketplace struct {
-	Marketplace *Marketplace `protobuf:"bytes,1,opt,name=marketplace,oneof"`
+	Marketplace *Marketplace `protobuf:"bytes,1,opt,name=marketplace,proto3,oneof" json:"marketplace,omitempty"`
 }
 type Azure_ImageId struct {
-	ImageId *AzureImage `protobuf:"bytes,2,opt,name=image_id,json=imageId,oneof"`
+	ImageId *AzureImage `protobuf:"bytes,2,opt,name=image_id,json=imageId,proto3,oneof" json:"image_id,omitempty"`
 }
 
 func (*Azure_Marketplace) isAzure_Image() {}
@@ -586,78 +611,12 @@ func (m *Azure) GetImageId() *AzureImage {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Azure) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Azure_OneofMarshaler, _Azure_OneofUnmarshaler, _Azure_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Azure) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Azure_Marketplace)(nil),
 		(*Azure_ImageId)(nil),
 	}
-}
-
-func _Azure_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Azure)
-	// image
-	switch x := m.Image.(type) {
-	case *Azure_Marketplace:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Marketplace); err != nil {
-			return err
-		}
-	case *Azure_ImageId:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ImageId); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Azure.Image has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Azure_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Azure)
-	switch tag {
-	case 1: // image.marketplace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Marketplace)
-		err := b.DecodeMessage(msg)
-		m.Image = &Azure_Marketplace{msg}
-		return true, err
-	case 2: // image.image_id
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzureImage)
-		err := b.DecodeMessage(msg)
-		m.Image = &Azure_ImageId{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Azure_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Azure)
-	// image
-	switch x := m.Image.(type) {
-	case *Azure_Marketplace:
-		s := proto.Size(x.Marketplace)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Azure_ImageId:
-		s := proto.Size(x.ImageId)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type AzureImage struct {
@@ -668,9 +627,33 @@ type AzureImage struct {
 	ImageId string `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
 }
 
-func (m *AzureImage) Reset()                    { *m = AzureImage{} }
-func (*AzureImage) ProtoMessage()               {}
-func (*AzureImage) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *AzureImage) Reset()      { *m = AzureImage{} }
+func (*AzureImage) ProtoMessage() {}
+func (*AzureImage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{4}
+}
+func (m *AzureImage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureImage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureImage.Merge(m, src)
+}
+func (m *AzureImage) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureImage) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureImage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureImage proto.InternalMessageInfo
 
 func (m *AzureImage) GetImageId() string {
 	if m != nil {
@@ -711,9 +694,33 @@ type Marketplace struct {
 	Publisher string `protobuf:"bytes,5,opt,name=publisher,proto3" json:"publisher,omitempty"`
 }
 
-func (m *Marketplace) Reset()                    { *m = Marketplace{} }
-func (*Marketplace) ProtoMessage()               {}
-func (*Marketplace) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *Marketplace) Reset()      { *m = Marketplace{} }
+func (*Marketplace) ProtoMessage() {}
+func (*Marketplace) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{5}
+}
+func (m *Marketplace) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Marketplace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Marketplace) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Marketplace.Merge(m, src)
+}
+func (m *Marketplace) XXX_Size() int {
+	return m.Size()
+}
+func (m *Marketplace) XXX_DiscardUnknown() {
+	xxx_messageInfo_Marketplace.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Marketplace proto.InternalMessageInfo
 
 func (m *Marketplace) GetOffer() string {
 	if m != nil {
@@ -760,9 +767,33 @@ type Aws struct {
 	Image isAws_Image `protobuf_oneof:"image"`
 }
 
-func (m *Aws) Reset()                    { *m = Aws{} }
-func (*Aws) ProtoMessage()               {}
-func (*Aws) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *Aws) Reset()      { *m = Aws{} }
+func (*Aws) ProtoMessage() {}
+func (*Aws) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{6}
+}
+func (m *Aws) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Aws) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Aws) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Aws.Merge(m, src)
+}
+func (m *Aws) XXX_Size() int {
+	return m.Size()
+}
+func (m *Aws) XXX_DiscardUnknown() {
+	xxx_messageInfo_Aws.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Aws proto.InternalMessageInfo
 
 type isAws_Image interface {
 	isAws_Image()
@@ -772,7 +803,7 @@ type isAws_Image interface {
 }
 
 type Aws_ImageId struct {
-	ImageId *AwsImage `protobuf:"bytes,1,opt,name=image_id,json=imageId,oneof"`
+	ImageId *AwsImage `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3,oneof" json:"image_id,omitempty"`
 }
 
 func (*Aws_ImageId) isAws_Image() {}
@@ -791,59 +822,11 @@ func (m *Aws) GetImageId() *AwsImage {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Aws) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Aws_OneofMarshaler, _Aws_OneofUnmarshaler, _Aws_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Aws) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Aws_ImageId)(nil),
 	}
-}
-
-func _Aws_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Aws)
-	// image
-	switch x := m.Image.(type) {
-	case *Aws_ImageId:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ImageId); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Aws.Image has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Aws_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Aws)
-	switch tag {
-	case 1: // image.image_id
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AwsImage)
-		err := b.DecodeMessage(msg)
-		m.Image = &Aws_ImageId{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Aws_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Aws)
-	// image
-	switch x := m.Image.(type) {
-	case *Aws_ImageId:
-		s := proto.Size(x.ImageId)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type AwsImage struct {
@@ -859,9 +842,33 @@ type AwsImage struct {
 	Region string `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
 }
 
-func (m *AwsImage) Reset()                    { *m = AwsImage{} }
-func (*AwsImage) ProtoMessage()               {}
-func (*AwsImage) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *AwsImage) Reset()      { *m = AwsImage{} }
+func (*AwsImage) ProtoMessage() {}
+func (*AwsImage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{7}
+}
+func (m *AwsImage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AwsImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AwsImage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AwsImage.Merge(m, src)
+}
+func (m *AwsImage) XXX_Size() int {
+	return m.Size()
+}
+func (m *AwsImage) XXX_DiscardUnknown() {
+	xxx_messageInfo_AwsImage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AwsImage proto.InternalMessageInfo
 
 func (m *AwsImage) GetImageId() string {
 	if m != nil {
@@ -887,9 +894,33 @@ type Gcp struct {
 	Image isGcp_Image `protobuf_oneof:"image"`
 }
 
-func (m *Gcp) Reset()                    { *m = Gcp{} }
-func (*Gcp) ProtoMessage()               {}
-func (*Gcp) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *Gcp) Reset()      { *m = Gcp{} }
+func (*Gcp) ProtoMessage() {}
+func (*Gcp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{8}
+}
+func (m *Gcp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Gcp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Gcp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Gcp.Merge(m, src)
+}
+func (m *Gcp) XXX_Size() int {
+	return m.Size()
+}
+func (m *Gcp) XXX_DiscardUnknown() {
+	xxx_messageInfo_Gcp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Gcp proto.InternalMessageInfo
 
 type isGcp_Image interface {
 	isGcp_Image()
@@ -899,7 +930,7 @@ type isGcp_Image interface {
 }
 
 type Gcp_ImageId struct {
-	ImageId *GcpImage `protobuf:"bytes,1,opt,name=image_id,json=imageId,oneof"`
+	ImageId *GcpImage `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3,oneof" json:"image_id,omitempty"`
 }
 
 func (*Gcp_ImageId) isGcp_Image() {}
@@ -918,59 +949,11 @@ func (m *Gcp) GetImageId() *GcpImage {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Gcp) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Gcp_OneofMarshaler, _Gcp_OneofUnmarshaler, _Gcp_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Gcp) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Gcp_ImageId)(nil),
 	}
-}
-
-func _Gcp_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Gcp)
-	// image
-	switch x := m.Image.(type) {
-	case *Gcp_ImageId:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ImageId); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Gcp.Image has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Gcp_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Gcp)
-	switch tag {
-	case 1: // image.image_id
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GcpImage)
-		err := b.DecodeMessage(msg)
-		m.Image = &Gcp_ImageId{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Gcp_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Gcp)
-	// image
-	switch x := m.Image.(type) {
-	case *Gcp_ImageId:
-		s := proto.Size(x.ImageId)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type GcpImage struct {
@@ -981,9 +964,33 @@ type GcpImage struct {
 	ImageId string `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
 }
 
-func (m *GcpImage) Reset()                    { *m = GcpImage{} }
-func (*GcpImage) ProtoMessage()               {}
-func (*GcpImage) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *GcpImage) Reset()      { *m = GcpImage{} }
+func (*GcpImage) ProtoMessage() {}
+func (*GcpImage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{9}
+}
+func (m *GcpImage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GcpImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GcpImage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcpImage.Merge(m, src)
+}
+func (m *GcpImage) XXX_Size() int {
+	return m.Size()
+}
+func (m *GcpImage) XXX_DiscardUnknown() {
+	xxx_messageInfo_GcpImage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GcpImage proto.InternalMessageInfo
 
 func (m *GcpImage) GetImageId() string {
 	if m != nil {
@@ -1011,9 +1018,33 @@ type NumaMem struct {
 	Node int32 `protobuf:"varint,2,opt,name=node,proto3" json:"node,omitempty"`
 }
 
-func (m *NumaMem) Reset()                    { *m = NumaMem{} }
-func (*NumaMem) ProtoMessage()               {}
-func (*NumaMem) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *NumaMem) Reset()      { *m = NumaMem{} }
+func (*NumaMem) ProtoMessage() {}
+func (*NumaMem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{10}
+}
+func (m *NumaMem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NumaMem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NumaMem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NumaMem.Merge(m, src)
+}
+func (m *NumaMem) XXX_Size() int {
+	return m.Size()
+}
+func (m *NumaMem) XXX_DiscardUnknown() {
+	xxx_messageInfo_NumaMem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NumaMem proto.InternalMessageInfo
 
 func (m *NumaMem) GetMemory() int32 {
 	if m != nil {
@@ -1038,17 +1069,17 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Vendor and Model"
 	// List of supported hardware vendor and model for this certified hardware
-	VendorModelList []*HardwareVendorModel `protobuf:"bytes,1,rep,name=vendor_model_list,json=vendorModelList" json:"vendor_model_list,omitempty"`
+	VendorModelList []*HardwareVendorModel `protobuf:"bytes,1,rep,name=vendor_model_list,json=vendorModelList,proto3" json:"vendor_model_list,omitempty"`
 	// Devices
 	//
 	// x-displayName: "Devices"
 	// List of supported devices in this model
-	Devices []*DeviceType `protobuf:"bytes,2,rep,name=devices" json:"devices,omitempty"`
+	Devices []*DeviceType `protobuf:"bytes,2,rep,name=devices,proto3" json:"devices,omitempty"`
 	// Image List
 	//
 	// x-displayName: "Image List"
 	// List of image names with providers for this certified hardware, e.g. AWS ami-0f99d090261d2acd5
-	ImageList []*ImageType `protobuf:"bytes,4,rep,name=image_list,json=imageList" json:"image_list,omitempty"`
+	ImageList []*ImageType `protobuf:"bytes,4,rep,name=image_list,json=imageList,proto3" json:"image_list,omitempty"`
 	// NUMA Node Count
 	//
 	// x-displayName: "NUMA Node Count"
@@ -1072,7 +1103,7 @@ type GlobalSpecType struct {
 	// x-displayName: "NUMA Memory"
 	// List of Numa nodes with the number of MB of instance memory to map to node instance
 	// If not specified, memory is evenly divided among available NUMA nodes
-	NumaMem []*NumaMem `protobuf:"bytes,8,rep,name=numa_mem,json=numaMem" json:"numa_mem,omitempty"`
+	NumaMem []*NumaMem `protobuf:"bytes,8,rep,name=numa_mem,json=numaMem,proto3" json:"numa_mem,omitempty"`
 	// Certified Hardware Type
 	//
 	// x-displayName: "Certified Hardware Type"
@@ -1083,12 +1114,36 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Internal USB device rules"
 	// List of internal USB device rules for server
-	InternalUsbDeviceRule []*ves_io_schema_usb_policy.Rule `protobuf:"bytes,10,rep,name=internal_usb_device_rule,json=internalUsbDeviceRule" json:"internal_usb_device_rule,omitempty"`
+	InternalUsbDeviceRule []*usb_policy.Rule `protobuf:"bytes,10,rep,name=internal_usb_device_rule,json=internalUsbDeviceRule,proto3" json:"internal_usb_device_rule,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{11}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetVendorModelList() []*HardwareVendorModel {
 	if m != nil {
@@ -1146,7 +1201,7 @@ func (m *GlobalSpecType) GetCertifiedHardwareType() HardwareType {
 	return VOLTMESH
 }
 
-func (m *GlobalSpecType) GetInternalUsbDeviceRule() []*ves_io_schema_usb_policy.Rule {
+func (m *GlobalSpecType) GetInternalUsbDeviceRule() []*usb_policy.Rule {
 	if m != nil {
 		return m.InternalUsbDeviceRule
 	}
@@ -1158,20 +1213,44 @@ func (m *GlobalSpecType) GetInternalUsbDeviceRule() []*ves_io_schema_usb_policy.
 // x-displayName: "Get Certified Hardware"
 // Get Certified Hardware object
 type GetSpecType struct {
-	VendorModelList       []*HardwareVendorModel           `protobuf:"bytes,1,rep,name=vendor_model_list,json=vendorModelList" json:"vendor_model_list,omitempty"`
-	Devices               []*DeviceType                    `protobuf:"bytes,2,rep,name=devices" json:"devices,omitempty"`
-	ImageList             []*ImageType                     `protobuf:"bytes,4,rep,name=image_list,json=imageList" json:"image_list,omitempty"`
-	NumaNodes             int32                            `protobuf:"varint,5,opt,name=numa_nodes,json=numaNodes,proto3" json:"numa_nodes,omitempty"`
-	MemPageSize           MemPageSize                      `protobuf:"varint,6,opt,name=mem_page_size,json=memPageSize,proto3,enum=ves.io.schema.certified_hardware.MemPageSize" json:"mem_page_size,omitempty"`
-	MemPageNumber         int32                            `protobuf:"varint,7,opt,name=mem_page_number,json=memPageNumber,proto3" json:"mem_page_number,omitempty"`
-	NumaMem               []*NumaMem                       `protobuf:"bytes,8,rep,name=numa_mem,json=numaMem" json:"numa_mem,omitempty"`
-	CertifiedHardwareType HardwareType                     `protobuf:"varint,9,opt,name=certified_hardware_type,json=certifiedHardwareType,proto3,enum=ves.io.schema.certified_hardware.HardwareType" json:"certified_hardware_type,omitempty"`
-	InternalUsbDeviceRule []*ves_io_schema_usb_policy.Rule `protobuf:"bytes,10,rep,name=internal_usb_device_rule,json=internalUsbDeviceRule" json:"internal_usb_device_rule,omitempty"`
+	VendorModelList       []*HardwareVendorModel `protobuf:"bytes,1,rep,name=vendor_model_list,json=vendorModelList,proto3" json:"vendor_model_list,omitempty"`
+	Devices               []*DeviceType          `protobuf:"bytes,2,rep,name=devices,proto3" json:"devices,omitempty"`
+	ImageList             []*ImageType           `protobuf:"bytes,4,rep,name=image_list,json=imageList,proto3" json:"image_list,omitempty"`
+	NumaNodes             int32                  `protobuf:"varint,5,opt,name=numa_nodes,json=numaNodes,proto3" json:"numa_nodes,omitempty"`
+	MemPageSize           MemPageSize            `protobuf:"varint,6,opt,name=mem_page_size,json=memPageSize,proto3,enum=ves.io.schema.certified_hardware.MemPageSize" json:"mem_page_size,omitempty"`
+	MemPageNumber         int32                  `protobuf:"varint,7,opt,name=mem_page_number,json=memPageNumber,proto3" json:"mem_page_number,omitempty"`
+	NumaMem               []*NumaMem             `protobuf:"bytes,8,rep,name=numa_mem,json=numaMem,proto3" json:"numa_mem,omitempty"`
+	CertifiedHardwareType HardwareType           `protobuf:"varint,9,opt,name=certified_hardware_type,json=certifiedHardwareType,proto3,enum=ves.io.schema.certified_hardware.HardwareType" json:"certified_hardware_type,omitempty"`
+	InternalUsbDeviceRule []*usb_policy.Rule     `protobuf:"bytes,10,rep,name=internal_usb_device_rule,json=internalUsbDeviceRule,proto3" json:"internal_usb_device_rule,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{12}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetVendorModelList() []*HardwareVendorModel {
 	if m != nil {
@@ -1229,7 +1308,7 @@ func (m *GetSpecType) GetCertifiedHardwareType() HardwareType {
 	return VOLTMESH
 }
 
-func (m *GetSpecType) GetInternalUsbDeviceRule() []*ves_io_schema_usb_policy.Rule {
+func (m *GetSpecType) GetInternalUsbDeviceRule() []*usb_policy.Rule {
 	if m != nil {
 		return m.InternalUsbDeviceRule
 	}
@@ -1248,9 +1327,33 @@ type CertifiedHardwareStatus struct {
 	LatestVersion string `protobuf:"bytes,1,opt,name=latest_version,json=latestVersion,proto3" json:"latest_version,omitempty"`
 }
 
-func (m *CertifiedHardwareStatus) Reset()                    { *m = CertifiedHardwareStatus{} }
-func (*CertifiedHardwareStatus) ProtoMessage()               {}
-func (*CertifiedHardwareStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (m *CertifiedHardwareStatus) Reset()      { *m = CertifiedHardwareStatus{} }
+func (*CertifiedHardwareStatus) ProtoMessage() {}
+func (*CertifiedHardwareStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30cf7db1740c5af8, []int{13}
+}
+func (m *CertifiedHardwareStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CertifiedHardwareStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CertifiedHardwareStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CertifiedHardwareStatus.Merge(m, src)
+}
+func (m *CertifiedHardwareStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *CertifiedHardwareStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_CertifiedHardwareStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CertifiedHardwareStatus proto.InternalMessageInfo
 
 func (m *CertifiedHardwareStatus) GetLatestVersion() string {
 	if m != nil {
@@ -1260,6 +1363,14 @@ func (m *CertifiedHardwareStatus) GetLatestVersion() string {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceType", HardwareDeviceType_name, HardwareDeviceType_value)
+	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceType", HardwareDeviceType_name, HardwareDeviceType_value)
+	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType", HardwareDeviceInstanceUseType_name, HardwareDeviceInstanceUseType_value)
+	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType", HardwareDeviceInstanceUseType_name, HardwareDeviceInstanceUseType_value)
+	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareType", HardwareType_name, HardwareType_value)
+	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareType", HardwareType_name, HardwareType_value)
+	proto.RegisterEnum("ves.io.schema.certified_hardware.MemPageSize", MemPageSize_name, MemPageSize_value)
+	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.MemPageSize", MemPageSize_name, MemPageSize_value)
 	proto.RegisterType((*DeviceType)(nil), "ves.io.schema.certified_hardware.DeviceType")
 	golang_proto.RegisterType((*DeviceType)(nil), "ves.io.schema.certified_hardware.DeviceType")
 	proto.RegisterType((*HardwareVendorModel)(nil), "ves.io.schema.certified_hardware.HardwareVendorModel")
@@ -1288,15 +1399,114 @@ func init() {
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.certified_hardware.GetSpecType")
 	proto.RegisterType((*CertifiedHardwareStatus)(nil), "ves.io.schema.certified_hardware.CertifiedHardwareStatus")
 	golang_proto.RegisterType((*CertifiedHardwareStatus)(nil), "ves.io.schema.certified_hardware.CertifiedHardwareStatus")
-	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceType", HardwareDeviceType_name, HardwareDeviceType_value)
-	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceType", HardwareDeviceType_name, HardwareDeviceType_value)
-	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType", HardwareDeviceInstanceUseType_name, HardwareDeviceInstanceUseType_value)
-	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType", HardwareDeviceInstanceUseType_name, HardwareDeviceInstanceUseType_value)
-	proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareType", HardwareType_name, HardwareType_value)
-	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.HardwareType", HardwareType_name, HardwareType_value)
-	proto.RegisterEnum("ves.io.schema.certified_hardware.MemPageSize", MemPageSize_name, MemPageSize_value)
-	golang_proto.RegisterEnum("ves.io.schema.certified_hardware.MemPageSize", MemPageSize_name, MemPageSize_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/certified_hardware/types.proto", fileDescriptor_30cf7db1740c5af8)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/certified_hardware/types.proto", fileDescriptor_30cf7db1740c5af8)
+}
+
+var fileDescriptor_30cf7db1740c5af8 = []byte{
+	// 1517 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4b, 0x73, 0xd3, 0x58,
+	0x16, 0xb6, 0xfc, 0xf6, 0x31, 0x04, 0x71, 0x81, 0x44, 0x84, 0x20, 0x5c, 0x1e, 0x20, 0x99, 0x40,
+	0xec, 0x1a, 0x03, 0x8b, 0x99, 0xaa, 0x19, 0x46, 0xb6, 0x85, 0xad, 0xc4, 0x8f, 0x20, 0x3f, 0x98,
+	0x62, 0xa3, 0x92, 0xed, 0x1b, 0x47, 0x85, 0xf5, 0x28, 0x49, 0x76, 0x08, 0xab, 0x99, 0x7f, 0x30,
+	0x53, 0xc5, 0xec, 0xe6, 0x07, 0xf0, 0x13, 0xa6, 0x8a, 0xaa, 0x2e, 0x96, 0x5d, 0xbd, 0xca, 0x92,
+	0x65, 0xe3, 0x6c, 0x7a, 0xd5, 0xc5, 0x4f, 0xe8, 0xd2, 0x95, 0xfc, 0x0c, 0xd8, 0xee, 0x5e, 0xf5,
+	0x82, 0xdd, 0x3d, 0xf7, 0x7c, 0xe7, 0x9c, 0xef, 0x9c, 0x7b, 0xee, 0xd1, 0xb5, 0xe1, 0xe1, 0x00,
+	0x5b, 0x29, 0x45, 0x4f, 0x5b, 0xed, 0x63, 0xac, 0xca, 0xe9, 0x36, 0x36, 0x6d, 0xe5, 0x48, 0xc1,
+	0x1d, 0xe9, 0x58, 0x36, 0x3b, 0x27, 0xb2, 0x89, 0xd3, 0xf6, 0xa9, 0x81, 0xad, 0x94, 0x61, 0xea,
+	0xb6, 0x8e, 0x12, 0x2e, 0x3a, 0xe5, 0xa2, 0x53, 0x17, 0xd1, 0x9b, 0x7b, 0x5d, 0xc5, 0x3e, 0xee,
+	0xb7, 0x52, 0x6d, 0x5d, 0x4d, 0x77, 0xf5, 0xae, 0x9e, 0x26, 0x86, 0xad, 0xfe, 0x11, 0x91, 0x88,
+	0x40, 0x56, 0xae, 0xc3, 0xcd, 0x3b, 0x5d, 0x5d, 0xef, 0xf6, 0xf0, 0x04, 0x65, 0x2b, 0x2a, 0xb6,
+	0x6c, 0x59, 0x35, 0x3c, 0xc0, 0xc6, 0x2c, 0x3f, 0x0d, 0xdb, 0x9e, 0xe2, 0xd6, 0xac, 0x42, 0x37,
+	0x6c, 0x45, 0xd7, 0x3c, 0x9e, 0x9b, 0xb7, 0x67, 0x95, 0xc6, 0xc0, 0x96, 0xa6, 0xd2, 0xd8, 0xbc,
+	0x39, 0xab, 0x9e, 0x56, 0xdd, 0x9d, 0x55, 0xf5, 0xad, 0x96, 0x64, 0xe8, 0x3d, 0xa5, 0x7d, 0x3a,
+	0x83, 0xda, 0x9a, 0x45, 0x0d, 0xe4, 0x9e, 0xd2, 0x91, 0x6d, 0xec, 0x69, 0x13, 0x73, 0x5a, 0x05,
+	0x9f, 0x48, 0x33, 0xfc, 0x92, 0x6f, 0xfd, 0x00, 0x79, 0x3c, 0x50, 0xda, 0xb8, 0x7e, 0x6a, 0x60,
+	0x54, 0x84, 0xa0, 0xe3, 0x9d, 0xa1, 0x12, 0xd4, 0xce, 0x5a, 0xe6, 0x71, 0x6a, 0x59, 0x95, 0x53,
+	0x45, 0x6f, 0x31, 0xf1, 0x21, 0x12, 0x0f, 0xe8, 0x39, 0x04, 0xfa, 0x16, 0x66, 0xfc, 0xc4, 0xd1,
+	0xd3, 0x5f, 0xeb, 0x48, 0xd0, 0x2c, 0x5b, 0xd6, 0xda, 0xb8, 0x61, 0xb9, 0x3e, 0x1d, 0x5f, 0x08,
+	0x41, 0x50, 0x93, 0x55, 0xcc, 0x04, 0x12, 0xd4, 0x4e, 0x4c, 0x24, 0x6b, 0x74, 0x13, 0xa2, 0xaa,
+	0xa2, 0x49, 0x7d, 0x4d, 0xb1, 0x99, 0x60, 0x82, 0xda, 0x09, 0x89, 0x11, 0x55, 0xd1, 0x1a, 0x9a,
+	0x62, 0x13, 0x95, 0xfc, 0xda, 0x55, 0x85, 0x3c, 0x95, 0xfc, 0x9a, 0xa8, 0xee, 0x40, 0xbc, 0x43,
+	0xe2, 0x48, 0x3d, 0xc5, 0xb2, 0x99, 0x70, 0x22, 0xb0, 0x13, 0x13, 0xc1, 0xdd, 0x2a, 0x29, 0x96,
+	0x9d, 0xcc, 0xc1, 0xb5, 0x11, 0xa1, 0x26, 0xd6, 0x3a, 0xba, 0x59, 0xd6, 0x3b, 0xb8, 0x87, 0xd6,
+	0x21, 0x3c, 0x20, 0x22, 0x29, 0x50, 0x4c, 0xf4, 0x24, 0x74, 0x1d, 0x42, 0xaa, 0x03, 0x20, 0xe9,
+	0xc6, 0x44, 0x57, 0x48, 0xfe, 0xcf, 0x0f, 0x31, 0x41, 0x95, 0xbb, 0x6e, 0x69, 0xd7, 0x3d, 0xf6,
+	0xc4, 0x32, 0xeb, 0x67, 0x28, 0x2f, 0x03, 0x16, 0xa2, 0x86, 0xa9, 0x0f, 0x94, 0x0e, 0x36, 0x5d,
+	0x73, 0xa2, 0x1b, 0xef, 0xa1, 0xa7, 0x10, 0x92, 0xdf, 0xf4, 0x4d, 0x37, 0xed, 0x78, 0x66, 0x7b,
+	0x79, 0x29, 0x39, 0x07, 0x5e, 0xf4, 0x89, 0xae, 0x1d, 0xfa, 0x33, 0x04, 0xe4, 0x13, 0x8b, 0x54,
+	0x27, 0x9e, 0xb9, 0xb7, 0x82, 0xf9, 0x89, 0x55, 0xf4, 0x89, 0x8e, 0x8d, 0x63, 0xda, 0x6d, 0x1b,
+	0xa4, 0x7a, 0x2b, 0x99, 0x16, 0xda, 0x86, 0x63, 0xda, 0x6d, 0x1b, 0xd9, 0x4d, 0x58, 0x6b, 0xf7,
+	0xf4, 0x7e, 0x47, 0x1a, 0x27, 0x12, 0xfd, 0xf0, 0x9e, 0x0a, 0x9e, 0xbd, 0xa7, 0xc2, 0xfb, 0xc1,
+	0x68, 0x98, 0x8e, 0x24, 0xbf, 0xa3, 0x20, 0x44, 0xa8, 0xa2, 0xe7, 0x10, 0x57, 0x65, 0xf3, 0x15,
+	0xb6, 0x8d, 0x9e, 0xdc, 0x76, 0x2b, 0x14, 0xcf, 0xec, 0x2d, 0x0f, 0x57, 0x9e, 0x18, 0x15, 0x7d,
+	0xe2, 0xb4, 0x0f, 0x24, 0x40, 0x54, 0x71, 0x4a, 0x2f, 0x29, 0x1d, 0x52, 0xd5, 0x78, 0xe6, 0xe1,
+	0x8a, 0x85, 0x23, 0x27, 0x56, 0xf4, 0x89, 0x11, 0x62, 0x2f, 0x74, 0xb2, 0x57, 0x21, 0x44, 0x96,
+	0x24, 0x01, 0xea, 0xec, 0x3d, 0x15, 0xd8, 0x0f, 0x46, 0x03, 0x74, 0x30, 0xb9, 0x0d, 0x30, 0xb1,
+	0x70, 0xda, 0x6d, 0x1c, 0xd1, 0xed, 0x8e, 0x91, 0x87, 0xe4, 0xbf, 0x28, 0x88, 0x4f, 0x71, 0x75,
+	0xda, 0x45, 0x3f, 0x3a, 0xc2, 0xa3, 0x2e, 0x72, 0x05, 0x44, 0x43, 0xc0, 0x7a, 0xd5, 0xf7, 0x5a,
+	0xc8, 0x59, 0x22, 0x06, 0x22, 0x03, 0x6c, 0x5a, 0x8a, 0xae, 0x79, 0x3d, 0x3f, 0x12, 0xc7, 0x57,
+	0x21, 0x38, 0x75, 0x15, 0xb6, 0x20, 0x66, 0xf4, 0x5b, 0x3d, 0xc5, 0x3a, 0xc6, 0x26, 0x39, 0xb2,
+	0x98, 0x38, 0xd9, 0x48, 0x76, 0x21, 0xc0, 0x9d, 0x58, 0xa8, 0x30, 0xc7, 0x32, 0x9e, 0xd9, 0x5d,
+	0xa9, 0x23, 0x96, 0x57, 0xc5, 0xbf, 0x1f, 0x8c, 0xfa, 0xe9, 0x40, 0xf2, 0xaf, 0x10, 0x1d, 0xe1,
+	0x17, 0xd4, 0xc4, 0xb9, 0x4a, 0x26, 0xee, 0x3a, 0xa9, 0xb9, 0x09, 0x7b, 0x92, 0xc3, 0xb3, 0xd0,
+	0x36, 0x7e, 0x1b, 0xcf, 0x42, 0xdb, 0x58, 0x9d, 0xe7, 0x3d, 0x88, 0x8e, 0xf0, 0x8b, 0xce, 0xee,
+	0x09, 0x44, 0x2a, 0x7d, 0x55, 0x2e, 0x63, 0xd5, 0xa1, 0xac, 0x62, 0x55, 0x37, 0x4f, 0x09, 0x26,
+	0x24, 0x7a, 0x12, 0x39, 0x0c, 0xbd, 0xe3, 0xce, 0xba, 0x90, 0x48, 0xd6, 0xc9, 0x77, 0x21, 0x58,
+	0x2b, 0xf4, 0xf4, 0x96, 0xdc, 0xab, 0x19, 0xb8, 0x4d, 0x06, 0x80, 0x0c, 0x57, 0xdd, 0x71, 0x21,
+	0x91, 0xf1, 0xe0, 0x8e, 0x1e, 0x2a, 0x11, 0xd8, 0x89, 0x67, 0x9e, 0xac, 0x3e, 0x1f, 0xa7, 0xc6,
+	0x91, 0x78, 0x65, 0x30, 0x11, 0x9c, 0xb1, 0x85, 0x9e, 0x41, 0xc4, 0x1d, 0x62, 0x16, 0xe3, 0x27,
+	0x8e, 0x57, 0x68, 0xfa, 0xa9, 0xc9, 0x3d, 0x32, 0x46, 0xfb, 0x00, 0x6e, 0x3d, 0x08, 0xc7, 0x20,
+	0x71, 0xf5, 0x60, 0xb9, 0xab, 0xf1, 0xb0, 0x13, 0x63, 0xc4, 0x9c, 0x70, 0xba, 0x0d, 0xa0, 0xf5,
+	0x55, 0x59, 0x72, 0xca, 0x62, 0x79, 0x83, 0x38, 0xe6, 0xec, 0x54, 0x9c, 0x0d, 0xf4, 0x1c, 0x2e,
+	0xab, 0x58, 0x95, 0x0c, 0x27, 0x9a, 0xa5, 0xbc, 0xc1, 0x4c, 0x98, 0x7c, 0x31, 0x56, 0xb9, 0xfd,
+	0x58, 0x3d, 0x94, 0xbb, 0xb8, 0xa6, 0xbc, 0xc1, 0x62, 0x5c, 0x9d, 0x08, 0xe8, 0x3e, 0x5c, 0x19,
+	0xbb, 0xd4, 0xfa, 0x6a, 0x0b, 0x9b, 0x4c, 0x84, 0x84, 0xbd, 0xec, 0xa1, 0x2a, 0x64, 0x13, 0xe5,
+	0x21, 0x4a, 0x98, 0xa9, 0x58, 0x65, 0xa2, 0x24, 0xc7, 0x3f, 0x2e, 0x8f, 0xea, 0x35, 0x83, 0x18,
+	0xd1, 0xbc, 0xae, 0x38, 0x82, 0x8d, 0x8b, 0x30, 0xf2, 0x91, 0x67, 0x62, 0x24, 0x95, 0xd4, 0xea,
+	0x87, 0x4b, 0x6a, 0x77, 0x63, 0x0c, 0x98, 0xde, 0x46, 0x2f, 0x80, 0x51, 0x34, 0x1b, 0x9b, 0x9a,
+	0xdc, 0x93, 0x9c, 0xc7, 0x80, 0xf7, 0x01, 0x33, 0xfb, 0x3d, 0xcc, 0x00, 0x61, 0xcf, 0xce, 0x05,
+	0x9a, 0x3c, 0x19, 0x52, 0x62, 0xbf, 0x87, 0xc5, 0x1b, 0x23, 0xfb, 0x86, 0xd5, 0x72, 0x4f, 0xdd,
+	0xd9, 0x4e, 0xfe, 0x3f, 0x04, 0xf1, 0x02, 0xb6, 0xbf, 0xf5, 0xe9, 0xb7, 0x3e, 0xfd, 0x3d, 0xf7,
+	0xe9, 0x5f, 0xae, 0xfe, 0xf0, 0xb7, 0xb9, 0x91, 0x9a, 0xfc, 0x3b, 0x6c, 0xe4, 0xe6, 0x49, 0xd4,
+	0x6c, 0xd9, 0xee, 0x5b, 0xe8, 0x1e, 0xac, 0xf5, 0x64, 0x1b, 0x5b, 0xb6, 0x34, 0xfa, 0x84, 0xba,
+	0x83, 0xfd, 0xb2, 0xbb, 0xdb, 0x74, 0x37, 0x77, 0x7f, 0xa6, 0x00, 0x5d, 0x7c, 0xc3, 0xa2, 0x5b,
+	0xb0, 0x51, 0xe4, 0xc4, 0xfc, 0x0b, 0x4e, 0xe4, 0xa5, 0x3c, 0xdf, 0x14, 0x72, 0xbc, 0x24, 0x54,
+	0x9a, 0x5c, 0x49, 0xc8, 0xd3, 0x3e, 0xb4, 0x05, 0xcc, 0xbc, 0x92, 0xaf, 0x17, 0x79, 0xb1, 0xc2,
+	0xd7, 0x69, 0x0a, 0x6d, 0xc2, 0xfa, 0xbc, 0xb6, 0x29, 0x88, 0x75, 0xa1, 0x4a, 0xfb, 0xbf, 0xa4,
+	0xab, 0x37, 0x2a, 0x75, 0xee, 0x90, 0x0e, 0x20, 0x06, 0xae, 0xcf, 0xeb, 0xb2, 0xd5, 0x4a, 0x9e,
+	0x0e, 0xa2, 0x07, 0xb0, 0x7d, 0x21, 0xde, 0x3f, 0xea, 0xbc, 0x58, 0xe1, 0x4a, 0x92, 0x50, 0xcb,
+	0xd5, 0x04, 0xa9, 0x56, 0xaf, 0x8a, 0x75, 0xae, 0xc0, 0xd3, 0x21, 0xc4, 0xc2, 0xe6, 0x3c, 0xb8,
+	0xd2, 0x14, 0xf2, 0x02, 0x27, 0x15, 0x0e, 0x1b, 0x74, 0x78, 0xf7, 0xbf, 0x41, 0xb8, 0xbd, 0xf0,
+	0xad, 0x8d, 0xee, 0xc0, 0xad, 0x79, 0x0f, 0x8d, 0x1a, 0x2f, 0x89, 0x7c, 0xa1, 0x51, 0xe2, 0x44,
+	0xda, 0x87, 0x12, 0xb0, 0xf5, 0x25, 0x80, 0x50, 0x71, 0x39, 0xd1, 0x14, 0xda, 0x86, 0x3f, 0x8c,
+	0x11, 0x15, 0xbe, 0xfe, 0xa2, 0x2a, 0x1e, 0x7c, 0xc9, 0x95, 0x1f, 0xed, 0xc0, 0xdd, 0x45, 0xc0,
+	0xb1, 0xcb, 0x00, 0xda, 0x85, 0xfb, 0x8b, 0x90, 0x65, 0xae, 0xc2, 0x15, 0xf8, 0x32, 0x5f, 0xa9,
+	0xd3, 0xc1, 0x65, 0xe1, 0xab, 0x8d, 0x7a, 0x4d, 0xc8, 0x3b, 0xc5, 0xba, 0x0f, 0xc9, 0xc5, 0xe1,
+	0x09, 0x2e, 0x3c, 0x73, 0x02, 0x5f, 0x77, 0x28, 0x95, 0xb8, 0x02, 0x1d, 0x59, 0xc6, 0xd4, 0x75,
+	0x4a, 0xb0, 0xd1, 0x65, 0xd8, 0x12, 0x57, 0x90, 0xca, 0x7c, 0x39, 0xcb, 0x8b, 0x74, 0x6c, 0x59,
+	0x56, 0x4e, 0x0f, 0x38, 0x2d, 0x00, 0xe8, 0x11, 0xa4, 0x17, 0x01, 0x9f, 0x71, 0xa5, 0x52, 0x96,
+	0xcb, 0x1d, 0x4c, 0xd7, 0x2c, 0xbe, 0x2b, 0xc0, 0xa5, 0x99, 0x6b, 0x7c, 0x09, 0xa2, 0xcd, 0x6a,
+	0xa9, 0x5e, 0xe6, 0x6b, 0x45, 0xda, 0x87, 0xae, 0xc1, 0x15, 0x47, 0xaa, 0xd5, 0x1d, 0xbb, 0x5c,
+	0xb5, 0x9c, 0xad, 0xd2, 0x14, 0x5a, 0x07, 0x94, 0x2b, 0x55, 0x1b, 0x79, 0xa9, 0xcc, 0x89, 0x07,
+	0x7c, 0x5d, 0x3a, 0x2c, 0x71, 0x39, 0x9e, 0xf6, 0xef, 0xfe, 0xc7, 0x79, 0xee, 0x4e, 0xcd, 0xb9,
+	0x24, 0xb0, 0x63, 0x3e, 0x65, 0xbe, 0x2c, 0x1d, 0x72, 0x05, 0x5e, 0xaa, 0x09, 0x2f, 0xa7, 0xef,
+	0xd4, 0x74, 0xdb, 0xce, 0x62, 0x1e, 0x1f, 0x64, 0x69, 0x6a, 0x81, 0x3e, 0x53, 0xce, 0xd2, 0xfe,
+	0x05, 0xfa, 0x3f, 0x15, 0xb2, 0x74, 0x20, 0xfb, 0x96, 0x3a, 0xfb, 0xc4, 0xfa, 0x3e, 0x7e, 0x62,
+	0x7d, 0x9f, 0x3f, 0xb1, 0xd4, 0x3f, 0x87, 0x2c, 0xf5, 0x6e, 0xc8, 0x52, 0xdf, 0x0f, 0x59, 0xea,
+	0x6c, 0xc8, 0x52, 0x1f, 0x87, 0x2c, 0xf5, 0xe3, 0x90, 0xa5, 0x7e, 0x1a, 0xb2, 0xbe, 0xcf, 0x43,
+	0x96, 0xfa, 0xf7, 0x39, 0xeb, 0xfb, 0x70, 0xce, 0x52, 0x67, 0xe7, 0xac, 0xef, 0xe3, 0x39, 0xeb,
+	0x7b, 0xd9, 0xec, 0xea, 0xc6, 0xab, 0x6e, 0x6a, 0xa0, 0xf7, 0x6c, 0x6c, 0x9a, 0xce, 0xc8, 0x4a,
+	0x93, 0xc5, 0x91, 0x6e, 0xaa, 0x7b, 0xa3, 0x5f, 0x38, 0x7b, 0x23, 0x75, 0xda, 0x68, 0x75, 0xf5,
+	0x34, 0x7e, 0x6d, 0x7b, 0xbf, 0xbb, 0xbf, 0xfa, 0x97, 0x46, 0x2b, 0x4c, 0x7e, 0x85, 0x3f, 0xfa,
+	0x25, 0x00, 0x00, 0xff, 0xff, 0xe5, 0x88, 0x52, 0xdf, 0xfd, 0x10, 0x00, 0x00,
+}
+
 func (x HardwareDeviceType) String() string {
 	s, ok := HardwareDeviceType_name[int32(x)]
 	if ok {
@@ -2263,7 +2473,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *DeviceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2271,58 +2481,58 @@ func (m *DeviceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DeviceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeviceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
-	}
-	if m.Use != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Use))
-	}
-	if len(m.Name) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if m.MinUnit != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MinUnit))
-	}
-	if m.MaxUnit != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxUnit))
-	}
 	if len(m.DeviceList) > 0 {
-		for _, s := range m.DeviceList {
+		for iNdEx := len(m.DeviceList) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.DeviceList[iNdEx])
+			copy(dAtA[i:], m.DeviceList[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.DeviceList[iNdEx])))
+			i--
 			dAtA[i] = 0x32
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	if m.MaxUnit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxUnit))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.MinUnit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MinUnit))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Use != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Use))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *HardwareVendorModel) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2330,29 +2540,36 @@ func (m *HardwareVendorModel) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HardwareVendorModel) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HardwareVendorModel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Vendor) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Vendor)))
-		i += copy(dAtA[i:], m.Vendor)
-	}
 	if len(m.Model) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Model)
+		copy(dAtA[i:], m.Model)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Model)))
-		i += copy(dAtA[i:], m.Model)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Vendor) > 0 {
+		i -= len(m.Vendor)
+		copy(dAtA[i:], m.Vendor)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Vendor)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ImageType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2360,78 +2577,108 @@ func (m *ImageType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ImageType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImageType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.CloudProvider != nil {
+		{
+			size := m.CloudProvider.Size()
+			i -= size
+			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if len(m.Provider) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Provider)
+		copy(dAtA[i:], m.Provider)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Provider)))
-		i += copy(dAtA[i:], m.Provider)
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.CloudProvider != nil {
-		nn1, err := m.CloudProvider.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ImageType_Azure) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImageType_Azure) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Azure != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Azure.Size()))
-		n2, err := m.Azure.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Azure.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ImageType_Aws) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImageType_Aws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Aws != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Aws.Size()))
-		n3, err := m.Aws.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Aws.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ImageType_Gcp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImageType_Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Gcp != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Gcp.Size()))
-		n4, err := m.Gcp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Gcp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Azure) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2439,52 +2686,73 @@ func (m *Azure) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Azure) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Azure) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Image != nil {
-		nn5, err := m.Image.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Image.Size()
+			i -= size
+			if _, err := m.Image.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn5
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Azure_Marketplace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Azure_Marketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Marketplace != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Marketplace.Size()))
-		n6, err := m.Marketplace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Marketplace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Azure_ImageId) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Azure_ImageId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ImageId != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ImageId.Size()))
-		n7, err := m.ImageId.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ImageId.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *AzureImage) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2492,23 +2760,29 @@ func (m *AzureImage) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureImage) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureImage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ImageId) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.ImageId)
+		copy(dAtA[i:], m.ImageId)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ImageId)))
-		i += copy(dAtA[i:], m.ImageId)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Marketplace) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2516,47 +2790,57 @@ func (m *Marketplace) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Marketplace) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Marketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Offer) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Offer)))
-		i += copy(dAtA[i:], m.Offer)
-	}
-	if len(m.Sku) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Sku)))
-		i += copy(dAtA[i:], m.Sku)
-	}
-	if len(m.Version) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Version)))
-		i += copy(dAtA[i:], m.Version)
+	if len(m.Publisher) > 0 {
+		i -= len(m.Publisher)
+		copy(dAtA[i:], m.Publisher)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Publisher)))
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.Name) > 0 {
-		dAtA[i] = 0x22
-		i++
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+		i--
+		dAtA[i] = 0x22
 	}
-	if len(m.Publisher) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Publisher)))
-		i += copy(dAtA[i:], m.Publisher)
+	if len(m.Version) > 0 {
+		i -= len(m.Version)
+		copy(dAtA[i:], m.Version)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Version)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if len(m.Sku) > 0 {
+		i -= len(m.Sku)
+		copy(dAtA[i:], m.Sku)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Sku)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Offer) > 0 {
+		i -= len(m.Offer)
+		copy(dAtA[i:], m.Offer)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Offer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Aws) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2564,38 +2848,52 @@ func (m *Aws) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Aws) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Aws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Image != nil {
-		nn8, err := m.Image.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Image.Size()
+			i -= size
+			if _, err := m.Image.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Aws_ImageId) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Aws_ImageId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ImageId != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ImageId.Size()))
-		n9, err := m.ImageId.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ImageId.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *AwsImage) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2603,29 +2901,36 @@ func (m *AwsImage) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AwsImage) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AwsImage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ImageId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ImageId)))
-		i += copy(dAtA[i:], m.ImageId)
-	}
 	if len(m.Region) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
-		i += copy(dAtA[i:], m.Region)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.ImageId) > 0 {
+		i -= len(m.ImageId)
+		copy(dAtA[i:], m.ImageId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ImageId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Gcp) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2633,38 +2938,52 @@ func (m *Gcp) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Gcp) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Image != nil {
-		nn10, err := m.Image.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Image.Size()
+			i -= size
+			if _, err := m.Image.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn10
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Gcp_ImageId) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Gcp_ImageId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ImageId != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ImageId.Size()))
-		n11, err := m.ImageId.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ImageId.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GcpImage) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2672,23 +2991,29 @@ func (m *GcpImage) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GcpImage) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GcpImage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ImageId) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.ImageId)
+		copy(dAtA[i:], m.ImageId)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ImageId)))
-		i += copy(dAtA[i:], m.ImageId)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *NumaMem) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2696,27 +3021,32 @@ func (m *NumaMem) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NumaMem) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NumaMem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Memory != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Memory))
-	}
 	if m.Node != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Node))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Memory != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Memory))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2724,97 +3054,112 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VendorModelList) > 0 {
-		for _, msg := range m.VendorModelList {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.InternalUsbDeviceRule) > 0 {
+		for iNdEx := len(m.InternalUsbDeviceRule) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InternalUsbDeviceRule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
-		}
-	}
-	if len(m.Devices) > 0 {
-		for _, msg := range m.Devices {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.ImageList) > 0 {
-		for _, msg := range m.ImageList {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.NumaNodes != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NumaNodes))
-	}
-	if m.MemPageSize != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageSize))
-	}
-	if m.MemPageNumber != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageNumber))
-	}
-	if len(m.NumaMem) > 0 {
-		for _, msg := range m.NumaMem {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+			i--
+			dAtA[i] = 0x52
 		}
 	}
 	if m.CertifiedHardwareType != 0 {
-		dAtA[i] = 0x48
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CertifiedHardwareType))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.InternalUsbDeviceRule) > 0 {
-		for _, msg := range m.InternalUsbDeviceRule {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.NumaMem) > 0 {
+		for iNdEx := len(m.NumaMem) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NumaMem[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x42
 		}
 	}
-	return i, nil
+	if m.MemPageNumber != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageNumber))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.MemPageSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageSize))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.NumaNodes != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NumaNodes))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ImageList) > 0 {
+		for iNdEx := len(m.ImageList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ImageList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Devices) > 0 {
+		for iNdEx := len(m.Devices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Devices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.VendorModelList) > 0 {
+		for iNdEx := len(m.VendorModelList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VendorModelList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2822,97 +3167,112 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VendorModelList) > 0 {
-		for _, msg := range m.VendorModelList {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.InternalUsbDeviceRule) > 0 {
+		for iNdEx := len(m.InternalUsbDeviceRule) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InternalUsbDeviceRule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
-		}
-	}
-	if len(m.Devices) > 0 {
-		for _, msg := range m.Devices {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.ImageList) > 0 {
-		for _, msg := range m.ImageList {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.NumaNodes != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NumaNodes))
-	}
-	if m.MemPageSize != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageSize))
-	}
-	if m.MemPageNumber != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageNumber))
-	}
-	if len(m.NumaMem) > 0 {
-		for _, msg := range m.NumaMem {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+			i--
+			dAtA[i] = 0x52
 		}
 	}
 	if m.CertifiedHardwareType != 0 {
-		dAtA[i] = 0x48
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CertifiedHardwareType))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.InternalUsbDeviceRule) > 0 {
-		for _, msg := range m.InternalUsbDeviceRule {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.NumaMem) > 0 {
+		for iNdEx := len(m.NumaMem) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NumaMem[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x42
 		}
 	}
-	return i, nil
+	if m.MemPageNumber != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageNumber))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.MemPageSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MemPageSize))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.NumaNodes != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NumaNodes))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ImageList) > 0 {
+		for iNdEx := len(m.ImageList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ImageList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Devices) > 0 {
+		for iNdEx := len(m.Devices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Devices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.VendorModelList) > 0 {
+		for iNdEx := len(m.VendorModelList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VendorModelList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CertifiedHardwareStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2920,29 +3280,40 @@ func (m *CertifiedHardwareStatus) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CertifiedHardwareStatus) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CertifiedHardwareStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.LatestVersion) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.LatestVersion)
+		copy(dAtA[i:], m.LatestVersion)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.LatestVersion)))
-		i += copy(dAtA[i:], m.LatestVersion)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *DeviceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != 0 {
@@ -2971,6 +3342,9 @@ func (m *DeviceType) Size() (n int) {
 }
 
 func (m *HardwareVendorModel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Vendor)
@@ -2985,6 +3359,9 @@ func (m *HardwareVendorModel) Size() (n int) {
 }
 
 func (m *ImageType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -3002,6 +3379,9 @@ func (m *ImageType) Size() (n int) {
 }
 
 func (m *ImageType_Azure) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Azure != nil {
@@ -3011,6 +3391,9 @@ func (m *ImageType_Azure) Size() (n int) {
 	return n
 }
 func (m *ImageType_Aws) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Aws != nil {
@@ -3020,6 +3403,9 @@ func (m *ImageType_Aws) Size() (n int) {
 	return n
 }
 func (m *ImageType_Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Gcp != nil {
@@ -3029,6 +3415,9 @@ func (m *ImageType_Gcp) Size() (n int) {
 	return n
 }
 func (m *Azure) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Image != nil {
@@ -3038,6 +3427,9 @@ func (m *Azure) Size() (n int) {
 }
 
 func (m *Azure_Marketplace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Marketplace != nil {
@@ -3047,6 +3439,9 @@ func (m *Azure_Marketplace) Size() (n int) {
 	return n
 }
 func (m *Azure_ImageId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ImageId != nil {
@@ -3056,6 +3451,9 @@ func (m *Azure_ImageId) Size() (n int) {
 	return n
 }
 func (m *AzureImage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ImageId)
@@ -3066,6 +3464,9 @@ func (m *AzureImage) Size() (n int) {
 }
 
 func (m *Marketplace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Offer)
@@ -3092,6 +3493,9 @@ func (m *Marketplace) Size() (n int) {
 }
 
 func (m *Aws) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Image != nil {
@@ -3101,6 +3505,9 @@ func (m *Aws) Size() (n int) {
 }
 
 func (m *Aws_ImageId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ImageId != nil {
@@ -3110,6 +3517,9 @@ func (m *Aws_ImageId) Size() (n int) {
 	return n
 }
 func (m *AwsImage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ImageId)
@@ -3124,6 +3534,9 @@ func (m *AwsImage) Size() (n int) {
 }
 
 func (m *Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Image != nil {
@@ -3133,6 +3546,9 @@ func (m *Gcp) Size() (n int) {
 }
 
 func (m *Gcp_ImageId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ImageId != nil {
@@ -3142,6 +3558,9 @@ func (m *Gcp_ImageId) Size() (n int) {
 	return n
 }
 func (m *GcpImage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ImageId)
@@ -3152,6 +3571,9 @@ func (m *GcpImage) Size() (n int) {
 }
 
 func (m *NumaMem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Memory != 0 {
@@ -3164,6 +3586,9 @@ func (m *NumaMem) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VendorModelList) > 0 {
@@ -3212,6 +3637,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.VendorModelList) > 0 {
@@ -3260,6 +3688,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *CertifiedHardwareStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.LatestVersion)
@@ -3270,14 +3701,7 @@ func (m *CertifiedHardwareStatus) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -3480,16 +3904,41 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVendorModelList := "[]*HardwareVendorModel{"
+	for _, f := range this.VendorModelList {
+		repeatedStringForVendorModelList += strings.Replace(f.String(), "HardwareVendorModel", "HardwareVendorModel", 1) + ","
+	}
+	repeatedStringForVendorModelList += "}"
+	repeatedStringForDevices := "[]*DeviceType{"
+	for _, f := range this.Devices {
+		repeatedStringForDevices += strings.Replace(f.String(), "DeviceType", "DeviceType", 1) + ","
+	}
+	repeatedStringForDevices += "}"
+	repeatedStringForImageList := "[]*ImageType{"
+	for _, f := range this.ImageList {
+		repeatedStringForImageList += strings.Replace(f.String(), "ImageType", "ImageType", 1) + ","
+	}
+	repeatedStringForImageList += "}"
+	repeatedStringForNumaMem := "[]*NumaMem{"
+	for _, f := range this.NumaMem {
+		repeatedStringForNumaMem += strings.Replace(f.String(), "NumaMem", "NumaMem", 1) + ","
+	}
+	repeatedStringForNumaMem += "}"
+	repeatedStringForInternalUsbDeviceRule := "[]*Rule{"
+	for _, f := range this.InternalUsbDeviceRule {
+		repeatedStringForInternalUsbDeviceRule += strings.Replace(fmt.Sprintf("%v", f), "Rule", "usb_policy.Rule", 1) + ","
+	}
+	repeatedStringForInternalUsbDeviceRule += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`VendorModelList:` + strings.Replace(fmt.Sprintf("%v", this.VendorModelList), "HardwareVendorModel", "HardwareVendorModel", 1) + `,`,
-		`Devices:` + strings.Replace(fmt.Sprintf("%v", this.Devices), "DeviceType", "DeviceType", 1) + `,`,
-		`ImageList:` + strings.Replace(fmt.Sprintf("%v", this.ImageList), "ImageType", "ImageType", 1) + `,`,
+		`VendorModelList:` + repeatedStringForVendorModelList + `,`,
+		`Devices:` + repeatedStringForDevices + `,`,
+		`ImageList:` + repeatedStringForImageList + `,`,
 		`NumaNodes:` + fmt.Sprintf("%v", this.NumaNodes) + `,`,
 		`MemPageSize:` + fmt.Sprintf("%v", this.MemPageSize) + `,`,
 		`MemPageNumber:` + fmt.Sprintf("%v", this.MemPageNumber) + `,`,
-		`NumaMem:` + strings.Replace(fmt.Sprintf("%v", this.NumaMem), "NumaMem", "NumaMem", 1) + `,`,
+		`NumaMem:` + repeatedStringForNumaMem + `,`,
 		`CertifiedHardwareType:` + fmt.Sprintf("%v", this.CertifiedHardwareType) + `,`,
-		`InternalUsbDeviceRule:` + strings.Replace(fmt.Sprintf("%v", this.InternalUsbDeviceRule), "Rule", "ves_io_schema_usb_policy.Rule", 1) + `,`,
+		`InternalUsbDeviceRule:` + repeatedStringForInternalUsbDeviceRule + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3498,16 +3947,41 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVendorModelList := "[]*HardwareVendorModel{"
+	for _, f := range this.VendorModelList {
+		repeatedStringForVendorModelList += strings.Replace(f.String(), "HardwareVendorModel", "HardwareVendorModel", 1) + ","
+	}
+	repeatedStringForVendorModelList += "}"
+	repeatedStringForDevices := "[]*DeviceType{"
+	for _, f := range this.Devices {
+		repeatedStringForDevices += strings.Replace(f.String(), "DeviceType", "DeviceType", 1) + ","
+	}
+	repeatedStringForDevices += "}"
+	repeatedStringForImageList := "[]*ImageType{"
+	for _, f := range this.ImageList {
+		repeatedStringForImageList += strings.Replace(f.String(), "ImageType", "ImageType", 1) + ","
+	}
+	repeatedStringForImageList += "}"
+	repeatedStringForNumaMem := "[]*NumaMem{"
+	for _, f := range this.NumaMem {
+		repeatedStringForNumaMem += strings.Replace(f.String(), "NumaMem", "NumaMem", 1) + ","
+	}
+	repeatedStringForNumaMem += "}"
+	repeatedStringForInternalUsbDeviceRule := "[]*Rule{"
+	for _, f := range this.InternalUsbDeviceRule {
+		repeatedStringForInternalUsbDeviceRule += strings.Replace(fmt.Sprintf("%v", f), "Rule", "usb_policy.Rule", 1) + ","
+	}
+	repeatedStringForInternalUsbDeviceRule += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`VendorModelList:` + strings.Replace(fmt.Sprintf("%v", this.VendorModelList), "HardwareVendorModel", "HardwareVendorModel", 1) + `,`,
-		`Devices:` + strings.Replace(fmt.Sprintf("%v", this.Devices), "DeviceType", "DeviceType", 1) + `,`,
-		`ImageList:` + strings.Replace(fmt.Sprintf("%v", this.ImageList), "ImageType", "ImageType", 1) + `,`,
+		`VendorModelList:` + repeatedStringForVendorModelList + `,`,
+		`Devices:` + repeatedStringForDevices + `,`,
+		`ImageList:` + repeatedStringForImageList + `,`,
 		`NumaNodes:` + fmt.Sprintf("%v", this.NumaNodes) + `,`,
 		`MemPageSize:` + fmt.Sprintf("%v", this.MemPageSize) + `,`,
 		`MemPageNumber:` + fmt.Sprintf("%v", this.MemPageNumber) + `,`,
-		`NumaMem:` + strings.Replace(fmt.Sprintf("%v", this.NumaMem), "NumaMem", "NumaMem", 1) + `,`,
+		`NumaMem:` + repeatedStringForNumaMem + `,`,
 		`CertifiedHardwareType:` + fmt.Sprintf("%v", this.CertifiedHardwareType) + `,`,
-		`InternalUsbDeviceRule:` + strings.Replace(fmt.Sprintf("%v", this.InternalUsbDeviceRule), "Rule", "ves_io_schema_usb_policy.Rule", 1) + `,`,
+		`InternalUsbDeviceRule:` + repeatedStringForInternalUsbDeviceRule + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3545,7 +4019,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3573,7 +4047,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (HardwareDeviceType(b) & 0x7F) << shift
+				m.Type |= HardwareDeviceType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3592,7 +4066,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Use |= (HardwareDeviceInstanceUseType(b) & 0x7F) << shift
+				m.Use |= HardwareDeviceInstanceUseType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3611,7 +4085,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3621,6 +4095,9 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3640,7 +4117,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MinUnit |= (int32(b) & 0x7F) << shift
+				m.MinUnit |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3659,7 +4136,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MaxUnit |= (int32(b) & 0x7F) << shift
+				m.MaxUnit |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3678,7 +4155,7 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3688,6 +4165,9 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3700,6 +4180,9 @@ func (m *DeviceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3729,7 +4212,7 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3757,7 +4240,7 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3767,6 +4250,9 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3786,7 +4272,7 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3796,6 +4282,9 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3808,6 +4297,9 @@ func (m *HardwareVendorModel) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3837,7 +4329,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3865,7 +4357,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3875,6 +4367,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3894,7 +4389,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3904,6 +4399,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3923,7 +4421,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3932,6 +4430,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3955,7 +4456,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3964,6 +4465,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3987,7 +4491,7 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3996,6 +4500,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4012,6 +4519,9 @@ func (m *ImageType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4041,7 +4551,7 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4069,7 +4579,7 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4078,6 +4588,9 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4101,7 +4614,7 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4110,6 +4623,9 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4126,6 +4642,9 @@ func (m *Azure) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4155,7 +4674,7 @@ func (m *AzureImage) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4183,7 +4702,7 @@ func (m *AzureImage) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4193,6 +4712,9 @@ func (m *AzureImage) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4205,6 +4727,9 @@ func (m *AzureImage) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4234,7 +4759,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4262,7 +4787,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4272,6 +4797,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4291,7 +4819,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4301,6 +4829,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4320,7 +4851,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4330,6 +4861,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4349,7 +4883,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4359,6 +4893,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4378,7 +4915,7 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4388,6 +4925,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4400,6 +4940,9 @@ func (m *Marketplace) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4429,7 +4972,7 @@ func (m *Aws) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4457,7 +5000,7 @@ func (m *Aws) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4466,6 +5009,9 @@ func (m *Aws) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4482,6 +5028,9 @@ func (m *Aws) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4511,7 +5060,7 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4539,7 +5088,7 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4549,6 +5098,9 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4568,7 +5120,7 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4578,6 +5130,9 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4590,6 +5145,9 @@ func (m *AwsImage) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4619,7 +5177,7 @@ func (m *Gcp) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4647,7 +5205,7 @@ func (m *Gcp) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4656,6 +5214,9 @@ func (m *Gcp) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4672,6 +5233,9 @@ func (m *Gcp) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4701,7 +5265,7 @@ func (m *GcpImage) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4729,7 +5293,7 @@ func (m *GcpImage) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4739,6 +5303,9 @@ func (m *GcpImage) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4751,6 +5318,9 @@ func (m *GcpImage) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4780,7 +5350,7 @@ func (m *NumaMem) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4808,7 +5378,7 @@ func (m *NumaMem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Memory |= (int32(b) & 0x7F) << shift
+				m.Memory |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4827,7 +5397,7 @@ func (m *NumaMem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Node |= (int32(b) & 0x7F) << shift
+				m.Node |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4839,6 +5409,9 @@ func (m *NumaMem) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4868,7 +5441,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4896,7 +5469,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4905,6 +5478,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4927,7 +5503,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4936,6 +5512,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4958,7 +5537,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4967,6 +5546,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4989,7 +5571,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NumaNodes |= (int32(b) & 0x7F) << shift
+				m.NumaNodes |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5008,7 +5590,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MemPageSize |= (MemPageSize(b) & 0x7F) << shift
+				m.MemPageSize |= MemPageSize(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5027,7 +5609,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MemPageNumber |= (int32(b) & 0x7F) << shift
+				m.MemPageNumber |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5046,7 +5628,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5055,6 +5637,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5077,7 +5662,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CertifiedHardwareType |= (HardwareType(b) & 0x7F) << shift
+				m.CertifiedHardwareType |= HardwareType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5096,7 +5681,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5105,10 +5690,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InternalUsbDeviceRule = append(m.InternalUsbDeviceRule, &ves_io_schema_usb_policy.Rule{})
+			m.InternalUsbDeviceRule = append(m.InternalUsbDeviceRule, &usb_policy.Rule{})
 			if err := m.InternalUsbDeviceRule[len(m.InternalUsbDeviceRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5120,6 +5708,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5149,7 +5740,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5177,7 +5768,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5186,6 +5777,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5208,7 +5802,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5217,6 +5811,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5239,7 +5836,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5248,6 +5845,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5270,7 +5870,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NumaNodes |= (int32(b) & 0x7F) << shift
+				m.NumaNodes |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5289,7 +5889,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MemPageSize |= (MemPageSize(b) & 0x7F) << shift
+				m.MemPageSize |= MemPageSize(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5308,7 +5908,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MemPageNumber |= (int32(b) & 0x7F) << shift
+				m.MemPageNumber |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5327,7 +5927,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5336,6 +5936,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5358,7 +5961,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CertifiedHardwareType |= (HardwareType(b) & 0x7F) << shift
+				m.CertifiedHardwareType |= HardwareType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5377,7 +5980,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5386,10 +5989,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InternalUsbDeviceRule = append(m.InternalUsbDeviceRule, &ves_io_schema_usb_policy.Rule{})
+			m.InternalUsbDeviceRule = append(m.InternalUsbDeviceRule, &usb_policy.Rule{})
 			if err := m.InternalUsbDeviceRule[len(m.InternalUsbDeviceRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5401,6 +6007,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5430,7 +6039,7 @@ func (m *CertifiedHardwareStatus) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5458,7 +6067,7 @@ func (m *CertifiedHardwareStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5468,6 +6077,9 @@ func (m *CertifiedHardwareStatus) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5480,6 +6092,9 @@ func (m *CertifiedHardwareStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5497,6 +6112,7 @@ func (m *CertifiedHardwareStatus) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -5528,10 +6144,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -5548,157 +6162,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/certified_hardware/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/certified_hardware/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1511 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcd, 0x73, 0xd3, 0x58,
-	0x12, 0xb7, 0xfc, 0xed, 0x36, 0x04, 0xf1, 0x80, 0x44, 0x84, 0x20, 0x5c, 0x5e, 0x20, 0xd9, 0x40,
-	0xec, 0x5a, 0x03, 0x87, 0xdd, 0xaa, 0x5d, 0x56, 0xb6, 0x85, 0xad, 0xc4, 0x1f, 0x41, 0xfe, 0x60,
-	0x8b, 0x8b, 0x4a, 0xb6, 0x5f, 0x1c, 0x15, 0xd6, 0x47, 0x49, 0xb2, 0x43, 0x38, 0xed, 0xde, 0xf7,
-	0x30, 0x53, 0x35, 0x73, 0x9b, 0x3f, 0x80, 0x3f, 0x61, 0xaa, 0xa8, 0x9a, 0xe2, 0x38, 0x35, 0xa7,
-	0x1c, 0x39, 0x0e, 0xe6, 0x32, 0xa7, 0x29, 0xfe, 0x84, 0x29, 0x3d, 0xc9, 0x9f, 0x01, 0xdb, 0x33,
-	0xa7, 0x39, 0x70, 0x7b, 0xfd, 0xfa, 0xd7, 0xdd, 0xbf, 0xee, 0xd7, 0xaf, 0xf5, 0x6c, 0xb8, 0x3f,
-	0xc0, 0x56, 0x4a, 0xd1, 0xd3, 0x56, 0xfb, 0x18, 0xab, 0x72, 0xba, 0x8d, 0x4d, 0x5b, 0x39, 0x52,
-	0x70, 0x47, 0x3a, 0x96, 0xcd, 0xce, 0x89, 0x6c, 0xe2, 0xb4, 0x7d, 0x6a, 0x60, 0x2b, 0x65, 0x98,
-	0xba, 0xad, 0xa3, 0x84, 0x8b, 0x4e, 0xb9, 0xe8, 0xd4, 0x79, 0xf4, 0xe6, 0x5e, 0x57, 0xb1, 0x8f,
-	0xfb, 0xad, 0x54, 0x5b, 0x57, 0xd3, 0x5d, 0xbd, 0xab, 0xa7, 0x89, 0x61, 0xab, 0x7f, 0x44, 0x24,
-	0x22, 0x90, 0x95, 0xeb, 0x70, 0xf3, 0x56, 0x57, 0xd7, 0xbb, 0x3d, 0x3c, 0x41, 0xd9, 0x8a, 0x8a,
-	0x2d, 0x5b, 0x56, 0x0d, 0x0f, 0xb0, 0x31, 0xcb, 0x4f, 0xc3, 0xb6, 0xa7, 0xb8, 0x31, 0xab, 0xd0,
-	0x0d, 0x5b, 0xd1, 0x35, 0x8f, 0xe7, 0xe6, 0xcd, 0x59, 0xa5, 0x31, 0xb0, 0xa5, 0xa9, 0x34, 0x36,
-	0xaf, 0xcf, 0xaa, 0xa7, 0x55, 0xb7, 0x67, 0x55, 0x7d, 0xab, 0x25, 0x19, 0x7a, 0x4f, 0x69, 0x9f,
-	0xce, 0xa0, 0xb6, 0x66, 0x51, 0x03, 0xb9, 0xa7, 0x74, 0x64, 0x1b, 0x7b, 0xda, 0xc4, 0x9c, 0x56,
-	0xc1, 0x27, 0xd2, 0x0c, 0xbf, 0xe4, 0x37, 0x7e, 0x80, 0x3c, 0x1e, 0x28, 0x6d, 0x5c, 0x3f, 0x35,
-	0x30, 0x2a, 0x42, 0xd0, 0xf1, 0xce, 0x50, 0x09, 0x6a, 0x67, 0x2d, 0xf3, 0x30, 0xb5, 0xac, 0xca,
-	0xa9, 0xa2, 0xb7, 0x98, 0xf8, 0x10, 0x89, 0x07, 0xf4, 0x14, 0x02, 0x7d, 0x0b, 0x33, 0x7e, 0xe2,
-	0xe8, 0xf1, 0xef, 0x75, 0x24, 0x68, 0x96, 0x2d, 0x6b, 0x6d, 0xdc, 0xb0, 0x5c, 0x9f, 0x8e, 0x2f,
-	0x84, 0x20, 0xa8, 0xc9, 0x2a, 0x66, 0x02, 0x09, 0x6a, 0x27, 0x26, 0x92, 0x35, 0xba, 0x0e, 0x51,
-	0x55, 0xd1, 0xa4, 0xbe, 0xa6, 0xd8, 0x4c, 0x30, 0x41, 0xed, 0x84, 0xc4, 0x88, 0xaa, 0x68, 0x0d,
-	0x4d, 0xb1, 0x89, 0x4a, 0x7e, 0xe9, 0xaa, 0x42, 0x9e, 0x4a, 0x7e, 0x49, 0x54, 0xb7, 0x20, 0xde,
-	0x21, 0x71, 0xa4, 0x9e, 0x62, 0xd9, 0x4c, 0x38, 0x11, 0xd8, 0x89, 0x89, 0xe0, 0x6e, 0x95, 0x14,
-	0xcb, 0x4e, 0xe6, 0xe0, 0xca, 0x88, 0x50, 0x13, 0x6b, 0x1d, 0xdd, 0x2c, 0xeb, 0x1d, 0xdc, 0x43,
-	0xeb, 0x10, 0x1e, 0x10, 0x91, 0x14, 0x28, 0x26, 0x7a, 0x12, 0xba, 0x0a, 0x21, 0xd5, 0x01, 0x90,
-	0x74, 0x63, 0xa2, 0x2b, 0x24, 0xbf, 0xf3, 0x43, 0x4c, 0x50, 0xe5, 0xae, 0x5b, 0xda, 0x75, 0x8f,
-	0x3d, 0xb1, 0xcc, 0xfa, 0x19, 0xca, 0xcb, 0x80, 0x85, 0xa8, 0x61, 0xea, 0x03, 0xa5, 0x83, 0x4d,
-	0xd7, 0x9c, 0xe8, 0xc6, 0x7b, 0xe8, 0x31, 0x84, 0xe4, 0x57, 0x7d, 0xd3, 0x4d, 0x3b, 0x9e, 0xd9,
-	0x5e, 0x5e, 0x4a, 0xce, 0x81, 0x17, 0x7d, 0xa2, 0x6b, 0x87, 0xfe, 0x0e, 0x01, 0xf9, 0xc4, 0x22,
-	0xd5, 0x89, 0x67, 0xee, 0xac, 0x60, 0x7e, 0x62, 0x15, 0x7d, 0xa2, 0x63, 0xe3, 0x98, 0x76, 0xdb,
-	0x06, 0xa9, 0xde, 0x4a, 0xa6, 0x85, 0xb6, 0xe1, 0x98, 0x76, 0xdb, 0x46, 0x76, 0x13, 0xd6, 0xda,
-	0x3d, 0xbd, 0xdf, 0x91, 0xc6, 0x89, 0x44, 0xdf, 0xbe, 0xa1, 0x82, 0x67, 0x6f, 0xa8, 0xf0, 0x7e,
-	0x30, 0x1a, 0xa6, 0x23, 0xc9, 0x1f, 0x28, 0x08, 0x11, 0xaa, 0xe8, 0x29, 0xc4, 0x55, 0xd9, 0x7c,
-	0x81, 0x6d, 0xa3, 0x27, 0xb7, 0xdd, 0x0a, 0xc5, 0x33, 0x7b, 0xcb, 0xc3, 0x95, 0x27, 0x46, 0x45,
-	0x9f, 0x38, 0xed, 0x03, 0x09, 0x10, 0x55, 0x9c, 0xd2, 0x4b, 0x4a, 0x87, 0x54, 0x35, 0x9e, 0xb9,
-	0xbf, 0x62, 0xe1, 0xc8, 0x89, 0x15, 0x7d, 0x62, 0x84, 0xd8, 0x0b, 0x9d, 0xec, 0x65, 0x08, 0x91,
-	0x25, 0x49, 0x80, 0x3a, 0x7b, 0x43, 0x05, 0xf6, 0x83, 0xd1, 0x00, 0x1d, 0x4c, 0x6e, 0x03, 0x4c,
-	0x2c, 0x9c, 0x76, 0x1b, 0x47, 0x74, 0xbb, 0x63, 0xe4, 0x21, 0xf9, 0x3f, 0x0a, 0xe2, 0x53, 0x5c,
-	0x9d, 0x76, 0xd1, 0x8f, 0x8e, 0xf0, 0xa8, 0x8b, 0x5c, 0x01, 0xd1, 0x10, 0xb0, 0x5e, 0xf4, 0xbd,
-	0x16, 0x72, 0x96, 0x88, 0x81, 0xc8, 0x00, 0x9b, 0x96, 0xa2, 0x6b, 0x5e, 0xcf, 0x8f, 0xc4, 0xf1,
-	0x55, 0x08, 0x4e, 0x5d, 0x85, 0x2d, 0x88, 0x19, 0xfd, 0x56, 0x4f, 0xb1, 0x8e, 0xb1, 0x49, 0x8e,
-	0x2c, 0x26, 0x4e, 0x36, 0x92, 0x5d, 0x08, 0x70, 0x27, 0x16, 0x2a, 0xcc, 0xb1, 0x8c, 0x67, 0x76,
-	0x57, 0xea, 0x88, 0xe5, 0x55, 0xf1, 0xef, 0x07, 0xa3, 0x7e, 0x3a, 0x90, 0xfc, 0x27, 0x44, 0x47,
-	0xf8, 0x05, 0x35, 0x71, 0xae, 0x92, 0x89, 0xbb, 0x4e, 0x6a, 0x6e, 0xc2, 0x9e, 0xe4, 0xf0, 0x2c,
-	0xb4, 0x8d, 0x3f, 0xc6, 0xb3, 0xd0, 0x36, 0x56, 0xe7, 0x79, 0x07, 0xa2, 0x23, 0xfc, 0xa2, 0xb3,
-	0x7b, 0x04, 0x91, 0x4a, 0x5f, 0x95, 0xcb, 0x58, 0x75, 0x28, 0xab, 0x58, 0xd5, 0xcd, 0x53, 0x82,
-	0x09, 0x89, 0x9e, 0x44, 0x0e, 0x43, 0xef, 0xb8, 0xb3, 0x2e, 0x24, 0x92, 0x75, 0xf2, 0x75, 0x08,
-	0xd6, 0x0a, 0x3d, 0xbd, 0x25, 0xf7, 0x6a, 0x06, 0x6e, 0x93, 0x01, 0x20, 0xc3, 0x65, 0x77, 0x5c,
-	0x48, 0x64, 0x3c, 0xb8, 0xa3, 0x87, 0x4a, 0x04, 0x76, 0xe2, 0x99, 0x47, 0xab, 0xcf, 0xc7, 0xa9,
-	0x71, 0x24, 0x5e, 0x1a, 0x4c, 0x04, 0x67, 0x6c, 0xa1, 0x27, 0x10, 0x71, 0x87, 0x98, 0xc5, 0xf8,
-	0x89, 0xe3, 0x15, 0x9a, 0x7e, 0x6a, 0x72, 0x8f, 0x8c, 0xd1, 0x3e, 0x80, 0x5b, 0x0f, 0xc2, 0x31,
-	0x48, 0x5c, 0xdd, 0x5b, 0xee, 0x6a, 0x3c, 0xec, 0xc4, 0x18, 0x31, 0x27, 0x9c, 0x6e, 0x02, 0x68,
-	0x7d, 0x55, 0x96, 0x9c, 0xb2, 0x58, 0xde, 0x20, 0x8e, 0x39, 0x3b, 0x15, 0x67, 0x03, 0x3d, 0x85,
-	0x8b, 0x2a, 0x56, 0x25, 0xc3, 0x89, 0x66, 0x29, 0xaf, 0x30, 0x13, 0x26, 0x5f, 0x8c, 0x55, 0x6e,
-	0x3f, 0x56, 0x0f, 0xe5, 0x2e, 0xae, 0x29, 0xaf, 0xb0, 0x18, 0x57, 0x27, 0x02, 0xba, 0x0b, 0x97,
-	0xc6, 0x2e, 0xb5, 0xbe, 0xda, 0xc2, 0x26, 0x13, 0x21, 0x61, 0x2f, 0x7a, 0xa8, 0x0a, 0xd9, 0x44,
-	0x79, 0x88, 0x12, 0x66, 0x2a, 0x56, 0x99, 0x28, 0xc9, 0xf1, 0xaf, 0xcb, 0xa3, 0x7a, 0xcd, 0x20,
-	0x46, 0x34, 0xaf, 0x2b, 0x8e, 0x60, 0xe3, 0x3c, 0x8c, 0x7c, 0xe4, 0x99, 0x18, 0x49, 0x25, 0xb5,
-	0xfa, 0xe1, 0x92, 0xda, 0x5d, 0x1b, 0x03, 0xa6, 0xb7, 0xd1, 0x33, 0x60, 0x14, 0xcd, 0xc6, 0xa6,
-	0x26, 0xf7, 0x24, 0xe7, 0x31, 0xe0, 0x7d, 0xc0, 0xcc, 0x7e, 0x0f, 0x33, 0x40, 0xd8, 0xb3, 0x73,
-	0x81, 0x26, 0x4f, 0x86, 0x94, 0xd8, 0xef, 0x61, 0xf1, 0xda, 0xc8, 0xbe, 0x61, 0xb5, 0xdc, 0x53,
-	0x77, 0xb6, 0x93, 0xdf, 0x87, 0x20, 0x5e, 0xc0, 0xf6, 0x97, 0x3e, 0xfd, 0xd2, 0xa7, 0x7f, 0xe6,
-	0x3e, 0xfd, 0xc7, 0xe5, 0x9f, 0xfe, 0x35, 0x37, 0x52, 0x93, 0xff, 0x86, 0x8d, 0xdc, 0x3c, 0x89,
-	0x9a, 0x2d, 0xdb, 0x7d, 0x0b, 0xdd, 0x81, 0xb5, 0x9e, 0x6c, 0x63, 0xcb, 0x96, 0x46, 0x9f, 0x50,
-	0x77, 0xb0, 0x5f, 0x74, 0x77, 0x9b, 0xee, 0xe6, 0xee, 0xaf, 0x14, 0xa0, 0xf3, 0x6f, 0x58, 0x74,
-	0x03, 0x36, 0x8a, 0x9c, 0x98, 0x7f, 0xc6, 0x89, 0xbc, 0x94, 0xe7, 0x9b, 0x42, 0x8e, 0x97, 0x84,
-	0x4a, 0x93, 0x2b, 0x09, 0x79, 0xda, 0x87, 0xb6, 0x80, 0x99, 0x57, 0xf2, 0xf5, 0x22, 0x2f, 0x56,
-	0xf8, 0x3a, 0x4d, 0xa1, 0x4d, 0x58, 0x9f, 0xd7, 0x36, 0x05, 0xb1, 0x2e, 0x54, 0x69, 0xff, 0xa7,
-	0x74, 0xf5, 0x46, 0xa5, 0xce, 0x1d, 0xd2, 0x01, 0xc4, 0xc0, 0xd5, 0x79, 0x5d, 0xb6, 0x5a, 0xc9,
-	0xd3, 0x41, 0x74, 0x0f, 0xb6, 0xcf, 0xc5, 0xfb, 0x4f, 0x9d, 0x17, 0x2b, 0x5c, 0x49, 0x12, 0x6a,
-	0xb9, 0x9a, 0x20, 0xd5, 0xea, 0x55, 0xb1, 0xce, 0x15, 0x78, 0x3a, 0x84, 0x58, 0xd8, 0x9c, 0x07,
-	0x57, 0x9a, 0x42, 0x5e, 0xe0, 0xa4, 0xc2, 0x61, 0x83, 0x0e, 0xef, 0x7e, 0x1b, 0x84, 0x9b, 0x0b,
-	0xdf, 0xda, 0xe8, 0x16, 0xdc, 0x98, 0xf7, 0xd0, 0xa8, 0xf1, 0x92, 0xc8, 0x17, 0x1a, 0x25, 0x4e,
-	0xa4, 0x7d, 0x28, 0x01, 0x5b, 0x9f, 0x02, 0x08, 0x15, 0x97, 0x13, 0x4d, 0xa1, 0x6d, 0xf8, 0xcb,
-	0x18, 0x51, 0xe1, 0xeb, 0xcf, 0xaa, 0xe2, 0xc1, 0xa7, 0x5c, 0xf9, 0xd1, 0x0e, 0xdc, 0x5e, 0x04,
-	0x1c, 0xbb, 0x0c, 0xa0, 0x5d, 0xb8, 0xbb, 0x08, 0x59, 0xe6, 0x2a, 0x5c, 0x81, 0x2f, 0xf3, 0x95,
-	0x3a, 0x1d, 0x5c, 0x16, 0xbe, 0xda, 0xa8, 0xd7, 0x84, 0xbc, 0x53, 0xac, 0xbb, 0x90, 0x5c, 0x1c,
-	0x9e, 0xe0, 0xc2, 0x33, 0x27, 0xf0, 0x79, 0x87, 0x52, 0x89, 0x2b, 0xd0, 0x91, 0x65, 0x4c, 0x5d,
-	0xa7, 0x04, 0x1b, 0x5d, 0x86, 0x2d, 0x71, 0x05, 0xa9, 0xcc, 0x97, 0xb3, 0xbc, 0x48, 0xc7, 0x96,
-	0x65, 0xe5, 0xf4, 0x80, 0xd3, 0x02, 0x80, 0x1e, 0x40, 0x7a, 0x11, 0xf0, 0x09, 0x57, 0x2a, 0x65,
-	0xb9, 0xdc, 0xc1, 0x74, 0xcd, 0xe2, 0xbb, 0x02, 0x5c, 0x98, 0xb9, 0xc6, 0x17, 0x20, 0xda, 0xac,
-	0x96, 0xea, 0x65, 0xbe, 0x56, 0xa4, 0x7d, 0xe8, 0x0a, 0x5c, 0x72, 0xa4, 0x5a, 0xdd, 0xb1, 0xcb,
-	0x55, 0xcb, 0xd9, 0x2a, 0x4d, 0xa1, 0x75, 0x40, 0xb9, 0x52, 0xb5, 0x91, 0x97, 0xca, 0x9c, 0x78,
-	0xc0, 0xd7, 0xa5, 0xc3, 0x12, 0x97, 0xe3, 0x69, 0xff, 0xee, 0xd7, 0xce, 0x73, 0x77, 0x6a, 0xce,
-	0x25, 0x81, 0x1d, 0xf3, 0x29, 0xf3, 0x65, 0xe9, 0x90, 0x2b, 0xf0, 0x52, 0x4d, 0x78, 0x3e, 0x7d,
-	0xa7, 0xa6, 0xdb, 0x76, 0x16, 0xf3, 0xf0, 0x20, 0x4b, 0x53, 0x0b, 0xf4, 0x99, 0x72, 0x96, 0xf6,
-	0x2f, 0xd0, 0xff, 0xad, 0x90, 0xa5, 0x03, 0xd9, 0xff, 0x53, 0x67, 0xef, 0x59, 0xdf, 0xbb, 0xf7,
-	0xac, 0xef, 0xe3, 0x7b, 0x96, 0xfa, 0xef, 0x90, 0xa5, 0x5e, 0x0f, 0x59, 0xea, 0xc7, 0x21, 0x4b,
-	0x9d, 0x0d, 0x59, 0xea, 0xdd, 0x90, 0xa5, 0x7e, 0x1e, 0xb2, 0xd4, 0x2f, 0x43, 0xd6, 0xf7, 0x71,
-	0xc8, 0x52, 0x5f, 0x7d, 0x60, 0x7d, 0x6f, 0x3f, 0xb0, 0xd4, 0xf3, 0x66, 0x57, 0x37, 0x5e, 0x74,
-	0x53, 0x03, 0xbd, 0x67, 0x63, 0xd3, 0x74, 0x46, 0x55, 0x9a, 0x2c, 0x8e, 0x74, 0x53, 0xdd, 0x1b,
-	0xfd, 0xb2, 0xd9, 0x1b, 0xa9, 0xd3, 0x46, 0xab, 0xab, 0xa7, 0xf1, 0x4b, 0xdb, 0xfb, 0xbd, 0xfd,
-	0xd9, 0xbf, 0x32, 0x5a, 0x61, 0xf2, 0xeb, 0xfb, 0xc1, 0x6f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x69,
-	0x95, 0xc6, 0x2e, 0xf5, 0x10, 0x00, 0x00,
-}

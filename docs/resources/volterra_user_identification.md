@@ -21,8 +21,8 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "client_ip query_param_key http_header_name cookie_name none client_asn" must be set
-    http_header_name = "http_header_name"
+    // One of the arguments from this list "http_header_name cookie_name none client_asn client_ip query_param_key" must be set
+    client_ip = true
   }
 }
 

@@ -3,26 +3,30 @@
 
 package views
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Custom Storage Class List
 //
@@ -33,14 +37,36 @@ type StorageClassListType struct {
 	//
 	// x-displayName: "List of Storage Classes"
 	// List of custom storage classes
-	StorageClasses []*StorageClassType `protobuf:"bytes,1,rep,name=storage_classes,json=storageClasses" json:"storage_classes,omitempty"`
+	StorageClasses []*StorageClassType `protobuf:"bytes,1,rep,name=storage_classes,json=storageClasses,proto3" json:"storage_classes,omitempty"`
 }
 
 func (m *StorageClassListType) Reset()      { *m = StorageClassListType{} }
 func (*StorageClassListType) ProtoMessage() {}
 func (*StorageClassListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorStorageTypes, []int{0}
+	return fileDescriptor_dc5274e25a7c8132, []int{0}
 }
+func (m *StorageClassListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassListType.Merge(m, src)
+}
+func (m *StorageClassListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassListType proto.InternalMessageInfo
 
 func (m *StorageClassListType) GetStorageClasses() []*StorageClassType {
 	if m != nil {
@@ -77,9 +103,33 @@ type StorageClassType struct {
 	DeviceChoice isStorageClassType_DeviceChoice `protobuf_oneof:"device_choice"`
 }
 
-func (m *StorageClassType) Reset()                    { *m = StorageClassType{} }
-func (*StorageClassType) ProtoMessage()               {}
-func (*StorageClassType) Descriptor() ([]byte, []int) { return fileDescriptorStorageTypes, []int{1} }
+func (m *StorageClassType) Reset()      { *m = StorageClassType{} }
+func (*StorageClassType) ProtoMessage() {}
+func (*StorageClassType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dc5274e25a7c8132, []int{1}
+}
+func (m *StorageClassType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassType.Merge(m, src)
+}
+func (m *StorageClassType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassType proto.InternalMessageInfo
 
 type isStorageClassType_DeviceChoice interface {
 	isStorageClassType_DeviceChoice()
@@ -89,7 +139,7 @@ type isStorageClassType_DeviceChoice interface {
 }
 
 type StorageClassType_OpenebsEnterprise struct {
-	OpenebsEnterprise *StorageClassOpenebsEnterpriseType `protobuf:"bytes,6,opt,name=openebs_enterprise,json=openebsEnterprise,oneof"`
+	OpenebsEnterprise *StorageClassOpenebsEnterpriseType `protobuf:"bytes,6,opt,name=openebs_enterprise,json=openebsEnterprise,proto3,oneof" json:"openebs_enterprise,omitempty"`
 }
 
 func (*StorageClassType_OpenebsEnterprise) isStorageClassType_DeviceChoice() {}
@@ -122,59 +172,11 @@ func (m *StorageClassType) GetOpenebsEnterprise() *StorageClassOpenebsEnterprise
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageClassType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageClassType_OneofMarshaler, _StorageClassType_OneofUnmarshaler, _StorageClassType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageClassType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageClassType_OpenebsEnterprise)(nil),
 	}
-}
-
-func _StorageClassType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageClassType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *StorageClassType_OpenebsEnterprise:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OpenebsEnterprise); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("StorageClassType.DeviceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageClassType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageClassType)
-	switch tag {
-	case 6: // device_choice.openebs_enterprise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageClassOpenebsEnterpriseType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &StorageClassType_OpenebsEnterprise{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageClassType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageClassType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *StorageClassType_OpenebsEnterprise:
-		s := proto.Size(x.OpenebsEnterprise)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // OpenEBS Enterprise
@@ -200,8 +202,30 @@ type StorageClassOpenebsEnterpriseType struct {
 func (m *StorageClassOpenebsEnterpriseType) Reset()      { *m = StorageClassOpenebsEnterpriseType{} }
 func (*StorageClassOpenebsEnterpriseType) ProtoMessage() {}
 func (*StorageClassOpenebsEnterpriseType) Descriptor() ([]byte, []int) {
-	return fileDescriptorStorageTypes, []int{2}
+	return fileDescriptor_dc5274e25a7c8132, []int{2}
 }
+func (m *StorageClassOpenebsEnterpriseType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassOpenebsEnterpriseType.Merge(m, src)
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassOpenebsEnterpriseType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassOpenebsEnterpriseType proto.InternalMessageInfo
 
 func (m *StorageClassOpenebsEnterpriseType) GetReplication() int32 {
 	if m != nil {
@@ -225,6 +249,55 @@ func init() {
 	proto.RegisterType((*StorageClassOpenebsEnterpriseType)(nil), "ves.io.schema.views.StorageClassOpenebsEnterpriseType")
 	golang_proto.RegisterType((*StorageClassOpenebsEnterpriseType)(nil), "ves.io.schema.views.StorageClassOpenebsEnterpriseType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptor_dc5274e25a7c8132)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptor_dc5274e25a7c8132)
+}
+
+var fileDescriptor_dc5274e25a7c8132 = []byte{
+	// 578 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0x41, 0x6b, 0x13, 0x41,
+	0x14, 0xde, 0x97, 0xa4, 0xb5, 0x4e, 0x69, 0x8d, 0x53, 0x85, 0x35, 0xca, 0xb8, 0x16, 0xd4, 0x20,
+	0x76, 0x57, 0x53, 0x28, 0xd2, 0x93, 0x44, 0x05, 0x15, 0x51, 0x49, 0x3d, 0x79, 0x09, 0x93, 0xe4,
+	0x75, 0x33, 0x98, 0xcd, 0x2c, 0x33, 0x93, 0x68, 0x7b, 0xea, 0xcd, 0x93, 0x20, 0xfe, 0x02, 0x8f,
+	0xfe, 0x06, 0xf7, 0x52, 0x3c, 0x09, 0x5e, 0x72, 0x2c, 0x9e, 0xcc, 0xe6, 0xa2, 0xb7, 0x1e, 0x3d,
+	0xca, 0x6e, 0x12, 0xd9, 0x44, 0xa1, 0xb7, 0xf7, 0xf2, 0x7d, 0xef, 0xfb, 0xe6, 0xcb, 0x7b, 0x4b,
+	0xae, 0xf7, 0x51, 0xbb, 0x42, 0x7a, 0xba, 0xd9, 0xc6, 0x80, 0x7b, 0x7d, 0x81, 0xaf, 0xb5, 0xa7,
+	0x8d, 0x54, 0xdc, 0xc7, 0xba, 0xd9, 0x0b, 0x51, 0xbb, 0xa1, 0x92, 0x46, 0xd2, 0xb5, 0x31, 0xd1,
+	0x1d, 0x13, 0xdd, 0x94, 0x58, 0xda, 0xf0, 0x85, 0x69, 0xf7, 0x1a, 0x6e, 0x53, 0x06, 0x9e, 0x2f,
+	0x7d, 0xe9, 0xa5, 0xdc, 0x46, 0x6f, 0x37, 0xed, 0xd2, 0x26, 0xad, 0xc6, 0x1a, 0xa5, 0x8b, 0xb3,
+	0x66, 0x32, 0x34, 0x42, 0x76, 0x27, 0x06, 0xa5, 0x0b, 0xb3, 0x60, 0xc6, 0xbb, 0x74, 0x69, 0xee,
+	0x91, 0xbc, 0x23, 0x5a, 0xdc, 0xe0, 0x04, 0x75, 0xfe, 0x8d, 0x50, 0x9f, 0x91, 0x5e, 0x3f, 0x00,
+	0x72, 0x6e, 0x67, 0x9c, 0xe9, 0x5e, 0x87, 0x6b, 0xfd, 0x44, 0x68, 0xf3, 0x62, 0x2f, 0x44, 0xda,
+	0x26, 0x67, 0xa6, 0x59, 0x9b, 0x09, 0x80, 0xda, 0x06, 0x27, 0x5f, 0x5e, 0xae, 0x5c, 0x75, 0xff,
+	0x13, 0xd7, 0xcd, 0x6a, 0x24, 0xf3, 0x55, 0x7b, 0x10, 0x01, 0x7c, 0xfe, 0x75, 0x98, 0x5f, 0xf8,
+	0x00, 0xb9, 0x62, 0x61, 0x5a, 0xd9, 0x50, 0x5b, 0xd5, 0x19, 0x2e, 0xea, 0xf5, 0x6f, 0x39, 0x52,
+	0x9c, 0x1f, 0xa7, 0x77, 0x08, 0x9d, 0xb1, 0xaf, 0x77, 0x79, 0x80, 0x36, 0x38, 0x50, 0x3e, 0x5d,
+	0x25, 0xa9, 0x98, 0xca, 0x7f, 0xcc, 0x41, 0xad, 0x98, 0x15, 0x7b, 0xca, 0x03, 0xa4, 0x15, 0x72,
+	0xbe, 0x85, 0xbb, 0xbc, 0xd7, 0x31, 0xf5, 0x19, 0x05, 0x3b, 0xe7, 0x40, 0x79, 0xa9, 0xb6, 0x36,
+	0x01, 0xb3, 0x8e, 0xd4, 0x27, 0x54, 0x86, 0xd8, 0xc5, 0x86, 0xae, 0x63, 0xd7, 0xa0, 0x0a, 0x95,
+	0xd0, 0x68, 0x2f, 0x3a, 0x50, 0x5e, 0xae, 0x6c, 0x9d, 0x98, 0xf7, 0xd9, 0x78, 0xf4, 0xc1, 0xdf,
+	0xc9, 0x24, 0xc1, 0x43, 0xab, 0x76, 0x56, 0xce, 0x03, 0xdb, 0xdb, 0x5f, 0x22, 0xd8, 0x22, 0x97,
+	0x89, 0x3d, 0x99, 0x77, 0x52, 0x01, 0xe7, 0x39, 0x57, 0x3c, 0x40, 0x83, 0x4a, 0xd3, 0xfc, 0xed,
+	0x9b, 0x15, 0xb2, 0x46, 0x56, 0xa7, 0x84, 0xfb, 0xd8, 0x17, 0x4d, 0xa4, 0xb0, 0x59, 0x65, 0x64,
+	0xa5, 0x95, 0x36, 0xf5, 0x66, 0x5b, 0x26, 0xbf, 0xad, 0x1c, 0x46, 0xb0, 0x38, 0x88, 0x20, 0x1f,
+	0x47, 0x00, 0x5b, 0x8f, 0x0b, 0x4b, 0xf9, 0x62, 0x61, 0xfd, 0x1d, 0x90, 0x2b, 0x27, 0x3e, 0x8e,
+	0x5e, 0x23, 0xcb, 0x0a, 0xc3, 0x8e, 0x68, 0xf2, 0xe4, 0x18, 0xd2, 0xbf, 0x66, 0xa1, 0x5a, 0xf8,
+	0x1d, 0x81, 0x55, 0xcb, 0x02, 0xf4, 0xee, 0xfc, 0x1a, 0xb4, 0xd8, 0x47, 0xbb, 0xe0, 0x40, 0x79,
+	0xa5, 0x4a, 0xbf, 0x47, 0x90, 0xab, 0xdc, 0x4a, 0x96, 0x71, 0xea, 0xc6, 0x82, 0x7d, 0xb0, 0x54,
+	0x9e, 0x5b, 0xc7, 0x8e, 0xd8, 0xc7, 0xea, 0x5b, 0x18, 0x0c, 0x99, 0x75, 0x34, 0x64, 0xd6, 0xf1,
+	0x90, 0xc1, 0x41, 0xcc, 0xe0, 0x53, 0xcc, 0xe0, 0x6b, 0xcc, 0x60, 0x10, 0x33, 0x38, 0x8a, 0x19,
+	0xfc, 0x88, 0x19, 0xfc, 0x8c, 0x99, 0x75, 0x1c, 0x33, 0x78, 0x3f, 0x62, 0xd6, 0xe1, 0x88, 0xc1,
+	0x60, 0xc4, 0xac, 0xa3, 0x11, 0xb3, 0x5e, 0x3e, 0xf2, 0x65, 0xf8, 0xca, 0x77, 0xfb, 0xb2, 0x63,
+	0x50, 0x29, 0xee, 0xf6, 0xb4, 0x97, 0x16, 0xbb, 0x52, 0x05, 0x1b, 0xa1, 0x92, 0x7d, 0xd1, 0x42,
+	0xb5, 0x31, 0x85, 0xbd, 0xb0, 0xe1, 0x4b, 0x0f, 0xdf, 0x98, 0xc9, 0xc1, 0x67, 0x3f, 0xdd, 0xc6,
+	0x62, 0x7a, 0xf1, 0x9b, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xbf, 0x0d, 0x9c, 0x13, 0xd8, 0x03,
+	0x00, 0x00,
+}
+
 func (this *StorageClassListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -397,7 +470,7 @@ func valueToGoStringStorageTypes(v interface{}, typ string) string {
 func (m *StorageClassListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -405,29 +478,36 @@ func (m *StorageClassListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StorageClasses) > 0 {
-		for _, msg := range m.StorageClasses {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintStorageTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StorageClasses) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StorageClasses[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintStorageTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -435,54 +515,69 @@ func (m *StorageClassType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageClassName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintStorageTypes(dAtA, i, uint64(len(m.StorageClassName)))
-		i += copy(dAtA[i:], m.StorageClassName)
+	if m.DeviceChoice != nil {
+		{
+			size := m.DeviceChoice.Size()
+			i -= size
+			if _, err := m.DeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.DefaultStorageClass {
-		dAtA[i] = 0x10
-		i++
+		i--
 		if m.DefaultStorageClass {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x10
 	}
-	if m.DeviceChoice != nil {
-		nn1, err := m.DeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
+	if len(m.StorageClassName) > 0 {
+		i -= len(m.StorageClassName)
+		copy(dAtA[i:], m.StorageClassName)
+		i = encodeVarintStorageTypes(dAtA, i, uint64(len(m.StorageClassName)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassType_OpenebsEnterprise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassType_OpenebsEnterprise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OpenebsEnterprise != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintStorageTypes(dAtA, i, uint64(m.OpenebsEnterprise.Size()))
-		n2, err := m.OpenebsEnterprise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OpenebsEnterprise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintStorageTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *StorageClassOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -490,33 +585,43 @@ func (m *StorageClassOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassOpenebsEnterpriseType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassOpenebsEnterpriseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Replication != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintStorageTypes(dAtA, i, uint64(m.Replication))
-	}
 	if m.StorageClassSize != 0 {
-		dAtA[i] = 0x20
-		i++
 		i = encodeVarintStorageTypes(dAtA, i, uint64(m.StorageClassSize))
+		i--
+		dAtA[i] = 0x20
 	}
-	return i, nil
+	if m.Replication != 0 {
+		i = encodeVarintStorageTypes(dAtA, i, uint64(m.Replication))
+		i--
+		dAtA[i] = 0x10
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintStorageTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovStorageTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *StorageClassListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StorageClasses) > 0 {
@@ -529,6 +634,9 @@ func (m *StorageClassListType) Size() (n int) {
 }
 
 func (m *StorageClassType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageClassName)
@@ -545,6 +653,9 @@ func (m *StorageClassType) Size() (n int) {
 }
 
 func (m *StorageClassType_OpenebsEnterprise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OpenebsEnterprise != nil {
@@ -554,6 +665,9 @@ func (m *StorageClassType_OpenebsEnterprise) Size() (n int) {
 	return n
 }
 func (m *StorageClassOpenebsEnterpriseType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Replication != 0 {
@@ -566,14 +680,7 @@ func (m *StorageClassOpenebsEnterpriseType) Size() (n int) {
 }
 
 func sovStorageTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozStorageTypes(x uint64) (n int) {
 	return sovStorageTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -582,8 +689,13 @@ func (this *StorageClassListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorageClasses := "[]*StorageClassType{"
+	for _, f := range this.StorageClasses {
+		repeatedStringForStorageClasses += strings.Replace(f.String(), "StorageClassType", "StorageClassType", 1) + ","
+	}
+	repeatedStringForStorageClasses += "}"
 	s := strings.Join([]string{`&StorageClassListType{`,
-		`StorageClasses:` + strings.Replace(fmt.Sprintf("%v", this.StorageClasses), "StorageClassType", "StorageClassType", 1) + `,`,
+		`StorageClasses:` + repeatedStringForStorageClasses + `,`,
 		`}`,
 	}, "")
 	return s
@@ -644,7 +756,7 @@ func (m *StorageClassListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -672,7 +784,7 @@ func (m *StorageClassListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -681,6 +793,9 @@ func (m *StorageClassListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthStorageTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -696,6 +811,9 @@ func (m *StorageClassListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthStorageTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -725,7 +843,7 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -753,7 +871,7 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -763,6 +881,9 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthStorageTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -782,7 +903,7 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -802,7 +923,7 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -811,6 +932,9 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthStorageTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -827,6 +951,9 @@ func (m *StorageClassType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthStorageTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -856,7 +983,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -884,7 +1011,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Replication |= (int32(b) & 0x7F) << shift
+				m.Replication |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -903,7 +1030,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.StorageClassSize |= (uint32(b) & 0x7F) << shift
+				m.StorageClassSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -915,6 +1042,9 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthStorageTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthStorageTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -932,6 +1062,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 func skipStorageTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -963,10 +1094,8 @@ func skipStorageTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -983,100 +1112,34 @@ func skipStorageTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthStorageTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowStorageTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipStorageTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupStorageTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthStorageTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthStorageTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowStorageTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthStorageTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowStorageTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupStorageTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptorStorageTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/storage_types.proto", fileDescriptorStorageTypes)
-}
-
-var fileDescriptorStorageTypes = []byte{
-	// 571 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0x41, 0x6b, 0x13, 0x41,
-	0x14, 0xce, 0x4b, 0xd2, 0x5a, 0xa7, 0xb4, 0xc6, 0xa9, 0xc2, 0x1a, 0x65, 0x5c, 0x0b, 0x6a, 0x10,
-	0xbb, 0xab, 0x29, 0x14, 0xe9, 0x49, 0xa2, 0x82, 0x8a, 0xa8, 0xa4, 0x9e, 0xbc, 0x2c, 0x93, 0xcd,
-	0xeb, 0x66, 0x30, 0x9b, 0x59, 0x66, 0x26, 0xd1, 0xf6, 0x62, 0xff, 0x80, 0x20, 0xfe, 0x02, 0x8f,
-	0xfe, 0x06, 0xf7, 0x52, 0x3c, 0x09, 0x5e, 0x72, 0x2c, 0x9e, 0xec, 0xf6, 0xa2, 0xb7, 0x1e, 0x3d,
-	0xca, 0x6e, 0x12, 0xd9, 0x44, 0xa1, 0xb7, 0xf7, 0xf2, 0x7d, 0xef, 0xfb, 0xe6, 0xcb, 0x7b, 0x4b,
-	0xae, 0x0f, 0x50, 0x3b, 0x42, 0xba, 0xda, 0xef, 0x60, 0xc8, 0xdd, 0x81, 0xc0, 0xd7, 0xda, 0xd5,
-	0x46, 0x2a, 0x1e, 0xa0, 0x67, 0x76, 0x22, 0xd4, 0x4e, 0xa4, 0xa4, 0x91, 0x74, 0x65, 0x44, 0x74,
-	0x46, 0x44, 0x27, 0x23, 0x56, 0xd7, 0x02, 0x61, 0x3a, 0xfd, 0x96, 0xe3, 0xcb, 0xd0, 0x0d, 0x64,
-	0x20, 0xdd, 0x8c, 0xdb, 0xea, 0x6f, 0x67, 0x5d, 0xd6, 0x64, 0xd5, 0x48, 0xa3, 0x7a, 0x71, 0xda,
-	0x4c, 0x46, 0x46, 0xc8, 0xde, 0xd8, 0xa0, 0x7a, 0x61, 0x1a, 0xcc, 0x79, 0x57, 0x2f, 0xcd, 0x3c,
-	0x92, 0x77, 0x45, 0x9b, 0x1b, 0x1c, 0xa3, 0xf6, 0xbf, 0x11, 0xbc, 0x29, 0xe9, 0xd5, 0x3d, 0x20,
-	0xe7, 0xb6, 0x46, 0x99, 0xee, 0x75, 0xb9, 0xd6, 0x4f, 0x84, 0x36, 0x2f, 0x76, 0x22, 0xa4, 0x1d,
-	0x72, 0x66, 0x92, 0xd5, 0x4f, 0x01, 0xd4, 0x16, 0xd8, 0xa5, 0xda, 0x62, 0xfd, 0xaa, 0xf3, 0x9f,
-	0xb8, 0x4e, 0x5e, 0x23, 0x9d, 0x6f, 0x58, 0xc3, 0x18, 0xe0, 0xf3, 0xaf, 0xfd, 0xd2, 0xdc, 0x07,
-	0x28, 0x56, 0xca, 0x93, 0xca, 0x82, 0xe6, 0xb2, 0xce, 0x71, 0x51, 0xaf, 0x7e, 0x2b, 0x92, 0xca,
-	0xec, 0x38, 0xbd, 0x43, 0xe8, 0x94, 0xbd, 0xd7, 0xe3, 0x21, 0x5a, 0x60, 0x43, 0xed, 0x74, 0x83,
-	0x64, 0x62, 0xaa, 0xf4, 0xb1, 0x08, 0xcd, 0x4a, 0x5e, 0xec, 0x29, 0x0f, 0x91, 0xd6, 0xc9, 0xf9,
-	0x36, 0x6e, 0xf3, 0x7e, 0xd7, 0x78, 0x53, 0x0a, 0x56, 0xd1, 0x86, 0xda, 0x42, 0x73, 0x65, 0x0c,
-	0xe6, 0x1d, 0x69, 0x40, 0xa8, 0x8c, 0xb0, 0x87, 0x2d, 0xed, 0x61, 0xcf, 0xa0, 0x8a, 0x94, 0xd0,
-	0x68, 0xcd, 0xdb, 0x50, 0x5b, 0xac, 0x6f, 0x9c, 0x98, 0xf7, 0xd9, 0x68, 0xf4, 0xc1, 0xdf, 0xc9,
-	0x34, 0xc1, 0xc3, 0x42, 0xf3, 0xac, 0x9c, 0x05, 0x36, 0x37, 0xbf, 0xc4, 0xb0, 0x41, 0x2e, 0x13,
-	0x6b, 0x3c, 0x6f, 0x67, 0x02, 0xf6, 0x73, 0xae, 0x78, 0x88, 0x06, 0x95, 0xa6, 0xa5, 0xdb, 0x37,
-	0xeb, 0x64, 0x85, 0x2c, 0x4f, 0x08, 0xf7, 0x71, 0x20, 0x7c, 0xa4, 0xb0, 0xde, 0x60, 0x64, 0xa9,
-	0x9d, 0x35, 0x9e, 0xdf, 0x91, 0xe9, 0x6f, 0x4b, 0xfb, 0x31, 0xcc, 0x0f, 0x63, 0x28, 0x25, 0x31,
-	0xc0, 0xc6, 0xe3, 0xf2, 0x42, 0xa9, 0x52, 0x5e, 0x7d, 0x07, 0xe4, 0xca, 0x89, 0x8f, 0xa3, 0xd7,
-	0xc8, 0xa2, 0xc2, 0xa8, 0x2b, 0x7c, 0x9e, 0x1e, 0x43, 0xf6, 0xd7, 0xcc, 0x35, 0xca, 0xbf, 0x63,
-	0x28, 0x34, 0xf3, 0x00, 0xbd, 0x3b, 0xbb, 0x06, 0x2d, 0x76, 0xd1, 0x2a, 0xdb, 0x50, 0x5b, 0x6a,
-	0xd0, 0xef, 0x31, 0x14, 0xeb, 0xb7, 0xd2, 0x65, 0x9c, 0xba, 0x31, 0x67, 0xed, 0x2d, 0xd4, 0x66,
-	0xd6, 0xb1, 0x25, 0x76, 0xb1, 0xf1, 0x76, 0x78, 0xc8, 0x0a, 0x07, 0x87, 0xac, 0x70, 0x7c, 0xc8,
-	0x60, 0x2f, 0x61, 0xf0, 0x29, 0x61, 0xf0, 0x35, 0x61, 0x30, 0x4c, 0x18, 0x1c, 0x24, 0x0c, 0x7e,
-	0x24, 0x0c, 0x7e, 0x26, 0xac, 0x70, 0x9c, 0x30, 0x78, 0x7f, 0xc4, 0x0a, 0xfb, 0x47, 0x0c, 0x5e,
-	0x3e, 0x0a, 0x64, 0xf4, 0x2a, 0x70, 0x06, 0xb2, 0x6b, 0x50, 0x29, 0xee, 0xf4, 0xb5, 0x9b, 0x15,
-	0xdb, 0x52, 0x85, 0x6b, 0x91, 0x92, 0x03, 0xd1, 0x46, 0xb5, 0x36, 0x81, 0xdd, 0xa8, 0x15, 0x48,
-	0x17, 0xdf, 0x98, 0xf1, 0x9d, 0xe7, 0xbf, 0xd8, 0xd6, 0x7c, 0x76, 0xe8, 0xeb, 0x7f, 0x02, 0x00,
-	0x00, 0xff, 0xff, 0xb4, 0x45, 0xba, 0xc3, 0xcf, 0x03, 0x00, 0x00,
-}

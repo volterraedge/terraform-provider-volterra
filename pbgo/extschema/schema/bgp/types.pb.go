@@ -3,32 +3,33 @@
 
 package bgp
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf1 "github.com/gogo/protobuf/types"
-import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // BGP Router ID
 //
@@ -58,6 +59,7 @@ var BgpRouterIdType_name = map[int32]string{
 	2: "BGP_ROUTER_ID_FROM_SITE_OBJECT",
 	3: "BGP_ROUTER_ID_FROM_SITE_TEMPLATE_PARAMETERS",
 }
+
 var BgpRouterIdType_value = map[string]int32{
 	"BGP_ROUTER_ID_FROM_INTERFACE":                0,
 	"BGP_ROUTER_ID_FROM_IP_ADDRESS":               1,
@@ -65,7 +67,9 @@ var BgpRouterIdType_value = map[string]int32{
 	"BGP_ROUTER_ID_FROM_SITE_TEMPLATE_PARAMETERS": 3,
 }
 
-func (BgpRouterIdType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (BgpRouterIdType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{0}
+}
 
 // BGP Peer Address
 //
@@ -117,6 +121,7 @@ var BgpPeerAddressType_name = map[int32]string{
 	4: "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
 	5: "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END",
 }
+
 var BgpPeerAddressType_value = map[string]int32{
 	"BGP_PEER_ADDRESS_FROM_DEFAULT_GW":               0,
 	"BGP_PEER_ADDRESS_FROM_IP_ADDRESS":               1,
@@ -126,7 +131,9 @@ var BgpPeerAddressType_value = map[string]int32{
 	"BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END":        5,
 }
 
-func (BgpPeerAddressType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (BgpPeerAddressType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{1}
+}
 
 // BGP Peer States
 //
@@ -147,12 +154,15 @@ var BgpPeerUpDownType_name = map[int32]string{
 	0: "BGP_PEER_DOWN",
 	1: "BGP_PEER_UP",
 }
+
 var BgpPeerUpDownType_value = map[string]int32{
 	"BGP_PEER_DOWN": 0,
 	"BGP_PEER_UP":   1,
 }
 
-func (BgpPeerUpDownType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (BgpPeerUpDownType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{2}
+}
 
 // BGP Parameters
 //
@@ -186,7 +196,7 @@ type BgpParameters struct {
 	//
 	// x-displayName: "Router ID"
 	// If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored.
-	BgpRouterId *ves_io_schema3.IpAddressType `protobuf:"bytes,3,opt,name=bgp_router_id,json=bgpRouterId" json:"bgp_router_id,omitempty"`
+	BgpRouterId *schema.IpAddressType `protobuf:"bytes,3,opt,name=bgp_router_id,json=bgpRouterId,proto3" json:"bgp_router_id,omitempty"`
 	// Router ID Key
 	//
 	// x-displayName: "Router ID Key"
@@ -195,9 +205,33 @@ type BgpParameters struct {
 	BgpRouterIdKey string `protobuf:"bytes,4,opt,name=bgp_router_id_key,json=bgpRouterIdKey,proto3" json:"bgp_router_id_key,omitempty"`
 }
 
-func (m *BgpParameters) Reset()                    { *m = BgpParameters{} }
-func (*BgpParameters) ProtoMessage()               {}
-func (*BgpParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *BgpParameters) Reset()      { *m = BgpParameters{} }
+func (*BgpParameters) ProtoMessage() {}
+func (*BgpParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{0}
+}
+func (m *BgpParameters) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BgpParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BgpParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BgpParameters.Merge(m, src)
+}
+func (m *BgpParameters) XXX_Size() int {
+	return m.Size()
+}
+func (m *BgpParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_BgpParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BgpParameters proto.InternalMessageInfo
 
 type isBgpParameters_RouterIdChoice interface {
 	isBgpParameters_RouterIdChoice()
@@ -207,13 +241,13 @@ type isBgpParameters_RouterIdChoice interface {
 }
 
 type BgpParameters_LocalAddress struct {
-	LocalAddress *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=local_address,json=localAddress,oneof"`
+	LocalAddress *schema.Empty `protobuf:"bytes,6,opt,name=local_address,json=localAddress,proto3,oneof" json:"local_address,omitempty"`
 }
 type BgpParameters_FromSite struct {
-	FromSite *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=from_site,json=fromSite,oneof"`
+	FromSite *schema.Empty `protobuf:"bytes,7,opt,name=from_site,json=fromSite,proto3,oneof" json:"from_site,omitempty"`
 }
 type BgpParameters_IpAddress struct {
-	IpAddress string `protobuf:"bytes,8,opt,name=ip_address,json=ipAddress,proto3,oneof"`
+	IpAddress string `protobuf:"bytes,8,opt,name=ip_address,json=ipAddress,proto3,oneof" json:"ip_address,omitempty"`
 }
 
 func (*BgpParameters_LocalAddress) isBgpParameters_RouterIdChoice() {}
@@ -234,14 +268,14 @@ func (m *BgpParameters) GetAsn() uint32 {
 	return 0
 }
 
-func (m *BgpParameters) GetLocalAddress() *ves_io_schema4.Empty {
+func (m *BgpParameters) GetLocalAddress() *schema.Empty {
 	if x, ok := m.GetRouterIdChoice().(*BgpParameters_LocalAddress); ok {
 		return x.LocalAddress
 	}
 	return nil
 }
 
-func (m *BgpParameters) GetFromSite() *ves_io_schema4.Empty {
+func (m *BgpParameters) GetFromSite() *schema.Empty {
 	if x, ok := m.GetRouterIdChoice().(*BgpParameters_FromSite); ok {
 		return x.FromSite
 	}
@@ -262,7 +296,7 @@ func (m *BgpParameters) GetBgpRouterIdType() BgpRouterIdType {
 	return BGP_ROUTER_ID_FROM_INTERFACE
 }
 
-func (m *BgpParameters) GetBgpRouterId() *ves_io_schema3.IpAddressType {
+func (m *BgpParameters) GetBgpRouterId() *schema.IpAddressType {
 	if m != nil {
 		return m.BgpRouterId
 	}
@@ -276,93 +310,13 @@ func (m *BgpParameters) GetBgpRouterIdKey() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*BgpParameters) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _BgpParameters_OneofMarshaler, _BgpParameters_OneofUnmarshaler, _BgpParameters_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*BgpParameters) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*BgpParameters_LocalAddress)(nil),
 		(*BgpParameters_FromSite)(nil),
 		(*BgpParameters_IpAddress)(nil),
 	}
-}
-
-func _BgpParameters_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*BgpParameters)
-	// router_id_choice
-	switch x := m.RouterIdChoice.(type) {
-	case *BgpParameters_LocalAddress:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalAddress); err != nil {
-			return err
-		}
-	case *BgpParameters_FromSite:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FromSite); err != nil {
-			return err
-		}
-	case *BgpParameters_IpAddress:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.IpAddress)
-	case nil:
-	default:
-		return fmt.Errorf("BgpParameters.RouterIdChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _BgpParameters_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*BgpParameters)
-	switch tag {
-	case 6: // router_id_choice.local_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RouterIdChoice = &BgpParameters_LocalAddress{msg}
-		return true, err
-	case 7: // router_id_choice.from_site
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RouterIdChoice = &BgpParameters_FromSite{msg}
-		return true, err
-	case 8: // router_id_choice.ip_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RouterIdChoice = &BgpParameters_IpAddress{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _BgpParameters_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*BgpParameters)
-	// router_id_choice
-	switch x := m.RouterIdChoice.(type) {
-	case *BgpParameters_LocalAddress:
-		s := proto.Size(x.LocalAddress)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *BgpParameters_FromSite:
-		s := proto.Size(x.FromSite)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *BgpParameters_IpAddress:
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.IpAddress)))
-		n += len(x.IpAddress)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Legacy BGP Peer
@@ -384,7 +338,7 @@ type BgpPeer struct {
 	//
 	// x-displayName: "Peer Address"
 	// If Peer Address Type is set to "From IP Address", this is used as Peer Address. Else, this is ignored.
-	BgpPeerAddress *ves_io_schema3.IpAddressType `protobuf:"bytes,3,opt,name=bgp_peer_address,json=bgpPeerAddress" json:"bgp_peer_address,omitempty"`
+	BgpPeerAddress *schema.IpAddressType `protobuf:"bytes,3,opt,name=bgp_peer_address,json=bgpPeerAddress,proto3" json:"bgp_peer_address,omitempty"`
 	// Peer Address Key
 	//
 	// x-displayName: "Peer Address Key"
@@ -418,12 +372,12 @@ type BgpPeer struct {
 	//
 	// x-displayName: "Address Families"
 	// List of address families for processing in vega code.
-	Families []*PeerFamilyParameters `protobuf:"bytes,20,rep,name=families" json:"families,omitempty"`
+	Families []*PeerFamilyParameters `protobuf:"bytes,20,rep,name=families,proto3" json:"families,omitempty"`
 	// interface_refs
 	//
 	// x-displayName: "Interface Refs"
 	// List of interface refs for processing in vega code.
-	InterfaceRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,21,rep,name=interface_refs,json=interfaceRefs" json:"interface_refs,omitempty"`
+	InterfaceRefs []*schema.ObjectRefType `protobuf:"bytes,21,rep,name=interface_refs,json=interfaceRefs,proto3" json:"interface_refs,omitempty"`
 	// all_inside_interfaces
 	//
 	// x-displayName: "All Inside Interfaces"
@@ -436,9 +390,33 @@ type BgpPeer struct {
 	AllOutsideInterfaces bool `protobuf:"varint,23,opt,name=all_outside_interfaces,json=allOutsideInterfaces,proto3" json:"all_outside_interfaces,omitempty"`
 }
 
-func (m *BgpPeer) Reset()                    { *m = BgpPeer{} }
-func (*BgpPeer) ProtoMessage()               {}
-func (*BgpPeer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *BgpPeer) Reset()      { *m = BgpPeer{} }
+func (*BgpPeer) ProtoMessage() {}
+func (*BgpPeer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{1}
+}
+func (m *BgpPeer) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BgpPeer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BgpPeer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BgpPeer.Merge(m, src)
+}
+func (m *BgpPeer) XXX_Size() int {
+	return m.Size()
+}
+func (m *BgpPeer) XXX_DiscardUnknown() {
+	xxx_messageInfo_BgpPeer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BgpPeer proto.InternalMessageInfo
 
 func (m *BgpPeer) GetAsn() uint32 {
 	if m != nil {
@@ -454,7 +432,7 @@ func (m *BgpPeer) GetBgpPeerAddressType() BgpPeerAddressType {
 	return BGP_PEER_ADDRESS_FROM_DEFAULT_GW
 }
 
-func (m *BgpPeer) GetBgpPeerAddress() *ves_io_schema3.IpAddressType {
+func (m *BgpPeer) GetBgpPeerAddress() *schema.IpAddressType {
 	if m != nil {
 		return m.BgpPeerAddress
 	}
@@ -489,7 +467,7 @@ func (m *BgpPeer) GetFamilies() []*PeerFamilyParameters {
 	return nil
 }
 
-func (m *BgpPeer) GetInterfaceRefs() []*ves_io_schema4.ObjectRefType {
+func (m *BgpPeer) GetInterfaceRefs() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InterfaceRefs
 	}
@@ -520,14 +498,38 @@ type InterfaceList struct {
 	// x-displayName: "Interface List"
 	// x-required
 	// List of network interfaces.
-	Interfaces []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=interfaces" json:"interfaces,omitempty"`
+	Interfaces []*views.ObjectRefType `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 }
 
-func (m *InterfaceList) Reset()                    { *m = InterfaceList{} }
-func (*InterfaceList) ProtoMessage()               {}
-func (*InterfaceList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *InterfaceList) Reset()      { *m = InterfaceList{} }
+func (*InterfaceList) ProtoMessage() {}
+func (*InterfaceList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{2}
+}
+func (m *InterfaceList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InterfaceList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InterfaceList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InterfaceList.Merge(m, src)
+}
+func (m *InterfaceList) XXX_Size() int {
+	return m.Size()
+}
+func (m *InterfaceList) XXX_DiscardUnknown() {
+	xxx_messageInfo_InterfaceList.DiscardUnknown(m)
+}
 
-func (m *InterfaceList) GetInterfaces() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_InterfaceList proto.InternalMessageInfo
+
+func (m *InterfaceList) GetInterfaces() []*views.ObjectRefType {
 	if m != nil {
 		return m.Interfaces
 	}
@@ -551,9 +553,33 @@ type FamilyInet struct {
 	EnableChoice isFamilyInet_EnableChoice `protobuf_oneof:"enable_choice"`
 }
 
-func (m *FamilyInet) Reset()                    { *m = FamilyInet{} }
-func (*FamilyInet) ProtoMessage()               {}
-func (*FamilyInet) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *FamilyInet) Reset()      { *m = FamilyInet{} }
+func (*FamilyInet) ProtoMessage() {}
+func (*FamilyInet) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{3}
+}
+func (m *FamilyInet) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FamilyInet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FamilyInet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FamilyInet.Merge(m, src)
+}
+func (m *FamilyInet) XXX_Size() int {
+	return m.Size()
+}
+func (m *FamilyInet) XXX_DiscardUnknown() {
+	xxx_messageInfo_FamilyInet.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FamilyInet proto.InternalMessageInfo
 
 type isFamilyInet_EnableChoice interface {
 	isFamilyInet_EnableChoice()
@@ -563,10 +589,10 @@ type isFamilyInet_EnableChoice interface {
 }
 
 type FamilyInet_Enable struct {
-	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+	Enable *schema.Empty `protobuf:"bytes,2,opt,name=enable,proto3,oneof" json:"enable,omitempty"`
 }
 type FamilyInet_Disable struct {
-	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+	Disable *schema.Empty `protobuf:"bytes,3,opt,name=disable,proto3,oneof" json:"disable,omitempty"`
 }
 
 func (*FamilyInet_Enable) isFamilyInet_EnableChoice()  {}
@@ -579,92 +605,26 @@ func (m *FamilyInet) GetEnableChoice() isFamilyInet_EnableChoice {
 	return nil
 }
 
-func (m *FamilyInet) GetEnable() *ves_io_schema4.Empty {
+func (m *FamilyInet) GetEnable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyInet_Enable); ok {
 		return x.Enable
 	}
 	return nil
 }
 
-func (m *FamilyInet) GetDisable() *ves_io_schema4.Empty {
+func (m *FamilyInet) GetDisable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyInet_Disable); ok {
 		return x.Disable
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FamilyInet) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FamilyInet_OneofMarshaler, _FamilyInet_OneofUnmarshaler, _FamilyInet_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FamilyInet) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FamilyInet_Enable)(nil),
 		(*FamilyInet_Disable)(nil),
 	}
-}
-
-func _FamilyInet_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FamilyInet)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInet_Enable:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Enable); err != nil {
-			return err
-		}
-	case *FamilyInet_Disable:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disable); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FamilyInet.EnableChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FamilyInet_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FamilyInet)
-	switch tag {
-	case 2: // enable_choice.enable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInet_Enable{msg}
-		return true, err
-	case 3: // enable_choice.disable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInet_Disable{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FamilyInet_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FamilyInet)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInet_Enable:
-		s := proto.Size(x.Enable)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FamilyInet_Disable:
-		s := proto.Size(x.Disable)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // FamilyInetvpnParameters
@@ -684,9 +644,33 @@ type FamilyInetvpnParameters struct {
 	SrChoice isFamilyInetvpnParameters_SrChoice `protobuf_oneof:"sr_choice"`
 }
 
-func (m *FamilyInetvpnParameters) Reset()                    { *m = FamilyInetvpnParameters{} }
-func (*FamilyInetvpnParameters) ProtoMessage()               {}
-func (*FamilyInetvpnParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *FamilyInetvpnParameters) Reset()      { *m = FamilyInetvpnParameters{} }
+func (*FamilyInetvpnParameters) ProtoMessage() {}
+func (*FamilyInetvpnParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{4}
+}
+func (m *FamilyInetvpnParameters) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FamilyInetvpnParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FamilyInetvpnParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FamilyInetvpnParameters.Merge(m, src)
+}
+func (m *FamilyInetvpnParameters) XXX_Size() int {
+	return m.Size()
+}
+func (m *FamilyInetvpnParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_FamilyInetvpnParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FamilyInetvpnParameters proto.InternalMessageInfo
 
 type isFamilyInetvpnParameters_SrChoice interface {
 	isFamilyInetvpnParameters_SrChoice()
@@ -696,10 +680,10 @@ type isFamilyInetvpnParameters_SrChoice interface {
 }
 
 type FamilyInetvpnParameters_Enable struct {
-	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+	Enable *schema.Empty `protobuf:"bytes,2,opt,name=enable,proto3,oneof" json:"enable,omitempty"`
 }
 type FamilyInetvpnParameters_Disable struct {
-	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+	Disable *schema.Empty `protobuf:"bytes,3,opt,name=disable,proto3,oneof" json:"disable,omitempty"`
 }
 
 func (*FamilyInetvpnParameters_Enable) isFamilyInetvpnParameters_SrChoice()  {}
@@ -712,92 +696,26 @@ func (m *FamilyInetvpnParameters) GetSrChoice() isFamilyInetvpnParameters_SrChoi
 	return nil
 }
 
-func (m *FamilyInetvpnParameters) GetEnable() *ves_io_schema4.Empty {
+func (m *FamilyInetvpnParameters) GetEnable() *schema.Empty {
 	if x, ok := m.GetSrChoice().(*FamilyInetvpnParameters_Enable); ok {
 		return x.Enable
 	}
 	return nil
 }
 
-func (m *FamilyInetvpnParameters) GetDisable() *ves_io_schema4.Empty {
+func (m *FamilyInetvpnParameters) GetDisable() *schema.Empty {
 	if x, ok := m.GetSrChoice().(*FamilyInetvpnParameters_Disable); ok {
 		return x.Disable
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FamilyInetvpnParameters) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FamilyInetvpnParameters_OneofMarshaler, _FamilyInetvpnParameters_OneofUnmarshaler, _FamilyInetvpnParameters_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FamilyInetvpnParameters) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FamilyInetvpnParameters_Enable)(nil),
 		(*FamilyInetvpnParameters_Disable)(nil),
 	}
-}
-
-func _FamilyInetvpnParameters_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FamilyInetvpnParameters)
-	// sr_choice
-	switch x := m.SrChoice.(type) {
-	case *FamilyInetvpnParameters_Enable:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Enable); err != nil {
-			return err
-		}
-	case *FamilyInetvpnParameters_Disable:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disable); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FamilyInetvpnParameters.SrChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FamilyInetvpnParameters_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FamilyInetvpnParameters)
-	switch tag {
-	case 2: // sr_choice.enable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SrChoice = &FamilyInetvpnParameters_Enable{msg}
-		return true, err
-	case 3: // sr_choice.disable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SrChoice = &FamilyInetvpnParameters_Disable{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FamilyInetvpnParameters_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FamilyInetvpnParameters)
-	// sr_choice
-	switch x := m.SrChoice.(type) {
-	case *FamilyInetvpnParameters_Enable:
-		s := proto.Size(x.Enable)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FamilyInetvpnParameters_Disable:
-		s := proto.Size(x.Disable)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // FamilyInetvpn
@@ -817,9 +735,33 @@ type FamilyInetvpn struct {
 	EnableChoice isFamilyInetvpn_EnableChoice `protobuf_oneof:"enable_choice"`
 }
 
-func (m *FamilyInetvpn) Reset()                    { *m = FamilyInetvpn{} }
-func (*FamilyInetvpn) ProtoMessage()               {}
-func (*FamilyInetvpn) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *FamilyInetvpn) Reset()      { *m = FamilyInetvpn{} }
+func (*FamilyInetvpn) ProtoMessage() {}
+func (*FamilyInetvpn) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{5}
+}
+func (m *FamilyInetvpn) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FamilyInetvpn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FamilyInetvpn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FamilyInetvpn.Merge(m, src)
+}
+func (m *FamilyInetvpn) XXX_Size() int {
+	return m.Size()
+}
+func (m *FamilyInetvpn) XXX_DiscardUnknown() {
+	xxx_messageInfo_FamilyInetvpn.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FamilyInetvpn proto.InternalMessageInfo
 
 type isFamilyInetvpn_EnableChoice interface {
 	isFamilyInetvpn_EnableChoice()
@@ -829,10 +771,10 @@ type isFamilyInetvpn_EnableChoice interface {
 }
 
 type FamilyInetvpn_Enable struct {
-	Enable *FamilyInetvpnParameters `protobuf:"bytes,2,opt,name=enable,oneof"`
+	Enable *FamilyInetvpnParameters `protobuf:"bytes,2,opt,name=enable,proto3,oneof" json:"enable,omitempty"`
 }
 type FamilyInetvpn_Disable struct {
-	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+	Disable *schema.Empty `protobuf:"bytes,3,opt,name=disable,proto3,oneof" json:"disable,omitempty"`
 }
 
 func (*FamilyInetvpn_Enable) isFamilyInetvpn_EnableChoice()  {}
@@ -852,85 +794,19 @@ func (m *FamilyInetvpn) GetEnable() *FamilyInetvpnParameters {
 	return nil
 }
 
-func (m *FamilyInetvpn) GetDisable() *ves_io_schema4.Empty {
+func (m *FamilyInetvpn) GetDisable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyInetvpn_Disable); ok {
 		return x.Disable
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FamilyInetvpn) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FamilyInetvpn_OneofMarshaler, _FamilyInetvpn_OneofUnmarshaler, _FamilyInetvpn_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FamilyInetvpn) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FamilyInetvpn_Enable)(nil),
 		(*FamilyInetvpn_Disable)(nil),
 	}
-}
-
-func _FamilyInetvpn_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FamilyInetvpn)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInetvpn_Enable:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Enable); err != nil {
-			return err
-		}
-	case *FamilyInetvpn_Disable:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disable); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FamilyInetvpn.EnableChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FamilyInetvpn_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FamilyInetvpn)
-	switch tag {
-	case 2: // enable_choice.enable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FamilyInetvpnParameters)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInetvpn_Enable{msg}
-		return true, err
-	case 3: // enable_choice.disable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInetvpn_Disable{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FamilyInetvpn_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FamilyInetvpn)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInetvpn_Enable:
-		s := proto.Size(x.Enable)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FamilyInetvpn_Disable:
-		s := proto.Size(x.Disable)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // FamilyInet6vpn
@@ -950,9 +826,33 @@ type FamilyInet6Vpn struct {
 	EnableChoice isFamilyInet6Vpn_EnableChoice `protobuf_oneof:"enable_choice"`
 }
 
-func (m *FamilyInet6Vpn) Reset()                    { *m = FamilyInet6Vpn{} }
-func (*FamilyInet6Vpn) ProtoMessage()               {}
-func (*FamilyInet6Vpn) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *FamilyInet6Vpn) Reset()      { *m = FamilyInet6Vpn{} }
+func (*FamilyInet6Vpn) ProtoMessage() {}
+func (*FamilyInet6Vpn) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{6}
+}
+func (m *FamilyInet6Vpn) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FamilyInet6Vpn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FamilyInet6Vpn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FamilyInet6Vpn.Merge(m, src)
+}
+func (m *FamilyInet6Vpn) XXX_Size() int {
+	return m.Size()
+}
+func (m *FamilyInet6Vpn) XXX_DiscardUnknown() {
+	xxx_messageInfo_FamilyInet6Vpn.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FamilyInet6Vpn proto.InternalMessageInfo
 
 type isFamilyInet6Vpn_EnableChoice interface {
 	isFamilyInet6Vpn_EnableChoice()
@@ -962,10 +862,10 @@ type isFamilyInet6Vpn_EnableChoice interface {
 }
 
 type FamilyInet6Vpn_Enable struct {
-	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+	Enable *schema.Empty `protobuf:"bytes,2,opt,name=enable,proto3,oneof" json:"enable,omitempty"`
 }
 type FamilyInet6Vpn_Disable struct {
-	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+	Disable *schema.Empty `protobuf:"bytes,3,opt,name=disable,proto3,oneof" json:"disable,omitempty"`
 }
 
 func (*FamilyInet6Vpn_Enable) isFamilyInet6Vpn_EnableChoice()  {}
@@ -978,92 +878,26 @@ func (m *FamilyInet6Vpn) GetEnableChoice() isFamilyInet6Vpn_EnableChoice {
 	return nil
 }
 
-func (m *FamilyInet6Vpn) GetEnable() *ves_io_schema4.Empty {
+func (m *FamilyInet6Vpn) GetEnable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyInet6Vpn_Enable); ok {
 		return x.Enable
 	}
 	return nil
 }
 
-func (m *FamilyInet6Vpn) GetDisable() *ves_io_schema4.Empty {
+func (m *FamilyInet6Vpn) GetDisable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyInet6Vpn_Disable); ok {
 		return x.Disable
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FamilyInet6Vpn) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FamilyInet6Vpn_OneofMarshaler, _FamilyInet6Vpn_OneofUnmarshaler, _FamilyInet6Vpn_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FamilyInet6Vpn) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FamilyInet6Vpn_Enable)(nil),
 		(*FamilyInet6Vpn_Disable)(nil),
 	}
-}
-
-func _FamilyInet6Vpn_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FamilyInet6Vpn)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInet6Vpn_Enable:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Enable); err != nil {
-			return err
-		}
-	case *FamilyInet6Vpn_Disable:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disable); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FamilyInet6Vpn.EnableChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FamilyInet6Vpn_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FamilyInet6Vpn)
-	switch tag {
-	case 2: // enable_choice.enable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInet6Vpn_Enable{msg}
-		return true, err
-	case 3: // enable_choice.disable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyInet6Vpn_Disable{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FamilyInet6Vpn_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FamilyInet6Vpn)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyInet6Vpn_Enable:
-		s := proto.Size(x.Enable)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FamilyInet6Vpn_Disable:
-		s := proto.Size(x.Disable)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // FamilyRtarget
@@ -1083,9 +917,33 @@ type FamilyRtarget struct {
 	EnableChoice isFamilyRtarget_EnableChoice `protobuf_oneof:"enable_choice"`
 }
 
-func (m *FamilyRtarget) Reset()                    { *m = FamilyRtarget{} }
-func (*FamilyRtarget) ProtoMessage()               {}
-func (*FamilyRtarget) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *FamilyRtarget) Reset()      { *m = FamilyRtarget{} }
+func (*FamilyRtarget) ProtoMessage() {}
+func (*FamilyRtarget) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{7}
+}
+func (m *FamilyRtarget) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FamilyRtarget) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FamilyRtarget) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FamilyRtarget.Merge(m, src)
+}
+func (m *FamilyRtarget) XXX_Size() int {
+	return m.Size()
+}
+func (m *FamilyRtarget) XXX_DiscardUnknown() {
+	xxx_messageInfo_FamilyRtarget.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FamilyRtarget proto.InternalMessageInfo
 
 type isFamilyRtarget_EnableChoice interface {
 	isFamilyRtarget_EnableChoice()
@@ -1095,10 +953,10 @@ type isFamilyRtarget_EnableChoice interface {
 }
 
 type FamilyRtarget_Enable struct {
-	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+	Enable *schema.Empty `protobuf:"bytes,2,opt,name=enable,proto3,oneof" json:"enable,omitempty"`
 }
 type FamilyRtarget_Disable struct {
-	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+	Disable *schema.Empty `protobuf:"bytes,3,opt,name=disable,proto3,oneof" json:"disable,omitempty"`
 }
 
 func (*FamilyRtarget_Enable) isFamilyRtarget_EnableChoice()  {}
@@ -1111,92 +969,26 @@ func (m *FamilyRtarget) GetEnableChoice() isFamilyRtarget_EnableChoice {
 	return nil
 }
 
-func (m *FamilyRtarget) GetEnable() *ves_io_schema4.Empty {
+func (m *FamilyRtarget) GetEnable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyRtarget_Enable); ok {
 		return x.Enable
 	}
 	return nil
 }
 
-func (m *FamilyRtarget) GetDisable() *ves_io_schema4.Empty {
+func (m *FamilyRtarget) GetDisable() *schema.Empty {
 	if x, ok := m.GetEnableChoice().(*FamilyRtarget_Disable); ok {
 		return x.Disable
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FamilyRtarget) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FamilyRtarget_OneofMarshaler, _FamilyRtarget_OneofUnmarshaler, _FamilyRtarget_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FamilyRtarget) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FamilyRtarget_Enable)(nil),
 		(*FamilyRtarget_Disable)(nil),
 	}
-}
-
-func _FamilyRtarget_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FamilyRtarget)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyRtarget_Enable:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Enable); err != nil {
-			return err
-		}
-	case *FamilyRtarget_Disable:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Disable); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FamilyRtarget.EnableChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FamilyRtarget_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FamilyRtarget)
-	switch tag {
-	case 2: // enable_choice.enable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyRtarget_Enable{msg}
-		return true, err
-	case 3: // enable_choice.disable
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EnableChoice = &FamilyRtarget_Disable{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FamilyRtarget_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FamilyRtarget)
-	// enable_choice
-	switch x := m.EnableChoice.(type) {
-	case *FamilyRtarget_Enable:
-		s := proto.Size(x.Enable)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FamilyRtarget_Disable:
-		s := proto.Size(x.Disable)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // PeerFamilyParameters
@@ -1217,9 +1009,33 @@ type PeerFamilyParameters struct {
 	EnableSrv6 bool `protobuf:"varint,2,opt,name=enable_srv6,json=enableSrv6,proto3" json:"enable_srv6,omitempty"`
 }
 
-func (m *PeerFamilyParameters) Reset()                    { *m = PeerFamilyParameters{} }
-func (*PeerFamilyParameters) ProtoMessage()               {}
-func (*PeerFamilyParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *PeerFamilyParameters) Reset()      { *m = PeerFamilyParameters{} }
+func (*PeerFamilyParameters) ProtoMessage() {}
+func (*PeerFamilyParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{8}
+}
+func (m *PeerFamilyParameters) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PeerFamilyParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PeerFamilyParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PeerFamilyParameters.Merge(m, src)
+}
+func (m *PeerFamilyParameters) XXX_Size() int {
+	return m.Size()
+}
+func (m *PeerFamilyParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_PeerFamilyParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PeerFamilyParameters proto.InternalMessageInfo
 
 func (m *PeerFamilyParameters) GetFamily() string {
 	if m != nil {
@@ -1270,7 +1086,7 @@ type PeerExternal struct {
 	//
 	// x-displayName: "Family IPv4 Unicast"
 	// Parameters for IPv4 Unicast family.
-	FamilyInet *FamilyInet `protobuf:"bytes,11,opt,name=family_inet,json=familyInet" json:"family_inet,omitempty"`
+	FamilyInet *FamilyInet `protobuf:"bytes,11,opt,name=family_inet,json=familyInet,proto3" json:"family_inet,omitempty"`
 	// interface_choice
 	//
 	// x-displayName: "Peer Interface(s)"
@@ -1285,9 +1101,33 @@ type PeerExternal struct {
 	InterfaceChoice isPeerExternal_InterfaceChoice `protobuf_oneof:"interface_choice"`
 }
 
-func (m *PeerExternal) Reset()                    { *m = PeerExternal{} }
-func (*PeerExternal) ProtoMessage()               {}
-func (*PeerExternal) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *PeerExternal) Reset()      { *m = PeerExternal{} }
+func (*PeerExternal) ProtoMessage() {}
+func (*PeerExternal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{9}
+}
+func (m *PeerExternal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PeerExternal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PeerExternal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PeerExternal.Merge(m, src)
+}
+func (m *PeerExternal) XXX_Size() int {
+	return m.Size()
+}
+func (m *PeerExternal) XXX_DiscardUnknown() {
+	xxx_messageInfo_PeerExternal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PeerExternal proto.InternalMessageInfo
 
 type isPeerExternal_AddressChoice interface {
 	isPeerExternal_AddressChoice()
@@ -1303,31 +1143,31 @@ type isPeerExternal_InterfaceChoice interface {
 }
 
 type PeerExternal_Address struct {
-	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof"`
+	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof" json:"address,omitempty"`
 }
 type PeerExternal_SubnetBeginOffset struct {
-	SubnetBeginOffset uint32 `protobuf:"varint,4,opt,name=subnet_begin_offset,json=subnetBeginOffset,proto3,oneof"`
+	SubnetBeginOffset uint32 `protobuf:"varint,4,opt,name=subnet_begin_offset,json=subnetBeginOffset,proto3,oneof" json:"subnet_begin_offset,omitempty"`
 }
 type PeerExternal_SubnetEndOffset struct {
-	SubnetEndOffset uint32 `protobuf:"varint,5,opt,name=subnet_end_offset,json=subnetEndOffset,proto3,oneof"`
+	SubnetEndOffset uint32 `protobuf:"varint,5,opt,name=subnet_end_offset,json=subnetEndOffset,proto3,oneof" json:"subnet_end_offset,omitempty"`
 }
 type PeerExternal_FromSite struct {
-	FromSite *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=from_site,json=fromSite,oneof"`
+	FromSite *schema.Empty `protobuf:"bytes,6,opt,name=from_site,json=fromSite,proto3,oneof" json:"from_site,omitempty"`
 }
 type PeerExternal_DefaultGateway struct {
-	DefaultGateway *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=default_gateway,json=defaultGateway,oneof"`
+	DefaultGateway *schema.Empty `protobuf:"bytes,7,opt,name=default_gateway,json=defaultGateway,proto3,oneof" json:"default_gateway,omitempty"`
 }
 type PeerExternal_Interface struct {
-	Interface *ves_io_schema_views.ObjectRefType `protobuf:"bytes,21,opt,name=interface,oneof"`
+	Interface *views.ObjectRefType `protobuf:"bytes,21,opt,name=interface,proto3,oneof" json:"interface,omitempty"`
 }
 type PeerExternal_InterfaceList struct {
-	InterfaceList *InterfaceList `protobuf:"bytes,22,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *InterfaceList `protobuf:"bytes,22,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type PeerExternal_InsideInterfaces struct {
-	InsideInterfaces *ves_io_schema4.Empty `protobuf:"bytes,23,opt,name=inside_interfaces,json=insideInterfaces,oneof"`
+	InsideInterfaces *schema.Empty `protobuf:"bytes,23,opt,name=inside_interfaces,json=insideInterfaces,proto3,oneof" json:"inside_interfaces,omitempty"`
 }
 type PeerExternal_OutsideInterfaces struct {
-	OutsideInterfaces *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=outside_interfaces,json=outsideInterfaces,oneof"`
+	OutsideInterfaces *schema.Empty `protobuf:"bytes,24,opt,name=outside_interfaces,json=outsideInterfaces,proto3,oneof" json:"outside_interfaces,omitempty"`
 }
 
 func (*PeerExternal_Address) isPeerExternal_AddressChoice()             {}
@@ -1381,14 +1221,14 @@ func (m *PeerExternal) GetSubnetEndOffset() uint32 {
 	return 0
 }
 
-func (m *PeerExternal) GetFromSite() *ves_io_schema4.Empty {
+func (m *PeerExternal) GetFromSite() *schema.Empty {
 	if x, ok := m.GetAddressChoice().(*PeerExternal_FromSite); ok {
 		return x.FromSite
 	}
 	return nil
 }
 
-func (m *PeerExternal) GetDefaultGateway() *ves_io_schema4.Empty {
+func (m *PeerExternal) GetDefaultGateway() *schema.Empty {
 	if x, ok := m.GetAddressChoice().(*PeerExternal_DefaultGateway); ok {
 		return x.DefaultGateway
 	}
@@ -1409,7 +1249,7 @@ func (m *PeerExternal) GetFamilyInet() *FamilyInet {
 	return nil
 }
 
-func (m *PeerExternal) GetInterface() *ves_io_schema_views.ObjectRefType {
+func (m *PeerExternal) GetInterface() *views.ObjectRefType {
 	if x, ok := m.GetInterfaceChoice().(*PeerExternal_Interface); ok {
 		return x.Interface
 	}
@@ -1423,23 +1263,23 @@ func (m *PeerExternal) GetInterfaceList() *InterfaceList {
 	return nil
 }
 
-func (m *PeerExternal) GetInsideInterfaces() *ves_io_schema4.Empty {
+func (m *PeerExternal) GetInsideInterfaces() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*PeerExternal_InsideInterfaces); ok {
 		return x.InsideInterfaces
 	}
 	return nil
 }
 
-func (m *PeerExternal) GetOutsideInterfaces() *ves_io_schema4.Empty {
+func (m *PeerExternal) GetOutsideInterfaces() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*PeerExternal_OutsideInterfaces); ok {
 		return x.OutsideInterfaces
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*PeerExternal) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _PeerExternal_OneofMarshaler, _PeerExternal_OneofUnmarshaler, _PeerExternal_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*PeerExternal) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*PeerExternal_Address)(nil),
 		(*PeerExternal_SubnetBeginOffset)(nil),
 		(*PeerExternal_SubnetEndOffset)(nil),
@@ -1450,196 +1290,6 @@ func (*PeerExternal) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) 
 		(*PeerExternal_InsideInterfaces)(nil),
 		(*PeerExternal_OutsideInterfaces)(nil),
 	}
-}
-
-func _PeerExternal_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*PeerExternal)
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *PeerExternal_Address:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Address)
-	case *PeerExternal_SubnetBeginOffset:
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.SubnetBeginOffset))
-	case *PeerExternal_SubnetEndOffset:
-		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.SubnetEndOffset))
-	case *PeerExternal_FromSite:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FromSite); err != nil {
-			return err
-		}
-	case *PeerExternal_DefaultGateway:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultGateway); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("PeerExternal.AddressChoice has unexpected type %T", x)
-	}
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *PeerExternal_Interface:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Interface); err != nil {
-			return err
-		}
-	case *PeerExternal_InterfaceList:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case *PeerExternal_InsideInterfaces:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideInterfaces); err != nil {
-			return err
-		}
-	case *PeerExternal_OutsideInterfaces:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideInterfaces); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("PeerExternal.InterfaceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _PeerExternal_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*PeerExternal)
-	switch tag {
-	case 3: // address_choice.address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AddressChoice = &PeerExternal_Address{x}
-		return true, err
-	case 4: // address_choice.subnet_begin_offset
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.AddressChoice = &PeerExternal_SubnetBeginOffset{uint32(x)}
-		return true, err
-	case 5: // address_choice.subnet_end_offset
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.AddressChoice = &PeerExternal_SubnetEndOffset{uint32(x)}
-		return true, err
-	case 6: // address_choice.from_site
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AddressChoice = &PeerExternal_FromSite{msg}
-		return true, err
-	case 7: // address_choice.default_gateway
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AddressChoice = &PeerExternal_DefaultGateway{msg}
-		return true, err
-	case 21: // interface_choice.interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &PeerExternal_Interface{msg}
-		return true, err
-	case 22: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(InterfaceList)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &PeerExternal_InterfaceList{msg}
-		return true, err
-	case 23: // interface_choice.inside_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &PeerExternal_InsideInterfaces{msg}
-		return true, err
-	case 24: // interface_choice.outside_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &PeerExternal_OutsideInterfaces{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _PeerExternal_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*PeerExternal)
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *PeerExternal_Address:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Address)))
-		n += len(x.Address)
-	case *PeerExternal_SubnetBeginOffset:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.SubnetBeginOffset))
-	case *PeerExternal_SubnetEndOffset:
-		n += proto.SizeVarint(5<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.SubnetEndOffset))
-	case *PeerExternal_FromSite:
-		s := proto.Size(x.FromSite)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerExternal_DefaultGateway:
-		s := proto.Size(x.DefaultGateway)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *PeerExternal_Interface:
-		s := proto.Size(x.Interface)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerExternal_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerExternal_InsideInterfaces:
-		s := proto.Size(x.InsideInterfaces)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerExternal_OutsideInterfaces:
-		s := proto.Size(x.OutsideInterfaces)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // PeerInternal
@@ -1668,17 +1318,17 @@ type PeerInternal struct {
 	//
 	// x-displayName: "Family IPv4 VPN Unicast"
 	// Parameters for IPv4 VPN Unicast family.
-	FamilyInetvpn *FamilyInetvpn `protobuf:"bytes,11,opt,name=family_inetvpn,json=familyInetvpn" json:"family_inetvpn,omitempty"`
+	FamilyInetvpn *FamilyInetvpn `protobuf:"bytes,11,opt,name=family_inetvpn,json=familyInetvpn,proto3" json:"family_inetvpn,omitempty"`
 	// family_inet6vpn
 	//
 	// x-displayName: "Family IPv6 VPN Unicast"
 	// Parameters for IPv6 VPN Unicast family.
-	FamilyInet6Vpn *FamilyInet6Vpn `protobuf:"bytes,16,opt,name=family_inet6vpn,json=familyInet6vpn" json:"family_inet6vpn,omitempty"`
+	FamilyInet6Vpn *FamilyInet6Vpn `protobuf:"bytes,16,opt,name=family_inet6vpn,json=familyInet6vpn,proto3" json:"family_inet6vpn,omitempty"`
 	// family_rtarget
 	//
 	// x-displayName: "Family Route Target"
 	// Parameters for Route Target family.
-	FamilyRtarget *FamilyRtarget `protobuf:"bytes,12,opt,name=family_rtarget,json=familyRtarget" json:"family_rtarget,omitempty"`
+	FamilyRtarget *FamilyRtarget `protobuf:"bytes,12,opt,name=family_rtarget,json=familyRtarget,proto3" json:"family_rtarget,omitempty"`
 	// mtls_choice
 	//
 	// x-displayName: "MTLS Configuration"
@@ -1690,9 +1340,33 @@ type PeerInternal struct {
 	MtlsChoice isPeerInternal_MtlsChoice `protobuf_oneof:"mtls_choice"`
 }
 
-func (m *PeerInternal) Reset()                    { *m = PeerInternal{} }
-func (*PeerInternal) ProtoMessage()               {}
-func (*PeerInternal) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *PeerInternal) Reset()      { *m = PeerInternal{} }
+func (*PeerInternal) ProtoMessage() {}
+func (*PeerInternal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{10}
+}
+func (m *PeerInternal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PeerInternal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PeerInternal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PeerInternal.Merge(m, src)
+}
+func (m *PeerInternal) XXX_Size() int {
+	return m.Size()
+}
+func (m *PeerInternal) XXX_DiscardUnknown() {
+	xxx_messageInfo_PeerInternal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PeerInternal proto.InternalMessageInfo
 
 type isPeerInternal_AddressChoice interface {
 	isPeerInternal_AddressChoice()
@@ -1708,19 +1382,19 @@ type isPeerInternal_MtlsChoice interface {
 }
 
 type PeerInternal_Address struct {
-	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof"`
+	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof" json:"address,omitempty"`
 }
 type PeerInternal_FromSite struct {
-	FromSite *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=from_site,json=fromSite,oneof"`
+	FromSite *schema.Empty `protobuf:"bytes,4,opt,name=from_site,json=fromSite,proto3,oneof" json:"from_site,omitempty"`
 }
 type PeerInternal_DnsName struct {
-	DnsName string `protobuf:"bytes,5,opt,name=dns_name,json=dnsName,proto3,oneof"`
+	DnsName string `protobuf:"bytes,5,opt,name=dns_name,json=dnsName,proto3,oneof" json:"dns_name,omitempty"`
 }
 type PeerInternal_DisableMtls struct {
-	DisableMtls *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=disable_mtls,json=disableMtls,oneof"`
+	DisableMtls *schema.Empty `protobuf:"bytes,14,opt,name=disable_mtls,json=disableMtls,proto3,oneof" json:"disable_mtls,omitempty"`
 }
 type PeerInternal_EnableMtls struct {
-	EnableMtls *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=enable_mtls,json=enableMtls,oneof"`
+	EnableMtls *schema.Empty `protobuf:"bytes,15,opt,name=enable_mtls,json=enableMtls,proto3,oneof" json:"enable_mtls,omitempty"`
 }
 
 func (*PeerInternal_Address) isPeerInternal_AddressChoice()  {}
@@ -1749,7 +1423,7 @@ func (m *PeerInternal) GetAddress() string {
 	return ""
 }
 
-func (m *PeerInternal) GetFromSite() *ves_io_schema4.Empty {
+func (m *PeerInternal) GetFromSite() *schema.Empty {
 	if x, ok := m.GetAddressChoice().(*PeerInternal_FromSite); ok {
 		return x.FromSite
 	}
@@ -1791,153 +1465,29 @@ func (m *PeerInternal) GetFamilyRtarget() *FamilyRtarget {
 	return nil
 }
 
-func (m *PeerInternal) GetDisableMtls() *ves_io_schema4.Empty {
+func (m *PeerInternal) GetDisableMtls() *schema.Empty {
 	if x, ok := m.GetMtlsChoice().(*PeerInternal_DisableMtls); ok {
 		return x.DisableMtls
 	}
 	return nil
 }
 
-func (m *PeerInternal) GetEnableMtls() *ves_io_schema4.Empty {
+func (m *PeerInternal) GetEnableMtls() *schema.Empty {
 	if x, ok := m.GetMtlsChoice().(*PeerInternal_EnableMtls); ok {
 		return x.EnableMtls
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*PeerInternal) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _PeerInternal_OneofMarshaler, _PeerInternal_OneofUnmarshaler, _PeerInternal_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*PeerInternal) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*PeerInternal_Address)(nil),
 		(*PeerInternal_FromSite)(nil),
 		(*PeerInternal_DnsName)(nil),
 		(*PeerInternal_DisableMtls)(nil),
 		(*PeerInternal_EnableMtls)(nil),
 	}
-}
-
-func _PeerInternal_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*PeerInternal)
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *PeerInternal_Address:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Address)
-	case *PeerInternal_FromSite:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FromSite); err != nil {
-			return err
-		}
-	case *PeerInternal_DnsName:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DnsName)
-	case nil:
-	default:
-		return fmt.Errorf("PeerInternal.AddressChoice has unexpected type %T", x)
-	}
-	// mtls_choice
-	switch x := m.MtlsChoice.(type) {
-	case *PeerInternal_DisableMtls:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableMtls); err != nil {
-			return err
-		}
-	case *PeerInternal_EnableMtls:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableMtls); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("PeerInternal.MtlsChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _PeerInternal_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*PeerInternal)
-	switch tag {
-	case 3: // address_choice.address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AddressChoice = &PeerInternal_Address{x}
-		return true, err
-	case 4: // address_choice.from_site
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AddressChoice = &PeerInternal_FromSite{msg}
-		return true, err
-	case 5: // address_choice.dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AddressChoice = &PeerInternal_DnsName{x}
-		return true, err
-	case 14: // mtls_choice.disable_mtls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MtlsChoice = &PeerInternal_DisableMtls{msg}
-		return true, err
-	case 15: // mtls_choice.enable_mtls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MtlsChoice = &PeerInternal_EnableMtls{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _PeerInternal_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*PeerInternal)
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *PeerInternal_Address:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Address)))
-		n += len(x.Address)
-	case *PeerInternal_FromSite:
-		s := proto.Size(x.FromSite)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerInternal_DnsName:
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DnsName)))
-		n += len(x.DnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// mtls_choice
-	switch x := m.MtlsChoice.(type) {
-	case *PeerInternal_DisableMtls:
-		s := proto.Size(x.DisableMtls)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PeerInternal_EnableMtls:
-		s := proto.Size(x.EnableMtls)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Peer
@@ -1950,7 +1500,7 @@ type Peer struct {
 	// x-displayName: "Metadata"
 	// x-required
 	// Common attributes for the peer including name and description.
-	Metadata *ves_io_schema4.MessageMetaType `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// type_choice
 	//
 	// x-displayName: "Peer Type"
@@ -1968,9 +1518,33 @@ type Peer struct {
 	TargetService string `protobuf:"bytes,1000,opt,name=target_service,json=targetService,proto3" json:"target_service,omitempty"`
 }
 
-func (m *Peer) Reset()                    { *m = Peer{} }
-func (*Peer) ProtoMessage()               {}
-func (*Peer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (m *Peer) Reset()      { *m = Peer{} }
+func (*Peer) ProtoMessage() {}
+func (*Peer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{11}
+}
+func (m *Peer) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Peer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Peer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Peer.Merge(m, src)
+}
+func (m *Peer) XXX_Size() int {
+	return m.Size()
+}
+func (m *Peer) XXX_DiscardUnknown() {
+	xxx_messageInfo_Peer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Peer proto.InternalMessageInfo
 
 type isPeer_TypeChoice interface {
 	isPeer_TypeChoice()
@@ -1980,10 +1554,10 @@ type isPeer_TypeChoice interface {
 }
 
 type Peer_External struct {
-	External *PeerExternal `protobuf:"bytes,3,opt,name=external,oneof"`
+	External *PeerExternal `protobuf:"bytes,3,opt,name=external,proto3,oneof" json:"external,omitempty"`
 }
 type Peer_Internal struct {
-	Internal *PeerInternal `protobuf:"bytes,4,opt,name=internal,oneof"`
+	Internal *PeerInternal `protobuf:"bytes,4,opt,name=internal,proto3,oneof" json:"internal,omitempty"`
 }
 
 func (*Peer_External) isPeer_TypeChoice() {}
@@ -1996,7 +1570,7 @@ func (m *Peer) GetTypeChoice() isPeer_TypeChoice {
 	return nil
 }
 
-func (m *Peer) GetMetadata() *ves_io_schema4.MessageMetaType {
+func (m *Peer) GetMetadata() *schema.MessageMetaType {
 	if m != nil {
 		return m.Metadata
 	}
@@ -2024,78 +1598,12 @@ func (m *Peer) GetTargetService() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Peer) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Peer_OneofMarshaler, _Peer_OneofUnmarshaler, _Peer_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Peer) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Peer_External)(nil),
 		(*Peer_Internal)(nil),
 	}
-}
-
-func _Peer_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Peer)
-	// type_choice
-	switch x := m.TypeChoice.(type) {
-	case *Peer_External:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.External); err != nil {
-			return err
-		}
-	case *Peer_Internal:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Internal); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Peer.TypeChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Peer_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Peer)
-	switch tag {
-	case 3: // type_choice.external
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PeerExternal)
-		err := b.DecodeMessage(msg)
-		m.TypeChoice = &Peer_External{msg}
-		return true, err
-	case 4: // type_choice.internal
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PeerInternal)
-		err := b.DecodeMessage(msg)
-		m.TypeChoice = &Peer_Internal{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Peer_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Peer)
-	// type_choice
-	switch x := m.TypeChoice.(type) {
-	case *Peer_External:
-		s := proto.Size(x.External)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Peer_Internal:
-		s := proto.Size(x.Internal)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Global Specification
@@ -2108,34 +1616,34 @@ type GlobalSpecType struct {
 	// x-displayName: "Where"
 	// x-required
 	// Site or virtual site where this BGP configuration should be applied.
-	Where *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
+	Where *schema.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
 	// BGP Parameters
 	//
 	// x-displayName: "Parameters"
 	// x-required
 	// BGP parameters for local site
-	BgpParameters *BgpParameters `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
+	BgpParameters *BgpParameters `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters,proto3" json:"bgp_parameters,omitempty"`
 	// BGP Peers
 	//
 	// x-displayName: "Peers"
 	// BGP parameters for peer
-	BgpPeers []*BgpPeer `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers" json:"bgp_peers,omitempty"`
+	BgpPeers []*BgpPeer `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers,proto3" json:"bgp_peers,omitempty"`
 	// Interfaces
 	//
 	// x-displayName: "Interfaces"
 	// List of interfaces to which the BGP configuration is applied
-	NetworkInterface []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface" json:"network_interface,omitempty"`
+	NetworkInterface []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface,proto3" json:"network_interface,omitempty"`
 	// BGP Peers
 	//
 	// x-displayName: "Peers"
 	// x-required
 	// BGP parameters for peer
-	Peers []*Peer `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
+	Peers []*Peer `protobuf:"bytes,5,rep,name=peers,proto3" json:"peers,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 	// view_version
 	//
 	// x-displayName: "View Version"
@@ -2146,11 +1654,35 @@ type GlobalSpecType struct {
 	ViewVersion uint32 `protobuf:"varint,1001,opt,name=view_version,json=viewVersion,proto3" json:"view_version,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{12}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetWhere() *schema.SiteVirtualSiteRefSelector {
 	if m != nil {
 		return m.Where
 	}
@@ -2171,7 +1703,7 @@ func (m *GlobalSpecType) GetBgpPeers() []*BgpPeer {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetNetworkInterface() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkInterface
 	}
@@ -2185,7 +1717,7 @@ func (m *GlobalSpecType) GetPeers() []*Peer {
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
@@ -2205,16 +1737,40 @@ func (m *GlobalSpecType) GetViewVersion() uint32 {
 // BGP object is the configuration for peering with external BGP servers.
 // It is created by users in system namespace.
 type CreateSpecType struct {
-	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
+	Where         *schema.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	BgpParameters *BgpParameters                     `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters,proto3" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                            `protobuf:"bytes,5,rep,name=peers,proto3" json:"peers,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{13}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetWhere() *schema.SiteVirtualSiteRefSelector {
 	if m != nil {
 		return m.Where
 	}
@@ -2241,16 +1797,40 @@ func (m *CreateSpecType) GetPeers() []*Peer {
 // BGP object is the configuration for peering with external BGP servers.
 // Replace bgp will replace the contents of given BGP object.
 type ReplaceSpecType struct {
-	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
+	Where         *schema.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	BgpParameters *BgpParameters                     `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters,proto3" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                            `protobuf:"bytes,5,rep,name=peers,proto3" json:"peers,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{14}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
 
-func (m *ReplaceSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
+
+func (m *ReplaceSpecType) GetWhere() *schema.SiteVirtualSiteRefSelector {
 	if m != nil {
 		return m.Where
 	}
@@ -2277,16 +1857,40 @@ func (m *ReplaceSpecType) GetPeers() []*Peer {
 // BGP object is the configuration for peering with external BGP servers.
 // Get bgp reads from system namespace.
 type GetSpecType struct {
-	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
+	Where         *schema.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	BgpParameters *BgpParameters                     `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters,proto3" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                            `protobuf:"bytes,5,rep,name=peers,proto3" json:"peers,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{15}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetWhere() *schema.SiteVirtualSiteRefSelector {
 	if m != nil {
 		return m.Where
 	}
@@ -2316,7 +1920,7 @@ type BgpPeerStatusType struct {
 	//
 	// x-displayName: "Peer Address"
 	// Address of the Peer
-	PeerAddress *ves_io_schema3.IpAddressType `protobuf:"bytes,3,opt,name=peer_address,json=peerAddress" json:"peer_address,omitempty"`
+	PeerAddress *schema.IpAddressType `protobuf:"bytes,3,opt,name=peer_address,json=peerAddress,proto3" json:"peer_address,omitempty"`
 	// Peer Port
 	//
 	// x-displayName: "Peer Port"
@@ -2341,7 +1945,7 @@ type BgpPeerStatusType struct {
 	//
 	// x-displayName: "State Change Timestamp"
 	// Timestamp at which last state change to Established state or to not Established state happened
-	UpDownTimestamp *google_protobuf1.Timestamp `protobuf:"bytes,7,opt,name=up_down_timestamp,json=upDownTimestamp" json:"up_down_timestamp,omitempty"`
+	UpDownTimestamp *types.Timestamp `protobuf:"bytes,7,opt,name=up_down_timestamp,json=upDownTimestamp,proto3" json:"up_down_timestamp,omitempty"`
 	// Connection Flap Count
 	//
 	// x-displayName: "BGP Connection Flap Count"
@@ -2369,11 +1973,35 @@ type BgpPeerStatusType struct {
 	LocalAddress string `protobuf:"bytes,12,opt,name=local_address,json=localAddress,proto3" json:"local_address,omitempty"`
 }
 
-func (m *BgpPeerStatusType) Reset()                    { *m = BgpPeerStatusType{} }
-func (*BgpPeerStatusType) ProtoMessage()               {}
-func (*BgpPeerStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
+func (m *BgpPeerStatusType) Reset()      { *m = BgpPeerStatusType{} }
+func (*BgpPeerStatusType) ProtoMessage() {}
+func (*BgpPeerStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{16}
+}
+func (m *BgpPeerStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BgpPeerStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BgpPeerStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BgpPeerStatusType.Merge(m, src)
+}
+func (m *BgpPeerStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *BgpPeerStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_BgpPeerStatusType.DiscardUnknown(m)
+}
 
-func (m *BgpPeerStatusType) GetPeerAddress() *ves_io_schema3.IpAddressType {
+var xxx_messageInfo_BgpPeerStatusType proto.InternalMessageInfo
+
+func (m *BgpPeerStatusType) GetPeerAddress() *schema.IpAddressType {
 	if m != nil {
 		return m.PeerAddress
 	}
@@ -2408,7 +2036,7 @@ func (m *BgpPeerStatusType) GetPeerAsn() uint32 {
 	return 0
 }
 
-func (m *BgpPeerStatusType) GetUpDownTimestamp() *google_protobuf1.Timestamp {
+func (m *BgpPeerStatusType) GetUpDownTimestamp() *types.Timestamp {
 	if m != nil {
 		return m.UpDownTimestamp
 	}
@@ -2469,12 +2097,36 @@ type BgpStatusType struct {
 	//
 	// x-displayName: "BGP Peer Status"
 	// Status of the BGP Peer
-	PeerStatusList []*BgpPeerStatusType `protobuf:"bytes,3,rep,name=peer_status_list,json=peerStatusList" json:"peer_status_list,omitempty"`
+	PeerStatusList []*BgpPeerStatusType `protobuf:"bytes,3,rep,name=peer_status_list,json=peerStatusList,proto3" json:"peer_status_list,omitempty"`
 }
 
-func (m *BgpStatusType) Reset()                    { *m = BgpStatusType{} }
-func (*BgpStatusType) ProtoMessage()               {}
-func (*BgpStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{17} }
+func (m *BgpStatusType) Reset()      { *m = BgpStatusType{} }
+func (*BgpStatusType) ProtoMessage() {}
+func (*BgpStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cad0df24d7dab112, []int{17}
+}
+func (m *BgpStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BgpStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BgpStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BgpStatusType.Merge(m, src)
+}
+func (m *BgpStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *BgpStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_BgpStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BgpStatusType proto.InternalMessageInfo
 
 func (m *BgpStatusType) GetLocalRouterId() string {
 	if m != nil {
@@ -2498,6 +2150,12 @@ func (m *BgpStatusType) GetPeerStatusList() []*BgpPeerStatusType {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.bgp.BgpRouterIdType", BgpRouterIdType_name, BgpRouterIdType_value)
+	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpRouterIdType", BgpRouterIdType_name, BgpRouterIdType_value)
+	proto.RegisterEnum("ves.io.schema.bgp.BgpPeerAddressType", BgpPeerAddressType_name, BgpPeerAddressType_value)
+	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpPeerAddressType", BgpPeerAddressType_name, BgpPeerAddressType_value)
+	proto.RegisterEnum("ves.io.schema.bgp.BgpPeerUpDownType", BgpPeerUpDownType_name, BgpPeerUpDownType_value)
+	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpPeerUpDownType", BgpPeerUpDownType_name, BgpPeerUpDownType_value)
 	proto.RegisterType((*BgpParameters)(nil), "ves.io.schema.bgp.BgpParameters")
 	golang_proto.RegisterType((*BgpParameters)(nil), "ves.io.schema.bgp.BgpParameters")
 	proto.RegisterType((*BgpPeer)(nil), "ves.io.schema.bgp.BgpPeer")
@@ -2534,13 +2192,171 @@ func init() {
 	golang_proto.RegisterType((*BgpPeerStatusType)(nil), "ves.io.schema.bgp.BgpPeerStatusType")
 	proto.RegisterType((*BgpStatusType)(nil), "ves.io.schema.bgp.BgpStatusType")
 	golang_proto.RegisterType((*BgpStatusType)(nil), "ves.io.schema.bgp.BgpStatusType")
-	proto.RegisterEnum("ves.io.schema.bgp.BgpRouterIdType", BgpRouterIdType_name, BgpRouterIdType_value)
-	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpRouterIdType", BgpRouterIdType_name, BgpRouterIdType_value)
-	proto.RegisterEnum("ves.io.schema.bgp.BgpPeerAddressType", BgpPeerAddressType_name, BgpPeerAddressType_value)
-	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpPeerAddressType", BgpPeerAddressType_name, BgpPeerAddressType_value)
-	proto.RegisterEnum("ves.io.schema.bgp.BgpPeerUpDownType", BgpPeerUpDownType_name, BgpPeerUpDownType_value)
-	golang_proto.RegisterEnum("ves.io.schema.bgp.BgpPeerUpDownType", BgpPeerUpDownType_name, BgpPeerUpDownType_value)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptor_cad0df24d7dab112) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptor_cad0df24d7dab112)
+}
+
+var fileDescriptor_cad0df24d7dab112 = []byte{
+	// 2452 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
+	0xf5, 0xe7, 0xf0, 0x9b, 0x8f, 0x22, 0xb9, 0x1c, 0x4b, 0xd6, 0x46, 0x4e, 0x68, 0x9a, 0xb1, 0xfe,
+	0x51, 0x64, 0x9a, 0xb2, 0xe8, 0xaf, 0x44, 0x46, 0x9c, 0xbf, 0x68, 0x51, 0xb2, 0x1c, 0x5b, 0x12,
+	0x96, 0x74, 0x12, 0xe4, 0xb2, 0x58, 0x92, 0x43, 0x7a, 0x93, 0xe5, 0xee, 0x62, 0x77, 0x49, 0x5b,
+	0x05, 0x02, 0xf4, 0x52, 0xf4, 0x5a, 0xf4, 0xd6, 0x43, 0x0e, 0x05, 0xda, 0x22, 0x08, 0xd0, 0x43,
+	0x2f, 0x3d, 0x94, 0x17, 0xa1, 0xa7, 0xa2, 0x27, 0x1d, 0xdd, 0xa2, 0x05, 0x6a, 0x1a, 0x28, 0x9c,
+	0x5b, 0x90, 0x63, 0x81, 0x22, 0xc5, 0xce, 0x7e, 0x92, 0x14, 0x65, 0x26, 0x28, 0x82, 0x22, 0xb7,
+	0xe5, 0xbc, 0x8f, 0xf9, 0xbd, 0x37, 0x6f, 0xde, 0xc7, 0x10, 0x5e, 0xeb, 0x13, 0xbd, 0x24, 0x2a,
+	0x6b, 0x7a, 0xf3, 0x11, 0xe9, 0x0a, 0x6b, 0x8d, 0x8e, 0xba, 0x66, 0x1c, 0xaa, 0x44, 0x2f, 0xa9,
+	0x9a, 0x62, 0x28, 0x38, 0x6b, 0x91, 0x4b, 0x16, 0xb9, 0xd4, 0xe8, 0xa8, 0x4b, 0x97, 0x3b, 0xa2,
+	0xf1, 0xa8, 0xd7, 0x28, 0x35, 0x95, 0xee, 0x5a, 0x47, 0xe9, 0x28, 0x6b, 0x94, 0xb3, 0xd1, 0x6b,
+	0xd3, 0x5f, 0xf4, 0x07, 0xfd, 0xb2, 0x34, 0x2c, 0x9d, 0xef, 0x28, 0x4a, 0x47, 0x22, 0x1e, 0x97,
+	0x21, 0x76, 0x89, 0x6e, 0x08, 0x5d, 0xd5, 0x66, 0x58, 0x1c, 0x45, 0x20, 0x13, 0xc3, 0x26, 0x9c,
+	0x1b, 0x25, 0x28, 0xaa, 0x21, 0x2a, 0xb2, 0x0d, 0x6c, 0x69, 0x0c, 0xb7, 0xda, 0x37, 0x78, 0x1f,
+	0xee, 0xa5, 0x57, 0x46, 0xc9, 0x7e, 0xd2, 0xab, 0xa3, 0xa4, 0xbe, 0x20, 0x89, 0x2d, 0xc1, 0x20,
+	0x36, 0x35, 0x3f, 0x46, 0x15, 0xc9, 0x63, 0x7e, 0x74, 0xe7, 0xf3, 0x93, 0x1c, 0xba, 0x7f, 0x83,
+	0xc2, 0xb3, 0x10, 0xa4, 0x2a, 0x1d, 0xf5, 0x40, 0xd0, 0x84, 0x2e, 0x31, 0x88, 0xa6, 0xe3, 0x73,
+	0x10, 0x12, 0x74, 0x99, 0x45, 0x79, 0xb4, 0x92, 0xaa, 0x24, 0xfe, 0xf0, 0xe5, 0x51, 0x28, 0xbc,
+	0x1a, 0x5c, 0x41, 0x9c, 0xb9, 0x8a, 0x6f, 0x41, 0x4a, 0x52, 0x9a, 0x82, 0xc4, 0x0b, 0xad, 0x96,
+	0x46, 0x74, 0x9d, 0x8d, 0xe6, 0xd1, 0x4a, 0xb2, 0x3c, 0x5f, 0x1a, 0x75, 0x7d, 0xb5, 0xab, 0x1a,
+	0x87, 0x77, 0x03, 0xdc, 0x1c, 0x65, 0xde, 0xb4, 0x78, 0xf1, 0x55, 0x48, 0xb4, 0x35, 0xa5, 0xcb,
+	0xeb, 0xa2, 0x41, 0xd8, 0xd8, 0xa9, 0x82, 0x71, 0x93, 0xb1, 0x26, 0x1a, 0x04, 0xaf, 0x02, 0x88,
+	0xaa, 0xbb, 0x5d, 0x3c, 0x8f, 0x56, 0x12, 0x36, 0x2a, 0x2d, 0xf8, 0x04, 0xdd, 0x0d, 0x70, 0x09,
+	0x51, 0x75, 0x36, 0xf8, 0x10, 0x70, 0xa3, 0xa3, 0xf2, 0x9a, 0xd2, 0x33, 0x88, 0xc6, 0x8b, 0x2d,
+	0xea, 0x65, 0x36, 0x98, 0x47, 0x2b, 0xe9, 0x72, 0xa1, 0x34, 0x11, 0x1d, 0xa5, 0x4a, 0x47, 0xe5,
+	0x28, 0xef, 0x6e, 0xab, 0x7e, 0xa8, 0x92, 0x4a, 0xec, 0xe9, 0xa7, 0xe8, 0xc5, 0x00, 0x21, 0x2e,
+	0xd3, 0x18, 0xa5, 0xe0, 0x5d, 0x48, 0x8d, 0x68, 0x66, 0x43, 0x14, 0xfe, 0xab, 0x63, 0x4a, 0x77,
+	0x1d, 0x28, 0xa3, 0xea, 0x92, 0x3e, 0x75, 0xf8, 0x16, 0x64, 0x47, 0x41, 0x7e, 0x42, 0x0e, 0xd9,
+	0x30, 0xb5, 0x8b, 0xb1, 0x05, 0x6c, 0xf3, 0xd8, 0xff, 0xe7, 0xd2, 0x3e, 0xc9, 0xf7, 0xc8, 0xe1,
+	0x46, 0xf4, 0xeb, 0xdb, 0xa1, 0xf5, 0xe2, 0xf5, 0xca, 0x32, 0x30, 0x9e, 0x82, 0xe6, 0x23, 0x45,
+	0x6c, 0x12, 0x9c, 0x3d, 0x1a, 0xa0, 0xe8, 0xf1, 0x00, 0x45, 0x86, 0x03, 0x14, 0xb9, 0x51, 0xbc,
+	0x59, 0x7c, 0xeb, 0x5e, 0x38, 0x1e, 0x61, 0xa2, 0x85, 0xdf, 0x46, 0x20, 0x66, 0x9e, 0x31, 0x21,
+	0xda, 0xe9, 0xa7, 0xfb, 0x21, 0x2c, 0x98, 0xd0, 0x54, 0x42, 0x34, 0xc7, 0xe3, 0x7e, 0x17, 0x2e,
+	0x9f, 0xec, 0x42, 0x53, 0xaf, 0xcf, 0x6c, 0xce, 0x3c, 0x83, 0xb1, 0x35, 0xbc, 0x0d, 0xcc, 0xb8,
+	0xe6, 0x59, 0x5c, 0x48, 0xed, 0xf7, 0xe9, 0xc2, 0x1b, 0x30, 0x3f, 0x81, 0xd0, 0xf3, 0x5f, 0xc2,
+	0x73, 0x5c, 0x76, 0x54, 0xf0, 0x3d, 0x72, 0x88, 0x5f, 0x87, 0xb0, 0xaa, 0x68, 0x06, 0x1b, 0xa1,
+	0xb6, 0x67, 0x8e, 0x6c, 0x47, 0x47, 0x57, 0xc3, 0xec, 0x37, 0xdf, 0x84, 0x38, 0x4a, 0xc4, 0x15,
+	0x38, 0xeb, 0x6e, 0xa0, 0xf7, 0x1a, 0x32, 0x31, 0x78, 0xa5, 0xdd, 0xd6, 0x89, 0x41, 0x23, 0x3d,
+	0x55, 0x49, 0x39, 0x62, 0xe1, 0xd5, 0x20, 0x9b, 0xe7, 0xce, 0xd8, 0xdb, 0xd4, 0x28, 0xeb, 0x3e,
+	0xe5, 0xc4, 0xef, 0x43, 0xbc, 0x2d, 0x74, 0x45, 0x49, 0x24, 0x3a, 0x3b, 0x9f, 0x0f, 0xad, 0x24,
+	0xcb, 0x6f, 0x9c, 0xe0, 0x39, 0x53, 0x6c, 0xdb, 0x64, 0x3b, 0xf4, 0x2e, 0x5f, 0x25, 0xeb, 0x8b,
+	0x80, 0xc8, 0xcf, 0x51, 0x90, 0x09, 0x73, 0xae, 0x2e, 0xfc, 0x31, 0xa4, 0x45, 0xd9, 0x20, 0x5a,
+	0x5b, 0x68, 0x12, 0x5e, 0x23, 0x6d, 0x9d, 0x5d, 0xa0, 0xda, 0xc7, 0x5d, 0xb8, 0xdf, 0xf8, 0x98,
+	0x34, 0x0d, 0x8e, 0xb4, 0x69, 0x14, 0x2e, 0x7f, 0xf1, 0x69, 0x56, 0x26, 0xc6, 0x63, 0x45, 0xfb,
+	0x84, 0x77, 0xc5, 0xc7, 0xb7, 0x89, 0x73, 0x29, 0x97, 0xc6, 0x91, 0xb6, 0x8e, 0x6f, 0xc1, 0x82,
+	0x20, 0x49, 0xbc, 0x28, 0xeb, 0x62, 0x8b, 0x78, 0x72, 0x3a, 0x7b, 0x36, 0x8f, 0x56, 0xe2, 0x5e,
+	0x68, 0x9f, 0x11, 0x24, 0x69, 0x97, 0x32, 0xed, 0xba, 0x3c, 0xf8, 0x1d, 0x38, 0x6b, 0x0a, 0x2b,
+	0x3d, 0x63, 0x5c, 0x7a, 0x71, 0x54, 0x7a, 0x5e, 0x90, 0xa4, 0x7d, 0x8b, 0xcb, 0x13, 0x2f, 0xfc,
+	0x14, 0x41, 0xca, 0xfd, 0x79, 0x5f, 0xd4, 0x0d, 0xdc, 0x07, 0xf0, 0x29, 0x41, 0xd4, 0xea, 0xf1,
+	0x0b, 0x4d, 0x73, 0xdb, 0x98, 0xed, 0xe5, 0x93, 0x6c, 0xf7, 0x8c, 0x76, 0xbe, 0xe2, 0xae, 0x23,
+	0x58, 0xc4, 0xf9, 0x76, 0x2a, 0x7c, 0x86, 0x00, 0xac, 0x33, 0xda, 0x95, 0x89, 0x81, 0x4b, 0x10,
+	0x25, 0xb2, 0xd0, 0x90, 0xac, 0x0b, 0x31, 0x3d, 0x7b, 0xd9, 0x5c, 0xf8, 0x6d, 0x88, 0xb5, 0x44,
+	0x9d, 0x0a, 0x84, 0xa6, 0x0b, 0xb8, 0xee, 0xb8, 0x1b, 0xe0, 0x1c, 0xfe, 0x4a, 0x0e, 0x52, 0x96,
+	0x12, 0xe7, 0x76, 0x9b, 0x81, 0x17, 0x3c, 0x1e, 0x20, 0x34, 0x1c, 0x20, 0x54, 0xbe, 0x17, 0x8e,
+	0x23, 0x26, 0x58, 0xf8, 0x0d, 0x82, 0x45, 0x0f, 0x5f, 0x5f, 0x95, 0x7d, 0x79, 0xfc, 0x7b, 0x04,
+	0xbb, 0x04, 0x09, 0x5d, 0x3b, 0x15, 0xe8, 0xef, 0x11, 0xa4, 0x46, 0x80, 0xe2, 0xad, 0x31, 0x78,
+	0xab, 0x27, 0x5c, 0x91, 0x29, 0xa6, 0x7d, 0x9f, 0x1e, 0xfe, 0x25, 0x82, 0xb4, 0x07, 0xe3, 0x86,
+	0x89, 0xfc, 0x7f, 0x2e, 0x0a, 0x7e, 0xe1, 0x3a, 0x97, 0x33, 0x04, 0xad, 0xf3, 0x1d, 0x02, 0xf5,
+	0xca, 0x4c, 0x10, 0xfd, 0xc8, 0xf2, 0xe3, 0xc8, 0x32, 0x3e, 0x64, 0xa1, 0x72, 0xf1, 0xaa, 0x8d,
+	0xed, 0x23, 0x98, 0x3f, 0x29, 0xd1, 0xe1, 0x0b, 0x10, 0xa5, 0x79, 0xed, 0x90, 0x96, 0x22, 0x5f,
+	0xea, 0x66, 0x38, 0x9b, 0x80, 0xcf, 0x43, 0xd2, 0xde, 0x42, 0xd7, 0xfa, 0x37, 0xa8, 0x25, 0x71,
+	0x0e, 0xac, 0xa5, 0x9a, 0xd6, 0xbf, 0x51, 0xf8, 0x67, 0x14, 0xe6, 0x4c, 0xe5, 0xd5, 0x27, 0x06,
+	0xd1, 0x64, 0x41, 0x3a, 0xbd, 0xb8, 0x2d, 0x43, 0xcc, 0x5f, 0x79, 0xc6, 0xba, 0x08, 0x87, 0x86,
+	0x6f, 0xc1, 0x19, 0x3b, 0xef, 0x37, 0x48, 0x47, 0x94, 0x9d, 0xec, 0x1f, 0x1e, 0xd1, 0xc9, 0xe6,
+	0xef, 0x06, 0xb8, 0xac, 0xc5, 0x57, 0x31, 0xd9, 0xec, 0xcc, 0x7f, 0x13, 0xec, 0x45, 0x9e, 0xc8,
+	0x2d, 0x47, 0x34, 0x32, 0x29, 0x9a, 0xb1, 0xb8, 0xaa, 0x72, 0xcb, 0x16, 0x1c, 0x69, 0x8d, 0xa2,
+	0x33, 0xb6, 0x46, 0xef, 0x42, 0xa6, 0x45, 0xda, 0x42, 0x4f, 0x32, 0xf8, 0x8e, 0x60, 0x90, 0xc7,
+	0xc2, 0xe1, 0x4b, 0xba, 0xaa, 0xb4, 0xcd, 0xbe, 0x63, 0x71, 0xe3, 0xa2, 0x5d, 0x11, 0x81, 0x22,
+	0x64, 0xcd, 0xd2, 0xf6, 0xd7, 0x01, 0x0a, 0xad, 0xdf, 0x7c, 0xdb, 0x04, 0x1b, 0x5f, 0x8d, 0x9a,
+	0x85, 0x71, 0x05, 0xd9, 0xa5, 0x71, 0x07, 0x92, 0xd6, 0xc9, 0xf0, 0xa2, 0x4c, 0x0c, 0x36, 0x49,
+	0xb7, 0x7a, 0xed, 0xd4, 0x6b, 0xeb, 0x65, 0x7a, 0x68, 0x7b, 0x69, 0xf4, 0x43, 0x48, 0xb8, 0x39,
+	0x96, 0x5d, 0xa0, 0x6a, 0x66, 0x49, 0xe6, 0xf3, 0x27, 0x25, 0xf3, 0xbb, 0x88, 0xf3, 0x94, 0xe1,
+	0x5d, 0x7f, 0x85, 0x94, 0x44, 0xdd, 0xa0, 0xe5, 0x2a, 0x59, 0xce, 0x9f, 0x80, 0x72, 0xa4, 0xc2,
+	0xdc, 0x45, 0xbe, 0x02, 0x48, 0x4b, 0xce, 0x7d, 0xc8, 0x4e, 0x16, 0xbf, 0xc5, 0x59, 0xee, 0x2f,
+	0xe2, 0x18, 0x71, 0xbc, 0x22, 0xee, 0x01, 0x3e, 0xa1, 0x1a, 0xb2, 0xb3, 0xa9, 0xcb, 0x2a, 0xe3,
+	0x25, 0x72, 0x63, 0xee, 0xeb, 0xdb, 0x89, 0xf5, 0x62, 0xb9, 0xb8, 0x7e, 0xa5, 0xb8, 0xbe, 0x5e,
+	0x59, 0x86, 0xb4, 0xd3, 0x0c, 0xd9, 0xb7, 0xf1, 0xcc, 0xd1, 0x00, 0x85, 0x8e, 0x07, 0x28, 0x38,
+	0x1c, 0xa0, 0xd8, 0xd5, 0xe2, 0xb5, 0xe2, 0xf5, 0xe2, 0x8d, 0xca, 0x25, 0x60, 0x3c, 0xef, 0xd8,
+	0x8c, 0x8b, 0x47, 0x03, 0xb4, 0x70, 0x3c, 0x40, 0xf3, 0xc3, 0x01, 0x4a, 0x96, 0xd7, 0x8b, 0xe5,
+	0x72, 0xb1, 0x7c, 0xb5, 0x58, 0xbe, 0x76, 0x2f, 0x1c, 0x0f, 0x32, 0xa1, 0x7b, 0xe1, 0xf8, 0x3c,
+	0xb3, 0x50, 0xf8, 0x57, 0xd8, 0xba, 0x68, 0x14, 0x80, 0x79, 0xd1, 0x66, 0xbc, 0x4b, 0x23, 0x51,
+	0x1d, 0x9e, 0x31, 0xaa, 0x2f, 0x43, 0xbc, 0x25, 0xeb, 0xbc, 0x2c, 0x74, 0x09, 0xbd, 0x3a, 0x13,
+	0x6d, 0xf1, 0x23, 0x2b, 0x45, 0xca, 0xfa, 0x9e, 0xd0, 0x25, 0xdf, 0x3a, 0x86, 0xd3, 0xbe, 0x18,
+	0xee, 0xab, 0xb2, 0x1d, 0xc6, 0xf9, 0x97, 0x55, 0x1f, 0x2e, 0xd5, 0x1e, 0x29, 0x5f, 0xf7, 0x20,
+	0xe3, 0x53, 0x64, 0xd6, 0x05, 0x96, 0xa1, 0x9a, 0x2e, 0x9c, 0xaa, 0xc9, 0x64, 0xe4, 0xd2, 0xed,
+	0xd1, 0x82, 0xe2, 0x81, 0xd2, 0xac, 0xfc, 0xcd, 0xce, 0xbd, 0x04, 0x94, 0x9d, 0xe7, 0x1d, 0x50,
+	0x4e, 0xda, 0x7f, 0x1b, 0xe6, 0xec, 0xfc, 0xcc, 0x77, 0x0d, 0x49, 0x67, 0xd3, 0xa7, 0xb8, 0x1c,
+	0x71, 0x49, 0x9b, 0xf7, 0x81, 0x21, 0xe9, 0xf8, 0xa6, 0x9b, 0x6c, 0xa9, 0x64, 0xe6, 0x54, 0x49,
+	0x3b, 0x09, 0x9b, 0x82, 0x1b, 0xf0, 0xf5, 0xed, 0x98, 0x13, 0x87, 0x17, 0x26, 0xe2, 0x30, 0xe3,
+	0x8b, 0xc3, 0xd0, 0xd5, 0xe2, 0xb5, 0xca, 0x45, 0x48, 0x9a, 0x1b, 0x38, 0xf4, 0x85, 0xa3, 0x01,
+	0x4a, 0x1f, 0x0f, 0x50, 0xca, 0x9c, 0x59, 0xd6, 0xaf, 0x15, 0xd7, 0xaf, 0x7f, 0x35, 0x40, 0xc8,
+	0x0d, 0xbe, 0x14, 0x93, 0x2e, 0x7c, 0x1e, 0x84, 0x30, 0x1d, 0x5d, 0x36, 0x20, 0xde, 0x25, 0x86,
+	0xd0, 0x12, 0x0c, 0x81, 0xa6, 0xf8, 0x64, 0x39, 0x37, 0x86, 0xef, 0x01, 0xd1, 0x75, 0xa1, 0x43,
+	0x1e, 0x10, 0x43, 0xa0, 0xd3, 0x83, 0xcb, 0x8f, 0xdf, 0x81, 0x38, 0xb1, 0xab, 0x84, 0x5d, 0xe1,
+	0xce, 0x4f, 0x69, 0xc9, 0x9d, 0x62, 0x62, 0xc6, 0xa4, 0x23, 0x82, 0xb7, 0x21, 0x2e, 0xda, 0xb1,
+	0x6f, 0xc7, 0xf1, 0x34, 0x71, 0xe7, 0x8a, 0xf8, 0xcb, 0xb9, 0x2b, 0x8b, 0xd7, 0x20, 0x6d, 0x1d,
+	0x15, 0xaf, 0x13, 0xad, 0x2f, 0x36, 0x09, 0xfb, 0x22, 0x46, 0x43, 0xdc, 0xcd, 0x93, 0x29, 0x8b,
+	0x5e, 0xb3, 0xc8, 0xf6, 0xbc, 0x57, 0xae, 0xe4, 0x20, 0x69, 0x0e, 0x62, 0xd3, 0xdc, 0x6a, 0x39,
+	0xac, 0xf0, 0xef, 0x30, 0xa4, 0x77, 0x24, 0xa5, 0x21, 0x48, 0x35, 0x95, 0x34, 0xe9, 0xe0, 0x55,
+	0x85, 0xc8, 0xe3, 0x47, 0x44, 0x23, 0xb6, 0xc7, 0xde, 0x1c, 0x83, 0x6d, 0xde, 0xb8, 0xf7, 0x45,
+	0xcd, 0xe8, 0x09, 0x92, 0xf9, 0xc9, 0x91, 0x76, 0x8d, 0x48, 0xa4, 0x69, 0x28, 0x5a, 0x25, 0x6c,
+	0x9e, 0x04, 0x67, 0x49, 0x9b, 0x21, 0x4a, 0xc7, 0x22, 0xb7, 0x80, 0xdb, 0x8d, 0x45, 0x7e, 0xca,
+	0x48, 0xe8, 0xf2, 0x71, 0xe6, 0xdc, 0xec, 0xab, 0xfb, 0x75, 0x48, 0x38, 0xf3, 0x95, 0x99, 0x3b,
+	0xcc, 0x46, 0x7e, 0x69, 0xfa, 0x58, 0x59, 0x39, 0x37, 0x31, 0xa8, 0xf8, 0x3a, 0xf5, 0xb8, 0x3d,
+	0x7c, 0xe9, 0xf8, 0x47, 0x30, 0x59, 0x19, 0xd8, 0xf0, 0x0c, 0xc3, 0xd1, 0xda, 0x4c, 0xc3, 0x91,
+	0x6f, 0x4f, 0xc6, 0xe6, 0x76, 0x73, 0x31, 0xbe, 0x03, 0x11, 0xcb, 0x9a, 0x08, 0xdd, 0x6f, 0x71,
+	0x4a, 0x60, 0x54, 0xe6, 0x27, 0xf5, 0x5d, 0x41, 0x9c, 0x25, 0x8b, 0x05, 0x48, 0xd1, 0xd7, 0x1b,
+	0x37, 0xca, 0x5e, 0xc4, 0x66, 0xae, 0x8b, 0x8b, 0x5f, 0x7c, 0x3a, 0x2a, 0xec, 0xc4, 0xd2, 0x9c,
+	0xb9, 0xea, 0xe6, 0xec, 0x4b, 0x40, 0x7f, 0xf3, 0x7d, 0xa2, 0xe9, 0xa2, 0x22, 0xb3, 0x5f, 0xc6,
+	0x68, 0xc6, 0xf4, 0x1e, 0x29, 0x4c, 0xea, 0xfb, 0x16, 0x71, 0xe3, 0xda, 0x1f, 0x07, 0xe8, 0x0a,
+	0x9c, 0x85, 0xec, 0x1d, 0xa5, 0xdb, 0x55, 0xe4, 0xbc, 0xef, 0x04, 0x51, 0x19, 0x00, 0x22, 0x96,
+	0xdf, 0xd1, 0x75, 0xf3, 0xfb, 0x03, 0x1a, 0x22, 0x68, 0xbd, 0xf0, 0x37, 0x04, 0xe9, 0x3b, 0x1a,
+	0x11, 0x0c, 0xe2, 0xc6, 0xdf, 0xbb, 0xdf, 0x35, 0xfe, 0xfe, 0xeb, 0x91, 0x77, 0x79, 0xb6, 0x73,
+	0xb2, 0x4f, 0x64, 0x23, 0xfb, 0xe7, 0xdb, 0x63, 0x77, 0xa9, 0xf0, 0x77, 0x04, 0x19, 0x8e, 0xa8,
+	0x92, 0xd0, 0xfc, 0x61, 0xda, 0xf7, 0x17, 0x04, 0xc9, 0x1d, 0x62, 0xfc, 0x20, 0x6d, 0xfb, 0x75,
+	0x18, 0xb2, 0x76, 0x52, 0xa9, 0x19, 0x82, 0xd1, 0xd3, 0x6d, 0x0b, 0xe7, 0xbe, 0xf5, 0x93, 0x54,
+	0x52, 0xf5, 0xbd, 0x47, 0x9d, 0x83, 0x04, 0x55, 0x40, 0x5b, 0x10, 0x3a, 0x23, 0x70, 0x71, 0x73,
+	0xe1, 0xc0, 0x6c, 0x36, 0xde, 0x81, 0x58, 0x4f, 0xe5, 0x5b, 0xca, 0x63, 0x6b, 0x24, 0x49, 0x97,
+	0x2f, 0x4e, 0xcf, 0x74, 0x0f, 0xd5, 0x2d, 0xe5, 0xb1, 0x4c, 0x37, 0x88, 0xf6, 0xe8, 0x37, 0xbe,
+	0x08, 0x69, 0xaa, 0xdb, 0x7b, 0x74, 0xa4, 0xed, 0x10, 0x47, 0x21, 0xbb, 0xcf, 0x89, 0xaf, 0x40,
+	0xdc, 0x32, 0x41, 0x97, 0xad, 0x27, 0x2a, 0x2e, 0x46, 0x01, 0xea, 0x32, 0xde, 0x86, 0xac, 0xbd,
+	0x3f, 0xef, 0xbe, 0x63, 0xdb, 0x13, 0xc2, 0x52, 0xc9, 0x7a, 0xe9, 0x2e, 0x39, 0x2f, 0xdd, 0xa5,
+	0xba, 0xc3, 0xc1, 0x65, 0xac, 0xfd, 0xdd, 0x05, 0x5c, 0x86, 0x85, 0xa6, 0x22, 0xcb, 0xa4, 0x69,
+	0x88, 0x8a, 0xcc, 0xb7, 0x25, 0x41, 0xe5, 0x9b, 0x4a, 0x4f, 0x36, 0xe8, 0x6b, 0x6c, 0x8a, 0x3b,
+	0xe3, 0x11, 0xb7, 0x25, 0x41, 0xbd, 0x63, 0x92, 0xf0, 0x0d, 0x58, 0x14, 0x5a, 0x7d, 0xa2, 0x19,
+	0xa2, 0x4e, 0x5a, 0xbc, 0xaa, 0x91, 0xb6, 0xf8, 0xc4, 0x96, 0x4a, 0x50, 0xa9, 0x05, 0x8f, 0x7c,
+	0x40, 0xa9, 0x96, 0x5c, 0x19, 0x16, 0x34, 0xd2, 0x24, 0x62, 0x7f, 0x5c, 0x0a, 0xac, 0xbd, 0x1c,
+	0xa2, 0x5f, 0x66, 0xd9, 0xdf, 0xf5, 0xd3, 0xbe, 0x31, 0x49, 0x1d, 0xe5, 0x75, 0xf4, 0xb4, 0x53,
+	0x7c, 0x7d, 0xfc, 0xed, 0x7a, 0xce, 0x72, 0xa7, 0xff, 0x8d, 0xba, 0xf0, 0x2b, 0x44, 0xdf, 0xc3,
+	0x7d, 0x31, 0xf2, 0x7f, 0x90, 0xb1, 0xc4, 0xbc, 0x73, 0x40, 0x96, 0x7a, 0xba, 0xec, 0x1e, 0xc4,
+	0x39, 0x48, 0xd8, 0xea, 0x75, 0x99, 0xc6, 0x79, 0x8a, 0x8b, 0x5b, 0xaa, 0x75, 0x19, 0xef, 0x01,
+	0x63, 0x3d, 0x29, 0x52, 0xbd, 0xd6, 0x68, 0x62, 0x55, 0xbf, 0x53, 0x62, 0xc2, 0x03, 0xc1, 0xd1,
+	0x48, 0xb0, 0x7e, 0x9b, 0xd3, 0xc9, 0xea, 0xef, 0x10, 0x64, 0xc6, 0x5e, 0xaf, 0x71, 0x1e, 0x5e,
+	0xad, 0xec, 0x1c, 0xf0, 0xdc, 0xfe, 0xc3, 0x7a, 0x95, 0xe3, 0x77, 0xb7, 0xf8, 0x6d, 0x6e, 0xff,
+	0x01, 0xbf, 0xbb, 0x57, 0xaf, 0x72, 0xdb, 0x9b, 0x77, 0xaa, 0x4c, 0x00, 0x5f, 0x80, 0xd7, 0x4e,
+	0xe2, 0x38, 0xe0, 0x37, 0xb7, 0xb6, 0xb8, 0x6a, 0xad, 0xc6, 0x20, 0x5c, 0x80, 0xdc, 0x09, 0x2c,
+	0xb5, 0xdd, 0x7a, 0x95, 0xdf, 0xaf, 0xdc, 0xab, 0xde, 0xa9, 0x33, 0x41, 0x7c, 0x1d, 0x2e, 0x4d,
+	0xe3, 0xa9, 0x57, 0x1f, 0x1c, 0xdc, 0xdf, 0xac, 0x57, 0xf9, 0x83, 0x4d, 0x6e, 0xf3, 0x41, 0xb5,
+	0x5e, 0xe5, 0x6a, 0x4c, 0x68, 0x29, 0x6c, 0x76, 0xe5, 0xab, 0x9f, 0x05, 0x01, 0x4f, 0x3e, 0x17,
+	0xe3, 0x8b, 0x90, 0x37, 0xb5, 0x1d, 0x54, 0xab, 0x9c, 0x83, 0xc3, 0x52, 0xb8, 0x55, 0xdd, 0xde,
+	0x7c, 0x78, 0xbf, 0xce, 0xef, 0x7c, 0xc0, 0x04, 0xa6, 0x73, 0x8d, 0xa0, 0x5f, 0x86, 0x0b, 0x27,
+	0x73, 0x8d, 0x1a, 0xf0, 0x16, 0x94, 0x4e, 0x61, 0x3b, 0xc5, 0x06, 0x7c, 0x19, 0xde, 0x9c, 0x90,
+	0xdc, 0xdf, 0xde, 0xae, 0x55, 0xeb, 0xb6, 0x82, 0x87, 0x95, 0xbd, 0x6a, 0x9d, 0xaf, 0x54, 0x77,
+	0x76, 0xf7, 0x98, 0x30, 0xbe, 0x04, 0x6f, 0xcc, 0xc2, 0x5e, 0xdd, 0xdb, 0x62, 0x22, 0xab, 0x37,
+	0xdd, 0x0c, 0xe5, 0x25, 0x03, 0x9c, 0x85, 0x94, 0xab, 0x61, 0x6b, 0xff, 0x83, 0x3d, 0x26, 0x80,
+	0x33, 0x90, 0x74, 0x97, 0x1e, 0x1e, 0x30, 0xa8, 0xf2, 0x13, 0x74, 0xfc, 0x2c, 0x17, 0x78, 0xfa,
+	0x2c, 0x17, 0xf8, 0xea, 0x59, 0x0e, 0xfd, 0x78, 0x98, 0x43, 0x9f, 0x0f, 0x73, 0xe8, 0x4f, 0xc3,
+	0x1c, 0x3a, 0x1e, 0xe6, 0xd0, 0xd3, 0x61, 0x0e, 0xfd, 0x63, 0x98, 0x43, 0x2f, 0x86, 0xb9, 0xc0,
+	0x57, 0xc3, 0x1c, 0xfa, 0xd9, 0xf3, 0x5c, 0xe0, 0xe8, 0x79, 0x0e, 0x1d, 0x3f, 0xcf, 0x05, 0x9e,
+	0x3e, 0xcf, 0x05, 0x3e, 0xda, 0xe9, 0x28, 0xea, 0x27, 0x9d, 0x52, 0x5f, 0x91, 0x0c, 0xa2, 0x69,
+	0x42, 0xa9, 0xa7, 0xaf, 0xd1, 0x8f, 0xb6, 0xa2, 0x75, 0x2f, 0xab, 0x9a, 0xd2, 0x17, 0x5b, 0x44,
+	0xbb, 0xec, 0x90, 0xd7, 0xd4, 0x46, 0x47, 0x59, 0x23, 0x4f, 0x0c, 0xfb, 0x2f, 0x25, 0xef, 0xbf,
+	0xb8, 0x46, 0x94, 0x26, 0x93, 0xab, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0xfb, 0x55, 0xea, 0x3a,
+	0xa7, 0x1b, 0x00, 0x00,
+}
+
 func (x BgpRouterIdType) String() string {
 	s, ok := BgpRouterIdType_name[int32(x)]
 	if ok {
@@ -4503,7 +4319,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *BgpParameters) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4511,86 +4327,116 @@ func (m *BgpParameters) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BgpParameters) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Asn != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
-	}
-	if m.BgpRouterIdType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpRouterIdType))
-	}
-	if m.BgpRouterId != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpRouterId.Size()))
-		n1, err := m.BgpRouterId.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RouterIdChoice != nil {
+		{
+			size := m.RouterIdChoice.Size()
+			i -= size
+			if _, err := m.RouterIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n1
 	}
 	if len(m.BgpRouterIdKey) > 0 {
-		dAtA[i] = 0x22
-		i++
+		i -= len(m.BgpRouterIdKey)
+		copy(dAtA[i:], m.BgpRouterIdKey)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpRouterIdKey)))
-		i += copy(dAtA[i:], m.BgpRouterIdKey)
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.RouterIdChoice != nil {
-		nn2, err := m.RouterIdChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.BgpRouterId != nil {
+		{
+			size, err := m.BgpRouterId.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn2
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.BgpRouterIdType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BgpRouterIdType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Asn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *BgpParameters_LocalAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpParameters_LocalAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LocalAddress != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalAddress.Size()))
-		n3, err := m.LocalAddress.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *BgpParameters_FromSite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpParameters_FromSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FromSite != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
-		n4, err := m.FromSite.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FromSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *BgpParameters_IpAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpParameters_IpAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.IpAddress)
+	copy(dAtA[i:], m.IpAddress)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.IpAddress)))
-	i += copy(dAtA[i:], m.IpAddress)
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
 }
 func (m *BgpPeer) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4598,105 +4444,117 @@ func (m *BgpPeer) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BgpPeer) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpPeer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Asn != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
-	}
-	if m.BgpPeerAddressType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerAddressType))
-	}
-	if m.BgpPeerAddress != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerAddress.Size()))
-		n5, err := m.BgpPeerAddress.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if len(m.BgpPeerAddressKey) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpPeerAddressKey)))
-		i += copy(dAtA[i:], m.BgpPeerAddressKey)
-	}
-	if m.Port != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-	}
-	if m.BgpPeerSubnetOffset != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerSubnetOffset))
-	}
-	if len(m.Families) > 0 {
-		for _, msg := range m.Families {
-			dAtA[i] = 0xa2
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.InterfaceRefs) > 0 {
-		for _, msg := range m.InterfaceRefs {
-			dAtA[i] = 0xaa
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.AllInsideInterfaces {
-		dAtA[i] = 0xb0
-		i++
-		dAtA[i] = 0x1
-		i++
-		if m.AllInsideInterfaces {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
 	if m.AllOutsideInterfaces {
-		dAtA[i] = 0xb8
-		i++
-		dAtA[i] = 0x1
-		i++
+		i--
 		if m.AllOutsideInterfaces {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb8
 	}
-	return i, nil
+	if m.AllInsideInterfaces {
+		i--
+		if m.AllInsideInterfaces {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb0
+	}
+	if len(m.InterfaceRefs) > 0 {
+		for iNdEx := len(m.InterfaceRefs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InterfaceRefs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.Families) > 0 {
+		for iNdEx := len(m.Families) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Families[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xa2
+		}
+	}
+	if m.BgpPeerSubnetOffset != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerSubnetOffset))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.BgpPeerAddressKey) > 0 {
+		i -= len(m.BgpPeerAddressKey)
+		copy(dAtA[i:], m.BgpPeerAddressKey)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpPeerAddressKey)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.BgpPeerAddress != nil {
+		{
+			size, err := m.BgpPeerAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.BgpPeerAddressType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerAddressType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Asn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *InterfaceList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4704,29 +4562,36 @@ func (m *InterfaceList) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
-		for _, msg := range m.Interfaces {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Interfaces) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Interfaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyInet) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4734,52 +4599,73 @@ func (m *FamilyInet) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FamilyInet) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
-		nn6, err := m.EnableChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.EnableChoice.Size()
+			i -= size
+			if _, err := m.EnableChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn6
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyInet_Enable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet_Enable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Enable != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
-		n7, err := m.Enable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Enable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInet_Disable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet_Disable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disable != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
-		n8, err := m.Disable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInetvpnParameters) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4787,52 +4673,73 @@ func (m *FamilyInetvpnParameters) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FamilyInetvpnParameters) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpnParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.SrChoice != nil {
-		nn9, err := m.SrChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.SrChoice.Size()
+			i -= size
+			if _, err := m.SrChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn9
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyInetvpnParameters_Enable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpnParameters_Enable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Enable != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
-		n10, err := m.Enable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Enable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInetvpnParameters_Disable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpnParameters_Disable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disable != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
-		n11, err := m.Disable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInetvpn) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4840,52 +4747,73 @@ func (m *FamilyInetvpn) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FamilyInetvpn) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
-		nn12, err := m.EnableChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.EnableChoice.Size()
+			i -= size
+			if _, err := m.EnableChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyInetvpn_Enable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpn_Enable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Enable != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
-		n13, err := m.Enable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Enable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInetvpn_Disable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInetvpn_Disable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disable != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
-		n14, err := m.Disable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInet6Vpn) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4893,52 +4821,73 @@ func (m *FamilyInet6Vpn) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FamilyInet6Vpn) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet6Vpn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
-		nn15, err := m.EnableChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.EnableChoice.Size()
+			i -= size
+			if _, err := m.EnableChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn15
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyInet6Vpn_Enable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet6Vpn_Enable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Enable != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
-		n16, err := m.Enable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Enable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyInet6Vpn_Disable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyInet6Vpn_Disable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disable != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
-		n17, err := m.Disable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyRtarget) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4946,52 +4895,73 @@ func (m *FamilyRtarget) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FamilyRtarget) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyRtarget) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
-		nn18, err := m.EnableChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.EnableChoice.Size()
+			i -= size
+			if _, err := m.EnableChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn18
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FamilyRtarget_Enable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyRtarget_Enable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Enable != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
-		n19, err := m.Enable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Enable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FamilyRtarget_Disable) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FamilyRtarget_Disable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Disable != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
-		n20, err := m.Disable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Disable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerFamilyParameters) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4999,33 +4969,39 @@ func (m *PeerFamilyParameters) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PeerFamilyParameters) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerFamilyParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Family) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Family)))
-		i += copy(dAtA[i:], m.Family)
-	}
 	if m.EnableSrv6 {
-		dAtA[i] = 0x10
-		i++
+		i--
 		if m.EnableSrv6 {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.Family) > 0 {
+		i -= len(m.Family)
+		copy(dAtA[i:], m.Family)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Family)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PeerExternal) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5033,165 +5009,234 @@ func (m *PeerExternal) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PeerExternal) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Asn != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
-	}
-	if m.AddressChoice != nil {
-		nn21, err := m.AddressChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.InterfaceChoice != nil {
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn21
-	}
-	if m.Port != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
 	}
 	if m.FamilyInet != nil {
+		{
+			size, err := m.FamilyInet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyInet.Size()))
-		n22, err := m.FamilyInet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
 	}
-	if m.InterfaceChoice != nil {
-		nn23, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn23
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x50
 	}
-	return i, nil
+	if m.AddressChoice != nil {
+		{
+			size := m.AddressChoice.Size()
+			i -= size
+			if _, err := m.AddressChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Asn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PeerExternal_Address) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_Address) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Address)
+	copy(dAtA[i:], m.Address)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-	i += copy(dAtA[i:], m.Address)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_SubnetBeginOffset) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_SubnetBeginOffset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.SubnetBeginOffset))
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_SubnetEndOffset) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x28
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_SubnetEndOffset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.SubnetEndOffset))
-	return i, nil
+	i--
+	dAtA[i] = 0x28
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_FromSite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_FromSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FromSite != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
-		n24, err := m.FromSite.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FromSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_DefaultGateway) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_DefaultGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultGateway != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultGateway.Size()))
-		n25, err := m.DefaultGateway.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_Interface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_Interface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Interface != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interface.Size()))
-		n26, err := m.Interface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Interface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n26
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n27, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_InsideInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_InsideInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InsideInterfaces != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideInterfaces.Size()))
-		n28, err := m.InsideInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InsideInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n28
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerExternal_OutsideInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerExternal_OutsideInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideInterfaces != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideInterfaces.Size()))
-		n29, err := m.OutsideInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n29
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerInternal) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5199,126 +5244,174 @@ func (m *PeerInternal) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PeerInternal) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AddressChoice != nil {
-		nn30, err := m.AddressChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.FamilyInet6Vpn != nil {
+		{
+			size, err := m.FamilyInet6Vpn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn30
-	}
-	if m.Port != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-	}
-	if m.FamilyInetvpn != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyInetvpn.Size()))
-		n31, err := m.FamilyInetvpn.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n31
-	}
-	if m.FamilyRtarget != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyRtarget.Size()))
-		n32, err := m.FamilyRtarget.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n32
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
 	if m.MtlsChoice != nil {
-		nn33, err := m.MtlsChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.MtlsChoice.Size()
+			i -= size
+			if _, err := m.MtlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn33
 	}
-	if m.FamilyInet6Vpn != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyInet6Vpn.Size()))
-		n34, err := m.FamilyInet6Vpn.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.FamilyRtarget != nil {
+		{
+			size, err := m.FamilyRtarget.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	if m.FamilyInetvpn != nil {
+		{
+			size, err := m.FamilyInetvpn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.AddressChoice != nil {
+		{
+			size := m.AddressChoice.Size()
+			i -= size
+			if _, err := m.AddressChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PeerInternal_Address) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal_Address) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Address)
+	copy(dAtA[i:], m.Address)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-	i += copy(dAtA[i:], m.Address)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *PeerInternal_FromSite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal_FromSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FromSite != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
-		n35, err := m.FromSite.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FromSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerInternal_DnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x2a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal_DnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DnsName)
+	copy(dAtA[i:], m.DnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.DnsName)))
-	i += copy(dAtA[i:], m.DnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
 }
 func (m *PeerInternal_DisableMtls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal_DisableMtls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableMtls != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableMtls.Size()))
-		n36, err := m.DisableMtls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableMtls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PeerInternal_EnableMtls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerInternal_EnableMtls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableMtls != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableMtls.Size()))
-		n37, err := m.EnableMtls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableMtls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Peer) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5326,70 +5419,94 @@ func (m *Peer) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Peer) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Peer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Metadata != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Metadata.Size()))
-		n38, err := m.Metadata.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n38
+	if len(m.TargetService) > 0 {
+		i -= len(m.TargetService)
+		copy(dAtA[i:], m.TargetService)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TargetService)))
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
 	}
 	if m.TypeChoice != nil {
-		nn39, err := m.TypeChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.TypeChoice.Size()
+			i -= size
+			if _, err := m.TypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn39
 	}
-	if len(m.TargetService) > 0 {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TargetService)))
-		i += copy(dAtA[i:], m.TargetService)
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Peer_External) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Peer_External) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.External != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.External.Size()))
-		n40, err := m.External.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.External.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n40
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Peer_Internal) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Peer_Internal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Internal != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Internal.Size()))
-		n41, err := m.Internal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Internal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n41
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5397,92 +5514,109 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Where != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n42, err := m.Where.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n42
+	if m.ViewVersion != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ViewVersion))
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc8
 	}
-	if m.BgpParameters != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n43, err := m.BgpParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n43
-	}
-	if len(m.BgpPeers) > 0 {
-		for _, msg := range m.BgpPeers {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
+	}
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
 	}
 	if len(m.NetworkInterface) > 0 {
-		for _, msg := range m.NetworkInterface {
+		for iNdEx := len(m.NetworkInterface) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkInterface[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		}
+	}
+	if len(m.BgpPeers) > 0 {
+		for iNdEx := len(m.BgpPeers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BgpPeers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.BgpParameters != nil {
+		{
+			size, err := m.BgpParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
 	}
-	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.Where != nil {
+		{
+			size, err := m.Where.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n44, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n44
-	}
-	if m.ViewVersion != 0 {
-		dAtA[i] = 0xc8
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewVersion))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5490,49 +5624,60 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Where != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n45, err := m.Where.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n45
 	}
 	if m.BgpParameters != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n46, err := m.BgpParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n46
-	}
-	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		{
+			size, err := m.BgpParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Where != nil {
+		{
+			size, err := m.Where.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5540,49 +5685,60 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Where != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n47, err := m.Where.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n47
 	}
 	if m.BgpParameters != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n48, err := m.BgpParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n48
-	}
-	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		{
+			size, err := m.BgpParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Where != nil {
+		{
+			size, err := m.Where.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5590,49 +5746,60 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Where != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n49, err := m.Where.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n49
 	}
 	if m.BgpParameters != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n50, err := m.BgpParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n50
-	}
-	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		{
+			size, err := m.BgpParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Where != nil {
+		{
+			size, err := m.Where.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *BgpPeerStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5640,85 +5807,97 @@ func (m *BgpPeerStatusType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BgpPeerStatusType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpPeerStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.UpDown != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UpDown))
-	}
-	if m.PeerAddress != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PeerAddress.Size()))
-		n51, err := m.PeerAddress.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n51
-	}
-	if m.PeerPort != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PeerPort))
-	}
-	if len(m.PeerRouterId) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerRouterId)))
-		i += copy(dAtA[i:], m.PeerRouterId)
-	}
-	if m.PeerAsn != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PeerAsn))
-	}
-	if m.UpDownTimestamp != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UpDownTimestamp.Size()))
-		n52, err := m.UpDownTimestamp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n52
-	}
-	if m.ConnectionFlapCount != 0 {
-		dAtA[i] = 0x40
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionFlapCount))
-	}
-	if m.AdvertisedPrefixCount != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertisedPrefixCount))
-	}
-	if m.ReceivedPrefixCount != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ReceivedPrefixCount))
+	if len(m.LocalAddress) > 0 {
+		i -= len(m.LocalAddress)
+		copy(dAtA[i:], m.LocalAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LocalAddress)))
+		i--
+		dAtA[i] = 0x62
 	}
 	if len(m.InterfaceName) > 0 {
-		dAtA[i] = 0x5a
-		i++
+		i -= len(m.InterfaceName)
+		copy(dAtA[i:], m.InterfaceName)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.InterfaceName)))
-		i += copy(dAtA[i:], m.InterfaceName)
+		i--
+		dAtA[i] = 0x5a
 	}
-	if len(m.LocalAddress) > 0 {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.LocalAddress)))
-		i += copy(dAtA[i:], m.LocalAddress)
+	if m.ReceivedPrefixCount != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ReceivedPrefixCount))
+		i--
+		dAtA[i] = 0x50
 	}
-	return i, nil
+	if m.AdvertisedPrefixCount != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertisedPrefixCount))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.ConnectionFlapCount != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionFlapCount))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.UpDownTimestamp != nil {
+		{
+			size, err := m.UpDownTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.PeerAsn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PeerAsn))
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.PeerRouterId) > 0 {
+		i -= len(m.PeerRouterId)
+		copy(dAtA[i:], m.PeerRouterId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerRouterId)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.PeerPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PeerPort))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.PeerAddress != nil {
+		{
+			size, err := m.PeerAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.UpDown != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UpDown))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *BgpStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -5726,46 +5905,59 @@ func (m *BgpStatusType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BgpStatusType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BgpStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.LocalRouterId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.LocalRouterId)))
-		i += copy(dAtA[i:], m.LocalRouterId)
-	}
-	if m.LocalAsn != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalAsn))
-	}
 	if len(m.PeerStatusList) > 0 {
-		for _, msg := range m.PeerStatusList {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.PeerStatusList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PeerStatusList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
-	return i, nil
+	if m.LocalAsn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LocalAsn))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.LocalRouterId) > 0 {
+		i -= len(m.LocalRouterId)
+		copy(dAtA[i:], m.LocalRouterId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LocalRouterId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *BgpParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Asn != 0 {
@@ -5789,6 +5981,9 @@ func (m *BgpParameters) Size() (n int) {
 }
 
 func (m *BgpParameters_LocalAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LocalAddress != nil {
@@ -5798,6 +5993,9 @@ func (m *BgpParameters_LocalAddress) Size() (n int) {
 	return n
 }
 func (m *BgpParameters_FromSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FromSite != nil {
@@ -5807,6 +6005,9 @@ func (m *BgpParameters_FromSite) Size() (n int) {
 	return n
 }
 func (m *BgpParameters_IpAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.IpAddress)
@@ -5814,6 +6015,9 @@ func (m *BgpParameters_IpAddress) Size() (n int) {
 	return n
 }
 func (m *BgpPeer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Asn != 0 {
@@ -5858,6 +6062,9 @@ func (m *BgpPeer) Size() (n int) {
 }
 
 func (m *InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
@@ -5870,6 +6077,9 @@ func (m *InterfaceList) Size() (n int) {
 }
 
 func (m *FamilyInet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
@@ -5879,6 +6089,9 @@ func (m *FamilyInet) Size() (n int) {
 }
 
 func (m *FamilyInet_Enable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enable != nil {
@@ -5888,6 +6101,9 @@ func (m *FamilyInet_Enable) Size() (n int) {
 	return n
 }
 func (m *FamilyInet_Disable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disable != nil {
@@ -5897,6 +6113,9 @@ func (m *FamilyInet_Disable) Size() (n int) {
 	return n
 }
 func (m *FamilyInetvpnParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SrChoice != nil {
@@ -5906,6 +6125,9 @@ func (m *FamilyInetvpnParameters) Size() (n int) {
 }
 
 func (m *FamilyInetvpnParameters_Enable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enable != nil {
@@ -5915,6 +6137,9 @@ func (m *FamilyInetvpnParameters_Enable) Size() (n int) {
 	return n
 }
 func (m *FamilyInetvpnParameters_Disable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disable != nil {
@@ -5924,6 +6149,9 @@ func (m *FamilyInetvpnParameters_Disable) Size() (n int) {
 	return n
 }
 func (m *FamilyInetvpn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
@@ -5933,6 +6161,9 @@ func (m *FamilyInetvpn) Size() (n int) {
 }
 
 func (m *FamilyInetvpn_Enable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enable != nil {
@@ -5942,6 +6173,9 @@ func (m *FamilyInetvpn_Enable) Size() (n int) {
 	return n
 }
 func (m *FamilyInetvpn_Disable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disable != nil {
@@ -5951,6 +6185,9 @@ func (m *FamilyInetvpn_Disable) Size() (n int) {
 	return n
 }
 func (m *FamilyInet6Vpn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
@@ -5960,6 +6197,9 @@ func (m *FamilyInet6Vpn) Size() (n int) {
 }
 
 func (m *FamilyInet6Vpn_Enable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enable != nil {
@@ -5969,6 +6209,9 @@ func (m *FamilyInet6Vpn_Enable) Size() (n int) {
 	return n
 }
 func (m *FamilyInet6Vpn_Disable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disable != nil {
@@ -5978,6 +6221,9 @@ func (m *FamilyInet6Vpn_Disable) Size() (n int) {
 	return n
 }
 func (m *FamilyRtarget) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableChoice != nil {
@@ -5987,6 +6233,9 @@ func (m *FamilyRtarget) Size() (n int) {
 }
 
 func (m *FamilyRtarget_Enable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enable != nil {
@@ -5996,6 +6245,9 @@ func (m *FamilyRtarget_Enable) Size() (n int) {
 	return n
 }
 func (m *FamilyRtarget_Disable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Disable != nil {
@@ -6005,6 +6257,9 @@ func (m *FamilyRtarget_Disable) Size() (n int) {
 	return n
 }
 func (m *PeerFamilyParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Family)
@@ -6018,6 +6273,9 @@ func (m *PeerFamilyParameters) Size() (n int) {
 }
 
 func (m *PeerExternal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Asn != 0 {
@@ -6040,6 +6298,9 @@ func (m *PeerExternal) Size() (n int) {
 }
 
 func (m *PeerExternal_Address) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Address)
@@ -6047,18 +6308,27 @@ func (m *PeerExternal_Address) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_SubnetBeginOffset) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 1 + sovTypes(uint64(m.SubnetBeginOffset))
 	return n
 }
 func (m *PeerExternal_SubnetEndOffset) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 1 + sovTypes(uint64(m.SubnetEndOffset))
 	return n
 }
 func (m *PeerExternal_FromSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FromSite != nil {
@@ -6068,6 +6338,9 @@ func (m *PeerExternal_FromSite) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_DefaultGateway) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultGateway != nil {
@@ -6077,6 +6350,9 @@ func (m *PeerExternal_DefaultGateway) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_Interface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Interface != nil {
@@ -6086,6 +6362,9 @@ func (m *PeerExternal_Interface) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -6095,6 +6374,9 @@ func (m *PeerExternal_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_InsideInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InsideInterfaces != nil {
@@ -6104,6 +6386,9 @@ func (m *PeerExternal_InsideInterfaces) Size() (n int) {
 	return n
 }
 func (m *PeerExternal_OutsideInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideInterfaces != nil {
@@ -6113,6 +6398,9 @@ func (m *PeerExternal_OutsideInterfaces) Size() (n int) {
 	return n
 }
 func (m *PeerInternal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AddressChoice != nil {
@@ -6140,6 +6428,9 @@ func (m *PeerInternal) Size() (n int) {
 }
 
 func (m *PeerInternal_Address) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Address)
@@ -6147,6 +6438,9 @@ func (m *PeerInternal_Address) Size() (n int) {
 	return n
 }
 func (m *PeerInternal_FromSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FromSite != nil {
@@ -6156,6 +6450,9 @@ func (m *PeerInternal_FromSite) Size() (n int) {
 	return n
 }
 func (m *PeerInternal_DnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DnsName)
@@ -6163,6 +6460,9 @@ func (m *PeerInternal_DnsName) Size() (n int) {
 	return n
 }
 func (m *PeerInternal_DisableMtls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableMtls != nil {
@@ -6172,6 +6472,9 @@ func (m *PeerInternal_DisableMtls) Size() (n int) {
 	return n
 }
 func (m *PeerInternal_EnableMtls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableMtls != nil {
@@ -6181,6 +6484,9 @@ func (m *PeerInternal_EnableMtls) Size() (n int) {
 	return n
 }
 func (m *Peer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Metadata != nil {
@@ -6198,6 +6504,9 @@ func (m *Peer) Size() (n int) {
 }
 
 func (m *Peer_External) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.External != nil {
@@ -6207,6 +6516,9 @@ func (m *Peer_External) Size() (n int) {
 	return n
 }
 func (m *Peer_Internal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Internal != nil {
@@ -6216,6 +6528,9 @@ func (m *Peer_Internal) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Where != nil {
@@ -6255,6 +6570,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Where != nil {
@@ -6275,6 +6593,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Where != nil {
@@ -6295,6 +6616,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Where != nil {
@@ -6315,6 +6639,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *BgpPeerStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UpDown != 0 {
@@ -6359,6 +6686,9 @@ func (m *BgpPeerStatusType) Size() (n int) {
 }
 
 func (m *BgpStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.LocalRouterId)
@@ -6378,14 +6708,7 @@ func (m *BgpStatusType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -6397,7 +6720,7 @@ func (this *BgpParameters) String() string {
 	s := strings.Join([]string{`&BgpParameters{`,
 		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
 		`BgpRouterIdType:` + fmt.Sprintf("%v", this.BgpRouterIdType) + `,`,
-		`BgpRouterId:` + strings.Replace(fmt.Sprintf("%v", this.BgpRouterId), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`BgpRouterId:` + strings.Replace(fmt.Sprintf("%v", this.BgpRouterId), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`BgpRouterIdKey:` + fmt.Sprintf("%v", this.BgpRouterIdKey) + `,`,
 		`RouterIdChoice:` + fmt.Sprintf("%v", this.RouterIdChoice) + `,`,
 		`}`,
@@ -6409,7 +6732,7 @@ func (this *BgpParameters_LocalAddress) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&BgpParameters_LocalAddress{`,
-		`LocalAddress:` + strings.Replace(fmt.Sprintf("%v", this.LocalAddress), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LocalAddress:` + strings.Replace(fmt.Sprintf("%v", this.LocalAddress), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6419,7 +6742,7 @@ func (this *BgpParameters_FromSite) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&BgpParameters_FromSite{`,
-		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6438,15 +6761,25 @@ func (this *BgpPeer) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForFamilies := "[]*PeerFamilyParameters{"
+	for _, f := range this.Families {
+		repeatedStringForFamilies += strings.Replace(f.String(), "PeerFamilyParameters", "PeerFamilyParameters", 1) + ","
+	}
+	repeatedStringForFamilies += "}"
+	repeatedStringForInterfaceRefs := "[]*ObjectRefType{"
+	for _, f := range this.InterfaceRefs {
+		repeatedStringForInterfaceRefs += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInterfaceRefs += "}"
 	s := strings.Join([]string{`&BgpPeer{`,
 		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
 		`BgpPeerAddressType:` + fmt.Sprintf("%v", this.BgpPeerAddressType) + `,`,
-		`BgpPeerAddress:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeerAddress), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`BgpPeerAddress:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeerAddress), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`BgpPeerAddressKey:` + fmt.Sprintf("%v", this.BgpPeerAddressKey) + `,`,
 		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
 		`BgpPeerSubnetOffset:` + fmt.Sprintf("%v", this.BgpPeerSubnetOffset) + `,`,
-		`Families:` + strings.Replace(fmt.Sprintf("%v", this.Families), "PeerFamilyParameters", "PeerFamilyParameters", 1) + `,`,
-		`InterfaceRefs:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Families:` + repeatedStringForFamilies + `,`,
+		`InterfaceRefs:` + repeatedStringForInterfaceRefs + `,`,
 		`AllInsideInterfaces:` + fmt.Sprintf("%v", this.AllInsideInterfaces) + `,`,
 		`AllOutsideInterfaces:` + fmt.Sprintf("%v", this.AllOutsideInterfaces) + `,`,
 		`}`,
@@ -6457,8 +6790,13 @@ func (this *InterfaceList) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForInterfaces := "[]*ObjectRefType{"
+	for _, f := range this.Interfaces {
+		repeatedStringForInterfaces += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInterfaces += "}"
 	s := strings.Join([]string{`&InterfaceList{`,
-		`Interfaces:` + strings.Replace(fmt.Sprintf("%v", this.Interfaces), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Interfaces:` + repeatedStringForInterfaces + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6478,7 +6816,7 @@ func (this *FamilyInet_Enable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInet_Enable{`,
-		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6488,7 +6826,7 @@ func (this *FamilyInet_Disable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInet_Disable{`,
-		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6508,7 +6846,7 @@ func (this *FamilyInetvpnParameters_Enable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInetvpnParameters_Enable{`,
-		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6518,7 +6856,7 @@ func (this *FamilyInetvpnParameters_Disable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInetvpnParameters_Disable{`,
-		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6548,7 +6886,7 @@ func (this *FamilyInetvpn_Disable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInetvpn_Disable{`,
-		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6568,7 +6906,7 @@ func (this *FamilyInet6Vpn_Enable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInet6Vpn_Enable{`,
-		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6578,7 +6916,7 @@ func (this *FamilyInet6Vpn_Disable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyInet6Vpn_Disable{`,
-		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6598,7 +6936,7 @@ func (this *FamilyRtarget_Enable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyRtarget_Enable{`,
-		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6608,7 +6946,7 @@ func (this *FamilyRtarget_Disable) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FamilyRtarget_Disable{`,
-		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6632,7 +6970,7 @@ func (this *PeerExternal) String() string {
 		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
 		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
 		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
-		`FamilyInet:` + strings.Replace(fmt.Sprintf("%v", this.FamilyInet), "FamilyInet", "FamilyInet", 1) + `,`,
+		`FamilyInet:` + strings.Replace(this.FamilyInet.String(), "FamilyInet", "FamilyInet", 1) + `,`,
 		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
 		`}`,
 	}, "")
@@ -6673,7 +7011,7 @@ func (this *PeerExternal_FromSite) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerExternal_FromSite{`,
-		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6683,7 +7021,7 @@ func (this *PeerExternal_DefaultGateway) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerExternal_DefaultGateway{`,
-		`DefaultGateway:` + strings.Replace(fmt.Sprintf("%v", this.DefaultGateway), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultGateway:` + strings.Replace(fmt.Sprintf("%v", this.DefaultGateway), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6693,7 +7031,7 @@ func (this *PeerExternal_Interface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerExternal_Interface{`,
-		`Interface:` + strings.Replace(fmt.Sprintf("%v", this.Interface), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Interface:` + strings.Replace(fmt.Sprintf("%v", this.Interface), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6713,7 +7051,7 @@ func (this *PeerExternal_InsideInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerExternal_InsideInterfaces{`,
-		`InsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.InsideInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`InsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.InsideInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6723,7 +7061,7 @@ func (this *PeerExternal_OutsideInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerExternal_OutsideInterfaces{`,
-		`OutsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.OutsideInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`OutsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.OutsideInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6735,8 +7073,8 @@ func (this *PeerInternal) String() string {
 	s := strings.Join([]string{`&PeerInternal{`,
 		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
 		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
-		`FamilyInetvpn:` + strings.Replace(fmt.Sprintf("%v", this.FamilyInetvpn), "FamilyInetvpn", "FamilyInetvpn", 1) + `,`,
-		`FamilyRtarget:` + strings.Replace(fmt.Sprintf("%v", this.FamilyRtarget), "FamilyRtarget", "FamilyRtarget", 1) + `,`,
+		`FamilyInetvpn:` + strings.Replace(this.FamilyInetvpn.String(), "FamilyInetvpn", "FamilyInetvpn", 1) + `,`,
+		`FamilyRtarget:` + strings.Replace(this.FamilyRtarget.String(), "FamilyRtarget", "FamilyRtarget", 1) + `,`,
 		`MtlsChoice:` + fmt.Sprintf("%v", this.MtlsChoice) + `,`,
 		`FamilyInet6Vpn:` + strings.Replace(fmt.Sprintf("%v", this.FamilyInet6Vpn), "FamilyInet6Vpn", "FamilyInet6Vpn", 1) + `,`,
 		`}`,
@@ -6758,7 +7096,7 @@ func (this *PeerInternal_FromSite) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerInternal_FromSite{`,
-		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6778,7 +7116,7 @@ func (this *PeerInternal_DisableMtls) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerInternal_DisableMtls{`,
-		`DisableMtls:` + strings.Replace(fmt.Sprintf("%v", this.DisableMtls), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableMtls:` + strings.Replace(fmt.Sprintf("%v", this.DisableMtls), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6788,7 +7126,7 @@ func (this *PeerInternal_EnableMtls) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PeerInternal_EnableMtls{`,
-		`EnableMtls:` + strings.Replace(fmt.Sprintf("%v", this.EnableMtls), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableMtls:` + strings.Replace(fmt.Sprintf("%v", this.EnableMtls), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6798,7 +7136,7 @@ func (this *Peer) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Peer{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "ves_io_schema4.MessageMetaType", 1) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
 		`TypeChoice:` + fmt.Sprintf("%v", this.TypeChoice) + `,`,
 		`TargetService:` + fmt.Sprintf("%v", this.TargetService) + `,`,
 		`}`,
@@ -6829,13 +7167,28 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForBgpPeers := "[]*BgpPeer{"
+	for _, f := range this.BgpPeers {
+		repeatedStringForBgpPeers += strings.Replace(f.String(), "BgpPeer", "BgpPeer", 1) + ","
+	}
+	repeatedStringForBgpPeers += "}"
+	repeatedStringForNetworkInterface := "[]*ObjectRefType{"
+	for _, f := range this.NetworkInterface {
+		repeatedStringForNetworkInterface += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkInterface += "}"
+	repeatedStringForPeers := "[]*Peer{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "Peer", "Peer", 1) + ","
+	}
+	repeatedStringForPeers += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
-		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`BgpPeers:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeers), "BgpPeer", "BgpPeer", 1) + `,`,
-		`NetworkInterface:` + strings.Replace(fmt.Sprintf("%v", this.NetworkInterface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "schema.SiteVirtualSiteRefSelector", 1) + `,`,
+		`BgpParameters:` + strings.Replace(this.BgpParameters.String(), "BgpParameters", "BgpParameters", 1) + `,`,
+		`BgpPeers:` + repeatedStringForBgpPeers + `,`,
+		`NetworkInterface:` + repeatedStringForNetworkInterface + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`ViewVersion:` + fmt.Sprintf("%v", this.ViewVersion) + `,`,
 		`}`,
 	}, "")
@@ -6845,10 +7198,15 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPeers := "[]*Peer{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "Peer", "Peer", 1) + ","
+	}
+	repeatedStringForPeers += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
-		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
+		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "schema.SiteVirtualSiteRefSelector", 1) + `,`,
+		`BgpParameters:` + strings.Replace(this.BgpParameters.String(), "BgpParameters", "BgpParameters", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6857,10 +7215,15 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPeers := "[]*Peer{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "Peer", "Peer", 1) + ","
+	}
+	repeatedStringForPeers += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
-		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
+		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "schema.SiteVirtualSiteRefSelector", 1) + `,`,
+		`BgpParameters:` + strings.Replace(this.BgpParameters.String(), "BgpParameters", "BgpParameters", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6869,10 +7232,15 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPeers := "[]*Peer{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "Peer", "Peer", 1) + ","
+	}
+	repeatedStringForPeers += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
-		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
+		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "schema.SiteVirtualSiteRefSelector", 1) + `,`,
+		`BgpParameters:` + strings.Replace(this.BgpParameters.String(), "BgpParameters", "BgpParameters", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6883,11 +7251,11 @@ func (this *BgpPeerStatusType) String() string {
 	}
 	s := strings.Join([]string{`&BgpPeerStatusType{`,
 		`UpDown:` + fmt.Sprintf("%v", this.UpDown) + `,`,
-		`PeerAddress:` + strings.Replace(fmt.Sprintf("%v", this.PeerAddress), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`PeerAddress:` + strings.Replace(fmt.Sprintf("%v", this.PeerAddress), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`PeerPort:` + fmt.Sprintf("%v", this.PeerPort) + `,`,
 		`PeerRouterId:` + fmt.Sprintf("%v", this.PeerRouterId) + `,`,
 		`PeerAsn:` + fmt.Sprintf("%v", this.PeerAsn) + `,`,
-		`UpDownTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.UpDownTimestamp), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
+		`UpDownTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.UpDownTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
 		`ConnectionFlapCount:` + fmt.Sprintf("%v", this.ConnectionFlapCount) + `,`,
 		`AdvertisedPrefixCount:` + fmt.Sprintf("%v", this.AdvertisedPrefixCount) + `,`,
 		`ReceivedPrefixCount:` + fmt.Sprintf("%v", this.ReceivedPrefixCount) + `,`,
@@ -6901,10 +7269,15 @@ func (this *BgpStatusType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPeerStatusList := "[]*BgpPeerStatusType{"
+	for _, f := range this.PeerStatusList {
+		repeatedStringForPeerStatusList += strings.Replace(f.String(), "BgpPeerStatusType", "BgpPeerStatusType", 1) + ","
+	}
+	repeatedStringForPeerStatusList += "}"
 	s := strings.Join([]string{`&BgpStatusType{`,
 		`LocalRouterId:` + fmt.Sprintf("%v", this.LocalRouterId) + `,`,
 		`LocalAsn:` + fmt.Sprintf("%v", this.LocalAsn) + `,`,
-		`PeerStatusList:` + strings.Replace(fmt.Sprintf("%v", this.PeerStatusList), "BgpPeerStatusType", "BgpPeerStatusType", 1) + `,`,
+		`PeerStatusList:` + repeatedStringForPeerStatusList + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6932,7 +7305,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6960,7 +7333,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Asn |= (uint32(b) & 0x7F) << shift
+				m.Asn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6979,7 +7352,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BgpRouterIdType |= (BgpRouterIdType(b) & 0x7F) << shift
+				m.BgpRouterIdType |= BgpRouterIdType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6998,7 +7371,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7007,11 +7380,14 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.BgpRouterId == nil {
-				m.BgpRouterId = &ves_io_schema3.IpAddressType{}
+				m.BgpRouterId = &schema.IpAddressType{}
 			}
 			if err := m.BgpRouterId.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7031,7 +7407,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7041,6 +7417,9 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7060,7 +7439,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7069,10 +7448,13 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7092,7 +7474,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7101,10 +7483,13 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7124,7 +7509,7 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7134,6 +7519,9 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7146,6 +7534,9 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7175,7 +7566,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7203,7 +7594,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Asn |= (uint32(b) & 0x7F) << shift
+				m.Asn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7222,7 +7613,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BgpPeerAddressType |= (BgpPeerAddressType(b) & 0x7F) << shift
+				m.BgpPeerAddressType |= BgpPeerAddressType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7241,7 +7632,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7250,11 +7641,14 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.BgpPeerAddress == nil {
-				m.BgpPeerAddress = &ves_io_schema3.IpAddressType{}
+				m.BgpPeerAddress = &schema.IpAddressType{}
 			}
 			if err := m.BgpPeerAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7274,7 +7668,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7284,6 +7678,9 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7303,7 +7700,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= (uint32(b) & 0x7F) << shift
+				m.Port |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7322,7 +7719,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BgpPeerSubnetOffset |= (uint32(b) & 0x7F) << shift
+				m.BgpPeerSubnetOffset |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7341,7 +7738,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7350,6 +7747,9 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7372,7 +7772,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7381,10 +7781,13 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InterfaceRefs = append(m.InterfaceRefs, &ves_io_schema4.ObjectRefType{})
+			m.InterfaceRefs = append(m.InterfaceRefs, &schema.ObjectRefType{})
 			if err := m.InterfaceRefs[len(m.InterfaceRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7403,7 +7806,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7423,7 +7826,7 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7436,6 +7839,9 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7465,7 +7871,7 @@ func (m *InterfaceList) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7493,7 +7899,7 @@ func (m *InterfaceList) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7502,10 +7908,13 @@ func (m *InterfaceList) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Interfaces = append(m.Interfaces, &ves_io_schema_views.ObjectRefType{})
+			m.Interfaces = append(m.Interfaces, &views.ObjectRefType{})
 			if err := m.Interfaces[len(m.Interfaces)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7517,6 +7926,9 @@ func (m *InterfaceList) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7546,7 +7958,7 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7574,7 +7986,7 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7583,10 +7995,13 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7606,7 +8021,7 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7615,10 +8030,13 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7631,6 +8049,9 @@ func (m *FamilyInet) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7660,7 +8081,7 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7688,7 +8109,7 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7697,10 +8118,13 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7720,7 +8144,7 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7729,10 +8153,13 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7745,6 +8172,9 @@ func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7774,7 +8204,7 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7802,7 +8232,7 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7811,6 +8241,9 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7834,7 +8267,7 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7843,10 +8276,13 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7859,6 +8295,9 @@ func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7888,7 +8327,7 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7916,7 +8355,7 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7925,10 +8364,13 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7948,7 +8390,7 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7957,10 +8399,13 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7973,6 +8418,9 @@ func (m *FamilyInet6Vpn) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8002,7 +8450,7 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -8030,7 +8478,7 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8039,10 +8487,13 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8062,7 +8513,7 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8071,10 +8522,13 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8087,6 +8541,9 @@ func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8116,7 +8573,7 @@ func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -8144,7 +8601,7 @@ func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8154,6 +8611,9 @@ func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8173,7 +8633,7 @@ func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8186,6 +8646,9 @@ func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8215,7 +8678,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -8243,7 +8706,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Asn |= (uint32(b) & 0x7F) << shift
+				m.Asn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8262,7 +8725,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8272,6 +8735,9 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8291,7 +8757,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8311,7 +8777,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8331,7 +8797,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8340,10 +8806,13 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8363,7 +8832,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8372,10 +8841,13 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8395,7 +8867,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= (uint32(b) & 0x7F) << shift
+				m.Port |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8414,7 +8886,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8423,6 +8895,9 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8447,7 +8922,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8456,10 +8931,13 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8479,7 +8957,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8488,6 +8966,9 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8511,7 +8992,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8520,10 +9001,13 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8543,7 +9027,7 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8552,10 +9036,13 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8568,6 +9055,9 @@ func (m *PeerExternal) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8597,7 +9087,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -8625,7 +9115,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8635,6 +9125,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8654,7 +9147,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8663,10 +9156,13 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8686,7 +9182,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8696,6 +9192,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8715,7 +9214,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= (uint32(b) & 0x7F) << shift
+				m.Port |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8734,7 +9233,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8743,6 +9242,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8767,7 +9269,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8776,6 +9278,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8800,7 +9305,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8809,10 +9314,13 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8832,7 +9340,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8841,10 +9349,13 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8864,7 +9375,7 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8873,6 +9384,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8890,6 +9404,9 @@ func (m *PeerInternal) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8919,7 +9436,7 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -8947,7 +9464,7 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8956,11 +9473,14 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &ves_io_schema4.MessageMetaType{}
+				m.Metadata = &schema.MessageMetaType{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8980,7 +9500,7 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8989,6 +9509,9 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9012,7 +9535,7 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9021,6 +9544,9 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9044,7 +9570,7 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9054,6 +9580,9 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9066,6 +9595,9 @@ func (m *Peer) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -9095,7 +9627,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -9123,7 +9655,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9132,11 +9664,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Where == nil {
-				m.Where = &ves_io_schema4.SiteVirtualSiteRefSelector{}
+				m.Where = &schema.SiteVirtualSiteRefSelector{}
 			}
 			if err := m.Where.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9156,7 +9691,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9165,6 +9700,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9189,7 +9727,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9198,6 +9736,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9220,7 +9761,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9229,10 +9770,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkInterface = append(m.NetworkInterface, &ves_io_schema4.ObjectRefType{})
+			m.NetworkInterface = append(m.NetworkInterface, &schema.ObjectRefType{})
 			if err := m.NetworkInterface[len(m.NetworkInterface)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9251,7 +9795,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9260,6 +9804,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9282,7 +9829,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9291,11 +9838,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9315,7 +9865,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ViewVersion |= (uint32(b) & 0x7F) << shift
+				m.ViewVersion |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9327,6 +9877,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -9356,7 +9909,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -9384,7 +9937,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9393,11 +9946,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Where == nil {
-				m.Where = &ves_io_schema4.SiteVirtualSiteRefSelector{}
+				m.Where = &schema.SiteVirtualSiteRefSelector{}
 			}
 			if err := m.Where.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9417,7 +9973,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9426,6 +9982,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9450,7 +10009,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9459,6 +10018,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9474,6 +10036,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -9503,7 +10068,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -9531,7 +10096,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9540,11 +10105,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Where == nil {
-				m.Where = &ves_io_schema4.SiteVirtualSiteRefSelector{}
+				m.Where = &schema.SiteVirtualSiteRefSelector{}
 			}
 			if err := m.Where.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9564,7 +10132,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9573,6 +10141,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9597,7 +10168,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9606,6 +10177,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9621,6 +10195,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -9650,7 +10227,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -9678,7 +10255,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9687,11 +10264,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Where == nil {
-				m.Where = &ves_io_schema4.SiteVirtualSiteRefSelector{}
+				m.Where = &schema.SiteVirtualSiteRefSelector{}
 			}
 			if err := m.Where.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9711,7 +10291,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9720,6 +10300,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9744,7 +10327,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9753,6 +10336,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9768,6 +10354,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -9797,7 +10386,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -9825,7 +10414,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UpDown |= (BgpPeerUpDownType(b) & 0x7F) << shift
+				m.UpDown |= BgpPeerUpDownType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9844,7 +10433,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9853,11 +10442,14 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.PeerAddress == nil {
-				m.PeerAddress = &ves_io_schema3.IpAddressType{}
+				m.PeerAddress = &schema.IpAddressType{}
 			}
 			if err := m.PeerAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9877,7 +10469,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PeerPort |= (uint32(b) & 0x7F) << shift
+				m.PeerPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9896,7 +10488,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9906,6 +10498,9 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -9925,7 +10520,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PeerAsn |= (uint32(b) & 0x7F) << shift
+				m.PeerAsn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9944,7 +10539,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9953,11 +10548,14 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.UpDownTimestamp == nil {
-				m.UpDownTimestamp = &google_protobuf1.Timestamp{}
+				m.UpDownTimestamp = &types.Timestamp{}
 			}
 			if err := m.UpDownTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9977,7 +10575,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionFlapCount |= (uint32(b) & 0x7F) << shift
+				m.ConnectionFlapCount |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -9996,7 +10594,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AdvertisedPrefixCount |= (uint32(b) & 0x7F) << shift
+				m.AdvertisedPrefixCount |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10015,7 +10613,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ReceivedPrefixCount |= (uint32(b) & 0x7F) << shift
+				m.ReceivedPrefixCount |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10034,7 +10632,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10044,6 +10642,9 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10063,7 +10664,7 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10073,6 +10674,9 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10085,6 +10689,9 @@ func (m *BgpPeerStatusType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -10114,7 +10721,7 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -10142,7 +10749,7 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10152,6 +10759,9 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10171,7 +10781,7 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LocalAsn |= (uint32(b) & 0x7F) << shift
+				m.LocalAsn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10190,7 +10800,7 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10199,6 +10809,9 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10216,6 +10829,9 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10231,6 +10847,7 @@ func (m *BgpStatusType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -10262,10 +10879,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -10282,213 +10897,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 2444 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
-	0xf5, 0xd7, 0xf0, 0x9b, 0x8f, 0x22, 0xb9, 0x1c, 0x4b, 0xd6, 0x46, 0x4e, 0x68, 0x9a, 0xb1, 0xfe,
-	0x51, 0x64, 0x9a, 0xb2, 0xe8, 0xaf, 0x44, 0x46, 0x9c, 0xbf, 0x68, 0x51, 0xb2, 0x54, 0xeb, 0x03,
-	0x4b, 0x3a, 0x09, 0x72, 0x59, 0x2c, 0xc9, 0x21, 0xbd, 0xc9, 0x72, 0x77, 0xb1, 0xbb, 0xa4, 0xac,
-	0x02, 0x06, 0x7a, 0xeb, 0xb5, 0xe8, 0xad, 0x87, 0x1c, 0x0a, 0xb4, 0x45, 0x10, 0xa0, 0x87, 0x5e,
-	0x7a, 0x28, 0x2f, 0x42, 0x4f, 0x45, 0x4f, 0x3a, 0xa6, 0x45, 0x0b, 0xd4, 0x0c, 0x50, 0x38, 0xb7,
-	0x20, 0xc7, 0x02, 0x45, 0x8a, 0x9d, 0xfd, 0x24, 0x29, 0xca, 0x4c, 0x50, 0x04, 0x45, 0x6e, 0xdc,
-	0x79, 0x1f, 0xf3, 0x9b, 0xf7, 0xde, 0xbc, 0x37, 0xef, 0x11, 0x5e, 0xeb, 0x11, 0xbd, 0x28, 0x2a,
-	0xab, 0x7a, 0xe3, 0x09, 0xe9, 0x08, 0xab, 0xf5, 0xb6, 0xba, 0x6a, 0x1c, 0xab, 0x44, 0x2f, 0xaa,
-	0x9a, 0x62, 0x28, 0x38, 0x63, 0x91, 0x8b, 0x16, 0xb9, 0x58, 0x6f, 0xab, 0x8b, 0xd7, 0xdb, 0xa2,
-	0xf1, 0xa4, 0x5b, 0x2f, 0x36, 0x94, 0xce, 0x6a, 0x5b, 0x69, 0x2b, 0xab, 0x94, 0xb3, 0xde, 0x6d,
-	0xd1, 0x2f, 0xfa, 0x41, 0x7f, 0x59, 0x1a, 0x16, 0x2f, 0xb7, 0x15, 0xa5, 0x2d, 0x11, 0x8f, 0xcb,
-	0x10, 0x3b, 0x44, 0x37, 0x84, 0x8e, 0x6a, 0x33, 0x2c, 0x0c, 0x23, 0x90, 0x89, 0x61, 0x13, 0x2e,
-	0x0d, 0x13, 0x14, 0xd5, 0x10, 0x15, 0xd9, 0x06, 0xb6, 0x38, 0x82, 0x5b, 0xed, 0x19, 0xbc, 0x0f,
-	0xf7, 0xe2, 0x2b, 0xc3, 0x64, 0x3f, 0xe9, 0xd5, 0x61, 0x52, 0x4f, 0x90, 0xc4, 0xa6, 0x60, 0x10,
-	0x9b, 0x9a, 0x1b, 0xa1, 0x8a, 0xe4, 0x88, 0x1f, 0xde, 0xf9, 0xf2, 0x38, 0x87, 0xee, 0xdf, 0x20,
-	0xff, 0x3c, 0x08, 0xc9, 0x72, 0x5b, 0x3d, 0x14, 0x34, 0xa1, 0x43, 0x0c, 0xa2, 0xe9, 0xf8, 0x12,
-	0x04, 0x05, 0x5d, 0x66, 0x51, 0x0e, 0x2d, 0x27, 0xcb, 0xf1, 0x3f, 0x7c, 0x79, 0x12, 0x0c, 0xad,
-	0x04, 0x96, 0x11, 0x67, 0xae, 0xe2, 0x0f, 0x00, 0xd7, 0xdb, 0x2a, 0xaf, 0x29, 0x5d, 0x83, 0x68,
-	0xbc, 0xd8, 0xa4, 0xe7, 0x60, 0x03, 0x39, 0xb4, 0x9c, 0x2a, 0xe5, 0x8b, 0x63, 0xf6, 0x2f, 0x96,
-	0xdb, 0x2a, 0x47, 0x79, 0x77, 0x9a, 0xb5, 0x63, 0x95, 0x94, 0xa3, 0x9f, 0x3f, 0x43, 0x2f, 0xfa,
-	0x08, 0x71, 0xe9, 0xfa, 0x30, 0x05, 0xef, 0x40, 0x72, 0x48, 0x33, 0x1b, 0xcc, 0xa1, 0xe5, 0x44,
-	0xe9, 0xd5, 0x11, 0xa5, 0x3b, 0xea, 0x46, 0xb3, 0xa9, 0x11, 0x5d, 0x1f, 0x56, 0x97, 0xf0, 0xa9,
-	0xc3, 0xf7, 0x20, 0x33, 0x0c, 0xf2, 0x63, 0x72, 0xcc, 0x86, 0x72, 0x68, 0x39, 0x5e, 0x66, 0x6c,
-	0x01, 0x7a, 0x2c, 0x2d, 0xc0, 0xfe, 0x3f, 0x97, 0xf2, 0x49, 0xfe, 0x88, 0x1c, 0xe3, 0x7b, 0x90,
-	0x94, 0x94, 0x86, 0x20, 0xf1, 0x82, 0xb5, 0x0f, 0x1b, 0xa1, 0x38, 0xe6, 0x46, 0x70, 0x54, 0x3a,
-	0xaa, 0x71, 0xfc, 0x70, 0x86, 0x9b, 0xa5, 0xcc, 0x36, 0x26, 0x7c, 0x13, 0xe2, 0x2d, 0x4d, 0xe9,
-	0xf0, 0xba, 0x68, 0x10, 0x36, 0x7a, 0xae, 0x60, 0xcc, 0x64, 0xac, 0x8a, 0x06, 0xc1, 0x2b, 0x00,
-	0xa2, 0xea, 0x6e, 0x17, 0xa3, 0x38, 0xe3, 0x36, 0xc0, 0xa7, 0xe8, 0xe1, 0x0c, 0x17, 0x17, 0x9d,
-	0x43, 0xaf, 0x47, 0xbe, 0xbe, 0x1f, 0x5c, 0x2b, 0xdc, 0x2e, 0x2f, 0x01, 0xe3, 0x1d, 0xaf, 0xf1,
-	0x44, 0x11, 0x1b, 0x04, 0x67, 0x4e, 0xfa, 0x28, 0x72, 0xda, 0x47, 0xe1, 0x41, 0x1f, 0x85, 0xef,
-	0x14, 0xee, 0x16, 0xde, 0xda, 0x0d, 0xc5, 0xc2, 0x4c, 0x24, 0xff, 0xdb, 0x30, 0x44, 0x4d, 0x1f,
-	0x13, 0xa2, 0xbd, 0xcc, 0xbb, 0xf3, 0xa6, 0xe1, 0x54, 0x42, 0x34, 0x07, 0x8f, 0xdf, 0xc1, 0x4b,
-	0x67, 0x3b, 0xd8, 0xd4, 0xeb, 0x73, 0x0a, 0x67, 0x46, 0xc8, 0xc8, 0x1a, 0xde, 0x02, 0x66, 0x54,
-	0xf3, 0x34, 0x0e, 0xa6, 0xde, 0xf1, 0xe9, 0xc2, 0xeb, 0x30, 0x37, 0x86, 0xd0, 0xf3, 0x6e, 0xdc,
-	0x73, 0x6b, 0x66, 0x58, 0xd0, 0xf4, 0xec, 0xeb, 0x10, 0x52, 0x15, 0xcd, 0x60, 0xc3, 0xf4, 0xec,
-	0xe9, 0x13, 0x3b, 0x0c, 0x22, 0x2b, 0x21, 0xf6, 0x9b, 0x6f, 0x82, 0x1c, 0x25, 0xe2, 0x32, 0x5c,
-	0x74, 0x37, 0xd0, 0xbb, 0x75, 0x99, 0x18, 0xbc, 0xd2, 0x6a, 0xe9, 0xc4, 0xa0, 0x71, 0x90, 0x2c,
-	0x27, 0x1d, 0xb1, 0xd0, 0x4a, 0x80, 0xcd, 0x71, 0x17, 0xec, 0x6d, 0xaa, 0x94, 0xf5, 0x80, 0x72,
-	0xe2, 0xf7, 0x20, 0xd6, 0x12, 0x3a, 0xa2, 0x24, 0x12, 0x9d, 0x9d, 0xcb, 0x05, 0x97, 0x13, 0xa5,
-	0x37, 0xce, 0xb0, 0x9c, 0x29, 0xb6, 0x65, 0xb2, 0x1d, 0x7b, 0x97, 0xaf, 0x9c, 0xf1, 0xc5, 0x67,
-	0xf8, 0xe7, 0x28, 0xc0, 0x84, 0x38, 0x57, 0x17, 0xfe, 0x08, 0x52, 0xa2, 0x6c, 0x10, 0xad, 0x25,
-	0x34, 0x08, 0xaf, 0x91, 0x96, 0xce, 0xce, 0x53, 0xed, 0xa3, 0x26, 0x3c, 0xa8, 0x7f, 0x44, 0x1a,
-	0x06, 0x47, 0x5a, 0xf4, 0x8e, 0x2c, 0x7d, 0xf6, 0x2c, 0x23, 0x13, 0xe3, 0x48, 0xd1, 0x3e, 0xe6,
-	0x5d, 0xf1, 0xd1, 0x6d, 0x62, 0x5c, 0xd2, 0xa5, 0x71, 0xa4, 0xa5, 0xe3, 0x7b, 0x30, 0x2f, 0x48,
-	0x12, 0x2f, 0xca, 0xba, 0xd8, 0x24, 0x9e, 0x9c, 0xce, 0x5e, 0xcc, 0xa1, 0xe5, 0x98, 0x77, 0xf1,
-	0x2e, 0x08, 0x92, 0xb4, 0x43, 0x99, 0x76, 0x5c, 0x1e, 0xfc, 0x0e, 0x5c, 0x34, 0x85, 0x95, 0xae,
-	0x31, 0x2a, 0xbd, 0x30, 0x2c, 0x3d, 0x27, 0x48, 0xd2, 0x81, 0xc5, 0xe5, 0x89, 0xe7, 0x7f, 0x8a,
-	0x20, 0xe9, 0x7e, 0x3e, 0x12, 0x75, 0x03, 0xf7, 0x00, 0x7c, 0x4a, 0x10, 0x3d, 0xf5, 0x68, 0xba,
-	0xa1, 0xb9, 0x6d, 0xe4, 0xec, 0xa5, 0xb3, 0xce, 0xee, 0x1d, 0xda, 0xf9, 0x15, 0x73, 0x0d, 0xc1,
-	0x22, 0xce, 0xb7, 0x53, 0xfe, 0x13, 0x04, 0x60, 0xf9, 0x68, 0x47, 0x26, 0x06, 0x2e, 0x42, 0x84,
-	0xc8, 0x42, 0x5d, 0xb2, 0x2e, 0xc4, 0xe4, 0xbb, 0x6d, 0x73, 0xe1, 0xb7, 0x21, 0xda, 0x14, 0x75,
-	0x2a, 0x10, 0x9c, 0x2c, 0xe0, 0x9a, 0xe3, 0xe1, 0x0c, 0xe7, 0xf0, 0x97, 0xb3, 0x90, 0xb4, 0x94,
-	0x38, 0xb7, 0xdb, 0x0c, 0xbc, 0xc0, 0x69, 0x1f, 0xa1, 0x41, 0x1f, 0xa1, 0xd2, 0x6e, 0x28, 0x86,
-	0x98, 0x40, 0xfe, 0x37, 0x08, 0x16, 0x3c, 0x7c, 0x3d, 0x55, 0xf6, 0xe5, 0xf1, 0xef, 0x11, 0xec,
-	0x22, 0xc4, 0x75, 0xed, 0x5c, 0xa0, 0xbf, 0x47, 0x90, 0x1c, 0x02, 0x8a, 0x37, 0x47, 0xe0, 0xad,
-	0x9c, 0x71, 0x45, 0x26, 0x1c, 0xed, 0xfb, 0xb4, 0xf0, 0x2f, 0x11, 0xa4, 0x3c, 0x18, 0x77, 0x4c,
-	0xe4, 0xff, 0x73, 0x51, 0xf0, 0x0b, 0xd7, 0xb8, 0x9c, 0x21, 0x68, 0xed, 0xef, 0x10, 0xa8, 0x37,
-	0xa6, 0x82, 0xe8, 0x47, 0x96, 0x1b, 0x45, 0x96, 0xf6, 0x21, 0x0b, 0x96, 0x0a, 0x37, 0x6d, 0x6c,
-	0x1f, 0xc2, 0xdc, 0x59, 0x89, 0x0e, 0x5f, 0x81, 0x08, 0xcd, 0x6b, 0xc7, 0xb4, 0x14, 0xf9, 0x52,
-	0x37, 0xc3, 0xd9, 0x04, 0x7c, 0x19, 0x12, 0xf6, 0x16, 0xba, 0xd6, 0xbb, 0x43, 0x4f, 0x12, 0xe3,
-	0xc0, 0x5a, 0xaa, 0x6a, 0xbd, 0x3b, 0xf9, 0x7f, 0x46, 0x60, 0xd6, 0x54, 0x5e, 0x79, 0x6a, 0x10,
-	0x4d, 0x16, 0xa4, 0xf3, 0x8b, 0xdb, 0x12, 0x44, 0xfd, 0x95, 0x67, 0xa4, 0xc6, 0x3a, 0x34, 0x7c,
-	0x0f, 0x2e, 0xd8, 0x79, 0xbf, 0x4e, 0xda, 0xa2, 0xec, 0x64, 0xff, 0xd0, 0x90, 0x4e, 0x36, 0xf7,
-	0x70, 0x86, 0xcb, 0x58, 0x7c, 0x65, 0x93, 0xcd, 0xce, 0xfc, 0x77, 0xc1, 0x5e, 0xe4, 0x89, 0xdc,
-	0x74, 0x44, 0xc3, 0xe3, 0xa2, 0x69, 0x8b, 0xab, 0x22, 0x37, 0x6d, 0xc1, 0xa1, 0x87, 0x43, 0x64,
-	0xca, 0x87, 0xc3, 0xbb, 0x90, 0x6e, 0x92, 0x96, 0xd0, 0x95, 0x0c, 0xbe, 0x2d, 0x18, 0xe4, 0x48,
-	0x38, 0x7e, 0xc9, 0x9b, 0x23, 0x65, 0xb3, 0x6f, 0x5b, 0xdc, 0xb8, 0x60, 0x57, 0x44, 0xa0, 0x08,
-	0x59, 0xb3, 0xb4, 0xfd, 0xb5, 0x8f, 0x82, 0x6b, 0x77, 0xdf, 0x36, 0xc1, 0xc6, 0x56, 0x22, 0x66,
-	0x61, 0x5c, 0x46, 0x76, 0x69, 0xdc, 0x86, 0x84, 0xe5, 0x19, 0x5e, 0x94, 0x89, 0xc1, 0x26, 0xe8,
-	0x56, 0xaf, 0x9d, 0x7b, 0x6d, 0xbd, 0x4c, 0x0f, 0x2d, 0x2f, 0x8d, 0x7e, 0x00, 0x71, 0x37, 0xc7,
-	0xb2, 0xf3, 0x54, 0xcd, 0x34, 0xc9, 0x7c, 0xee, 0xac, 0x64, 0xfe, 0x10, 0x71, 0x9e, 0x32, 0xbc,
-	0xe3, 0xaf, 0x90, 0x92, 0xa8, 0x1b, 0xb4, 0x5c, 0x25, 0x4a, 0xb9, 0x33, 0x50, 0x0e, 0x55, 0x98,
-	0x87, 0xc8, 0x57, 0x00, 0x69, 0xc9, 0x79, 0x04, 0x99, 0xf1, 0xe2, 0xb7, 0x30, 0xcd, 0xfd, 0x45,
-	0x1c, 0x23, 0x8e, 0x56, 0xc4, 0x7d, 0xc0, 0x67, 0x54, 0x43, 0x76, 0x3a, 0x75, 0x19, 0x65, 0xb4,
-	0x44, 0xae, 0xcf, 0x7e, 0x7d, 0x3f, 0xbe, 0x56, 0x28, 0x15, 0xd6, 0x6e, 0x14, 0xd6, 0xd6, 0xca,
-	0x4b, 0x90, 0x72, 0x1e, 0x43, 0xf6, 0x6d, 0xbc, 0x70, 0xd2, 0x47, 0xc1, 0xd3, 0x3e, 0x0a, 0x0c,
-	0xfa, 0x28, 0x7a, 0xb3, 0x70, 0xab, 0x70, 0xbb, 0x70, 0xa7, 0x7c, 0x0d, 0x18, 0xcf, 0x3a, 0x36,
-	0xe3, 0xc2, 0x49, 0x1f, 0xcd, 0x9f, 0xf6, 0xd1, 0xdc, 0xa0, 0x8f, 0x12, 0xa5, 0xb5, 0x42, 0xa9,
-	0x54, 0x28, 0xdd, 0x2c, 0x94, 0x6e, 0xed, 0x86, 0x62, 0x01, 0x26, 0xb8, 0x1b, 0x8a, 0xcd, 0x31,
-	0xf3, 0xf9, 0x7f, 0x85, 0xac, 0x8b, 0x46, 0x01, 0x98, 0x17, 0x6d, 0xca, 0xbb, 0x34, 0x14, 0xd5,
-	0xa1, 0x29, 0xa3, 0xfa, 0x3a, 0xc4, 0x9a, 0xb2, 0xce, 0xcb, 0x42, 0x87, 0xd0, 0xab, 0x33, 0xf6,
-	0x68, 0x7f, 0x62, 0xa5, 0x48, 0x59, 0xdf, 0x17, 0x3a, 0xe4, 0x5b, 0xc7, 0x70, 0xca, 0x17, 0xc3,
-	0x3d, 0x55, 0xb6, 0xc3, 0x38, 0xf7, 0xb2, 0xea, 0xc3, 0x25, 0x5b, 0x43, 0xe5, 0xcb, 0x53, 0xa4,
-	0x59, 0x39, 0x97, 0x9d, 0x7d, 0x89, 0x22, 0x3b, 0x37, 0x3b, 0x8a, 0x9c, 0x54, 0xfd, 0x36, 0xcc,
-	0xda, 0x39, 0x95, 0xef, 0x18, 0x92, 0xce, 0xa6, 0xce, 0x31, 0x13, 0xe2, 0x12, 0x36, 0xef, 0x9e,
-	0x21, 0xe9, 0xf8, 0xae, 0x9b, 0x20, 0xa9, 0x64, 0xfa, 0x5c, 0x49, 0x3b, 0x71, 0x52, 0xc1, 0x5d,
-	0x48, 0xfb, 0xac, 0x60, 0x16, 0x35, 0x96, 0xa1, 0xc2, 0x57, 0xce, 0x35, 0x83, 0xc9, 0xc8, 0xa5,
-	0x5a, 0x43, 0xdf, 0xeb, 0xf0, 0xf5, 0xfd, 0xa8, 0x13, 0x87, 0x57, 0xc6, 0xe2, 0x30, 0xed, 0x8b,
-	0xc3, 0xe0, 0xcd, 0xc2, 0xad, 0xf2, 0x55, 0x48, 0x98, 0x60, 0x1d, 0xfa, 0xfc, 0x49, 0x1f, 0xa5,
-	0x4e, 0xfb, 0x28, 0x69, 0xf6, 0x2c, 0x6b, 0xb7, 0x0a, 0x6b, 0xb7, 0xbf, 0xea, 0x23, 0xe4, 0x06,
-	0x5f, 0x92, 0x49, 0xe5, 0x3f, 0x0d, 0x40, 0x88, 0xb6, 0x2e, 0xeb, 0x10, 0xeb, 0x10, 0x43, 0x68,
-	0x0a, 0x86, 0x40, 0x53, 0x7c, 0xa2, 0x94, 0x1d, 0x81, 0xbb, 0x47, 0x74, 0x5d, 0x68, 0x93, 0x3d,
-	0x62, 0x08, 0xb4, 0x7b, 0x70, 0xf9, 0xf1, 0x3b, 0x10, 0x23, 0x76, 0x95, 0xb0, 0x2b, 0xdc, 0xe5,
-	0x09, 0x4f, 0x72, 0xa7, 0x98, 0x98, 0x31, 0xe9, 0x88, 0xe0, 0x2d, 0x88, 0x89, 0x76, 0xec, 0xdb,
-	0x71, 0x3c, 0x49, 0xdc, 0xb9, 0x22, 0xfe, 0x72, 0xee, 0xca, 0xe2, 0x55, 0x48, 0x59, 0x6e, 0xe7,
-	0x75, 0xa2, 0xf5, 0xc4, 0x06, 0x61, 0x5f, 0x44, 0x69, 0x88, 0xbb, 0x79, 0x32, 0x69, 0xd1, 0xab,
-	0x16, 0xd9, 0xee, 0xf7, 0x4a, 0xe5, 0x2c, 0x24, 0xcc, 0x46, 0x6c, 0x92, 0x59, 0x2d, 0x83, 0xe5,
-	0xff, 0x1d, 0x82, 0xd4, 0xb6, 0xa4, 0xd4, 0x05, 0xa9, 0xaa, 0x92, 0x06, 0x6d, 0xbc, 0x2a, 0x10,
-	0x3e, 0x7a, 0x42, 0x34, 0x62, 0x5b, 0xec, 0xcd, 0x11, 0xd8, 0xe6, 0x8d, 0x7b, 0x4f, 0xd4, 0x8c,
-	0xae, 0x20, 0x99, 0x3f, 0x39, 0xd2, 0xaa, 0x12, 0x89, 0x34, 0x0c, 0x45, 0x2b, 0x87, 0x4c, 0x4f,
-	0x70, 0x96, 0xb4, 0x19, 0xee, 0xb4, 0x2d, 0x72, 0x0b, 0xb8, 0xfd, 0xb0, 0xc8, 0x4d, 0x68, 0x09,
-	0x5d, 0x3e, 0xce, 0xec, 0xea, 0x7d, 0x75, 0xbf, 0x06, 0x71, 0xa7, 0xbf, 0x32, 0x73, 0x87, 0xf9,
-	0x90, 0x5f, 0x9c, 0xdc, 0x56, 0x96, 0x2f, 0x8d, 0x35, 0x2a, 0xbe, 0x97, 0x7a, 0xcc, 0x6e, 0xbe,
-	0x74, 0xfc, 0x63, 0x18, 0xaf, 0x0c, 0x6c, 0x68, 0x8a, 0xe6, 0x68, 0x75, 0xaa, 0xe6, 0xc8, 0xb7,
-	0x27, 0x63, 0x73, 0xbb, 0xb9, 0x18, 0x3f, 0x80, 0xb0, 0x75, 0x9a, 0x30, 0xdd, 0x6f, 0x61, 0x42,
-	0x60, 0x94, 0xe7, 0xc6, 0xf5, 0xdd, 0x40, 0x9c, 0x25, 0x8b, 0x05, 0x48, 0xd2, 0xe9, 0x8d, 0x1b,
-	0x65, 0x2f, 0xa2, 0x53, 0xd7, 0xc5, 0x85, 0xcf, 0x9e, 0x0d, 0x0b, 0x3b, 0xb1, 0x34, 0x6b, 0xae,
-	0xba, 0x39, 0xfb, 0x1a, 0xd0, 0x6f, 0xbe, 0x47, 0x34, 0x5d, 0x54, 0x64, 0xf6, 0xcb, 0x28, 0xcd,
-	0x98, 0xde, 0x08, 0xc5, 0xa4, 0xbe, 0x67, 0x11, 0xd7, 0x6f, 0xfd, 0xb1, 0x8f, 0x6e, 0xc0, 0x45,
-	0xc8, 0x3c, 0x50, 0x3a, 0x1d, 0x45, 0xce, 0xf9, 0x3c, 0x88, 0x4a, 0x00, 0x10, 0xb6, 0xec, 0x8e,
-	0x6e, 0x9b, 0xbf, 0xdf, 0xa7, 0x21, 0x82, 0xd6, 0xf2, 0x7f, 0x43, 0x90, 0x7a, 0xa0, 0x11, 0xc1,
-	0x20, 0x6e, 0xfc, 0xbd, 0xfb, 0x5d, 0xe3, 0xef, 0xbf, 0x1e, 0x79, 0xd7, 0xa7, 0xf3, 0x93, 0xed,
-	0x91, 0xf5, 0xcc, 0x9f, 0xef, 0x8f, 0xdc, 0xa5, 0xfc, 0xdf, 0x11, 0xa4, 0x39, 0xa2, 0x4a, 0x42,
-	0xe3, 0x87, 0x79, 0xbe, 0xbf, 0x20, 0x48, 0x6c, 0x13, 0xe3, 0x07, 0x79, 0xb6, 0x5f, 0x87, 0x20,
-	0x63, 0x27, 0x95, 0xaa, 0x21, 0x18, 0x5d, 0x6b, 0x2c, 0xf5, 0x0e, 0x44, 0xbb, 0x2a, 0xdf, 0x54,
-	0x8e, 0xac, 0xa6, 0x21, 0x55, 0xba, 0x3a, 0x39, 0x17, 0x3d, 0x56, 0x37, 0x95, 0x23, 0x99, 0xd6,
-	0x95, 0x48, 0x97, 0xfe, 0xc6, 0xef, 0xc2, 0xec, 0xb7, 0x9e, 0x68, 0x25, 0x54, 0xdf, 0x38, 0xeb,
-	0x12, 0xc4, 0xa9, 0x02, 0xfa, 0x82, 0xa1, 0x2d, 0x06, 0x17, 0x33, 0x17, 0x0e, 0xcd, 0xb7, 0xca,
-	0x55, 0x48, 0x51, 0xa2, 0x37, 0x12, 0xa5, 0xcf, 0x21, 0x8e, 0xee, 0xe9, 0x0e, 0x3b, 0x5f, 0x81,
-	0x98, 0x85, 0x41, 0x97, 0xad, 0x11, 0x15, 0x17, 0xa5, 0x3b, 0xe8, 0x32, 0xde, 0x82, 0x8c, 0x7d,
-	0x3a, 0xde, 0x9d, 0x63, 0xdb, 0x1d, 0xc2, 0x62, 0xd1, 0x9a, 0x74, 0x17, 0x9d, 0x49, 0x77, 0xb1,
-	0xe6, 0x70, 0x70, 0x69, 0xeb, 0x74, 0xee, 0x02, 0x2e, 0xc1, 0x7c, 0x43, 0x91, 0x65, 0xd2, 0x30,
-	0x44, 0x45, 0xe6, 0x5b, 0x92, 0xa0, 0xf2, 0x0d, 0xa5, 0x2b, 0x1b, 0x74, 0x56, 0x99, 0xe4, 0x2e,
-	0x78, 0xc4, 0x2d, 0x49, 0x50, 0x1f, 0x98, 0x24, 0x7c, 0x07, 0x16, 0x84, 0x66, 0x8f, 0x68, 0x86,
-	0xa8, 0x93, 0x26, 0xaf, 0x6a, 0xa4, 0x25, 0x3e, 0xb5, 0xa5, 0xe2, 0x54, 0x6a, 0xde, 0x23, 0x1f,
-	0x52, 0xaa, 0x25, 0x57, 0x82, 0x79, 0x8d, 0x34, 0x88, 0xd8, 0x1b, 0x95, 0x02, 0x6b, 0x2f, 0x87,
-	0xe8, 0x97, 0x59, 0xf2, 0xbf, 0xfa, 0xe9, 0xbb, 0x31, 0x41, 0x0d, 0xe5, 0xbd, 0xe8, 0xe9, 0x4b,
-	0xf1, 0xf5, 0xd1, 0xc9, 0xee, 0xac, 0x65, 0x4e, 0xff, 0x04, 0x37, 0xff, 0x2b, 0x44, 0xe7, 0xe1,
-	0xbe, 0x18, 0xf9, 0x3f, 0x48, 0x5b, 0x62, 0x9e, 0x1f, 0x90, 0xa5, 0x9e, 0x2e, 0xbb, 0x8e, 0xb8,
-	0x04, 0x71, 0x5b, 0xbd, 0x2e, 0xd3, 0x38, 0x4f, 0x72, 0x31, 0x4b, 0xb5, 0x2e, 0xe3, 0x7d, 0x60,
-	0xac, 0x91, 0x22, 0xd5, 0x6b, 0xb5, 0x26, 0x56, 0xf5, 0x3b, 0x27, 0xe2, 0x3c, 0x10, 0x1c, 0x8d,
-	0x04, 0xeb, 0xdb, 0xec, 0x4e, 0x56, 0x7e, 0x87, 0x20, 0x3d, 0x32, 0x5b, 0xc7, 0x39, 0x78, 0xb5,
-	0xbc, 0x7d, 0xc8, 0x73, 0x07, 0x8f, 0x6b, 0x15, 0x8e, 0xdf, 0xd9, 0xe4, 0xb7, 0xb8, 0x83, 0x3d,
-	0x7e, 0x67, 0xbf, 0x56, 0xe1, 0xb6, 0x36, 0x1e, 0x54, 0x98, 0x19, 0x7c, 0x05, 0x5e, 0x3b, 0x8b,
-	0xe3, 0x90, 0xdf, 0xd8, 0xdc, 0xe4, 0x2a, 0xd5, 0x2a, 0x83, 0x70, 0x1e, 0xb2, 0x67, 0xb0, 0x54,
-	0x77, 0x6a, 0x15, 0xfe, 0xa0, 0xbc, 0x5b, 0x79, 0x50, 0x63, 0x02, 0xf8, 0x36, 0x5c, 0x9b, 0xc4,
-	0x53, 0xab, 0xec, 0x1d, 0x3e, 0xda, 0xa8, 0x55, 0xf8, 0xc3, 0x0d, 0x6e, 0x63, 0xaf, 0x52, 0xab,
-	0x70, 0x55, 0x26, 0xb8, 0x18, 0x32, 0x5f, 0xe5, 0x2b, 0x9f, 0x04, 0x00, 0x8f, 0x8f, 0x8b, 0xf1,
-	0x55, 0xc8, 0x99, 0xda, 0x0e, 0x2b, 0x15, 0xce, 0xc1, 0x61, 0x29, 0xdc, 0xac, 0x6c, 0x6d, 0x3c,
-	0x7e, 0x54, 0xe3, 0xb7, 0xdf, 0x67, 0x66, 0x26, 0x73, 0x0d, 0xa1, 0x5f, 0x82, 0x2b, 0x67, 0x73,
-	0x0d, 0x1f, 0xe0, 0x2d, 0x28, 0x9e, 0xc3, 0x76, 0xce, 0x19, 0xf0, 0x75, 0x78, 0x73, 0x4c, 0xf2,
-	0x60, 0x6b, 0xab, 0x5a, 0xa9, 0xd9, 0x0a, 0x1e, 0x97, 0xf7, 0x2b, 0x35, 0xbe, 0x5c, 0xd9, 0xde,
-	0xd9, 0x67, 0x42, 0xf8, 0x1a, 0xbc, 0x31, 0x0d, 0x7b, 0x65, 0x7f, 0x93, 0x09, 0xaf, 0xdc, 0x75,
-	0x33, 0x94, 0x97, 0x6a, 0x70, 0x06, 0x92, 0xae, 0x86, 0xcd, 0x83, 0xf7, 0xf7, 0x99, 0x19, 0x9c,
-	0x86, 0x84, 0xbb, 0xf4, 0xf8, 0x90, 0x41, 0xe5, 0x67, 0xa7, 0xcf, 0xb3, 0x33, 0x9f, 0x3f, 0xcf,
-	0xce, 0x7c, 0xf5, 0x3c, 0x8b, 0x7e, 0x32, 0xc8, 0xa2, 0x4f, 0x07, 0x59, 0xf4, 0xa7, 0x41, 0x16,
-	0x9d, 0x0e, 0xb2, 0xe8, 0xf3, 0x41, 0x16, 0xfd, 0x63, 0x90, 0x45, 0x2f, 0x06, 0xd9, 0x99, 0xaf,
-	0x06, 0x59, 0xf4, 0xb3, 0x2f, 0xb2, 0x33, 0x27, 0x5f, 0x64, 0xd1, 0x87, 0xdb, 0x6d, 0x45, 0xfd,
-	0xb8, 0x5d, 0xec, 0x29, 0x92, 0x41, 0x34, 0x4d, 0x28, 0x76, 0xf5, 0x55, 0xfa, 0xa3, 0xa5, 0x68,
-	0x9d, 0xeb, 0xaa, 0xa6, 0xf4, 0xc4, 0x26, 0xd1, 0xae, 0x3b, 0xe4, 0x55, 0xb5, 0xde, 0x56, 0x56,
-	0xc9, 0x53, 0xc3, 0xfe, 0x27, 0xc9, 0xfb, 0x0b, 0xae, 0x1e, 0xa1, 0x39, 0xe4, 0xe6, 0x7f, 0x02,
-	0x00, 0x00, 0xff, 0xff, 0x19, 0x7a, 0x34, 0x6e, 0x9e, 0x1b, 0x00, 0x00,
-}

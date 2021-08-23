@@ -3,30 +3,32 @@
 
 package tunnel
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Tunnel Type
 //
@@ -43,11 +45,14 @@ const (
 var TunnelType_name = map[int32]string{
 	0: "IPSEC_PSK",
 }
+
 var TunnelType_value = map[string]int32{
 	"IPSEC_PSK": 0,
 }
 
-func (TunnelType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (TunnelType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{0}
+}
 
 // IPSec tunnel configuration parameters
 //
@@ -59,14 +64,38 @@ type IpsecTunnelParams struct {
 	//
 	// x-displayName: "Ipsec PSK"
 	// Pre shared key, valid for tunnel type IPSEC_PSK, SA are computed by IKE dynamically
-	IpsecPsk *ves_io_schema4.SecretType `protobuf:"bytes,1,opt,name=ipsec_psk,json=ipsecPsk" json:"ipsec_psk,omitempty"`
+	IpsecPsk *schema.SecretType `protobuf:"bytes,1,opt,name=ipsec_psk,json=ipsecPsk,proto3" json:"ipsec_psk,omitempty"`
 }
 
-func (m *IpsecTunnelParams) Reset()                    { *m = IpsecTunnelParams{} }
-func (*IpsecTunnelParams) ProtoMessage()               {}
-func (*IpsecTunnelParams) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *IpsecTunnelParams) Reset()      { *m = IpsecTunnelParams{} }
+func (*IpsecTunnelParams) ProtoMessage() {}
+func (*IpsecTunnelParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{0}
+}
+func (m *IpsecTunnelParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IpsecTunnelParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *IpsecTunnelParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IpsecTunnelParams.Merge(m, src)
+}
+func (m *IpsecTunnelParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *IpsecTunnelParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_IpsecTunnelParams.DiscardUnknown(m)
+}
 
-func (m *IpsecTunnelParams) GetIpsecPsk() *ves_io_schema4.SecretType {
+var xxx_messageInfo_IpsecTunnelParams proto.InternalMessageInfo
+
+func (m *IpsecTunnelParams) GetIpsecPsk() *schema.SecretType {
 	if m != nil {
 		return m.IpsecPsk
 	}
@@ -89,9 +118,33 @@ type TunnelParams struct {
 	Type isTunnelParams_Type `protobuf_oneof:"type"`
 }
 
-func (m *TunnelParams) Reset()                    { *m = TunnelParams{} }
-func (*TunnelParams) ProtoMessage()               {}
-func (*TunnelParams) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *TunnelParams) Reset()      { *m = TunnelParams{} }
+func (*TunnelParams) ProtoMessage() {}
+func (*TunnelParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{1}
+}
+func (m *TunnelParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TunnelParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TunnelParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TunnelParams.Merge(m, src)
+}
+func (m *TunnelParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *TunnelParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_TunnelParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TunnelParams proto.InternalMessageInfo
 
 type isTunnelParams_Type interface {
 	isTunnelParams_Type()
@@ -101,7 +154,7 @@ type isTunnelParams_Type interface {
 }
 
 type TunnelParams_Ipsec struct {
-	Ipsec *IpsecTunnelParams `protobuf:"bytes,1,opt,name=ipsec,oneof"`
+	Ipsec *IpsecTunnelParams `protobuf:"bytes,1,opt,name=ipsec,proto3,oneof" json:"ipsec,omitempty"`
 }
 
 func (*TunnelParams_Ipsec) isTunnelParams_Type() {}
@@ -120,59 +173,11 @@ func (m *TunnelParams) GetIpsec() *IpsecTunnelParams {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*TunnelParams) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _TunnelParams_OneofMarshaler, _TunnelParams_OneofUnmarshaler, _TunnelParams_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*TunnelParams) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*TunnelParams_Ipsec)(nil),
 	}
-}
-
-func _TunnelParams_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*TunnelParams)
-	// type
-	switch x := m.Type.(type) {
-	case *TunnelParams_Ipsec:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Ipsec); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("TunnelParams.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _TunnelParams_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*TunnelParams)
-	switch tag {
-	case 1: // type.ipsec
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(IpsecTunnelParams)
-		err := b.DecodeMessage(msg)
-		m.Type = &TunnelParams_Ipsec{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _TunnelParams_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*TunnelParams)
-	// type
-	switch x := m.Type.(type) {
-	case *TunnelParams_Ipsec:
-		s := proto.Size(x.Ipsec)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Interface Type
@@ -184,14 +189,38 @@ type InterfaceType struct {
 	//
 	// x-displayName: "Local Interface"
 	// Local interface to be used for filling in source information of IP and network for transport
-	LocalIntf []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=local_intf,json=localIntf" json:"local_intf,omitempty"`
+	LocalIntf []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=local_intf,json=localIntf,proto3" json:"local_intf,omitempty"`
 }
 
-func (m *InterfaceType) Reset()                    { *m = InterfaceType{} }
-func (*InterfaceType) ProtoMessage()               {}
-func (*InterfaceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *InterfaceType) Reset()      { *m = InterfaceType{} }
+func (*InterfaceType) ProtoMessage() {}
+func (*InterfaceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{2}
+}
+func (m *InterfaceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InterfaceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InterfaceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InterfaceType.Merge(m, src)
+}
+func (m *InterfaceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *InterfaceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_InterfaceType.DiscardUnknown(m)
+}
 
-func (m *InterfaceType) GetLocalIntf() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_InterfaceType proto.InternalMessageInfo
+
+func (m *InterfaceType) GetLocalIntf() []*schema.ObjectRefType {
 	if m != nil {
 		return m.LocalIntf
 	}
@@ -217,12 +246,36 @@ type LocalIpAddressType struct {
 	// x-displayName: "Local Virtual Network"
 	// x-required
 	// Local Virtual network to be used for transporting encapsulated packets
-	VirtualNetworkType *ves_io_schema4.VirtualNetworkSelectorType `protobuf:"bytes,3,opt,name=virtual_network_type,json=virtualNetworkType" json:"virtual_network_type,omitempty"`
+	VirtualNetworkType *schema.VirtualNetworkSelectorType `protobuf:"bytes,3,opt,name=virtual_network_type,json=virtualNetworkType,proto3" json:"virtual_network_type,omitempty"`
 }
 
-func (m *LocalIpAddressType) Reset()                    { *m = LocalIpAddressType{} }
-func (*LocalIpAddressType) ProtoMessage()               {}
-func (*LocalIpAddressType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *LocalIpAddressType) Reset()      { *m = LocalIpAddressType{} }
+func (*LocalIpAddressType) ProtoMessage() {}
+func (*LocalIpAddressType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{3}
+}
+func (m *LocalIpAddressType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LocalIpAddressType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LocalIpAddressType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocalIpAddressType.Merge(m, src)
+}
+func (m *LocalIpAddressType) XXX_Size() int {
+	return m.Size()
+}
+func (m *LocalIpAddressType) XXX_DiscardUnknown() {
+	xxx_messageInfo_LocalIpAddressType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LocalIpAddressType proto.InternalMessageInfo
 
 type isLocalIpAddressType_Type interface {
 	isLocalIpAddressType_Type()
@@ -232,10 +285,10 @@ type isLocalIpAddressType_Type interface {
 }
 
 type LocalIpAddressType_IpAddress struct {
-	IpAddress *ves_io_schema3.IpAddressType `protobuf:"bytes,1,opt,name=ip_address,json=ipAddress,oneof"`
+	IpAddress *schema.IpAddressType `protobuf:"bytes,1,opt,name=ip_address,json=ipAddress,proto3,oneof" json:"ip_address,omitempty"`
 }
 type LocalIpAddressType_Auto struct {
-	Auto *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=auto,oneof"`
+	Auto *schema.Empty `protobuf:"bytes,2,opt,name=auto,proto3,oneof" json:"auto,omitempty"`
 }
 
 func (*LocalIpAddressType_IpAddress) isLocalIpAddressType_Type() {}
@@ -248,99 +301,33 @@ func (m *LocalIpAddressType) GetType() isLocalIpAddressType_Type {
 	return nil
 }
 
-func (m *LocalIpAddressType) GetIpAddress() *ves_io_schema3.IpAddressType {
+func (m *LocalIpAddressType) GetIpAddress() *schema.IpAddressType {
 	if x, ok := m.GetType().(*LocalIpAddressType_IpAddress); ok {
 		return x.IpAddress
 	}
 	return nil
 }
 
-func (m *LocalIpAddressType) GetAuto() *ves_io_schema4.Empty {
+func (m *LocalIpAddressType) GetAuto() *schema.Empty {
 	if x, ok := m.GetType().(*LocalIpAddressType_Auto); ok {
 		return x.Auto
 	}
 	return nil
 }
 
-func (m *LocalIpAddressType) GetVirtualNetworkType() *ves_io_schema4.VirtualNetworkSelectorType {
+func (m *LocalIpAddressType) GetVirtualNetworkType() *schema.VirtualNetworkSelectorType {
 	if m != nil {
 		return m.VirtualNetworkType
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*LocalIpAddressType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _LocalIpAddressType_OneofMarshaler, _LocalIpAddressType_OneofUnmarshaler, _LocalIpAddressType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*LocalIpAddressType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*LocalIpAddressType_IpAddress)(nil),
 		(*LocalIpAddressType_Auto)(nil),
 	}
-}
-
-func _LocalIpAddressType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*LocalIpAddressType)
-	// type
-	switch x := m.Type.(type) {
-	case *LocalIpAddressType_IpAddress:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpAddress); err != nil {
-			return err
-		}
-	case *LocalIpAddressType_Auto:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Auto); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("LocalIpAddressType.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _LocalIpAddressType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*LocalIpAddressType)
-	switch tag {
-	case 1: // type.ip_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.IpAddressType)
-		err := b.DecodeMessage(msg)
-		m.Type = &LocalIpAddressType_IpAddress{msg}
-		return true, err
-	case 2: // type.auto
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Type = &LocalIpAddressType_Auto{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _LocalIpAddressType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*LocalIpAddressType)
-	// type
-	switch x := m.Type.(type) {
-	case *LocalIpAddressType_IpAddress:
-		s := proto.Size(x.IpAddress)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *LocalIpAddressType_Auto:
-		s := proto.Size(x.Auto)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Local IP Address Selector
@@ -362,9 +349,33 @@ type LocalIpAddressSelector struct {
 	Type isLocalIpAddressSelector_Type `protobuf_oneof:"type"`
 }
 
-func (m *LocalIpAddressSelector) Reset()                    { *m = LocalIpAddressSelector{} }
-func (*LocalIpAddressSelector) ProtoMessage()               {}
-func (*LocalIpAddressSelector) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *LocalIpAddressSelector) Reset()      { *m = LocalIpAddressSelector{} }
+func (*LocalIpAddressSelector) ProtoMessage() {}
+func (*LocalIpAddressSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{4}
+}
+func (m *LocalIpAddressSelector) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LocalIpAddressSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LocalIpAddressSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocalIpAddressSelector.Merge(m, src)
+}
+func (m *LocalIpAddressSelector) XXX_Size() int {
+	return m.Size()
+}
+func (m *LocalIpAddressSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_LocalIpAddressSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LocalIpAddressSelector proto.InternalMessageInfo
 
 type isLocalIpAddressSelector_Type interface {
 	isLocalIpAddressSelector_Type()
@@ -374,10 +385,10 @@ type isLocalIpAddressSelector_Type interface {
 }
 
 type LocalIpAddressSelector_Intf struct {
-	Intf *InterfaceType `protobuf:"bytes,1,opt,name=intf,oneof"`
+	Intf *InterfaceType `protobuf:"bytes,1,opt,name=intf,proto3,oneof" json:"intf,omitempty"`
 }
 type LocalIpAddressSelector_IpAddress struct {
-	IpAddress *LocalIpAddressType `protobuf:"bytes,2,opt,name=ip_address,json=ipAddress,oneof"`
+	IpAddress *LocalIpAddressType `protobuf:"bytes,2,opt,name=ip_address,json=ipAddress,proto3,oneof" json:"ip_address,omitempty"`
 }
 
 func (*LocalIpAddressSelector_Intf) isLocalIpAddressSelector_Type()      {}
@@ -404,78 +415,12 @@ func (m *LocalIpAddressSelector) GetIpAddress() *LocalIpAddressType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*LocalIpAddressSelector) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _LocalIpAddressSelector_OneofMarshaler, _LocalIpAddressSelector_OneofUnmarshaler, _LocalIpAddressSelector_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*LocalIpAddressSelector) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*LocalIpAddressSelector_Intf)(nil),
 		(*LocalIpAddressSelector_IpAddress)(nil),
 	}
-}
-
-func _LocalIpAddressSelector_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*LocalIpAddressSelector)
-	// type
-	switch x := m.Type.(type) {
-	case *LocalIpAddressSelector_Intf:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Intf); err != nil {
-			return err
-		}
-	case *LocalIpAddressSelector_IpAddress:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpAddress); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("LocalIpAddressSelector.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _LocalIpAddressSelector_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*LocalIpAddressSelector)
-	switch tag {
-	case 1: // type.intf
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(InterfaceType)
-		err := b.DecodeMessage(msg)
-		m.Type = &LocalIpAddressSelector_Intf{msg}
-		return true, err
-	case 2: // type.ip_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(LocalIpAddressType)
-		err := b.DecodeMessage(msg)
-		m.Type = &LocalIpAddressSelector_IpAddress{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _LocalIpAddressSelector_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*LocalIpAddressSelector)
-	// type
-	switch x := m.Type.(type) {
-	case *LocalIpAddressSelector_Intf:
-		s := proto.Size(x.Intf)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *LocalIpAddressSelector_IpAddress:
-		s := proto.Size(x.IpAddress)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Remote Node Atributes
@@ -487,14 +432,38 @@ type RemoteNodeAttributes struct {
 	//
 	// x-displayName: "IP Address"
 	// IP address of remote node
-	Ip *ves_io_schema3.IpAddressType `protobuf:"bytes,1,opt,name=ip" json:"ip,omitempty"`
+	Ip *schema.IpAddressType `protobuf:"bytes,1,opt,name=ip,proto3" json:"ip,omitempty"`
 }
 
-func (m *RemoteNodeAttributes) Reset()                    { *m = RemoteNodeAttributes{} }
-func (*RemoteNodeAttributes) ProtoMessage()               {}
-func (*RemoteNodeAttributes) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *RemoteNodeAttributes) Reset()      { *m = RemoteNodeAttributes{} }
+func (*RemoteNodeAttributes) ProtoMessage() {}
+func (*RemoteNodeAttributes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{5}
+}
+func (m *RemoteNodeAttributes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RemoteNodeAttributes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RemoteNodeAttributes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoteNodeAttributes.Merge(m, src)
+}
+func (m *RemoteNodeAttributes) XXX_Size() int {
+	return m.Size()
+}
+func (m *RemoteNodeAttributes) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoteNodeAttributes.DiscardUnknown(m)
+}
 
-func (m *RemoteNodeAttributes) GetIp() *ves_io_schema3.IpAddressType {
+var xxx_messageInfo_RemoteNodeAttributes proto.InternalMessageInfo
+
+func (m *RemoteNodeAttributes) GetIp() *schema.IpAddressType {
 	if m != nil {
 		return m.Ip
 	}
@@ -513,12 +482,36 @@ type RemoteEndpointType struct {
 	// Map of remote attributes to which tunnel will be established on per site node basis
 	// Every node can have a different attributes and IP address to connect to
 	// Key is ver node name and value is Remote node attributes
-	Endpoints map[string]*RemoteNodeAttributes `protobuf:"bytes,2,rep,name=endpoints" json:"endpoints,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+	Endpoints map[string]*RemoteNodeAttributes `protobuf:"bytes,2,rep,name=endpoints,proto3" json:"endpoints,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *RemoteEndpointType) Reset()                    { *m = RemoteEndpointType{} }
-func (*RemoteEndpointType) ProtoMessage()               {}
-func (*RemoteEndpointType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *RemoteEndpointType) Reset()      { *m = RemoteEndpointType{} }
+func (*RemoteEndpointType) ProtoMessage() {}
+func (*RemoteEndpointType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{6}
+}
+func (m *RemoteEndpointType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RemoteEndpointType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RemoteEndpointType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoteEndpointType.Merge(m, src)
+}
+func (m *RemoteEndpointType) XXX_Size() int {
+	return m.Size()
+}
+func (m *RemoteEndpointType) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoteEndpointType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RemoteEndpointType proto.InternalMessageInfo
 
 func (m *RemoteEndpointType) GetEndpoints() map[string]*RemoteNodeAttributes {
 	if m != nil {
@@ -546,9 +539,33 @@ type RemoteIpAddressSelector struct {
 	Type isRemoteIpAddressSelector_Type `protobuf_oneof:"type"`
 }
 
-func (m *RemoteIpAddressSelector) Reset()                    { *m = RemoteIpAddressSelector{} }
-func (*RemoteIpAddressSelector) ProtoMessage()               {}
-func (*RemoteIpAddressSelector) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *RemoteIpAddressSelector) Reset()      { *m = RemoteIpAddressSelector{} }
+func (*RemoteIpAddressSelector) ProtoMessage() {}
+func (*RemoteIpAddressSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{7}
+}
+func (m *RemoteIpAddressSelector) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RemoteIpAddressSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RemoteIpAddressSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoteIpAddressSelector.Merge(m, src)
+}
+func (m *RemoteIpAddressSelector) XXX_Size() int {
+	return m.Size()
+}
+func (m *RemoteIpAddressSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoteIpAddressSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RemoteIpAddressSelector proto.InternalMessageInfo
 
 type isRemoteIpAddressSelector_Type interface {
 	isRemoteIpAddressSelector_Type()
@@ -558,10 +575,10 @@ type isRemoteIpAddressSelector_Type interface {
 }
 
 type RemoteIpAddressSelector_Ip struct {
-	Ip *ves_io_schema3.IpAddressType `protobuf:"bytes,1,opt,name=ip,oneof"`
+	Ip *schema.IpAddressType `protobuf:"bytes,1,opt,name=ip,proto3,oneof" json:"ip,omitempty"`
 }
 type RemoteIpAddressSelector_Endpoints struct {
-	Endpoints *RemoteEndpointType `protobuf:"bytes,2,opt,name=endpoints,oneof"`
+	Endpoints *RemoteEndpointType `protobuf:"bytes,2,opt,name=endpoints,proto3,oneof" json:"endpoints,omitempty"`
 }
 
 func (*RemoteIpAddressSelector_Ip) isRemoteIpAddressSelector_Type()        {}
@@ -574,7 +591,7 @@ func (m *RemoteIpAddressSelector) GetType() isRemoteIpAddressSelector_Type {
 	return nil
 }
 
-func (m *RemoteIpAddressSelector) GetIp() *ves_io_schema3.IpAddressType {
+func (m *RemoteIpAddressSelector) GetIp() *schema.IpAddressType {
 	if x, ok := m.GetType().(*RemoteIpAddressSelector_Ip); ok {
 		return x.Ip
 	}
@@ -588,78 +605,12 @@ func (m *RemoteIpAddressSelector) GetEndpoints() *RemoteEndpointType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*RemoteIpAddressSelector) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _RemoteIpAddressSelector_OneofMarshaler, _RemoteIpAddressSelector_OneofUnmarshaler, _RemoteIpAddressSelector_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RemoteIpAddressSelector) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*RemoteIpAddressSelector_Ip)(nil),
 		(*RemoteIpAddressSelector_Endpoints)(nil),
 	}
-}
-
-func _RemoteIpAddressSelector_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*RemoteIpAddressSelector)
-	// type
-	switch x := m.Type.(type) {
-	case *RemoteIpAddressSelector_Ip:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Ip); err != nil {
-			return err
-		}
-	case *RemoteIpAddressSelector_Endpoints:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Endpoints); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RemoteIpAddressSelector.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _RemoteIpAddressSelector_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*RemoteIpAddressSelector)
-	switch tag {
-	case 1: // type.ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.IpAddressType)
-		err := b.DecodeMessage(msg)
-		m.Type = &RemoteIpAddressSelector_Ip{msg}
-		return true, err
-	case 2: // type.endpoints
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RemoteEndpointType)
-		err := b.DecodeMessage(msg)
-		m.Type = &RemoteIpAddressSelector_Endpoints{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _RemoteIpAddressSelector_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*RemoteIpAddressSelector)
-	// type
-	switch x := m.Type.(type) {
-	case *RemoteIpAddressSelector_Ip:
-		s := proto.Size(x.Ip)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RemoteIpAddressSelector_Endpoints:
-		s := proto.Size(x.Endpoints)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Tunnel specification
@@ -678,23 +629,47 @@ type GlobalSpecType struct {
 	// x-displayName: "Local IP Address selector"
 	// x-required
 	// Selects local IP address configuration for tunnel
-	LocalIp *LocalIpAddressSelector `protobuf:"bytes,7,opt,name=local_ip,json=localIp" json:"local_ip,omitempty"`
+	LocalIp *LocalIpAddressSelector `protobuf:"bytes,7,opt,name=local_ip,json=localIp,proto3" json:"local_ip,omitempty"`
 	// Remore IP Address Selector
 	//
 	// x-displayName: "Remote IP Address Selector"
 	// x-required
 	// Selects remote endpoint IP address configuration for tunnel
-	RemoteIp *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp" json:"remote_ip,omitempty"`
+	RemoteIp *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
 	// Tunnel Parameters
 	//
 	// x-displayName: "Tunnel Parameters"
 	// Configuration for supported tunnel types
-	Params *TunnelParams `protobuf:"bytes,6,opt,name=params" json:"params,omitempty"`
+	Params *TunnelParams `protobuf:"bytes,6,opt,name=params,proto3" json:"params,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{8}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetTunnelType() TunnelType {
 	if m != nil {
@@ -730,14 +705,38 @@ func (m *GlobalSpecType) GetParams() *TunnelParams {
 // Create tunnel in a given namespace. If one already exist it will give a error.
 type CreateSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`
-	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp" json:"local_ip,omitempty"`
-	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp" json:"remote_ip,omitempty"`
-	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params" json:"params,omitempty"`
+	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp,proto3" json:"local_ip,omitempty"`
+	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
+	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params,proto3" json:"params,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{9}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetTunnelType() TunnelType {
 	if m != nil {
@@ -773,14 +772,38 @@ func (m *CreateSpecType) GetParams() *TunnelParams {
 // Replace tunnel in a given namespace.
 type ReplaceSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`
-	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp" json:"local_ip,omitempty"`
-	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp" json:"remote_ip,omitempty"`
-	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params" json:"params,omitempty"`
+	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp,proto3" json:"local_ip,omitempty"`
+	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
+	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params,proto3" json:"params,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{10}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 func (m *ReplaceSpecType) GetTunnelType() TunnelType {
 	if m != nil {
@@ -816,14 +839,38 @@ func (m *ReplaceSpecType) GetParams() *TunnelParams {
 // Get Tunnel in a given namespace.
 type GetSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`
-	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp" json:"local_ip,omitempty"`
-	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp" json:"remote_ip,omitempty"`
-	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params" json:"params,omitempty"`
+	LocalIp    *LocalIpAddressSelector  `protobuf:"bytes,7,opt,name=local_ip,json=localIp,proto3" json:"local_ip,omitempty"`
+	RemoteIp   *RemoteIpAddressSelector `protobuf:"bytes,8,opt,name=remote_ip,json=remoteIp,proto3" json:"remote_ip,omitempty"`
+	Params     *TunnelParams            `protobuf:"bytes,6,opt,name=params,proto3" json:"params,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{11}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetTunnelType() TunnelType {
 	if m != nil {
@@ -854,6 +901,8 @@ func (m *GetSpecType) GetParams() *TunnelParams {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
+	golang_proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
 	proto.RegisterType((*IpsecTunnelParams)(nil), "ves.io.schema.tunnel.IpsecTunnelParams")
 	golang_proto.RegisterType((*IpsecTunnelParams)(nil), "ves.io.schema.tunnel.IpsecTunnelParams")
 	proto.RegisterType((*TunnelParams)(nil), "ves.io.schema.tunnel.TunnelParams")
@@ -868,6 +917,8 @@ func init() {
 	golang_proto.RegisterType((*RemoteNodeAttributes)(nil), "ves.io.schema.tunnel.RemoteNodeAttributes")
 	proto.RegisterType((*RemoteEndpointType)(nil), "ves.io.schema.tunnel.RemoteEndpointType")
 	golang_proto.RegisterType((*RemoteEndpointType)(nil), "ves.io.schema.tunnel.RemoteEndpointType")
+	proto.RegisterMapType((map[string]*RemoteNodeAttributes)(nil), "ves.io.schema.tunnel.RemoteEndpointType.EndpointsEntry")
+	golang_proto.RegisterMapType((map[string]*RemoteNodeAttributes)(nil), "ves.io.schema.tunnel.RemoteEndpointType.EndpointsEntry")
 	proto.RegisterType((*RemoteIpAddressSelector)(nil), "ves.io.schema.tunnel.RemoteIpAddressSelector")
 	golang_proto.RegisterType((*RemoteIpAddressSelector)(nil), "ves.io.schema.tunnel.RemoteIpAddressSelector")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.tunnel.GlobalSpecType")
@@ -878,9 +929,88 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.tunnel.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.tunnel.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.tunnel.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
-	golang_proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/tunnel/types.proto", fileDescriptor_6fc6059a22f3fcf5) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/tunnel/types.proto", fileDescriptor_6fc6059a22f3fcf5)
+}
+
+var fileDescriptor_6fc6059a22f3fcf5 = []byte{
+	// 1127 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x41, 0x6f, 0xe3, 0x44,
+	0x14, 0xf6, 0x38, 0x4e, 0xea, 0x4c, 0xba, 0xc5, 0x1d, 0x55, 0xbb, 0xd9, 0xb0, 0xb2, 0x8c, 0x39,
+	0x50, 0xaa, 0xd6, 0x81, 0x82, 0x16, 0x88, 0xc4, 0xb2, 0xed, 0x52, 0xb5, 0xcd, 0xa2, 0x52, 0xb9,
+	0x2b, 0x0e, 0x2c, 0x52, 0xe4, 0x24, 0x93, 0xd4, 0xd4, 0xf1, 0x58, 0xf6, 0x24, 0x4b, 0x0f, 0x48,
+	0x15, 0x27, 0x94, 0x13, 0xe2, 0xb8, 0xbf, 0x00, 0xc1, 0x15, 0x01, 0x22, 0x39, 0x54, 0x48, 0x48,
+	0x0b, 0x12, 0xa8, 0xc7, 0x1e, 0xb7, 0xe9, 0x05, 0xf6, 0xb4, 0x07, 0xb8, 0xa3, 0x99, 0x71, 0x5a,
+	0x9c, 0x74, 0xab, 0x2e, 0x47, 0xb4, 0x37, 0xcf, 0xbc, 0xf7, 0xbe, 0xf7, 0xbe, 0x6f, 0x3e, 0x8f,
+	0x13, 0x68, 0x74, 0x70, 0x64, 0xb9, 0xa4, 0x18, 0xd5, 0xb6, 0x71, 0xcb, 0x29, 0xd2, 0xb6, 0xef,
+	0x63, 0xaf, 0x48, 0x77, 0x03, 0x1c, 0x59, 0x41, 0x48, 0x28, 0x41, 0x33, 0x22, 0xc3, 0x12, 0x19,
+	0x96, 0xc8, 0x28, 0x2c, 0x34, 0x5d, 0xba, 0xdd, 0xae, 0x5a, 0x35, 0xd2, 0x2a, 0x36, 0x49, 0x93,
+	0x14, 0x79, 0x72, 0xb5, 0xdd, 0xe0, 0x2b, 0xbe, 0xe0, 0x4f, 0x02, 0xa4, 0x70, 0x25, 0xd9, 0xc6,
+	0xc7, 0x34, 0x0e, 0x3c, 0x9f, 0x0c, 0x90, 0x80, 0xba, 0xc4, 0x8f, 0x5b, 0x17, 0xae, 0x8e, 0x0c,
+	0x77, 0x3a, 0x55, 0xe1, 0x5a, 0x32, 0xd4, 0x71, 0x3c, 0xb7, 0xee, 0x50, 0x1c, 0x47, 0x47, 0x58,
+	0x75, 0x5c, 0x7c, 0xaf, 0x92, 0x80, 0x36, 0x6f, 0xc3, 0xe9, 0xf5, 0x20, 0xc2, 0xb5, 0x3b, 0x9c,
+	0xce, 0xa6, 0x13, 0x3a, 0xad, 0x08, 0x5d, 0x87, 0x59, 0x97, 0x6d, 0x56, 0x82, 0x68, 0x27, 0x0f,
+	0x0c, 0x30, 0x9b, 0x5b, 0xbc, 0x6a, 0x25, 0xe9, 0x6f, 0xe1, 0x5a, 0x88, 0xe9, 0x9d, 0xdd, 0x00,
+	0xdb, 0x2a, 0xcf, 0xdd, 0x8c, 0x76, 0xcc, 0x26, 0x9c, 0x4c, 0xe0, 0xbc, 0x03, 0xd3, 0x3c, 0x16,
+	0x63, 0xbc, 0x64, 0x9d, 0x25, 0xa1, 0x35, 0xd6, 0x7f, 0x4d, 0xb2, 0x45, 0xdd, 0xb2, 0x06, 0x15,
+	0x46, 0x16, 0xa9, 0xfb, 0x3d, 0x00, 0x0e, 0x7a, 0x40, 0x2e, 0x2b, 0xaa, 0xac, 0xa5, 0x4c, 0x0f,
+	0x5e, 0x5a, 0xf7, 0x29, 0x0e, 0x1b, 0x4e, 0x0d, 0xb3, 0x19, 0xd0, 0x5d, 0x08, 0x3d, 0x52, 0x73,
+	0xbc, 0x8a, 0xeb, 0xd3, 0x46, 0x1e, 0x18, 0xa9, 0xd9, 0xdc, 0xe2, 0xb5, 0x91, 0x76, 0xef, 0x57,
+	0x3f, 0xc6, 0x35, 0x6a, 0xe3, 0x06, 0xab, 0x58, 0xd6, 0xbf, 0xfe, 0x74, 0xda, 0xc7, 0xf4, 0x1e,
+	0x09, 0x77, 0x58, 0x91, 0xc0, 0xfa, 0xf1, 0xcf, 0xfd, 0x54, 0xfa, 0x4b, 0x20, 0x6b, 0xc0, 0xce,
+	0x72, 0xbc, 0x75, 0x9f, 0x36, 0xcc, 0xbf, 0x00, 0x44, 0xef, 0xf1, 0x55, 0xb0, 0x54, 0xaf, 0x87,
+	0x38, 0x8a, 0x78, 0xcf, 0xb7, 0x21, 0x74, 0x83, 0x8a, 0x23, 0x76, 0x62, 0x8a, 0xa3, 0x3d, 0x13,
+	0x15, 0x6b, 0x92, 0x9d, 0x75, 0x87, 0x1b, 0x68, 0x0e, 0x2a, 0x4e, 0x9b, 0x92, 0xbc, 0xcc, 0x0b,
+	0x67, 0x46, 0x0a, 0x57, 0x5a, 0x01, 0xdd, 0x5d, 0x93, 0x6c, 0x9e, 0x83, 0xee, 0xc2, 0x99, 0x8e,
+	0x1b, 0xd2, 0xb6, 0xe3, 0x55, 0x86, 0x33, 0x33, 0x5d, 0xf2, 0x29, 0x5e, 0xfb, 0xf2, 0x48, 0xed,
+	0x07, 0x22, 0x75, 0x43, 0x64, 0x6e, 0x61, 0x0f, 0xd7, 0x28, 0x09, 0xf9, 0x59, 0xa1, 0x4e, 0x22,
+	0xc6, 0x95, 0x18, 0x15, 0x59, 0x29, 0x2b, 0xaa, 0xa2, 0xa5, 0xcd, 0xef, 0x00, 0xbc, 0x9c, 0xa4,
+	0x3d, 0x84, 0x42, 0x6f, 0x41, 0x25, 0x16, 0x9a, 0xf5, 0x7f, 0xf1, 0x09, 0xe7, 0xfa, 0xef, 0x13,
+	0x62, 0x54, 0x58, 0x09, 0x5a, 0x4f, 0xa8, 0x26, 0xc8, 0xcf, 0x9e, 0x0d, 0x30, 0xae, 0x79, 0x42,
+	0xc1, 0xb1, 0xc1, 0x53, 0x65, 0x45, 0x4d, 0x69, 0x8a, 0xf9, 0x11, 0x9c, 0xb1, 0x71, 0x8b, 0x50,
+	0xbc, 0x41, 0xea, 0x78, 0x89, 0xd2, 0xd0, 0xad, 0xb6, 0x29, 0x8e, 0xd0, 0x3c, 0x94, 0xdd, 0xe0,
+	0x22, 0x07, 0x65, 0xcb, 0x6e, 0x50, 0xba, 0xfc, 0x53, 0x0f, 0x20, 0xa8, 0xc1, 0x9c, 0xc0, 0x32,
+	0x18, 0x18, 0x02, 0xaf, 0x9a, 0xbf, 0xa7, 0x20, 0x12, 0x5b, 0x2b, 0x7e, 0x3d, 0x20, 0xae, 0xcf,
+	0xdf, 0x02, 0xf4, 0x9b, 0x0c, 0xb3, 0x38, 0xde, 0x60, 0xbc, 0x98, 0x03, 0xdf, 0x38, 0x9b, 0xd7,
+	0x78, 0xb5, 0x35, 0x5c, 0x44, 0x2b, 0x3e, 0x0d, 0x77, 0x97, 0xff, 0x06, 0xcc, 0x89, 0x93, 0xf7,
+	0x41, 0xd6, 0x9c, 0x08, 0xd3, 0x1a, 0xc8, 0xef, 0xc9, 0x6c, 0x23, 0x73, 0x1f, 0xa4, 0xb4, 0x3d,
+	0x30, 0x78, 0xf8, 0x73, 0xea, 0xdd, 0x6e, 0x1f, 0xdc, 0x44, 0x37, 0x1e, 0xf5, 0x40, 0x89, 0x0d,
+	0x66, 0x34, 0x48, 0x68, 0xc4, 0xf0, 0xc6, 0x56, 0x80, 0x6b, 0x6e, 0xc3, 0xc5, 0x75, 0xc3, 0x89,
+	0x8c, 0xc8, 0xa5, 0xb8, 0xe4, 0x93, 0x3a, 0x9e, 0xe7, 0x8f, 0x86, 0x1b, 0x19, 0xe2, 0x06, 0x70,
+	0x3c, 0x83, 0x01, 0x4d, 0x75, 0xfb, 0x00, 0x22, 0x75, 0xd0, 0x03, 0x0a, 0x03, 0x62, 0x5b, 0xb0,
+	0xdb, 0x07, 0x19, 0xa4, 0x3c, 0xe8, 0x01, 0x89, 0x2d, 0x33, 0xdd, 0x3e, 0x90, 0x55, 0xde, 0xb5,
+	0xd4, 0xed, 0x83, 0xeb, 0x85, 0xd7, 0x1f, 0xf5, 0xc0, 0x2b, 0xb1, 0x2a, 0xce, 0x89, 0xbc, 0x62,
+	0x84, 0x6d, 0x1c, 0x8f, 0x61, 0x10, 0xdf, 0x70, 0x8c, 0xa6, 0xdb, 0xc1, 0xbe, 0xe1, 0xc7, 0xc0,
+	0x5a, 0xb7, 0x0f, 0x26, 0x0b, 0x70, 0xd0, 0x03, 0x19, 0x71, 0x7f, 0x9c, 0x74, 0x2b, 0x28, 0xec,
+	0x0c, 0xed, 0x53, 0x05, 0x0b, 0xdb, 0x70, 0x2a, 0x29, 0x0a, 0xd2, 0x60, 0x6a, 0x07, 0xef, 0xf2,
+	0xf3, 0xcb, 0xda, 0xec, 0x11, 0xdd, 0x84, 0xe9, 0x8e, 0xe3, 0xb5, 0x71, 0x6c, 0xa3, 0xb9, 0xf3,
+	0xe4, 0x4e, 0x7a, 0xc1, 0x16, 0x85, 0x25, 0xf9, 0x4d, 0x60, 0x7e, 0x03, 0xe0, 0x15, 0x91, 0x33,
+	0x6e, 0x74, 0xeb, 0xa2, 0x96, 0x59, 0x93, 0x98, 0x69, 0xd0, 0x5a, 0xd2, 0x04, 0xe7, 0x98, 0x7b,
+	0xdc, 0x04, 0xcc, 0xdc, 0x27, 0xc5, 0x4f, 0x34, 0xf7, 0x2f, 0x32, 0x9c, 0x5a, 0xf5, 0x48, 0xd5,
+	0xf1, 0xd8, 0x31, 0x73, 0xeb, 0x6d, 0xc0, 0x9c, 0x00, 0x15, 0x97, 0x02, 0x9b, 0x76, 0x6a, 0xd1,
+	0x38, 0xbb, 0xad, 0xb8, 0x67, 0xf9, 0x7b, 0x9f, 0xe3, 0x96, 0xfa, 0x0c, 0xa4, 0x0a, 0x40, 0xb2,
+	0x21, 0x3d, 0x09, 0xa0, 0x55, 0xa8, 0xc6, 0x97, 0x69, 0x90, 0x9f, 0xe0, 0x1c, 0xe6, 0x2f, 0xf2,
+	0x82, 0x0e, 0x45, 0xb3, 0x27, 0xc4, 0xd5, 0x19, 0xa0, 0x32, 0xcc, 0x86, 0x9c, 0x26, 0x43, 0x52,
+	0x39, 0xd2, 0xc2, 0x79, 0x6a, 0x8c, 0x43, 0xa9, 0x61, 0x1c, 0x40, 0x25, 0x98, 0x09, 0xf8, 0xd7,
+	0x21, 0x9f, 0xe1, 0x40, 0xe6, 0x79, 0xfc, 0xc4, 0x77, 0xc4, 0x8e, 0x2b, 0xc4, 0x47, 0x43, 0xe8,
+	0x27, 0xee, 0xb6, 0xb2, 0xa2, 0xa6, 0xb5, 0x8c, 0xf9, 0xbd, 0x0c, 0xa7, 0x6e, 0x85, 0xd8, 0xa1,
+	0xf8, 0x44, 0xcb, 0xa5, 0xff, 0xa4, 0xe5, 0xff, 0x5a, 0xbe, 0xd2, 0xf4, 0xaf, 0x37, 0x46, 0x2c,
+	0x67, 0xfe, 0x20, 0xc3, 0xe7, 0x6c, 0x1c, 0x78, 0x4e, 0xed, 0x99, 0x74, 0x4f, 0x29, 0xdd, 0xb7,
+	0x32, 0xcc, 0xad, 0x62, 0xfa, 0x4c, 0xb6, 0xa7, 0x92, 0x6d, 0xee, 0x05, 0x08, 0x4f, 0xd9, 0xa3,
+	0x4b, 0x30, 0xbb, 0xbe, 0xb9, 0xb5, 0x72, 0xab, 0xb2, 0xb9, 0x75, 0x5b, 0x93, 0x4c, 0x45, 0x05,
+	0x1a, 0x58, 0xfe, 0x1c, 0x1c, 0x1c, 0xe9, 0xd2, 0xe1, 0x91, 0x2e, 0x3d, 0x3e, 0xd2, 0xc1, 0xde,
+	0x40, 0x07, 0x5f, 0x0d, 0x74, 0xf0, 0x60, 0xa0, 0x83, 0x83, 0x81, 0x0e, 0x0e, 0x07, 0x3a, 0x78,
+	0x38, 0xd0, 0xc1, 0x1f, 0x03, 0x5d, 0x7a, 0x3c, 0xd0, 0xc1, 0x17, 0xc7, 0xba, 0xb4, 0x7f, 0xac,
+	0x83, 0x83, 0x63, 0x5d, 0x3a, 0x3c, 0xd6, 0xa5, 0x0f, 0xcb, 0x4d, 0x12, 0xec, 0x34, 0xad, 0x0e,
+	0xf1, 0x28, 0x0e, 0x43, 0xc7, 0x6a, 0x47, 0x45, 0xfe, 0xd0, 0x20, 0x61, 0x6b, 0x21, 0x08, 0x49,
+	0xc7, 0xad, 0xe3, 0x70, 0x61, 0x18, 0x2e, 0x06, 0xd5, 0x26, 0x29, 0xe2, 0x4f, 0x68, 0xfc, 0xdb,
+	0x3a, 0xf1, 0xc7, 0xa1, 0x9a, 0xe1, 0xbf, 0xae, 0x5f, 0xfb, 0x27, 0x00, 0x00, 0xff, 0xff, 0x8f,
+	0x2a, 0x4d, 0x65, 0x57, 0x0c, 0x00, 0x00,
+}
+
 func (x TunnelType) String() string {
 	s, ok := TunnelType_name[int32(x)]
 	if ok {
@@ -1542,7 +1672,7 @@ func (this *RemoteEndpointType) GoString() string {
 	for k, _ := range this.Endpoints {
 		keysForEndpoints = append(keysForEndpoints, k)
 	}
-	sortkeys.Strings(keysForEndpoints)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
 	mapStringForEndpoints := "map[string]*RemoteNodeAttributes{"
 	for _, k := range keysForEndpoints {
 		mapStringForEndpoints += fmt.Sprintf("%#v: %#v,", k, this.Endpoints[k])
@@ -1669,7 +1799,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *IpsecTunnelParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1677,27 +1807,34 @@ func (m *IpsecTunnelParams) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *IpsecTunnelParams) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IpsecTunnelParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.IpsecPsk != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpsecPsk.Size()))
-		n1, err := m.IpsecPsk.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpsecPsk.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n1
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *TunnelParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1705,38 +1842,52 @@ func (m *TunnelParams) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TunnelParams) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TunnelParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Type != nil {
-		nn2, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Type.Size()
+			i -= size
+			if _, err := m.Type.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *TunnelParams_Ipsec) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TunnelParams_Ipsec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Ipsec != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Ipsec.Size()))
-		n3, err := m.Ipsec.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Ipsec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *InterfaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1744,29 +1895,36 @@ func (m *InterfaceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *InterfaceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InterfaceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.LocalIntf) > 0 {
-		for _, msg := range m.LocalIntf {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.LocalIntf) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.LocalIntf[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LocalIpAddressType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1774,62 +1932,85 @@ func (m *LocalIpAddressType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LocalIpAddressType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != nil {
-		nn4, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn4
-	}
 	if m.VirtualNetworkType != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VirtualNetworkType.Size()))
-		n5, err := m.VirtualNetworkType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VirtualNetworkType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.Type != nil {
+		{
+			size := m.Type.Size()
+			i -= size
+			if _, err := m.Type.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *LocalIpAddressType_IpAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressType_IpAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpAddress != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpAddress.Size()))
-		n6, err := m.IpAddress.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *LocalIpAddressType_Auto) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressType_Auto) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Auto != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Auto.Size()))
-		n7, err := m.Auto.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Auto.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *LocalIpAddressSelector) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1837,52 +2018,73 @@ func (m *LocalIpAddressSelector) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LocalIpAddressSelector) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Type != nil {
-		nn8, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Type.Size()
+			i -= size
+			if _, err := m.Type.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LocalIpAddressSelector_Intf) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressSelector_Intf) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Intf != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Intf.Size()))
-		n9, err := m.Intf.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Intf.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *LocalIpAddressSelector_IpAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressSelector_IpAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpAddress != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpAddress.Size()))
-		n10, err := m.IpAddress.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *RemoteNodeAttributes) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1890,27 +2092,34 @@ func (m *RemoteNodeAttributes) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RemoteNodeAttributes) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoteNodeAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Ip != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Ip.Size()))
-		n11, err := m.Ip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Ip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *RemoteEndpointType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1918,50 +2127,53 @@ func (m *RemoteEndpointType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RemoteEndpointType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoteEndpointType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
 		keysForEndpoints := make([]string, 0, len(m.Endpoints))
-		for k, _ := range m.Endpoints {
+		for k := range m.Endpoints {
 			keysForEndpoints = append(keysForEndpoints, string(k))
 		}
-		sortkeys.Strings(keysForEndpoints)
-		for _, k := range keysForEndpoints {
-			dAtA[i] = 0x12
-			i++
-			v := m.Endpoints[string(k)]
-			msgSize := 0
+		github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
+		for iNdEx := len(keysForEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Endpoints[string(keysForEndpoints[iNdEx])]
+			baseI := i
 			if v != nil {
-				msgSize = v.Size()
-				msgSize += 1 + sovTypes(uint64(msgSize))
-			}
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + msgSize
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			if v != nil {
-				dAtA[i] = 0x12
-				i++
-				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
-				n12, err := v.MarshalTo(dAtA[i:])
-				if err != nil {
-					return 0, err
+				{
+					size, err := v.MarshalToSizedBuffer(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintTypes(dAtA, i, uint64(size))
 				}
-				i += n12
+				i--
+				dAtA[i] = 0x12
 			}
+			i -= len(keysForEndpoints[iNdEx])
+			copy(dAtA[i:], keysForEndpoints[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForEndpoints[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *RemoteIpAddressSelector) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1969,52 +2181,73 @@ func (m *RemoteIpAddressSelector) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RemoteIpAddressSelector) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoteIpAddressSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Type != nil {
-		nn13, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Type.Size()
+			i -= size
+			if _, err := m.Type.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn13
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *RemoteIpAddressSelector_Ip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoteIpAddressSelector_Ip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Ip != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Ip.Size()))
-		n14, err := m.Ip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Ip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *RemoteIpAddressSelector_Endpoints) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RemoteIpAddressSelector_Endpoints) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Endpoints != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Endpoints.Size()))
-		n15, err := m.Endpoints.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Endpoints.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2022,52 +2255,63 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
-	}
-	if m.Params != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Params.Size()))
-		n16, err := m.Params.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RemoteIp != nil {
+		{
+			size, err := m.RemoteIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x42
 	}
 	if m.LocalIp != nil {
+		{
+			size, err := m.LocalIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalIp.Size()))
-		n17, err := m.LocalIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n17
 	}
-	if m.RemoteIp != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RemoteIp.Size()))
-		n18, err := m.RemoteIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Params != nil {
+		{
+			size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2075,52 +2319,63 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
-	}
-	if m.Params != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Params.Size()))
-		n19, err := m.Params.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RemoteIp != nil {
+		{
+			size, err := m.RemoteIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x42
 	}
 	if m.LocalIp != nil {
+		{
+			size, err := m.LocalIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalIp.Size()))
-		n20, err := m.LocalIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
 	}
-	if m.RemoteIp != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RemoteIp.Size()))
-		n21, err := m.RemoteIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Params != nil {
+		{
+			size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2128,52 +2383,63 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
-	}
-	if m.Params != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Params.Size()))
-		n22, err := m.Params.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RemoteIp != nil {
+		{
+			size, err := m.RemoteIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x42
 	}
 	if m.LocalIp != nil {
+		{
+			size, err := m.LocalIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalIp.Size()))
-		n23, err := m.LocalIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
 	}
-	if m.RemoteIp != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RemoteIp.Size()))
-		n24, err := m.RemoteIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Params != nil {
+		{
+			size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2181,58 +2447,74 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
-	}
-	if m.Params != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Params.Size()))
-		n25, err := m.Params.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RemoteIp != nil {
+		{
+			size, err := m.RemoteIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x42
 	}
 	if m.LocalIp != nil {
+		{
+			size, err := m.LocalIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalIp.Size()))
-		n26, err := m.LocalIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n26
 	}
-	if m.RemoteIp != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RemoteIp.Size()))
-		n27, err := m.RemoteIp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Params != nil {
+		{
+			size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *IpsecTunnelParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpsecPsk != nil {
@@ -2243,6 +2525,9 @@ func (m *IpsecTunnelParams) Size() (n int) {
 }
 
 func (m *TunnelParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != nil {
@@ -2252,6 +2537,9 @@ func (m *TunnelParams) Size() (n int) {
 }
 
 func (m *TunnelParams_Ipsec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Ipsec != nil {
@@ -2261,6 +2549,9 @@ func (m *TunnelParams_Ipsec) Size() (n int) {
 	return n
 }
 func (m *InterfaceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.LocalIntf) > 0 {
@@ -2273,6 +2564,9 @@ func (m *InterfaceType) Size() (n int) {
 }
 
 func (m *LocalIpAddressType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != nil {
@@ -2286,6 +2580,9 @@ func (m *LocalIpAddressType) Size() (n int) {
 }
 
 func (m *LocalIpAddressType_IpAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpAddress != nil {
@@ -2295,6 +2592,9 @@ func (m *LocalIpAddressType_IpAddress) Size() (n int) {
 	return n
 }
 func (m *LocalIpAddressType_Auto) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Auto != nil {
@@ -2304,6 +2604,9 @@ func (m *LocalIpAddressType_Auto) Size() (n int) {
 	return n
 }
 func (m *LocalIpAddressSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != nil {
@@ -2313,6 +2616,9 @@ func (m *LocalIpAddressSelector) Size() (n int) {
 }
 
 func (m *LocalIpAddressSelector_Intf) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Intf != nil {
@@ -2322,6 +2628,9 @@ func (m *LocalIpAddressSelector_Intf) Size() (n int) {
 	return n
 }
 func (m *LocalIpAddressSelector_IpAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpAddress != nil {
@@ -2331,6 +2640,9 @@ func (m *LocalIpAddressSelector_IpAddress) Size() (n int) {
 	return n
 }
 func (m *RemoteNodeAttributes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Ip != nil {
@@ -2341,6 +2653,9 @@ func (m *RemoteNodeAttributes) Size() (n int) {
 }
 
 func (m *RemoteEndpointType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -2360,6 +2675,9 @@ func (m *RemoteEndpointType) Size() (n int) {
 }
 
 func (m *RemoteIpAddressSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != nil {
@@ -2369,6 +2687,9 @@ func (m *RemoteIpAddressSelector) Size() (n int) {
 }
 
 func (m *RemoteIpAddressSelector_Ip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Ip != nil {
@@ -2378,6 +2699,9 @@ func (m *RemoteIpAddressSelector_Ip) Size() (n int) {
 	return n
 }
 func (m *RemoteIpAddressSelector_Endpoints) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Endpoints != nil {
@@ -2387,6 +2711,9 @@ func (m *RemoteIpAddressSelector_Endpoints) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TunnelType != 0 {
@@ -2408,6 +2735,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TunnelType != 0 {
@@ -2429,6 +2759,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TunnelType != 0 {
@@ -2450,6 +2783,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TunnelType != 0 {
@@ -2471,14 +2807,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2488,7 +2817,7 @@ func (this *IpsecTunnelParams) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&IpsecTunnelParams{`,
-		`IpsecPsk:` + strings.Replace(fmt.Sprintf("%v", this.IpsecPsk), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`IpsecPsk:` + strings.Replace(fmt.Sprintf("%v", this.IpsecPsk), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2517,8 +2846,13 @@ func (this *InterfaceType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForLocalIntf := "[]*ObjectRefType{"
+	for _, f := range this.LocalIntf {
+		repeatedStringForLocalIntf += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForLocalIntf += "}"
 	s := strings.Join([]string{`&InterfaceType{`,
-		`LocalIntf:` + strings.Replace(fmt.Sprintf("%v", this.LocalIntf), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`LocalIntf:` + repeatedStringForLocalIntf + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2529,7 +2863,7 @@ func (this *LocalIpAddressType) String() string {
 	}
 	s := strings.Join([]string{`&LocalIpAddressType{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`VirtualNetworkType:` + strings.Replace(fmt.Sprintf("%v", this.VirtualNetworkType), "VirtualNetworkSelectorType", "ves_io_schema4.VirtualNetworkSelectorType", 1) + `,`,
+		`VirtualNetworkType:` + strings.Replace(fmt.Sprintf("%v", this.VirtualNetworkType), "VirtualNetworkSelectorType", "schema.VirtualNetworkSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2539,7 +2873,7 @@ func (this *LocalIpAddressType_IpAddress) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&LocalIpAddressType_IpAddress{`,
-		`IpAddress:` + strings.Replace(fmt.Sprintf("%v", this.IpAddress), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`IpAddress:` + strings.Replace(fmt.Sprintf("%v", this.IpAddress), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2549,7 +2883,7 @@ func (this *LocalIpAddressType_Auto) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&LocalIpAddressType_Auto{`,
-		`Auto:` + strings.Replace(fmt.Sprintf("%v", this.Auto), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Auto:` + strings.Replace(fmt.Sprintf("%v", this.Auto), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2589,7 +2923,7 @@ func (this *RemoteNodeAttributes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RemoteNodeAttributes{`,
-		`Ip:` + strings.Replace(fmt.Sprintf("%v", this.Ip), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`Ip:` + strings.Replace(fmt.Sprintf("%v", this.Ip), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2602,7 +2936,7 @@ func (this *RemoteEndpointType) String() string {
 	for k, _ := range this.Endpoints {
 		keysForEndpoints = append(keysForEndpoints, k)
 	}
-	sortkeys.Strings(keysForEndpoints)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForEndpoints)
 	mapStringForEndpoints := "map[string]*RemoteNodeAttributes{"
 	for _, k := range keysForEndpoints {
 		mapStringForEndpoints += fmt.Sprintf("%v: %v,", k, this.Endpoints[k])
@@ -2629,7 +2963,7 @@ func (this *RemoteIpAddressSelector_Ip) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RemoteIpAddressSelector_Ip{`,
-		`Ip:` + strings.Replace(fmt.Sprintf("%v", this.Ip), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
+		`Ip:` + strings.Replace(fmt.Sprintf("%v", this.Ip), "IpAddressType", "schema.IpAddressType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2650,9 +2984,9 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`Params:` + strings.Replace(fmt.Sprintf("%v", this.Params), "TunnelParams", "TunnelParams", 1) + `,`,
-		`LocalIp:` + strings.Replace(fmt.Sprintf("%v", this.LocalIp), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
-		`RemoteIp:` + strings.Replace(fmt.Sprintf("%v", this.RemoteIp), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
+		`Params:` + strings.Replace(this.Params.String(), "TunnelParams", "TunnelParams", 1) + `,`,
+		`LocalIp:` + strings.Replace(this.LocalIp.String(), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
+		`RemoteIp:` + strings.Replace(this.RemoteIp.String(), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2663,9 +2997,9 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`Params:` + strings.Replace(fmt.Sprintf("%v", this.Params), "TunnelParams", "TunnelParams", 1) + `,`,
-		`LocalIp:` + strings.Replace(fmt.Sprintf("%v", this.LocalIp), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
-		`RemoteIp:` + strings.Replace(fmt.Sprintf("%v", this.RemoteIp), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
+		`Params:` + strings.Replace(this.Params.String(), "TunnelParams", "TunnelParams", 1) + `,`,
+		`LocalIp:` + strings.Replace(this.LocalIp.String(), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
+		`RemoteIp:` + strings.Replace(this.RemoteIp.String(), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2676,9 +3010,9 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`Params:` + strings.Replace(fmt.Sprintf("%v", this.Params), "TunnelParams", "TunnelParams", 1) + `,`,
-		`LocalIp:` + strings.Replace(fmt.Sprintf("%v", this.LocalIp), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
-		`RemoteIp:` + strings.Replace(fmt.Sprintf("%v", this.RemoteIp), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
+		`Params:` + strings.Replace(this.Params.String(), "TunnelParams", "TunnelParams", 1) + `,`,
+		`LocalIp:` + strings.Replace(this.LocalIp.String(), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
+		`RemoteIp:` + strings.Replace(this.RemoteIp.String(), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2689,9 +3023,9 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`Params:` + strings.Replace(fmt.Sprintf("%v", this.Params), "TunnelParams", "TunnelParams", 1) + `,`,
-		`LocalIp:` + strings.Replace(fmt.Sprintf("%v", this.LocalIp), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
-		`RemoteIp:` + strings.Replace(fmt.Sprintf("%v", this.RemoteIp), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
+		`Params:` + strings.Replace(this.Params.String(), "TunnelParams", "TunnelParams", 1) + `,`,
+		`LocalIp:` + strings.Replace(this.LocalIp.String(), "LocalIpAddressSelector", "LocalIpAddressSelector", 1) + `,`,
+		`RemoteIp:` + strings.Replace(this.RemoteIp.String(), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2719,7 +3053,7 @@ func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2747,7 +3081,7 @@ func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2756,11 +3090,14 @@ func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.IpsecPsk == nil {
-				m.IpsecPsk = &ves_io_schema4.SecretType{}
+				m.IpsecPsk = &schema.SecretType{}
 			}
 			if err := m.IpsecPsk.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2773,6 +3110,9 @@ func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2802,7 +3142,7 @@ func (m *TunnelParams) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2830,7 +3170,7 @@ func (m *TunnelParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2839,6 +3179,9 @@ func (m *TunnelParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2855,6 +3198,9 @@ func (m *TunnelParams) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2884,7 +3230,7 @@ func (m *InterfaceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2912,7 +3258,7 @@ func (m *InterfaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2921,10 +3267,13 @@ func (m *InterfaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.LocalIntf = append(m.LocalIntf, &ves_io_schema4.ObjectRefType{})
+			m.LocalIntf = append(m.LocalIntf, &schema.ObjectRefType{})
 			if err := m.LocalIntf[len(m.LocalIntf)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2936,6 +3285,9 @@ func (m *InterfaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2965,7 +3317,7 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2993,7 +3345,7 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3002,10 +3354,13 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.IpAddressType{}
+			v := &schema.IpAddressType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3025,7 +3380,7 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3034,10 +3389,13 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3057,7 +3415,7 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3066,11 +3424,14 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.VirtualNetworkType == nil {
-				m.VirtualNetworkType = &ves_io_schema4.VirtualNetworkSelectorType{}
+				m.VirtualNetworkType = &schema.VirtualNetworkSelectorType{}
 			}
 			if err := m.VirtualNetworkType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3083,6 +3444,9 @@ func (m *LocalIpAddressType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3112,7 +3476,7 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3140,7 +3504,7 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3149,6 +3513,9 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3172,7 +3539,7 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3181,6 +3548,9 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3197,6 +3567,9 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3226,7 +3599,7 @@ func (m *RemoteNodeAttributes) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3254,7 +3627,7 @@ func (m *RemoteNodeAttributes) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3263,11 +3636,14 @@ func (m *RemoteNodeAttributes) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Ip == nil {
-				m.Ip = &ves_io_schema3.IpAddressType{}
+				m.Ip = &schema.IpAddressType{}
 			}
 			if err := m.Ip.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3280,6 +3656,9 @@ func (m *RemoteNodeAttributes) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3309,7 +3688,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3337,7 +3716,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3346,6 +3725,9 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3366,7 +3748,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3383,7 +3765,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -3393,6 +3775,9 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -3409,7 +3794,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						mapmsglen |= (int(b) & 0x7F) << shift
+						mapmsglen |= int(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -3418,7 +3803,7 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postmsgIndex := iNdEx + mapmsglen
-					if mapmsglen < 0 {
+					if postmsgIndex < 0 {
 						return ErrInvalidLengthTypes
 					}
 					if postmsgIndex > l {
@@ -3455,6 +3840,9 @@ func (m *RemoteEndpointType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3482,7 +3870,7 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3510,7 +3898,7 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3519,10 +3907,13 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.IpAddressType{}
+			v := &schema.IpAddressType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3542,7 +3933,7 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3551,6 +3942,9 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3567,6 +3961,9 @@ func (m *RemoteIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3596,7 +3993,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3624,7 +4021,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (TunnelType(b) & 0x7F) << shift
+				m.TunnelType |= TunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3643,7 +4040,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3652,6 +4049,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3676,7 +4076,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3685,6 +4085,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3709,7 +4112,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3718,6 +4121,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3735,6 +4141,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3764,7 +4173,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3792,7 +4201,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (TunnelType(b) & 0x7F) << shift
+				m.TunnelType |= TunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3811,7 +4220,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3820,6 +4229,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3844,7 +4256,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3853,6 +4265,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3877,7 +4292,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3886,6 +4301,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3903,6 +4321,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3932,7 +4353,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3960,7 +4381,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (TunnelType(b) & 0x7F) << shift
+				m.TunnelType |= TunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3979,7 +4400,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3988,6 +4409,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4012,7 +4436,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4021,6 +4445,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4045,7 +4472,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4054,6 +4481,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4071,6 +4501,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4100,7 +4533,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4128,7 +4561,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (TunnelType(b) & 0x7F) << shift
+				m.TunnelType |= TunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4147,7 +4580,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4156,6 +4589,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4180,7 +4616,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4189,6 +4625,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4213,7 +4652,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4222,6 +4661,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4241,6 +4683,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4256,6 +4701,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4287,10 +4733,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4307,130 +4751,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/tunnel/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/tunnel/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 1120 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xc1, 0x6f, 0x1b, 0xc5,
-	0x17, 0xf6, 0xec, 0xae, 0xdd, 0xf5, 0x38, 0xcd, 0x6f, 0x33, 0x8a, 0x5a, 0xd7, 0xbf, 0x6a, 0xb5,
-	0x2c, 0x07, 0x42, 0x94, 0xac, 0x21, 0xa0, 0x02, 0x96, 0x28, 0x4d, 0x4a, 0x94, 0xc4, 0x45, 0x21,
-	0xda, 0x54, 0x1c, 0x28, 0x92, 0xb5, 0xb6, 0xc7, 0xce, 0x92, 0xf5, 0xce, 0x6a, 0x77, 0xec, 0x92,
-	0x03, 0x52, 0xc4, 0xd1, 0x27, 0xc4, 0xb1, 0x7f, 0x01, 0x82, 0x2b, 0x02, 0x84, 0x7d, 0x88, 0x90,
-	0x90, 0x0a, 0x12, 0x28, 0xc7, 0x1e, 0x9b, 0xed, 0x05, 0x7a, 0xea, 0x01, 0xee, 0x68, 0x66, 0xd6,
-	0x09, 0x6b, 0xa7, 0x51, 0xca, 0x11, 0xf5, 0x36, 0x33, 0xef, 0xbd, 0xef, 0xbd, 0xf7, 0xbd, 0x6f,
-	0x5f, 0x1c, 0x68, 0xf4, 0x70, 0x64, 0xb9, 0xa4, 0x1c, 0x35, 0x76, 0x70, 0xc7, 0x29, 0xd3, 0xae,
-	0xef, 0x63, 0xaf, 0x4c, 0xf7, 0x02, 0x1c, 0x59, 0x41, 0x48, 0x28, 0x41, 0xb3, 0xc2, 0xc3, 0x12,
-	0x1e, 0x96, 0xf0, 0x28, 0x2d, 0xb6, 0x5d, 0xba, 0xd3, 0xad, 0x5b, 0x0d, 0xd2, 0x29, 0xb7, 0x49,
-	0x9b, 0x94, 0xb9, 0x73, 0xbd, 0xdb, 0xe2, 0x37, 0x7e, 0xe1, 0x27, 0x01, 0x52, 0xba, 0x9c, 0x4e,
-	0xe3, 0x63, 0x9a, 0x18, 0xfe, 0x9f, 0x36, 0x90, 0x80, 0xba, 0xc4, 0x4f, 0x52, 0x97, 0xae, 0x8c,
-	0x15, 0x77, 0x52, 0x55, 0xe9, 0x6a, 0xda, 0xd4, 0x73, 0x3c, 0xb7, 0xe9, 0x50, 0x9c, 0x58, 0xc7,
-	0xba, 0xea, 0xb9, 0xf8, 0x6e, 0x2d, 0x05, 0x6d, 0xde, 0x82, 0x33, 0x1b, 0x41, 0x84, 0x1b, 0xb7,
-	0x79, 0x3b, 0x5b, 0x4e, 0xe8, 0x74, 0x22, 0x74, 0x0d, 0xe6, 0x5d, 0xf6, 0x58, 0x0b, 0xa2, 0xdd,
-	0x22, 0x30, 0xc0, 0x5c, 0x61, 0xe9, 0x8a, 0x95, 0x6e, 0x7f, 0x1b, 0x37, 0x42, 0x4c, 0x6f, 0xef,
-	0x05, 0xd8, 0x56, 0xb9, 0xef, 0x56, 0xb4, 0x6b, 0xb6, 0xe1, 0x54, 0x0a, 0xe7, 0x1d, 0x98, 0xe5,
-	0xb6, 0x04, 0xe3, 0x25, 0xeb, 0x34, 0x0a, 0xad, 0x89, 0xfc, 0xeb, 0x19, 0x5b, 0xc4, 0xad, 0x68,
-	0x50, 0x61, 0xcd, 0x22, 0xf5, 0x60, 0x00, 0xc0, 0xe1, 0x00, 0x48, 0x55, 0x45, 0x95, 0x34, 0xd9,
-	0xf4, 0xe0, 0xc5, 0x0d, 0x9f, 0xe2, 0xb0, 0xe5, 0x34, 0x30, 0xab, 0x01, 0xdd, 0x81, 0xd0, 0x23,
-	0x0d, 0xc7, 0xab, 0xb9, 0x3e, 0x6d, 0x15, 0x81, 0x21, 0xcf, 0x15, 0x96, 0xae, 0x8e, 0xa5, 0x7b,
-	0xbf, 0xfe, 0x31, 0x6e, 0x50, 0x1b, 0xb7, 0x58, 0xc4, 0x8a, 0xfe, 0xd5, 0xa7, 0x33, 0x3e, 0xa6,
-	0x77, 0x49, 0xb8, 0xcb, 0x82, 0x04, 0xd6, 0x0f, 0x7f, 0x1c, 0xc8, 0xd9, 0x2f, 0x80, 0xa4, 0x01,
-	0x3b, 0xcf, 0xf1, 0x36, 0x7c, 0xda, 0x32, 0xff, 0x04, 0x10, 0xbd, 0xc7, 0x6f, 0xc1, 0x72, 0xb3,
-	0x19, 0xe2, 0x28, 0xe2, 0x39, 0xdf, 0x86, 0xd0, 0x0d, 0x6a, 0x8e, 0x78, 0x49, 0x5a, 0x1c, 0xcf,
-	0x99, 0x8a, 0x58, 0xcf, 0xd8, 0x79, 0x77, 0xf4, 0x80, 0xe6, 0xa1, 0xe2, 0x74, 0x29, 0x29, 0x4a,
-	0x3c, 0x70, 0x76, 0x2c, 0x70, 0xb5, 0x13, 0xd0, 0xbd, 0xf5, 0x8c, 0xcd, 0x7d, 0xd0, 0x1d, 0x38,
-	0xdb, 0x73, 0x43, 0xda, 0x75, 0xbc, 0xda, 0xa8, 0x66, 0xc6, 0x4b, 0x51, 0xe6, 0xb1, 0x2f, 0x8f,
-	0xc5, 0x7e, 0x20, 0x5c, 0x37, 0x85, 0xe7, 0x36, 0xf6, 0x70, 0x83, 0x92, 0x90, 0xcf, 0x0a, 0xf5,
-	0x52, 0x36, 0xce, 0xc4, 0x38, 0xc9, 0x4a, 0x55, 0x51, 0x15, 0x2d, 0x6b, 0x7e, 0x0b, 0xe0, 0xa5,
-	0x74, 0xdb, 0x23, 0x28, 0xf4, 0x16, 0x54, 0x12, 0xa2, 0x59, 0xfe, 0x17, 0x9f, 0x32, 0xd7, 0x7f,
-	0x4e, 0x88, 0xb5, 0xc2, 0x42, 0xd0, 0x46, 0x8a, 0x35, 0xd1, 0xfc, 0xdc, 0xe9, 0x00, 0x93, 0x9c,
-	0xa7, 0x18, 0x9c, 0x28, 0x5c, 0xae, 0x2a, 0xaa, 0xac, 0x29, 0xe6, 0x47, 0x70, 0xd6, 0xc6, 0x1d,
-	0x42, 0xf1, 0x26, 0x69, 0xe2, 0x65, 0x4a, 0x43, 0xb7, 0xde, 0xa5, 0x38, 0x42, 0x0b, 0x50, 0x72,
-	0x83, 0xf3, 0x0c, 0xca, 0x96, 0xdc, 0xa0, 0x72, 0xe9, 0xc7, 0x01, 0x40, 0x50, 0x83, 0x05, 0x81,
-	0x65, 0x30, 0x30, 0x04, 0x5e, 0x35, 0x7f, 0x93, 0x21, 0x12, 0x4f, 0xab, 0x7e, 0x33, 0x20, 0xae,
-	0xcf, 0xbf, 0x02, 0xf4, 0xab, 0x04, 0xf3, 0x38, 0x79, 0x60, 0x7d, 0x31, 0x05, 0xbe, 0x71, 0x7a,
-	0x5f, 0x93, 0xd1, 0xd6, 0xe8, 0x12, 0xad, 0xfa, 0x34, 0xdc, 0x5b, 0xf9, 0x0b, 0x30, 0x25, 0x4e,
-	0xdd, 0x03, 0x79, 0xf3, 0x42, 0x98, 0xd5, 0x40, 0x71, 0x5f, 0x62, 0x0f, 0xb9, 0x7b, 0x40, 0xd6,
-	0xf6, 0x41, 0xfc, 0xf0, 0x27, 0xf9, 0xdd, 0xfe, 0x10, 0xdc, 0x40, 0xd7, 0x1f, 0x0f, 0x40, 0x85,
-	0x15, 0x66, 0xb4, 0x48, 0x68, 0x24, 0xf0, 0xc6, 0x76, 0x80, 0x1b, 0x6e, 0xcb, 0xc5, 0x4d, 0xc3,
-	0x89, 0x8c, 0xc8, 0xa5, 0xb8, 0xe2, 0x93, 0x26, 0x5e, 0xe0, 0x47, 0xc3, 0x8d, 0x0c, 0xb1, 0x01,
-	0x1c, 0xcf, 0x60, 0x40, 0xd3, 0xfd, 0x21, 0x80, 0x48, 0x8d, 0x07, 0x40, 0x61, 0x40, 0xec, 0x09,
-	0xf6, 0x87, 0x20, 0x87, 0x94, 0xfb, 0x03, 0x90, 0x61, 0xd7, 0x5c, 0x7f, 0x08, 0x24, 0x95, 0x67,
-	0xad, 0xf4, 0x87, 0xe0, 0x5a, 0xe9, 0xf5, 0xc7, 0x03, 0xf0, 0x4a, 0xc2, 0x8a, 0x73, 0x4c, 0xaf,
-	0x28, 0x61, 0x07, 0x27, 0x65, 0x18, 0xc4, 0x37, 0x1c, 0xa3, 0xed, 0xf6, 0xb0, 0x6f, 0xf8, 0x09,
-	0xb0, 0xd6, 0x1f, 0x82, 0xa9, 0x12, 0x8c, 0x07, 0x20, 0x27, 0xf6, 0xc7, 0x71, 0xb6, 0x92, 0xc2,
-	0x66, 0x68, 0x9f, 0x30, 0x58, 0xda, 0x81, 0xd3, 0x69, 0x52, 0x90, 0x06, 0xe5, 0x5d, 0xbc, 0xc7,
-	0xe7, 0x97, 0xb7, 0xd9, 0x11, 0xdd, 0x80, 0xd9, 0x9e, 0xe3, 0x75, 0x71, 0x22, 0xa3, 0xf9, 0xb3,
-	0xe8, 0x4e, 0x6b, 0xc1, 0x16, 0x81, 0x15, 0xe9, 0x4d, 0x60, 0x7e, 0x0d, 0xe0, 0x65, 0xe1, 0x33,
-	0x29, 0x74, 0xeb, 0xbc, 0x92, 0x59, 0xcf, 0x30, 0xd1, 0xa0, 0xf5, 0xb4, 0x08, 0xce, 0x10, 0xf7,
-	0xa4, 0x08, 0x98, 0xb8, 0x8f, 0x83, 0x9f, 0x2a, 0xee, 0x9f, 0x25, 0x38, 0xbd, 0xe6, 0x91, 0xba,
-	0xe3, 0xb1, 0x31, 0x73, 0xe9, 0x6d, 0xc2, 0x82, 0x00, 0x15, 0x4b, 0x81, 0x55, 0x3b, 0xbd, 0x64,
-	0x9c, 0x9e, 0x56, 0xec, 0x59, 0xfe, 0xdd, 0x17, 0xb8, 0xa4, 0x3e, 0x03, 0x72, 0x09, 0x64, 0x6c,
-	0x48, 0x8f, 0x0d, 0xa8, 0x02, 0x73, 0x01, 0x5f, 0xc4, 0xc5, 0x1c, 0xef, 0xc0, 0x3c, 0x0b, 0x4a,
-	0xac, 0x6c, 0x3b, 0x89, 0x40, 0x6b, 0x50, 0x4d, 0x16, 0x71, 0x50, 0xbc, 0xc0, 0xa3, 0x17, 0xce,
-	0xf3, 0x71, 0x8f, 0x08, 0xb7, 0x2f, 0x88, 0xb5, 0x1b, 0xa0, 0x2a, 0xcc, 0x87, 0x9c, 0x22, 0x86,
-	0xa4, 0x72, 0xa4, 0xc5, 0xb3, 0x98, 0x9c, 0x84, 0x52, 0xc3, 0xc4, 0x20, 0xfe, 0x68, 0x08, 0xfe,
-	0xc4, 0x6e, 0xab, 0x2a, 0x6a, 0x56, 0xcb, 0x99, 0xdf, 0x49, 0x70, 0xfa, 0x66, 0x88, 0x1d, 0x8a,
-	0x8f, 0xb9, 0x5c, 0xfe, 0x57, 0x5c, 0xfe, 0xa7, 0xe9, 0xab, 0xcc, 0xfc, 0x72, 0x7d, 0x4c, 0x72,
-	0xe6, 0xf7, 0x12, 0xfc, 0x9f, 0x8d, 0x03, 0xcf, 0x69, 0x3c, 0xa7, 0xee, 0x19, 0xa9, 0xfb, 0x46,
-	0x82, 0x85, 0x35, 0x4c, 0x9f, 0xd3, 0xf6, 0x4c, 0xb4, 0xcd, 0xbf, 0x00, 0xe1, 0x49, 0xf7, 0xe8,
-	0x22, 0xcc, 0x6f, 0x6c, 0x6d, 0xaf, 0xde, 0xac, 0x6d, 0x6d, 0xdf, 0xd2, 0x32, 0xa6, 0xa2, 0x02,
-	0x0d, 0xac, 0xec, 0x83, 0xc3, 0x23, 0x3d, 0xf3, 0xe0, 0x48, 0xcf, 0x3c, 0x39, 0xd2, 0xc1, 0x7e,
-	0xac, 0x83, 0x2f, 0x63, 0x1d, 0xdc, 0x8f, 0x75, 0x70, 0x18, 0xeb, 0xe0, 0x41, 0xac, 0x83, 0x87,
-	0xb1, 0x0e, 0x7e, 0x8f, 0xf5, 0xcc, 0x93, 0x58, 0x07, 0x9f, 0x3f, 0xd2, 0x33, 0x07, 0x8f, 0x74,
-	0xf0, 0x61, 0xb5, 0x4d, 0x82, 0xdd, 0xb6, 0xd5, 0x23, 0x1e, 0xc5, 0x61, 0xe8, 0x58, 0xdd, 0xa8,
-	0xcc, 0x0f, 0x2d, 0x12, 0x76, 0x16, 0x83, 0x90, 0xf4, 0xdc, 0x26, 0x0e, 0x17, 0x47, 0xe6, 0x72,
-	0x50, 0x6f, 0x93, 0x32, 0xfe, 0x84, 0x26, 0xbf, 0xa9, 0x53, 0xff, 0x30, 0xd4, 0x73, 0xfc, 0x57,
-	0xf5, 0x6b, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x65, 0xc1, 0xa1, 0xa4, 0x4f, 0x0c, 0x00, 0x00,
-}

@@ -394,7 +394,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userLastLoginUpdateResponse"
                         }
@@ -478,7 +478,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomPrivateAPI.CascadeDelete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userCascadeDeleteResponse"
                         }
@@ -535,9 +535,11 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -568,7 +570,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userLastLoginUpdateResponse"
                         }

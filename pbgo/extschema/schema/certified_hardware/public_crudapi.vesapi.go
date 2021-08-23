@@ -1023,7 +1023,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.certified_hardware.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/certified_hardwareListResponse"
                         }
@@ -1080,9 +1080,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of certified_hardware",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "label_filter",
@@ -1101,6 +1103,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Fields"
                     },
                     {
@@ -1112,6 +1115,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Status Fields"
                     }
                 ],
@@ -1135,7 +1139,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.certified_hardware.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/certified_hardwareGetResponse"
                         }
@@ -1192,15 +1196,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "response_format",

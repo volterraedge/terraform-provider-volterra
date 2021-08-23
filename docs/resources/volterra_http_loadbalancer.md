@@ -23,31 +23,47 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  // One of the arguments from this list "policy_based_challenge no_challenge js_challenge captcha_challenge" must be set
   no_challenge = true
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  source_ip_stickiness = true
+  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      header_name = "host"
+
+      terminal = true
+    }
+  }
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
   }
+
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
-  disable_rate_limit = true
+
+  rate_limit {
+    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
+    no_ip_allowed_list = true
+
+    // One of the arguments from this list "no_policies policies" must be set
+    no_policies = true
+
+    rate_limiter {
+      burst_multiplier = "burst_multiplier"
+      total_number     = "total_number"
+      unit             = "unit"
+    }
+  }
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-
-  // One of the arguments from this list "waf waf_rule app_firewall disable_waf" must be set
-
-  app_firewall {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+  disable_waf = true
 }
 
 ```

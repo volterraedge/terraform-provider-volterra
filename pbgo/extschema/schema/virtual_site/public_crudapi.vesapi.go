@@ -1641,7 +1641,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_site.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_siteCreateResponse"
                         }
@@ -1698,9 +1698,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1731,7 +1733,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_site.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_siteReplaceResponse"
                         }
@@ -1788,15 +1790,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "metadata.name",
+                        "description": "name\n\nx-example: \"acmecorp-web\"\nThe configuration object to be replaced will be looked up by name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -1827,7 +1833,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_site.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_siteListResponse"
                         }
@@ -1884,9 +1890,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of virtual_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "label_filter",
@@ -1905,6 +1913,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Fields"
                     },
                     {
@@ -1916,6 +1925,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Status Fields"
                     }
                 ],
@@ -1939,7 +1949,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_site.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_siteGetResponse"
                         }
@@ -1996,15 +2006,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "response_format",
@@ -2039,10 +2053,8 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_site.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/googleprotobufEmpty"
-                        }
+                        "description": "A successful response.",
+                        "schema": {}
                     },
                     "401": {
                         "description": "Returned when operation is not authorized",
@@ -2096,15 +2108,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nName of the configuration object",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -2130,11 +2146,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "googleprotobufEmpty": {
-            "type": "object",
-            "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
-            "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
-        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",

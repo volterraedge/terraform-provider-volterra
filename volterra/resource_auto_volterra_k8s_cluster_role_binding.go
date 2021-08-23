@@ -242,11 +242,13 @@ func resourceVolterraK8SClusterRoleBindingCreate(d *schema.ResourceData, meta in
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						subjectChoiceInt.ServiceAccount.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						subjectChoiceInt.ServiceAccount.Namespace = v.(string)
+
 					}
 
 				}
@@ -424,11 +426,13 @@ func resourceVolterraK8SClusterRoleBindingUpdate(d *schema.ResourceData, meta in
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						subjectChoiceInt.ServiceAccount.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						subjectChoiceInt.ServiceAccount.Namespace = v.(string)
+
 					}
 
 				}

@@ -3,27 +3,31 @@
 
 package virtual_site
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GlobalSpecType
 //
@@ -35,31 +39,55 @@ type GlobalSpecType struct {
 	// x-displayName: "Site Selector Expression"
 	// x-required
 	// Label selector for virtual-site
-	SiteSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector" json:"site_selector,omitempty"`
+	SiteSelector *schema.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector,proto3" json:"site_selector,omitempty"`
 	// site_type
 	//
 	// x-displayName: "Site Type"
 	// x-required
 	// Site type for sites to be selected. A virtual site can only select sites of given type (CE or RE). Sites of different types cannot be selected by one virtual site.
-	SiteType ves_io_schema_site.SiteType `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
+	SiteType site.SiteType `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_814b43fcffc0437f, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetSiteSelector() *ves_io_schema4.LabelSelectorType {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetSiteSelector() *schema.LabelSelectorType {
 	if m != nil {
 		return m.SiteSelector
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSiteType() ves_io_schema_site.SiteType {
+func (m *GlobalSpecType) GetSiteType() site.SiteType {
 	if m != nil {
 		return m.SiteType
 	}
-	return ves_io_schema_site.INVALID
+	return site.INVALID
 }
 
 // CreateSpecType
@@ -67,26 +95,50 @@ func (m *GlobalSpecType) GetSiteType() ves_io_schema_site.SiteType {
 // x-displayName: "Create Virtual Site"
 // Create a virtual site object in given namespace
 type CreateSpecType struct {
-	SiteSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector" json:"site_selector,omitempty"`
-	SiteType     ves_io_schema_site.SiteType       `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
+	SiteSelector *schema.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector,proto3" json:"site_selector,omitempty"`
+	SiteType     site.SiteType             `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_814b43fcffc0437f, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetSiteSelector() *ves_io_schema4.LabelSelectorType {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetSiteSelector() *schema.LabelSelectorType {
 	if m != nil {
 		return m.SiteSelector
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetSiteType() ves_io_schema_site.SiteType {
+func (m *CreateSpecType) GetSiteType() site.SiteType {
 	if m != nil {
 		return m.SiteType
 	}
-	return ves_io_schema_site.INVALID
+	return site.INVALID
 }
 
 // Replace virtual site
@@ -96,35 +148,83 @@ func (m *CreateSpecType) GetSiteType() ves_io_schema_site.SiteType {
 type ReplaceSpecType struct {
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_814b43fcffc0437f, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 // Get virtual site
 //
 // x-displayName: "Get Virtual Site"
 // Get a virtual site object in given namespace
 type GetSpecType struct {
-	SiteSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector" json:"site_selector,omitempty"`
-	SiteType     ves_io_schema_site.SiteType       `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
+	SiteSelector *schema.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector,proto3" json:"site_selector,omitempty"`
+	SiteType     site.SiteType             `protobuf:"varint,2,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_814b43fcffc0437f, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetSiteSelector() *ves_io_schema4.LabelSelectorType {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetSiteSelector() *schema.LabelSelectorType {
 	if m != nil {
 		return m.SiteSelector
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetSiteType() ves_io_schema_site.SiteType {
+func (m *GetSpecType) GetSiteType() site.SiteType {
 	if m != nil {
 		return m.SiteType
 	}
-	return ves_io_schema_site.INVALID
+	return site.INVALID
 }
 
 func init() {
@@ -137,6 +237,47 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.virtual_site.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.virtual_site.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/virtual_site/types.proto", fileDescriptor_814b43fcffc0437f)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/virtual_site/types.proto", fileDescriptor_814b43fcffc0437f)
+}
+
+var fileDescriptor_814b43fcffc0437f = []byte{
+	// 461 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x93, 0xbf, 0x6f, 0xd3, 0x40,
+	0x14, 0xc7, 0xfd, 0xd2, 0xf2, 0xeb, 0x0a, 0xa9, 0xc8, 0x42, 0x31, 0xd5, 0x93, 0x15, 0x21, 0xd4,
+	0x81, 0x9c, 0x45, 0x98, 0xe8, 0xd0, 0xa1, 0x08, 0x75, 0x41, 0x08, 0x25, 0x88, 0x81, 0x25, 0x3a,
+	0xbb, 0xaf, 0xae, 0x85, 0xc3, 0x9d, 0xce, 0x97, 0x40, 0x07, 0x24, 0xc4, 0x1f, 0x80, 0x98, 0xf9,
+	0x0b, 0xd8, 0x10, 0x12, 0x53, 0xc5, 0xd0, 0x11, 0x31, 0x65, 0xcc, 0x48, 0x9c, 0x05, 0xb6, 0x8a,
+	0xbf, 0x00, 0xf9, 0xe2, 0x94, 0xda, 0x99, 0x60, 0xeb, 0x76, 0xcf, 0xdf, 0xef, 0xfb, 0xbe, 0xcf,
+	0x3b, 0xf9, 0xd8, 0xad, 0x21, 0xa5, 0x3c, 0x96, 0x7e, 0x1a, 0xee, 0x53, 0x5f, 0xf8, 0xc3, 0x58,
+	0x9b, 0x81, 0x48, 0x7a, 0x69, 0x6c, 0xc8, 0x37, 0x07, 0x8a, 0x52, 0xae, 0xb4, 0x34, 0xb2, 0xe1,
+	0xce, 0x7c, 0x7c, 0xe6, 0xe3, 0xa7, 0x7d, 0x6e, 0x2b, 0x8a, 0xcd, 0xfe, 0x20, 0xe0, 0xa1, 0xec,
+	0xfb, 0x91, 0x8c, 0xa4, 0x6f, 0x5b, 0x82, 0xc1, 0x9e, 0xad, 0x6c, 0x61, 0x4f, 0xb3, 0x28, 0xf7,
+	0x46, 0x79, 0xa4, 0x54, 0x26, 0x96, 0x2f, 0x8a, 0x39, 0x2e, 0x96, 0xc5, 0x2a, 0x87, 0x7b, 0xbd,
+	0xac, 0x9f, 0x96, 0xd6, 0x2b, 0xab, 0x88, 0x24, 0xde, 0x15, 0x86, 0x0a, 0xd5, 0xab, 0x2e, 0x4a,
+	0x2f, 0x7b, 0xa5, 0xd1, 0xcd, 0x4f, 0xc0, 0xea, 0x3b, 0x89, 0x0c, 0x44, 0xd2, 0x55, 0x14, 0x3e,
+	0x39, 0x50, 0xd4, 0x78, 0xca, 0xae, 0xe4, 0x04, 0xbd, 0x94, 0x12, 0x0a, 0x8d, 0xd4, 0x6b, 0xe0,
+	0xc1, 0xc6, 0x4a, 0xdb, 0xe3, 0xe5, 0xdb, 0x78, 0x28, 0x02, 0x4a, 0xba, 0x85, 0x27, 0x6f, 0xdc,
+	0x5e, 0x3d, 0x7c, 0xbd, 0x9c, 0x77, 0x7e, 0xf8, 0x0a, 0xcb, 0xac, 0xe6, 0x40, 0xe7, 0x72, 0x5e,
+	0xcd, 0x2d, 0x8d, 0x07, 0xec, 0x92, 0xcd, 0xcd, 0xf1, 0xd7, 0x6a, 0x1e, 0x6c, 0xd4, 0xdb, 0xeb,
+	0x95, 0xcc, 0x5c, 0xe7, 0xdd, 0xd8, 0x90, 0xcd, 0x63, 0x87, 0xbf, 0x8e, 0x96, 0xce, 0xbd, 0x85,
+	0x9a, 0xe7, 0x74, 0x2e, 0xa6, 0xc5, 0xd7, 0xe6, 0x17, 0x60, 0xf5, 0xfb, 0x9a, 0x84, 0xa1, 0x13,
+	0xe2, 0x47, 0xff, 0x4b, 0x7c, 0xa1, 0x20, 0xae, 0x90, 0xde, 0xfb, 0x47, 0xd2, 0xbf, 0x74, 0x9b,
+	0xd7, 0xbe, 0x6f, 0x55, 0xee, 0xf3, 0xf7, 0xd6, 0x52, 0xfb, 0xf6, 0x9d, 0xe6, 0x4d, 0xb6, 0xda,
+	0x21, 0x95, 0x88, 0xf0, 0x04, 0x7b, 0xf3, 0xea, 0x82, 0xb7, 0xf9, 0x19, 0xd8, 0xca, 0x0e, 0x99,
+	0xb3, 0xb4, 0xd9, 0xf6, 0x3b, 0x18, 0x4d, 0xd0, 0x19, 0x4f, 0xd0, 0x39, 0x9e, 0x20, 0xbc, 0xc9,
+	0x10, 0x3e, 0x66, 0x08, 0xdf, 0x32, 0x84, 0x51, 0x86, 0x30, 0xce, 0x10, 0x7e, 0x64, 0x08, 0x3f,
+	0x33, 0x74, 0x8e, 0x33, 0x84, 0xf7, 0x53, 0x74, 0x8e, 0xa6, 0x08, 0xa3, 0x29, 0x3a, 0xe3, 0x29,
+	0x3a, 0xcf, 0x1e, 0x47, 0x52, 0x3d, 0x8f, 0xf8, 0x50, 0x26, 0x86, 0xb4, 0x16, 0x7c, 0x90, 0xfa,
+	0xf6, 0xb0, 0x27, 0x75, 0xbf, 0xa5, 0xb4, 0x1c, 0xc6, 0xbb, 0xa4, 0x5b, 0x73, 0xd9, 0x57, 0x41,
+	0x24, 0x7d, 0x7a, 0x65, 0xe6, 0x6f, 0x65, 0xf1, 0x09, 0x07, 0xe7, 0xed, 0xaf, 0x7d, 0xf7, 0x4f,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x66, 0xb7, 0x9b, 0x49, 0xe7, 0x03, 0x00, 0x00,
+}
+
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -298,7 +439,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -306,32 +447,39 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SiteSelector != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteSelector.Size()))
-		n1, err := m.SiteSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
 	if m.SiteType != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.SiteSelector != nil {
+		{
+			size, err := m.SiteSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -339,32 +487,39 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SiteSelector != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteSelector.Size()))
-		n2, err := m.SiteSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
-	}
 	if m.SiteType != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.SiteSelector != nil {
+		{
+			size, err := m.SiteSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -372,17 +527,22 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -390,38 +550,50 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SiteSelector != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteSelector.Size()))
-		n3, err := m.SiteSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
-	}
 	if m.SiteType != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.SiteSelector != nil {
+		{
+			size, err := m.SiteSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SiteSelector != nil {
@@ -435,6 +607,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SiteSelector != nil {
@@ -448,12 +623,18 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	return n
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SiteSelector != nil {
@@ -467,14 +648,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -484,7 +658,7 @@ func (this *GlobalSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
 		`}`,
 	}, "")
@@ -495,7 +669,7 @@ func (this *CreateSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
 		`}`,
 	}, "")
@@ -515,7 +689,7 @@ func (this *GetSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
-		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`SiteSelector:` + strings.Replace(fmt.Sprintf("%v", this.SiteSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
 		`}`,
 	}, "")
@@ -544,7 +718,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -572,7 +746,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -581,11 +755,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SiteSelector == nil {
-				m.SiteSelector = &ves_io_schema4.LabelSelectorType{}
+				m.SiteSelector = &schema.LabelSelectorType{}
 			}
 			if err := m.SiteSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -605,7 +782,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SiteType |= (ves_io_schema_site.SiteType(b) & 0x7F) << shift
+				m.SiteType |= site.SiteType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -617,6 +794,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -646,7 +826,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -674,7 +854,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -683,11 +863,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SiteSelector == nil {
-				m.SiteSelector = &ves_io_schema4.LabelSelectorType{}
+				m.SiteSelector = &schema.LabelSelectorType{}
 			}
 			if err := m.SiteSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -707,7 +890,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SiteType |= (ves_io_schema_site.SiteType(b) & 0x7F) << shift
+				m.SiteType |= site.SiteType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -719,6 +902,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -748,7 +934,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -769,6 +955,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -798,7 +987,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -826,7 +1015,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -835,11 +1024,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SiteSelector == nil {
-				m.SiteSelector = &ves_io_schema4.LabelSelectorType{}
+				m.SiteSelector = &schema.LabelSelectorType{}
 			}
 			if err := m.SiteSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -859,7 +1051,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SiteType |= (ves_io_schema_site.SiteType(b) & 0x7F) << shift
+				m.SiteType |= site.SiteType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -871,6 +1063,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -888,6 +1083,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -919,10 +1115,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -939,89 +1133,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/virtual_site/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/virtual_site/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 454 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x93, 0xbf, 0x6f, 0x13, 0x31,
-	0x14, 0xc7, 0xef, 0xa5, 0xe5, 0x97, 0x0b, 0xa9, 0xc8, 0x42, 0x39, 0x2a, 0xeb, 0x14, 0x21, 0xd4,
-	0x81, 0xf8, 0x44, 0x98, 0xe8, 0xd0, 0xa1, 0x08, 0x75, 0x41, 0x08, 0x25, 0x88, 0x81, 0x25, 0xf2,
-	0x5d, 0x5f, 0xaf, 0x16, 0x0e, 0xb6, 0x7c, 0x4e, 0xa0, 0x03, 0x12, 0x62, 0x60, 0x66, 0xe6, 0x2f,
-	0x60, 0x43, 0x48, 0x4c, 0x15, 0x43, 0x47, 0xc4, 0xd4, 0xb1, 0x23, 0x71, 0x17, 0xd8, 0x2a, 0xfe,
-	0x02, 0x74, 0xce, 0xa5, 0xf4, 0xae, 0x13, 0x6c, 0xdd, 0xfc, 0xee, 0xfb, 0x7d, 0xdf, 0xf7, 0x79,
-	0xd6, 0x99, 0xdc, 0x1a, 0x63, 0xce, 0x84, 0x8a, 0xf3, 0x74, 0x1b, 0x87, 0x3c, 0x1e, 0x0b, 0x63,
-	0x47, 0x5c, 0x0e, 0x72, 0x61, 0x31, 0xb6, 0x3b, 0x1a, 0x73, 0xa6, 0x8d, 0xb2, 0xaa, 0x15, 0x4e,
-	0x7d, 0x6c, 0xea, 0x63, 0x27, 0x7d, 0x61, 0x27, 0x13, 0x76, 0x7b, 0x94, 0xb0, 0x54, 0x0d, 0xe3,
-	0x4c, 0x65, 0x2a, 0xf6, 0x2d, 0xc9, 0x68, 0xcb, 0x57, 0xbe, 0xf0, 0xa7, 0x69, 0x54, 0x78, 0xa3,
-	0x3a, 0x52, 0x69, 0x2b, 0xd4, 0x8b, 0x72, 0x4e, 0x48, 0xab, 0x62, 0x9d, 0x23, 0xbc, 0x5e, 0xd5,
-	0x4f, 0x4a, 0xcb, 0xb5, 0x55, 0xb8, 0x14, 0x9b, 0xdc, 0x62, 0xa9, 0x46, 0xf5, 0x45, 0xf1, 0xe5,
-	0xa0, 0x32, 0xba, 0xfd, 0x09, 0x48, 0x73, 0x43, 0xaa, 0x84, 0xcb, 0xbe, 0xc6, 0xf4, 0xc9, 0x8e,
-	0xc6, 0xd6, 0x53, 0x72, 0xa5, 0x20, 0x18, 0xe4, 0x28, 0x31, 0xb5, 0xca, 0x2c, 0x41, 0x04, 0x2b,
-	0x0b, 0xdd, 0x88, 0x55, 0x6f, 0xe3, 0x21, 0x4f, 0x50, 0xf6, 0x4b, 0x4f, 0xd1, 0xb8, 0xbe, 0xb8,
-	0xfb, 0x7a, 0xbe, 0xe8, 0xfc, 0xf0, 0x15, 0xe6, 0x49, 0x23, 0x80, 0xde, 0xe5, 0xa2, 0x9a, 0x59,
-	0x5a, 0x0f, 0xc8, 0x25, 0x9f, 0x5b, 0xe0, 0x2f, 0x35, 0x22, 0x58, 0x69, 0x76, 0x97, 0x6b, 0x99,
-	0x85, 0xce, 0xfa, 0xc2, 0xa2, 0xcf, 0x23, 0xbb, 0xbf, 0xf6, 0xe6, 0xce, 0xbd, 0x85, 0x46, 0x14,
-	0xf4, 0x2e, 0xe6, 0xe5, 0xd7, 0xf6, 0x17, 0x20, 0xcd, 0xfb, 0x06, 0xb9, 0xc5, 0x63, 0xe2, 0x47,
-	0xff, 0x4b, 0x7c, 0xa1, 0x24, 0xae, 0x91, 0xde, 0xfb, 0x47, 0xd2, 0xbf, 0x74, 0xab, 0xd7, 0xbe,
-	0xaf, 0xd5, 0xee, 0xf3, 0xf7, 0xda, 0x5c, 0xf7, 0xf6, 0x9d, 0xf6, 0x4d, 0xb2, 0xd8, 0x43, 0x2d,
-	0x79, 0x7a, 0x8c, 0xbd, 0x7a, 0xf5, 0x94, 0xb7, 0xfd, 0x19, 0xc8, 0xc2, 0x06, 0xda, 0xb3, 0xb4,
-	0xd9, 0xfa, 0x3b, 0xd8, 0x9f, 0xd0, 0xe0, 0x60, 0x42, 0x83, 0xa3, 0x09, 0x85, 0x37, 0x8e, 0xc2,
-	0x47, 0x47, 0xe1, 0x9b, 0xa3, 0xb0, 0xef, 0x28, 0x1c, 0x38, 0x0a, 0x3f, 0x1c, 0x85, 0x9f, 0x8e,
-	0x06, 0x47, 0x8e, 0xc2, 0xfb, 0x43, 0x1a, 0xec, 0x1d, 0x52, 0x78, 0xf6, 0x38, 0x53, 0xfa, 0x79,
-	0xc6, 0xc6, 0x4a, 0x5a, 0x34, 0x86, 0xb3, 0x51, 0x1e, 0xfb, 0xc3, 0x96, 0x32, 0xc3, 0x8e, 0x36,
-	0x6a, 0x2c, 0x36, 0xd1, 0x74, 0x66, 0x72, 0xac, 0x93, 0x4c, 0xc5, 0xf8, 0xca, 0xce, 0xde, 0xc8,
-	0xe9, 0xa7, 0x9b, 0x9c, 0xf7, 0xbf, 0xf4, 0xdd, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x5d, 0x64,
-	0x8a, 0x9b, 0xdf, 0x03, 0x00, 0x00,
-}

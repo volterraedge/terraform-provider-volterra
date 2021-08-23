@@ -30,6 +30,10 @@ import (
 	ves_io_schema_alert_receiver_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver/crudapi"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	ves_io_schema_api_credential_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential/crudapi"
+	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_app_firewall_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall/crudapi"
+	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
+	ves_io_schema_app_setting_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting/crudapi"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_app_type_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type/crudapi"
 	ves_io_schema_authentication "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/authentication"
@@ -44,10 +48,14 @@ import (
 	ves_io_schema_cloud_credentials_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_cluster_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi"
+	ves_io_schema_container_registry "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
+	ves_io_schema_container_registry_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry/crudapi"
 	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 	ves_io_schema_dc_cluster_group_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group/crudapi"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_discovery_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery/crudapi"
+	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
+	ves_io_schema_dns_domain_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain/crudapi"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
 	ves_io_schema_endpoint_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint/crudapi"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
@@ -76,6 +84,8 @@ import (
 	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
 	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
+	ves_io_schema_log_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver"
+	ves_io_schema_log_receiver_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver/crudapi"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 	ves_io_schema_malicious_user_mitigation_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation/crudapi"
 	ves_io_schema_namespace "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
@@ -153,6 +163,8 @@ import (
 	ves_io_schema_views_terraform_parameters_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters/crudapi"
 	ves_io_schema_views_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 	ves_io_schema_views_voltstack_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site/crudapi"
+	ves_io_schema_views_workload "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload"
+	ves_io_schema_views_workload_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload/crudapi"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_virtual_host_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host/crudapi"
 	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
@@ -517,6 +529,84 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.crudapi.ObjectReplaceReq"] = ves_io_schema_api_credential_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.crudapi.ObjectReplaceRsp"] = ves_io_schema_api_credential_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.SpecType"] = ves_io_schema_app_firewall.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.CreateRequest"] = ves_io_schema_app_firewall.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.CreateResponse"] = ves_io_schema_app_firewall.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.DeleteRequest"] = ves_io_schema_app_firewall.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GetRequest"] = ves_io_schema_app_firewall.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GetResponse"] = ves_io_schema_app_firewall.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ListRequest"] = ves_io_schema_app_firewall.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ListResponse"] = ves_io_schema_app_firewall.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ListResponseItem"] = ves_io_schema_app_firewall.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceRequest"] = ves_io_schema_app_firewall.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceResponse"] = ves_io_schema_app_firewall.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.CreateSpecType"] = ves_io_schema_app_firewall.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.DetectionSetting"] = ves_io_schema_app_firewall.DetectionSettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledAttackTypes"] = ves_io_schema_app_firewall.EnabledAttackTypesValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledEvasionSubViolations"] = ves_io_schema_app_firewall.EnabledEvasionSubViolationsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledHTTPProtocolSubViolations"] = ves_io_schema_app_firewall.EnabledHTTPProtocolSubViolationsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GetSpecType"] = ves_io_schema_app_firewall.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GlobalSpecType"] = ves_io_schema_app_firewall.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceSpecType"] = ves_io_schema_app_firewall.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.SignatureSelectionSetting"] = ves_io_schema_app_firewall.SignatureSelectionSettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ViolationSetting"] = ves_io_schema_app_firewall.ViolationSettingValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectCreateReq"] = ves_io_schema_app_firewall_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectCreateRsp"] = ves_io_schema_app_firewall_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectDeleteReq"] = ves_io_schema_app_firewall_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectDeleteRsp"] = ves_io_schema_app_firewall_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectGetReq"] = ves_io_schema_app_firewall_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectGetRsp"] = ves_io_schema_app_firewall_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectListReq"] = ves_io_schema_app_firewall_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectListRsp"] = ves_io_schema_app_firewall_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectListRspItem"] = ves_io_schema_app_firewall_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectReplaceReq"] = ves_io_schema_app_firewall_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.crudapi.ObjectReplaceRsp"] = ves_io_schema_app_firewall_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.SpecType"] = ves_io_schema_app_setting.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.CreateRequest"] = ves_io_schema_app_setting.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.CreateResponse"] = ves_io_schema_app_setting.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.DeleteRequest"] = ves_io_schema_app_setting.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.GetRequest"] = ves_io_schema_app_setting.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.GetResponse"] = ves_io_schema_app_setting.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ListRequest"] = ves_io_schema_app_setting.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ListResponse"] = ves_io_schema_app_setting.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ListResponseItem"] = ves_io_schema_app_setting.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ReplaceRequest"] = ves_io_schema_app_setting.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ReplaceResponse"] = ves_io_schema_app_setting.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.SuspiciousUser"] = ves_io_schema_app_setting.SuspiciousUserValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.SuspiciousUserStatusReq"] = ves_io_schema_app_setting.SuspiciousUserStatusReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.SuspiciousUserStatusRsp"] = ves_io_schema_app_setting.SuspiciousUserStatusRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.AppTypeSettings"] = ves_io_schema_app_setting.AppTypeSettingsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.BusinessLogicMarkupSetting"] = ves_io_schema_app_setting.BusinessLogicMarkupSettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.CreateSpecType"] = ves_io_schema_app_setting.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.FailedLoginActivitySetting"] = ves_io_schema_app_setting.FailedLoginActivitySettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ForbiddenActivitySetting"] = ves_io_schema_app_setting.ForbiddenActivitySettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.GetSpecType"] = ves_io_schema_app_setting.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.GlobalSpecType"] = ves_io_schema_app_setting.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.MaliciousUserDetectionSetting"] = ves_io_schema_app_setting.MaliciousUserDetectionSettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.MetricSelector"] = ves_io_schema_app_setting.MetricSelectorValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.ReplaceSpecType"] = ves_io_schema_app_setting.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.TimeseriesAnalysesSetting"] = ves_io_schema_app_setting.TimeseriesAnalysesSettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.UserBehaviorAnalysisSetting"] = ves_io_schema_app_setting.UserBehaviorAnalysisSettingValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectCreateReq"] = ves_io_schema_app_setting_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectCreateRsp"] = ves_io_schema_app_setting_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectDeleteReq"] = ves_io_schema_app_setting_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectDeleteRsp"] = ves_io_schema_app_setting_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectGetReq"] = ves_io_schema_app_setting_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectGetRsp"] = ves_io_schema_app_setting_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectListReq"] = ves_io_schema_app_setting_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectListRsp"] = ves_io_schema_app_setting_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectListRspItem"] = ves_io_schema_app_setting_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectReplaceReq"] = ves_io_schema_app_setting_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.crudapi.ObjectReplaceRsp"] = ves_io_schema_app_setting_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.app_type.APIEndpointLearntSchemaReq"] = ves_io_schema_app_type.APIEndpointLearntSchemaReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.APIEndpointLearntSchemaRsp"] = ves_io_schema_app_type.APIEndpointLearntSchemaRspValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.APIEndpointPDFReq"] = ves_io_schema_app_type.APIEndpointPDFReqValidator()
@@ -784,6 +874,36 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.cluster.crudapi.ObjectReplaceReq"] = ves_io_schema_cluster_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.cluster.crudapi.ObjectReplaceRsp"] = ves_io_schema_cluster_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.SpecType"] = ves_io_schema_container_registry.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.CreateRequest"] = ves_io_schema_container_registry.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.CreateResponse"] = ves_io_schema_container_registry.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.DeleteRequest"] = ves_io_schema_container_registry.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.GetRequest"] = ves_io_schema_container_registry.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.GetResponse"] = ves_io_schema_container_registry.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ListRequest"] = ves_io_schema_container_registry.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ListResponse"] = ves_io_schema_container_registry.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ListResponseItem"] = ves_io_schema_container_registry.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ReplaceRequest"] = ves_io_schema_container_registry.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ReplaceResponse"] = ves_io_schema_container_registry.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.CreateSpecType"] = ves_io_schema_container_registry.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.GetSpecType"] = ves_io_schema_container_registry.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.GlobalSpecType"] = ves_io_schema_container_registry.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.ReplaceSpecType"] = ves_io_schema_container_registry.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectCreateReq"] = ves_io_schema_container_registry_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectCreateRsp"] = ves_io_schema_container_registry_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectDeleteReq"] = ves_io_schema_container_registry_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectDeleteRsp"] = ves_io_schema_container_registry_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectGetReq"] = ves_io_schema_container_registry_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectGetRsp"] = ves_io_schema_container_registry_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectListReq"] = ves_io_schema_container_registry_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectListRsp"] = ves_io_schema_container_registry_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectListRspItem"] = ves_io_schema_container_registry_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectReplaceReq"] = ves_io_schema_container_registry_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.crudapi.ObjectReplaceRsp"] = ves_io_schema_container_registry_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.SpecType"] = ves_io_schema_dc_cluster_group.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.CreateRequest"] = ves_io_schema_dc_cluster_group.CreateRequestValidator()
@@ -864,6 +984,42 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.discovery.crudapi.ObjectListRspItem"] = ves_io_schema_discovery_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.crudapi.ObjectReplaceReq"] = ves_io_schema_discovery_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.discovery.crudapi.ObjectReplaceRsp"] = ves_io_schema_discovery_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.DNSDomainStatus"] = ves_io_schema_dns_domain.DNSDomainStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.DNSSECStatus"] = ves_io_schema_dns_domain.DNSSECStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.SpecType"] = ves_io_schema_dns_domain.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.CreateRequest"] = ves_io_schema_dns_domain.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.CreateResponse"] = ves_io_schema_dns_domain.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.DeleteRequest"] = ves_io_schema_dns_domain.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.GetRequest"] = ves_io_schema_dns_domain.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.GetResponse"] = ves_io_schema_dns_domain.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ListRequest"] = ves_io_schema_dns_domain.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ListResponse"] = ves_io_schema_dns_domain.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ListResponseItem"] = ves_io_schema_dns_domain.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ReplaceRequest"] = ves_io_schema_dns_domain.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ReplaceResponse"] = ves_io_schema_dns_domain.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.VerifyDnsDomainRequest"] = ves_io_schema_dns_domain.VerifyDnsDomainRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.VerifyDnsDomainResponse"] = ves_io_schema_dns_domain.VerifyDnsDomainResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.AWSRoute53Type"] = ves_io_schema_dns_domain.AWSRoute53TypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.CreateSpecType"] = ves_io_schema_dns_domain.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.GetSpecType"] = ves_io_schema_dns_domain.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.GlobalSpecType"] = ves_io_schema_dns_domain.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.ReplaceSpecType"] = ves_io_schema_dns_domain.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectCreateReq"] = ves_io_schema_dns_domain_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectCreateRsp"] = ves_io_schema_dns_domain_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectDeleteReq"] = ves_io_schema_dns_domain_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectDeleteRsp"] = ves_io_schema_dns_domain_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectGetReq"] = ves_io_schema_dns_domain_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectGetRsp"] = ves_io_schema_dns_domain_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectListReq"] = ves_io_schema_dns_domain_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectListRsp"] = ves_io_schema_dns_domain_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectListRspItem"] = ves_io_schema_dns_domain_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectReplaceReq"] = ves_io_schema_dns_domain_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.crudapi.ObjectReplaceRsp"] = ves_io_schema_dns_domain_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.SpecType"] = ves_io_schema_endpoint.SpecTypeValidator()
 
@@ -1307,6 +1463,49 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_events.AggregationRequest"] = ves_io_schema_log_vk8s_events.AggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_events.DateAggregation"] = ves_io_schema_log_vk8s_events.DateAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_events.FieldAggregation"] = ves_io_schema_log_vk8s_events.FieldAggregationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.SpecType"] = ves_io_schema_log_receiver.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.CreateRequest"] = ves_io_schema_log_receiver.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.CreateResponse"] = ves_io_schema_log_receiver.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.DeleteRequest"] = ves_io_schema_log_receiver.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.GetRequest"] = ves_io_schema_log_receiver.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.GetResponse"] = ves_io_schema_log_receiver.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ListRequest"] = ves_io_schema_log_receiver.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ListResponse"] = ves_io_schema_log_receiver.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ListResponseItem"] = ves_io_schema_log_receiver.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ReplaceRequest"] = ves_io_schema_log_receiver.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ReplaceResponse"] = ves_io_schema_log_receiver.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.TestLogReceiverRequest"] = ves_io_schema_log_receiver.TestLogReceiverRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.TestLogReceiverResponse"] = ves_io_schema_log_receiver.TestLogReceiverResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.CreateSpecType"] = ves_io_schema_log_receiver.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.DataDogReceiver"] = ves_io_schema_log_receiver.DataDogReceiverValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.GetSpecType"] = ves_io_schema_log_receiver.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.GlobalSpecType"] = ves_io_schema_log_receiver.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.HTTPServerConfigType"] = ves_io_schema_log_receiver.HTTPServerConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.IPServerConfigType"] = ves_io_schema_log_receiver.IPServerConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.ReplaceSpecType"] = ves_io_schema_log_receiver.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.SplunkReceiver"] = ves_io_schema_log_receiver.SplunkReceiverValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.SyslogReceiver"] = ves_io_schema_log_receiver.SyslogReceiverValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.TCPServerConfigType"] = ves_io_schema_log_receiver.TCPServerConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.TLSClientConfigType"] = ves_io_schema_log_receiver.TLSClientConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.TLSConfigType"] = ves_io_schema_log_receiver.TLSConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.UDPServerConfigType"] = ves_io_schema_log_receiver.UDPServerConfigTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.WhereSites"] = ves_io_schema_log_receiver.WhereSitesValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectCreateReq"] = ves_io_schema_log_receiver_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectCreateRsp"] = ves_io_schema_log_receiver_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectDeleteReq"] = ves_io_schema_log_receiver_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectDeleteRsp"] = ves_io_schema_log_receiver_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectGetReq"] = ves_io_schema_log_receiver_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectGetRsp"] = ves_io_schema_log_receiver_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectListReq"] = ves_io_schema_log_receiver_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectListRsp"] = ves_io_schema_log_receiver_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectListRspItem"] = ves_io_schema_log_receiver_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectReplaceReq"] = ves_io_schema_log_receiver_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.crudapi.ObjectReplaceRsp"] = ves_io_schema_log_receiver_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.malicious_user_mitigation.SpecType"] = ves_io_schema_malicious_user_mitigation.SpecTypeValidator()
 
@@ -2909,6 +3108,87 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceReq"] = ves_io_schema_views_voltstack_site_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_voltstack_site_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.SpecType"] = ves_io_schema_views_workload.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.CreateRequest"] = ves_io_schema_views_workload.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.CreateResponse"] = ves_io_schema_views_workload.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeleteRequest"] = ves_io_schema_views_workload.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.GetRequest"] = ves_io_schema_views_workload.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.GetResponse"] = ves_io_schema_views_workload.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ListRequest"] = ves_io_schema_views_workload.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ListResponse"] = ves_io_schema_views_workload.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ListResponseItem"] = ves_io_schema_views_workload.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ReplaceRequest"] = ves_io_schema_views_workload.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ReplaceResponse"] = ves_io_schema_views_workload.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.UsageData"] = ves_io_schema_views_workload.UsageDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.UsageRequest"] = ves_io_schema_views_workload.UsageRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.UsageResponse"] = ves_io_schema_views_workload.UsageResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.UsageTypeData"] = ves_io_schema_views_workload.UsageTypeDataValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseCustomType"] = ves_io_schema_views_workload.AdvertiseCustomTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseInClusterType"] = ves_io_schema_views_workload.AdvertiseInClusterTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseMultiPortType"] = ves_io_schema_views_workload.AdvertiseMultiPortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseOptionsType"] = ves_io_schema_views_workload.AdvertiseOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertisePortType"] = ves_io_schema_views_workload.AdvertisePortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertisePublicType"] = ves_io_schema_views_workload.AdvertisePublicTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseSimpleServiceType"] = ves_io_schema_views_workload.AdvertiseSimpleServiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseSinglePortType"] = ves_io_schema_views_workload.AdvertiseSinglePortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.AdvertiseWhereType"] = ves_io_schema_views_workload.AdvertiseWhereTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ConfigurationFileType"] = ves_io_schema_views_workload.ConfigurationFileTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ConfigurationParameterType"] = ves_io_schema_views_workload.ConfigurationParameterTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ConfigurationParametersType"] = ves_io_schema_views_workload.ConfigurationParametersTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ContainerType"] = ves_io_schema_views_workload.ContainerTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.CreateSpecType"] = ves_io_schema_views_workload.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeployCESiteType"] = ves_io_schema_views_workload.DeployCESiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeployCEVirtualSiteType"] = ves_io_schema_views_workload.DeployCEVirtualSiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeployOptionsType"] = ves_io_schema_views_workload.DeployOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeployRESiteType"] = ves_io_schema_views_workload.DeployRESiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.DeployREVirtualSiteType"] = ves_io_schema_views_workload.DeployREVirtualSiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.EmptyDirectoryVolumeType"] = ves_io_schema_views_workload.EmptyDirectoryVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.EnvironmentVariableType"] = ves_io_schema_views_workload.EnvironmentVariableTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.EphemeralStorageVolumeType"] = ves_io_schema_views_workload.EphemeralStorageVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ExecHealthCheckType"] = ves_io_schema_views_workload.ExecHealthCheckTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.GetSpecType"] = ves_io_schema_views_workload.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.GlobalSpecType"] = ves_io_schema_views_workload.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.HTTPHealthCheckType"] = ves_io_schema_views_workload.HTTPHealthCheckTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.HTTPLoadBalancerType"] = ves_io_schema_views_workload.HTTPLoadBalancerTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.HealthCheckType"] = ves_io_schema_views_workload.HealthCheckTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.HostPathVolumeType"] = ves_io_schema_views_workload.HostPathVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ImageType"] = ves_io_schema_views_workload.ImageTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.JobType"] = ves_io_schema_views_workload.JobTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.MatchAllRouteType"] = ves_io_schema_views_workload.MatchAllRouteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.MultiPortType"] = ves_io_schema_views_workload.MultiPortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PersistentStorageType"] = ves_io_schema_views_workload.PersistentStorageTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PersistentStorageVolumeType"] = ves_io_schema_views_workload.PersistentStorageVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PersistentVolumeType"] = ves_io_schema_views_workload.PersistentVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PortChoiceType"] = ves_io_schema_views_workload.PortChoiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PortInfoType"] = ves_io_schema_views_workload.PortInfoTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.PortType"] = ves_io_schema_views_workload.PortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ReplaceSpecType"] = ves_io_schema_views_workload.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.RouteInfoType"] = ves_io_schema_views_workload.RouteInfoTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.RouteType"] = ves_io_schema_views_workload.RouteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.ServiceType"] = ves_io_schema_views_workload.ServiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.SimpleServiceType"] = ves_io_schema_views_workload.SimpleServiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.SinglePortType"] = ves_io_schema_views_workload.SinglePortTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.StatefulServiceType"] = ves_io_schema_views_workload.StatefulServiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.StorageVolumeType"] = ves_io_schema_views_workload.StorageVolumeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.TCPHealthCheckType"] = ves_io_schema_views_workload.TCPHealthCheckTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.TCPLoadBalancerType"] = ves_io_schema_views_workload.TCPLoadBalancerTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.VolumeMountType"] = ves_io_schema_views_workload.VolumeMountTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectCreateReq"] = ves_io_schema_views_workload_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectCreateRsp"] = ves_io_schema_views_workload_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectDeleteReq"] = ves_io_schema_views_workload_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectDeleteRsp"] = ves_io_schema_views_workload_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectGetReq"] = ves_io_schema_views_workload_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectGetRsp"] = ves_io_schema_views_workload_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectListReq"] = ves_io_schema_views_workload_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectListRsp"] = ves_io_schema_views_workload_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectListRspItem"] = ves_io_schema_views_workload_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectReplaceReq"] = ves_io_schema_views_workload_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_workload_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.SpecType"] = ves_io_schema_virtual_host.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointLearntSchemaReq"] = ves_io_schema_virtual_host.APIEndpointLearntSchemaReqValidator()
@@ -3419,6 +3699,166 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_firewall.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
+			},
+			"spec.detection_settings": []sets.String{
+				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
+				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
+				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
+			},
+			"spec.detection_settings.enabled_violation_types": []sets.String{
+				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
+				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
+			},
+			"spec.detection_settings.signature_selection_setting": []sets.String{
+				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
+				sets.NewString([]string{"high_medium_accuracy_signatures", "high_medium_low_accuracy_signatures", "only_high_accuracy_signatures"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_firewall.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
+			},
+			"spec.detection_settings": []sets.String{
+				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
+				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
+				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
+			},
+			"spec.detection_settings.enabled_violation_types": []sets.String{
+				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
+				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
+			},
+			"spec.detection_settings.signature_selection_setting": []sets.String{
+				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
+				sets.NewString([]string{"high_medium_accuracy_signatures", "high_medium_low_accuracy_signatures", "only_high_accuracy_signatures"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_firewall.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
+			},
+			"spec.gc_spec.detection_settings": []sets.String{
+				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
+				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
+				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
+			},
+			"spec.gc_spec.detection_settings.enabled_violation_types": []sets.String{
+				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
+				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
+			},
+			"spec.gc_spec.detection_settings.signature_selection_setting": []sets.String{
+				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
+				sets.NewString([]string{"high_medium_accuracy_signatures", "high_medium_low_accuracy_signatures", "only_high_accuracy_signatures"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_firewall.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
+			},
+			"spec.gc_spec.detection_settings": []sets.String{
+				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
+				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
+				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
+			},
+			"spec.gc_spec.detection_settings.enabled_violation_types": []sets.String{
+				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
+				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
+			},
+			"spec.gc_spec.detection_settings.signature_selection_setting": []sets.String{
+				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
+				sets.NewString([]string{"high_medium_accuracy_signatures", "high_medium_low_accuracy_signatures", "only_high_accuracy_signatures"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_setting.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.app_type_settings.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+			"spec.app_type_settings.user_behavior_analysis_setting": []sets.String{
+				sets.NewString([]string{"disable_detection", "enable_detection"}...),
+				sets.NewString([]string{"disable_learning", "enable_learning"}...),
+			},
+			"spec.app_type_settings.user_behavior_analysis_setting.enable_detection": []sets.String{
+				sets.NewString([]string{"cooling_off_period"}...),
+				sets.NewString([]string{"exclude_failed_login_activity", "include_failed_login_activity"}...),
+				sets.NewString([]string{"exclude_forbidden_activity", "include_forbidden_activity"}...),
+				sets.NewString([]string{"exclude_waf_activity", "include_waf_activity"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_setting.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.app_type_settings.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+			"spec.app_type_settings.user_behavior_analysis_setting": []sets.String{
+				sets.NewString([]string{"disable_detection", "enable_detection"}...),
+				sets.NewString([]string{"disable_learning", "enable_learning"}...),
+			},
+			"spec.app_type_settings.user_behavior_analysis_setting.enable_detection": []sets.String{
+				sets.NewString([]string{"cooling_off_period"}...),
+				sets.NewString([]string{"exclude_failed_login_activity", "include_failed_login_activity"}...),
+				sets.NewString([]string{"exclude_forbidden_activity", "include_forbidden_activity"}...),
+				sets.NewString([]string{"exclude_waf_activity", "include_waf_activity"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_setting.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.app_type_settings.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+			"spec.gc_spec.app_type_settings.user_behavior_analysis_setting": []sets.String{
+				sets.NewString([]string{"disable_detection", "enable_detection"}...),
+				sets.NewString([]string{"disable_learning", "enable_learning"}...),
+			},
+			"spec.gc_spec.app_type_settings.user_behavior_analysis_setting.enable_detection": []sets.String{
+				sets.NewString([]string{"cooling_off_period"}...),
+				sets.NewString([]string{"exclude_failed_login_activity", "include_failed_login_activity"}...),
+				sets.NewString([]string{"exclude_forbidden_activity", "include_forbidden_activity"}...),
+				sets.NewString([]string{"exclude_waf_activity", "include_waf_activity"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_setting.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.app_type_settings.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+			"spec.gc_spec.app_type_settings.user_behavior_analysis_setting": []sets.String{
+				sets.NewString([]string{"disable_detection", "enable_detection"}...),
+				sets.NewString([]string{"disable_learning", "enable_learning"}...),
+			},
+			"spec.gc_spec.app_type_settings.user_behavior_analysis_setting.enable_detection": []sets.String{
+				sets.NewString([]string{"cooling_off_period"}...),
+				sets.NewString([]string{"exclude_failed_login_activity", "include_failed_login_activity"}...),
+				sets.NewString([]string{"exclude_forbidden_activity", "include_forbidden_activity"}...),
+				sets.NewString([]string{"exclude_waf_activity", "include_waf_activity"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_type.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.business_logic_markup_setting": []sets.String{
@@ -3879,6 +4319,38 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.container_registry.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.container_registry.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.container_registry.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.container_registry.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.discovery.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
@@ -4113,6 +4585,38 @@ func init() {
 			},
 			"spec.gc_spec.where": []sets.String{
 				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dns_domain.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"route53", "verification_only", "volterra_managed"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dns_domain.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"route53", "verification_only", "volterra_managed"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dns_domain.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"route53", "verification_only", "volterra_managed"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dns_domain.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"route53", "verification_only", "volterra_managed"}...),
 			},
 		},
 	}
@@ -5271,6 +5775,182 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"aggs": []sets.String{
 				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log_receiver.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"data_dog", "splunk", "syslog"}...),
+				sets.NewString([]string{"log_receiver_sites", "site_local"}...),
+			},
+			"spec.data_dog": []sets.String{
+				sets.NewString([]string{"compression_disabled", "compression_enabled"}...),
+				sets.NewString([]string{"datadog_default_server", "server_name"}...),
+				sets.NewString([]string{"default_port", "port"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.data_dog.datadog_api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.splunk": []sets.String{
+				sets.NewString([]string{"splunk_server_ip", "splunk_server_name", "splunk_server_tls"}...),
+			},
+			"spec.splunk.splunk_hec_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.splunk.splunk_server_tls": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.splunk.splunk_server_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.syslog": []sets.String{
+				sets.NewString([]string{"syslog_rfc3164", "syslog_rfc5424"}...),
+				sets.NewString([]string{"tcp_server", "tls_server", "udp_server"}...),
+			},
+			"spec.syslog.tls_server": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.syslog.tls_server.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log_receiver.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"data_dog", "splunk", "syslog"}...),
+				sets.NewString([]string{"log_receiver_sites", "site_local"}...),
+			},
+			"spec.data_dog": []sets.String{
+				sets.NewString([]string{"compression_disabled", "compression_enabled"}...),
+				sets.NewString([]string{"datadog_default_server", "server_name"}...),
+				sets.NewString([]string{"default_port", "port"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.data_dog.datadog_api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.splunk": []sets.String{
+				sets.NewString([]string{"splunk_server_ip", "splunk_server_name", "splunk_server_tls"}...),
+			},
+			"spec.splunk.splunk_hec_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.splunk.splunk_server_tls": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.splunk.splunk_server_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.syslog": []sets.String{
+				sets.NewString([]string{"syslog_rfc3164", "syslog_rfc5424"}...),
+				sets.NewString([]string{"tcp_server", "tls_server", "udp_server"}...),
+			},
+			"spec.syslog.tls_server": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.syslog.tls_server.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log_receiver.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"data_dog", "splunk", "syslog"}...),
+				sets.NewString([]string{"log_receiver_sites", "site_local"}...),
+			},
+			"spec.gc_spec.data_dog": []sets.String{
+				sets.NewString([]string{"compression_disabled", "compression_enabled"}...),
+				sets.NewString([]string{"datadog_default_server", "server_name"}...),
+				sets.NewString([]string{"default_port", "port"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.data_dog.datadog_api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.splunk": []sets.String{
+				sets.NewString([]string{"splunk_server_ip", "splunk_server_name", "splunk_server_tls"}...),
+			},
+			"spec.gc_spec.splunk.splunk_hec_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.splunk.splunk_server_tls": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.splunk.splunk_server_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.syslog": []sets.String{
+				sets.NewString([]string{"syslog_rfc3164", "syslog_rfc5424"}...),
+				sets.NewString([]string{"tcp_server", "tls_server", "udp_server"}...),
+			},
+			"spec.gc_spec.syslog.tls_server": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.syslog.tls_server.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log_receiver.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"data_dog", "splunk", "syslog"}...),
+				sets.NewString([]string{"log_receiver_sites", "site_local"}...),
+			},
+			"spec.gc_spec.data_dog": []sets.String{
+				sets.NewString([]string{"compression_disabled", "compression_enabled"}...),
+				sets.NewString([]string{"datadog_default_server", "server_name"}...),
+				sets.NewString([]string{"default_port", "port"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.data_dog.datadog_api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.splunk": []sets.String{
+				sets.NewString([]string{"splunk_server_ip", "splunk_server_name", "splunk_server_tls"}...),
+			},
+			"spec.gc_spec.splunk.splunk_hec_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.splunk.splunk_server_tls": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.splunk.splunk_server_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.syslog": []sets.String{
+				sets.NewString([]string{"syslog_rfc3164", "syslog_rfc5424"}...),
+				sets.NewString([]string{"tcp_server", "tls_server", "udp_server"}...),
+			},
+			"spec.gc_spec.syslog.tls_server": []sets.String{
+				sets.NewString([]string{"default_https_port", "default_syslog_tls_port", "port"}...),
+				sets.NewString([]string{"mtls_disabled", "mtls_enable"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_ca"}...),
+			},
+			"spec.gc_spec.syslog.tls_server.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 		},
 	}
@@ -10755,6 +11435,1950 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.workload.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"job", "service", "simple_service", "stateful_service"}...),
+			},
+			"spec.job.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.job.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.job.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.job.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.job.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.job.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.job.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.service.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.simple_service": []sets.String{
+				sets.NewString([]string{"disabled", "enabled"}...),
+				sets.NewString([]string{"do_not_advertise", "service_port", "simple_advertise"}...),
+			},
+			"spec.simple_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.simple_service.container.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.simple_service.container.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.simple_service.container.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.simple_service.container.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.enabled.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.stateful_service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.stateful_service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.stateful_service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.stateful_service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.stateful_service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.stateful_service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.stateful_service.persistent_volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.stateful_service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.workload.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"job", "service", "simple_service", "stateful_service"}...),
+			},
+			"spec.job.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.job.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.job.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.job.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.job.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.job.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.job.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.job.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.service.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.simple_service": []sets.String{
+				sets.NewString([]string{"disabled", "enabled"}...),
+				sets.NewString([]string{"do_not_advertise", "service_port", "simple_advertise"}...),
+			},
+			"spec.simple_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.simple_service.container.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.simple_service.container.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.simple_service.container.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.simple_service.container.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.container.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.simple_service.enabled.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.stateful_service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.stateful_service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.stateful_service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.stateful_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.stateful_service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.stateful_service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.stateful_service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.stateful_service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.stateful_service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.stateful_service.persistent_volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.stateful_service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.workload.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"job", "service", "simple_service", "stateful_service"}...),
+			},
+			"spec.gc_spec.job.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.job.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.job.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.gc_spec.job.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.gc_spec.service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.gc_spec.service.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.simple_service": []sets.String{
+				sets.NewString([]string{"disabled", "enabled"}...),
+				sets.NewString([]string{"do_not_advertise", "service_port", "simple_advertise"}...),
+			},
+			"spec.gc_spec.simple_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.simple_service.container.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.enabled.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.stateful_service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.stateful_service.persistent_volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.stateful_service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.workload.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"job", "service", "simple_service", "stateful_service"}...),
+			},
+			"spec.gc_spec.job.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.job.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.job.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.job.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.gc_spec.job.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.gc_spec.service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path", "persistent_volume"}...),
+			},
+			"spec.gc_spec.service.volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.simple_service": []sets.String{
+				sets.NewString([]string{"disabled", "enabled"}...),
+				sets.NewString([]string{"do_not_advertise", "service_port", "simple_advertise"}...),
+			},
+			"spec.gc_spec.simple_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.simple_service.container.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.container.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.simple_service.enabled.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.stateful_service": []sets.String{
+				sets.NewString([]string{"num_replicas", "scale_to_zero"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_in_cluster", "advertise_on_public", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_custom.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster.multi_ports.ports.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_in_cluster.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public": []sets.String{
+				sets.NewString([]string{"multi_ports", "port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.multi_ports.ports.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port": []sets.String{
+				sets.NewString([]string{"http_loadbalancer", "tcp_loadbalancer"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer": []sets.String{
+				sets.NewString([]string{"default_route", "specific_routes"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.default_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.http_loadbalancer.specific_routes.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.stateful_service.advertise_options.advertise_on_public.port.port.info": []sets.String{
+				sets.NewString([]string{"same_as_port", "target_port"}...),
+			},
+			"spec.gc_spec.stateful_service.configuration.parameters": []sets.String{
+				sets.NewString([]string{"env_var", "file"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.image": []sets.String{
+				sets.NewString([]string{"container_registry", "public"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.liveness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check": []sets.String{
+				sets.NewString([]string{"exec_health_check", "http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check.http_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.containers.readiness_check.tcp_health_check.port": []sets.String{
+				sets.NewString([]string{"name", "num"}...),
+			},
+			"spec.gc_spec.stateful_service.deploy_options": []sets.String{
+				sets.NewString([]string{"all_res", "default_virtual_sites", "deploy_ce_sites", "deploy_ce_virtual_sites", "deploy_re_sites", "deploy_re_virtual_sites"}...),
+			},
+			"spec.gc_spec.stateful_service.persistent_volumes.persistent_volume.storage": []sets.String{
+				sets.NewString([]string{"class_name", "default"}...),
+			},
+			"spec.gc_spec.stateful_service.volumes": []sets.String{
+				sets.NewString([]string{"empty_dir", "host_path"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_host.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
@@ -11296,6 +13920,98 @@ func init() {
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.api_credential.Object"] = ves_io_schema_api_credential_crudapi.APISwaggerJSON
 
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.app_firewall.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.app_firewall.Object"] = reflect.TypeOf(&ves_io_schema_app_firewall.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.app_firewall.StatusObject"] = ves_io_schema_app_firewall.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.app_firewall.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.app_firewall.StatusObject"] = reflect.TypeOf(&ves_io_schema_app_firewall.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.app_firewall.StatusObject"] = ves_io_schema_app_firewall.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.StatusObject"] = ves_io_schema_app_firewall.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.app_firewall.API"] = ves_io_schema_app_firewall.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.app_firewall.API"] = ves_io_schema_app_firewall.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.app_firewall.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.app_firewall.crudapi.API"] = ves_io_schema_app_firewall_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.app_firewall.crudapi.API"] = ves_io_schema_app_firewall_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.app_firewall.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.app_firewall.Object"] = ves_io_schema_app_firewall_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.app_setting.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.app_setting.Object"] = reflect.TypeOf(&ves_io_schema_app_setting.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.app_setting.StatusObject"] = ves_io_schema_app_setting.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.app_setting.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.app_setting.StatusObject"] = reflect.TypeOf(&ves_io_schema_app_setting.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.app_setting.StatusObject"] = ves_io_schema_app_setting.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.app_setting.StatusObject"] = ves_io_schema_app_setting.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.app_setting.API"] = ves_io_schema_app_setting.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.app_setting.API"] = ves_io_schema_app_setting.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.app_setting.Object"] = []svcfw.NamespaceType{svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.app_setting.CustomAPI"] = ves_io_schema_app_setting.NewCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.app_setting.CustomAPI"] = ves_io_schema_app_setting.NewCustomAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.app_setting.CustomAPI"] = ves_io_schema_app_setting.RegisterCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.app_setting.CustomAPI"] = ves_io_schema_app_setting.RegisterGwCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting.CustomAPISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.app_setting.crudapi.API"] = ves_io_schema_app_setting_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.app_setting.crudapi.API"] = ves_io_schema_app_setting_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.app_setting.Object"] = []svcfw.NamespaceType{svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.app_setting.Object"] = ves_io_schema_app_setting_crudapi.APISwaggerJSON
+
 	customCSR = MDR.PubCustomServiceRegistry
 	customCSR.GrpcClientRegistry["ves.io.schema.app_type.CustomAPI"] = ves_io_schema_app_type.NewCustomAPIGrpcClient
 	customCSR.RestClientRegistry["ves.io.schema.app_type.CustomAPI"] = ves_io_schema_app_type.NewCustomAPIRestClient
@@ -11594,6 +14310,47 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.cluster.Object"] = ves_io_schema_cluster_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.container_registry.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.container_registry.Object"] = reflect.TypeOf(&ves_io_schema_container_registry.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.container_registry.StatusObject"] = ves_io_schema_container_registry.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.container_registry.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.container_registry.StatusObject"] = reflect.TypeOf(&ves_io_schema_container_registry.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.container_registry.StatusObject"] = ves_io_schema_container_registry.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.container_registry.StatusObject"] = ves_io_schema_container_registry.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.container_registry.API"] = ves_io_schema_container_registry.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.container_registry.API"] = ves_io_schema_container_registry.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.container_registry.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.container_registry.crudapi.API"] = ves_io_schema_container_registry_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.container_registry.crudapi.API"] = ves_io_schema_container_registry_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.container_registry.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.container_registry.Object"] = ves_io_schema_container_registry_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.dc_cluster_group.Object"] = ves_io_schema_dc_cluster_group.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.dc_cluster_group.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.dc_cluster_group.Object"] = reflect.TypeOf(&ves_io_schema_dc_cluster_group.DBObject{})
@@ -11684,6 +14441,57 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.discovery.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.dns_domain.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.dns_domain.Object"] = reflect.TypeOf(&ves_io_schema_dns_domain.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.dns_domain.StatusObject"] = ves_io_schema_dns_domain.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.dns_domain.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.dns_domain.StatusObject"] = reflect.TypeOf(&ves_io_schema_dns_domain.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.dns_domain.StatusObject"] = ves_io_schema_dns_domain.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.dns_domain.StatusObject"] = ves_io_schema_dns_domain.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.dns_domain.API"] = ves_io_schema_dns_domain.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.dns_domain.API"] = ves_io_schema_dns_domain.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.dns_domain.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.dns_domain.CustomAPI"] = ves_io_schema_dns_domain.NewCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.dns_domain.CustomAPI"] = ves_io_schema_dns_domain.NewCustomAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.dns_domain.CustomAPI"] = ves_io_schema_dns_domain.RegisterCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.dns_domain.CustomAPI"] = ves_io_schema_dns_domain.RegisterGwCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain.CustomAPISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.dns_domain.crudapi.API"] = ves_io_schema_dns_domain_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.dns_domain.crudapi.API"] = ves_io_schema_dns_domain_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.dns_domain.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.dns_domain.Object"] = ves_io_schema_dns_domain_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.endpoint.Object"] = ves_io_schema_endpoint.NewEntryObject
@@ -12114,6 +14922,57 @@ func init() {
 	MDR.SvcGwRegisterHandlers["ves.io.schema.log.CustomAPI"] = ves_io_schema_log.RegisterGwCustomAPIHandler
 
 	customCSR.SwaggerRegistry["ves.io.schema.log.Object"] = ves_io_schema_log.CustomAPISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.log_receiver.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.log_receiver.Object"] = reflect.TypeOf(&ves_io_schema_log_receiver.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.log_receiver.StatusObject"] = ves_io_schema_log_receiver.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.log_receiver.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.log_receiver.StatusObject"] = reflect.TypeOf(&ves_io_schema_log_receiver.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.log_receiver.StatusObject"] = ves_io_schema_log_receiver.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.log_receiver.StatusObject"] = ves_io_schema_log_receiver.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.log_receiver.API"] = ves_io_schema_log_receiver.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.log_receiver.API"] = ves_io_schema_log_receiver.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.log_receiver.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.log_receiver.CustomAPI"] = ves_io_schema_log_receiver.NewCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.log_receiver.CustomAPI"] = ves_io_schema_log_receiver.NewCustomAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.log_receiver.CustomAPI"] = ves_io_schema_log_receiver.RegisterCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.log_receiver.CustomAPI"] = ves_io_schema_log_receiver.RegisterGwCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver.CustomAPISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.log_receiver.crudapi.API"] = ves_io_schema_log_receiver_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.log_receiver.crudapi.API"] = ves_io_schema_log_receiver_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.log_receiver.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.log_receiver.Object"] = ves_io_schema_log_receiver_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.malicious_user_mitigation.Object"] = ves_io_schema_malicious_user_mitigation.NewEntryObject
@@ -13877,6 +16736,57 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.voltstack_site.Object"] = ves_io_schema_views_voltstack_site_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.views.workload.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.workload.Object"] = reflect.TypeOf(&ves_io_schema_views_workload.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.workload.StatusObject"] = ves_io_schema_views_workload.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.views.workload.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.workload.StatusObject"] = reflect.TypeOf(&ves_io_schema_views_workload.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.views.workload.StatusObject"] = ves_io_schema_views_workload.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.workload.StatusObject"] = ves_io_schema_views_workload.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.workload.API"] = ves_io_schema_views_workload.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.workload.API"] = ves_io_schema_views_workload.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.workload.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.views.workload.CustomDataAPI"] = ves_io_schema_views_workload.NewCustomDataAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.views.workload.CustomDataAPI"] = ves_io_schema_views_workload.NewCustomDataAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.workload.CustomDataAPI"] = ves_io_schema_views_workload.RegisterCustomDataAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.workload.CustomDataAPI"] = ves_io_schema_views_workload.RegisterGwCustomDataAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload.CustomDataAPISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.workload.crudapi.API"] = ves_io_schema_views_workload_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.workload.crudapi.API"] = ves_io_schema_views_workload_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.workload.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.workload.Object"] = ves_io_schema_views_workload_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.virtual_host.Object"] = ves_io_schema_virtual_host.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.virtual_host.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.virtual_host.Object"] = reflect.TypeOf(&ves_io_schema_virtual_host.DBObject{})
@@ -14445,6 +17355,66 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.app_firewall.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_firewall.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_app_firewall.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_app_firewall.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_app_firewall.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.app_firewall.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_firewall_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_app_firewall_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_app_firewall_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_app_firewall_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.app_setting.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_setting.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_app_setting.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_app_setting.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_app_setting.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.app_setting.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_setting.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_app_setting.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_app_setting.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_app_setting.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.app_setting.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_setting_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_app_setting_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_app_setting_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_app_setting_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.app_type.CustomAPI":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_app_type.CustomAPIServer))
@@ -14625,6 +17595,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.container_registry.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_container_registry.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_container_registry.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_container_registry.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_container_registry.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.container_registry.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_container_registry_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_container_registry_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_container_registry_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_container_registry_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.dc_cluster_group.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_dc_cluster_group.APIServer))
@@ -14682,6 +17676,42 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_discovery_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_discovery_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.dns_domain.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_dns_domain.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_dns_domain.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_dns_domain.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_dns_domain.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.dns_domain.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_dns_domain.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_dns_domain.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_dns_domain.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_dns_domain.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.dns_domain.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_dns_domain_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_dns_domain_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_dns_domain_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_dns_domain_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -14946,6 +17976,42 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_log.CustomAPIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_log.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.log_receiver.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_log_receiver.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_log_receiver.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_log_receiver.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_log_receiver.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.log_receiver.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_log_receiver.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_log_receiver.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_log_receiver.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_log_receiver.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.log_receiver.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_log_receiver_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_log_receiver_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_log_receiver_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_log_receiver_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -16145,6 +19211,42 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_views_voltstack_site_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_voltstack_site_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.workload.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_workload.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_workload.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_workload.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_workload.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.workload.CustomDataAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_workload.CustomDataAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_workload.CustomDataAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_workload.CustomDataAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_workload.CustomDataAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.workload.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_workload_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_workload_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_workload_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_workload_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 

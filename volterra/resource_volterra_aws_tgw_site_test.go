@@ -94,6 +94,10 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			  no_inside_static_routes = true
 			  no_outside_static_routes = true
 			}
+			coordinates {
+				latitude = 37.404989
+				longitude = -121.942300
+			}
 		  }
 		  resource "volterra_tf_params_action" "%[1]s" {
 			  site_name = "%[2]s"

@@ -3,24 +3,28 @@
 
 package alert_receiver
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Slack Config
 //
@@ -33,7 +37,7 @@ type SlackConfig struct {
 	// x-required
 	// Incoming webhook url to send alert notifications.
 	// API Key is embedded in the webhook URL.
-	Url *ves_io_schema4.SecretType `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Url *schema.SecretType `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	// Channel
 	//
 	// x-displayName: "Channel"
@@ -42,11 +46,35 @@ type SlackConfig struct {
 	Channel string `protobuf:"bytes,2,opt,name=channel,proto3" json:"channel,omitempty"`
 }
 
-func (m *SlackConfig) Reset()                    { *m = SlackConfig{} }
-func (*SlackConfig) ProtoMessage()               {}
-func (*SlackConfig) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *SlackConfig) Reset()      { *m = SlackConfig{} }
+func (*SlackConfig) ProtoMessage() {}
+func (*SlackConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{0}
+}
+func (m *SlackConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SlackConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SlackConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SlackConfig.Merge(m, src)
+}
+func (m *SlackConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *SlackConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_SlackConfig.DiscardUnknown(m)
+}
 
-func (m *SlackConfig) GetUrl() *ves_io_schema4.SecretType {
+var xxx_messageInfo_SlackConfig proto.InternalMessageInfo
+
+func (m *SlackConfig) GetUrl() *schema.SecretType {
 	if m != nil {
 		return m.Url
 	}
@@ -70,7 +98,7 @@ type PagerDutyConfig struct {
 	// x-displayName: "Integration Key"
 	// x-required
 	// PagerDuty integration key (choose Integration Type: Events API v2)
-	RoutingKey *ves_io_schema4.SecretType `protobuf:"bytes,1,opt,name=routing_key,json=routingKey" json:"routing_key,omitempty"`
+	RoutingKey *schema.SecretType `protobuf:"bytes,1,opt,name=routing_key,json=routingKey,proto3" json:"routing_key,omitempty"`
 	// URL
 	//
 	// x-displayName: "Pager Duty URL"
@@ -79,11 +107,35 @@ type PagerDutyConfig struct {
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 }
 
-func (m *PagerDutyConfig) Reset()                    { *m = PagerDutyConfig{} }
-func (*PagerDutyConfig) ProtoMessage()               {}
-func (*PagerDutyConfig) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *PagerDutyConfig) Reset()      { *m = PagerDutyConfig{} }
+func (*PagerDutyConfig) ProtoMessage() {}
+func (*PagerDutyConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{1}
+}
+func (m *PagerDutyConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PagerDutyConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PagerDutyConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PagerDutyConfig.Merge(m, src)
+}
+func (m *PagerDutyConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *PagerDutyConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_PagerDutyConfig.DiscardUnknown(m)
+}
 
-func (m *PagerDutyConfig) GetRoutingKey() *ves_io_schema4.SecretType {
+var xxx_messageInfo_PagerDutyConfig proto.InternalMessageInfo
+
+func (m *PagerDutyConfig) GetRoutingKey() *schema.SecretType {
 	if m != nil {
 		return m.RoutingKey
 	}
@@ -107,7 +159,7 @@ type OpsGenieConfig struct {
 	// x-displayName: "API Key"
 	// x-required
 	// API integration key to send alert notifications using REST API to OpsGenie service.
-	ApiKey *ves_io_schema4.SecretType `protobuf:"bytes,1,opt,name=api_key,json=apiKey" json:"api_key,omitempty"`
+	ApiKey *schema.SecretType `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
 	// URL
 	//
 	// x-displayName: "API URL"
@@ -116,11 +168,35 @@ type OpsGenieConfig struct {
 	Url string `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 }
 
-func (m *OpsGenieConfig) Reset()                    { *m = OpsGenieConfig{} }
-func (*OpsGenieConfig) ProtoMessage()               {}
-func (*OpsGenieConfig) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *OpsGenieConfig) Reset()      { *m = OpsGenieConfig{} }
+func (*OpsGenieConfig) ProtoMessage() {}
+func (*OpsGenieConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{2}
+}
+func (m *OpsGenieConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OpsGenieConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OpsGenieConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpsGenieConfig.Merge(m, src)
+}
+func (m *OpsGenieConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *OpsGenieConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpsGenieConfig.DiscardUnknown(m)
+}
 
-func (m *OpsGenieConfig) GetApiKey() *ves_io_schema4.SecretType {
+var xxx_messageInfo_OpsGenieConfig proto.InternalMessageInfo
+
+func (m *OpsGenieConfig) GetApiKey() *schema.SecretType {
 	if m != nil {
 		return m.ApiKey
 	}
@@ -143,9 +219,33 @@ type EmailConfig struct {
 	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 }
 
-func (m *EmailConfig) Reset()                    { *m = EmailConfig{} }
-func (*EmailConfig) ProtoMessage()               {}
-func (*EmailConfig) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *EmailConfig) Reset()      { *m = EmailConfig{} }
+func (*EmailConfig) ProtoMessage() {}
+func (*EmailConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{3}
+}
+func (m *EmailConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EmailConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EmailConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EmailConfig.Merge(m, src)
+}
+func (m *EmailConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *EmailConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_EmailConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EmailConfig proto.InternalMessageInfo
 
 func (m *EmailConfig) GetEmail() string {
 	if m != nil {
@@ -163,9 +263,33 @@ type SMSConfig struct {
 	ContactNumber string `protobuf:"bytes,1,opt,name=contact_number,json=contactNumber,proto3" json:"contact_number,omitempty"`
 }
 
-func (m *SMSConfig) Reset()                    { *m = SMSConfig{} }
-func (*SMSConfig) ProtoMessage()               {}
-func (*SMSConfig) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *SMSConfig) Reset()      { *m = SMSConfig{} }
+func (*SMSConfig) ProtoMessage() {}
+func (*SMSConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{4}
+}
+func (m *SMSConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SMSConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SMSConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SMSConfig.Merge(m, src)
+}
+func (m *SMSConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *SMSConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_SMSConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SMSConfig proto.InternalMessageInfo
 
 func (m *SMSConfig) GetContactNumber() string {
 	if m != nil {
@@ -193,9 +317,33 @@ type GlobalSpecType struct {
 	Receiver isGlobalSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{5}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_Receiver interface {
 	isGlobalSpecType_Receiver()
@@ -205,19 +353,19 @@ type isGlobalSpecType_Receiver interface {
 }
 
 type GlobalSpecType_Slack struct {
-	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,oneof"`
+	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,proto3,oneof" json:"slack,omitempty"`
 }
 type GlobalSpecType_Pagerduty struct {
-	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,oneof"`
+	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,proto3,oneof" json:"pagerduty,omitempty"`
 }
 type GlobalSpecType_Opsgenie struct {
-	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,oneof"`
+	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,proto3,oneof" json:"opsgenie,omitempty"`
 }
 type GlobalSpecType_Email struct {
-	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,oneof"`
+	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`
 }
 type GlobalSpecType_Sms struct {
-	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,oneof"`
+	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
 
 func (*GlobalSpecType_Slack) isGlobalSpecType_Receiver()     {}
@@ -268,135 +416,15 @@ func (m *GlobalSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_Slack)(nil),
 		(*GlobalSpecType_Pagerduty)(nil),
 		(*GlobalSpecType_Opsgenie)(nil),
 		(*GlobalSpecType_Email)(nil),
 		(*GlobalSpecType_Sms)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *GlobalSpecType_Slack:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Slack); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Pagerduty:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Pagerduty); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Opsgenie:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Opsgenie); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Email:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Email); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Sms:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Sms); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.Receiver has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 1: // receiver.slack
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SlackConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GlobalSpecType_Slack{msg}
-		return true, err
-	case 2: // receiver.pagerduty
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PagerDutyConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GlobalSpecType_Pagerduty{msg}
-		return true, err
-	case 3: // receiver.opsgenie
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OpsGenieConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GlobalSpecType_Opsgenie{msg}
-		return true, err
-	case 4: // receiver.email
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EmailConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GlobalSpecType_Email{msg}
-		return true, err
-	case 5: // receiver.sms
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SMSConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GlobalSpecType_Sms{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *GlobalSpecType_Slack:
-		s := proto.Size(x.Slack)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Pagerduty:
-		s := proto.Size(x.Pagerduty)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Opsgenie:
-		s := proto.Size(x.Opsgenie)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Email:
-		s := proto.Size(x.Email)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Sms:
-		s := proto.Size(x.Sms)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create Alert Receiver
@@ -413,9 +441,33 @@ type CreateSpecType struct {
 	Receiver isCreateSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{6}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_Receiver interface {
 	isCreateSpecType_Receiver()
@@ -425,19 +477,19 @@ type isCreateSpecType_Receiver interface {
 }
 
 type CreateSpecType_Slack struct {
-	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,oneof"`
+	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,proto3,oneof" json:"slack,omitempty"`
 }
 type CreateSpecType_Pagerduty struct {
-	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,oneof"`
+	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,proto3,oneof" json:"pagerduty,omitempty"`
 }
 type CreateSpecType_Opsgenie struct {
-	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,oneof"`
+	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,proto3,oneof" json:"opsgenie,omitempty"`
 }
 type CreateSpecType_Email struct {
-	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,oneof"`
+	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`
 }
 type CreateSpecType_Sms struct {
-	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,oneof"`
+	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
 
 func (*CreateSpecType_Slack) isCreateSpecType_Receiver()     {}
@@ -488,135 +540,15 @@ func (m *CreateSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_Slack)(nil),
 		(*CreateSpecType_Pagerduty)(nil),
 		(*CreateSpecType_Opsgenie)(nil),
 		(*CreateSpecType_Email)(nil),
 		(*CreateSpecType_Sms)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *CreateSpecType_Slack:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Slack); err != nil {
-			return err
-		}
-	case *CreateSpecType_Pagerduty:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Pagerduty); err != nil {
-			return err
-		}
-	case *CreateSpecType_Opsgenie:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Opsgenie); err != nil {
-			return err
-		}
-	case *CreateSpecType_Email:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Email); err != nil {
-			return err
-		}
-	case *CreateSpecType_Sms:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Sms); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.Receiver has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 1: // receiver.slack
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SlackConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &CreateSpecType_Slack{msg}
-		return true, err
-	case 2: // receiver.pagerduty
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PagerDutyConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &CreateSpecType_Pagerduty{msg}
-		return true, err
-	case 3: // receiver.opsgenie
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OpsGenieConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &CreateSpecType_Opsgenie{msg}
-		return true, err
-	case 4: // receiver.email
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EmailConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &CreateSpecType_Email{msg}
-		return true, err
-	case 5: // receiver.sms
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SMSConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &CreateSpecType_Sms{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *CreateSpecType_Slack:
-		s := proto.Size(x.Slack)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Pagerduty:
-		s := proto.Size(x.Pagerduty)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Opsgenie:
-		s := proto.Size(x.Opsgenie)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Email:
-		s := proto.Size(x.Email)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Sms:
-		s := proto.Size(x.Sms)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Alert Receiver
@@ -633,9 +565,33 @@ type ReplaceSpecType struct {
 	Receiver isReplaceSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{7}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_Receiver interface {
 	isReplaceSpecType_Receiver()
@@ -645,19 +601,19 @@ type isReplaceSpecType_Receiver interface {
 }
 
 type ReplaceSpecType_Slack struct {
-	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,oneof"`
+	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,proto3,oneof" json:"slack,omitempty"`
 }
 type ReplaceSpecType_Pagerduty struct {
-	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,oneof"`
+	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,proto3,oneof" json:"pagerduty,omitempty"`
 }
 type ReplaceSpecType_Opsgenie struct {
-	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,oneof"`
+	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,proto3,oneof" json:"opsgenie,omitempty"`
 }
 type ReplaceSpecType_Email struct {
-	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,oneof"`
+	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`
 }
 type ReplaceSpecType_Sms struct {
-	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,oneof"`
+	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
 
 func (*ReplaceSpecType_Slack) isReplaceSpecType_Receiver()     {}
@@ -708,135 +664,15 @@ func (m *ReplaceSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_Slack)(nil),
 		(*ReplaceSpecType_Pagerduty)(nil),
 		(*ReplaceSpecType_Opsgenie)(nil),
 		(*ReplaceSpecType_Email)(nil),
 		(*ReplaceSpecType_Sms)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *ReplaceSpecType_Slack:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Slack); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Pagerduty:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Pagerduty); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Opsgenie:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Opsgenie); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Email:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Email); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Sms:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Sms); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.Receiver has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 1: // receiver.slack
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SlackConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &ReplaceSpecType_Slack{msg}
-		return true, err
-	case 2: // receiver.pagerduty
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PagerDutyConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &ReplaceSpecType_Pagerduty{msg}
-		return true, err
-	case 3: // receiver.opsgenie
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OpsGenieConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &ReplaceSpecType_Opsgenie{msg}
-		return true, err
-	case 4: // receiver.email
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EmailConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &ReplaceSpecType_Email{msg}
-		return true, err
-	case 5: // receiver.sms
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SMSConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &ReplaceSpecType_Sms{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *ReplaceSpecType_Slack:
-		s := proto.Size(x.Slack)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Pagerduty:
-		s := proto.Size(x.Pagerduty)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Opsgenie:
-		s := proto.Size(x.Opsgenie)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Email:
-		s := proto.Size(x.Email)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Sms:
-		s := proto.Size(x.Sms)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Alert Receiver
@@ -853,9 +689,33 @@ type GetSpecType struct {
 	Receiver isGetSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{8}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_Receiver interface {
 	isGetSpecType_Receiver()
@@ -865,19 +725,19 @@ type isGetSpecType_Receiver interface {
 }
 
 type GetSpecType_Slack struct {
-	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,oneof"`
+	Slack *SlackConfig `protobuf:"bytes,1,opt,name=slack,proto3,oneof" json:"slack,omitempty"`
 }
 type GetSpecType_Pagerduty struct {
-	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,oneof"`
+	Pagerduty *PagerDutyConfig `protobuf:"bytes,2,opt,name=pagerduty,proto3,oneof" json:"pagerduty,omitempty"`
 }
 type GetSpecType_Opsgenie struct {
-	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,oneof"`
+	Opsgenie *OpsGenieConfig `protobuf:"bytes,3,opt,name=opsgenie,proto3,oneof" json:"opsgenie,omitempty"`
 }
 type GetSpecType_Email struct {
-	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,oneof"`
+	Email *EmailConfig `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`
 }
 type GetSpecType_Sms struct {
-	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,oneof"`
+	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
 
 func (*GetSpecType_Slack) isGetSpecType_Receiver()     {}
@@ -928,135 +788,15 @@ func (m *GetSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_Slack)(nil),
 		(*GetSpecType_Pagerduty)(nil),
 		(*GetSpecType_Opsgenie)(nil),
 		(*GetSpecType_Email)(nil),
 		(*GetSpecType_Sms)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *GetSpecType_Slack:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Slack); err != nil {
-			return err
-		}
-	case *GetSpecType_Pagerduty:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Pagerduty); err != nil {
-			return err
-		}
-	case *GetSpecType_Opsgenie:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Opsgenie); err != nil {
-			return err
-		}
-	case *GetSpecType_Email:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Email); err != nil {
-			return err
-		}
-	case *GetSpecType_Sms:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Sms); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.Receiver has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 1: // receiver.slack
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SlackConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GetSpecType_Slack{msg}
-		return true, err
-	case 2: // receiver.pagerduty
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PagerDutyConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GetSpecType_Pagerduty{msg}
-		return true, err
-	case 3: // receiver.opsgenie
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OpsGenieConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GetSpecType_Opsgenie{msg}
-		return true, err
-	case 4: // receiver.email
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EmailConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GetSpecType_Email{msg}
-		return true, err
-	case 5: // receiver.sms
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SMSConfig)
-		err := b.DecodeMessage(msg)
-		m.Receiver = &GetSpecType_Sms{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// receiver
-	switch x := m.Receiver.(type) {
-	case *GetSpecType_Slack:
-		s := proto.Size(x.Slack)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Pagerduty:
-		s := proto.Size(x.Pagerduty)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Opsgenie:
-		s := proto.Size(x.Opsgenie)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Email:
-		s := proto.Size(x.Email)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Sms:
-		s := proto.Size(x.Sms)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -1070,6 +810,57 @@ func init() {
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.alert_receiver.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.alert_receiver.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/alert_receiver/types.proto", fileDescriptor_ca1466d8d1f67094)
+}
+
+var fileDescriptor_ca1466d8d1f67094 = []byte{
+	// 669 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xbf, 0x6f, 0xd3, 0x40,
+	0x14, 0xc7, 0x7d, 0x75, 0x92, 0x26, 0x17, 0x48, 0x8b, 0xc5, 0x90, 0x86, 0xea, 0xa8, 0xb2, 0x50,
+	0x24, 0x62, 0x8b, 0xb2, 0x20, 0x90, 0x2a, 0x48, 0x41, 0x8d, 0x8a, 0x0a, 0xc8, 0x61, 0xaa, 0x90,
+	0xc2, 0xc5, 0x7d, 0x75, 0xad, 0x3a, 0xbe, 0xd3, 0xf9, 0x1c, 0xc8, 0x86, 0x18, 0x11, 0x03, 0x23,
+	0x12, 0xfc, 0x01, 0xfc, 0x0d, 0x74, 0xe9, 0x88, 0x98, 0x32, 0x76, 0xa4, 0xee, 0x02, 0x5b, 0x67,
+	0x26, 0xe4, 0x1f, 0x29, 0x71, 0x55, 0x95, 0xb2, 0xa0, 0x0e, 0xdd, 0xee, 0xf9, 0xbd, 0xef, 0xf7,
+	0xdd, 0x7b, 0x1f, 0x0f, 0x87, 0xe7, 0xfb, 0xe0, 0xeb, 0x0e, 0x33, 0x7c, 0x6b, 0x13, 0x7a, 0xd4,
+	0xa0, 0x2e, 0x08, 0xd9, 0x11, 0x60, 0x81, 0xd3, 0x07, 0x61, 0xc8, 0x01, 0x07, 0x5f, 0xe7, 0x82,
+	0x49, 0xa6, 0xcd, 0x26, 0x95, 0x7a, 0x52, 0xa9, 0x67, 0x2b, 0x6b, 0x0d, 0xdb, 0x91, 0x9b, 0x41,
+	0x57, 0xb7, 0x58, 0xcf, 0xb0, 0x99, 0xcd, 0x8c, 0x58, 0xd4, 0x0d, 0x36, 0xe2, 0x28, 0x0e, 0xe2,
+	0x53, 0x62, 0x56, 0xbb, 0x92, 0x6d, 0xcb, 0xb8, 0x74, 0x98, 0x97, 0x76, 0xaa, 0xcd, 0x64, 0x93,
+	0x63, 0x97, 0xa8, 0xcd, 0x66, 0x53, 0x7d, 0xea, 0x3a, 0xeb, 0x54, 0x42, 0x9a, 0x9d, 0x3b, 0x92,
+	0x75, 0xe0, 0x65, 0x27, 0x63, 0x5d, 0x5f, 0xc3, 0xe5, 0xb6, 0x4b, 0xad, 0xad, 0x25, 0xe6, 0x6d,
+	0x38, 0xb6, 0x76, 0x13, 0xab, 0x81, 0x70, 0xab, 0x68, 0x0e, 0xcd, 0x97, 0x17, 0x66, 0xf4, 0xec,
+	0x84, 0x6d, 0xb0, 0x04, 0xc8, 0x67, 0x03, 0x0e, 0xcd, 0xdc, 0x70, 0x1b, 0x21, 0x33, 0xaa, 0xd5,
+	0xaa, 0x78, 0xd2, 0xda, 0xa4, 0x9e, 0x07, 0x6e, 0x75, 0x62, 0x0e, 0xcd, 0x97, 0xcc, 0x51, 0x58,
+	0x07, 0x3c, 0xf5, 0x94, 0xda, 0x20, 0x1e, 0x04, 0x72, 0x90, 0xfa, 0xdf, 0xc3, 0x65, 0xc1, 0x02,
+	0xe9, 0x78, 0x76, 0x67, 0x0b, 0x06, 0xa7, 0xed, 0x83, 0x53, 0xcd, 0x23, 0x18, 0x68, 0xd3, 0xc9,
+	0x0d, 0x93, 0x56, 0xd1, 0xb1, 0xfe, 0x1c, 0x57, 0x9e, 0x70, 0x7f, 0x19, 0x3c, 0x07, 0xd2, 0x2e,
+	0xb7, 0xf1, 0x24, 0xe5, 0xce, 0xbf, 0x74, 0x28, 0x50, 0xee, 0x1c, 0xef, 0xae, 0xe3, 0xf2, 0xc3,
+	0x1e, 0x75, 0xdc, 0xd4, 0xfa, 0x2a, 0xce, 0x43, 0x14, 0xc6, 0xc6, 0xa5, 0x66, 0xe9, 0xcb, 0xcf,
+	0x1d, 0x35, 0x27, 0x26, 0x5e, 0x20, 0x33, 0xf9, 0x5e, 0x5f, 0xc4, 0xa5, 0xf6, 0x6a, 0xfb, 0x70,
+	0x9d, 0x15, 0x8b, 0x79, 0x92, 0x5a, 0xb2, 0xe3, 0x05, 0xbd, 0x2e, 0x88, 0x54, 0x86, 0x23, 0x59,
+	0x5e, 0xa8, 0x3b, 0x13, 0xc8, 0xbc, 0x98, 0x56, 0x3c, 0x8e, 0x0b, 0xea, 0x6f, 0x55, 0x5c, 0x59,
+	0x76, 0x59, 0x97, 0xba, 0x6d, 0x0e, 0x56, 0x74, 0x45, 0xed, 0x3e, 0xce, 0xfb, 0x11, 0xa3, 0x74,
+	0x98, 0xeb, 0xfa, 0x49, 0x3f, 0x9e, 0x3e, 0x86, 0xb3, 0xa5, 0x98, 0x89, 0x52, 0x5b, 0xc5, 0x25,
+	0x1e, 0xa1, 0x58, 0x0f, 0xe4, 0x20, 0x9e, 0xae, 0xbc, 0xd0, 0x38, 0xd9, 0xe6, 0x08, 0xb9, 0x96,
+	0x62, 0xfe, 0x71, 0xd0, 0x56, 0x70, 0x91, 0x71, 0xdf, 0x8e, 0x56, 0x5e, 0x55, 0x63, 0xb7, 0x1b,
+	0x27, 0xbb, 0x65, 0x01, 0xb5, 0x14, 0xf3, 0x50, 0x1f, 0x4d, 0x97, 0x6c, 0x34, 0x77, 0x9a, 0xe9,
+	0xc6, 0x58, 0x44, 0xd3, 0xc5, 0x4a, 0xed, 0x2e, 0x56, 0xfd, 0x9e, 0x5f, 0xcd, 0xc7, 0x06, 0xd7,
+	0xfe, 0xb2, 0x9e, 0x11, 0x9c, 0x96, 0x62, 0x46, 0xaa, 0xe6, 0x65, 0x5c, 0x1c, 0x25, 0xb5, 0xe2,
+	0xce, 0x36, 0x42, 0xc3, 0x6d, 0x54, 0x58, 0xc9, 0x15, 0x0b, 0xd3, 0x93, 0xf5, 0x8f, 0x2a, 0xae,
+	0x2c, 0x09, 0xa0, 0x12, 0xce, 0x61, 0xfc, 0x0f, 0x18, 0x77, 0x2e, 0x7d, 0x5b, 0x3c, 0xf2, 0xf7,
+	0x37, 0xab, 0x63, 0x7c, 0x2e, 0xbc, 0xf9, 0x85, 0x0e, 0xa3, 0xfa, 0x27, 0x15, 0x4f, 0x99, 0xc0,
+	0x5d, 0x6a, 0x9d, 0xe3, 0x39, 0x83, 0x78, 0x3e, 0xa8, 0xb8, 0xbc, 0x0c, 0xf2, 0x1c, 0xcd, 0x99,
+	0x43, 0xd3, 0x7c, 0x87, 0x86, 0x7b, 0x44, 0xd9, 0xdd, 0x23, 0xca, 0xc1, 0x1e, 0x41, 0xaf, 0x43,
+	0x82, 0x3e, 0x87, 0x04, 0x7d, 0x0d, 0x09, 0x1a, 0x86, 0x04, 0xed, 0x86, 0x04, 0x7d, 0x0f, 0x09,
+	0xfa, 0x11, 0x12, 0xe5, 0x20, 0x24, 0xe8, 0xfd, 0x3e, 0x51, 0x86, 0xfb, 0x44, 0xd9, 0xdd, 0x27,
+	0xca, 0x9a, 0x69, 0x33, 0xbe, 0x65, 0xeb, 0x7d, 0xe6, 0x4a, 0x10, 0x82, 0xea, 0x81, 0x6f, 0xc4,
+	0x87, 0x0d, 0x26, 0x7a, 0x0d, 0x2e, 0x58, 0xdf, 0x59, 0x07, 0xd1, 0x18, 0xa5, 0x0d, 0xde, 0xb5,
+	0x99, 0x01, 0xaf, 0x64, 0xfa, 0x02, 0x39, 0xf6, 0x55, 0xd5, 0x2d, 0xc4, 0x6f, 0x91, 0x5b, 0xbf,
+	0x03, 0x00, 0x00, 0xff, 0xff, 0x69, 0x63, 0x75, 0x66, 0x7c, 0x09, 0x00, 0x00,
+}
+
 func (this *SlackConfig) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2077,7 +1868,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *SlackConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2085,33 +1876,41 @@ func (m *SlackConfig) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SlackConfig) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SlackConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Url != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Url.Size()))
-		n1, err := m.Url.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
 	if len(m.Channel) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Channel)
+		copy(dAtA[i:], m.Channel)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Channel)))
-		i += copy(dAtA[i:], m.Channel)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Url != nil {
+		{
+			size, err := m.Url.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PagerDutyConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2119,33 +1918,41 @@ func (m *PagerDutyConfig) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PagerDutyConfig) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PagerDutyConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.RoutingKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RoutingKey.Size()))
-		n2, err := m.RoutingKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
-	}
 	if len(m.Url) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Url)
+		copy(dAtA[i:], m.Url)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Url)))
-		i += copy(dAtA[i:], m.Url)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.RoutingKey != nil {
+		{
+			size, err := m.RoutingKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *OpsGenieConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2153,33 +1960,41 @@ func (m *OpsGenieConfig) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OpsGenieConfig) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OpsGenieConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ApiKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ApiKey.Size()))
-		n3, err := m.ApiKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
-	}
 	if len(m.Url) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Url)
+		copy(dAtA[i:], m.Url)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Url)))
-		i += copy(dAtA[i:], m.Url)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.ApiKey != nil {
+		{
+			size, err := m.ApiKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *EmailConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2187,23 +2002,29 @@ func (m *EmailConfig) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *EmailConfig) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EmailConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Email) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.Email)
+		copy(dAtA[i:], m.Email)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Email)))
-		i += copy(dAtA[i:], m.Email)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *SMSConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2211,23 +2032,29 @@ func (m *SMSConfig) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SMSConfig) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SMSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ContactNumber) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.ContactNumber)
+		copy(dAtA[i:], m.ContactNumber)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ContactNumber)))
-		i += copy(dAtA[i:], m.ContactNumber)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2235,94 +2062,136 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Receiver != nil {
-		nn4, err := m.Receiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Receiver.Size()
+			i -= size
+			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn4
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_Slack) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Slack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Slack != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Slack.Size()))
-		n5, err := m.Slack.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Slack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Pagerduty) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Pagerduty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Pagerduty != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Pagerduty.Size()))
-		n6, err := m.Pagerduty.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Pagerduty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Opsgenie) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Opsgenie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Opsgenie != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Opsgenie.Size()))
-		n7, err := m.Opsgenie.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Opsgenie.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Email) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Email) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Email != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Email.Size()))
-		n8, err := m.Email.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Email.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Sms) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Sms != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sms.Size()))
-		n9, err := m.Sms.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Sms.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2330,94 +2199,136 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Receiver != nil {
-		nn10, err := m.Receiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Receiver.Size()
+			i -= size
+			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn10
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_Slack) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Slack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Slack != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Slack.Size()))
-		n11, err := m.Slack.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Slack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Pagerduty) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Pagerduty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Pagerduty != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Pagerduty.Size()))
-		n12, err := m.Pagerduty.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Pagerduty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Opsgenie) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Opsgenie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Opsgenie != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Opsgenie.Size()))
-		n13, err := m.Opsgenie.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Opsgenie.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Email) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Email) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Email != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Email.Size()))
-		n14, err := m.Email.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Email.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Sms) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Sms != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sms.Size()))
-		n15, err := m.Sms.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Sms.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2425,94 +2336,136 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Receiver != nil {
-		nn16, err := m.Receiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Receiver.Size()
+			i -= size
+			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn16
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_Slack) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Slack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Slack != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Slack.Size()))
-		n17, err := m.Slack.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Slack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Pagerduty) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Pagerduty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Pagerduty != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Pagerduty.Size()))
-		n18, err := m.Pagerduty.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Pagerduty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Opsgenie) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Opsgenie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Opsgenie != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Opsgenie.Size()))
-		n19, err := m.Opsgenie.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Opsgenie.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Email) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Email) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Email != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Email.Size()))
-		n20, err := m.Email.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Email.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Sms) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Sms != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sms.Size()))
-		n21, err := m.Sms.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Sms.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2520,100 +2473,147 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Receiver != nil {
-		nn22, err := m.Receiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Receiver.Size()
+			i -= size
+			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_Slack) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Slack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Slack != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Slack.Size()))
-		n23, err := m.Slack.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Slack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Pagerduty) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Pagerduty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Pagerduty != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Pagerduty.Size()))
-		n24, err := m.Pagerduty.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Pagerduty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Opsgenie) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Opsgenie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Opsgenie != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Opsgenie.Size()))
-		n25, err := m.Opsgenie.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Opsgenie.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Email) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Email) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Email != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Email.Size()))
-		n26, err := m.Email.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Email.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n26
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Sms) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Sms != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sms.Size()))
-		n27, err := m.Sms.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Sms.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *SlackConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Url != nil {
@@ -2628,6 +2628,9 @@ func (m *SlackConfig) Size() (n int) {
 }
 
 func (m *PagerDutyConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RoutingKey != nil {
@@ -2642,6 +2645,9 @@ func (m *PagerDutyConfig) Size() (n int) {
 }
 
 func (m *OpsGenieConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ApiKey != nil {
@@ -2656,6 +2662,9 @@ func (m *OpsGenieConfig) Size() (n int) {
 }
 
 func (m *EmailConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Email)
@@ -2666,6 +2675,9 @@ func (m *EmailConfig) Size() (n int) {
 }
 
 func (m *SMSConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ContactNumber)
@@ -2676,6 +2688,9 @@ func (m *SMSConfig) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Receiver != nil {
@@ -2685,6 +2700,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_Slack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Slack != nil {
@@ -2694,6 +2712,9 @@ func (m *GlobalSpecType_Slack) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Pagerduty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Pagerduty != nil {
@@ -2703,6 +2724,9 @@ func (m *GlobalSpecType_Pagerduty) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Opsgenie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Opsgenie != nil {
@@ -2712,6 +2736,9 @@ func (m *GlobalSpecType_Opsgenie) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Email) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Email != nil {
@@ -2721,6 +2748,9 @@ func (m *GlobalSpecType_Email) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Sms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Sms != nil {
@@ -2730,6 +2760,9 @@ func (m *GlobalSpecType_Sms) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Receiver != nil {
@@ -2739,6 +2772,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_Slack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Slack != nil {
@@ -2748,6 +2784,9 @@ func (m *CreateSpecType_Slack) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Pagerduty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Pagerduty != nil {
@@ -2757,6 +2796,9 @@ func (m *CreateSpecType_Pagerduty) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Opsgenie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Opsgenie != nil {
@@ -2766,6 +2808,9 @@ func (m *CreateSpecType_Opsgenie) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Email) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Email != nil {
@@ -2775,6 +2820,9 @@ func (m *CreateSpecType_Email) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Sms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Sms != nil {
@@ -2784,6 +2832,9 @@ func (m *CreateSpecType_Sms) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Receiver != nil {
@@ -2793,6 +2844,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_Slack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Slack != nil {
@@ -2802,6 +2856,9 @@ func (m *ReplaceSpecType_Slack) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Pagerduty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Pagerduty != nil {
@@ -2811,6 +2868,9 @@ func (m *ReplaceSpecType_Pagerduty) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Opsgenie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Opsgenie != nil {
@@ -2820,6 +2880,9 @@ func (m *ReplaceSpecType_Opsgenie) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Email) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Email != nil {
@@ -2829,6 +2892,9 @@ func (m *ReplaceSpecType_Email) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Sms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Sms != nil {
@@ -2838,6 +2904,9 @@ func (m *ReplaceSpecType_Sms) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Receiver != nil {
@@ -2847,6 +2916,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_Slack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Slack != nil {
@@ -2856,6 +2928,9 @@ func (m *GetSpecType_Slack) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Pagerduty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Pagerduty != nil {
@@ -2865,6 +2940,9 @@ func (m *GetSpecType_Pagerduty) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Opsgenie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Opsgenie != nil {
@@ -2874,6 +2952,9 @@ func (m *GetSpecType_Opsgenie) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Email) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Email != nil {
@@ -2883,6 +2964,9 @@ func (m *GetSpecType_Email) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Sms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Sms != nil {
@@ -2893,14 +2977,7 @@ func (m *GetSpecType_Sms) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2910,7 +2987,7 @@ func (this *SlackConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SlackConfig{`,
-		`Url:` + strings.Replace(fmt.Sprintf("%v", this.Url), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Url:` + strings.Replace(fmt.Sprintf("%v", this.Url), "SecretType", "schema.SecretType", 1) + `,`,
 		`Channel:` + fmt.Sprintf("%v", this.Channel) + `,`,
 		`}`,
 	}, "")
@@ -2921,7 +2998,7 @@ func (this *PagerDutyConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PagerDutyConfig{`,
-		`RoutingKey:` + strings.Replace(fmt.Sprintf("%v", this.RoutingKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`RoutingKey:` + strings.Replace(fmt.Sprintf("%v", this.RoutingKey), "SecretType", "schema.SecretType", 1) + `,`,
 		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
 		`}`,
 	}, "")
@@ -2932,7 +3009,7 @@ func (this *OpsGenieConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&OpsGenieConfig{`,
-		`ApiKey:` + strings.Replace(fmt.Sprintf("%v", this.ApiKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ApiKey:` + strings.Replace(fmt.Sprintf("%v", this.ApiKey), "SecretType", "schema.SecretType", 1) + `,`,
 		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
 		`}`,
 	}, "")
@@ -3221,7 +3298,7 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3249,7 +3326,7 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3258,11 +3335,14 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Url == nil {
-				m.Url = &ves_io_schema4.SecretType{}
+				m.Url = &schema.SecretType{}
 			}
 			if err := m.Url.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3282,7 +3362,7 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3292,6 +3372,9 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3304,6 +3387,9 @@ func (m *SlackConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3333,7 +3419,7 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3361,7 +3447,7 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3370,11 +3456,14 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.RoutingKey == nil {
-				m.RoutingKey = &ves_io_schema4.SecretType{}
+				m.RoutingKey = &schema.SecretType{}
 			}
 			if err := m.RoutingKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3394,7 +3483,7 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3404,6 +3493,9 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3416,6 +3508,9 @@ func (m *PagerDutyConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3445,7 +3540,7 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3473,7 +3568,7 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3482,11 +3577,14 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ApiKey == nil {
-				m.ApiKey = &ves_io_schema4.SecretType{}
+				m.ApiKey = &schema.SecretType{}
 			}
 			if err := m.ApiKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3506,7 +3604,7 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3516,6 +3614,9 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3528,6 +3629,9 @@ func (m *OpsGenieConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3557,7 +3661,7 @@ func (m *EmailConfig) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3585,7 +3689,7 @@ func (m *EmailConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3595,6 +3699,9 @@ func (m *EmailConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3607,6 +3714,9 @@ func (m *EmailConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3636,7 +3746,7 @@ func (m *SMSConfig) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3664,7 +3774,7 @@ func (m *SMSConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3674,6 +3784,9 @@ func (m *SMSConfig) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3686,6 +3799,9 @@ func (m *SMSConfig) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3715,7 +3831,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3743,7 +3859,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3752,6 +3868,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3775,7 +3894,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3784,6 +3903,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3807,7 +3929,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3816,6 +3938,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3839,7 +3964,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3848,6 +3973,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3871,7 +3999,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3880,6 +4008,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3896,6 +4027,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3925,7 +4059,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3953,7 +4087,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3962,6 +4096,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3985,7 +4122,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3994,6 +4131,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4017,7 +4157,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4026,6 +4166,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4049,7 +4192,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4058,6 +4201,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4081,7 +4227,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4090,6 +4236,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4106,6 +4255,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4135,7 +4287,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4163,7 +4315,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4172,6 +4324,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4195,7 +4350,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4204,6 +4359,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4227,7 +4385,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4236,6 +4394,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4259,7 +4420,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4268,6 +4429,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4291,7 +4455,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4300,6 +4464,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4316,6 +4483,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4345,7 +4515,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4373,7 +4543,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4382,6 +4552,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4405,7 +4578,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4414,6 +4587,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4437,7 +4613,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4446,6 +4622,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4469,7 +4648,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4478,6 +4657,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4501,7 +4683,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4510,6 +4692,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4528,6 +4713,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4543,6 +4731,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4574,10 +4763,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4594,101 +4781,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/alert_receiver/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 666 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xbf, 0x6f, 0xd3, 0x5a,
-	0x14, 0xc7, 0x7d, 0xeb, 0x24, 0x4d, 0x6e, 0xde, 0x4b, 0xfb, 0xac, 0x37, 0xa4, 0x79, 0x95, 0x5f,
-	0xe5, 0x85, 0x22, 0x11, 0x5b, 0x94, 0x05, 0x81, 0x54, 0x41, 0x0a, 0x6a, 0x54, 0x54, 0x40, 0x0e,
-	0x53, 0x85, 0x14, 0x6e, 0xdc, 0x53, 0xf7, 0xaa, 0x8e, 0xef, 0xd5, 0xf5, 0x75, 0x20, 0x1b, 0x42,
-	0x4c, 0x4c, 0x8c, 0x48, 0xf0, 0x07, 0xf0, 0x37, 0xd0, 0xa5, 0x23, 0x62, 0xca, 0xd8, 0x91, 0x9a,
-	0x05, 0xb6, 0xce, 0x4c, 0xc8, 0x3f, 0x52, 0xe2, 0xaa, 0x2a, 0x65, 0x41, 0x1d, 0xba, 0xdd, 0xe3,
-	0x73, 0xbe, 0xdf, 0x73, 0xcf, 0xf9, 0x78, 0xb8, 0x78, 0x71, 0x00, 0x81, 0x49, 0x99, 0x15, 0x38,
-	0xdb, 0xd0, 0x27, 0x16, 0xf1, 0x40, 0xc8, 0xae, 0x00, 0x07, 0xe8, 0x00, 0x84, 0x25, 0x87, 0x1c,
-	0x02, 0x93, 0x0b, 0x26, 0x99, 0x36, 0x9f, 0x56, 0x9a, 0x69, 0xa5, 0x99, 0xaf, 0x6c, 0x34, 0x5d,
-	0x2a, 0xb7, 0xc3, 0x9e, 0xe9, 0xb0, 0xbe, 0xe5, 0x32, 0x97, 0x59, 0x89, 0xa8, 0x17, 0x6e, 0x25,
-	0x51, 0x12, 0x24, 0xa7, 0xd4, 0xac, 0xf1, 0x5f, 0xbe, 0x2d, 0xe3, 0x92, 0x32, 0x3f, 0xeb, 0xd4,
-	0x98, 0xcb, 0x27, 0x27, 0x2e, 0xd1, 0x98, 0xcf, 0xa7, 0x06, 0xc4, 0xa3, 0x9b, 0x44, 0x42, 0x96,
-	0x5d, 0x38, 0x96, 0xa5, 0xf0, 0xb4, 0x9b, 0xb3, 0x36, 0x36, 0x70, 0xb5, 0xe3, 0x11, 0x67, 0x67,
-	0x85, 0xf9, 0x5b, 0xd4, 0xd5, 0xae, 0x62, 0x35, 0x14, 0x5e, 0x1d, 0x2d, 0xa0, 0xc5, 0xea, 0xd2,
-	0x9c, 0x99, 0x9f, 0xb0, 0x03, 0x8e, 0x00, 0xf9, 0x68, 0xc8, 0xa1, 0x55, 0x18, 0xed, 0x22, 0x64,
-	0xc7, 0xb5, 0x5a, 0x1d, 0x4f, 0x3b, 0xdb, 0xc4, 0xf7, 0xc1, 0xab, 0x4f, 0x2d, 0xa0, 0xc5, 0x8a,
-	0x3d, 0x0e, 0x0d, 0xc0, 0x33, 0x0f, 0x89, 0x0b, 0xe2, 0x4e, 0x28, 0x87, 0x99, 0xff, 0x2d, 0x5c,
-	0x15, 0x2c, 0x94, 0xd4, 0x77, 0xbb, 0x3b, 0x30, 0x3c, 0x6b, 0x1f, 0x9c, 0x69, 0xee, 0xc1, 0x50,
-	0x9b, 0x4d, 0x6f, 0x98, 0xb6, 0x8a, 0x8f, 0xc6, 0x63, 0x5c, 0x7b, 0xc0, 0x83, 0x55, 0xf0, 0x29,
-	0x64, 0x5d, 0xae, 0xe3, 0x69, 0xc2, 0xe9, 0xef, 0x74, 0x28, 0x11, 0x4e, 0x4f, 0x76, 0x37, 0x71,
-	0xf5, 0x6e, 0x9f, 0x50, 0x2f, 0xb3, 0xfe, 0x1f, 0x17, 0x21, 0x0e, 0x13, 0xe3, 0x4a, 0xab, 0xf2,
-	0xe1, 0xdb, 0x9e, 0x5a, 0x10, 0x53, 0x4f, 0x90, 0x9d, 0x7e, 0x37, 0x96, 0x71, 0xa5, 0xb3, 0xde,
-	0x39, 0x5a, 0x67, 0xcd, 0x61, 0xbe, 0x24, 0x8e, 0xec, 0xfa, 0x61, 0xbf, 0x07, 0x22, 0x93, 0xe1,
-	0x58, 0x56, 0x14, 0xea, 0xde, 0x14, 0xb2, 0xff, 0xce, 0x2a, 0xee, 0x27, 0x05, 0xc6, 0x2b, 0x15,
-	0xd7, 0x56, 0x3d, 0xd6, 0x23, 0x5e, 0x87, 0x83, 0x13, 0x5f, 0x51, 0xbb, 0x8d, 0x8b, 0x41, 0xcc,
-	0x28, 0x1b, 0xe6, 0xb2, 0x79, 0xda, 0x8f, 0x67, 0x4e, 0xe0, 0x6c, 0x2b, 0x76, 0xaa, 0xd4, 0xd6,
-	0x71, 0x85, 0xc7, 0x28, 0x36, 0x43, 0x39, 0x4c, 0xa6, 0xab, 0x2e, 0x35, 0x4f, 0xb7, 0x39, 0x46,
-	0xae, 0xad, 0xd8, 0x3f, 0x1d, 0xb4, 0x35, 0x5c, 0x66, 0x3c, 0x70, 0xe3, 0x95, 0xd7, 0xd5, 0xc4,
-	0xed, 0xca, 0xe9, 0x6e, 0x79, 0x40, 0x6d, 0xc5, 0x3e, 0xd2, 0xc7, 0xd3, 0xa5, 0x1b, 0x2d, 0x9c,
-	0x65, 0xba, 0x09, 0x16, 0xf1, 0x74, 0x89, 0x52, 0xbb, 0x89, 0xd5, 0xa0, 0x1f, 0xd4, 0x8b, 0x89,
-	0xc1, 0xa5, 0x5f, 0xac, 0x67, 0x0c, 0xa7, 0xad, 0xd8, 0xb1, 0xaa, 0xf5, 0x2f, 0x2e, 0x8f, 0x93,
-	0x5a, 0x79, 0x6f, 0x17, 0xa1, 0xd1, 0x2e, 0x2a, 0xad, 0x15, 0xca, 0xa5, 0xd9, 0x69, 0xe3, 0xad,
-	0x8a, 0x6b, 0x2b, 0x02, 0x88, 0x84, 0x0b, 0x18, 0x7f, 0x02, 0xc6, 0x8d, 0x7f, 0x3e, 0x2d, 0x1f,
-	0xfb, 0xfb, 0x5b, 0xf5, 0x09, 0x3e, 0x7f, 0xbd, 0xf8, 0x8e, 0x8e, 0x22, 0xe3, 0x9d, 0x8a, 0x67,
-	0x6c, 0xe0, 0x1e, 0x71, 0x2e, 0xf0, 0x9c, 0x43, 0x3c, 0x6f, 0x54, 0x5c, 0x5d, 0x05, 0x79, 0x81,
-	0xe6, 0xdc, 0xa1, 0x69, 0xbd, 0x44, 0xa3, 0x03, 0x5d, 0xd9, 0x3f, 0xd0, 0x95, 0xc3, 0x03, 0x1d,
-	0x3d, 0x8f, 0x74, 0xf4, 0x3e, 0xd2, 0xd1, 0xc7, 0x48, 0x47, 0xa3, 0x48, 0x47, 0xfb, 0x91, 0x8e,
-	0x3e, 0x47, 0x3a, 0xfa, 0x1a, 0xe9, 0xca, 0x61, 0xa4, 0xa3, 0xd7, 0x5f, 0x74, 0x65, 0xc3, 0x76,
-	0x19, 0xdf, 0x71, 0xcd, 0x01, 0xf3, 0x24, 0x08, 0x41, 0xcc, 0x30, 0xb0, 0x92, 0xc3, 0x16, 0x13,
-	0xfd, 0x26, 0x17, 0x6c, 0x40, 0x37, 0x41, 0x34, 0xc7, 0x69, 0x8b, 0xf7, 0x5c, 0x66, 0xc1, 0x33,
-	0x99, 0xbd, 0x3c, 0x4e, 0x7c, 0x4d, 0xf5, 0x4a, 0xc9, 0x1b, 0xe4, 0xda, 0x8f, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xc2, 0xdc, 0x4d, 0x96, 0x74, 0x09, 0x00, 0x00,
-}

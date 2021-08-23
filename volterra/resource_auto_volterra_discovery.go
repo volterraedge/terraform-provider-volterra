@@ -1664,16 +1664,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -1694,11 +1697,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -1719,16 +1724,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1740,6 +1748,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -1760,6 +1769,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -1828,16 +1838,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -1858,11 +1871,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -1883,16 +1898,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1904,6 +1922,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -1924,6 +1943,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -1988,16 +2008,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -2018,11 +2041,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -2043,16 +2068,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2064,6 +2092,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -2084,6 +2113,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -2172,16 +2202,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -2202,11 +2235,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -2227,16 +2262,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2248,6 +2286,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -2268,6 +2307,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -2373,6 +2413,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["api_server"]; ok && !isIntfNil(v) {
 
 								configTypeInt.ConnectionInfo.ApiServer = v.(string)
+
 							}
 
 							if v, ok := cs["tls_info"]; ok && !isIntfNil(v) {
@@ -2437,16 +2478,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -2467,11 +2511,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -2492,16 +2538,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2513,6 +2562,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -2533,6 +2583,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -2601,16 +2652,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -2631,11 +2685,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -2656,16 +2712,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2677,6 +2736,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -2697,6 +2757,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -2761,16 +2822,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -2791,11 +2855,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -2816,16 +2882,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2837,6 +2906,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -2857,6 +2927,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -2890,8 +2961,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 						accessInfo.ConfigType = configTypeInt
 
-						configTypeInt.InCluster =
-							v.(bool)
+						configTypeInt.InCluster = v.(bool)
 
 					}
 
@@ -2952,16 +3022,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 									}
 
 									if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 									}
 
 									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 									}
 
 								}
@@ -2982,11 +3055,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 									}
 
 									if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 									}
 
 								}
@@ -3007,16 +3082,19 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 									}
 
 									if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 									}
 
 									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 									}
 
 									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3028,6 +3106,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 									}
 
 								}
@@ -3048,6 +3127,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 									}
 
 								}
@@ -3130,6 +3210,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["subdomain"]; ok && !isIntfNil(v) {
 
 								publishChoiceInt.DnsDelegation.Subdomain = v.(string)
+
 							}
 
 						}
@@ -3150,6 +3231,7 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								publishChoiceInt.Publish.Namespace = v.(string)
+
 							}
 
 						}
@@ -3537,16 +3619,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -3567,11 +3652,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -3592,16 +3679,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3613,6 +3703,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -3633,6 +3724,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -3701,16 +3793,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -3731,11 +3826,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -3756,16 +3853,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3777,6 +3877,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -3797,6 +3898,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -3861,16 +3963,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -3891,11 +3996,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -3916,16 +4023,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3937,6 +4047,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -3957,6 +4068,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4045,16 +4157,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -4075,11 +4190,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -4100,16 +4217,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4121,6 +4241,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -4141,6 +4262,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -4246,6 +4368,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["api_server"]; ok && !isIntfNil(v) {
 
 								configTypeInt.ConnectionInfo.ApiServer = v.(string)
+
 							}
 
 							if v, ok := cs["tls_info"]; ok && !isIntfNil(v) {
@@ -4310,16 +4433,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -4340,11 +4466,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -4365,16 +4493,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4386,6 +4517,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -4406,6 +4538,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4474,16 +4607,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -4504,11 +4640,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -4529,16 +4667,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4550,6 +4691,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -4570,6 +4712,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4634,16 +4777,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -4664,11 +4810,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -4689,16 +4837,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4710,6 +4861,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -4730,6 +4882,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4763,8 +4916,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 
 						accessInfo.ConfigType = configTypeInt
 
-						configTypeInt.InCluster =
-							v.(bool)
+						configTypeInt.InCluster = v.(bool)
 
 					}
 
@@ -4825,16 +4977,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 									}
 
 									if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 									}
 
 									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 									}
 
 								}
@@ -4855,11 +5010,13 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 									}
 
 									if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 									}
 
 								}
@@ -4880,16 +5037,19 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 									}
 
 									if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 									}
 
 									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 									}
 
 									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4901,6 +5061,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 									}
 
 								}
@@ -4921,6 +5082,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 									}
 
 								}
@@ -5003,6 +5165,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["subdomain"]; ok && !isIntfNil(v) {
 
 								publishChoiceInt.DnsDelegation.Subdomain = v.(string)
+
 							}
 
 						}
@@ -5023,6 +5186,7 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								publishChoiceInt.Publish.Namespace = v.(string)
+
 							}
 
 						}

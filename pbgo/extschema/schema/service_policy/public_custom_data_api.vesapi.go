@@ -432,7 +432,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/service_policyServicePolicyHitsResponse"
                         }
@@ -489,9 +489,11 @@ var CustomDataAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace is used to scope Service policy hits for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -522,7 +524,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/service_policyServicePolicyHitsResponse"
                         }
@@ -579,9 +581,11 @@ var CustomDataAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace is used to scope Service policy hits for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

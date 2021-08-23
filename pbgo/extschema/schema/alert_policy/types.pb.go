@@ -3,26 +3,29 @@
 
 package alert_policy
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Severity
 //
@@ -47,13 +50,16 @@ var Severity_name = map[int32]string{
 	1: "MAJOR",
 	2: "CRITICAL",
 }
+
 var Severity_value = map[string]int32{
 	"MINOR":    0,
 	"MAJOR":    1,
 	"CRITICAL": 2,
 }
 
-func (Severity) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (Severity) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{0}
+}
 
 // Group
 //
@@ -94,6 +100,7 @@ var Group_name = map[int32]string{
 	5: "SECURITY",
 	6: "TIMESERIES_ANOMALY",
 }
+
 var Group_value = map[string]int32{
 	"INFRASTRUCTURE":     0,
 	"IAAS_CAAS":          1,
@@ -104,7 +111,9 @@ var Group_value = map[string]int32{
 	"TIMESERIES_ANOMALY": 6,
 }
 
-func (Group) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (Group) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{1}
+}
 
 // AlertName
 //
@@ -157,6 +166,7 @@ var AlertName_name = map[int32]string{
 	8: "SERVICE_CLIENT_ERROR_PER_SOURCE_SITE",
 	9: "SERVICE_ENDPOINT_HEALTHCHECK_FAILURE",
 }
+
 var AlertName_value = map[string]int32{
 	"SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN":  0,
 	"SITE_PHYSICAL_INTERFACE_DOWN":         1,
@@ -170,7 +180,9 @@ var AlertName_value = map[string]int32{
 	"SERVICE_ENDPOINT_HEALTHCHECK_FAILURE": 9,
 }
 
-func (AlertName) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (AlertName) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{2}
+}
 
 // Label Matcher
 //
@@ -188,9 +200,33 @@ type LabelMatcher struct {
 	MatcherType isLabelMatcher_MatcherType `protobuf_oneof:"matcher_type"`
 }
 
-func (m *LabelMatcher) Reset()                    { *m = LabelMatcher{} }
-func (*LabelMatcher) ProtoMessage()               {}
-func (*LabelMatcher) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *LabelMatcher) Reset()      { *m = LabelMatcher{} }
+func (*LabelMatcher) ProtoMessage() {}
+func (*LabelMatcher) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{0}
+}
+func (m *LabelMatcher) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LabelMatcher) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LabelMatcher) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelMatcher.Merge(m, src)
+}
+func (m *LabelMatcher) XXX_Size() int {
+	return m.Size()
+}
+func (m *LabelMatcher) XXX_DiscardUnknown() {
+	xxx_messageInfo_LabelMatcher.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LabelMatcher proto.InternalMessageInfo
 
 type isLabelMatcher_MatcherType interface {
 	isLabelMatcher_MatcherType()
@@ -200,10 +236,10 @@ type isLabelMatcher_MatcherType interface {
 }
 
 type LabelMatcher_ExactMatch struct {
-	ExactMatch string `protobuf:"bytes,1,opt,name=exact_match,json=exactMatch,proto3,oneof"`
+	ExactMatch string `protobuf:"bytes,1,opt,name=exact_match,json=exactMatch,proto3,oneof" json:"exact_match,omitempty"`
 }
 type LabelMatcher_RegexMatch struct {
-	RegexMatch string `protobuf:"bytes,2,opt,name=regex_match,json=regexMatch,proto3,oneof"`
+	RegexMatch string `protobuf:"bytes,2,opt,name=regex_match,json=regexMatch,proto3,oneof" json:"regex_match,omitempty"`
 }
 
 func (*LabelMatcher_ExactMatch) isLabelMatcher_MatcherType() {}
@@ -230,70 +266,12 @@ func (m *LabelMatcher) GetRegexMatch() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*LabelMatcher) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _LabelMatcher_OneofMarshaler, _LabelMatcher_OneofUnmarshaler, _LabelMatcher_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*LabelMatcher) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*LabelMatcher_ExactMatch)(nil),
 		(*LabelMatcher_RegexMatch)(nil),
 	}
-}
-
-func _LabelMatcher_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*LabelMatcher)
-	// matcher_type
-	switch x := m.MatcherType.(type) {
-	case *LabelMatcher_ExactMatch:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ExactMatch)
-	case *LabelMatcher_RegexMatch:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.RegexMatch)
-	case nil:
-	default:
-		return fmt.Errorf("LabelMatcher.MatcherType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _LabelMatcher_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*LabelMatcher)
-	switch tag {
-	case 1: // matcher_type.exact_match
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MatcherType = &LabelMatcher_ExactMatch{x}
-		return true, err
-	case 2: // matcher_type.regex_match
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MatcherType = &LabelMatcher_RegexMatch{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _LabelMatcher_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*LabelMatcher)
-	// matcher_type
-	switch x := m.MatcherType.(type) {
-	case *LabelMatcher_ExactMatch:
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ExactMatch)))
-		n += len(x.ExactMatch)
-	case *LabelMatcher_RegexMatch:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.RegexMatch)))
-		n += len(x.RegexMatch)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Custom Matcher
@@ -305,22 +283,46 @@ type CustomMatcher struct {
 	//
 	// x-displayName: "Severity"
 	// Severity Matcher
-	Severity *LabelMatcher `protobuf:"bytes,1,opt,name=severity" json:"severity,omitempty"`
+	Severity *LabelMatcher `protobuf:"bytes,1,opt,name=severity,proto3" json:"severity,omitempty"`
 	// Group
 	//
 	// x-displayName: "Group"
 	// Group Matcher
-	Group *LabelMatcher `protobuf:"bytes,2,opt,name=group" json:"group,omitempty"`
+	Group *LabelMatcher `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
 	// Alertname
 	//
 	// x-displayName: "Alertname"
 	// Alertname Matcher
-	Alertname *LabelMatcher `protobuf:"bytes,3,opt,name=alertname" json:"alertname,omitempty"`
+	Alertname *LabelMatcher `protobuf:"bytes,3,opt,name=alertname,proto3" json:"alertname,omitempty"`
 }
 
-func (m *CustomMatcher) Reset()                    { *m = CustomMatcher{} }
-func (*CustomMatcher) ProtoMessage()               {}
-func (*CustomMatcher) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CustomMatcher) Reset()      { *m = CustomMatcher{} }
+func (*CustomMatcher) ProtoMessage() {}
+func (*CustomMatcher) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{1}
+}
+func (m *CustomMatcher) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomMatcher) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomMatcher) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomMatcher.Merge(m, src)
+}
+func (m *CustomMatcher) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomMatcher) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomMatcher.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomMatcher proto.InternalMessageInfo
 
 func (m *CustomMatcher) GetSeverity() *LabelMatcher {
 	if m != nil {
@@ -352,12 +354,36 @@ type SeverityMatcher struct {
 	//
 	// x-displayName: "Severities"
 	// List of severity levels
-	Severities []Severity `protobuf:"varint,1,rep,packed,name=severities,enum=ves.io.schema.alert_policy.Severity" json:"severities,omitempty"`
+	Severities []Severity `protobuf:"varint,1,rep,packed,name=severities,proto3,enum=ves.io.schema.alert_policy.Severity" json:"severities,omitempty"`
 }
 
-func (m *SeverityMatcher) Reset()                    { *m = SeverityMatcher{} }
-func (*SeverityMatcher) ProtoMessage()               {}
-func (*SeverityMatcher) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *SeverityMatcher) Reset()      { *m = SeverityMatcher{} }
+func (*SeverityMatcher) ProtoMessage() {}
+func (*SeverityMatcher) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{2}
+}
+func (m *SeverityMatcher) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SeverityMatcher) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SeverityMatcher) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SeverityMatcher.Merge(m, src)
+}
+func (m *SeverityMatcher) XXX_Size() int {
+	return m.Size()
+}
+func (m *SeverityMatcher) XXX_DiscardUnknown() {
+	xxx_messageInfo_SeverityMatcher.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SeverityMatcher proto.InternalMessageInfo
 
 func (m *SeverityMatcher) GetSeverities() []Severity {
 	if m != nil {
@@ -375,12 +401,36 @@ type GroupMatcher struct {
 	//
 	// x-displayName: "Groups"
 	// Name of groups to match the alert
-	Groups []Group `protobuf:"varint,1,rep,packed,name=groups,enum=ves.io.schema.alert_policy.Group" json:"groups,omitempty"`
+	Groups []Group `protobuf:"varint,1,rep,packed,name=groups,proto3,enum=ves.io.schema.alert_policy.Group" json:"groups,omitempty"`
 }
 
-func (m *GroupMatcher) Reset()                    { *m = GroupMatcher{} }
-func (*GroupMatcher) ProtoMessage()               {}
-func (*GroupMatcher) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GroupMatcher) Reset()      { *m = GroupMatcher{} }
+func (*GroupMatcher) ProtoMessage() {}
+func (*GroupMatcher) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{3}
+}
+func (m *GroupMatcher) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GroupMatcher) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GroupMatcher) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GroupMatcher.Merge(m, src)
+}
+func (m *GroupMatcher) XXX_Size() int {
+	return m.Size()
+}
+func (m *GroupMatcher) XXX_DiscardUnknown() {
+	xxx_messageInfo_GroupMatcher.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GroupMatcher proto.InternalMessageInfo
 
 func (m *GroupMatcher) GetGroups() []Group {
 	if m != nil {
@@ -398,12 +448,36 @@ type CustomGroupBy struct {
 	//
 	// x-displayName: "Labels"
 	// Name of labels to group/aggregate the alerts
-	Labels []string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty"`
+	Labels []string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty"`
 }
 
-func (m *CustomGroupBy) Reset()                    { *m = CustomGroupBy{} }
-func (*CustomGroupBy) ProtoMessage()               {}
-func (*CustomGroupBy) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *CustomGroupBy) Reset()      { *m = CustomGroupBy{} }
+func (*CustomGroupBy) ProtoMessage() {}
+func (*CustomGroupBy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{4}
+}
+func (m *CustomGroupBy) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomGroupBy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomGroupBy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomGroupBy.Merge(m, src)
+}
+func (m *CustomGroupBy) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomGroupBy) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomGroupBy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomGroupBy proto.InternalMessageInfo
 
 func (m *CustomGroupBy) GetLabels() []string {
 	if m != nil {
@@ -458,9 +532,33 @@ type NotificationParameters struct {
 	RepeatInterval string `protobuf:"bytes,13,opt,name=repeat_interval,json=repeatInterval,proto3" json:"repeat_interval,omitempty"`
 }
 
-func (m *NotificationParameters) Reset()                    { *m = NotificationParameters{} }
-func (*NotificationParameters) ProtoMessage()               {}
-func (*NotificationParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *NotificationParameters) Reset()      { *m = NotificationParameters{} }
+func (*NotificationParameters) ProtoMessage() {}
+func (*NotificationParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{5}
+}
+func (m *NotificationParameters) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NotificationParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NotificationParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NotificationParameters.Merge(m, src)
+}
+func (m *NotificationParameters) XXX_Size() int {
+	return m.Size()
+}
+func (m *NotificationParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_NotificationParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NotificationParameters proto.InternalMessageInfo
 
 type isNotificationParameters_GroupBy interface {
 	isNotificationParameters_GroupBy()
@@ -470,16 +568,16 @@ type isNotificationParameters_GroupBy interface {
 }
 
 type NotificationParameters_Default struct {
-	Default *ves_io_schema4.Empty `protobuf:"bytes,1,opt,name=default,oneof"`
+	Default *schema.Empty `protobuf:"bytes,1,opt,name=default,proto3,oneof" json:"default,omitempty"`
 }
 type NotificationParameters_Individual struct {
-	Individual *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=individual,oneof"`
+	Individual *schema.Empty `protobuf:"bytes,2,opt,name=individual,proto3,oneof" json:"individual,omitempty"`
 }
 type NotificationParameters_VesIoGroup struct {
-	VesIoGroup *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=ves_io_group,json=vesIoGroup,oneof"`
+	VesIoGroup *schema.Empty `protobuf:"bytes,3,opt,name=ves_io_group,json=vesIoGroup,proto3,oneof" json:"ves_io_group,omitempty"`
 }
 type NotificationParameters_Custom struct {
-	Custom *CustomGroupBy `protobuf:"bytes,10,opt,name=custom,oneof"`
+	Custom *CustomGroupBy `protobuf:"bytes,10,opt,name=custom,proto3,oneof" json:"custom,omitempty"`
 }
 
 func (*NotificationParameters_Default) isNotificationParameters_GroupBy()    {}
@@ -494,21 +592,22 @@ func (m *NotificationParameters) GetGroupBy() isNotificationParameters_GroupBy {
 	return nil
 }
 
-func (m *NotificationParameters) GetDefault() *ves_io_schema4.Empty {
+// Deprecated: Do not use.
+func (m *NotificationParameters) GetDefault() *schema.Empty {
 	if x, ok := m.GetGroupBy().(*NotificationParameters_Default); ok {
 		return x.Default
 	}
 	return nil
 }
 
-func (m *NotificationParameters) GetIndividual() *ves_io_schema4.Empty {
+func (m *NotificationParameters) GetIndividual() *schema.Empty {
 	if x, ok := m.GetGroupBy().(*NotificationParameters_Individual); ok {
 		return x.Individual
 	}
 	return nil
 }
 
-func (m *NotificationParameters) GetVesIoGroup() *ves_io_schema4.Empty {
+func (m *NotificationParameters) GetVesIoGroup() *schema.Empty {
 	if x, ok := m.GetGroupBy().(*NotificationParameters_VesIoGroup); ok {
 		return x.VesIoGroup
 	}
@@ -543,116 +642,14 @@ func (m *NotificationParameters) GetRepeatInterval() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*NotificationParameters) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _NotificationParameters_OneofMarshaler, _NotificationParameters_OneofUnmarshaler, _NotificationParameters_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*NotificationParameters) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*NotificationParameters_Default)(nil),
 		(*NotificationParameters_Individual)(nil),
 		(*NotificationParameters_VesIoGroup)(nil),
 		(*NotificationParameters_Custom)(nil),
 	}
-}
-
-func _NotificationParameters_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*NotificationParameters)
-	// group_by
-	switch x := m.GroupBy.(type) {
-	case *NotificationParameters_Default:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Default); err != nil {
-			return err
-		}
-	case *NotificationParameters_Individual:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Individual); err != nil {
-			return err
-		}
-	case *NotificationParameters_VesIoGroup:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.VesIoGroup); err != nil {
-			return err
-		}
-	case *NotificationParameters_Custom:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Custom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("NotificationParameters.GroupBy has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _NotificationParameters_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*NotificationParameters)
-	switch tag {
-	case 1: // group_by.default
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GroupBy = &NotificationParameters_Default{msg}
-		return true, err
-	case 2: // group_by.individual
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GroupBy = &NotificationParameters_Individual{msg}
-		return true, err
-	case 3: // group_by.ves_io_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GroupBy = &NotificationParameters_VesIoGroup{msg}
-		return true, err
-	case 10: // group_by.custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(CustomGroupBy)
-		err := b.DecodeMessage(msg)
-		m.GroupBy = &NotificationParameters_Custom{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _NotificationParameters_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*NotificationParameters)
-	// group_by
-	switch x := m.GroupBy.(type) {
-	case *NotificationParameters_Default:
-		s := proto.Size(x.Default)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NotificationParameters_Individual:
-		s := proto.Size(x.Individual)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NotificationParameters_VesIoGroup:
-		s := proto.Size(x.VesIoGroup)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NotificationParameters_Custom:
-		s := proto.Size(x.Custom)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Route
@@ -689,12 +686,36 @@ type Route struct {
 	// Notification parameters to decide how and when the alerts should be sent to the receivers.
 	// If the notification_config is not specified for the route, then the route inherits the config from the
 	// notification_config defined in the policy.
-	NotificationParameters *NotificationParameters `protobuf:"bytes,13,opt,name=notification_parameters,json=notificationParameters" json:"notification_parameters,omitempty"`
+	NotificationParameters *NotificationParameters `protobuf:"bytes,13,opt,name=notification_parameters,json=notificationParameters,proto3" json:"notification_parameters,omitempty"`
 }
 
-func (m *Route) Reset()                    { *m = Route{} }
-func (*Route) ProtoMessage()               {}
-func (*Route) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *Route) Reset()      { *m = Route{} }
+func (*Route) ProtoMessage() {}
+func (*Route) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{6}
+}
+func (m *Route) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Route) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Route) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Route.Merge(m, src)
+}
+func (m *Route) XXX_Size() int {
+	return m.Size()
+}
+func (m *Route) XXX_DiscardUnknown() {
+	xxx_messageInfo_Route.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Route proto.InternalMessageInfo
 
 type isRoute_Matcher interface {
 	isRoute_Matcher()
@@ -710,28 +731,28 @@ type isRoute_Action interface {
 }
 
 type Route_Any struct {
-	Any *ves_io_schema4.Empty `protobuf:"bytes,1,opt,name=any,oneof"`
+	Any *schema.Empty `protobuf:"bytes,1,opt,name=any,proto3,oneof" json:"any,omitempty"`
 }
 type Route_Severity struct {
-	Severity *SeverityMatcher `protobuf:"bytes,2,opt,name=severity,oneof"`
+	Severity *SeverityMatcher `protobuf:"bytes,2,opt,name=severity,proto3,oneof" json:"severity,omitempty"`
 }
 type Route_Group struct {
-	Group *GroupMatcher `protobuf:"bytes,3,opt,name=group,oneof"`
+	Group *GroupMatcher `protobuf:"bytes,3,opt,name=group,proto3,oneof" json:"group,omitempty"`
 }
 type Route_Alertname struct {
-	Alertname AlertName `protobuf:"varint,4,opt,name=alertname,proto3,enum=ves.io.schema.alert_policy.AlertName,oneof"`
+	Alertname AlertName `protobuf:"varint,4,opt,name=alertname,proto3,enum=ves.io.schema.alert_policy.AlertName,oneof" json:"alertname,omitempty"`
 }
 type Route_AlertnameRegex struct {
-	AlertnameRegex string `protobuf:"bytes,5,opt,name=alertname_regex,json=alertnameRegex,proto3,oneof"`
+	AlertnameRegex string `protobuf:"bytes,5,opt,name=alertname_regex,json=alertnameRegex,proto3,oneof" json:"alertname_regex,omitempty"`
 }
 type Route_Custom struct {
-	Custom *CustomMatcher `protobuf:"bytes,10,opt,name=custom,oneof"`
+	Custom *CustomMatcher `protobuf:"bytes,10,opt,name=custom,proto3,oneof" json:"custom,omitempty"`
 }
 type Route_Send struct {
-	Send *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=send,oneof"`
+	Send *schema.Empty `protobuf:"bytes,11,opt,name=send,proto3,oneof" json:"send,omitempty"`
 }
 type Route_DontSend struct {
-	DontSend *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=dont_send,json=dontSend,oneof"`
+	DontSend *schema.Empty `protobuf:"bytes,12,opt,name=dont_send,json=dontSend,proto3,oneof" json:"dont_send,omitempty"`
 }
 
 func (*Route_Any) isRoute_Matcher()            {}
@@ -756,7 +777,7 @@ func (m *Route) GetAction() isRoute_Action {
 	return nil
 }
 
-func (m *Route) GetAny() *ves_io_schema4.Empty {
+func (m *Route) GetAny() *schema.Empty {
 	if x, ok := m.GetMatcher().(*Route_Any); ok {
 		return x.Any
 	}
@@ -798,14 +819,14 @@ func (m *Route) GetCustom() *CustomMatcher {
 	return nil
 }
 
-func (m *Route) GetSend() *ves_io_schema4.Empty {
+func (m *Route) GetSend() *schema.Empty {
 	if x, ok := m.GetAction().(*Route_Send); ok {
 		return x.Send
 	}
 	return nil
 }
 
-func (m *Route) GetDontSend() *ves_io_schema4.Empty {
+func (m *Route) GetDontSend() *schema.Empty {
 	if x, ok := m.GetAction().(*Route_DontSend); ok {
 		return x.DontSend
 	}
@@ -819,9 +840,9 @@ func (m *Route) GetNotificationParameters() *NotificationParameters {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Route) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Route_OneofMarshaler, _Route_OneofUnmarshaler, _Route_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Route) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Route_Any)(nil),
 		(*Route_Severity)(nil),
 		(*Route_Group)(nil),
@@ -831,183 +852,6 @@ func (*Route) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, 
 		(*Route_Send)(nil),
 		(*Route_DontSend)(nil),
 	}
-}
-
-func _Route_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Route)
-	// matcher
-	switch x := m.Matcher.(type) {
-	case *Route_Any:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Any); err != nil {
-			return err
-		}
-	case *Route_Severity:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Severity); err != nil {
-			return err
-		}
-	case *Route_Group:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Group); err != nil {
-			return err
-		}
-	case *Route_Alertname:
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.Alertname))
-	case *Route_AlertnameRegex:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.AlertnameRegex)
-	case *Route_Custom:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Custom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Route.Matcher has unexpected type %T", x)
-	}
-	// action
-	switch x := m.Action.(type) {
-	case *Route_Send:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Send); err != nil {
-			return err
-		}
-	case *Route_DontSend:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DontSend); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Route.Action has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Route_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Route)
-	switch tag {
-	case 1: // matcher.any
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Matcher = &Route_Any{msg}
-		return true, err
-	case 2: // matcher.severity
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SeverityMatcher)
-		err := b.DecodeMessage(msg)
-		m.Matcher = &Route_Severity{msg}
-		return true, err
-	case 3: // matcher.group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GroupMatcher)
-		err := b.DecodeMessage(msg)
-		m.Matcher = &Route_Group{msg}
-		return true, err
-	case 4: // matcher.alertname
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Matcher = &Route_Alertname{AlertName(x)}
-		return true, err
-	case 5: // matcher.alertname_regex
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Matcher = &Route_AlertnameRegex{x}
-		return true, err
-	case 10: // matcher.custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(CustomMatcher)
-		err := b.DecodeMessage(msg)
-		m.Matcher = &Route_Custom{msg}
-		return true, err
-	case 11: // action.send
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Action = &Route_Send{msg}
-		return true, err
-	case 12: // action.dont_send
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Action = &Route_DontSend{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Route_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Route)
-	// matcher
-	switch x := m.Matcher.(type) {
-	case *Route_Any:
-		s := proto.Size(x.Any)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Route_Severity:
-		s := proto.Size(x.Severity)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Route_Group:
-		s := proto.Size(x.Group)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Route_Alertname:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.Alertname))
-	case *Route_AlertnameRegex:
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.AlertnameRegex)))
-		n += len(x.AlertnameRegex)
-	case *Route_Custom:
-		s := proto.Size(x.Custom)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// action
-	switch x := m.Action.(type) {
-	case *Route_Send:
-		s := proto.Size(x.Send)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Route_DontSend:
-		s := proto.Size(x.DontSend)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Specification for Alert Policy
@@ -1020,26 +864,50 @@ type GlobalSpecType struct {
 	// x-displayName: "Alert Receivers"
 	// x-required
 	// list of Alert Receivers where the alerts will be sent
-	Receivers []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=receivers" json:"receivers,omitempty"`
+	Receivers []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=receivers,proto3" json:"receivers,omitempty"`
 	// Routes
 	//
 	// x-displayName: "Policy Rules"
 	// x-required
 	// Set of routes to match the incoming alert.
 	// The routes are evaluated in the specified order and terminates on the first match.
-	Routes []*Route `protobuf:"bytes,2,rep,name=routes" json:"routes,omitempty"`
+	Routes []*Route `protobuf:"bytes,2,rep,name=routes,proto3" json:"routes,omitempty"`
 	// Notification Parameters
 	//
 	// x-displayName: "Receiver Default Notification Parameters"
 	// Notification parameters to decide how and when the alerts should be sent to the receivers.
-	NotificationParameters *NotificationParameters `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters" json:"notification_parameters,omitempty"`
+	NotificationParameters *NotificationParameters `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters,proto3" json:"notification_parameters,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{7}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetReceivers() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetReceivers() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Receivers
 	}
@@ -1065,16 +933,40 @@ func (m *GlobalSpecType) GetNotificationParameters() *NotificationParameters {
 // x-displayName: "Create Alert Policy"
 // Creates a new Alert Policy Object
 type CreateSpecType struct {
-	Receivers              []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=receivers" json:"receivers,omitempty"`
-	Routes                 []*Route                        `protobuf:"bytes,2,rep,name=routes" json:"routes,omitempty"`
-	NotificationParameters *NotificationParameters         `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters" json:"notification_parameters,omitempty"`
+	Receivers              []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=receivers,proto3" json:"receivers,omitempty"`
+	Routes                 []*Route                `protobuf:"bytes,2,rep,name=routes,proto3" json:"routes,omitempty"`
+	NotificationParameters *NotificationParameters `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters,proto3" json:"notification_parameters,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{8}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetReceivers() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetReceivers() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Receivers
 	}
@@ -1100,16 +992,40 @@ func (m *CreateSpecType) GetNotificationParameters() *NotificationParameters {
 // x-displayName: "Replace Alert Policy"
 // Replaces the content of the Alert Policy Object
 type ReplaceSpecType struct {
-	Receivers              []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=receivers" json:"receivers,omitempty"`
-	Routes                 []*Route                        `protobuf:"bytes,2,rep,name=routes" json:"routes,omitempty"`
-	NotificationParameters *NotificationParameters         `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters" json:"notification_parameters,omitempty"`
+	Receivers              []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=receivers,proto3" json:"receivers,omitempty"`
+	Routes                 []*Route                `protobuf:"bytes,2,rep,name=routes,proto3" json:"routes,omitempty"`
+	NotificationParameters *NotificationParameters `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters,proto3" json:"notification_parameters,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{9}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
 
-func (m *ReplaceSpecType) GetReceivers() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
+
+func (m *ReplaceSpecType) GetReceivers() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Receivers
 	}
@@ -1135,16 +1051,40 @@ func (m *ReplaceSpecType) GetNotificationParameters() *NotificationParameters {
 // x-displayName: "Get Alert Policy"
 // Get the Alert Policy Object
 type GetSpecType struct {
-	Receivers              []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=receivers" json:"receivers,omitempty"`
-	Routes                 []*Route                        `protobuf:"bytes,2,rep,name=routes" json:"routes,omitempty"`
-	NotificationParameters *NotificationParameters         `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters" json:"notification_parameters,omitempty"`
+	Receivers              []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=receivers,proto3" json:"receivers,omitempty"`
+	Routes                 []*Route                `protobuf:"bytes,2,rep,name=routes,proto3" json:"routes,omitempty"`
+	NotificationParameters *NotificationParameters `protobuf:"bytes,3,opt,name=notification_parameters,json=notificationParameters,proto3" json:"notification_parameters,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b48c1f89a6403901, []int{10}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetReceivers() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetReceivers() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Receivers
 	}
@@ -1166,6 +1106,9 @@ func (m *GetSpecType) GetNotificationParameters() *NotificationParameters {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.alert_policy.Severity", Severity_name, Severity_value)
+	proto.RegisterEnum("ves.io.schema.alert_policy.Group", Group_name, Group_value)
+	proto.RegisterEnum("ves.io.schema.alert_policy.AlertName", AlertName_name, AlertName_value)
 	proto.RegisterType((*LabelMatcher)(nil), "ves.io.schema.alert_policy.LabelMatcher")
 	proto.RegisterType((*CustomMatcher)(nil), "ves.io.schema.alert_policy.CustomMatcher")
 	proto.RegisterType((*SeverityMatcher)(nil), "ves.io.schema.alert_policy.SeverityMatcher")
@@ -1177,10 +1120,114 @@ func init() {
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.alert_policy.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.alert_policy.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.alert_policy.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.alert_policy.Severity", Severity_name, Severity_value)
-	proto.RegisterEnum("ves.io.schema.alert_policy.Group", Group_name, Group_value)
-	proto.RegisterEnum("ves.io.schema.alert_policy.AlertName", AlertName_name, AlertName_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/alert_policy/types.proto", fileDescriptor_b48c1f89a6403901)
+}
+
+var fileDescriptor_b48c1f89a6403901 = []byte{
+	// 1562 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6f, 0xdb, 0xc8,
+	0x15, 0xe6, 0x90, 0x92, 0x2c, 0x3d, 0x2b, 0x32, 0x33, 0xdd, 0x3a, 0xaa, 0x93, 0x55, 0x15, 0x65,
+	0xdb, 0xf5, 0xba, 0x8a, 0x14, 0x49, 0x49, 0xb1, 0x1b, 0x14, 0x46, 0x29, 0x85, 0x8e, 0x98, 0xca,
+	0x92, 0x3b, 0xa4, 0x12, 0xa4, 0x40, 0x41, 0xd0, 0xd2, 0x58, 0x61, 0x57, 0x12, 0x05, 0x8a, 0xd2,
+	0xc6, 0x28, 0x0a, 0xb4, 0xd7, 0x9e, 0x8a, 0xfe, 0x07, 0x05, 0x5a, 0xa0, 0xe8, 0xb9, 0xa7, 0xea,
+	0x62, 0xec, 0x69, 0xd1, 0x93, 0x8f, 0xc1, 0xa2, 0x87, 0x46, 0x41, 0xd1, 0xee, 0x9e, 0x82, 0xfc,
+	0x05, 0x05, 0x87, 0xa4, 0x44, 0x7b, 0x1d, 0x61, 0x73, 0xc8, 0x2d, 0x27, 0x73, 0xe6, 0x7d, 0xdf,
+	0x37, 0xef, 0xd7, 0xbc, 0xb1, 0xe0, 0x87, 0x53, 0x3a, 0x2e, 0x98, 0x56, 0x71, 0xdc, 0x79, 0x42,
+	0x07, 0x46, 0xd1, 0xe8, 0x53, 0xdb, 0xd1, 0x47, 0x56, 0xdf, 0xec, 0x1c, 0x17, 0x9d, 0xe3, 0x11,
+	0x1d, 0x17, 0x46, 0xb6, 0xe5, 0x58, 0x78, 0xcb, 0xc3, 0x15, 0x3c, 0x5c, 0x21, 0x8c, 0xdb, 0xba,
+	0xd9, 0x33, 0x9d, 0x27, 0x93, 0xc3, 0x42, 0xc7, 0x1a, 0x14, 0x7b, 0x56, 0xcf, 0x2a, 0x32, 0xca,
+	0xe1, 0xe4, 0x88, 0xad, 0xd8, 0x82, 0x7d, 0x79, 0x52, 0x5b, 0x57, 0xcf, 0x1e, 0x69, 0x8d, 0x1c,
+	0xd3, 0x1a, 0xfa, 0xe7, 0x6c, 0x7d, 0xef, 0xac, 0x31, 0xe4, 0xc2, 0xd6, 0xb5, 0xb3, 0xa6, 0xa9,
+	0xd1, 0x37, 0xbb, 0x86, 0x43, 0x7d, 0x6b, 0xf6, 0x9c, 0xd5, 0xa4, 0x9f, 0xe9, 0x67, 0xa4, 0x73,
+	0xbf, 0x43, 0x90, 0x6c, 0x18, 0x87, 0xb4, 0xbf, 0x6f, 0x38, 0x9d, 0x27, 0xd4, 0xc6, 0xd7, 0x61,
+	0x9d, 0x3e, 0x35, 0x3a, 0x8e, 0x3e, 0x70, 0x37, 0xd2, 0x28, 0x8b, 0xb6, 0x13, 0x75, 0x8e, 0x00,
+	0xdb, 0x64, 0x20, 0x17, 0x62, 0xd3, 0x1e, 0x7d, 0xea, 0x43, 0xf8, 0x00, 0xc2, 0x36, 0x19, 0xe4,
+	0x6e, 0xe4, 0xd5, 0x2e, 0xaa, 0x54, 0xbf, 0x0f, 0xc9, 0x81, 0x27, 0xab, 0xbb, 0x3e, 0xe3, 0x8d,
+	0x93, 0x19, 0x42, 0xa7, 0x33, 0x24, 0xcc, 0x67, 0x48, 0x28, 0xe5, 0xcb, 0x0f, 0x22, 0x71, 0x41,
+	0x8c, 0xe4, 0xfe, 0x8b, 0xe0, 0x52, 0x6d, 0x32, 0x76, 0xac, 0x41, 0xe0, 0xc4, 0x3d, 0x88, 0x8f,
+	0xe9, 0x94, 0xda, 0xa6, 0x73, 0xcc, 0x3c, 0x58, 0x2f, 0x6f, 0x17, 0x5e, 0x9f, 0xeb, 0x42, 0x38,
+	0x00, 0xb2, 0x60, 0xe2, 0x5d, 0x88, 0xf6, 0x6c, 0x6b, 0x32, 0x62, 0x1e, 0xbe, 0x89, 0x84, 0x47,
+	0xc3, 0x7b, 0x90, 0x60, 0x98, 0xa1, 0x31, 0xa0, 0x69, 0xe1, 0x0d, 0x35, 0x96, 0xd4, 0xbb, 0xf1,
+	0x57, 0xbb, 0xd1, 0x52, 0xbe, 0x9c, 0xaf, 0xe4, 0x7e, 0x09, 0x1b, 0xaa, 0xef, 0xdd, 0x32, 0x54,
+	0xf0, 0x1d, 0x36, 0xe9, 0x38, 0x8d, 0xb2, 0xc2, 0x76, 0xaa, 0xfc, 0xc1, 0xaa, 0x53, 0x02, 0x01,
+	0x12, 0xe2, 0xb1, 0x7c, 0x97, 0x72, 0x2d, 0x48, 0xde, 0x77, 0x3d, 0x0f, 0xb4, 0x3f, 0x81, 0x18,
+	0x8b, 0x24, 0xd0, 0xbd, 0xbe, 0x4a, 0x97, 0x31, 0x89, 0x4f, 0xf0, 0x05, 0x3f, 0x0c, 0x0a, 0xc3,
+	0x8c, 0xd5, 0x63, 0xbc, 0x09, 0xb1, 0xbe, 0x1b, 0xa5, 0xa7, 0x98, 0x20, 0xfe, 0x2a, 0xf7, 0x55,
+	0x04, 0x36, 0x9b, 0x96, 0x63, 0x1e, 0x99, 0x1d, 0xc3, 0x6d, 0xaf, 0x03, 0xc3, 0x36, 0x06, 0xd4,
+	0xa1, 0xf6, 0x18, 0xdf, 0x86, 0xb5, 0x2e, 0x3d, 0x32, 0x26, 0x7d, 0xc7, 0x2f, 0xe5, 0x7b, 0xe7,
+	0xbc, 0x90, 0x07, 0x23, 0xe7, 0xb8, 0xca, 0xa7, 0x51, 0x9d, 0x23, 0x01, 0x14, 0xff, 0x18, 0xc0,
+	0x1c, 0x76, 0xcd, 0xa9, 0xd9, 0x9d, 0x18, 0x7d, 0xbf, 0x80, 0x17, 0x12, 0xdd, 0xc6, 0x5b, 0x22,
+	0xf1, 0xc7, 0x90, 0x9c, 0xd2, 0xb1, 0x6e, 0x5a, 0xba, 0x57, 0x7a, 0x61, 0x35, 0x73, 0x4a, 0xc7,
+	0x8a, 0xc5, 0x82, 0xc3, 0x35, 0x88, 0x75, 0x58, 0xac, 0x69, 0x60, 0x9c, 0x8f, 0x56, 0x25, 0xeb,
+	0x4c, 0x56, 0xea, 0x1c, 0xf1, 0xa9, 0xb8, 0x0e, 0xc0, 0xce, 0xd5, 0x3f, 0x33, 0x4c, 0x27, 0xbd,
+	0xee, 0xde, 0x8c, 0xea, 0x47, 0x5f, 0xce, 0x90, 0x50, 0xb9, 0x35, 0xfe, 0xc7, 0x57, 0x27, 0xc2,
+	0x9a, 0x1d, 0xfd, 0x5a, 0xe0, 0xef, 0x0c, 0xfc, 0xef, 0xb9, 0xc0, 0x7b, 0xfb, 0x51, 0x5b, 0x78,
+	0xc9, 0x23, 0x92, 0x60, 0xe4, 0x47, 0x86, 0xe9, 0xe0, 0x9f, 0x43, 0xca, 0x53, 0x32, 0x87, 0x0e,
+	0xb5, 0xa7, 0x46, 0x3f, 0x9d, 0x64, 0x6a, 0x3b, 0x5f, 0xce, 0x10, 0x5f, 0x62, 0x02, 0x71, 0x3b,
+	0xf6, 0xb5, 0x20, 0x94, 0x6e, 0x05, 0x8b, 0xb9, 0x10, 0x1c, 0xe3, 0xcb, 0x5d, 0x62, 0x0a, 0x8a,
+	0x2f, 0x80, 0x55, 0xd8, 0xb0, 0xe9, 0x88, 0x1a, 0xce, 0x52, 0xf3, 0xd2, 0x52, 0xf3, 0xf6, 0x93,
+	0xb0, 0x66, 0x37, 0xac, 0x39, 0x08, 0x69, 0xa6, 0x3c, 0x89, 0x40, 0xf4, 0xee, 0xde, 0xe7, 0x33,
+	0x54, 0x85, 0xf7, 0xe1, 0x4a, 0xb8, 0xfc, 0xd9, 0x50, 0xfd, 0xf9, 0x52, 0x05, 0xae, 0xc3, 0x77,
+	0xcf, 0x98, 0x59, 0xe2, 0xcc, 0x61, 0x0f, 0xc7, 0x4b, 0xb7, 0xf3, 0xa5, 0x52, 0xbe, 0x54, 0xae,
+	0xe6, 0x20, 0xee, 0xc5, 0x7b, 0x78, 0x8c, 0x37, 0x4f, 0x66, 0x88, 0xff, 0xc2, 0x9b, 0x15, 0xa9,
+	0xf9, 0x0c, 0xc5, 0xca, 0xf9, 0x4a, 0xbe, 0x74, 0xeb, 0x41, 0x24, 0x9e, 0x12, 0x37, 0x72, 0x7f,
+	0x8f, 0x42, 0x94, 0x58, 0x13, 0x87, 0xe2, 0x6d, 0x10, 0x8c, 0xe1, 0xf1, 0xaa, 0xb6, 0xaa, 0x73,
+	0xc4, 0x85, 0x60, 0x25, 0x34, 0x50, 0xbc, 0x66, 0xfa, 0xd1, 0xb7, 0xb9, 0x63, 0xfe, 0x45, 0xaa,
+	0x73, 0xa1, 0xa9, 0xf2, 0xd3, 0x60, 0xaa, 0x7c, 0x8b, 0x89, 0x10, 0xbe, 0x8d, 0x75, 0x2e, 0x98,
+	0x2b, 0x72, 0x78, 0xae, 0x44, 0xb2, 0x68, 0x3b, 0x55, 0xfe, 0xc1, 0x2a, 0x15, 0xc9, 0x5d, 0x34,
+	0x8d, 0x01, 0xad, 0x73, 0xa1, 0xb1, 0x82, 0x8b, 0xb0, 0xb1, 0x58, 0xe8, 0x6c, 0xf6, 0xa6, 0xa3,
+	0xac, 0x9c, 0x11, 0x77, 0xcc, 0xd6, 0x39, 0x92, 0x5a, 0x98, 0x89, 0x6b, 0xc5, 0xca, 0x9b, 0x77,
+	0xb8, 0xef, 0xfb, 0x42, 0x32, 0xe8, 0xf3, 0x1d, 0x88, 0x8c, 0xe9, 0xb0, 0xcb, 0x3a, 0xfc, 0x75,
+	0xa9, 0x47, 0x84, 0x61, 0x70, 0x05, 0x12, 0x5d, 0x6b, 0xe8, 0xe8, 0x8c, 0x90, 0x5c, 0x49, 0x88,
+	0xbb, 0x40, 0xd5, 0x25, 0x4d, 0xe0, 0xca, 0x30, 0xd4, 0x31, 0xfa, 0x68, 0xd1, 0x50, 0xac, 0x67,
+	0xd7, 0xcb, 0xe5, 0x55, 0xce, 0x5f, 0x3c, 0x8a, 0xaa, 0x71, 0xff, 0xfd, 0x41, 0x64, 0x73, 0x78,
+	0x21, 0xe2, 0xee, 0xfa, 0xab, 0x5d, 0xd6, 0x92, 0x77, 0xf2, 0xa5, 0x4a, 0xf5, 0x06, 0xac, 0xf9,
+	0xcf, 0x17, 0x4e, 0x9f, 0x2c, 0xbb, 0x31, 0xc9, 0x66, 0x79, 0xfe, 0x76, 0xfe, 0x4e, 0xbe, 0x74,
+	0xab, 0x7a, 0x15, 0x62, 0x46, 0xc7, 0x55, 0xc1, 0x97, 0x4f, 0x66, 0x68, 0xfd, 0x74, 0x86, 0x36,
+	0xe6, 0x33, 0x14, 0x65, 0x4d, 0xed, 0x35, 0xec, 0x83, 0x48, 0x7c, 0x43, 0x14, 0x73, 0xff, 0xe1,
+	0x21, 0x75, 0xbf, 0x6f, 0x1d, 0x1a, 0x7d, 0x75, 0x44, 0x3b, 0x9a, 0xfb, 0x1e, 0x3e, 0x82, 0x84,
+	0x4d, 0x3b, 0xd4, 0x9c, 0xba, 0x61, 0xb9, 0x03, 0x75, 0xbd, 0x7c, 0xed, 0x5c, 0x58, 0xad, 0xc3,
+	0x5f, 0xd1, 0x8e, 0x43, 0xe8, 0x91, 0x4b, 0xa8, 0x5e, 0xfd, 0xdb, 0x6f, 0xbc, 0xa2, 0xea, 0x01,
+	0x8f, 0xdd, 0xcc, 0x3f, 0x22, 0x5e, 0x8c, 0x90, 0xa5, 0x16, 0x96, 0x21, 0x66, 0xbb, 0x37, 0x64,
+	0x9c, 0xe6, 0x99, 0xea, 0xca, 0xc1, 0xcf, 0xee, 0x52, 0x15, 0x16, 0x4a, 0x22, 0xf1, 0xc9, 0xab,
+	0x8a, 0x20, 0xbc, 0xc5, 0x22, 0xfc, 0xe4, 0xf3, 0x19, 0xfa, 0x18, 0x6e, 0xc0, 0x35, 0xd6, 0xf8,
+	0x59, 0xe2, 0x87, 0x95, 0xad, 0x59, 0xc3, 0x23, 0xb3, 0x37, 0xb1, 0x19, 0x1e, 0x0b, 0xa5, 0x7c,
+	0x05, 0x2e, 0x43, 0xf2, 0x80, 0x9d, 0x96, 0x25, 0x93, 0x3e, 0x1d, 0x63, 0x54, 0xce, 0xfd, 0x99,
+	0x87, 0x54, 0xcd, 0xa6, 0x86, 0x43, 0xdf, 0x7e, 0x9e, 0x3f, 0x79, 0xe3, 0x3c, 0x2f, 0x72, 0xfb,
+	0xe9, 0x5b, 0xc8, 0xed, 0x6b, 0x33, 0x7a, 0xf9, 0x9f, 0xbb, 0xe7, 0x7a, 0x2f, 0xf7, 0x17, 0x1e,
+	0x36, 0x08, 0x1d, 0xf5, 0x8d, 0xce, 0xbb, 0x3c, 0xad, 0xca, 0xd3, 0x9f, 0x78, 0x58, 0xbf, 0x4f,
+	0x9d, 0x77, 0x39, 0x7a, 0x7d, 0x8e, 0x76, 0x0a, 0x10, 0x0f, 0x5e, 0x4c, 0x9c, 0x80, 0xe8, 0xbe,
+	0xd2, 0x6c, 0x11, 0x91, 0x63, 0x9f, 0xd2, 0x83, 0x16, 0x11, 0x11, 0x4e, 0x42, 0xbc, 0x46, 0x14,
+	0x4d, 0xa9, 0x49, 0x0d, 0x91, 0xdf, 0xf9, 0x35, 0x44, 0xbd, 0xff, 0xb9, 0x30, 0xa4, 0x94, 0xe6,
+	0x1e, 0x91, 0x54, 0x8d, 0xb4, 0x6b, 0x5a, 0x9b, 0xc8, 0x22, 0x87, 0x2f, 0x41, 0x42, 0x91, 0x24,
+	0x55, 0xaf, 0x49, 0x92, 0x2a, 0x22, 0x2c, 0x42, 0xf2, 0xa1, 0x42, 0xb4, 0xb6, 0xd4, 0xd0, 0xeb,
+	0x2d, 0x55, 0x13, 0x79, 0x9c, 0x02, 0x78, 0xd8, 0x6a, 0x68, 0xba, 0x5a, 0x97, 0x88, 0x2c, 0x0a,
+	0x78, 0x0d, 0x84, 0xb6, 0xb4, 0x2f, 0x46, 0xdc, 0x43, 0x54, 0xb9, 0xd6, 0x26, 0x8a, 0xf6, 0x58,
+	0x8c, 0xe2, 0x4d, 0xc0, 0x9a, 0xb2, 0x2f, 0xab, 0x32, 0x51, 0x64, 0x55, 0x97, 0x9a, 0xad, 0x7d,
+	0xa9, 0xf1, 0x58, 0x8c, 0xed, 0xfc, 0x8b, 0x87, 0xc4, 0xe2, 0x45, 0xc5, 0x1f, 0xc2, 0x0d, 0x55,
+	0xd1, 0x64, 0xbd, 0xd6, 0x56, 0xb5, 0xd6, 0xbe, 0x4c, 0x74, 0xad, 0xdd, 0x6c, 0xca, 0x0d, 0x5d,
+	0x69, 0x6a, 0x32, 0xd9, 0x93, 0x6a, 0xb2, 0x7e, 0xaf, 0xf5, 0xa8, 0x29, 0x72, 0x38, 0x0b, 0xd7,
+	0x18, 0xf0, 0xa0, 0xfe, 0x58, 0x75, 0xc3, 0x38, 0x8f, 0x40, 0xf8, 0x3a, 0xbc, 0xef, 0x91, 0x55,
+	0x5d, 0x6b, 0x2d, 0x05, 0x19, 0x8b, 0x41, 0x78, 0x9c, 0x86, 0xf7, 0x54, 0x99, 0x3c, 0x54, 0x6a,
+	0xb2, 0xee, 0xfe, 0x95, 0x89, 0x2e, 0x13, 0xd2, 0x22, 0xa2, 0x10, 0xb6, 0xd4, 0x1a, 0x8a, 0xdc,
+	0xd4, 0x7c, 0x4b, 0xc4, 0x8d, 0x23, 0xb0, 0xd4, 0x65, 0xa9, 0xa1, 0xd5, 0xf5, 0x46, 0xeb, 0x91,
+	0x18, 0xc5, 0x57, 0xe0, 0x3b, 0xc1, 0x7e, 0xbb, 0x29, 0x3d, 0x94, 0x94, 0x86, 0x54, 0x6d, 0xc8,
+	0x62, 0x0c, 0x6f, 0xc3, 0x07, 0x17, 0x1d, 0xa2, 0x1f, 0xb8, 0xce, 0xb4, 0xda, 0xc4, 0xdd, 0x57,
+	0x34, 0x59, 0x5c, 0x0b, 0x23, 0xc3, 0x87, 0x7e, 0x03, 0x19, 0x0f, 0x23, 0xe5, 0xe6, 0xbd, 0x83,
+	0x96, 0xd2, 0xd4, 0x7c, 0x6f, 0x6a, 0x75, 0xb9, 0xf6, 0x33, 0x7d, 0x4f, 0x52, 0x1a, 0x6e, 0xf9,
+	0x12, 0xd5, 0xdf, 0xa3, 0xd3, 0xe7, 0x19, 0xee, 0xd9, 0xf3, 0x0c, 0xf7, 0xf2, 0x79, 0x06, 0xfd,
+	0x76, 0x9e, 0x41, 0x7f, 0x9d, 0x67, 0xd0, 0x17, 0xf3, 0x0c, 0x3a, 0x9d, 0x67, 0xd0, 0xb3, 0x79,
+	0x06, 0xfd, 0x7b, 0x9e, 0x41, 0xff, 0x9b, 0x67, 0xb8, 0x97, 0xf3, 0x0c, 0xfa, 0xc3, 0x8b, 0x0c,
+	0x77, 0xfa, 0x22, 0xc3, 0x3d, 0x7b, 0x91, 0xe1, 0x7e, 0x71, 0xd0, 0xb3, 0x46, 0x9f, 0xf6, 0x0a,
+	0x53, 0xab, 0xef, 0x50, 0xdb, 0x36, 0x0a, 0x93, 0x71, 0x91, 0x7d, 0x1c, 0x59, 0xf6, 0xe0, 0xe6,
+	0xc8, 0xb6, 0xa6, 0x66, 0x97, 0xda, 0x37, 0x03, 0x73, 0x71, 0x74, 0xd8, 0xb3, 0x8a, 0xf4, 0xa9,
+	0xe3, 0xff, 0xb8, 0xbd, 0xe0, 0xc7, 0xfa, 0x61, 0x8c, 0xfd, 0xc8, 0xad, 0xfc, 0x3f, 0x00, 0x00,
+	0xff, 0xff, 0x5c, 0xf6, 0x0a, 0x5e, 0xd1, 0x0f, 0x00, 0x00,
+}
+
 func (x Severity) String() string {
 	s, ok := Severity_name[int32(x)]
 	if ok {
@@ -2214,7 +2261,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *LabelMatcher) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2222,40 +2269,59 @@ func (m *LabelMatcher) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LabelMatcher) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MatcherType != nil {
-		nn1, err := m.MatcherType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.MatcherType.Size()
+			i -= size
+			if _, err := m.MatcherType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LabelMatcher_ExactMatch) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelMatcher_ExactMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ExactMatch)
+	copy(dAtA[i:], m.ExactMatch)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ExactMatch)))
-	i += copy(dAtA[i:], m.ExactMatch)
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 func (m *LabelMatcher_RegexMatch) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelMatcher_RegexMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.RegexMatch)
+	copy(dAtA[i:], m.RegexMatch)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.RegexMatch)))
-	i += copy(dAtA[i:], m.RegexMatch)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *CustomMatcher) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2263,47 +2329,58 @@ func (m *CustomMatcher) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CustomMatcher) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Severity != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Severity.Size()))
-		n2, err := m.Severity.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Alertname != nil {
+		{
+			size, err := m.Alertname.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x1a
 	}
 	if m.Group != nil {
+		{
+			size, err := m.Group.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Group.Size()))
-		n3, err := m.Group.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
 	}
-	if m.Alertname != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Alertname.Size()))
-		n4, err := m.Alertname.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Severity != nil {
+		{
+			size, err := m.Severity.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *SeverityMatcher) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2311,34 +2388,40 @@ func (m *SeverityMatcher) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SeverityMatcher) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SeverityMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Severities) > 0 {
-		dAtA6 := make([]byte, len(m.Severities)*10)
-		var j5 int
+		dAtA5 := make([]byte, len(m.Severities)*10)
+		var j4 int
 		for _, num := range m.Severities {
 			for num >= 1<<7 {
-				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j5++
+				j4++
 			}
-			dAtA6[j5] = uint8(num)
-			j5++
+			dAtA5[j4] = uint8(num)
+			j4++
 		}
+		i -= j4
+		copy(dAtA[i:], dAtA5[:j4])
+		i = encodeVarintTypes(dAtA, i, uint64(j4))
+		i--
 		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j5))
-		i += copy(dAtA[i:], dAtA6[:j5])
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GroupMatcher) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2346,34 +2429,40 @@ func (m *GroupMatcher) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GroupMatcher) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GroupMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Groups) > 0 {
-		dAtA8 := make([]byte, len(m.Groups)*10)
-		var j7 int
+		dAtA7 := make([]byte, len(m.Groups)*10)
+		var j6 int
 		for _, num := range m.Groups {
 			for num >= 1<<7 {
-				dAtA8[j7] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j7++
+				j6++
 			}
-			dAtA8[j7] = uint8(num)
-			j7++
+			dAtA7[j6] = uint8(num)
+			j6++
 		}
+		i -= j6
+		copy(dAtA[i:], dAtA7[:j6])
+		i = encodeVarintTypes(dAtA, i, uint64(j6))
+		i--
 		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j7))
-		i += copy(dAtA[i:], dAtA8[:j7])
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CustomGroupBy) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2381,32 +2470,31 @@ func (m *CustomGroupBy) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CustomGroupBy) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomGroupBy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Labels) > 0 {
-		for _, s := range m.Labels {
+		for iNdEx := len(m.Labels) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Labels[iNdEx])
+			copy(dAtA[i:], m.Labels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Labels[iNdEx])))
+			i--
 			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *NotificationParameters) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2414,98 +2502,136 @@ func (m *NotificationParameters) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NotificationParameters) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NotificationParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.GroupBy != nil {
-		nn9, err := m.GroupBy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn9
-	}
-	if len(m.GroupWait) > 0 {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GroupWait)))
-		i += copy(dAtA[i:], m.GroupWait)
+	if len(m.RepeatInterval) > 0 {
+		i -= len(m.RepeatInterval)
+		copy(dAtA[i:], m.RepeatInterval)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.RepeatInterval)))
+		i--
+		dAtA[i] = 0x6a
 	}
 	if len(m.GroupInterval) > 0 {
-		dAtA[i] = 0x62
-		i++
+		i -= len(m.GroupInterval)
+		copy(dAtA[i:], m.GroupInterval)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.GroupInterval)))
-		i += copy(dAtA[i:], m.GroupInterval)
+		i--
+		dAtA[i] = 0x62
 	}
-	if len(m.RepeatInterval) > 0 {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.RepeatInterval)))
-		i += copy(dAtA[i:], m.RepeatInterval)
+	if len(m.GroupWait) > 0 {
+		i -= len(m.GroupWait)
+		copy(dAtA[i:], m.GroupWait)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GroupWait)))
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	if m.GroupBy != nil {
+		{
+			size := m.GroupBy.Size()
+			i -= size
+			if _, err := m.GroupBy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *NotificationParameters_Default) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NotificationParameters_Default) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Default != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Default.Size()))
-		n10, err := m.Default.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Default.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *NotificationParameters_Individual) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NotificationParameters_Individual) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Individual != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Individual.Size()))
-		n11, err := m.Individual.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Individual.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *NotificationParameters_VesIoGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NotificationParameters_VesIoGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.VesIoGroup != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VesIoGroup.Size()))
-		n12, err := m.VesIoGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VesIoGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *NotificationParameters_Custom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NotificationParameters_Custom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Custom != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Custom.Size()))
-		n13, err := m.Custom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Custom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2513,140 +2639,204 @@ func (m *Route) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Route) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Matcher != nil {
-		nn14, err := m.Matcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.NotificationParameters != nil {
+		{
+			size, err := m.NotificationParameters.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn14
+		i--
+		dAtA[i] = 0x6a
 	}
 	if m.Action != nil {
-		nn15, err := m.Action.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Action.Size()
+			i -= size
+			if _, err := m.Action.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn15
 	}
-	if m.NotificationParameters != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NotificationParameters.Size()))
-		n16, err := m.NotificationParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Matcher != nil {
+		{
+			size := m.Matcher.Size()
+			i -= size
+			if _, err := m.Matcher.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n16
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Route_Any) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Any) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Any != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Any.Size()))
-		n17, err := m.Any.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Any.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route_Severity) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Severity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Severity != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Severity.Size()))
-		n18, err := m.Severity.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Severity.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route_Group) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Group) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Group != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Group.Size()))
-		n19, err := m.Group.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Group.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route_Alertname) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Alertname) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.Alertname))
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *Route_AlertnameRegex) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x2a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_AlertnameRegex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.AlertnameRegex)
+	copy(dAtA[i:], m.AlertnameRegex)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.AlertnameRegex)))
-	i += copy(dAtA[i:], m.AlertnameRegex)
-	return i, nil
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
 }
 func (m *Route_Custom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Custom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Custom != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Custom.Size()))
-		n20, err := m.Custom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Custom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route_Send) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_Send) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Send != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Send.Size()))
-		n21, err := m.Send.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Send.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Route_DontSend) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Route_DontSend) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DontSend != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DontSend.Size()))
-		n22, err := m.DontSend.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DontSend.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2654,51 +2844,62 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receivers) > 0 {
-		for _, msg := range m.Receivers {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.NotificationParameters != nil {
+		{
+			size, err := m.NotificationParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Routes) > 0 {
-		for _, msg := range m.Routes {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Routes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Routes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.NotificationParameters != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NotificationParameters.Size()))
-		n23, err := m.NotificationParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Receivers) > 0 {
+		for iNdEx := len(m.Receivers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Receivers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n23
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2706,51 +2907,62 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receivers) > 0 {
-		for _, msg := range m.Receivers {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.NotificationParameters != nil {
+		{
+			size, err := m.NotificationParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Routes) > 0 {
-		for _, msg := range m.Routes {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Routes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Routes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.NotificationParameters != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NotificationParameters.Size()))
-		n24, err := m.NotificationParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Receivers) > 0 {
+		for iNdEx := len(m.Receivers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Receivers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n24
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2758,51 +2970,62 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receivers) > 0 {
-		for _, msg := range m.Receivers {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.NotificationParameters != nil {
+		{
+			size, err := m.NotificationParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Routes) > 0 {
-		for _, msg := range m.Routes {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Routes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Routes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.NotificationParameters != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NotificationParameters.Size()))
-		n25, err := m.NotificationParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Receivers) > 0 {
+		for iNdEx := len(m.Receivers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Receivers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n25
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2810,57 +3033,73 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Receivers) > 0 {
-		for _, msg := range m.Receivers {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.NotificationParameters != nil {
+		{
+			size, err := m.NotificationParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Routes) > 0 {
-		for _, msg := range m.Routes {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Routes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Routes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.NotificationParameters != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NotificationParameters.Size()))
-		n26, err := m.NotificationParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Receivers) > 0 {
+		for iNdEx := len(m.Receivers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Receivers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n26
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *LabelMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MatcherType != nil {
@@ -2870,6 +3109,9 @@ func (m *LabelMatcher) Size() (n int) {
 }
 
 func (m *LabelMatcher_ExactMatch) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ExactMatch)
@@ -2877,6 +3119,9 @@ func (m *LabelMatcher_ExactMatch) Size() (n int) {
 	return n
 }
 func (m *LabelMatcher_RegexMatch) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.RegexMatch)
@@ -2884,6 +3129,9 @@ func (m *LabelMatcher_RegexMatch) Size() (n int) {
 	return n
 }
 func (m *CustomMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Severity != nil {
@@ -2902,6 +3150,9 @@ func (m *CustomMatcher) Size() (n int) {
 }
 
 func (m *SeverityMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Severities) > 0 {
@@ -2915,6 +3166,9 @@ func (m *SeverityMatcher) Size() (n int) {
 }
 
 func (m *GroupMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Groups) > 0 {
@@ -2928,6 +3182,9 @@ func (m *GroupMatcher) Size() (n int) {
 }
 
 func (m *CustomGroupBy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Labels) > 0 {
@@ -2940,6 +3197,9 @@ func (m *CustomGroupBy) Size() (n int) {
 }
 
 func (m *NotificationParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GroupBy != nil {
@@ -2961,6 +3221,9 @@ func (m *NotificationParameters) Size() (n int) {
 }
 
 func (m *NotificationParameters_Default) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Default != nil {
@@ -2970,6 +3233,9 @@ func (m *NotificationParameters_Default) Size() (n int) {
 	return n
 }
 func (m *NotificationParameters_Individual) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Individual != nil {
@@ -2979,6 +3245,9 @@ func (m *NotificationParameters_Individual) Size() (n int) {
 	return n
 }
 func (m *NotificationParameters_VesIoGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.VesIoGroup != nil {
@@ -2988,6 +3257,9 @@ func (m *NotificationParameters_VesIoGroup) Size() (n int) {
 	return n
 }
 func (m *NotificationParameters_Custom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Custom != nil {
@@ -2997,6 +3269,9 @@ func (m *NotificationParameters_Custom) Size() (n int) {
 	return n
 }
 func (m *Route) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Matcher != nil {
@@ -3013,6 +3288,9 @@ func (m *Route) Size() (n int) {
 }
 
 func (m *Route_Any) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Any != nil {
@@ -3022,6 +3300,9 @@ func (m *Route_Any) Size() (n int) {
 	return n
 }
 func (m *Route_Severity) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Severity != nil {
@@ -3031,6 +3312,9 @@ func (m *Route_Severity) Size() (n int) {
 	return n
 }
 func (m *Route_Group) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Group != nil {
@@ -3040,12 +3324,18 @@ func (m *Route_Group) Size() (n int) {
 	return n
 }
 func (m *Route_Alertname) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 1 + sovTypes(uint64(m.Alertname))
 	return n
 }
 func (m *Route_AlertnameRegex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AlertnameRegex)
@@ -3053,6 +3343,9 @@ func (m *Route_AlertnameRegex) Size() (n int) {
 	return n
 }
 func (m *Route_Custom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Custom != nil {
@@ -3062,6 +3355,9 @@ func (m *Route_Custom) Size() (n int) {
 	return n
 }
 func (m *Route_Send) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Send != nil {
@@ -3071,6 +3367,9 @@ func (m *Route_Send) Size() (n int) {
 	return n
 }
 func (m *Route_DontSend) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DontSend != nil {
@@ -3080,6 +3379,9 @@ func (m *Route_DontSend) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Receivers) > 0 {
@@ -3102,6 +3404,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Receivers) > 0 {
@@ -3124,6 +3429,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Receivers) > 0 {
@@ -3146,6 +3454,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Receivers) > 0 {
@@ -3168,14 +3479,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -3215,9 +3519,9 @@ func (this *CustomMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CustomMatcher{`,
-		`Severity:` + strings.Replace(fmt.Sprintf("%v", this.Severity), "LabelMatcher", "LabelMatcher", 1) + `,`,
-		`Group:` + strings.Replace(fmt.Sprintf("%v", this.Group), "LabelMatcher", "LabelMatcher", 1) + `,`,
-		`Alertname:` + strings.Replace(fmt.Sprintf("%v", this.Alertname), "LabelMatcher", "LabelMatcher", 1) + `,`,
+		`Severity:` + strings.Replace(this.Severity.String(), "LabelMatcher", "LabelMatcher", 1) + `,`,
+		`Group:` + strings.Replace(this.Group.String(), "LabelMatcher", "LabelMatcher", 1) + `,`,
+		`Alertname:` + strings.Replace(this.Alertname.String(), "LabelMatcher", "LabelMatcher", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3270,7 +3574,7 @@ func (this *NotificationParameters_Default) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&NotificationParameters_Default{`,
-		`Default:` + strings.Replace(fmt.Sprintf("%v", this.Default), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Default:` + strings.Replace(fmt.Sprintf("%v", this.Default), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3280,7 +3584,7 @@ func (this *NotificationParameters_Individual) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&NotificationParameters_Individual{`,
-		`Individual:` + strings.Replace(fmt.Sprintf("%v", this.Individual), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Individual:` + strings.Replace(fmt.Sprintf("%v", this.Individual), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3290,7 +3594,7 @@ func (this *NotificationParameters_VesIoGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&NotificationParameters_VesIoGroup{`,
-		`VesIoGroup:` + strings.Replace(fmt.Sprintf("%v", this.VesIoGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`VesIoGroup:` + strings.Replace(fmt.Sprintf("%v", this.VesIoGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3312,7 +3616,7 @@ func (this *Route) String() string {
 	s := strings.Join([]string{`&Route{`,
 		`Matcher:` + fmt.Sprintf("%v", this.Matcher) + `,`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
-		`NotificationParameters:` + strings.Replace(fmt.Sprintf("%v", this.NotificationParameters), "NotificationParameters", "NotificationParameters", 1) + `,`,
+		`NotificationParameters:` + strings.Replace(this.NotificationParameters.String(), "NotificationParameters", "NotificationParameters", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3322,7 +3626,7 @@ func (this *Route_Any) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Route_Any{`,
-		`Any:` + strings.Replace(fmt.Sprintf("%v", this.Any), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Any:` + strings.Replace(fmt.Sprintf("%v", this.Any), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3382,7 +3686,7 @@ func (this *Route_Send) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Route_Send{`,
-		`Send:` + strings.Replace(fmt.Sprintf("%v", this.Send), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Send:` + strings.Replace(fmt.Sprintf("%v", this.Send), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3392,7 +3696,7 @@ func (this *Route_DontSend) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Route_DontSend{`,
-		`DontSend:` + strings.Replace(fmt.Sprintf("%v", this.DontSend), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DontSend:` + strings.Replace(fmt.Sprintf("%v", this.DontSend), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3401,10 +3705,20 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForReceivers := "[]*ObjectRefType{"
+	for _, f := range this.Receivers {
+		repeatedStringForReceivers += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForReceivers += "}"
+	repeatedStringForRoutes := "[]*Route{"
+	for _, f := range this.Routes {
+		repeatedStringForRoutes += strings.Replace(f.String(), "Route", "Route", 1) + ","
+	}
+	repeatedStringForRoutes += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Receivers:` + strings.Replace(fmt.Sprintf("%v", this.Receivers), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Routes:` + strings.Replace(fmt.Sprintf("%v", this.Routes), "Route", "Route", 1) + `,`,
-		`NotificationParameters:` + strings.Replace(fmt.Sprintf("%v", this.NotificationParameters), "NotificationParameters", "NotificationParameters", 1) + `,`,
+		`Receivers:` + repeatedStringForReceivers + `,`,
+		`Routes:` + repeatedStringForRoutes + `,`,
+		`NotificationParameters:` + strings.Replace(this.NotificationParameters.String(), "NotificationParameters", "NotificationParameters", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3413,10 +3727,20 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForReceivers := "[]*ObjectRefType{"
+	for _, f := range this.Receivers {
+		repeatedStringForReceivers += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForReceivers += "}"
+	repeatedStringForRoutes := "[]*Route{"
+	for _, f := range this.Routes {
+		repeatedStringForRoutes += strings.Replace(f.String(), "Route", "Route", 1) + ","
+	}
+	repeatedStringForRoutes += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Receivers:` + strings.Replace(fmt.Sprintf("%v", this.Receivers), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Routes:` + strings.Replace(fmt.Sprintf("%v", this.Routes), "Route", "Route", 1) + `,`,
-		`NotificationParameters:` + strings.Replace(fmt.Sprintf("%v", this.NotificationParameters), "NotificationParameters", "NotificationParameters", 1) + `,`,
+		`Receivers:` + repeatedStringForReceivers + `,`,
+		`Routes:` + repeatedStringForRoutes + `,`,
+		`NotificationParameters:` + strings.Replace(this.NotificationParameters.String(), "NotificationParameters", "NotificationParameters", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3425,10 +3749,20 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForReceivers := "[]*ObjectRefType{"
+	for _, f := range this.Receivers {
+		repeatedStringForReceivers += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForReceivers += "}"
+	repeatedStringForRoutes := "[]*Route{"
+	for _, f := range this.Routes {
+		repeatedStringForRoutes += strings.Replace(f.String(), "Route", "Route", 1) + ","
+	}
+	repeatedStringForRoutes += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Receivers:` + strings.Replace(fmt.Sprintf("%v", this.Receivers), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Routes:` + strings.Replace(fmt.Sprintf("%v", this.Routes), "Route", "Route", 1) + `,`,
-		`NotificationParameters:` + strings.Replace(fmt.Sprintf("%v", this.NotificationParameters), "NotificationParameters", "NotificationParameters", 1) + `,`,
+		`Receivers:` + repeatedStringForReceivers + `,`,
+		`Routes:` + repeatedStringForRoutes + `,`,
+		`NotificationParameters:` + strings.Replace(this.NotificationParameters.String(), "NotificationParameters", "NotificationParameters", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3437,10 +3771,20 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForReceivers := "[]*ObjectRefType{"
+	for _, f := range this.Receivers {
+		repeatedStringForReceivers += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForReceivers += "}"
+	repeatedStringForRoutes := "[]*Route{"
+	for _, f := range this.Routes {
+		repeatedStringForRoutes += strings.Replace(f.String(), "Route", "Route", 1) + ","
+	}
+	repeatedStringForRoutes += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Receivers:` + strings.Replace(fmt.Sprintf("%v", this.Receivers), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Routes:` + strings.Replace(fmt.Sprintf("%v", this.Routes), "Route", "Route", 1) + `,`,
-		`NotificationParameters:` + strings.Replace(fmt.Sprintf("%v", this.NotificationParameters), "NotificationParameters", "NotificationParameters", 1) + `,`,
+		`Receivers:` + repeatedStringForReceivers + `,`,
+		`Routes:` + repeatedStringForRoutes + `,`,
+		`NotificationParameters:` + strings.Replace(this.NotificationParameters.String(), "NotificationParameters", "NotificationParameters", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3468,7 +3812,7 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3496,7 +3840,7 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3506,6 +3850,9 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3525,7 +3872,7 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3535,6 +3882,9 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3547,6 +3897,9 @@ func (m *LabelMatcher) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3576,7 +3929,7 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3604,7 +3957,7 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3613,6 +3966,9 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3637,7 +3993,7 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3646,6 +4002,9 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3670,7 +4029,7 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3679,6 +4038,9 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3696,6 +4058,9 @@ func (m *CustomMatcher) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3725,7 +4090,7 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3751,7 +4116,7 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (Severity(b) & 0x7F) << shift
+					v |= Severity(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3768,7 +4133,7 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3777,8 +4142,15 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Severities) == 0 {
+					m.Severities = make([]Severity, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v Severity
@@ -3791,7 +4163,7 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (Severity(b) & 0x7F) << shift
+						v |= Severity(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -3808,6 +4180,9 @@ func (m *SeverityMatcher) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3837,7 +4212,7 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3863,7 +4238,7 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (Group(b) & 0x7F) << shift
+					v |= Group(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3880,7 +4255,7 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3889,8 +4264,15 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Groups) == 0 {
+					m.Groups = make([]Group, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v Group
@@ -3903,7 +4285,7 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (Group(b) & 0x7F) << shift
+						v |= Group(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -3920,6 +4302,9 @@ func (m *GroupMatcher) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3949,7 +4334,7 @@ func (m *CustomGroupBy) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3977,7 +4362,7 @@ func (m *CustomGroupBy) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3987,6 +4372,9 @@ func (m *CustomGroupBy) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3999,6 +4387,9 @@ func (m *CustomGroupBy) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4028,7 +4419,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4056,7 +4447,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4065,10 +4456,13 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4088,7 +4482,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4097,10 +4491,13 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4120,7 +4517,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4129,10 +4526,13 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4152,7 +4552,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4161,6 +4561,9 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4184,7 +4587,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4194,6 +4597,9 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4213,7 +4619,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4223,6 +4629,9 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4242,7 +4651,7 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4252,6 +4661,9 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4264,6 +4676,9 @@ func (m *NotificationParameters) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4293,7 +4708,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4321,7 +4736,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4330,10 +4745,13 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4353,7 +4771,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4362,6 +4780,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4385,7 +4806,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4394,6 +4815,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4417,7 +4841,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (AlertName(b) & 0x7F) << shift
+				v |= AlertName(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4437,7 +4861,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4447,6 +4871,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4466,7 +4893,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4475,6 +4902,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4498,7 +4928,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4507,10 +4937,13 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4530,7 +4963,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4539,10 +4972,13 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4562,7 +4998,7 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4571,6 +5007,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4588,6 +5027,9 @@ func (m *Route) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4617,7 +5059,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4645,7 +5087,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4654,10 +5096,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receivers = append(m.Receivers, &ves_io_schema4.ObjectRefType{})
+			m.Receivers = append(m.Receivers, &schema.ObjectRefType{})
 			if err := m.Receivers[len(m.Receivers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4676,7 +5121,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4685,6 +5130,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4707,7 +5155,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4716,6 +5164,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4733,6 +5184,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4762,7 +5216,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4790,7 +5244,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4799,10 +5253,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receivers = append(m.Receivers, &ves_io_schema4.ObjectRefType{})
+			m.Receivers = append(m.Receivers, &schema.ObjectRefType{})
 			if err := m.Receivers[len(m.Receivers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4821,7 +5278,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4830,6 +5287,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4852,7 +5312,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4861,6 +5321,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4878,6 +5341,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4907,7 +5373,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4935,7 +5401,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4944,10 +5410,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receivers = append(m.Receivers, &ves_io_schema4.ObjectRefType{})
+			m.Receivers = append(m.Receivers, &schema.ObjectRefType{})
 			if err := m.Receivers[len(m.Receivers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4966,7 +5435,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4975,6 +5444,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4997,7 +5469,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5006,6 +5478,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5023,6 +5498,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5052,7 +5530,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5080,7 +5558,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5089,10 +5567,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Receivers = append(m.Receivers, &ves_io_schema4.ObjectRefType{})
+			m.Receivers = append(m.Receivers, &schema.ObjectRefType{})
 			if err := m.Receivers[len(m.Receivers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5111,7 +5592,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5120,6 +5601,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5142,7 +5626,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5151,6 +5635,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5170,6 +5657,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5185,6 +5675,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -5216,10 +5707,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -5236,157 +5725,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/alert_policy/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 1554 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4f, 0x8f, 0x1a, 0xc9,
-	0x15, 0xa7, 0xba, 0x81, 0x81, 0x07, 0x86, 0x76, 0x65, 0x33, 0x26, 0x63, 0x2f, 0xc1, 0x78, 0x93,
-	0x9d, 0x9d, 0x60, 0x30, 0x60, 0x47, 0xbb, 0x56, 0x34, 0x4a, 0x83, 0x7b, 0x4c, 0x3b, 0x0c, 0x4c,
-	0xaa, 0x1b, 0x5b, 0x8e, 0x14, 0xb5, 0x1a, 0xa8, 0xc1, 0x9d, 0x05, 0x1a, 0x35, 0x0d, 0xeb, 0x51,
-	0x14, 0x29, 0xc9, 0x27, 0x88, 0xf2, 0x0d, 0x22, 0x25, 0x52, 0x94, 0x73, 0x4e, 0xe1, 0x32, 0xda,
-	0xd3, 0x2a, 0x27, 0x1f, 0x57, 0xab, 0x1c, 0x62, 0xa2, 0x28, 0xd9, 0x3d, 0x59, 0xfe, 0x04, 0x51,
-	0x57, 0x77, 0x43, 0xcf, 0x64, 0x8c, 0x76, 0x0e, 0xbe, 0xed, 0x69, 0xba, 0xea, 0xfd, 0x7e, 0xbf,
-	0x7a, 0xff, 0xea, 0xd5, 0x00, 0xdf, 0x9f, 0xd3, 0x69, 0xd1, 0x30, 0x4b, 0xd3, 0xde, 0x33, 0x3a,
-	0xd2, 0x4b, 0xfa, 0x90, 0x5a, 0xb6, 0x36, 0x31, 0x87, 0x46, 0xef, 0xa4, 0x64, 0x9f, 0x4c, 0xe8,
-	0xb4, 0x38, 0xb1, 0x4c, 0xdb, 0xc4, 0x3b, 0x2e, 0xae, 0xe8, 0xe2, 0x8a, 0x41, 0xdc, 0xce, 0xed,
-	0x81, 0x61, 0x3f, 0x9b, 0x75, 0x8b, 0x3d, 0x73, 0x54, 0x1a, 0x98, 0x03, 0xb3, 0xc4, 0x28, 0xdd,
-	0xd9, 0x31, 0x5b, 0xb1, 0x05, 0xfb, 0x72, 0xa5, 0x76, 0xae, 0x9f, 0x3d, 0xd2, 0x9c, 0xd8, 0x86,
-	0x39, 0xf6, 0xce, 0xd9, 0xf9, 0xce, 0x59, 0x63, 0xc0, 0x85, 0x9d, 0x1b, 0x67, 0x4d, 0x73, 0x7d,
-	0x68, 0xf4, 0x75, 0x9b, 0x7a, 0xd6, 0xdc, 0x39, 0xab, 0x41, 0x3f, 0xd1, 0xce, 0x48, 0xe7, 0x7f,
-	0x83, 0x20, 0xd9, 0xd4, 0xbb, 0x74, 0x78, 0xa8, 0xdb, 0xbd, 0x67, 0xd4, 0xc2, 0x37, 0x21, 0x41,
-	0x9f, 0xeb, 0x3d, 0x5b, 0x1b, 0x39, 0x1b, 0x19, 0x94, 0x43, 0xbb, 0xf1, 0x46, 0x88, 0x00, 0xdb,
-	0x64, 0x20, 0x07, 0x62, 0xd1, 0x01, 0x7d, 0xee, 0x41, 0x38, 0x1f, 0xc2, 0x36, 0x19, 0xe4, 0x7e,
-	0xf8, 0xf5, 0x3e, 0xaa, 0xd6, 0xbe, 0x0b, 0xc9, 0x91, 0x2b, 0xab, 0x39, 0x3e, 0xe3, 0xf4, 0xe9,
-	0x02, 0xa1, 0x17, 0x0b, 0xc4, 0x2f, 0x17, 0x88, 0x2f, 0x17, 0x2a, 0x8f, 0xc2, 0x31, 0x5e, 0x08,
-	0xe7, 0xff, 0x83, 0xe0, 0x4a, 0x7d, 0x36, 0xb5, 0xcd, 0x91, 0xef, 0xc4, 0x03, 0x88, 0x4d, 0xe9,
-	0x9c, 0x5a, 0x86, 0x7d, 0xc2, 0x3c, 0x48, 0x54, 0x76, 0x8b, 0x6f, 0xce, 0x75, 0x31, 0x18, 0x00,
-	0x59, 0x31, 0xf1, 0x3e, 0x44, 0x06, 0x96, 0x39, 0x9b, 0x30, 0x0f, 0x2f, 0x23, 0xe1, 0xd2, 0xf0,
-	0x01, 0xc4, 0x19, 0x66, 0xac, 0x8f, 0x68, 0x86, 0xbf, 0xa4, 0xc6, 0x9a, 0x7a, 0x3f, 0xf6, 0x7a,
-	0x3f, 0x52, 0x2e, 0x54, 0x0a, 0xd5, 0xfc, 0xcf, 0x21, 0xad, 0x78, 0xde, 0xad, 0x43, 0x05, 0xcf,
-	0x61, 0x83, 0x4e, 0x33, 0x28, 0xc7, 0xef, 0xa6, 0x2a, 0xef, 0x6d, 0x3a, 0xc5, 0x17, 0x20, 0x01,
-	0x1e, 0xcb, 0x77, 0x39, 0xdf, 0x86, 0xe4, 0x43, 0xc7, 0x73, 0x5f, 0xfb, 0x23, 0x88, 0xb2, 0x48,
-	0x7c, 0xdd, 0x9b, 0x9b, 0x74, 0x19, 0x93, 0x78, 0x04, 0x4f, 0xf0, 0x7d, 0xbf, 0x30, 0xcc, 0x58,
-	0x3b, 0xc1, 0xdb, 0x10, 0x1d, 0x3a, 0x51, 0xba, 0x8a, 0x71, 0xe2, 0xad, 0xf2, 0x5f, 0x86, 0x61,
-	0xbb, 0x65, 0xda, 0xc6, 0xb1, 0xd1, 0xd3, 0x9d, 0xf6, 0x3a, 0xd2, 0x2d, 0x7d, 0x44, 0x6d, 0x6a,
-	0x4d, 0xf1, 0x5d, 0xd8, 0xea, 0xd3, 0x63, 0x7d, 0x36, 0xb4, 0xbd, 0x52, 0xbe, 0x73, 0xce, 0x0b,
-	0x69, 0x34, 0xb1, 0x4f, 0x6a, 0x5c, 0x06, 0x35, 0x42, 0xc4, 0x87, 0xe2, 0x1f, 0x02, 0x18, 0xe3,
-	0xbe, 0x31, 0x37, 0xfa, 0x33, 0x7d, 0xe8, 0x15, 0xf0, 0x42, 0xa2, 0xd3, 0x78, 0x6b, 0x24, 0xfe,
-	0x10, 0x92, 0x73, 0x3a, 0xd5, 0x0c, 0x53, 0x73, 0x4b, 0xcf, 0x6f, 0x66, 0xce, 0xe9, 0x54, 0x36,
-	0x59, 0x70, 0xb8, 0x0e, 0xd1, 0x1e, 0x8b, 0x35, 0x03, 0x8c, 0xf3, 0xc1, 0xa6, 0x64, 0x9d, 0xc9,
-	0x4a, 0x23, 0x44, 0x3c, 0x2a, 0x6e, 0x00, 0xb0, 0x73, 0xb5, 0x4f, 0x74, 0xc3, 0xce, 0x24, 0x9c,
-	0x9b, 0x51, 0xfb, 0xe0, 0x8b, 0x05, 0xe2, 0xab, 0x77, 0xa6, 0x7f, 0xfb, 0xf2, 0x94, 0xdf, 0xb2,
-	0x22, 0x5f, 0xf1, 0xdc, 0xbd, 0x91, 0xf7, 0xbd, 0xe4, 0x39, 0x77, 0x3f, 0x62, 0xf1, 0xaf, 0x38,
-	0x44, 0xe2, 0x8c, 0xfc, 0x44, 0x37, 0x6c, 0xfc, 0x53, 0x48, 0xb9, 0x4a, 0xc6, 0xd8, 0xa6, 0xd6,
-	0x5c, 0x1f, 0x66, 0x92, 0x4c, 0x6d, 0xef, 0x8b, 0x05, 0xe2, 0xca, 0x4c, 0x20, 0x66, 0x45, 0xbf,
-	0xe2, 0xf9, 0xf2, 0x1d, 0x7f, 0xb1, 0xe4, 0xfd, 0x63, 0x3c, 0xb9, 0x2b, 0x4c, 0x41, 0xf6, 0x04,
-	0xb0, 0x02, 0x69, 0x8b, 0x4e, 0xa8, 0x6e, 0xaf, 0x35, 0xaf, 0xac, 0x35, 0xef, 0x3e, 0x0b, 0x6a,
-	0xf6, 0x83, 0x9a, 0xa3, 0x80, 0x66, 0xca, 0x95, 0xf0, 0x45, 0xef, 0x1f, 0x7c, 0xba, 0x40, 0x35,
-	0x78, 0x17, 0xae, 0x05, 0xcb, 0x9f, 0x0b, 0xd4, 0x9f, 0x2b, 0x57, 0xe1, 0x26, 0x7c, 0xfb, 0x8c,
-	0x99, 0x25, 0xce, 0x18, 0x0f, 0x70, 0xac, 0x7c, 0xb7, 0x50, 0x2e, 0x17, 0xca, 0x95, 0x5a, 0x1e,
-	0x62, 0x6e, 0xbc, 0xdd, 0x13, 0xbc, 0x7d, 0xba, 0x40, 0xdc, 0x67, 0xee, 0xac, 0x48, 0x2d, 0x17,
-	0x28, 0x5a, 0x29, 0x54, 0x0b, 0xe5, 0x3b, 0x8f, 0xc2, 0xb1, 0x94, 0x90, 0xce, 0xff, 0x35, 0x02,
-	0x11, 0x62, 0xce, 0x6c, 0x8a, 0x77, 0x81, 0xd7, 0xc7, 0x27, 0x9b, 0xda, 0xaa, 0x11, 0x22, 0x0e,
-	0x04, 0xcb, 0x81, 0x81, 0xe2, 0x36, 0xd3, 0x0f, 0xbe, 0xce, 0x1d, 0xf3, 0x2e, 0x52, 0x23, 0x14,
-	0x98, 0x2a, 0x3f, 0xf6, 0xa7, 0xca, 0xd7, 0x98, 0x08, 0xc1, 0xdb, 0xd8, 0x08, 0xf9, 0x73, 0x45,
-	0x0a, 0xce, 0x95, 0x70, 0x0e, 0xed, 0xa6, 0x2a, 0xdf, 0xdb, 0xa4, 0x22, 0x3a, 0x8b, 0x96, 0x3e,
-	0xa2, 0x8d, 0x50, 0x60, 0xac, 0xe0, 0x12, 0xa4, 0x57, 0x0b, 0x8d, 0xcd, 0xde, 0x4c, 0x84, 0x95,
-	0x33, 0xec, 0x8c, 0xd9, 0x46, 0x88, 0xa4, 0x56, 0x66, 0xe2, 0x58, 0xb1, 0x7c, 0xf9, 0x0e, 0xf7,
-	0x7c, 0x5f, 0x49, 0xfa, 0x7d, 0xbe, 0x07, 0xe1, 0x29, 0x1d, 0xf7, 0x59, 0x87, 0xbf, 0x29, 0xf5,
-	0x88, 0x30, 0x0c, 0xae, 0x42, 0xbc, 0x6f, 0x8e, 0x6d, 0x8d, 0x11, 0x92, 0x1b, 0x09, 0x31, 0x07,
-	0xa8, 0x38, 0xa4, 0x19, 0x5c, 0x1b, 0x07, 0x3a, 0x46, 0x9b, 0xac, 0x1a, 0x8a, 0xf5, 0x6c, 0xa2,
-	0x52, 0xd9, 0xe4, 0xfc, 0xc5, 0xa3, 0xa8, 0x16, 0xf3, 0xde, 0x1f, 0x44, 0xb6, 0xc7, 0x17, 0x22,
-	0xee, 0x27, 0x5e, 0xef, 0xb3, 0x96, 0xbc, 0x57, 0x28, 0x57, 0x6b, 0xb7, 0x60, 0xcb, 0x7b, 0xbe,
-	0x70, 0xe6, 0x74, 0xdd, 0x8d, 0x49, 0x36, 0xcb, 0x0b, 0x77, 0x0b, 0xf7, 0x0a, 0xe5, 0x3b, 0xb5,
-	0xeb, 0x10, 0xd5, 0x7b, 0x8e, 0x0a, 0xbe, 0x7a, 0xba, 0x40, 0x89, 0x17, 0x0b, 0x94, 0x5e, 0x2e,
-	0x50, 0x84, 0x35, 0xb5, 0xdb, 0xb0, 0x8f, 0xc2, 0xb1, 0xb4, 0x20, 0xe4, 0xff, 0xcd, 0x41, 0xea,
-	0xe1, 0xd0, 0xec, 0xea, 0x43, 0x65, 0x42, 0x7b, 0xaa, 0xf3, 0x1e, 0x3e, 0x81, 0xb8, 0x45, 0x7b,
-	0xd4, 0x98, 0x3b, 0x61, 0x39, 0x03, 0x35, 0x51, 0xb9, 0x71, 0x2e, 0xac, 0x76, 0xf7, 0x17, 0xb4,
-	0x67, 0x13, 0x7a, 0xec, 0x10, 0x6a, 0xd7, 0xff, 0xf2, 0x2b, 0xb7, 0xa8, 0x9a, 0xcf, 0x63, 0x37,
-	0xf3, 0xf7, 0x88, 0x13, 0xc2, 0x64, 0xad, 0x85, 0x25, 0x88, 0x5a, 0xce, 0x0d, 0x99, 0x66, 0x38,
-	0xa6, 0xba, 0x71, 0xf0, 0xb3, 0xbb, 0x54, 0x83, 0x95, 0x92, 0x40, 0x3c, 0xf2, 0xa6, 0x22, 0xf0,
-	0x6f, 0xb1, 0x08, 0x3f, 0xfa, 0x74, 0x81, 0x3e, 0x84, 0x5b, 0x70, 0x83, 0x35, 0x7e, 0x8e, 0x78,
-	0x61, 0xe5, 0xea, 0xe6, 0xf8, 0xd8, 0x18, 0xcc, 0x2c, 0x86, 0xc7, 0x7c, 0xb9, 0x50, 0x85, 0xab,
-	0x90, 0x3c, 0x62, 0xa7, 0xe5, 0xc8, 0x6c, 0x48, 0xa7, 0x18, 0x55, 0xf2, 0x7f, 0xe4, 0x20, 0x55,
-	0xb7, 0xa8, 0x6e, 0xd3, 0xb7, 0x9f, 0xe7, 0x8f, 0x2e, 0x9d, 0xe7, 0x55, 0x6e, 0x3f, 0x7e, 0x0b,
-	0xb9, 0x7d, 0x63, 0x46, 0xaf, 0xfe, 0x7d, 0xff, 0x5c, 0xef, 0xe5, 0xff, 0xc4, 0x41, 0x9a, 0xd0,
-	0xc9, 0x50, 0xef, 0x7d, 0x93, 0xa7, 0x4d, 0x79, 0xfa, 0x03, 0x07, 0x89, 0x87, 0xd4, 0xfe, 0x26,
-	0x47, 0x6f, 0xce, 0xd1, 0x5e, 0x11, 0x62, 0xfe, 0x8b, 0x89, 0xe3, 0x10, 0x39, 0x94, 0x5b, 0x6d,
-	0x22, 0x84, 0xd8, 0xa7, 0xf8, 0xa8, 0x4d, 0x04, 0x84, 0x93, 0x10, 0xab, 0x13, 0x59, 0x95, 0xeb,
-	0x62, 0x53, 0xe0, 0xf6, 0x7e, 0x09, 0x11, 0xf7, 0x7f, 0x2e, 0x0c, 0x29, 0xb9, 0x75, 0x40, 0x44,
-	0x45, 0x25, 0x9d, 0xba, 0xda, 0x21, 0x92, 0x10, 0xc2, 0x57, 0x20, 0x2e, 0x8b, 0xa2, 0xa2, 0xd5,
-	0x45, 0x51, 0x11, 0x10, 0x16, 0x20, 0xf9, 0x58, 0x26, 0x6a, 0x47, 0x6c, 0x6a, 0x8d, 0xb6, 0xa2,
-	0x0a, 0x1c, 0x4e, 0x01, 0x3c, 0x6e, 0x37, 0x55, 0x4d, 0x69, 0x88, 0x44, 0x12, 0x78, 0xbc, 0x05,
-	0x7c, 0x47, 0x3c, 0x14, 0xc2, 0xce, 0x21, 0x8a, 0x54, 0xef, 0x10, 0x59, 0x7d, 0x2a, 0x44, 0xf0,
-	0x36, 0x60, 0x55, 0x3e, 0x94, 0x14, 0x89, 0xc8, 0x92, 0xa2, 0x89, 0xad, 0xf6, 0xa1, 0xd8, 0x7c,
-	0x2a, 0x44, 0xf7, 0xfe, 0xc1, 0x41, 0x7c, 0xf5, 0xa2, 0xe2, 0xf7, 0xe1, 0x96, 0x22, 0xab, 0x92,
-	0x56, 0xef, 0x28, 0x6a, 0xfb, 0x50, 0x22, 0x9a, 0xda, 0x69, 0xb5, 0xa4, 0xa6, 0x26, 0xb7, 0x54,
-	0x89, 0x1c, 0x88, 0x75, 0x49, 0x7b, 0xd0, 0x7e, 0xd2, 0x12, 0x42, 0x38, 0x07, 0x37, 0x18, 0xf0,
-	0xa8, 0xf1, 0x54, 0x71, 0xc2, 0x38, 0x8f, 0x40, 0xf8, 0x26, 0xbc, 0xeb, 0x92, 0x15, 0x4d, 0x6d,
-	0xaf, 0x05, 0x19, 0x8b, 0x41, 0x38, 0x9c, 0x81, 0x77, 0x14, 0x89, 0x3c, 0x96, 0xeb, 0x92, 0xe6,
-	0xfc, 0x95, 0x88, 0x26, 0x11, 0xd2, 0x26, 0x02, 0x1f, 0xb4, 0xd4, 0x9b, 0xb2, 0xd4, 0x52, 0x3d,
-	0x4b, 0xd8, 0x89, 0xc3, 0xb7, 0x34, 0x24, 0xb1, 0xa9, 0x36, 0xb4, 0x66, 0xfb, 0x89, 0x10, 0xc1,
-	0xd7, 0xe0, 0x5b, 0xfe, 0x7e, 0xa7, 0x25, 0x3e, 0x16, 0xe5, 0xa6, 0x58, 0x6b, 0x4a, 0x42, 0x14,
-	0xef, 0xc2, 0x7b, 0x17, 0x1d, 0xa2, 0x1d, 0x39, 0xce, 0xb4, 0x3b, 0xc4, 0xd9, 0x97, 0x55, 0x49,
-	0xd8, 0x0a, 0x22, 0x83, 0x87, 0xfe, 0x1f, 0x32, 0x16, 0x44, 0x4a, 0xad, 0x07, 0x47, 0x6d, 0xb9,
-	0xa5, 0x7a, 0xde, 0xd4, 0x1b, 0x52, 0xfd, 0x27, 0xda, 0x81, 0x28, 0x37, 0x9d, 0xf2, 0xc5, 0x6b,
-	0xbf, 0x45, 0x2f, 0x5e, 0x66, 0x43, 0x9f, 0xbf, 0xcc, 0x86, 0x5e, 0xbd, 0xcc, 0xa2, 0x5f, 0x2f,
-	0xb3, 0xe8, 0xcf, 0xcb, 0x2c, 0xfa, 0x6c, 0x99, 0x45, 0x2f, 0x96, 0x59, 0xf4, 0xf9, 0x32, 0x8b,
-	0xfe, 0xb9, 0xcc, 0xa2, 0xff, 0x2e, 0xb3, 0xa1, 0x57, 0xcb, 0x2c, 0xfa, 0xdd, 0xbf, 0xb2, 0xa1,
-	0x9f, 0x1d, 0x0d, 0xcc, 0xc9, 0xc7, 0x83, 0xe2, 0xdc, 0x1c, 0xda, 0xd4, 0xb2, 0xf4, 0xe2, 0x6c,
-	0x5a, 0x62, 0x1f, 0xc7, 0xa6, 0x35, 0xba, 0x3d, 0xb1, 0xcc, 0xb9, 0xd1, 0xa7, 0xd6, 0x6d, 0xdf,
-	0x5c, 0x9a, 0x74, 0x07, 0x66, 0x89, 0x3e, 0xb7, 0xbd, 0x1f, 0xb5, 0x17, 0xfc, 0x48, 0xef, 0x46,
-	0xd9, 0x8f, 0xdb, 0xea, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0x7a, 0x37, 0xc4, 0xba, 0xc9, 0x0f,
-	0x00, 0x00,
-}

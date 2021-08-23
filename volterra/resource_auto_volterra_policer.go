@@ -141,6 +141,7 @@ func resourceVolterraPolicerCreate(d *schema.ResourceData, meta interface{}) err
 
 		createSpec.BurstSize =
 			uint32(v.(int))
+
 	}
 
 	//committed_information_rate
@@ -148,6 +149,7 @@ func resourceVolterraPolicerCreate(d *schema.ResourceData, meta interface{}) err
 
 		createSpec.CommittedInformationRate =
 			uint32(v.(int))
+
 	}
 
 	//policer_mode
@@ -266,12 +268,14 @@ func resourceVolterraPolicerUpdate(d *schema.ResourceData, meta interface{}) err
 
 		updateSpec.BurstSize =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("committed_information_rate"); ok && !isIntfNil(v) {
 
 		updateSpec.CommittedInformationRate =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("policer_mode"); ok && !isIntfNil(v) {

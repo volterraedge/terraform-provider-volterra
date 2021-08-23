@@ -27,41 +27,52 @@ resource "volterra_fleet" "example" {
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
 
   enable_vgpu {
     feature_type   = "feature_type"
     server_address = "gridlicense1.example.com"
     server_port    = "server_port"
   }
-
   // One of the arguments from this list "interface_list default_config device_list" must be set
-
-  interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  default_config = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
-  default_storage_class = true
+
+  storage_class_list {
+    storage_classes {
+      advanced_storage_parameters = {
+        "key1" = "value1"
+      }
+
+      allow_volume_expansion = true
+      default_storage_class  = true
+      description            = "description"
+
+      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise custom_storage" must be set
+
+      netapp_trident {
+        selector = {
+          "key1" = "value1"
+        }
+
+        storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
+      }
+      reclaim_policy     = "Delete"
+      storage_class_name = "premium"
+      storage_device     = "storage_device"
+    }
+  }
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-
-  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
-
-  usb_policy {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+  deny_all_usb = true
 }
 
 ```

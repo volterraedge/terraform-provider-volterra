@@ -291,7 +291,7 @@ var CustomStateAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomStateAPI.SetState",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteSetStateResp"
                         }
@@ -348,15 +348,19 @@ var CustomStateAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nSite namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

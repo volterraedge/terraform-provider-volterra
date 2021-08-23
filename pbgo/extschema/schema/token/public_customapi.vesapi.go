@@ -291,7 +291,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.token.CustomAPI.TokenState",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/tokenObjectChangeResp"
                         }
@@ -348,15 +348,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Token namespace\n\nx-example: \"value\"\nNamespace where token is residing",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Token name\n\nx-example: \"value\"\nToken object name to change, it's usually same as Metadata.Uid",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

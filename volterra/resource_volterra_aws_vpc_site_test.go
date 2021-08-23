@@ -138,6 +138,10 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 				}
 			}
 		  }
+		  coordinates {
+			latitude = 37.404989
+			longitude = -121.942300
+		  }
 		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
 		  total_nodes = 2
@@ -176,6 +180,10 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 		}
 		logs_streaming_disabled = true
 		no_worker_nodes = true
+		coordinates {
+			latitude = 37.404989
+			longitude = -121.942300
+		}
 	  }`, resourceName, name, cloudCred)
 }
 

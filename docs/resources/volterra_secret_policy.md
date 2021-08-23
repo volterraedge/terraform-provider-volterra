@@ -46,6 +46,8 @@ Argument Reference
 
 `allow_volterra` - (Optional) if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy. (`Bool`).
 
+`decrypt_cache_timeout` - (Optional) Value for this parameter is a string ending in the suffix "s" (indicating seconds), suffix "m" (indicating minutes) or suffix "h" (indicating hours) (`String`).
+
 `rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
 
 ### Ref

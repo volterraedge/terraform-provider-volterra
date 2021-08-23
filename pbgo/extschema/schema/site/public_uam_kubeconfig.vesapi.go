@@ -559,7 +559,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteKubeConfigStatusRsp"
                         }
@@ -643,7 +643,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteListKubeConfigRsp"
                         }
@@ -700,9 +700,11 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "Site\n\nx-required\nx-example: \"ce398\"\nName of the site.\nAll global kubeconfigs created by the user under the site will be listed.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -720,7 +722,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/apiHttpBody"
                         }
@@ -777,9 +779,11 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "Site\n\nx-required\nx-example: \"ce398\"\nName of the site for which kubeconfig is being requested.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",

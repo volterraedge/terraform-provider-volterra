@@ -3,34 +3,35 @@
 
 package fleet
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Etcd Clustering Network
 //
@@ -55,13 +56,16 @@ var EtcdClusterNetworkType_name = map[int32]string{
 	1: "ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK",
 	2: "ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK",
 }
+
 var EtcdClusterNetworkType_value = map[string]int32{
 	"ETCD_CLUSTER_SITE_LOCAL_NETWORK":        0,
 	"ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK": 1,
 	"ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK":   2,
 }
 
-func (EtcdClusterNetworkType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (EtcdClusterNetworkType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{0}
+}
 
 // Device Owner Type
 //
@@ -90,6 +94,7 @@ var DeviceOwnerType_name = map[int32]string{
 	2: "DEVICE_OWNER_VK8S_WORK_LOAD",
 	3: "DEVICE_OWNER_HOST",
 }
+
 var DeviceOwnerType_value = map[string]int32{
 	"DEVICE_OWNER_INVALID":        0,
 	"DEVICE_OWNER_VER":            1,
@@ -97,7 +102,9 @@ var DeviceOwnerType_value = map[string]int32{
 	"DEVICE_OWNER_HOST":           3,
 }
 
-func (DeviceOwnerType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (DeviceOwnerType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{1}
+}
 
 // Fleet Type
 //
@@ -118,12 +125,15 @@ var FleetType_name = map[int32]string{
 	0: "MULTIPLE_SITE",
 	1: "SINGLE_SITE",
 }
+
 var FleetType_value = map[string]int32{
 	"MULTIPLE_SITE": 0,
 	"SINGLE_SITE":   1,
 }
 
-func (FleetType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (FleetType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{2}
+}
 
 // Network Device Use
 //
@@ -148,6 +158,7 @@ var NetworkingDeviceInstanceUseType_name = map[int32]string{
 	1: "NETWORK_INTERFACE_USE_OUTSIDE",
 	2: "NETWORK_INTERFACE_USE_INSIDE",
 }
+
 var NetworkingDeviceInstanceUseType_value = map[string]int32{
 	"NETWORK_INTERFACE_USE_REGULAR": 0,
 	"NETWORK_INTERFACE_USE_OUTSIDE": 1,
@@ -155,7 +166,7 @@ var NetworkingDeviceInstanceUseType_value = map[string]int32{
 }
 
 func (NetworkingDeviceInstanceUseType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{3}
+	return fileDescriptor_82c3333ba2789298, []int{3}
 }
 
 // vGPU Feature Type
@@ -185,6 +196,7 @@ var VGPUFeatureType_name = map[int32]string{
 	2: "VWS",
 	4: "VCS",
 }
+
 var VGPUFeatureType_value = map[string]int32{
 	"UNLICENSED": 0,
 	"VGPU":       1,
@@ -192,7 +204,9 @@ var VGPUFeatureType_value = map[string]int32{
 	"VCS":        4,
 }
 
-func (VGPUFeatureType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (VGPUFeatureType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{4}
+}
 
 // Network Device Type
 //
@@ -219,7 +233,7 @@ type NetworkingDeviceInstanceType struct {
 	// If use is NETWORK_INTERFACE_USE_REGULAR, the virtual-network must be of type VIRTUAL_NETWORK_SITE_LOCAL or VIRTUAL_NETWORK_SITE_LOCAL_INSIDE
 	// if use is NETWORK_INTERFACE_USE_OUTSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL
 	// if use is NETWORK_INTERFACE_USE_INSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE
-	Interface []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=interface" json:"interface,omitempty"`
+	Interface []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=interface,proto3" json:"interface,omitempty"`
 	// Use
 	//
 	// x-displayName: "Use"
@@ -233,10 +247,32 @@ type NetworkingDeviceInstanceType struct {
 func (m *NetworkingDeviceInstanceType) Reset()      { *m = NetworkingDeviceInstanceType{} }
 func (*NetworkingDeviceInstanceType) ProtoMessage() {}
 func (*NetworkingDeviceInstanceType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{0}
+	return fileDescriptor_82c3333ba2789298, []int{0}
+}
+func (m *NetworkingDeviceInstanceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkingDeviceInstanceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NetworkingDeviceInstanceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkingDeviceInstanceType.Merge(m, src)
+}
+func (m *NetworkingDeviceInstanceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkingDeviceInstanceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkingDeviceInstanceType.DiscardUnknown(m)
 }
 
-func (m *NetworkingDeviceInstanceType) GetInterface() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_NetworkingDeviceInstanceType proto.InternalMessageInfo
+
+func (m *NetworkingDeviceInstanceType) GetInterface() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Interface
 	}
@@ -258,9 +294,33 @@ func (m *NetworkingDeviceInstanceType) GetUse() NetworkingDeviceInstanceUseType 
 type GenericDeviceInstanceType struct {
 }
 
-func (m *GenericDeviceInstanceType) Reset()                    { *m = GenericDeviceInstanceType{} }
-func (*GenericDeviceInstanceType) ProtoMessage()               {}
-func (*GenericDeviceInstanceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GenericDeviceInstanceType) Reset()      { *m = GenericDeviceInstanceType{} }
+func (*GenericDeviceInstanceType) ProtoMessage() {}
+func (*GenericDeviceInstanceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{1}
+}
+func (m *GenericDeviceInstanceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GenericDeviceInstanceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GenericDeviceInstanceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenericDeviceInstanceType.Merge(m, src)
+}
+func (m *GenericDeviceInstanceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GenericDeviceInstanceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GenericDeviceInstanceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GenericDeviceInstanceType proto.InternalMessageInfo
 
 // Device Instance
 //
@@ -296,9 +356,33 @@ type DeviceInstanceType struct {
 	DeviceInstance isDeviceInstanceType_DeviceInstance `protobuf_oneof:"device_instance"`
 }
 
-func (m *DeviceInstanceType) Reset()                    { *m = DeviceInstanceType{} }
-func (*DeviceInstanceType) ProtoMessage()               {}
-func (*DeviceInstanceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *DeviceInstanceType) Reset()      { *m = DeviceInstanceType{} }
+func (*DeviceInstanceType) ProtoMessage() {}
+func (*DeviceInstanceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{2}
+}
+func (m *DeviceInstanceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DeviceInstanceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DeviceInstanceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeviceInstanceType.Merge(m, src)
+}
+func (m *DeviceInstanceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *DeviceInstanceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeviceInstanceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeviceInstanceType proto.InternalMessageInfo
 
 type isDeviceInstanceType_DeviceInstance interface {
 	isDeviceInstanceType_DeviceInstance()
@@ -308,7 +392,7 @@ type isDeviceInstanceType_DeviceInstance interface {
 }
 
 type DeviceInstanceType_NetworkDevice struct {
-	NetworkDevice *NetworkingDeviceInstanceType `protobuf:"bytes,4,opt,name=network_device,json=networkDevice,oneof"`
+	NetworkDevice *NetworkingDeviceInstanceType `protobuf:"bytes,4,opt,name=network_device,json=networkDevice,proto3,oneof" json:"network_device,omitempty"`
 }
 
 func (*DeviceInstanceType_NetworkDevice) isDeviceInstanceType_DeviceInstance() {}
@@ -341,59 +425,11 @@ func (m *DeviceInstanceType) GetNetworkDevice() *NetworkingDeviceInstanceType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*DeviceInstanceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _DeviceInstanceType_OneofMarshaler, _DeviceInstanceType_OneofUnmarshaler, _DeviceInstanceType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DeviceInstanceType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*DeviceInstanceType_NetworkDevice)(nil),
 	}
-}
-
-func _DeviceInstanceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*DeviceInstanceType)
-	// device_instance
-	switch x := m.DeviceInstance.(type) {
-	case *DeviceInstanceType_NetworkDevice:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetworkDevice); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("DeviceInstanceType.DeviceInstance has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _DeviceInstanceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*DeviceInstanceType)
-	switch tag {
-	case 4: // device_instance.network_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(NetworkingDeviceInstanceType)
-		err := b.DecodeMessage(msg)
-		m.DeviceInstance = &DeviceInstanceType_NetworkDevice{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _DeviceInstanceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*DeviceInstanceType)
-	// device_instance
-	switch x := m.DeviceInstance.(type) {
-	case *DeviceInstanceType_NetworkDevice:
-		s := proto.Size(x.NetworkDevice)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // List of Interfaces
@@ -406,14 +442,38 @@ type FleetInterfaceListType struct {
 	// x-displayName: "List of Interfaces"
 	// x-required
 	// Add all interfaces belonging to this fleet
-	Interfaces []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=interfaces" json:"interfaces,omitempty"`
+	Interfaces []*views.ObjectRefType `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 }
 
-func (m *FleetInterfaceListType) Reset()                    { *m = FleetInterfaceListType{} }
-func (*FleetInterfaceListType) ProtoMessage()               {}
-func (*FleetInterfaceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *FleetInterfaceListType) Reset()      { *m = FleetInterfaceListType{} }
+func (*FleetInterfaceListType) ProtoMessage() {}
+func (*FleetInterfaceListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{3}
+}
+func (m *FleetInterfaceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetInterfaceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetInterfaceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetInterfaceListType.Merge(m, src)
+}
+func (m *FleetInterfaceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetInterfaceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetInterfaceListType.DiscardUnknown(m)
+}
 
-func (m *FleetInterfaceListType) GetInterfaces() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_FleetInterfaceListType proto.InternalMessageInfo
+
+func (m *FleetInterfaceListType) GetInterfaces() []*views.ObjectRefType {
 	if m != nil {
 		return m.Interfaces
 	}
@@ -434,12 +494,36 @@ type FleetDeviceListType struct {
 	// has an corresponding interface/device. The mapping from device configured in fleet with
 	// interface/device in VER node depends on the type of device and is documented in
 	// device instance specific sections
-	Devices []*DeviceInstanceType `protobuf:"bytes,3,rep,name=devices" json:"devices,omitempty"`
+	Devices []*DeviceInstanceType `protobuf:"bytes,3,rep,name=devices,proto3" json:"devices,omitempty"`
 }
 
-func (m *FleetDeviceListType) Reset()                    { *m = FleetDeviceListType{} }
-func (*FleetDeviceListType) ProtoMessage()               {}
-func (*FleetDeviceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *FleetDeviceListType) Reset()      { *m = FleetDeviceListType{} }
+func (*FleetDeviceListType) ProtoMessage() {}
+func (*FleetDeviceListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{4}
+}
+func (m *FleetDeviceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetDeviceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetDeviceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetDeviceListType.Merge(m, src)
+}
+func (m *FleetDeviceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetDeviceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetDeviceListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetDeviceListType proto.InternalMessageInfo
 
 func (m *FleetDeviceListType) GetDevices() []*DeviceInstanceType {
 	if m != nil {
@@ -462,14 +546,36 @@ type StorageDeviceOpenebsEnterpriseType struct {
 	// Each MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).
 	// The pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access
 	// mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.
-	MayastorPools []*OpenebsMayastorPoolType `protobuf:"bytes,1,rep,name=mayastor_pools,json=mayastorPools" json:"mayastor_pools,omitempty"`
+	MayastorPools []*OpenebsMayastorPoolType `protobuf:"bytes,1,rep,name=mayastor_pools,json=mayastorPools,proto3" json:"mayastor_pools,omitempty"`
 }
 
 func (m *StorageDeviceOpenebsEnterpriseType) Reset()      { *m = StorageDeviceOpenebsEnterpriseType{} }
 func (*StorageDeviceOpenebsEnterpriseType) ProtoMessage() {}
 func (*StorageDeviceOpenebsEnterpriseType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{5}
+	return fileDescriptor_82c3333ba2789298, []int{5}
 }
+func (m *StorageDeviceOpenebsEnterpriseType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceOpenebsEnterpriseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceOpenebsEnterpriseType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceOpenebsEnterpriseType.Merge(m, src)
+}
+func (m *StorageDeviceOpenebsEnterpriseType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceOpenebsEnterpriseType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceOpenebsEnterpriseType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceOpenebsEnterpriseType proto.InternalMessageInfo
 
 func (m *StorageDeviceOpenebsEnterpriseType) GetMayastorPools() []*OpenebsMayastorPoolType {
 	if m != nil {
@@ -510,12 +616,36 @@ type OpenebsMayastorPoolType struct {
 	// List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated
 	// disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.
 	// It supports various types such as "/dev/sdb", "nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432" or "iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2".
-	PoolDiskDevices []string `protobuf:"bytes,3,rep,name=pool_disk_devices,json=poolDiskDevices" json:"pool_disk_devices,omitempty"`
+	PoolDiskDevices []string `protobuf:"bytes,3,rep,name=pool_disk_devices,json=poolDiskDevices,proto3" json:"pool_disk_devices,omitempty"`
 }
 
-func (m *OpenebsMayastorPoolType) Reset()                    { *m = OpenebsMayastorPoolType{} }
-func (*OpenebsMayastorPoolType) ProtoMessage()               {}
-func (*OpenebsMayastorPoolType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *OpenebsMayastorPoolType) Reset()      { *m = OpenebsMayastorPoolType{} }
+func (*OpenebsMayastorPoolType) ProtoMessage() {}
+func (*OpenebsMayastorPoolType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{6}
+}
+func (m *OpenebsMayastorPoolType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OpenebsMayastorPoolType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OpenebsMayastorPoolType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpenebsMayastorPoolType.Merge(m, src)
+}
+func (m *OpenebsMayastorPoolType) XXX_Size() int {
+	return m.Size()
+}
+func (m *OpenebsMayastorPoolType) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpenebsMayastorPoolType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OpenebsMayastorPoolType proto.InternalMessageInfo
 
 func (m *OpenebsMayastorPoolType) GetPoolName() string {
 	if m != nil {
@@ -554,7 +684,7 @@ type StorageDeviceDellIsilonF800Type struct {
 	//
 	// x-displayName: "Password"
 	// Please Enter you password.
-	Password *ves_io_schema4.SecretType `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
+	Password *schema.SecretType `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	//  Select Network Security Mode
 	//
 	// x-displayName: "Select Network Security mode"
@@ -597,15 +727,37 @@ type StorageDeviceDellIsilonF800Type struct {
 	//
 	// x-displayName: "Base Path
 	// x-example: "/ifs/data/csi"
-	// The default base path for the volumes to be created, this will be used if a storage class does not have the IsiPath parameter specified Ensure that this path exists on Isilon.
+	//The default base path for the volumes to be created, this will be used if a storage class does not have the IsiPath parameter specified Ensure that this path exists on Isilon.
 	BasePath string `protobuf:"bytes,12,opt,name=base_path,json=basePath,proto3" json:"base_path,omitempty"`
 }
 
 func (m *StorageDeviceDellIsilonF800Type) Reset()      { *m = StorageDeviceDellIsilonF800Type{} }
 func (*StorageDeviceDellIsilonF800Type) ProtoMessage() {}
 func (*StorageDeviceDellIsilonF800Type) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{7}
+	return fileDescriptor_82c3333ba2789298, []int{7}
 }
+func (m *StorageDeviceDellIsilonF800Type) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceDellIsilonF800Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceDellIsilonF800Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceDellIsilonF800Type.Merge(m, src)
+}
+func (m *StorageDeviceDellIsilonF800Type) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceDellIsilonF800Type) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceDellIsilonF800Type.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceDellIsilonF800Type proto.InternalMessageInfo
 
 type isStorageDeviceDellIsilonF800Type_HttpsChoice interface {
 	isStorageDeviceDellIsilonF800Type_HttpsChoice()
@@ -621,16 +773,16 @@ type isStorageDeviceDellIsilonF800Type_AddressChoice interface {
 }
 
 type StorageDeviceDellIsilonF800Type_SecureNetwork struct {
-	SecureNetwork *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=secure_network,json=secureNetwork,oneof"`
+	SecureNetwork *schema.Empty `protobuf:"bytes,4,opt,name=secure_network,json=secureNetwork,proto3,oneof" json:"secure_network,omitempty"`
 }
 type StorageDeviceDellIsilonF800Type_TrustedCaUrl struct {
-	TrustedCaUrl string `protobuf:"bytes,5,opt,name=trusted_ca_url,json=trustedCaUrl,proto3,oneof"`
+	TrustedCaUrl string `protobuf:"bytes,5,opt,name=trusted_ca_url,json=trustedCaUrl,proto3,oneof" json:"trusted_ca_url,omitempty"`
 }
 type StorageDeviceDellIsilonF800Type_ApiServerName struct {
-	ApiServerName string `protobuf:"bytes,7,opt,name=api_server_name,json=apiServerName,proto3,oneof"`
+	ApiServerName string `protobuf:"bytes,7,opt,name=api_server_name,json=apiServerName,proto3,oneof" json:"api_server_name,omitempty"`
 }
 type StorageDeviceDellIsilonF800Type_ApiServerIpAddress struct {
-	ApiServerIpAddress string `protobuf:"bytes,8,opt,name=api_server_ip_address,json=apiServerIpAddress,proto3,oneof"`
+	ApiServerIpAddress string `protobuf:"bytes,8,opt,name=api_server_ip_address,json=apiServerIpAddress,proto3,oneof" json:"api_server_ip_address,omitempty"`
 }
 
 func (*StorageDeviceDellIsilonF800Type_SecureNetwork) isStorageDeviceDellIsilonF800Type_HttpsChoice() {
@@ -662,14 +814,14 @@ func (m *StorageDeviceDellIsilonF800Type) GetUsername() string {
 	return ""
 }
 
-func (m *StorageDeviceDellIsilonF800Type) GetPassword() *ves_io_schema4.SecretType {
+func (m *StorageDeviceDellIsilonF800Type) GetPassword() *schema.SecretType {
 	if m != nil {
 		return m.Password
 	}
 	return nil
 }
 
-func (m *StorageDeviceDellIsilonF800Type) GetSecureNetwork() *ves_io_schema4.Empty {
+func (m *StorageDeviceDellIsilonF800Type) GetSecureNetwork() *schema.Empty {
 	if x, ok := m.GetHttpsChoice().(*StorageDeviceDellIsilonF800Type_SecureNetwork); ok {
 		return x.SecureNetwork
 	}
@@ -725,116 +877,14 @@ func (m *StorageDeviceDellIsilonF800Type) GetBasePath() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageDeviceDellIsilonF800Type) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageDeviceDellIsilonF800Type_OneofMarshaler, _StorageDeviceDellIsilonF800Type_OneofUnmarshaler, _StorageDeviceDellIsilonF800Type_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageDeviceDellIsilonF800Type) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageDeviceDellIsilonF800Type_SecureNetwork)(nil),
 		(*StorageDeviceDellIsilonF800Type_TrustedCaUrl)(nil),
 		(*StorageDeviceDellIsilonF800Type_ApiServerName)(nil),
 		(*StorageDeviceDellIsilonF800Type_ApiServerIpAddress)(nil),
 	}
-}
-
-func _StorageDeviceDellIsilonF800Type_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageDeviceDellIsilonF800Type)
-	// https_choice
-	switch x := m.HttpsChoice.(type) {
-	case *StorageDeviceDellIsilonF800Type_SecureNetwork:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SecureNetwork); err != nil {
-			return err
-		}
-	case *StorageDeviceDellIsilonF800Type_TrustedCaUrl:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.TrustedCaUrl)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceDellIsilonF800Type.HttpsChoice has unexpected type %T", x)
-	}
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *StorageDeviceDellIsilonF800Type_ApiServerName:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ApiServerName)
-	case *StorageDeviceDellIsilonF800Type_ApiServerIpAddress:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ApiServerIpAddress)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceDellIsilonF800Type.AddressChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageDeviceDellIsilonF800Type_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageDeviceDellIsilonF800Type)
-	switch tag {
-	case 4: // https_choice.secure_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HttpsChoice = &StorageDeviceDellIsilonF800Type_SecureNetwork{msg}
-		return true, err
-	case 5: // https_choice.trusted_ca_url
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.HttpsChoice = &StorageDeviceDellIsilonF800Type_TrustedCaUrl{x}
-		return true, err
-	case 7: // address_choice.api_server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AddressChoice = &StorageDeviceDellIsilonF800Type_ApiServerName{x}
-		return true, err
-	case 8: // address_choice.api_server_ip_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AddressChoice = &StorageDeviceDellIsilonF800Type_ApiServerIpAddress{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageDeviceDellIsilonF800Type_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageDeviceDellIsilonF800Type)
-	// https_choice
-	switch x := m.HttpsChoice.(type) {
-	case *StorageDeviceDellIsilonF800Type_SecureNetwork:
-		s := proto.Size(x.SecureNetwork)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *StorageDeviceDellIsilonF800Type_TrustedCaUrl:
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.TrustedCaUrl)))
-		n += len(x.TrustedCaUrl)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// address_choice
-	switch x := m.AddressChoice.(type) {
-	case *StorageDeviceDellIsilonF800Type_ApiServerName:
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ApiServerName)))
-		n += len(x.ApiServerName)
-	case *StorageDeviceDellIsilonF800Type_ApiServerIpAddress:
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ApiServerIpAddress)))
-		n += len(x.ApiServerIpAddress)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // HPE Nimbus Storage AF40
@@ -869,7 +919,7 @@ type StorageDeviceHPENimbusStorageAf40Type struct {
 	//
 	// x-displayName: "Password"
 	// Please Enter you password.
-	Password *ves_io_schema4.SecretType `protobuf:"bytes,5,opt,name=password" json:"password,omitempty"`
+	Password *schema.SecretType `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
 	// Performance Policy
 	//
 	// x-displayName: "Performance Policy"
@@ -893,8 +943,30 @@ type StorageDeviceHPENimbusStorageAf40Type struct {
 func (m *StorageDeviceHPENimbusStorageAf40Type) Reset()      { *m = StorageDeviceHPENimbusStorageAf40Type{} }
 func (*StorageDeviceHPENimbusStorageAf40Type) ProtoMessage() {}
 func (*StorageDeviceHPENimbusStorageAf40Type) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{8}
+	return fileDescriptor_82c3333ba2789298, []int{8}
 }
+func (m *StorageDeviceHPENimbusStorageAf40Type) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceHPENimbusStorageAf40Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceHPENimbusStorageAf40Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceHPENimbusStorageAf40Type.Merge(m, src)
+}
+func (m *StorageDeviceHPENimbusStorageAf40Type) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceHPENimbusStorageAf40Type) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceHPENimbusStorageAf40Type.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceHPENimbusStorageAf40Type proto.InternalMessageInfo
 
 func (m *StorageDeviceHPENimbusStorageAf40Type) GetStorageServerName() string {
 	if m != nil {
@@ -924,7 +996,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) GetUsername() string {
 	return ""
 }
 
-func (m *StorageDeviceHPENimbusStorageAf40Type) GetPassword() *ves_io_schema4.SecretType {
+func (m *StorageDeviceHPENimbusStorageAf40Type) GetPassword() *schema.SecretType {
 	if m != nil {
 		return m.Password
 	}
@@ -982,7 +1054,7 @@ type StorageDevicePureStorageServiceOrchestratorType struct {
 	// x-displayName: "Arrays Configuration"
 	// x-required
 	// This section configure PSO storage arrays
-	Arrays *PsoArrayConfiguration `protobuf:"bytes,4,opt,name=arrays" json:"arrays,omitempty"`
+	Arrays *PsoArrayConfiguration `protobuf:"bytes,4,opt,name=arrays,proto3" json:"arrays,omitempty"`
 }
 
 func (m *StorageDevicePureStorageServiceOrchestratorType) Reset() {
@@ -990,8 +1062,30 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Reset() {
 }
 func (*StorageDevicePureStorageServiceOrchestratorType) ProtoMessage() {}
 func (*StorageDevicePureStorageServiceOrchestratorType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{9}
+	return fileDescriptor_82c3333ba2789298, []int{9}
 }
+func (m *StorageDevicePureStorageServiceOrchestratorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDevicePureStorageServiceOrchestratorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDevicePureStorageServiceOrchestratorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDevicePureStorageServiceOrchestratorType.Merge(m, src)
+}
+func (m *StorageDevicePureStorageServiceOrchestratorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDevicePureStorageServiceOrchestratorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDevicePureStorageServiceOrchestratorType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDevicePureStorageServiceOrchestratorType proto.InternalMessageInfo
 
 func (m *StorageDevicePureStorageServiceOrchestratorType) GetClusterId() string {
 	if m != nil {
@@ -1031,17 +1125,41 @@ type PsoArrayConfiguration struct {
 	// x-displayName: "Flash Arrays"
 	// Specify what storage flash arrays should be managed the plugin
 	// For FlashArrays you must set the "mgmt_endpoint" and "api_token"
-	FlashArray *FlashArrayType `protobuf:"bytes,1,opt,name=flash_array,json=flashArray" json:"flash_array,omitempty"`
+	FlashArray *FlashArrayType `protobuf:"bytes,1,opt,name=flash_array,json=flashArray,proto3" json:"flash_array,omitempty"`
 	// Flash Blade
 	//
 	// x-displayName: "Flash Blade"
 	// Specify what storage flash blades should be managed the plugin
-	FlashBlade *FlashBladeType `protobuf:"bytes,2,opt,name=flash_blade,json=flashBlade" json:"flash_blade,omitempty"`
+	FlashBlade *FlashBladeType `protobuf:"bytes,2,opt,name=flash_blade,json=flashBlade,proto3" json:"flash_blade,omitempty"`
 }
 
-func (m *PsoArrayConfiguration) Reset()                    { *m = PsoArrayConfiguration{} }
-func (*PsoArrayConfiguration) ProtoMessage()               {}
-func (*PsoArrayConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *PsoArrayConfiguration) Reset()      { *m = PsoArrayConfiguration{} }
+func (*PsoArrayConfiguration) ProtoMessage() {}
+func (*PsoArrayConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{10}
+}
+func (m *PsoArrayConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PsoArrayConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PsoArrayConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PsoArrayConfiguration.Merge(m, src)
+}
+func (m *PsoArrayConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *PsoArrayConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_PsoArrayConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PsoArrayConfiguration proto.InternalMessageInfo
 
 func (m *PsoArrayConfiguration) GetFlashArray() *FlashArrayType {
 	if m != nil {
@@ -1078,12 +1196,36 @@ type FlashBladeType struct {
 	// x-displayName: "Flash Blades"
 	// x-required
 	// For FlashBlades you must set the "mgmt_endpoint", "api_token" and nfs_endpoint
-	FlashBlades []*FlashBladeEndpoint `protobuf:"bytes,3,rep,name=flash_blades,json=flashBlades" json:"flash_blades,omitempty"`
+	FlashBlades []*FlashBladeEndpoint `protobuf:"bytes,3,rep,name=flash_blades,json=flashBlades,proto3" json:"flash_blades,omitempty"`
 }
 
-func (m *FlashBladeType) Reset()                    { *m = FlashBladeType{} }
-func (*FlashBladeType) ProtoMessage()               {}
-func (*FlashBladeType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (m *FlashBladeType) Reset()      { *m = FlashBladeType{} }
+func (*FlashBladeType) ProtoMessage() {}
+func (*FlashBladeType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{11}
+}
+func (m *FlashBladeType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FlashBladeType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FlashBladeType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FlashBladeType.Merge(m, src)
+}
+func (m *FlashBladeType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FlashBladeType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FlashBladeType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FlashBladeType proto.InternalMessageInfo
 
 func (m *FlashBladeType) GetEnableSnapshotDirectory() bool {
 	if m != nil {
@@ -1125,7 +1267,7 @@ type FlashBladeEndpoint struct {
 	//
 	// x-displayName: "API Token"
 	// Please Enter API TOken. Token to connect to management interface
-	ApiToken *ves_io_schema4.SecretType `protobuf:"bytes,4,opt,name=api_token,json=apiToken" json:"api_token,omitempty"`
+	ApiToken *schema.SecretType `protobuf:"bytes,4,opt,name=api_token,json=apiToken,proto3" json:"api_token,omitempty"`
 	// NFS Endpoint
 	//
 	// x-displayName: "NFS Endpoint"
@@ -1142,12 +1284,36 @@ type FlashBladeEndpoint struct {
 	// x-displayName: "Labels"
 	// x-example: "{"rack": "22"}"
 	// The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner.
-	Lables map[string]string `protobuf:"bytes,8,rep,name=lables" json:"lables,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Lables map[string]string `protobuf:"bytes,8,rep,name=lables,proto3" json:"lables,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *FlashBladeEndpoint) Reset()                    { *m = FlashBladeEndpoint{} }
-func (*FlashBladeEndpoint) ProtoMessage()               {}
-func (*FlashBladeEndpoint) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (m *FlashBladeEndpoint) Reset()      { *m = FlashBladeEndpoint{} }
+func (*FlashBladeEndpoint) ProtoMessage() {}
+func (*FlashBladeEndpoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{12}
+}
+func (m *FlashBladeEndpoint) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FlashBladeEndpoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FlashBladeEndpoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FlashBladeEndpoint.Merge(m, src)
+}
+func (m *FlashBladeEndpoint) XXX_Size() int {
+	return m.Size()
+}
+func (m *FlashBladeEndpoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_FlashBladeEndpoint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FlashBladeEndpoint proto.InternalMessageInfo
 
 type isFlashBladeEndpoint_MgmtEndpoint interface {
 	isFlashBladeEndpoint_MgmtEndpoint()
@@ -1163,16 +1329,16 @@ type isFlashBladeEndpoint_NfsEndpoint interface {
 }
 
 type FlashBladeEndpoint_MgmtIp struct {
-	MgmtIp string `protobuf:"bytes,2,opt,name=mgmt_ip,json=mgmtIp,proto3,oneof"`
+	MgmtIp string `protobuf:"bytes,2,opt,name=mgmt_ip,json=mgmtIp,proto3,oneof" json:"mgmt_ip,omitempty"`
 }
 type FlashBladeEndpoint_MgmtDnsName struct {
-	MgmtDnsName string `protobuf:"bytes,3,opt,name=mgmt_dns_name,json=mgmtDnsName,proto3,oneof"`
+	MgmtDnsName string `protobuf:"bytes,3,opt,name=mgmt_dns_name,json=mgmtDnsName,proto3,oneof" json:"mgmt_dns_name,omitempty"`
 }
 type FlashBladeEndpoint_NfsEndpointIp struct {
-	NfsEndpointIp string `protobuf:"bytes,6,opt,name=nfs_endpoint_ip,json=nfsEndpointIp,proto3,oneof"`
+	NfsEndpointIp string `protobuf:"bytes,6,opt,name=nfs_endpoint_ip,json=nfsEndpointIp,proto3,oneof" json:"nfs_endpoint_ip,omitempty"`
 }
 type FlashBladeEndpoint_NfsEndpointDnsName struct {
-	NfsEndpointDnsName string `protobuf:"bytes,7,opt,name=nfs_endpoint_dns_name,json=nfsEndpointDnsName,proto3,oneof"`
+	NfsEndpointDnsName string `protobuf:"bytes,7,opt,name=nfs_endpoint_dns_name,json=nfsEndpointDnsName,proto3,oneof" json:"nfs_endpoint_dns_name,omitempty"`
 }
 
 func (*FlashBladeEndpoint_MgmtIp) isFlashBladeEndpoint_MgmtEndpoint()            {}
@@ -1207,7 +1373,7 @@ func (m *FlashBladeEndpoint) GetMgmtDnsName() string {
 	return ""
 }
 
-func (m *FlashBladeEndpoint) GetApiToken() *ves_io_schema4.SecretType {
+func (m *FlashBladeEndpoint) GetApiToken() *schema.SecretType {
 	if m != nil {
 		return m.ApiToken
 	}
@@ -1235,112 +1401,14 @@ func (m *FlashBladeEndpoint) GetLables() map[string]string {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FlashBladeEndpoint) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FlashBladeEndpoint_OneofMarshaler, _FlashBladeEndpoint_OneofUnmarshaler, _FlashBladeEndpoint_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FlashBladeEndpoint) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FlashBladeEndpoint_MgmtIp)(nil),
 		(*FlashBladeEndpoint_MgmtDnsName)(nil),
 		(*FlashBladeEndpoint_NfsEndpointIp)(nil),
 		(*FlashBladeEndpoint_NfsEndpointDnsName)(nil),
 	}
-}
-
-func _FlashBladeEndpoint_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FlashBladeEndpoint)
-	// mgmt_endpoint
-	switch x := m.MgmtEndpoint.(type) {
-	case *FlashBladeEndpoint_MgmtIp:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.MgmtIp)
-	case *FlashBladeEndpoint_MgmtDnsName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.MgmtDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("FlashBladeEndpoint.MgmtEndpoint has unexpected type %T", x)
-	}
-	// nfs_endpoint
-	switch x := m.NfsEndpoint.(type) {
-	case *FlashBladeEndpoint_NfsEndpointIp:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.NfsEndpointIp)
-	case *FlashBladeEndpoint_NfsEndpointDnsName:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.NfsEndpointDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("FlashBladeEndpoint.NfsEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FlashBladeEndpoint_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FlashBladeEndpoint)
-	switch tag {
-	case 2: // mgmt_endpoint.mgmt_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MgmtEndpoint = &FlashBladeEndpoint_MgmtIp{x}
-		return true, err
-	case 3: // mgmt_endpoint.mgmt_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MgmtEndpoint = &FlashBladeEndpoint_MgmtDnsName{x}
-		return true, err
-	case 6: // nfs_endpoint.nfs_endpoint_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.NfsEndpoint = &FlashBladeEndpoint_NfsEndpointIp{x}
-		return true, err
-	case 7: // nfs_endpoint.nfs_endpoint_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.NfsEndpoint = &FlashBladeEndpoint_NfsEndpointDnsName{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FlashBladeEndpoint_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FlashBladeEndpoint)
-	// mgmt_endpoint
-	switch x := m.MgmtEndpoint.(type) {
-	case *FlashBladeEndpoint_MgmtIp:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.MgmtIp)))
-		n += len(x.MgmtIp)
-	case *FlashBladeEndpoint_MgmtDnsName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.MgmtDnsName)))
-		n += len(x.MgmtDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// nfs_endpoint
-	switch x := m.NfsEndpoint.(type) {
-	case *FlashBladeEndpoint_NfsEndpointIp:
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.NfsEndpointIp)))
-		n += len(x.NfsEndpointIp)
-	case *FlashBladeEndpoint_NfsEndpointDnsName:
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.NfsEndpointDnsName)))
-		n += len(x.NfsEndpointDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Flash Arrays
@@ -1373,7 +1441,7 @@ type FlashArrayType struct {
 	// x-displayName: "Default Mount Options"
 	// x-example: "[- discart]"
 	// Block volume default filesystem mount options. Not recommended to change!
-	DefaultMountOpts []string `protobuf:"bytes,4,rep,name=default_mount_opts,json=defaultMountOpts" json:"default_mount_opts,omitempty"`
+	DefaultMountOpts []string `protobuf:"bytes,4,rep,name=default_mount_opts,json=defaultMountOpts,proto3" json:"default_mount_opts,omitempty"`
 	// Disable Preempt Attachments
 	//
 	// x-displayName: "Disable Preempt Attachments"
@@ -1391,12 +1459,36 @@ type FlashArrayType struct {
 	// x-displayName: "Flash Arrays"
 	// x-required
 	// For FlashArrays you must set the "mgmt_endpoint" and "api_token"
-	FlashArrays []*FlashArrayEndpoint `protobuf:"bytes,7,rep,name=flash_arrays,json=flashArrays" json:"flash_arrays,omitempty"`
+	FlashArrays []*FlashArrayEndpoint `protobuf:"bytes,7,rep,name=flash_arrays,json=flashArrays,proto3" json:"flash_arrays,omitempty"`
 }
 
-func (m *FlashArrayType) Reset()                    { *m = FlashArrayType{} }
-func (*FlashArrayType) ProtoMessage()               {}
-func (*FlashArrayType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (m *FlashArrayType) Reset()      { *m = FlashArrayType{} }
+func (*FlashArrayType) ProtoMessage() {}
+func (*FlashArrayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{13}
+}
+func (m *FlashArrayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FlashArrayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FlashArrayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FlashArrayType.Merge(m, src)
+}
+func (m *FlashArrayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FlashArrayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FlashArrayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FlashArrayType proto.InternalMessageInfo
 
 func (m *FlashArrayType) GetSanType() string {
 	if m != nil {
@@ -1466,18 +1558,42 @@ type FlashArrayEndpoint struct {
 	//
 	// x-displayName: "API Token"
 	// Please Enter API TOken. Token to connect to management interface
-	ApiToken *ves_io_schema4.SecretType `protobuf:"bytes,4,opt,name=api_token,json=apiToken" json:"api_token,omitempty"`
+	ApiToken *schema.SecretType `protobuf:"bytes,4,opt,name=api_token,json=apiToken,proto3" json:"api_token,omitempty"`
 	// Labels
 	//
 	// x-displayName: "Labels"
 	// x-example: "{"rack": "22"}"
 	// The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner.
-	Labels map[string]string `protobuf:"bytes,5,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,5,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *FlashArrayEndpoint) Reset()                    { *m = FlashArrayEndpoint{} }
-func (*FlashArrayEndpoint) ProtoMessage()               {}
-func (*FlashArrayEndpoint) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (m *FlashArrayEndpoint) Reset()      { *m = FlashArrayEndpoint{} }
+func (*FlashArrayEndpoint) ProtoMessage() {}
+func (*FlashArrayEndpoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{14}
+}
+func (m *FlashArrayEndpoint) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FlashArrayEndpoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FlashArrayEndpoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FlashArrayEndpoint.Merge(m, src)
+}
+func (m *FlashArrayEndpoint) XXX_Size() int {
+	return m.Size()
+}
+func (m *FlashArrayEndpoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_FlashArrayEndpoint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FlashArrayEndpoint proto.InternalMessageInfo
 
 type isFlashArrayEndpoint_MgmtEndpoint interface {
 	isFlashArrayEndpoint_MgmtEndpoint()
@@ -1487,10 +1603,10 @@ type isFlashArrayEndpoint_MgmtEndpoint interface {
 }
 
 type FlashArrayEndpoint_MgmtIp struct {
-	MgmtIp string `protobuf:"bytes,2,opt,name=mgmt_ip,json=mgmtIp,proto3,oneof"`
+	MgmtIp string `protobuf:"bytes,2,opt,name=mgmt_ip,json=mgmtIp,proto3,oneof" json:"mgmt_ip,omitempty"`
 }
 type FlashArrayEndpoint_MgmtDnsName struct {
-	MgmtDnsName string `protobuf:"bytes,3,opt,name=mgmt_dns_name,json=mgmtDnsName,proto3,oneof"`
+	MgmtDnsName string `protobuf:"bytes,3,opt,name=mgmt_dns_name,json=mgmtDnsName,proto3,oneof" json:"mgmt_dns_name,omitempty"`
 }
 
 func (*FlashArrayEndpoint_MgmtIp) isFlashArrayEndpoint_MgmtEndpoint()      {}
@@ -1517,7 +1633,7 @@ func (m *FlashArrayEndpoint) GetMgmtDnsName() string {
 	return ""
 }
 
-func (m *FlashArrayEndpoint) GetApiToken() *ves_io_schema4.SecretType {
+func (m *FlashArrayEndpoint) GetApiToken() *schema.SecretType {
 	if m != nil {
 		return m.ApiToken
 	}
@@ -1531,70 +1647,12 @@ func (m *FlashArrayEndpoint) GetLabels() map[string]string {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FlashArrayEndpoint) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FlashArrayEndpoint_OneofMarshaler, _FlashArrayEndpoint_OneofUnmarshaler, _FlashArrayEndpoint_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FlashArrayEndpoint) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FlashArrayEndpoint_MgmtIp)(nil),
 		(*FlashArrayEndpoint_MgmtDnsName)(nil),
 	}
-}
-
-func _FlashArrayEndpoint_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FlashArrayEndpoint)
-	// mgmt_endpoint
-	switch x := m.MgmtEndpoint.(type) {
-	case *FlashArrayEndpoint_MgmtIp:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.MgmtIp)
-	case *FlashArrayEndpoint_MgmtDnsName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.MgmtDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("FlashArrayEndpoint.MgmtEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FlashArrayEndpoint_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FlashArrayEndpoint)
-	switch tag {
-	case 2: // mgmt_endpoint.mgmt_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MgmtEndpoint = &FlashArrayEndpoint_MgmtIp{x}
-		return true, err
-	case 3: // mgmt_endpoint.mgmt_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MgmtEndpoint = &FlashArrayEndpoint_MgmtDnsName{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FlashArrayEndpoint_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FlashArrayEndpoint)
-	// mgmt_endpoint
-	switch x := m.MgmtEndpoint.(type) {
-	case *FlashArrayEndpoint_MgmtIp:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.MgmtIp)))
-		n += len(x.MgmtIp)
-	case *FlashArrayEndpoint_MgmtDnsName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.MgmtDnsName)))
-		n += len(x.MgmtDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // NetApp Trident
@@ -1617,8 +1675,30 @@ type StorageDeviceNetappTridentType struct {
 func (m *StorageDeviceNetappTridentType) Reset()      { *m = StorageDeviceNetappTridentType{} }
 func (*StorageDeviceNetappTridentType) ProtoMessage() {}
 func (*StorageDeviceNetappTridentType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{15}
+	return fileDescriptor_82c3333ba2789298, []int{15}
 }
+func (m *StorageDeviceNetappTridentType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceNetappTridentType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceNetappTridentType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceNetappTridentType.Merge(m, src)
+}
+func (m *StorageDeviceNetappTridentType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceNetappTridentType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceNetappTridentType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceNetappTridentType proto.InternalMessageInfo
 
 type isStorageDeviceNetappTridentType_BackendChoice interface {
 	isStorageDeviceNetappTridentType_BackendChoice()
@@ -1628,10 +1708,10 @@ type isStorageDeviceNetappTridentType_BackendChoice interface {
 }
 
 type StorageDeviceNetappTridentType_NetappBackendOntapNas struct {
-	NetappBackendOntapNas *StorageDeviceNetappBackendOntapNasType `protobuf:"bytes,2,opt,name=netapp_backend_ontap_nas,json=netappBackendOntapNas,oneof"`
+	NetappBackendOntapNas *StorageDeviceNetappBackendOntapNasType `protobuf:"bytes,2,opt,name=netapp_backend_ontap_nas,json=netappBackendOntapNas,proto3,oneof" json:"netapp_backend_ontap_nas,omitempty"`
 }
 type StorageDeviceNetappTridentType_NetappBackendOntapSan struct {
-	NetappBackendOntapSan *StorageDeviceNetappBackendOntapSanType `protobuf:"bytes,3,opt,name=netapp_backend_ontap_san,json=netappBackendOntapSan,oneof"`
+	NetappBackendOntapSan *StorageDeviceNetappBackendOntapSanType `protobuf:"bytes,3,opt,name=netapp_backend_ontap_san,json=netappBackendOntapSan,proto3,oneof" json:"netapp_backend_ontap_san,omitempty"`
 }
 
 func (*StorageDeviceNetappTridentType_NetappBackendOntapNas) isStorageDeviceNetappTridentType_BackendChoice() {
@@ -1660,78 +1740,12 @@ func (m *StorageDeviceNetappTridentType) GetNetappBackendOntapSan() *StorageDevi
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageDeviceNetappTridentType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageDeviceNetappTridentType_OneofMarshaler, _StorageDeviceNetappTridentType_OneofUnmarshaler, _StorageDeviceNetappTridentType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageDeviceNetappTridentType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageDeviceNetappTridentType_NetappBackendOntapNas)(nil),
 		(*StorageDeviceNetappTridentType_NetappBackendOntapSan)(nil),
 	}
-}
-
-func _StorageDeviceNetappTridentType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageDeviceNetappTridentType)
-	// backend_choice
-	switch x := m.BackendChoice.(type) {
-	case *StorageDeviceNetappTridentType_NetappBackendOntapNas:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetappBackendOntapNas); err != nil {
-			return err
-		}
-	case *StorageDeviceNetappTridentType_NetappBackendOntapSan:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetappBackendOntapSan); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappTridentType.BackendChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageDeviceNetappTridentType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageDeviceNetappTridentType)
-	switch tag {
-	case 2: // backend_choice.netapp_backend_ontap_nas
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageDeviceNetappBackendOntapNasType)
-		err := b.DecodeMessage(msg)
-		m.BackendChoice = &StorageDeviceNetappTridentType_NetappBackendOntapNas{msg}
-		return true, err
-	case 3: // backend_choice.netapp_backend_ontap_san
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageDeviceNetappBackendOntapSanType)
-		err := b.DecodeMessage(msg)
-		m.BackendChoice = &StorageDeviceNetappTridentType_NetappBackendOntapSan{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageDeviceNetappTridentType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageDeviceNetappTridentType)
-	// backend_choice
-	switch x := m.BackendChoice.(type) {
-	case *StorageDeviceNetappTridentType_NetappBackendOntapNas:
-		s := proto.Size(x.NetappBackendOntapNas)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *StorageDeviceNetappTridentType_NetappBackendOntapSan:
-		s := proto.Size(x.NetappBackendOntapSan)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Storage Backend NetApp ONTAP SAN
@@ -1783,7 +1797,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	//
 	// x-displayName: "Password"
 	// Please Enter you password. Password to connect to the cluster/SVM
-	Password *ves_io_schema4.SecretType `protobuf:"bytes,11,opt,name=password" json:"password,omitempty"`
+	Password *schema.SecretType `protobuf:"bytes,11,opt,name=password,proto3" json:"password,omitempty"`
 	// Use CHAP
 	//
 	// x-displayName: "Use CHAP"
@@ -1820,13 +1834,13 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	//
 	// x-displayName: "Backend Volume Defaults"
 	// List of QoS volume defaults types
-	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,21,opt,name=volume_defaults,json=volumeDefaults" json:"volume_defaults,omitempty"`
+	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,21,opt,name=volume_defaults,json=volumeDefaults,proto3" json:"volume_defaults,omitempty"`
 	// Backend Labels
 	//
 	// x-displayName: "Backend Labels"
 	// x-example: "{"store":"nas_store"}"
 	// List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.
-	Labels map[string]string `protobuf:"bytes,22,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,22,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Backend Region
 	//
 	// x-displayName: "Backend Region"
@@ -1837,7 +1851,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	//
 	// x-displayName: "Virtual Storage Pools"
 	// List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.
-	Storage []*OntapVirtualStoragePoolType `protobuf:"bytes,24,rep,name=storage" json:"storage,omitempty"`
+	Storage []*OntapVirtualStoragePoolType `protobuf:"bytes,24,rep,name=storage,proto3" json:"storage,omitempty"`
 	// Client Certificate
 	//
 	// x-displayName: "Client Certificate"
@@ -1847,7 +1861,7 @@ type StorageDeviceNetappBackendOntapSanType struct {
 	//
 	// x-displayName: "Client Private Key"
 	// Please Enter value of client private key. Used for certificate-based auth.
-	ClientPrivateKey *ves_io_schema4.SecretType `protobuf:"bytes,26,opt,name=client_private_key,json=clientPrivateKey" json:"client_private_key,omitempty"`
+	ClientPrivateKey *schema.SecretType `protobuf:"bytes,26,opt,name=client_private_key,json=clientPrivateKey,proto3" json:"client_private_key,omitempty"`
 	// Trusted CA Certificate
 	//
 	// x-displayName: "Trusted CA Certificate"
@@ -1860,8 +1874,30 @@ func (m *StorageDeviceNetappBackendOntapSanType) Reset() {
 }
 func (*StorageDeviceNetappBackendOntapSanType) ProtoMessage() {}
 func (*StorageDeviceNetappBackendOntapSanType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{16}
+	return fileDescriptor_82c3333ba2789298, []int{16}
 }
+func (m *StorageDeviceNetappBackendOntapSanType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceNetappBackendOntapSanType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceNetappBackendOntapSanType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceNetappBackendOntapSanType.Merge(m, src)
+}
+func (m *StorageDeviceNetappBackendOntapSanType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceNetappBackendOntapSanType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceNetappBackendOntapSanType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceNetappBackendOntapSanType proto.InternalMessageInfo
 
 type isStorageDeviceNetappBackendOntapSanType_ManagementLif interface {
 	isStorageDeviceNetappBackendOntapSanType_ManagementLif()
@@ -1883,22 +1919,22 @@ type isStorageDeviceNetappBackendOntapSanType_ChapChoice interface {
 }
 
 type StorageDeviceNetappBackendOntapSanType_ManagementLifIp struct {
-	ManagementLifIp string `protobuf:"bytes,4,opt,name=management_lif_ip,json=managementLifIp,proto3,oneof"`
+	ManagementLifIp string `protobuf:"bytes,4,opt,name=management_lif_ip,json=managementLifIp,proto3,oneof" json:"management_lif_ip,omitempty"`
 }
 type StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName struct {
-	ManagementLifDnsName string `protobuf:"bytes,5,opt,name=management_lif_dns_name,json=managementLifDnsName,proto3,oneof"`
+	ManagementLifDnsName string `protobuf:"bytes,5,opt,name=management_lif_dns_name,json=managementLifDnsName,proto3,oneof" json:"management_lif_dns_name,omitempty"`
 }
 type StorageDeviceNetappBackendOntapSanType_DataLifIp struct {
-	DataLifIp string `protobuf:"bytes,7,opt,name=data_lif_ip,json=dataLifIp,proto3,oneof"`
+	DataLifIp string `protobuf:"bytes,7,opt,name=data_lif_ip,json=dataLifIp,proto3,oneof" json:"data_lif_ip,omitempty"`
 }
 type StorageDeviceNetappBackendOntapSanType_DataLifDnsName struct {
-	DataLifDnsName string `protobuf:"bytes,8,opt,name=data_lif_dns_name,json=dataLifDnsName,proto3,oneof"`
+	DataLifDnsName string `protobuf:"bytes,8,opt,name=data_lif_dns_name,json=dataLifDnsName,proto3,oneof" json:"data_lif_dns_name,omitempty"`
 }
 type StorageDeviceNetappBackendOntapSanType_NoChap struct {
-	NoChap *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=no_chap,json=noChap,oneof"`
+	NoChap *schema.Empty `protobuf:"bytes,13,opt,name=no_chap,json=noChap,proto3,oneof" json:"no_chap,omitempty"`
 }
 type StorageDeviceNetappBackendOntapSanType_UseChap struct {
-	UseChap *DeviceNetappBackendOntapSanChapType `protobuf:"bytes,14,opt,name=use_chap,json=useChap,oneof"`
+	UseChap *DeviceNetappBackendOntapSanChapType `protobuf:"bytes,14,opt,name=use_chap,json=useChap,proto3,oneof" json:"use_chap,omitempty"`
 }
 
 func (*StorageDeviceNetappBackendOntapSanType_ManagementLifIp) isStorageDeviceNetappBackendOntapSanType_ManagementLif() {
@@ -1982,14 +2018,14 @@ func (m *StorageDeviceNetappBackendOntapSanType) GetUsername() string {
 	return ""
 }
 
-func (m *StorageDeviceNetappBackendOntapSanType) GetPassword() *ves_io_schema4.SecretType {
+func (m *StorageDeviceNetappBackendOntapSanType) GetPassword() *schema.SecretType {
 	if m != nil {
 		return m.Password
 	}
 	return nil
 }
 
-func (m *StorageDeviceNetappBackendOntapSanType) GetNoChap() *ves_io_schema4.Empty {
+func (m *StorageDeviceNetappBackendOntapSanType) GetNoChap() *schema.Empty {
 	if x, ok := m.GetChapChoice().(*StorageDeviceNetappBackendOntapSanType_NoChap); ok {
 		return x.NoChap
 	}
@@ -2066,7 +2102,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) GetClientCertificate() string {
 	return ""
 }
 
-func (m *StorageDeviceNetappBackendOntapSanType) GetClientPrivateKey() *ves_io_schema4.SecretType {
+func (m *StorageDeviceNetappBackendOntapSanType) GetClientPrivateKey() *schema.SecretType {
 	if m != nil {
 		return m.ClientPrivateKey
 	}
@@ -2080,9 +2116,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) GetTrustedCaCertificate() strin
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageDeviceNetappBackendOntapSanType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageDeviceNetappBackendOntapSanType_OneofMarshaler, _StorageDeviceNetappBackendOntapSanType_OneofUnmarshaler, _StorageDeviceNetappBackendOntapSanType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageDeviceNetappBackendOntapSanType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageDeviceNetappBackendOntapSanType_ManagementLifIp)(nil),
 		(*StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName)(nil),
 		(*StorageDeviceNetappBackendOntapSanType_DataLifIp)(nil),
@@ -2090,152 +2126,6 @@ func (*StorageDeviceNetappBackendOntapSanType) XXX_OneofFuncs() (func(msg proto.
 		(*StorageDeviceNetappBackendOntapSanType_NoChap)(nil),
 		(*StorageDeviceNetappBackendOntapSanType_UseChap)(nil),
 	}
-}
-
-func _StorageDeviceNetappBackendOntapSanType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageDeviceNetappBackendOntapSanType)
-	// management_lif
-	switch x := m.ManagementLif.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_ManagementLifIp:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ManagementLifIp)
-	case *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ManagementLifDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappBackendOntapSanType.ManagementLif has unexpected type %T", x)
-	}
-	// data_lif
-	switch x := m.DataLif.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_DataLifIp:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DataLifIp)
-	case *StorageDeviceNetappBackendOntapSanType_DataLifDnsName:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DataLifDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappBackendOntapSanType.DataLif has unexpected type %T", x)
-	}
-	// chap_choice
-	switch x := m.ChapChoice.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_NoChap:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoChap); err != nil {
-			return err
-		}
-	case *StorageDeviceNetappBackendOntapSanType_UseChap:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UseChap); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappBackendOntapSanType.ChapChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageDeviceNetappBackendOntapSanType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageDeviceNetappBackendOntapSanType)
-	switch tag {
-	case 4: // management_lif.management_lif_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ManagementLif = &StorageDeviceNetappBackendOntapSanType_ManagementLifIp{x}
-		return true, err
-	case 5: // management_lif.management_lif_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ManagementLif = &StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName{x}
-		return true, err
-	case 7: // data_lif.data_lif_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.DataLif = &StorageDeviceNetappBackendOntapSanType_DataLifIp{x}
-		return true, err
-	case 8: // data_lif.data_lif_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.DataLif = &StorageDeviceNetappBackendOntapSanType_DataLifDnsName{x}
-		return true, err
-	case 13: // chap_choice.no_chap
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ChapChoice = &StorageDeviceNetappBackendOntapSanType_NoChap{msg}
-		return true, err
-	case 14: // chap_choice.use_chap
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(DeviceNetappBackendOntapSanChapType)
-		err := b.DecodeMessage(msg)
-		m.ChapChoice = &StorageDeviceNetappBackendOntapSanType_UseChap{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageDeviceNetappBackendOntapSanType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageDeviceNetappBackendOntapSanType)
-	// management_lif
-	switch x := m.ManagementLif.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_ManagementLifIp:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ManagementLifIp)))
-		n += len(x.ManagementLifIp)
-	case *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName:
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ManagementLifDnsName)))
-		n += len(x.ManagementLifDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// data_lif
-	switch x := m.DataLif.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_DataLifIp:
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DataLifIp)))
-		n += len(x.DataLifIp)
-	case *StorageDeviceNetappBackendOntapSanType_DataLifDnsName:
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DataLifDnsName)))
-		n += len(x.DataLifDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// chap_choice
-	switch x := m.ChapChoice.(type) {
-	case *StorageDeviceNetappBackendOntapSanType_NoChap:
-		s := proto.Size(x.NoChap)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *StorageDeviceNetappBackendOntapSanType_UseChap:
-		s := proto.Size(x.UseChap)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Device NetApp Backend ONTAP SAN CHAP configuration
@@ -2257,19 +2147,41 @@ type DeviceNetappBackendOntapSanChapType struct {
 	//
 	// x-displayName: "CHAP Intiator Secret"
 	// CHAP initiator secret. Required if useCHAP=true
-	ChapInitiatorSecret *ves_io_schema4.SecretType `protobuf:"bytes,3,opt,name=chap_initiator_secret,json=chapInitiatorSecret" json:"chap_initiator_secret,omitempty"`
+	ChapInitiatorSecret *schema.SecretType `protobuf:"bytes,3,opt,name=chap_initiator_secret,json=chapInitiatorSecret,proto3" json:"chap_initiator_secret,omitempty"`
 	// CHAP Target Initiator Secret
 	//
 	// x-displayName: "CHAP Target Initiator Secret"
 	// CHAP target initiator secret. Required if useCHAP=true
-	ChapTargetInitiatorSecret *ves_io_schema4.SecretType `protobuf:"bytes,4,opt,name=chap_target_initiator_secret,json=chapTargetInitiatorSecret" json:"chap_target_initiator_secret,omitempty"`
+	ChapTargetInitiatorSecret *schema.SecretType `protobuf:"bytes,4,opt,name=chap_target_initiator_secret,json=chapTargetInitiatorSecret,proto3" json:"chap_target_initiator_secret,omitempty"`
 }
 
 func (m *DeviceNetappBackendOntapSanChapType) Reset()      { *m = DeviceNetappBackendOntapSanChapType{} }
 func (*DeviceNetappBackendOntapSanChapType) ProtoMessage() {}
 func (*DeviceNetappBackendOntapSanChapType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{17}
+	return fileDescriptor_82c3333ba2789298, []int{17}
 }
+func (m *DeviceNetappBackendOntapSanChapType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DeviceNetappBackendOntapSanChapType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DeviceNetappBackendOntapSanChapType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeviceNetappBackendOntapSanChapType.Merge(m, src)
+}
+func (m *DeviceNetappBackendOntapSanChapType) XXX_Size() int {
+	return m.Size()
+}
+func (m *DeviceNetappBackendOntapSanChapType) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeviceNetappBackendOntapSanChapType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeviceNetappBackendOntapSanChapType proto.InternalMessageInfo
 
 func (m *DeviceNetappBackendOntapSanChapType) GetChapUsername() string {
 	if m != nil {
@@ -2285,14 +2197,14 @@ func (m *DeviceNetappBackendOntapSanChapType) GetChapTargetUsername() string {
 	return ""
 }
 
-func (m *DeviceNetappBackendOntapSanChapType) GetChapInitiatorSecret() *ves_io_schema4.SecretType {
+func (m *DeviceNetappBackendOntapSanChapType) GetChapInitiatorSecret() *schema.SecretType {
 	if m != nil {
 		return m.ChapInitiatorSecret
 	}
 	return nil
 }
 
-func (m *DeviceNetappBackendOntapSanChapType) GetChapTargetInitiatorSecret() *ves_io_schema4.SecretType {
+func (m *DeviceNetappBackendOntapSanChapType) GetChapTargetInitiatorSecret() *schema.SecretType {
 	if m != nil {
 		return m.ChapTargetInitiatorSecret
 	}
@@ -2353,7 +2265,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	//
 	// x-displayName: "Password"
 	// Please Enter you password. Password to connect to the cluster/SVM
-	Password *ves_io_schema4.SecretType `protobuf:"bytes,11,opt,name=password" json:"password,omitempty"`
+	Password *schema.SecretType `protobuf:"bytes,11,opt,name=password,proto3" json:"password,omitempty"`
 	// Auto Export Policy
 	//
 	// x-displayName: "Auto Export Policy"
@@ -2364,7 +2276,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	// x-displayName: "Auto Export CIDRs"
 	// x-example: "0.0.0.0/0"
 	// List of CIDRs to filter Kubernetes’ node IPs against when autoExportPolicy is enabled
-	AutoExportCidrs *ves_io_schema_views.PrefixStringListType `protobuf:"bytes,13,opt,name=auto_export_cidrs,json=autoExportCidrs" json:"auto_export_cidrs,omitempty"`
+	AutoExportCidrs *views.PrefixStringListType `protobuf:"bytes,13,opt,name=auto_export_cidrs,json=autoExportCidrs,proto3" json:"auto_export_cidrs,omitempty"`
 	// Storage Prefix
 	//
 	// x-displayName: "Storage Prefix"
@@ -2393,13 +2305,13 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	//
 	// x-displayName: "Backend Volume Defaults"
 	// List of QoS volume defaults types
-	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,18,opt,name=volume_defaults,json=volumeDefaults" json:"volume_defaults,omitempty"`
+	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,18,opt,name=volume_defaults,json=volumeDefaults,proto3" json:"volume_defaults,omitempty"`
 	// Backend Labels
 	//
 	// x-displayName: "Backend Labels"
 	// x-example: "{"store":"nas_store"}"
 	// List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection.
-	Labels map[string]string `protobuf:"bytes,19,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,19,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Backend Region
 	//
 	// x-displayName: "Backend Region"
@@ -2410,7 +2322,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	//
 	// x-displayName: "Virtual Storage Pools"
 	// List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.
-	Storage []*OntapVirtualStoragePoolType `protobuf:"bytes,21,rep,name=storage" json:"storage,omitempty"`
+	Storage []*OntapVirtualStoragePoolType `protobuf:"bytes,21,rep,name=storage,proto3" json:"storage,omitempty"`
 	// Client Certificate
 	//
 	// x-displayName: "Client Certificate"
@@ -2420,7 +2332,7 @@ type StorageDeviceNetappBackendOntapNasType struct {
 	//
 	// x-displayName: "Client Private Key"
 	// Please Enter value of client private key. Used for certificate-based auth.
-	ClientPrivateKey *ves_io_schema4.SecretType `protobuf:"bytes,23,opt,name=client_private_key,json=clientPrivateKey" json:"client_private_key,omitempty"`
+	ClientPrivateKey *schema.SecretType `protobuf:"bytes,23,opt,name=client_private_key,json=clientPrivateKey,proto3" json:"client_private_key,omitempty"`
 	// Trusted CA Certificate
 	//
 	// x-displayName: "Trusted CA Certificate"
@@ -2433,8 +2345,30 @@ func (m *StorageDeviceNetappBackendOntapNasType) Reset() {
 }
 func (*StorageDeviceNetappBackendOntapNasType) ProtoMessage() {}
 func (*StorageDeviceNetappBackendOntapNasType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{18}
+	return fileDescriptor_82c3333ba2789298, []int{18}
 }
+func (m *StorageDeviceNetappBackendOntapNasType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageDeviceNetappBackendOntapNasType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageDeviceNetappBackendOntapNasType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageDeviceNetappBackendOntapNasType.Merge(m, src)
+}
+func (m *StorageDeviceNetappBackendOntapNasType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageDeviceNetappBackendOntapNasType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageDeviceNetappBackendOntapNasType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageDeviceNetappBackendOntapNasType proto.InternalMessageInfo
 
 type isStorageDeviceNetappBackendOntapNasType_ManagementLif interface {
 	isStorageDeviceNetappBackendOntapNasType_ManagementLif()
@@ -2450,16 +2384,16 @@ type isStorageDeviceNetappBackendOntapNasType_DataLif interface {
 }
 
 type StorageDeviceNetappBackendOntapNasType_ManagementLifIp struct {
-	ManagementLifIp string `protobuf:"bytes,4,opt,name=management_lif_ip,json=managementLifIp,proto3,oneof"`
+	ManagementLifIp string `protobuf:"bytes,4,opt,name=management_lif_ip,json=managementLifIp,proto3,oneof" json:"management_lif_ip,omitempty"`
 }
 type StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName struct {
-	ManagementLifDnsName string `protobuf:"bytes,5,opt,name=management_lif_dns_name,json=managementLifDnsName,proto3,oneof"`
+	ManagementLifDnsName string `protobuf:"bytes,5,opt,name=management_lif_dns_name,json=managementLifDnsName,proto3,oneof" json:"management_lif_dns_name,omitempty"`
 }
 type StorageDeviceNetappBackendOntapNasType_DataLifIp struct {
-	DataLifIp string `protobuf:"bytes,7,opt,name=data_lif_ip,json=dataLifIp,proto3,oneof"`
+	DataLifIp string `protobuf:"bytes,7,opt,name=data_lif_ip,json=dataLifIp,proto3,oneof" json:"data_lif_ip,omitempty"`
 }
 type StorageDeviceNetappBackendOntapNasType_DataLifDnsName struct {
-	DataLifDnsName string `protobuf:"bytes,8,opt,name=data_lif_dns_name,json=dataLifDnsName,proto3,oneof"`
+	DataLifDnsName string `protobuf:"bytes,8,opt,name=data_lif_dns_name,json=dataLifDnsName,proto3,oneof" json:"data_lif_dns_name,omitempty"`
 }
 
 func (*StorageDeviceNetappBackendOntapNasType_ManagementLifIp) isStorageDeviceNetappBackendOntapNasType_ManagementLif() {
@@ -2540,7 +2474,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) GetUsername() string {
 	return ""
 }
 
-func (m *StorageDeviceNetappBackendOntapNasType) GetPassword() *ves_io_schema4.SecretType {
+func (m *StorageDeviceNetappBackendOntapNasType) GetPassword() *schema.SecretType {
 	if m != nil {
 		return m.Password
 	}
@@ -2554,7 +2488,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) GetAutoExportPolicy() bool {
 	return false
 }
 
-func (m *StorageDeviceNetappBackendOntapNasType) GetAutoExportCidrs() *ves_io_schema_views.PrefixStringListType {
+func (m *StorageDeviceNetappBackendOntapNasType) GetAutoExportCidrs() *views.PrefixStringListType {
 	if m != nil {
 		return m.AutoExportCidrs
 	}
@@ -2624,7 +2558,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) GetClientCertificate() string {
 	return ""
 }
 
-func (m *StorageDeviceNetappBackendOntapNasType) GetClientPrivateKey() *ves_io_schema4.SecretType {
+func (m *StorageDeviceNetappBackendOntapNasType) GetClientPrivateKey() *schema.SecretType {
 	if m != nil {
 		return m.ClientPrivateKey
 	}
@@ -2638,112 +2572,14 @@ func (m *StorageDeviceNetappBackendOntapNasType) GetTrustedCaCertificate() strin
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageDeviceNetappBackendOntapNasType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageDeviceNetappBackendOntapNasType_OneofMarshaler, _StorageDeviceNetappBackendOntapNasType_OneofUnmarshaler, _StorageDeviceNetappBackendOntapNasType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageDeviceNetappBackendOntapNasType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageDeviceNetappBackendOntapNasType_ManagementLifIp)(nil),
 		(*StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName)(nil),
 		(*StorageDeviceNetappBackendOntapNasType_DataLifIp)(nil),
 		(*StorageDeviceNetappBackendOntapNasType_DataLifDnsName)(nil),
 	}
-}
-
-func _StorageDeviceNetappBackendOntapNasType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageDeviceNetappBackendOntapNasType)
-	// management_lif
-	switch x := m.ManagementLif.(type) {
-	case *StorageDeviceNetappBackendOntapNasType_ManagementLifIp:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ManagementLifIp)
-	case *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ManagementLifDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappBackendOntapNasType.ManagementLif has unexpected type %T", x)
-	}
-	// data_lif
-	switch x := m.DataLif.(type) {
-	case *StorageDeviceNetappBackendOntapNasType_DataLifIp:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DataLifIp)
-	case *StorageDeviceNetappBackendOntapNasType_DataLifDnsName:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DataLifDnsName)
-	case nil:
-	default:
-		return fmt.Errorf("StorageDeviceNetappBackendOntapNasType.DataLif has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageDeviceNetappBackendOntapNasType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageDeviceNetappBackendOntapNasType)
-	switch tag {
-	case 4: // management_lif.management_lif_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ManagementLif = &StorageDeviceNetappBackendOntapNasType_ManagementLifIp{x}
-		return true, err
-	case 5: // management_lif.management_lif_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ManagementLif = &StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName{x}
-		return true, err
-	case 7: // data_lif.data_lif_ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.DataLif = &StorageDeviceNetappBackendOntapNasType_DataLifIp{x}
-		return true, err
-	case 8: // data_lif.data_lif_dns_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.DataLif = &StorageDeviceNetappBackendOntapNasType_DataLifDnsName{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageDeviceNetappBackendOntapNasType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageDeviceNetappBackendOntapNasType)
-	// management_lif
-	switch x := m.ManagementLif.(type) {
-	case *StorageDeviceNetappBackendOntapNasType_ManagementLifIp:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ManagementLifIp)))
-		n += len(x.ManagementLifIp)
-	case *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName:
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ManagementLifDnsName)))
-		n += len(x.ManagementLifDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// data_lif
-	switch x := m.DataLif.(type) {
-	case *StorageDeviceNetappBackendOntapNasType_DataLifIp:
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DataLifIp)))
-		n += len(x.DataLifIp)
-	case *StorageDeviceNetappBackendOntapNasType_DataLifDnsName:
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DataLifDnsName)))
-		n += len(x.DataLifDnsName)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Backend OnTap Volume Defaults
@@ -2823,9 +2659,33 @@ type OntapVolumeDefaults struct {
 	QosPolicyChoice isOntapVolumeDefaults_QosPolicyChoice `protobuf_oneof:"qos_policy_choice"`
 }
 
-func (m *OntapVolumeDefaults) Reset()                    { *m = OntapVolumeDefaults{} }
-func (*OntapVolumeDefaults) ProtoMessage()               {}
-func (*OntapVolumeDefaults) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{19} }
+func (m *OntapVolumeDefaults) Reset()      { *m = OntapVolumeDefaults{} }
+func (*OntapVolumeDefaults) ProtoMessage() {}
+func (*OntapVolumeDefaults) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{19}
+}
+func (m *OntapVolumeDefaults) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OntapVolumeDefaults) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OntapVolumeDefaults) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OntapVolumeDefaults.Merge(m, src)
+}
+func (m *OntapVolumeDefaults) XXX_Size() int {
+	return m.Size()
+}
+func (m *OntapVolumeDefaults) XXX_DiscardUnknown() {
+	xxx_messageInfo_OntapVolumeDefaults.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OntapVolumeDefaults proto.InternalMessageInfo
 
 type isOntapVolumeDefaults_QosPolicyChoice interface {
 	isOntapVolumeDefaults_QosPolicyChoice()
@@ -2835,13 +2695,13 @@ type isOntapVolumeDefaults_QosPolicyChoice interface {
 }
 
 type OntapVolumeDefaults_NoQos struct {
-	NoQos *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=no_qos,json=noQos,oneof"`
+	NoQos *schema.Empty `protobuf:"bytes,12,opt,name=no_qos,json=noQos,proto3,oneof" json:"no_qos,omitempty"`
 }
 type OntapVolumeDefaults_QosPolicy struct {
-	QosPolicy string `protobuf:"bytes,13,opt,name=qos_policy,json=qosPolicy,proto3,oneof"`
+	QosPolicy string `protobuf:"bytes,13,opt,name=qos_policy,json=qosPolicy,proto3,oneof" json:"qos_policy,omitempty"`
 }
 type OntapVolumeDefaults_AdaptiveQosPolicy struct {
-	AdaptiveQosPolicy string `protobuf:"bytes,14,opt,name=adaptive_qos_policy,json=adaptiveQosPolicy,proto3,oneof"`
+	AdaptiveQosPolicy string `protobuf:"bytes,14,opt,name=adaptive_qos_policy,json=adaptiveQosPolicy,proto3,oneof" json:"adaptive_qos_policy,omitempty"`
 }
 
 func (*OntapVolumeDefaults_NoQos) isOntapVolumeDefaults_QosPolicyChoice()             {}
@@ -2925,7 +2785,7 @@ func (m *OntapVolumeDefaults) GetTieringPolicy() string {
 	return ""
 }
 
-func (m *OntapVolumeDefaults) GetNoQos() *ves_io_schema4.Empty {
+func (m *OntapVolumeDefaults) GetNoQos() *schema.Empty {
 	if x, ok := m.GetQosPolicyChoice().(*OntapVolumeDefaults_NoQos); ok {
 		return x.NoQos
 	}
@@ -2946,89 +2806,13 @@ func (m *OntapVolumeDefaults) GetAdaptiveQosPolicy() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*OntapVolumeDefaults) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _OntapVolumeDefaults_OneofMarshaler, _OntapVolumeDefaults_OneofUnmarshaler, _OntapVolumeDefaults_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*OntapVolumeDefaults) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*OntapVolumeDefaults_NoQos)(nil),
 		(*OntapVolumeDefaults_QosPolicy)(nil),
 		(*OntapVolumeDefaults_AdaptiveQosPolicy)(nil),
 	}
-}
-
-func _OntapVolumeDefaults_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*OntapVolumeDefaults)
-	// qos_policy_choice
-	switch x := m.QosPolicyChoice.(type) {
-	case *OntapVolumeDefaults_NoQos:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoQos); err != nil {
-			return err
-		}
-	case *OntapVolumeDefaults_QosPolicy:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.QosPolicy)
-	case *OntapVolumeDefaults_AdaptiveQosPolicy:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.AdaptiveQosPolicy)
-	case nil:
-	default:
-		return fmt.Errorf("OntapVolumeDefaults.QosPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _OntapVolumeDefaults_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*OntapVolumeDefaults)
-	switch tag {
-	case 12: // qos_policy_choice.no_qos
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.QosPolicyChoice = &OntapVolumeDefaults_NoQos{msg}
-		return true, err
-	case 13: // qos_policy_choice.qos_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.QosPolicyChoice = &OntapVolumeDefaults_QosPolicy{x}
-		return true, err
-	case 14: // qos_policy_choice.adaptive_qos_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.QosPolicyChoice = &OntapVolumeDefaults_AdaptiveQosPolicy{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _OntapVolumeDefaults_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*OntapVolumeDefaults)
-	// qos_policy_choice
-	switch x := m.QosPolicyChoice.(type) {
-	case *OntapVolumeDefaults_NoQos:
-		s := proto.Size(x.NoQos)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OntapVolumeDefaults_QosPolicy:
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.QosPolicy)))
-		n += len(x.QosPolicy)
-	case *OntapVolumeDefaults_AdaptiveQosPolicy:
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.AdaptiveQosPolicy)))
-		n += len(x.AdaptiveQosPolicy)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Backend ONTAP Virtual Storage Pool
@@ -3041,7 +2825,7 @@ type OntapVirtualStoragePoolType struct {
 	// x-displayName: "Storage Pool Labels"
 	// x-example: "{"department":"finance", "creditpoints":"6000"}"
 	// List of labels for Storage Device used in NetApp ONTAP. It is used for storage class label match selection.
-	Labels map[string]string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Pool Zone
 	//
 	// x-displayName: "Virtual Pool Zone"
@@ -3052,14 +2836,36 @@ type OntapVirtualStoragePoolType struct {
 	//
 	// x-displayName: "Backend Volume Defaults"
 	// List of QoS volume default types
-	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,3,opt,name=volume_defaults,json=volumeDefaults" json:"volume_defaults,omitempty"`
+	VolumeDefaults *OntapVolumeDefaults `protobuf:"bytes,3,opt,name=volume_defaults,json=volumeDefaults,proto3" json:"volume_defaults,omitempty"`
 }
 
 func (m *OntapVirtualStoragePoolType) Reset()      { *m = OntapVirtualStoragePoolType{} }
 func (*OntapVirtualStoragePoolType) ProtoMessage() {}
 func (*OntapVirtualStoragePoolType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{20}
+	return fileDescriptor_82c3333ba2789298, []int{20}
 }
+func (m *OntapVirtualStoragePoolType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OntapVirtualStoragePoolType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OntapVirtualStoragePoolType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OntapVirtualStoragePoolType.Merge(m, src)
+}
+func (m *OntapVirtualStoragePoolType) XXX_Size() int {
+	return m.Size()
+}
+func (m *OntapVirtualStoragePoolType) XXX_DiscardUnknown() {
+	xxx_messageInfo_OntapVirtualStoragePoolType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OntapVirtualStoragePoolType proto.InternalMessageInfo
 
 func (m *OntapVirtualStoragePoolType) GetLabels() map[string]string {
 	if m != nil {
@@ -3110,12 +2916,36 @@ type FleetStorageDeviceType struct {
 	//
 	// x-displayName: "Advanced Parameters"
 	// Map of parameter name and string value
-	AdvancedAdvancedParameters map[string]string `protobuf:"bytes,5,rep,name=advanced_advanced_parameters,json=advancedAdvancedParameters" json:"advanced_advanced_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	AdvancedAdvancedParameters map[string]string `protobuf:"bytes,5,rep,name=advanced_advanced_parameters,json=advancedAdvancedParameters,proto3" json:"advanced_advanced_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *FleetStorageDeviceType) Reset()                    { *m = FleetStorageDeviceType{} }
-func (*FleetStorageDeviceType) ProtoMessage()               {}
-func (*FleetStorageDeviceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{21} }
+func (m *FleetStorageDeviceType) Reset()      { *m = FleetStorageDeviceType{} }
+func (*FleetStorageDeviceType) ProtoMessage() {}
+func (*FleetStorageDeviceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{21}
+}
+func (m *FleetStorageDeviceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStorageDeviceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStorageDeviceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStorageDeviceType.Merge(m, src)
+}
+func (m *FleetStorageDeviceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStorageDeviceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStorageDeviceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetStorageDeviceType proto.InternalMessageInfo
 
 type isFleetStorageDeviceType_DeviceChoice interface {
 	isFleetStorageDeviceType_DeviceChoice()
@@ -3125,16 +2955,16 @@ type isFleetStorageDeviceType_DeviceChoice interface {
 }
 
 type FleetStorageDeviceType_NetappTrident struct {
-	NetappTrident *StorageDeviceNetappTridentType `protobuf:"bytes,6,opt,name=netapp_trident,json=netappTrident,oneof"`
+	NetappTrident *StorageDeviceNetappTridentType `protobuf:"bytes,6,opt,name=netapp_trident,json=netappTrident,proto3,oneof" json:"netapp_trident,omitempty"`
 }
 type FleetStorageDeviceType_PureServiceOrchestrator struct {
-	PureServiceOrchestrator *StorageDevicePureStorageServiceOrchestratorType `protobuf:"bytes,7,opt,name=pure_service_orchestrator,json=pureServiceOrchestrator,oneof"`
+	PureServiceOrchestrator *StorageDevicePureStorageServiceOrchestratorType `protobuf:"bytes,7,opt,name=pure_service_orchestrator,json=pureServiceOrchestrator,proto3,oneof" json:"pure_service_orchestrator,omitempty"`
 }
 type FleetStorageDeviceType_OpenebsEnterprise struct {
-	OpenebsEnterprise *StorageDeviceOpenebsEnterpriseType `protobuf:"bytes,8,opt,name=openebs_enterprise,json=openebsEnterprise,oneof"`
+	OpenebsEnterprise *StorageDeviceOpenebsEnterpriseType `protobuf:"bytes,8,opt,name=openebs_enterprise,json=openebsEnterprise,proto3,oneof" json:"openebs_enterprise,omitempty"`
 }
 type FleetStorageDeviceType_CustomStorage struct {
-	CustomStorage *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=custom_storage,json=customStorage,oneof"`
+	CustomStorage *schema.Empty `protobuf:"bytes,9,opt,name=custom_storage,json=customStorage,proto3,oneof" json:"custom_storage,omitempty"`
 }
 
 func (*FleetStorageDeviceType_NetappTrident) isFleetStorageDeviceType_DeviceChoice()           {}
@@ -3177,7 +3007,7 @@ func (m *FleetStorageDeviceType) GetOpenebsEnterprise() *StorageDeviceOpenebsEnt
 	return nil
 }
 
-func (m *FleetStorageDeviceType) GetCustomStorage() *ves_io_schema4.Empty {
+func (m *FleetStorageDeviceType) GetCustomStorage() *schema.Empty {
 	if x, ok := m.GetDeviceChoice().(*FleetStorageDeviceType_CustomStorage); ok {
 		return x.CustomStorage
 	}
@@ -3191,116 +3021,14 @@ func (m *FleetStorageDeviceType) GetAdvancedAdvancedParameters() map[string]stri
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FleetStorageDeviceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FleetStorageDeviceType_OneofMarshaler, _FleetStorageDeviceType_OneofUnmarshaler, _FleetStorageDeviceType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FleetStorageDeviceType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FleetStorageDeviceType_NetappTrident)(nil),
 		(*FleetStorageDeviceType_PureServiceOrchestrator)(nil),
 		(*FleetStorageDeviceType_OpenebsEnterprise)(nil),
 		(*FleetStorageDeviceType_CustomStorage)(nil),
 	}
-}
-
-func _FleetStorageDeviceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FleetStorageDeviceType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *FleetStorageDeviceType_NetappTrident:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetappTrident); err != nil {
-			return err
-		}
-	case *FleetStorageDeviceType_PureServiceOrchestrator:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PureServiceOrchestrator); err != nil {
-			return err
-		}
-	case *FleetStorageDeviceType_OpenebsEnterprise:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OpenebsEnterprise); err != nil {
-			return err
-		}
-	case *FleetStorageDeviceType_CustomStorage:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorage); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FleetStorageDeviceType.DeviceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FleetStorageDeviceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FleetStorageDeviceType)
-	switch tag {
-	case 6: // device_choice.netapp_trident
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageDeviceNetappTridentType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageDeviceType_NetappTrident{msg}
-		return true, err
-	case 7: // device_choice.pure_service_orchestrator
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageDevicePureStorageServiceOrchestratorType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageDeviceType_PureServiceOrchestrator{msg}
-		return true, err
-	case 8: // device_choice.openebs_enterprise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageDeviceOpenebsEnterpriseType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageDeviceType_OpenebsEnterprise{msg}
-		return true, err
-	case 9: // device_choice.custom_storage
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageDeviceType_CustomStorage{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FleetStorageDeviceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FleetStorageDeviceType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *FleetStorageDeviceType_NetappTrident:
-		s := proto.Size(x.NetappTrident)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageDeviceType_PureServiceOrchestrator:
-		s := proto.Size(x.PureServiceOrchestrator)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageDeviceType_OpenebsEnterprise:
-		s := proto.Size(x.OpenebsEnterprise)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageDeviceType_CustomStorage:
-		s := proto.Size(x.CustomStorage)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Custom Storage Device List
@@ -3312,14 +3040,36 @@ type FleetStorageDeviceListType struct {
 	//
 	// x-displayName: "List of Storage Devices"
 	// List of custom storage devices
-	StorageDevices []*FleetStorageDeviceType `protobuf:"bytes,1,rep,name=storage_devices,json=storageDevices" json:"storage_devices,omitempty"`
+	StorageDevices []*FleetStorageDeviceType `protobuf:"bytes,1,rep,name=storage_devices,json=storageDevices,proto3" json:"storage_devices,omitempty"`
 }
 
 func (m *FleetStorageDeviceListType) Reset()      { *m = FleetStorageDeviceListType{} }
 func (*FleetStorageDeviceListType) ProtoMessage() {}
 func (*FleetStorageDeviceListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{22}
+	return fileDescriptor_82c3333ba2789298, []int{22}
 }
+func (m *FleetStorageDeviceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStorageDeviceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStorageDeviceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStorageDeviceListType.Merge(m, src)
+}
+func (m *FleetStorageDeviceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStorageDeviceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStorageDeviceListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetStorageDeviceListType proto.InternalMessageInfo
 
 func (m *FleetStorageDeviceListType) GetStorageDevices() []*FleetStorageDeviceType {
 	if m != nil {
@@ -3366,8 +3116,30 @@ type StorageClassDellIsilonF800Type struct {
 func (m *StorageClassDellIsilonF800Type) Reset()      { *m = StorageClassDellIsilonF800Type{} }
 func (*StorageClassDellIsilonF800Type) ProtoMessage() {}
 func (*StorageClassDellIsilonF800Type) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{23}
+	return fileDescriptor_82c3333ba2789298, []int{23}
 }
+func (m *StorageClassDellIsilonF800Type) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassDellIsilonF800Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassDellIsilonF800Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassDellIsilonF800Type.Merge(m, src)
+}
+func (m *StorageClassDellIsilonF800Type) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassDellIsilonF800Type) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassDellIsilonF800Type.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassDellIsilonF800Type proto.InternalMessageInfo
 
 type isStorageClassDellIsilonF800Type_HttpsChoice interface {
 	isStorageClassDellIsilonF800Type_HttpsChoice()
@@ -3377,10 +3149,10 @@ type isStorageClassDellIsilonF800Type_HttpsChoice interface {
 }
 
 type StorageClassDellIsilonF800Type_AzServiceName struct {
-	AzServiceName string `protobuf:"bytes,2,opt,name=az_service_name,json=azServiceName,proto3,oneof"`
+	AzServiceName string `protobuf:"bytes,2,opt,name=az_service_name,json=azServiceName,proto3,oneof" json:"az_service_name,omitempty"`
 }
 type StorageClassDellIsilonF800Type_AzServiceIpAddress struct {
-	AzServiceIpAddress string `protobuf:"bytes,3,opt,name=az_service_ip_address,json=azServiceIpAddress,proto3,oneof"`
+	AzServiceIpAddress string `protobuf:"bytes,3,opt,name=az_service_ip_address,json=azServiceIpAddress,proto3,oneof" json:"az_service_ip_address,omitempty"`
 }
 
 func (*StorageClassDellIsilonF800Type_AzServiceName) isStorageClassDellIsilonF800Type_HttpsChoice() {}
@@ -3429,70 +3201,12 @@ func (m *StorageClassDellIsilonF800Type) GetRootClientEnable() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StorageClassDellIsilonF800Type) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StorageClassDellIsilonF800Type_OneofMarshaler, _StorageClassDellIsilonF800Type_OneofUnmarshaler, _StorageClassDellIsilonF800Type_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StorageClassDellIsilonF800Type) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StorageClassDellIsilonF800Type_AzServiceName)(nil),
 		(*StorageClassDellIsilonF800Type_AzServiceIpAddress)(nil),
 	}
-}
-
-func _StorageClassDellIsilonF800Type_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StorageClassDellIsilonF800Type)
-	// https_choice
-	switch x := m.HttpsChoice.(type) {
-	case *StorageClassDellIsilonF800Type_AzServiceName:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.AzServiceName)
-	case *StorageClassDellIsilonF800Type_AzServiceIpAddress:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.AzServiceIpAddress)
-	case nil:
-	default:
-		return fmt.Errorf("StorageClassDellIsilonF800Type.HttpsChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StorageClassDellIsilonF800Type_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StorageClassDellIsilonF800Type)
-	switch tag {
-	case 2: // https_choice.az_service_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.HttpsChoice = &StorageClassDellIsilonF800Type_AzServiceName{x}
-		return true, err
-	case 3: // https_choice.az_service_ip_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.HttpsChoice = &StorageClassDellIsilonF800Type_AzServiceIpAddress{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StorageClassDellIsilonF800Type_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StorageClassDellIsilonF800Type)
-	// https_choice
-	switch x := m.HttpsChoice.(type) {
-	case *StorageClassDellIsilonF800Type_AzServiceName:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.AzServiceName)))
-		n += len(x.AzServiceName)
-	case *StorageClassDellIsilonF800Type_AzServiceIpAddress:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.AzServiceIpAddress)))
-		n += len(x.AzServiceIpAddress)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // HPE Nimbus Storage AF40
@@ -3523,8 +3237,30 @@ type StorageClassHPENimbusStorageAf40Type struct {
 func (m *StorageClassHPENimbusStorageAf40Type) Reset()      { *m = StorageClassHPENimbusStorageAf40Type{} }
 func (*StorageClassHPENimbusStorageAf40Type) ProtoMessage() {}
 func (*StorageClassHPENimbusStorageAf40Type) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{24}
+	return fileDescriptor_82c3333ba2789298, []int{24}
 }
+func (m *StorageClassHPENimbusStorageAf40Type) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassHPENimbusStorageAf40Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassHPENimbusStorageAf40Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassHPENimbusStorageAf40Type.Merge(m, src)
+}
+func (m *StorageClassHPENimbusStorageAf40Type) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassHPENimbusStorageAf40Type) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassHPENimbusStorageAf40Type.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassHPENimbusStorageAf40Type proto.InternalMessageInfo
 
 func (m *StorageClassHPENimbusStorageAf40Type) GetPerfPolicy() string {
 	if m != nil {
@@ -3569,8 +3305,30 @@ type StorageClassOpenebsEnterpriseType struct {
 func (m *StorageClassOpenebsEnterpriseType) Reset()      { *m = StorageClassOpenebsEnterpriseType{} }
 func (*StorageClassOpenebsEnterpriseType) ProtoMessage() {}
 func (*StorageClassOpenebsEnterpriseType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{25}
+	return fileDescriptor_82c3333ba2789298, []int{25}
 }
+func (m *StorageClassOpenebsEnterpriseType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassOpenebsEnterpriseType.Merge(m, src)
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassOpenebsEnterpriseType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassOpenebsEnterpriseType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassOpenebsEnterpriseType proto.InternalMessageInfo
 
 func (m *StorageClassOpenebsEnterpriseType) GetProtocol() string {
 	if m != nil {
@@ -3597,7 +3355,7 @@ type StorageClassNetappTridentType struct {
 	// x-example: "protection=silver; creditpoints=20000"
 	// Using the Selector field, each StorageClass calls out which virtual pool(s) may be used to host a volume.
 	// The volume will have the aspects defined in the chosen virtual pool.
-	Selector map[string]string `protobuf:"bytes,1,rep,name=selector" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Selector map[string]string `protobuf:"bytes,1,rep,name=selector,proto3" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Storage Pools
 	//
 	// x-displayName: "Storage Pools"
@@ -3609,8 +3367,30 @@ type StorageClassNetappTridentType struct {
 func (m *StorageClassNetappTridentType) Reset()      { *m = StorageClassNetappTridentType{} }
 func (*StorageClassNetappTridentType) ProtoMessage() {}
 func (*StorageClassNetappTridentType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{26}
+	return fileDescriptor_82c3333ba2789298, []int{26}
 }
+func (m *StorageClassNetappTridentType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassNetappTridentType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassNetappTridentType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassNetappTridentType.Merge(m, src)
+}
+func (m *StorageClassNetappTridentType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassNetappTridentType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassNetappTridentType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassNetappTridentType proto.InternalMessageInfo
 
 func (m *StorageClassNetappTridentType) GetSelector() map[string]string {
 	if m != nil {
@@ -3658,8 +3438,30 @@ func (m *StorageClassPureServiceOrchestratorType) Reset() {
 }
 func (*StorageClassPureServiceOrchestratorType) ProtoMessage() {}
 func (*StorageClassPureServiceOrchestratorType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{27}
+	return fileDescriptor_82c3333ba2789298, []int{27}
 }
+func (m *StorageClassPureServiceOrchestratorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassPureServiceOrchestratorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassPureServiceOrchestratorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassPureServiceOrchestratorType.Merge(m, src)
+}
+func (m *StorageClassPureServiceOrchestratorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassPureServiceOrchestratorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassPureServiceOrchestratorType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassPureServiceOrchestratorType proto.InternalMessageInfo
 
 func (m *StorageClassPureServiceOrchestratorType) GetBackend() string {
 	if m != nil {
@@ -3694,9 +3496,33 @@ type StorageClassCustomType struct {
 	Yaml string `protobuf:"bytes,1,opt,name=yaml,proto3" json:"yaml,omitempty"`
 }
 
-func (m *StorageClassCustomType) Reset()                    { *m = StorageClassCustomType{} }
-func (*StorageClassCustomType) ProtoMessage()               {}
-func (*StorageClassCustomType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{28} }
+func (m *StorageClassCustomType) Reset()      { *m = StorageClassCustomType{} }
+func (*StorageClassCustomType) ProtoMessage() {}
+func (*StorageClassCustomType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{28}
+}
+func (m *StorageClassCustomType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageClassCustomType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageClassCustomType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageClassCustomType.Merge(m, src)
+}
+func (m *StorageClassCustomType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageClassCustomType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageClassCustomType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageClassCustomType proto.InternalMessageInfo
 
 func (m *StorageClassCustomType) GetYaml() string {
 	if m != nil {
@@ -3755,7 +3581,7 @@ type FleetStorageClassType struct {
 	//
 	// x-displayName: "Advanced Parameters"
 	// Map of parameter name and string value
-	AdvancedStorageParameters map[string]string `protobuf:"bytes,7,rep,name=advanced_storage_parameters,json=advancedStorageParameters" json:"advanced_storage_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	AdvancedStorageParameters map[string]string `protobuf:"bytes,7,rep,name=advanced_storage_parameters,json=advancedStorageParameters,proto3" json:"advanced_storage_parameters,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Storage Class Name
 	//
 	// x-displayName: "Storage Class Name"
@@ -3765,9 +3591,33 @@ type FleetStorageClassType struct {
 	StorageClassName string `protobuf:"bytes,8,opt,name=storage_class_name,json=storageClassName,proto3" json:"storage_class_name,omitempty"`
 }
 
-func (m *FleetStorageClassType) Reset()                    { *m = FleetStorageClassType{} }
-func (*FleetStorageClassType) ProtoMessage()               {}
-func (*FleetStorageClassType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{29} }
+func (m *FleetStorageClassType) Reset()      { *m = FleetStorageClassType{} }
+func (*FleetStorageClassType) ProtoMessage() {}
+func (*FleetStorageClassType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{29}
+}
+func (m *FleetStorageClassType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStorageClassType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStorageClassType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStorageClassType.Merge(m, src)
+}
+func (m *FleetStorageClassType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStorageClassType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStorageClassType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetStorageClassType proto.InternalMessageInfo
 
 type isFleetStorageClassType_DeviceChoice interface {
 	isFleetStorageClassType_DeviceChoice()
@@ -3777,16 +3627,16 @@ type isFleetStorageClassType_DeviceChoice interface {
 }
 
 type FleetStorageClassType_NetappTrident struct {
-	NetappTrident *StorageClassNetappTridentType `protobuf:"bytes,9,opt,name=netapp_trident,json=netappTrident,oneof"`
+	NetappTrident *StorageClassNetappTridentType `protobuf:"bytes,9,opt,name=netapp_trident,json=netappTrident,proto3,oneof" json:"netapp_trident,omitempty"`
 }
 type FleetStorageClassType_PureServiceOrchestrator struct {
-	PureServiceOrchestrator *StorageClassPureServiceOrchestratorType `protobuf:"bytes,10,opt,name=pure_service_orchestrator,json=pureServiceOrchestrator,oneof"`
+	PureServiceOrchestrator *StorageClassPureServiceOrchestratorType `protobuf:"bytes,10,opt,name=pure_service_orchestrator,json=pureServiceOrchestrator,proto3,oneof" json:"pure_service_orchestrator,omitempty"`
 }
 type FleetStorageClassType_OpenebsEnterprise struct {
-	OpenebsEnterprise *StorageClassOpenebsEnterpriseType `protobuf:"bytes,11,opt,name=openebs_enterprise,json=openebsEnterprise,oneof"`
+	OpenebsEnterprise *StorageClassOpenebsEnterpriseType `protobuf:"bytes,11,opt,name=openebs_enterprise,json=openebsEnterprise,proto3,oneof" json:"openebs_enterprise,omitempty"`
 }
 type FleetStorageClassType_CustomStorage struct {
-	CustomStorage *StorageClassCustomType `protobuf:"bytes,16,opt,name=custom_storage,json=customStorage,oneof"`
+	CustomStorage *StorageClassCustomType `protobuf:"bytes,16,opt,name=custom_storage,json=customStorage,proto3,oneof" json:"custom_storage,omitempty"`
 }
 
 func (*FleetStorageClassType_NetappTrident) isFleetStorageClassType_DeviceChoice()           {}
@@ -3878,116 +3728,14 @@ func (m *FleetStorageClassType) GetStorageClassName() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FleetStorageClassType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FleetStorageClassType_OneofMarshaler, _FleetStorageClassType_OneofUnmarshaler, _FleetStorageClassType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FleetStorageClassType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FleetStorageClassType_NetappTrident)(nil),
 		(*FleetStorageClassType_PureServiceOrchestrator)(nil),
 		(*FleetStorageClassType_OpenebsEnterprise)(nil),
 		(*FleetStorageClassType_CustomStorage)(nil),
 	}
-}
-
-func _FleetStorageClassType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FleetStorageClassType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *FleetStorageClassType_NetappTrident:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetappTrident); err != nil {
-			return err
-		}
-	case *FleetStorageClassType_PureServiceOrchestrator:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PureServiceOrchestrator); err != nil {
-			return err
-		}
-	case *FleetStorageClassType_OpenebsEnterprise:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OpenebsEnterprise); err != nil {
-			return err
-		}
-	case *FleetStorageClassType_CustomStorage:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorage); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FleetStorageClassType.DeviceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FleetStorageClassType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FleetStorageClassType)
-	switch tag {
-	case 9: // device_choice.netapp_trident
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageClassNetappTridentType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageClassType_NetappTrident{msg}
-		return true, err
-	case 10: // device_choice.pure_service_orchestrator
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageClassPureServiceOrchestratorType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageClassType_PureServiceOrchestrator{msg}
-		return true, err
-	case 11: // device_choice.openebs_enterprise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageClassOpenebsEnterpriseType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageClassType_OpenebsEnterprise{msg}
-		return true, err
-	case 16: // device_choice.custom_storage
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageClassCustomType)
-		err := b.DecodeMessage(msg)
-		m.DeviceChoice = &FleetStorageClassType_CustomStorage{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FleetStorageClassType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FleetStorageClassType)
-	// device_choice
-	switch x := m.DeviceChoice.(type) {
-	case *FleetStorageClassType_NetappTrident:
-		s := proto.Size(x.NetappTrident)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageClassType_PureServiceOrchestrator:
-		s := proto.Size(x.PureServiceOrchestrator)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageClassType_OpenebsEnterprise:
-		s := proto.Size(x.OpenebsEnterprise)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetStorageClassType_CustomStorage:
-		s := proto.Size(x.CustomStorage)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Custom Storage Class List
@@ -3999,12 +3747,36 @@ type FleetStorageClassListType struct {
 	//
 	// x-displayName: "List of Storage Classes"
 	// List of custom storage classes
-	StorageClasses []*FleetStorageClassType `protobuf:"bytes,1,rep,name=storage_classes,json=storageClasses" json:"storage_classes,omitempty"`
+	StorageClasses []*FleetStorageClassType `protobuf:"bytes,1,rep,name=storage_classes,json=storageClasses,proto3" json:"storage_classes,omitempty"`
 }
 
-func (m *FleetStorageClassListType) Reset()                    { *m = FleetStorageClassListType{} }
-func (*FleetStorageClassListType) ProtoMessage()               {}
-func (*FleetStorageClassListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{30} }
+func (m *FleetStorageClassListType) Reset()      { *m = FleetStorageClassListType{} }
+func (*FleetStorageClassListType) ProtoMessage() {}
+func (*FleetStorageClassListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{30}
+}
+func (m *FleetStorageClassListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStorageClassListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStorageClassListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStorageClassListType.Merge(m, src)
+}
+func (m *FleetStorageClassListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStorageClassListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStorageClassListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetStorageClassListType proto.InternalMessageInfo
 
 func (m *FleetStorageClassListType) GetStorageClasses() []*FleetStorageClassType {
 	if m != nil {
@@ -4026,9 +3798,33 @@ type BondLacpType struct {
 	Rate uint32 `protobuf:"varint,1,opt,name=rate,proto3" json:"rate,omitempty"`
 }
 
-func (m *BondLacpType) Reset()                    { *m = BondLacpType{} }
-func (*BondLacpType) ProtoMessage()               {}
-func (*BondLacpType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{31} }
+func (m *BondLacpType) Reset()      { *m = BondLacpType{} }
+func (*BondLacpType) ProtoMessage() {}
+func (*BondLacpType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{31}
+}
+func (m *BondLacpType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BondLacpType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BondLacpType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BondLacpType.Merge(m, src)
+}
+func (m *BondLacpType) XXX_Size() int {
+	return m.Size()
+}
+func (m *BondLacpType) XXX_DiscardUnknown() {
+	xxx_messageInfo_BondLacpType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BondLacpType proto.InternalMessageInfo
 
 func (m *BondLacpType) GetRate() uint32 {
 	if m != nil {
@@ -4054,7 +3850,7 @@ type FleetBondDeviceType struct {
 	// x-displayName: "Member Ethernet Devices"
 	// x-required
 	// Ethernet devices that will make up this bond
-	Devices []string `protobuf:"bytes,2,rep,name=devices" json:"devices,omitempty"`
+	Devices []string `protobuf:"bytes,2,rep,name=devices,proto3" json:"devices,omitempty"`
 	// Select Bond Mode
 	//
 	// x-displayName: "Select Bond Mode"
@@ -4081,9 +3877,33 @@ type FleetBondDeviceType struct {
 	LinkUpDelay uint32 `protobuf:"varint,7,opt,name=link_up_delay,json=linkUpDelay,proto3" json:"link_up_delay,omitempty"`
 }
 
-func (m *FleetBondDeviceType) Reset()                    { *m = FleetBondDeviceType{} }
-func (*FleetBondDeviceType) ProtoMessage()               {}
-func (*FleetBondDeviceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{32} }
+func (m *FleetBondDeviceType) Reset()      { *m = FleetBondDeviceType{} }
+func (*FleetBondDeviceType) ProtoMessage() {}
+func (*FleetBondDeviceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{32}
+}
+func (m *FleetBondDeviceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetBondDeviceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetBondDeviceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetBondDeviceType.Merge(m, src)
+}
+func (m *FleetBondDeviceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetBondDeviceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetBondDeviceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetBondDeviceType proto.InternalMessageInfo
 
 type isFleetBondDeviceType_LacpChoice interface {
 	isFleetBondDeviceType_LacpChoice()
@@ -4093,10 +3913,10 @@ type isFleetBondDeviceType_LacpChoice interface {
 }
 
 type FleetBondDeviceType_Lacp struct {
-	Lacp *BondLacpType `protobuf:"bytes,4,opt,name=lacp,oneof"`
+	Lacp *BondLacpType `protobuf:"bytes,4,opt,name=lacp,proto3,oneof" json:"lacp,omitempty"`
 }
 type FleetBondDeviceType_ActiveBackup struct {
-	ActiveBackup *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=active_backup,json=activeBackup,oneof"`
+	ActiveBackup *schema.Empty `protobuf:"bytes,5,opt,name=active_backup,json=activeBackup,proto3,oneof" json:"active_backup,omitempty"`
 }
 
 func (*FleetBondDeviceType_Lacp) isFleetBondDeviceType_LacpChoice()         {}
@@ -4130,7 +3950,7 @@ func (m *FleetBondDeviceType) GetLacp() *BondLacpType {
 	return nil
 }
 
-func (m *FleetBondDeviceType) GetActiveBackup() *ves_io_schema4.Empty {
+func (m *FleetBondDeviceType) GetActiveBackup() *schema.Empty {
 	if x, ok := m.GetLacpChoice().(*FleetBondDeviceType_ActiveBackup); ok {
 		return x.ActiveBackup
 	}
@@ -4151,78 +3971,12 @@ func (m *FleetBondDeviceType) GetLinkUpDelay() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FleetBondDeviceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FleetBondDeviceType_OneofMarshaler, _FleetBondDeviceType_OneofUnmarshaler, _FleetBondDeviceType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FleetBondDeviceType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FleetBondDeviceType_Lacp)(nil),
 		(*FleetBondDeviceType_ActiveBackup)(nil),
 	}
-}
-
-func _FleetBondDeviceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FleetBondDeviceType)
-	// lacp_choice
-	switch x := m.LacpChoice.(type) {
-	case *FleetBondDeviceType_Lacp:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Lacp); err != nil {
-			return err
-		}
-	case *FleetBondDeviceType_ActiveBackup:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveBackup); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("FleetBondDeviceType.LacpChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FleetBondDeviceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FleetBondDeviceType)
-	switch tag {
-	case 4: // lacp_choice.lacp
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(BondLacpType)
-		err := b.DecodeMessage(msg)
-		m.LacpChoice = &FleetBondDeviceType_Lacp{msg}
-		return true, err
-	case 5: // lacp_choice.active_backup
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LacpChoice = &FleetBondDeviceType_ActiveBackup{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FleetBondDeviceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FleetBondDeviceType)
-	// lacp_choice
-	switch x := m.LacpChoice.(type) {
-	case *FleetBondDeviceType_Lacp:
-		s := proto.Size(x.Lacp)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FleetBondDeviceType_ActiveBackup:
-		s := proto.Size(x.ActiveBackup)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Bond Devices List
@@ -4235,12 +3989,36 @@ type FleetBondDevicesListType struct {
 	// x-displayName: "Bond Devices List"
 	// x-required
 	// List of bond devices for this fleet
-	BondDevices []*FleetBondDeviceType `protobuf:"bytes,1,rep,name=bond_devices,json=bondDevices" json:"bond_devices,omitempty"`
+	BondDevices []*FleetBondDeviceType `protobuf:"bytes,1,rep,name=bond_devices,json=bondDevices,proto3" json:"bond_devices,omitempty"`
 }
 
-func (m *FleetBondDevicesListType) Reset()                    { *m = FleetBondDevicesListType{} }
-func (*FleetBondDevicesListType) ProtoMessage()               {}
-func (*FleetBondDevicesListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{33} }
+func (m *FleetBondDevicesListType) Reset()      { *m = FleetBondDevicesListType{} }
+func (*FleetBondDevicesListType) ProtoMessage() {}
+func (*FleetBondDevicesListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{33}
+}
+func (m *FleetBondDevicesListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetBondDevicesListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetBondDevicesListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetBondDevicesListType.Merge(m, src)
+}
+func (m *FleetBondDevicesListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetBondDevicesListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetBondDevicesListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetBondDevicesListType proto.InternalMessageInfo
 
 func (m *FleetBondDevicesListType) GetBondDevices() []*FleetBondDeviceType {
 	if m != nil {
@@ -4259,16 +4037,38 @@ type FleetStorageStaticRoutesListType struct {
 	// x-displayName: "List of Static Routes"
 	// x-required
 	// List of storage static routes
-	StorageRoutes []*ves_io_schema4.StaticRouteType `protobuf:"bytes,1,rep,name=storage_routes,json=storageRoutes" json:"storage_routes,omitempty"`
+	StorageRoutes []*schema.StaticRouteType `protobuf:"bytes,1,rep,name=storage_routes,json=storageRoutes,proto3" json:"storage_routes,omitempty"`
 }
 
 func (m *FleetStorageStaticRoutesListType) Reset()      { *m = FleetStorageStaticRoutesListType{} }
 func (*FleetStorageStaticRoutesListType) ProtoMessage() {}
 func (*FleetStorageStaticRoutesListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{34}
+	return fileDescriptor_82c3333ba2789298, []int{34}
+}
+func (m *FleetStorageStaticRoutesListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStorageStaticRoutesListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStorageStaticRoutesListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStorageStaticRoutesListType.Merge(m, src)
+}
+func (m *FleetStorageStaticRoutesListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStorageStaticRoutesListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStorageStaticRoutesListType.DiscardUnknown(m)
 }
 
-func (m *FleetStorageStaticRoutesListType) GetStorageRoutes() []*ves_io_schema4.StaticRouteType {
+var xxx_messageInfo_FleetStorageStaticRoutesListType proto.InternalMessageInfo
+
+func (m *FleetStorageStaticRoutesListType) GetStorageRoutes() []*schema.StaticRouteType {
 	if m != nil {
 		return m.StorageRoutes
 	}
@@ -4299,9 +4099,33 @@ type VGPUConfiguration struct {
 	FeatureType VGPUFeatureType `protobuf:"varint,6,opt,name=feature_type,json=featureType,proto3,enum=ves.io.schema.fleet.VGPUFeatureType" json:"feature_type,omitempty"`
 }
 
-func (m *VGPUConfiguration) Reset()                    { *m = VGPUConfiguration{} }
-func (*VGPUConfiguration) ProtoMessage()               {}
-func (*VGPUConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{35} }
+func (m *VGPUConfiguration) Reset()      { *m = VGPUConfiguration{} }
+func (*VGPUConfiguration) ProtoMessage() {}
+func (*VGPUConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{35}
+}
+func (m *VGPUConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VGPUConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VGPUConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VGPUConfiguration.Merge(m, src)
+}
+func (m *VGPUConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *VGPUConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_VGPUConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VGPUConfiguration proto.InternalMessageInfo
 
 func (m *VGPUConfiguration) GetServerAddress() string {
 	if m != nil {
@@ -4340,12 +4164,36 @@ type BGPConfiguration struct {
 	//
 	// x-displayName: "Peers"
 	// BGP parameters for peer
-	Peers []*ves_io_schema_bgp.Peer `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
+	Peers []*bgp.Peer `protobuf:"bytes,2,rep,name=peers,proto3" json:"peers,omitempty"`
 }
 
-func (m *BGPConfiguration) Reset()                    { *m = BGPConfiguration{} }
-func (*BGPConfiguration) ProtoMessage()               {}
-func (*BGPConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{36} }
+func (m *BGPConfiguration) Reset()      { *m = BGPConfiguration{} }
+func (*BGPConfiguration) ProtoMessage() {}
+func (*BGPConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{36}
+}
+func (m *BGPConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BGPConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BGPConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BGPConfiguration.Merge(m, src)
+}
+func (m *BGPConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *BGPConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_BGPConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BGPConfiguration proto.InternalMessageInfo
 
 func (m *BGPConfiguration) GetAsn() uint32 {
 	if m != nil {
@@ -4354,7 +4202,7 @@ func (m *BGPConfiguration) GetAsn() uint32 {
 	return 0
 }
 
-func (m *BGPConfiguration) GetPeers() []*ves_io_schema_bgp.Peer {
+func (m *BGPConfiguration) GetPeers() []*bgp.Peer {
 	if m != nil {
 		return m.Peers
 	}
@@ -4380,12 +4228,36 @@ type LocalControlPlaneType struct {
 	//
 	// x-displayName: "BGP Configuration"
 	// BGP configuration for local control plane
-	BgpConfig *BGPConfiguration `protobuf:"bytes,4,opt,name=bgp_config,json=bgpConfig" json:"bgp_config,omitempty"`
+	BgpConfig *BGPConfiguration `protobuf:"bytes,4,opt,name=bgp_config,json=bgpConfig,proto3" json:"bgp_config,omitempty"`
 }
 
-func (m *LocalControlPlaneType) Reset()                    { *m = LocalControlPlaneType{} }
-func (*LocalControlPlaneType) ProtoMessage()               {}
-func (*LocalControlPlaneType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{37} }
+func (m *LocalControlPlaneType) Reset()      { *m = LocalControlPlaneType{} }
+func (*LocalControlPlaneType) ProtoMessage() {}
+func (*LocalControlPlaneType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{37}
+}
+func (m *LocalControlPlaneType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LocalControlPlaneType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LocalControlPlaneType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocalControlPlaneType.Merge(m, src)
+}
+func (m *LocalControlPlaneType) XXX_Size() int {
+	return m.Size()
+}
+func (m *LocalControlPlaneType) XXX_DiscardUnknown() {
+	xxx_messageInfo_LocalControlPlaneType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LocalControlPlaneType proto.InternalMessageInfo
 
 type isLocalControlPlaneType_NetworkChoice interface {
 	isLocalControlPlaneType_NetworkChoice()
@@ -4395,10 +4267,10 @@ type isLocalControlPlaneType_NetworkChoice interface {
 }
 
 type LocalControlPlaneType_InsideVn struct {
-	InsideVn *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=inside_vn,json=insideVn,oneof"`
+	InsideVn *schema.Empty `protobuf:"bytes,2,opt,name=inside_vn,json=insideVn,proto3,oneof" json:"inside_vn,omitempty"`
 }
 type LocalControlPlaneType_OutsideVn struct {
-	OutsideVn *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=outside_vn,json=outsideVn,oneof"`
+	OutsideVn *schema.Empty `protobuf:"bytes,3,opt,name=outside_vn,json=outsideVn,proto3,oneof" json:"outside_vn,omitempty"`
 }
 
 func (*LocalControlPlaneType_InsideVn) isLocalControlPlaneType_NetworkChoice()  {}
@@ -4411,14 +4283,14 @@ func (m *LocalControlPlaneType) GetNetworkChoice() isLocalControlPlaneType_Netwo
 	return nil
 }
 
-func (m *LocalControlPlaneType) GetInsideVn() *ves_io_schema4.Empty {
+func (m *LocalControlPlaneType) GetInsideVn() *schema.Empty {
 	if x, ok := m.GetNetworkChoice().(*LocalControlPlaneType_InsideVn); ok {
 		return x.InsideVn
 	}
 	return nil
 }
 
-func (m *LocalControlPlaneType) GetOutsideVn() *ves_io_schema4.Empty {
+func (m *LocalControlPlaneType) GetOutsideVn() *schema.Empty {
 	if x, ok := m.GetNetworkChoice().(*LocalControlPlaneType_OutsideVn); ok {
 		return x.OutsideVn
 	}
@@ -4432,78 +4304,12 @@ func (m *LocalControlPlaneType) GetBgpConfig() *BGPConfiguration {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*LocalControlPlaneType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _LocalControlPlaneType_OneofMarshaler, _LocalControlPlaneType_OneofUnmarshaler, _LocalControlPlaneType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*LocalControlPlaneType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*LocalControlPlaneType_InsideVn)(nil),
 		(*LocalControlPlaneType_OutsideVn)(nil),
 	}
-}
-
-func _LocalControlPlaneType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*LocalControlPlaneType)
-	// network_choice
-	switch x := m.NetworkChoice.(type) {
-	case *LocalControlPlaneType_InsideVn:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideVn); err != nil {
-			return err
-		}
-	case *LocalControlPlaneType_OutsideVn:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideVn); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("LocalControlPlaneType.NetworkChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _LocalControlPlaneType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*LocalControlPlaneType)
-	switch tag {
-	case 2: // network_choice.inside_vn
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkChoice = &LocalControlPlaneType_InsideVn{msg}
-		return true, err
-	case 3: // network_choice.outside_vn
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkChoice = &LocalControlPlaneType_OutsideVn{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _LocalControlPlaneType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*LocalControlPlaneType)
-	// network_choice
-	switch x := m.NetworkChoice.(type) {
-	case *LocalControlPlaneType_InsideVn:
-		s := proto.Size(x.InsideVn)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *LocalControlPlaneType_OutsideVn:
-		s := proto.Size(x.OutsideVn)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Global Specifications
@@ -4540,14 +4346,14 @@ type GlobalSpecType struct {
 	// has an corresponding interface/device. The mapping from device configured in fleet with
 	// interface/device in VER node depends on the type of device and is documented in
 	// device instance specific sections
-	Devices []*DeviceInstanceType `protobuf:"bytes,3,rep,name=devices" json:"devices,omitempty"`
+	Devices []*DeviceInstanceType `protobuf:"bytes,3,rep,name=devices,proto3" json:"devices,omitempty"`
 	// Network Connectors
 	//
 	// x-displayName: "Network Connectors"
 	// Network Connector defines connection between two virtual networks in a given site.
 	// Fleet defines one or more such network connectors.
 	// The network connectors configuration is applied on all sites that are member of the fleet.
-	NetworkConnectors []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors" json:"network_connectors,omitempty"`
+	NetworkConnectors []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors,proto3" json:"network_connectors,omitempty"`
 	// Network Firewall
 	//
 	// x-displayName: "Network Firewall"
@@ -4556,7 +4362,7 @@ type GlobalSpecType struct {
 	//
 	// Constraints
 	// The Network Firewall is applied on Virtual Networks of type site local network and site local inside network
-	NetworkFirewall []*ves_io_schema4.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall" json:"network_firewall,omitempty"`
+	NetworkFirewall []*schema.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall,proto3" json:"network_firewall,omitempty"`
 	// Operating System Version
 	//
 	// x-displayName: "Operating System Version"
@@ -4568,12 +4374,12 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Outside (Site Local) Virtual Network"
 	// Default outside (site local) virtual network for the fleet
-	OutsideVirtualNetwork []*ves_io_schema4.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork" json:"outside_virtual_network,omitempty"`
+	OutsideVirtualNetwork []*schema.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork,proto3" json:"outside_virtual_network,omitempty"`
 	// Inside Virtual Network
 	//
 	// x-displayName: "Site Local Inside Virtual Network"
 	// Default inside (site local) virtual network for the fleet
-	InsideVirtualNetwork []*ves_io_schema4.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork" json:"inside_virtual_network,omitempty"`
+	InsideVirtualNetwork []*schema.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork,proto3" json:"inside_virtual_network,omitempty"`
 	// Select Interface Config
 	//
 	// x-displayName: "Select Interface Configuration"
@@ -4677,7 +4483,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Single Site Fleet Site"
 	// Vega should use this ref when when fleet type is single site fleet
-	SingleSite []*ves_io_schema4.ObjectRefType `protobuf:"bytes,42,rep,name=single_site,json=singleSite" json:"single_site,omitempty"`
+	SingleSite []*schema.ObjectRefType `protobuf:"bytes,42,rep,name=single_site,json=singleSite,proto3" json:"single_site,omitempty"`
 	// Logs Streaming
 	//
 	// x-displayName: "Logs Streaming"
@@ -4703,27 +4509,51 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Enable Local K8s Cluster access"
 	// Local K8s cluster access is enabled, using config k8s_cluster object
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,50,opt,name=k8s_cluster,json=k8sCluster" json:"k8s_cluster,omitempty"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,50,opt,name=k8s_cluster,json=k8sCluster,proto3" json:"k8s_cluster,omitempty"`
 	// Local Control Plane
 	//
 	// x-displayName: "Local Control Plane"
 	// Enable local control plane for L3VPN, SRV6, EVPN etc
-	LocalControlPlane *LocalControlPlaneType `protobuf:"bytes,51,opt,name=local_control_plane,json=localControlPlane" json:"local_control_plane,omitempty"`
+	LocalControlPlane *LocalControlPlaneType `protobuf:"bytes,51,opt,name=local_control_plane,json=localControlPlane,proto3" json:"local_control_plane,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 	// K8s YAMLs
 	//
 	// x-displayName: "K8s YAMLs"
 	// K8s YAML for CustomStorageClass
-	GeneratedYamls []string `protobuf:"bytes,1001,rep,name=generated_yamls,json=generatedYamls" json:"generated_yamls,omitempty"`
+	GeneratedYamls []string `protobuf:"bytes,1001,rep,name=generated_yamls,json=generatedYamls,proto3" json:"generated_yamls,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{38} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{38}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_InterfaceChoice interface {
 	isGlobalSpecType_InterfaceChoice()
@@ -4787,76 +4617,76 @@ type isGlobalSpecType_UsbPolicyChoice interface {
 }
 
 type GlobalSpecType_InterfaceList struct {
-	InterfaceList *FleetInterfaceListType `protobuf:"bytes,10,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *FleetInterfaceListType `protobuf:"bytes,10,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type GlobalSpecType_DefaultInterfaces struct {
-	DefaultInterfaces *ves_io_schema4.Empty `protobuf:"bytes,39,opt,name=default_interfaces,json=defaultInterfaces,oneof"`
+	DefaultInterfaces *schema.Empty `protobuf:"bytes,39,opt,name=default_interfaces,json=defaultInterfaces,proto3,oneof" json:"default_interfaces,omitempty"`
 }
 type GlobalSpecType_LegacyDevices struct {
-	LegacyDevices *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=legacy_devices,json=legacyDevices,oneof"`
+	LegacyDevices *schema.Empty `protobuf:"bytes,11,opt,name=legacy_devices,json=legacyDevices,proto3,oneof" json:"legacy_devices,omitempty"`
 }
 type GlobalSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type GlobalSpecType_BondDeviceList struct {
-	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type GlobalSpecType_NoStorageInterfaces struct {
-	NoStorageInterfaces *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,oneof"`
+	NoStorageInterfaces *schema.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,proto3,oneof" json:"no_storage_interfaces,omitempty"`
 }
 type GlobalSpecType_StorageInterfaceList struct {
-	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,oneof"`
+	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,proto3,oneof" json:"storage_interface_list,omitempty"`
 }
 type GlobalSpecType_NoStorageDevice struct {
-	NoStorageDevice *ves_io_schema4.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,oneof"`
+	NoStorageDevice *schema.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,proto3,oneof" json:"no_storage_device,omitempty"`
 }
 type GlobalSpecType_StorageDeviceList struct {
-	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,oneof"`
+	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,proto3,oneof" json:"storage_device_list,omitempty"`
 }
 type GlobalSpecType_DefaultStorageClass struct {
-	DefaultStorageClass *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,oneof"`
+	DefaultStorageClass *schema.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,proto3,oneof" json:"default_storage_class,omitempty"`
 }
 type GlobalSpecType_StorageClassList struct {
-	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,oneof"`
+	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,proto3,oneof" json:"storage_class_list,omitempty"`
 }
 type GlobalSpecType_NoDcClusterGroup struct {
-	NoDcClusterGroup *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,oneof"`
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
 }
 type GlobalSpecType_DcClusterGroup struct {
-	DcClusterGroup *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,oneof"`
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
 type GlobalSpecType_DcClusterGroupInside struct {
-	DcClusterGroupInside *ves_io_schema_views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,oneof"`
+	DcClusterGroupInside *views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,proto3,oneof" json:"dc_cluster_group_inside,omitempty"`
 }
 type GlobalSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type GlobalSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type GlobalSpecType_EnableVgpu struct {
-	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type GlobalSpecType_NoStorageStaticRoutes struct {
-	NoStorageStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,oneof"`
+	NoStorageStaticRoutes *schema.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,proto3,oneof" json:"no_storage_static_routes,omitempty"`
 }
 type GlobalSpecType_StorageStaticRoutes struct {
-	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,oneof"`
+	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,proto3,oneof" json:"storage_static_routes,omitempty"`
 }
 type GlobalSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GlobalSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type GlobalSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type GlobalSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type GlobalSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 
 func (*GlobalSpecType_InterfaceList) isGlobalSpecType_InterfaceChoice()                   {}
@@ -4966,14 +4796,14 @@ func (m *GlobalSpecType) GetDevices() []*DeviceInstanceType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNetworkConnectors() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetNetworkConnectors() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkConnectors
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetNetworkFirewall() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetNetworkFirewall() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkFirewall
 	}
@@ -4987,14 +4817,14 @@ func (m *GlobalSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetOutsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetOutsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.OutsideVirtualNetwork
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetInsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetInsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InsideVirtualNetwork
 	}
@@ -5008,21 +4838,21 @@ func (m *GlobalSpecType) GetInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultInterfaces() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDefaultInterfaces() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*GlobalSpecType_DefaultInterfaces); ok {
 		return x.DefaultInterfaces
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLegacyDevices() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetLegacyDevices() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*GlobalSpecType_LegacyDevices); ok {
 		return x.LegacyDevices
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*GlobalSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
@@ -5036,7 +4866,7 @@ func (m *GlobalSpecType) GetBondDeviceList() *FleetBondDevicesListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoStorageInterfaces() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoStorageInterfaces() *schema.Empty {
 	if x, ok := m.GetStorageInterfaceChoice().(*GlobalSpecType_NoStorageInterfaces); ok {
 		return x.NoStorageInterfaces
 	}
@@ -5050,7 +4880,7 @@ func (m *GlobalSpecType) GetStorageInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoStorageDevice() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoStorageDevice() *schema.Empty {
 	if x, ok := m.GetStorageDeviceChoice().(*GlobalSpecType_NoStorageDevice); ok {
 		return x.NoStorageDevice
 	}
@@ -5064,7 +4894,7 @@ func (m *GlobalSpecType) GetStorageDeviceList() *FleetStorageDeviceListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultStorageClass() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDefaultStorageClass() *schema.Empty {
 	if x, ok := m.GetStorageClassChoice().(*GlobalSpecType_DefaultStorageClass); ok {
 		return x.DefaultStorageClass
 	}
@@ -5078,35 +4908,35 @@ func (m *GlobalSpecType) GetStorageClassList() *FleetStorageClassListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoDcClusterGroup() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoDcClusterGroup() *schema.Empty {
 	if x, ok := m.GetDcClusterGroupChoice().(*GlobalSpecType_NoDcClusterGroup); ok {
 		return x.NoDcClusterGroup
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDcClusterGroup() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetDcClusterGroup() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*GlobalSpecType_DcClusterGroup); ok {
 		return x.DcClusterGroup
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDcClusterGroupInside() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetDcClusterGroupInside() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*GlobalSpecType_DcClusterGroupInside); ok {
 		return x.DcClusterGroupInside
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GlobalSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GlobalSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
@@ -5127,7 +4957,7 @@ func (m *GlobalSpecType) GetEtcdClusterNetwork() EtcdClusterNetworkType {
 	return ETCD_CLUSTER_SITE_LOCAL_NETWORK
 }
 
-func (m *GlobalSpecType) GetNoStorageStaticRoutes() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoStorageStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStorageStaticRoutesChoice().(*GlobalSpecType_NoStorageStaticRoutes); ok {
 		return x.NoStorageStaticRoutes
 	}
@@ -5155,49 +4985,49 @@ func (m *GlobalSpecType) GetFleetType() FleetType {
 	return MULTIPLE_SITE
 }
 
-func (m *GlobalSpecType) GetSingleSite() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetSingleSite() []*schema.ObjectRefType {
 	if m != nil {
 		return m.SingleSite
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetK8SCluster() *views.ObjectRefType {
 	if m != nil {
 		return m.K8SCluster
 	}
@@ -5211,7 +5041,7 @@ func (m *GlobalSpecType) GetLocalControlPlane() *LocalControlPlaneType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
@@ -5225,9 +5055,9 @@ func (m *GlobalSpecType) GetGeneratedYamls() []string {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_InterfaceList)(nil),
 		(*GlobalSpecType_DefaultInterfaces)(nil),
 		(*GlobalSpecType_LegacyDevices)(nil),
@@ -5255,588 +5085,18 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *GlobalSpecType_InterfaceList:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case *GlobalSpecType_DefaultInterfaces:
-		_ = b.EncodeVarint(39<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultInterfaces); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LegacyDevices:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LegacyDevices); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.InterfaceChoice has unexpected type %T", x)
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GlobalSpecType_NoBondDevices:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *GlobalSpecType_BondDeviceList:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.BondChoice has unexpected type %T", x)
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *GlobalSpecType_NoStorageInterfaces:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageInterfaces); err != nil {
-			return err
-		}
-	case *GlobalSpecType_StorageInterfaceList:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageInterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.StorageInterfaceChoice has unexpected type %T", x)
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *GlobalSpecType_NoStorageDevice:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageDevice); err != nil {
-			return err
-		}
-	case *GlobalSpecType_StorageDeviceList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.StorageDeviceChoice has unexpected type %T", x)
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *GlobalSpecType_DefaultStorageClass:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageClass); err != nil {
-			return err
-		}
-	case *GlobalSpecType_StorageClassList:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageClassList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.StorageClassChoice has unexpected type %T", x)
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *GlobalSpecType_NoDcClusterGroup:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoDcClusterGroup); err != nil {
-			return err
-		}
-	case *GlobalSpecType_DcClusterGroup:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroup); err != nil {
-			return err
-		}
-	case *GlobalSpecType_DcClusterGroupInside:
-		_ = b.EncodeVarint(38<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroupInside); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.DcClusterGroupChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GlobalSpecType_DisableGpu:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *GlobalSpecType_EnableGpu:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *GlobalSpecType_EnableVgpu:
-		_ = b.EncodeVarint(52<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *GlobalSpecType_NoStorageStaticRoutes:
-		_ = b.EncodeVarint(35<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageStaticRoutes); err != nil {
-			return err
-		}
-	case *GlobalSpecType_StorageStaticRoutes:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.StorageStaticRoutesChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(44<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LogReceiver:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GlobalSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *GlobalSpecType_UsbPolicy:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 10: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GlobalSpecType_InterfaceList{msg}
-		return true, err
-	case 39: // interface_choice.default_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GlobalSpecType_DefaultInterfaces{msg}
-		return true, err
-	case 11: // interface_choice.legacy_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GlobalSpecType_LegacyDevices{msg}
-		return true, err
-	case 16: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GlobalSpecType_NoBondDevices{msg}
-		return true, err
-	case 17: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GlobalSpecType_BondDeviceList{msg}
-		return true, err
-	case 19: // storage_interface_choice.no_storage_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &GlobalSpecType_NoStorageInterfaces{msg}
-		return true, err
-	case 20: // storage_interface_choice.storage_interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &GlobalSpecType_StorageInterfaceList{msg}
-		return true, err
-	case 22: // storage_device_choice.no_storage_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &GlobalSpecType_NoStorageDevice{msg}
-		return true, err
-	case 23: // storage_device_choice.storage_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &GlobalSpecType_StorageDeviceList{msg}
-		return true, err
-	case 25: // storage_class_choice.default_storage_class
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &GlobalSpecType_DefaultStorageClass{msg}
-		return true, err
-	case 26: // storage_class_choice.storage_class_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageClassListType)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &GlobalSpecType_StorageClassList{msg}
-		return true, err
-	case 28: // dc_cluster_group_choice.no_dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GlobalSpecType_NoDcClusterGroup{msg}
-		return true, err
-	case 29: // dc_cluster_group_choice.dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GlobalSpecType_DcClusterGroup{msg}
-		return true, err
-	case 38: // dc_cluster_group_choice.dc_cluster_group_inside
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GlobalSpecType_DcClusterGroupInside{msg}
-		return true, err
-	case 31: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_DisableGpu{msg}
-		return true, err
-	case 32: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_EnableGpu{msg}
-		return true, err
-	case 52: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_EnableVgpu{msg}
-		return true, err
-	case 35: // storage_static_routes_choice.no_storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &GlobalSpecType_NoStorageStaticRoutes{msg}
-		return true, err
-	case 36: // storage_static_routes_choice.storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &GlobalSpecType_StorageStaticRoutes{msg}
-		return true, err
-	case 44: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 45: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogReceiver{msg}
-		return true, err
-	case 47: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_DenyAllUsb{msg}
-		return true, err
-	case 48: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_AllowAllUsb{msg}
-		return true, err
-	case 49: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_UsbPolicy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *GlobalSpecType_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_DefaultInterfaces:
-		s := proto.Size(x.DefaultInterfaces)
-		n += proto.SizeVarint(39<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LegacyDevices:
-		s := proto.Size(x.LegacyDevices)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GlobalSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *GlobalSpecType_NoStorageInterfaces:
-		s := proto.Size(x.NoStorageInterfaces)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_StorageInterfaceList:
-		s := proto.Size(x.StorageInterfaceList)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *GlobalSpecType_NoStorageDevice:
-		s := proto.Size(x.NoStorageDevice)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_StorageDeviceList:
-		s := proto.Size(x.StorageDeviceList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *GlobalSpecType_DefaultStorageClass:
-		s := proto.Size(x.DefaultStorageClass)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_StorageClassList:
-		s := proto.Size(x.StorageClassList)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *GlobalSpecType_NoDcClusterGroup:
-		s := proto.Size(x.NoDcClusterGroup)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_DcClusterGroup:
-		s := proto.Size(x.DcClusterGroup)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_DcClusterGroupInside:
-		s := proto.Size(x.DcClusterGroupInside)
-		n += proto.SizeVarint(38<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GlobalSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(52<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *GlobalSpecType_NoStorageStaticRoutes:
-		s := proto.Size(x.NoStorageStaticRoutes)
-		n += proto.SizeVarint(35<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_StorageStaticRoutes:
-		s := proto.Size(x.StorageStaticRoutes)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(44<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GlobalSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // Create Fleet
 //
 // x-displayName: "Create Fleet"
 // Create fleet will create a fleet object in 'system' namespace of the user
 type CreateSpecType struct {
-	FleetLabel              string                          `protobuf:"bytes,1,opt,name=fleet_label,json=fleetLabel,proto3" json:"fleet_label,omitempty"`
-	VolterraSoftwareVersion string                          `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
-	NetworkConnectors       []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors" json:"network_connectors,omitempty"`
-	NetworkFirewall         []*ves_io_schema4.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall" json:"network_firewall,omitempty"`
-	OperatingSystemVersion  string                          `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
-	OutsideVirtualNetwork   []*ves_io_schema4.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork" json:"outside_virtual_network,omitempty"`
-	InsideVirtualNetwork    []*ves_io_schema4.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork" json:"inside_virtual_network,omitempty"`
+	FleetLabel              string                  `protobuf:"bytes,1,opt,name=fleet_label,json=fleetLabel,proto3" json:"fleet_label,omitempty"`
+	VolterraSoftwareVersion string                  `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
+	NetworkConnectors       []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors,proto3" json:"network_connectors,omitempty"`
+	NetworkFirewall         []*schema.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall,proto3" json:"network_firewall,omitempty"`
+	OperatingSystemVersion  string                  `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
+	OutsideVirtualNetwork   []*schema.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork,proto3" json:"outside_virtual_network,omitempty"`
+	InsideVirtualNetwork    []*schema.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork,proto3" json:"inside_virtual_network,omitempty"`
 	// Select Interface Config
 	//
 	// x-displayName: "Select Interface Config"
@@ -5890,9 +5150,33 @@ type CreateSpecType struct {
 	UsbPolicyChoice isCreateSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{39} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{39}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_InterfaceChoice interface {
 	isCreateSpecType_InterfaceChoice()
@@ -5956,76 +5240,76 @@ type isCreateSpecType_UsbPolicyChoice interface {
 }
 
 type CreateSpecType_InterfaceList struct {
-	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type CreateSpecType_DefaultConfig struct {
-	DefaultConfig *ves_io_schema4.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,oneof"`
+	DefaultConfig *schema.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,proto3,oneof" json:"default_config,omitempty"`
 }
 type CreateSpecType_DeviceList struct {
-	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,oneof"`
+	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,proto3,oneof" json:"device_list,omitempty"`
 }
 type CreateSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type CreateSpecType_BondDeviceList struct {
-	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type CreateSpecType_NoStorageInterfaces struct {
-	NoStorageInterfaces *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,oneof"`
+	NoStorageInterfaces *schema.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,proto3,oneof" json:"no_storage_interfaces,omitempty"`
 }
 type CreateSpecType_StorageInterfaceList struct {
-	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,oneof"`
+	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,proto3,oneof" json:"storage_interface_list,omitempty"`
 }
 type CreateSpecType_NoStorageDevice struct {
-	NoStorageDevice *ves_io_schema4.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,oneof"`
+	NoStorageDevice *schema.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,proto3,oneof" json:"no_storage_device,omitempty"`
 }
 type CreateSpecType_StorageDeviceList struct {
-	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,oneof"`
+	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,proto3,oneof" json:"storage_device_list,omitempty"`
 }
 type CreateSpecType_DefaultStorageClass struct {
-	DefaultStorageClass *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,oneof"`
+	DefaultStorageClass *schema.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,proto3,oneof" json:"default_storage_class,omitempty"`
 }
 type CreateSpecType_StorageClassList struct {
-	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,oneof"`
+	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,proto3,oneof" json:"storage_class_list,omitempty"`
 }
 type CreateSpecType_NoDcClusterGroup struct {
-	NoDcClusterGroup *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,oneof"`
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
 }
 type CreateSpecType_DcClusterGroup struct {
-	DcClusterGroup *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,oneof"`
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
 type CreateSpecType_DcClusterGroupInside struct {
-	DcClusterGroupInside *ves_io_schema_views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,oneof"`
+	DcClusterGroupInside *views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,proto3,oneof" json:"dc_cluster_group_inside,omitempty"`
 }
 type CreateSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type CreateSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type CreateSpecType_EnableVgpu struct {
-	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type CreateSpecType_NoStorageStaticRoutes struct {
-	NoStorageStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,oneof"`
+	NoStorageStaticRoutes *schema.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,proto3,oneof" json:"no_storage_static_routes,omitempty"`
 }
 type CreateSpecType_StorageStaticRoutes struct {
-	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,oneof"`
+	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,proto3,oneof" json:"storage_static_routes,omitempty"`
 }
 type CreateSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type CreateSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type CreateSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type CreateSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type CreateSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 
 func (*CreateSpecType_InterfaceList) isCreateSpecType_InterfaceChoice()                   {}
@@ -6128,14 +5412,14 @@ func (m *CreateSpecType) GetVolterraSoftwareVersion() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetNetworkConnectors() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetNetworkConnectors() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkConnectors
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetNetworkFirewall() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetNetworkFirewall() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkFirewall
 	}
@@ -6149,14 +5433,14 @@ func (m *CreateSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetOutsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetOutsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.OutsideVirtualNetwork
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetInsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetInsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InsideVirtualNetwork
 	}
@@ -6170,7 +5454,7 @@ func (m *CreateSpecType) GetInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultConfig() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDefaultConfig() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*CreateSpecType_DefaultConfig); ok {
 		return x.DefaultConfig
 	}
@@ -6184,7 +5468,7 @@ func (m *CreateSpecType) GetDeviceList() *FleetDeviceListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*CreateSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
@@ -6198,7 +5482,7 @@ func (m *CreateSpecType) GetBondDeviceList() *FleetBondDevicesListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoStorageInterfaces() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoStorageInterfaces() *schema.Empty {
 	if x, ok := m.GetStorageInterfaceChoice().(*CreateSpecType_NoStorageInterfaces); ok {
 		return x.NoStorageInterfaces
 	}
@@ -6212,7 +5496,7 @@ func (m *CreateSpecType) GetStorageInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoStorageDevice() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoStorageDevice() *schema.Empty {
 	if x, ok := m.GetStorageDeviceChoice().(*CreateSpecType_NoStorageDevice); ok {
 		return x.NoStorageDevice
 	}
@@ -6226,7 +5510,7 @@ func (m *CreateSpecType) GetStorageDeviceList() *FleetStorageDeviceListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultStorageClass() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDefaultStorageClass() *schema.Empty {
 	if x, ok := m.GetStorageClassChoice().(*CreateSpecType_DefaultStorageClass); ok {
 		return x.DefaultStorageClass
 	}
@@ -6240,35 +5524,35 @@ func (m *CreateSpecType) GetStorageClassList() *FleetStorageClassListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoDcClusterGroup() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoDcClusterGroup() *schema.Empty {
 	if x, ok := m.GetDcClusterGroupChoice().(*CreateSpecType_NoDcClusterGroup); ok {
 		return x.NoDcClusterGroup
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDcClusterGroup() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetDcClusterGroup() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*CreateSpecType_DcClusterGroup); ok {
 		return x.DcClusterGroup
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDcClusterGroupInside() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetDcClusterGroupInside() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*CreateSpecType_DcClusterGroupInside); ok {
 		return x.DcClusterGroupInside
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*CreateSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*CreateSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
@@ -6282,7 +5566,7 @@ func (m *CreateSpecType) GetEnableVgpu() *VGPUConfiguration {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoStorageStaticRoutes() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoStorageStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStorageStaticRoutesChoice().(*CreateSpecType_NoStorageStaticRoutes); ok {
 		return x.NoStorageStaticRoutes
 	}
@@ -6303,44 +5587,44 @@ func (m *CreateSpecType) GetEnableDefaultFleetConfigDownload() bool {
 	return false
 }
 
-func (m *CreateSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_InterfaceList)(nil),
 		(*CreateSpecType_DefaultConfig)(nil),
 		(*CreateSpecType_DeviceList)(nil),
@@ -6368,587 +5652,17 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *CreateSpecType_InterfaceList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case *CreateSpecType_DefaultConfig:
-		_ = b.EncodeVarint(40<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultConfig); err != nil {
-			return err
-		}
-	case *CreateSpecType_DeviceList:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.InterfaceChoice has unexpected type %T", x)
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *CreateSpecType_NoBondDevices:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *CreateSpecType_BondDeviceList:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.BondChoice has unexpected type %T", x)
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *CreateSpecType_NoStorageInterfaces:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageInterfaces); err != nil {
-			return err
-		}
-	case *CreateSpecType_StorageInterfaceList:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageInterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.StorageInterfaceChoice has unexpected type %T", x)
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *CreateSpecType_NoStorageDevice:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageDevice); err != nil {
-			return err
-		}
-	case *CreateSpecType_StorageDeviceList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.StorageDeviceChoice has unexpected type %T", x)
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *CreateSpecType_DefaultStorageClass:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageClass); err != nil {
-			return err
-		}
-	case *CreateSpecType_StorageClassList:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageClassList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.StorageClassChoice has unexpected type %T", x)
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *CreateSpecType_NoDcClusterGroup:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoDcClusterGroup); err != nil {
-			return err
-		}
-	case *CreateSpecType_DcClusterGroup:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroup); err != nil {
-			return err
-		}
-	case *CreateSpecType_DcClusterGroupInside:
-		_ = b.EncodeVarint(38<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroupInside); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.DcClusterGroupChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *CreateSpecType_DisableGpu:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *CreateSpecType_EnableGpu:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *CreateSpecType_EnableVgpu:
-		_ = b.EncodeVarint(52<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *CreateSpecType_NoStorageStaticRoutes:
-		_ = b.EncodeVarint(35<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageStaticRoutes); err != nil {
-			return err
-		}
-	case *CreateSpecType_StorageStaticRoutes:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.StorageStaticRoutesChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(44<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *CreateSpecType_LogReceiver:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *CreateSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *CreateSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *CreateSpecType_UsbPolicy:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 13: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &CreateSpecType_InterfaceList{msg}
-		return true, err
-	case 40: // interface_choice.default_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &CreateSpecType_DefaultConfig{msg}
-		return true, err
-	case 14: // interface_choice.device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &CreateSpecType_DeviceList{msg}
-		return true, err
-	case 16: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &CreateSpecType_NoBondDevices{msg}
-		return true, err
-	case 17: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &CreateSpecType_BondDeviceList{msg}
-		return true, err
-	case 19: // storage_interface_choice.no_storage_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &CreateSpecType_NoStorageInterfaces{msg}
-		return true, err
-	case 20: // storage_interface_choice.storage_interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &CreateSpecType_StorageInterfaceList{msg}
-		return true, err
-	case 22: // storage_device_choice.no_storage_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &CreateSpecType_NoStorageDevice{msg}
-		return true, err
-	case 23: // storage_device_choice.storage_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &CreateSpecType_StorageDeviceList{msg}
-		return true, err
-	case 25: // storage_class_choice.default_storage_class
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &CreateSpecType_DefaultStorageClass{msg}
-		return true, err
-	case 26: // storage_class_choice.storage_class_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageClassListType)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &CreateSpecType_StorageClassList{msg}
-		return true, err
-	case 28: // dc_cluster_group_choice.no_dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &CreateSpecType_NoDcClusterGroup{msg}
-		return true, err
-	case 29: // dc_cluster_group_choice.dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &CreateSpecType_DcClusterGroup{msg}
-		return true, err
-	case 38: // dc_cluster_group_choice.dc_cluster_group_inside
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &CreateSpecType_DcClusterGroupInside{msg}
-		return true, err
-	case 31: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_DisableGpu{msg}
-		return true, err
-	case 32: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_EnableGpu{msg}
-		return true, err
-	case 52: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_EnableVgpu{msg}
-		return true, err
-	case 35: // storage_static_routes_choice.no_storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &CreateSpecType_NoStorageStaticRoutes{msg}
-		return true, err
-	case 36: // storage_static_routes_choice.storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &CreateSpecType_StorageStaticRoutes{msg}
-		return true, err
-	case 44: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 45: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogReceiver{msg}
-		return true, err
-	case 47: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_DenyAllUsb{msg}
-		return true, err
-	case 48: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_AllowAllUsb{msg}
-		return true, err
-	case 49: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_UsbPolicy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *CreateSpecType_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DefaultConfig:
-		s := proto.Size(x.DefaultConfig)
-		n += proto.SizeVarint(40<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DeviceList:
-		s := proto.Size(x.DeviceList)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *CreateSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *CreateSpecType_NoStorageInterfaces:
-		s := proto.Size(x.NoStorageInterfaces)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_StorageInterfaceList:
-		s := proto.Size(x.StorageInterfaceList)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *CreateSpecType_NoStorageDevice:
-		s := proto.Size(x.NoStorageDevice)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_StorageDeviceList:
-		s := proto.Size(x.StorageDeviceList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *CreateSpecType_DefaultStorageClass:
-		s := proto.Size(x.DefaultStorageClass)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_StorageClassList:
-		s := proto.Size(x.StorageClassList)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *CreateSpecType_NoDcClusterGroup:
-		s := proto.Size(x.NoDcClusterGroup)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DcClusterGroup:
-		s := proto.Size(x.DcClusterGroup)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DcClusterGroupInside:
-		s := proto.Size(x.DcClusterGroupInside)
-		n += proto.SizeVarint(38<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *CreateSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(52<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *CreateSpecType_NoStorageStaticRoutes:
-		s := proto.Size(x.NoStorageStaticRoutes)
-		n += proto.SizeVarint(35<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_StorageStaticRoutes:
-		s := proto.Size(x.StorageStaticRoutes)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(44<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *CreateSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // Replace fleet
 //
 // x-displayName: "Replace Fleet"
 // Replace fleet will replace the contents of given fleet object
 type ReplaceSpecType struct {
-	VolterraSoftwareVersion string                          `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
-	NetworkConnectors       []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors" json:"network_connectors,omitempty"`
-	NetworkFirewall         []*ves_io_schema4.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall" json:"network_firewall,omitempty"`
-	OperatingSystemVersion  string                          `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
-	OutsideVirtualNetwork   []*ves_io_schema4.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork" json:"outside_virtual_network,omitempty"`
-	InsideVirtualNetwork    []*ves_io_schema4.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork" json:"inside_virtual_network,omitempty"`
+	VolterraSoftwareVersion string                  `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
+	NetworkConnectors       []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors,proto3" json:"network_connectors,omitempty"`
+	NetworkFirewall         []*schema.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall,proto3" json:"network_firewall,omitempty"`
+	OperatingSystemVersion  string                  `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
+	OutsideVirtualNetwork   []*schema.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork,proto3" json:"outside_virtual_network,omitempty"`
+	InsideVirtualNetwork    []*schema.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork,proto3" json:"inside_virtual_network,omitempty"`
 	// Select Interface Config
 	//
 	// x-displayName: "Select Network Interface Config"
@@ -7002,9 +5716,33 @@ type ReplaceSpecType struct {
 	UsbPolicyChoice isReplaceSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{40} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{40}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_InterfaceChoice interface {
 	isReplaceSpecType_InterfaceChoice()
@@ -7068,76 +5806,76 @@ type isReplaceSpecType_UsbPolicyChoice interface {
 }
 
 type ReplaceSpecType_InterfaceList struct {
-	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type ReplaceSpecType_DefaultConfig struct {
-	DefaultConfig *ves_io_schema4.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,oneof"`
+	DefaultConfig *schema.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,proto3,oneof" json:"default_config,omitempty"`
 }
 type ReplaceSpecType_DeviceList struct {
-	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,oneof"`
+	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,proto3,oneof" json:"device_list,omitempty"`
 }
 type ReplaceSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type ReplaceSpecType_BondDeviceList struct {
-	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type ReplaceSpecType_NoStorageInterfaces struct {
-	NoStorageInterfaces *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,oneof"`
+	NoStorageInterfaces *schema.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,proto3,oneof" json:"no_storage_interfaces,omitempty"`
 }
 type ReplaceSpecType_StorageInterfaceList struct {
-	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,oneof"`
+	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,proto3,oneof" json:"storage_interface_list,omitempty"`
 }
 type ReplaceSpecType_NoStorageDevice struct {
-	NoStorageDevice *ves_io_schema4.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,oneof"`
+	NoStorageDevice *schema.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,proto3,oneof" json:"no_storage_device,omitempty"`
 }
 type ReplaceSpecType_StorageDeviceList struct {
-	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,oneof"`
+	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,proto3,oneof" json:"storage_device_list,omitempty"`
 }
 type ReplaceSpecType_DefaultStorageClass struct {
-	DefaultStorageClass *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,oneof"`
+	DefaultStorageClass *schema.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,proto3,oneof" json:"default_storage_class,omitempty"`
 }
 type ReplaceSpecType_StorageClassList struct {
-	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,oneof"`
+	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,proto3,oneof" json:"storage_class_list,omitempty"`
 }
 type ReplaceSpecType_NoDcClusterGroup struct {
-	NoDcClusterGroup *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,oneof"`
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
 }
 type ReplaceSpecType_DcClusterGroup struct {
-	DcClusterGroup *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,oneof"`
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
 type ReplaceSpecType_DcClusterGroupInside struct {
-	DcClusterGroupInside *ves_io_schema_views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,oneof"`
+	DcClusterGroupInside *views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,proto3,oneof" json:"dc_cluster_group_inside,omitempty"`
 }
 type ReplaceSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type ReplaceSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type ReplaceSpecType_EnableVgpu struct {
-	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type ReplaceSpecType_NoStorageStaticRoutes struct {
-	NoStorageStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,oneof"`
+	NoStorageStaticRoutes *schema.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,proto3,oneof" json:"no_storage_static_routes,omitempty"`
 }
 type ReplaceSpecType_StorageStaticRoutes struct {
-	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,oneof"`
+	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,proto3,oneof" json:"storage_static_routes,omitempty"`
 }
 type ReplaceSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type ReplaceSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type ReplaceSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type ReplaceSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type ReplaceSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 
 func (*ReplaceSpecType_InterfaceList) isReplaceSpecType_InterfaceChoice()                   {}
@@ -7233,14 +5971,14 @@ func (m *ReplaceSpecType) GetVolterraSoftwareVersion() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetNetworkConnectors() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetNetworkConnectors() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkConnectors
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNetworkFirewall() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetNetworkFirewall() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkFirewall
 	}
@@ -7254,14 +5992,14 @@ func (m *ReplaceSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetOutsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetOutsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.OutsideVirtualNetwork
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetInsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetInsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InsideVirtualNetwork
 	}
@@ -7275,7 +6013,7 @@ func (m *ReplaceSpecType) GetInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultConfig() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDefaultConfig() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*ReplaceSpecType_DefaultConfig); ok {
 		return x.DefaultConfig
 	}
@@ -7289,7 +6027,7 @@ func (m *ReplaceSpecType) GetDeviceList() *FleetDeviceListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*ReplaceSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
@@ -7303,7 +6041,7 @@ func (m *ReplaceSpecType) GetBondDeviceList() *FleetBondDevicesListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoStorageInterfaces() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoStorageInterfaces() *schema.Empty {
 	if x, ok := m.GetStorageInterfaceChoice().(*ReplaceSpecType_NoStorageInterfaces); ok {
 		return x.NoStorageInterfaces
 	}
@@ -7317,7 +6055,7 @@ func (m *ReplaceSpecType) GetStorageInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoStorageDevice() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoStorageDevice() *schema.Empty {
 	if x, ok := m.GetStorageDeviceChoice().(*ReplaceSpecType_NoStorageDevice); ok {
 		return x.NoStorageDevice
 	}
@@ -7331,7 +6069,7 @@ func (m *ReplaceSpecType) GetStorageDeviceList() *FleetStorageDeviceListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultStorageClass() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDefaultStorageClass() *schema.Empty {
 	if x, ok := m.GetStorageClassChoice().(*ReplaceSpecType_DefaultStorageClass); ok {
 		return x.DefaultStorageClass
 	}
@@ -7345,35 +6083,35 @@ func (m *ReplaceSpecType) GetStorageClassList() *FleetStorageClassListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoDcClusterGroup() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoDcClusterGroup() *schema.Empty {
 	if x, ok := m.GetDcClusterGroupChoice().(*ReplaceSpecType_NoDcClusterGroup); ok {
 		return x.NoDcClusterGroup
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDcClusterGroup() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetDcClusterGroup() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*ReplaceSpecType_DcClusterGroup); ok {
 		return x.DcClusterGroup
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDcClusterGroupInside() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetDcClusterGroupInside() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*ReplaceSpecType_DcClusterGroupInside); ok {
 		return x.DcClusterGroupInside
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*ReplaceSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*ReplaceSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
@@ -7387,7 +6125,7 @@ func (m *ReplaceSpecType) GetEnableVgpu() *VGPUConfiguration {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoStorageStaticRoutes() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoStorageStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStorageStaticRoutesChoice().(*ReplaceSpecType_NoStorageStaticRoutes); ok {
 		return x.NoStorageStaticRoutes
 	}
@@ -7408,44 +6146,44 @@ func (m *ReplaceSpecType) GetEnableDefaultFleetConfigDownload() bool {
 	return false
 }
 
-func (m *ReplaceSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_InterfaceList)(nil),
 		(*ReplaceSpecType_DefaultConfig)(nil),
 		(*ReplaceSpecType_DeviceList)(nil),
@@ -7473,588 +6211,18 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 	}
 }
 
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *ReplaceSpecType_InterfaceList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DefaultConfig:
-		_ = b.EncodeVarint(40<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultConfig); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DeviceList:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.InterfaceChoice has unexpected type %T", x)
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *ReplaceSpecType_NoBondDevices:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_BondDeviceList:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.BondChoice has unexpected type %T", x)
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *ReplaceSpecType_NoStorageInterfaces:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageInterfaces); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_StorageInterfaceList:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageInterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.StorageInterfaceChoice has unexpected type %T", x)
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *ReplaceSpecType_NoStorageDevice:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageDevice); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_StorageDeviceList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.StorageDeviceChoice has unexpected type %T", x)
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *ReplaceSpecType_DefaultStorageClass:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageClass); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_StorageClassList:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageClassList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.StorageClassChoice has unexpected type %T", x)
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *ReplaceSpecType_NoDcClusterGroup:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoDcClusterGroup); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DcClusterGroup:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroup); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DcClusterGroupInside:
-		_ = b.EncodeVarint(38<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroupInside); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.DcClusterGroupChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *ReplaceSpecType_DisableGpu:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_EnableGpu:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_EnableVgpu:
-		_ = b.EncodeVarint(52<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *ReplaceSpecType_NoStorageStaticRoutes:
-		_ = b.EncodeVarint(35<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageStaticRoutes); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_StorageStaticRoutes:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.StorageStaticRoutesChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(44<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_LogReceiver:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *ReplaceSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_UsbPolicy:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 13: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &ReplaceSpecType_InterfaceList{msg}
-		return true, err
-	case 40: // interface_choice.default_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &ReplaceSpecType_DefaultConfig{msg}
-		return true, err
-	case 14: // interface_choice.device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &ReplaceSpecType_DeviceList{msg}
-		return true, err
-	case 16: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &ReplaceSpecType_NoBondDevices{msg}
-		return true, err
-	case 17: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &ReplaceSpecType_BondDeviceList{msg}
-		return true, err
-	case 19: // storage_interface_choice.no_storage_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &ReplaceSpecType_NoStorageInterfaces{msg}
-		return true, err
-	case 20: // storage_interface_choice.storage_interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &ReplaceSpecType_StorageInterfaceList{msg}
-		return true, err
-	case 22: // storage_device_choice.no_storage_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &ReplaceSpecType_NoStorageDevice{msg}
-		return true, err
-	case 23: // storage_device_choice.storage_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &ReplaceSpecType_StorageDeviceList{msg}
-		return true, err
-	case 25: // storage_class_choice.default_storage_class
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &ReplaceSpecType_DefaultStorageClass{msg}
-		return true, err
-	case 26: // storage_class_choice.storage_class_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageClassListType)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &ReplaceSpecType_StorageClassList{msg}
-		return true, err
-	case 28: // dc_cluster_group_choice.no_dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &ReplaceSpecType_NoDcClusterGroup{msg}
-		return true, err
-	case 29: // dc_cluster_group_choice.dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &ReplaceSpecType_DcClusterGroup{msg}
-		return true, err
-	case 38: // dc_cluster_group_choice.dc_cluster_group_inside
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &ReplaceSpecType_DcClusterGroupInside{msg}
-		return true, err
-	case 31: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_DisableGpu{msg}
-		return true, err
-	case 32: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_EnableGpu{msg}
-		return true, err
-	case 52: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_EnableVgpu{msg}
-		return true, err
-	case 35: // storage_static_routes_choice.no_storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &ReplaceSpecType_NoStorageStaticRoutes{msg}
-		return true, err
-	case 36: // storage_static_routes_choice.storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &ReplaceSpecType_StorageStaticRoutes{msg}
-		return true, err
-	case 44: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 45: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{msg}
-		return true, err
-	case 47: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_DenyAllUsb{msg}
-		return true, err
-	case 48: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_AllowAllUsb{msg}
-		return true, err
-	case 49: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_UsbPolicy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *ReplaceSpecType_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DefaultConfig:
-		s := proto.Size(x.DefaultConfig)
-		n += proto.SizeVarint(40<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DeviceList:
-		s := proto.Size(x.DeviceList)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *ReplaceSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *ReplaceSpecType_NoStorageInterfaces:
-		s := proto.Size(x.NoStorageInterfaces)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_StorageInterfaceList:
-		s := proto.Size(x.StorageInterfaceList)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *ReplaceSpecType_NoStorageDevice:
-		s := proto.Size(x.NoStorageDevice)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_StorageDeviceList:
-		s := proto.Size(x.StorageDeviceList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *ReplaceSpecType_DefaultStorageClass:
-		s := proto.Size(x.DefaultStorageClass)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_StorageClassList:
-		s := proto.Size(x.StorageClassList)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *ReplaceSpecType_NoDcClusterGroup:
-		s := proto.Size(x.NoDcClusterGroup)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DcClusterGroup:
-		s := proto.Size(x.DcClusterGroup)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DcClusterGroupInside:
-		s := proto.Size(x.DcClusterGroupInside)
-		n += proto.SizeVarint(38<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *ReplaceSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(52<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *ReplaceSpecType_NoStorageStaticRoutes:
-		s := proto.Size(x.NoStorageStaticRoutes)
-		n += proto.SizeVarint(35<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_StorageStaticRoutes:
-		s := proto.Size(x.StorageStaticRoutes)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(44<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *ReplaceSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // Get fleet
 //
 // x-displayName: "Get Fleet"
 // Get fleet will get fleet object from system namespace
 type GetSpecType struct {
-	FleetLabel              string                          `protobuf:"bytes,1,opt,name=fleet_label,json=fleetLabel,proto3" json:"fleet_label,omitempty"`
-	VolterraSoftwareVersion string                          `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
-	NetworkConnectors       []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors" json:"network_connectors,omitempty"`
-	NetworkFirewall         []*ves_io_schema4.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall" json:"network_firewall,omitempty"`
-	OperatingSystemVersion  string                          `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
-	OutsideVirtualNetwork   []*ves_io_schema4.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork" json:"outside_virtual_network,omitempty"`
-	InsideVirtualNetwork    []*ves_io_schema4.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork" json:"inside_virtual_network,omitempty"`
+	FleetLabel              string                  `protobuf:"bytes,1,opt,name=fleet_label,json=fleetLabel,proto3" json:"fleet_label,omitempty"`
+	VolterraSoftwareVersion string                  `protobuf:"bytes,2,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
+	NetworkConnectors       []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=network_connectors,json=networkConnectors,proto3" json:"network_connectors,omitempty"`
+	NetworkFirewall         []*schema.ObjectRefType `protobuf:"bytes,5,rep,name=network_firewall,json=networkFirewall,proto3" json:"network_firewall,omitempty"`
+	OperatingSystemVersion  string                  `protobuf:"bytes,6,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
+	OutsideVirtualNetwork   []*schema.ObjectRefType `protobuf:"bytes,7,rep,name=outside_virtual_network,json=outsideVirtualNetwork,proto3" json:"outside_virtual_network,omitempty"`
+	InsideVirtualNetwork    []*schema.ObjectRefType `protobuf:"bytes,8,rep,name=inside_virtual_network,json=insideVirtualNetwork,proto3" json:"inside_virtual_network,omitempty"`
 	// Select Interface Config
 	//
 	// x-displayName: "Select Interface Config"
@@ -8108,9 +6276,33 @@ type GetSpecType struct {
 	UsbPolicyChoice isGetSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{41} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{41}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_InterfaceChoice interface {
 	isGetSpecType_InterfaceChoice()
@@ -8174,76 +6366,76 @@ type isGetSpecType_UsbPolicyChoice interface {
 }
 
 type GetSpecType_InterfaceList struct {
-	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *FleetInterfaceListType `protobuf:"bytes,13,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type GetSpecType_DefaultConfig struct {
-	DefaultConfig *ves_io_schema4.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,oneof"`
+	DefaultConfig *schema.Empty `protobuf:"bytes,40,opt,name=default_config,json=defaultConfig,proto3,oneof" json:"default_config,omitempty"`
 }
 type GetSpecType_DeviceList struct {
-	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,oneof"`
+	DeviceList *FleetDeviceListType `protobuf:"bytes,14,opt,name=device_list,json=deviceList,proto3,oneof" json:"device_list,omitempty"`
 }
 type GetSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,16,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type GetSpecType_BondDeviceList struct {
-	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *FleetBondDevicesListType `protobuf:"bytes,17,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type GetSpecType_NoStorageInterfaces struct {
-	NoStorageInterfaces *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,oneof"`
+	NoStorageInterfaces *schema.Empty `protobuf:"bytes,19,opt,name=no_storage_interfaces,json=noStorageInterfaces,proto3,oneof" json:"no_storage_interfaces,omitempty"`
 }
 type GetSpecType_StorageInterfaceList struct {
-	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,oneof"`
+	StorageInterfaceList *FleetInterfaceListType `protobuf:"bytes,20,opt,name=storage_interface_list,json=storageInterfaceList,proto3,oneof" json:"storage_interface_list,omitempty"`
 }
 type GetSpecType_NoStorageDevice struct {
-	NoStorageDevice *ves_io_schema4.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,oneof"`
+	NoStorageDevice *schema.Empty `protobuf:"bytes,22,opt,name=no_storage_device,json=noStorageDevice,proto3,oneof" json:"no_storage_device,omitempty"`
 }
 type GetSpecType_StorageDeviceList struct {
-	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,oneof"`
+	StorageDeviceList *FleetStorageDeviceListType `protobuf:"bytes,23,opt,name=storage_device_list,json=storageDeviceList,proto3,oneof" json:"storage_device_list,omitempty"`
 }
 type GetSpecType_DefaultStorageClass struct {
-	DefaultStorageClass *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,oneof"`
+	DefaultStorageClass *schema.Empty `protobuf:"bytes,25,opt,name=default_storage_class,json=defaultStorageClass,proto3,oneof" json:"default_storage_class,omitempty"`
 }
 type GetSpecType_StorageClassList struct {
-	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,oneof"`
+	StorageClassList *FleetStorageClassListType `protobuf:"bytes,26,opt,name=storage_class_list,json=storageClassList,proto3,oneof" json:"storage_class_list,omitempty"`
 }
 type GetSpecType_NoDcClusterGroup struct {
-	NoDcClusterGroup *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,oneof"`
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,28,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
 }
 type GetSpecType_DcClusterGroup struct {
-	DcClusterGroup *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,oneof"`
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,29,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
 type GetSpecType_DcClusterGroupInside struct {
-	DcClusterGroupInside *ves_io_schema_views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,oneof"`
+	DcClusterGroupInside *views.ObjectRefType `protobuf:"bytes,38,opt,name=dc_cluster_group_inside,json=dcClusterGroupInside,proto3,oneof" json:"dc_cluster_group_inside,omitempty"`
 }
 type GetSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,31,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type GetSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,32,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type GetSpecType_EnableVgpu struct {
-	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *VGPUConfiguration `protobuf:"bytes,52,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type GetSpecType_NoStorageStaticRoutes struct {
-	NoStorageStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,oneof"`
+	NoStorageStaticRoutes *schema.Empty `protobuf:"bytes,35,opt,name=no_storage_static_routes,json=noStorageStaticRoutes,proto3,oneof" json:"no_storage_static_routes,omitempty"`
 }
 type GetSpecType_StorageStaticRoutes struct {
-	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,oneof"`
+	StorageStaticRoutes *FleetStorageStaticRoutesListType `protobuf:"bytes,36,opt,name=storage_static_routes,json=storageStaticRoutes,proto3,oneof" json:"storage_static_routes,omitempty"`
 }
 type GetSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,44,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GetSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,45,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type GetSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,47,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type GetSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,48,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type GetSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,49,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 
 func (*GetSpecType_InterfaceList) isGetSpecType_InterfaceChoice()                   {}
@@ -8346,14 +6538,14 @@ func (m *GetSpecType) GetVolterraSoftwareVersion() string {
 	return ""
 }
 
-func (m *GetSpecType) GetNetworkConnectors() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetNetworkConnectors() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkConnectors
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetNetworkFirewall() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetNetworkFirewall() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkFirewall
 	}
@@ -8367,14 +6559,14 @@ func (m *GetSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *GetSpecType) GetOutsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetOutsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.OutsideVirtualNetwork
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetInsideVirtualNetwork() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetInsideVirtualNetwork() []*schema.ObjectRefType {
 	if m != nil {
 		return m.InsideVirtualNetwork
 	}
@@ -8388,7 +6580,7 @@ func (m *GetSpecType) GetInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultConfig() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDefaultConfig() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*GetSpecType_DefaultConfig); ok {
 		return x.DefaultConfig
 	}
@@ -8402,7 +6594,7 @@ func (m *GetSpecType) GetDeviceList() *FleetDeviceListType {
 	return nil
 }
 
-func (m *GetSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*GetSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
@@ -8416,7 +6608,7 @@ func (m *GetSpecType) GetBondDeviceList() *FleetBondDevicesListType {
 	return nil
 }
 
-func (m *GetSpecType) GetNoStorageInterfaces() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoStorageInterfaces() *schema.Empty {
 	if x, ok := m.GetStorageInterfaceChoice().(*GetSpecType_NoStorageInterfaces); ok {
 		return x.NoStorageInterfaces
 	}
@@ -8430,7 +6622,7 @@ func (m *GetSpecType) GetStorageInterfaceList() *FleetInterfaceListType {
 	return nil
 }
 
-func (m *GetSpecType) GetNoStorageDevice() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoStorageDevice() *schema.Empty {
 	if x, ok := m.GetStorageDeviceChoice().(*GetSpecType_NoStorageDevice); ok {
 		return x.NoStorageDevice
 	}
@@ -8444,7 +6636,7 @@ func (m *GetSpecType) GetStorageDeviceList() *FleetStorageDeviceListType {
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultStorageClass() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDefaultStorageClass() *schema.Empty {
 	if x, ok := m.GetStorageClassChoice().(*GetSpecType_DefaultStorageClass); ok {
 		return x.DefaultStorageClass
 	}
@@ -8458,35 +6650,35 @@ func (m *GetSpecType) GetStorageClassList() *FleetStorageClassListType {
 	return nil
 }
 
-func (m *GetSpecType) GetNoDcClusterGroup() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoDcClusterGroup() *schema.Empty {
 	if x, ok := m.GetDcClusterGroupChoice().(*GetSpecType_NoDcClusterGroup); ok {
 		return x.NoDcClusterGroup
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDcClusterGroup() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetDcClusterGroup() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*GetSpecType_DcClusterGroup); ok {
 		return x.DcClusterGroup
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDcClusterGroupInside() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetDcClusterGroupInside() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*GetSpecType_DcClusterGroupInside); ok {
 		return x.DcClusterGroupInside
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GetSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GetSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
@@ -8500,7 +6692,7 @@ func (m *GetSpecType) GetEnableVgpu() *VGPUConfiguration {
 	return nil
 }
 
-func (m *GetSpecType) GetNoStorageStaticRoutes() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoStorageStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStorageStaticRoutesChoice().(*GetSpecType_NoStorageStaticRoutes); ok {
 		return x.NoStorageStaticRoutes
 	}
@@ -8521,44 +6713,44 @@ func (m *GetSpecType) GetEnableDefaultFleetConfigDownload() bool {
 	return false
 }
 
-func (m *GetSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_InterfaceList)(nil),
 		(*GetSpecType_DefaultConfig)(nil),
 		(*GetSpecType_DeviceList)(nil),
@@ -8586,576 +6778,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *GetSpecType_InterfaceList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case *GetSpecType_DefaultConfig:
-		_ = b.EncodeVarint(40<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultConfig); err != nil {
-			return err
-		}
-	case *GetSpecType_DeviceList:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.InterfaceChoice has unexpected type %T", x)
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GetSpecType_NoBondDevices:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *GetSpecType_BondDeviceList:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.BondChoice has unexpected type %T", x)
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *GetSpecType_NoStorageInterfaces:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageInterfaces); err != nil {
-			return err
-		}
-	case *GetSpecType_StorageInterfaceList:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageInterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.StorageInterfaceChoice has unexpected type %T", x)
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *GetSpecType_NoStorageDevice:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageDevice); err != nil {
-			return err
-		}
-	case *GetSpecType_StorageDeviceList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.StorageDeviceChoice has unexpected type %T", x)
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *GetSpecType_DefaultStorageClass:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageClass); err != nil {
-			return err
-		}
-	case *GetSpecType_StorageClassList:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageClassList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.StorageClassChoice has unexpected type %T", x)
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *GetSpecType_NoDcClusterGroup:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoDcClusterGroup); err != nil {
-			return err
-		}
-	case *GetSpecType_DcClusterGroup:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroup); err != nil {
-			return err
-		}
-	case *GetSpecType_DcClusterGroupInside:
-		_ = b.EncodeVarint(38<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroupInside); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.DcClusterGroupChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GetSpecType_DisableGpu:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *GetSpecType_EnableGpu:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *GetSpecType_EnableVgpu:
-		_ = b.EncodeVarint(52<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *GetSpecType_NoStorageStaticRoutes:
-		_ = b.EncodeVarint(35<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageStaticRoutes); err != nil {
-			return err
-		}
-	case *GetSpecType_StorageStaticRoutes:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.StorageStaticRoutesChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(44<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GetSpecType_LogReceiver:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GetSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *GetSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *GetSpecType_UsbPolicy:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 13: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GetSpecType_InterfaceList{msg}
-		return true, err
-	case 40: // interface_choice.default_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GetSpecType_DefaultConfig{msg}
-		return true, err
-	case 14: // interface_choice.device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &GetSpecType_DeviceList{msg}
-		return true, err
-	case 16: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GetSpecType_NoBondDevices{msg}
-		return true, err
-	case 17: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GetSpecType_BondDeviceList{msg}
-		return true, err
-	case 19: // storage_interface_choice.no_storage_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &GetSpecType_NoStorageInterfaces{msg}
-		return true, err
-	case 20: // storage_interface_choice.storage_interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &GetSpecType_StorageInterfaceList{msg}
-		return true, err
-	case 22: // storage_device_choice.no_storage_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &GetSpecType_NoStorageDevice{msg}
-		return true, err
-	case 23: // storage_device_choice.storage_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &GetSpecType_StorageDeviceList{msg}
-		return true, err
-	case 25: // storage_class_choice.default_storage_class
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &GetSpecType_DefaultStorageClass{msg}
-		return true, err
-	case 26: // storage_class_choice.storage_class_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageClassListType)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &GetSpecType_StorageClassList{msg}
-		return true, err
-	case 28: // dc_cluster_group_choice.no_dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GetSpecType_NoDcClusterGroup{msg}
-		return true, err
-	case 29: // dc_cluster_group_choice.dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GetSpecType_DcClusterGroup{msg}
-		return true, err
-	case 38: // dc_cluster_group_choice.dc_cluster_group_inside
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &GetSpecType_DcClusterGroupInside{msg}
-		return true, err
-	case 31: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_DisableGpu{msg}
-		return true, err
-	case 32: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_EnableGpu{msg}
-		return true, err
-	case 52: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_EnableVgpu{msg}
-		return true, err
-	case 35: // storage_static_routes_choice.no_storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &GetSpecType_NoStorageStaticRoutes{msg}
-		return true, err
-	case 36: // storage_static_routes_choice.storage_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FleetStorageStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StorageStaticRoutesChoice = &GetSpecType_StorageStaticRoutes{msg}
-		return true, err
-	case 44: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 45: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogReceiver{msg}
-		return true, err
-	case 47: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_DenyAllUsb{msg}
-		return true, err
-	case 48: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_AllowAllUsb{msg}
-		return true, err
-	case 49: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_UsbPolicy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *GetSpecType_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DefaultConfig:
-		s := proto.Size(x.DefaultConfig)
-		n += proto.SizeVarint(40<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DeviceList:
-		s := proto.Size(x.DeviceList)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GetSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *GetSpecType_NoStorageInterfaces:
-		s := proto.Size(x.NoStorageInterfaces)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_StorageInterfaceList:
-		s := proto.Size(x.StorageInterfaceList)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *GetSpecType_NoStorageDevice:
-		s := proto.Size(x.NoStorageDevice)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_StorageDeviceList:
-		s := proto.Size(x.StorageDeviceList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *GetSpecType_DefaultStorageClass:
-		s := proto.Size(x.DefaultStorageClass)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_StorageClassList:
-		s := proto.Size(x.StorageClassList)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *GetSpecType_NoDcClusterGroup:
-		s := proto.Size(x.NoDcClusterGroup)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DcClusterGroup:
-		s := proto.Size(x.DcClusterGroup)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DcClusterGroupInside:
-		s := proto.Size(x.DcClusterGroupInside)
-		n += proto.SizeVarint(38<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GetSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(52<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_static_routes_choice
-	switch x := m.StorageStaticRoutesChoice.(type) {
-	case *GetSpecType_NoStorageStaticRoutes:
-		s := proto.Size(x.NoStorageStaticRoutes)
-		n += proto.SizeVarint(35<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_StorageStaticRoutes:
-		s := proto.Size(x.StorageStaticRoutes)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(44<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GetSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // Fleet Status
 //
 // x-displayName: "Fleet Status"
@@ -9168,9 +6790,33 @@ type FleetStatus struct {
 	AvailableSoftwareVersion string `protobuf:"bytes,1,opt,name=available_software_version,json=availableSoftwareVersion,proto3" json:"available_software_version,omitempty"`
 }
 
-func (m *FleetStatus) Reset()                    { *m = FleetStatus{} }
-func (*FleetStatus) ProtoMessage()               {}
-func (*FleetStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{42} }
+func (m *FleetStatus) Reset()      { *m = FleetStatus{} }
+func (*FleetStatus) ProtoMessage() {}
+func (*FleetStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_82c3333ba2789298, []int{42}
+}
+func (m *FleetStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FleetStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FleetStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FleetStatus.Merge(m, src)
+}
+func (m *FleetStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *FleetStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_FleetStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FleetStatus proto.InternalMessageInfo
 
 func (m *FleetStatus) GetAvailableSoftwareVersion() string {
 	if m != nil {
@@ -9180,6 +6826,16 @@ func (m *FleetStatus) GetAvailableSoftwareVersion() string {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.fleet.EtcdClusterNetworkType", EtcdClusterNetworkType_name, EtcdClusterNetworkType_value)
+	golang_proto.RegisterEnum("ves.io.schema.fleet.EtcdClusterNetworkType", EtcdClusterNetworkType_name, EtcdClusterNetworkType_value)
+	proto.RegisterEnum("ves.io.schema.fleet.DeviceOwnerType", DeviceOwnerType_name, DeviceOwnerType_value)
+	golang_proto.RegisterEnum("ves.io.schema.fleet.DeviceOwnerType", DeviceOwnerType_name, DeviceOwnerType_value)
+	proto.RegisterEnum("ves.io.schema.fleet.FleetType", FleetType_name, FleetType_value)
+	golang_proto.RegisterEnum("ves.io.schema.fleet.FleetType", FleetType_name, FleetType_value)
+	proto.RegisterEnum("ves.io.schema.fleet.NetworkingDeviceInstanceUseType", NetworkingDeviceInstanceUseType_name, NetworkingDeviceInstanceUseType_value)
+	golang_proto.RegisterEnum("ves.io.schema.fleet.NetworkingDeviceInstanceUseType", NetworkingDeviceInstanceUseType_name, NetworkingDeviceInstanceUseType_value)
+	proto.RegisterEnum("ves.io.schema.fleet.VGPUFeatureType", VGPUFeatureType_name, VGPUFeatureType_value)
+	golang_proto.RegisterEnum("ves.io.schema.fleet.VGPUFeatureType", VGPUFeatureType_name, VGPUFeatureType_value)
 	proto.RegisterType((*NetworkingDeviceInstanceType)(nil), "ves.io.schema.fleet.NetworkingDeviceInstanceType")
 	golang_proto.RegisterType((*NetworkingDeviceInstanceType)(nil), "ves.io.schema.fleet.NetworkingDeviceInstanceType")
 	proto.RegisterType((*GenericDeviceInstanceType)(nil), "ves.io.schema.fleet.GenericDeviceInstanceType")
@@ -9206,24 +6862,36 @@ func init() {
 	golang_proto.RegisterType((*FlashBladeType)(nil), "ves.io.schema.fleet.FlashBladeType")
 	proto.RegisterType((*FlashBladeEndpoint)(nil), "ves.io.schema.fleet.FlashBladeEndpoint")
 	golang_proto.RegisterType((*FlashBladeEndpoint)(nil), "ves.io.schema.fleet.FlashBladeEndpoint")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FlashBladeEndpoint.LablesEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FlashBladeEndpoint.LablesEntry")
 	proto.RegisterType((*FlashArrayType)(nil), "ves.io.schema.fleet.FlashArrayType")
 	golang_proto.RegisterType((*FlashArrayType)(nil), "ves.io.schema.fleet.FlashArrayType")
 	proto.RegisterType((*FlashArrayEndpoint)(nil), "ves.io.schema.fleet.FlashArrayEndpoint")
 	golang_proto.RegisterType((*FlashArrayEndpoint)(nil), "ves.io.schema.fleet.FlashArrayEndpoint")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FlashArrayEndpoint.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FlashArrayEndpoint.LabelsEntry")
 	proto.RegisterType((*StorageDeviceNetappTridentType)(nil), "ves.io.schema.fleet.StorageDeviceNetappTridentType")
 	golang_proto.RegisterType((*StorageDeviceNetappTridentType)(nil), "ves.io.schema.fleet.StorageDeviceNetappTridentType")
 	proto.RegisterType((*StorageDeviceNetappBackendOntapSanType)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapSanType")
 	golang_proto.RegisterType((*StorageDeviceNetappBackendOntapSanType)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapSanType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapSanType.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapSanType.LabelsEntry")
 	proto.RegisterType((*DeviceNetappBackendOntapSanChapType)(nil), "ves.io.schema.fleet.DeviceNetappBackendOntapSanChapType")
 	golang_proto.RegisterType((*DeviceNetappBackendOntapSanChapType)(nil), "ves.io.schema.fleet.DeviceNetappBackendOntapSanChapType")
 	proto.RegisterType((*StorageDeviceNetappBackendOntapNasType)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapNasType")
 	golang_proto.RegisterType((*StorageDeviceNetappBackendOntapNasType)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapNasType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapNasType.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageDeviceNetappBackendOntapNasType.LabelsEntry")
 	proto.RegisterType((*OntapVolumeDefaults)(nil), "ves.io.schema.fleet.OntapVolumeDefaults")
 	golang_proto.RegisterType((*OntapVolumeDefaults)(nil), "ves.io.schema.fleet.OntapVolumeDefaults")
 	proto.RegisterType((*OntapVirtualStoragePoolType)(nil), "ves.io.schema.fleet.OntapVirtualStoragePoolType")
 	golang_proto.RegisterType((*OntapVirtualStoragePoolType)(nil), "ves.io.schema.fleet.OntapVirtualStoragePoolType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.OntapVirtualStoragePoolType.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.OntapVirtualStoragePoolType.LabelsEntry")
 	proto.RegisterType((*FleetStorageDeviceType)(nil), "ves.io.schema.fleet.FleetStorageDeviceType")
 	golang_proto.RegisterType((*FleetStorageDeviceType)(nil), "ves.io.schema.fleet.FleetStorageDeviceType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FleetStorageDeviceType.AdvancedAdvancedParametersEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FleetStorageDeviceType.AdvancedAdvancedParametersEntry")
 	proto.RegisterType((*FleetStorageDeviceListType)(nil), "ves.io.schema.fleet.FleetStorageDeviceListType")
 	golang_proto.RegisterType((*FleetStorageDeviceListType)(nil), "ves.io.schema.fleet.FleetStorageDeviceListType")
 	proto.RegisterType((*StorageClassDellIsilonF800Type)(nil), "ves.io.schema.fleet.StorageClassDellIsilonF800Type")
@@ -9234,12 +6902,16 @@ func init() {
 	golang_proto.RegisterType((*StorageClassOpenebsEnterpriseType)(nil), "ves.io.schema.fleet.StorageClassOpenebsEnterpriseType")
 	proto.RegisterType((*StorageClassNetappTridentType)(nil), "ves.io.schema.fleet.StorageClassNetappTridentType")
 	golang_proto.RegisterType((*StorageClassNetappTridentType)(nil), "ves.io.schema.fleet.StorageClassNetappTridentType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageClassNetappTridentType.SelectorEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.StorageClassNetappTridentType.SelectorEntry")
 	proto.RegisterType((*StorageClassPureServiceOrchestratorType)(nil), "ves.io.schema.fleet.StorageClassPureServiceOrchestratorType")
 	golang_proto.RegisterType((*StorageClassPureServiceOrchestratorType)(nil), "ves.io.schema.fleet.StorageClassPureServiceOrchestratorType")
 	proto.RegisterType((*StorageClassCustomType)(nil), "ves.io.schema.fleet.StorageClassCustomType")
 	golang_proto.RegisterType((*StorageClassCustomType)(nil), "ves.io.schema.fleet.StorageClassCustomType")
 	proto.RegisterType((*FleetStorageClassType)(nil), "ves.io.schema.fleet.FleetStorageClassType")
 	golang_proto.RegisterType((*FleetStorageClassType)(nil), "ves.io.schema.fleet.FleetStorageClassType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FleetStorageClassType.AdvancedStorageParametersEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.fleet.FleetStorageClassType.AdvancedStorageParametersEntry")
 	proto.RegisterType((*FleetStorageClassListType)(nil), "ves.io.schema.fleet.FleetStorageClassListType")
 	golang_proto.RegisterType((*FleetStorageClassListType)(nil), "ves.io.schema.fleet.FleetStorageClassListType")
 	proto.RegisterType((*BondLacpType)(nil), "ves.io.schema.fleet.BondLacpType")
@@ -9266,17 +6938,480 @@ func init() {
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.fleet.GetSpecType")
 	proto.RegisterType((*FleetStatus)(nil), "ves.io.schema.fleet.FleetStatus")
 	golang_proto.RegisterType((*FleetStatus)(nil), "ves.io.schema.fleet.FleetStatus")
-	proto.RegisterEnum("ves.io.schema.fleet.EtcdClusterNetworkType", EtcdClusterNetworkType_name, EtcdClusterNetworkType_value)
-	golang_proto.RegisterEnum("ves.io.schema.fleet.EtcdClusterNetworkType", EtcdClusterNetworkType_name, EtcdClusterNetworkType_value)
-	proto.RegisterEnum("ves.io.schema.fleet.DeviceOwnerType", DeviceOwnerType_name, DeviceOwnerType_value)
-	golang_proto.RegisterEnum("ves.io.schema.fleet.DeviceOwnerType", DeviceOwnerType_name, DeviceOwnerType_value)
-	proto.RegisterEnum("ves.io.schema.fleet.FleetType", FleetType_name, FleetType_value)
-	golang_proto.RegisterEnum("ves.io.schema.fleet.FleetType", FleetType_name, FleetType_value)
-	proto.RegisterEnum("ves.io.schema.fleet.NetworkingDeviceInstanceUseType", NetworkingDeviceInstanceUseType_name, NetworkingDeviceInstanceUseType_value)
-	golang_proto.RegisterEnum("ves.io.schema.fleet.NetworkingDeviceInstanceUseType", NetworkingDeviceInstanceUseType_name, NetworkingDeviceInstanceUseType_value)
-	proto.RegisterEnum("ves.io.schema.fleet.VGPUFeatureType", VGPUFeatureType_name, VGPUFeatureType_value)
-	golang_proto.RegisterEnum("ves.io.schema.fleet.VGPUFeatureType", VGPUFeatureType_name, VGPUFeatureType_value)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/fleet/types.proto", fileDescriptor_82c3333ba2789298) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/fleet/types.proto", fileDescriptor_82c3333ba2789298)
+}
+
+var fileDescriptor_82c3333ba2789298 = []byte{
+	// 7396 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x4d, 0x70, 0x1b, 0x49,
+	0x96, 0x1e, 0x13, 0x00, 0x49, 0xf0, 0x81, 0xf8, 0x61, 0xf2, 0x0f, 0xa4, 0x24, 0x0a, 0x42, 0x6b,
+	0xba, 0xd9, 0x14, 0xf8, 0x03, 0xf0, 0x57, 0xea, 0x6e, 0xad, 0x08, 0x92, 0x92, 0x48, 0x51, 0x14,
+	0xb7, 0x48, 0xa9, 0xbd, 0x3d, 0xe3, 0x29, 0x17, 0x81, 0x24, 0x58, 0xab, 0x42, 0x55, 0x4d, 0x55,
+	0x81, 0x12, 0xdb, 0xa1, 0x88, 0x0e, 0x5d, 0xc6, 0x96, 0xbd, 0x11, 0xed, 0x6d, 0x9f, 0x76, 0x1d,
+	0x0e, 0xdb, 0xe1, 0xc3, 0x86, 0x0e, 0xb6, 0x8f, 0xbb, 0x0b, 0x1d, 0x14, 0x72, 0x38, 0x62, 0xc2,
+	0x07, 0x07, 0xc3, 0x07, 0xbb, 0xa3, 0x63, 0x0f, 0x3b, 0x9c, 0xcb, 0xcc, 0xf8, 0xb0, 0x1b, 0x1b,
+	0x7b, 0xd8, 0xe8, 0xcb, 0x3a, 0x32, 0x2b, 0xab, 0x50, 0x00, 0x0b, 0x20, 0x29, 0xb5, 0xd7, 0x3b,
+	0xbd, 0xd4, 0x81, 0x02, 0x2b, 0xdf, 0x5f, 0x66, 0xbe, 0x7c, 0xf9, 0xbe, 0xac, 0x97, 0x20, 0x5c,
+	0xde, 0x27, 0xe6, 0x84, 0xac, 0x4d, 0x9a, 0x85, 0x3d, 0x52, 0x96, 0x26, 0x77, 0x15, 0x42, 0xac,
+	0x49, 0xeb, 0x40, 0x27, 0xe6, 0x84, 0x6e, 0x68, 0x96, 0x86, 0x7b, 0x6d, 0x82, 0x09, 0x9b, 0x60,
+	0x82, 0x11, 0x0c, 0x8f, 0x97, 0x64, 0x6b, 0xaf, 0xb2, 0x33, 0x51, 0xd0, 0xca, 0x93, 0x25, 0xad,
+	0xa4, 0x4d, 0x32, 0xda, 0x9d, 0xca, 0x2e, 0xfb, 0x8d, 0xfd, 0xc2, 0x3e, 0xd9, 0x32, 0x86, 0x2f,
+	0x97, 0x34, 0xad, 0xa4, 0x90, 0x1a, 0x95, 0x25, 0x97, 0x89, 0x69, 0x49, 0x65, 0x9d, 0x13, 0x5c,
+	0xaa, 0xb7, 0x62, 0xa7, 0xa4, 0x7b, 0x6d, 0x18, 0x1e, 0xac, 0x6f, 0x56, 0x89, 0xc5, 0x1b, 0x2e,
+	0xd4, 0x37, 0x68, 0xba, 0x25, 0x6b, 0xaa, 0xe9, 0x2f, 0x54, 0xdf, 0xb7, 0x44, 0xaf, 0xd0, 0xa1,
+	0xfa, 0x66, 0x6f, 0xd3, 0xc5, 0xfa, 0xa6, 0x7d, 0x49, 0x91, 0x8b, 0x92, 0x45, 0x78, 0x6b, 0xaa,
+	0xa1, 0x55, 0x26, 0x4f, 0xc4, 0x7a, 0xcd, 0x97, 0x8f, 0x53, 0x98, 0x5e, 0x05, 0xe9, 0x37, 0x08,
+	0x2e, 0x6e, 0x10, 0xeb, 0x89, 0x66, 0x3c, 0x96, 0xd5, 0xd2, 0x32, 0xd9, 0x97, 0x0b, 0x64, 0x55,
+	0x35, 0x2d, 0x49, 0x2d, 0x90, 0xed, 0x03, 0x9d, 0xe0, 0xcf, 0xa0, 0x4b, 0x56, 0x2d, 0x62, 0xec,
+	0x4a, 0x05, 0x92, 0x0c, 0xa4, 0x82, 0xa3, 0x91, 0xdc, 0xc5, 0x89, 0xfa, 0x99, 0x78, 0xb0, 0xf3,
+	0xbb, 0xa4, 0x60, 0x09, 0x64, 0x97, 0x32, 0xe4, 0x47, 0x5e, 0x3e, 0xeb, 0x51, 0x6d, 0x89, 0xa2,
+	0xcb, 0xf9, 0xa7, 0xbf, 0x7a, 0x1d, 0x6c, 0xff, 0x7d, 0x14, 0x48, 0x20, 0xa1, 0x26, 0x0e, 0xdf,
+	0x86, 0x60, 0xc5, 0x24, 0xc9, 0x60, 0x0a, 0x8d, 0xc6, 0x72, 0x33, 0x13, 0x3e, 0xf3, 0x3b, 0xd1,
+	0xcc, 0xb6, 0x87, 0x26, 0x33, 0x4f, 0xa0, 0x02, 0xd2, 0x17, 0x60, 0xe8, 0x0e, 0x51, 0x89, 0x21,
+	0x17, 0x8e, 0x77, 0x20, 0xfd, 0x6f, 0x02, 0x80, 0x7d, 0xfa, 0x85, 0x21, 0xa4, 0x4a, 0x65, 0x92,
+	0x44, 0x29, 0x34, 0xda, 0x25, 0xb0, 0xcf, 0xf8, 0x0e, 0xb4, 0x6b, 0x4f, 0x54, 0x62, 0x70, 0x8b,
+	0xae, 0xfa, 0x5a, 0x64, 0xcb, 0x7a, 0x40, 0xe9, 0x58, 0x7f, 0x23, 0xb4, 0x6f, 0x1d, 0xcf, 0x51,
+	0x70, 0x18, 0x21, 0xc1, 0xe6, 0xc7, 0x9f, 0x41, 0xcc, 0x19, 0x82, 0x22, 0x23, 0x4f, 0x86, 0x52,
+	0x68, 0x34, 0x92, 0xcb, 0x9e, 0xa9, 0x8f, 0x54, 0xfc, 0xdd, 0x36, 0x21, 0xca, 0x45, 0xd9, 0x8d,
+	0x37, 0x2e, 0xbf, 0xa9, 0xa2, 0x0b, 0x30, 0x04, 0x7d, 0xf6, 0xef, 0xa9, 0x25, 0x4d, 0xdd, 0x95,
+	0x4b, 0x15, 0x43, 0xa2, 0xf3, 0x8e, 0x51, 0x36, 0x9f, 0x82, 0xb8, 0xad, 0x54, 0x94, 0xb9, 0x20,
+	0x1c, 0x7d, 0x5d, 0x45, 0xa1, 0xc3, 0x2a, 0x6a, 0x3f, 0xaa, 0x22, 0x34, 0xb3, 0x16, 0x0a, 0x07,
+	0x12, 0xc1, 0xb5, 0x50, 0xb8, 0x3d, 0xd1, 0x91, 0xfe, 0x12, 0xc1, 0xc0, 0x6d, 0x6a, 0xc6, 0xaa,
+	0x33, 0x2d, 0xeb, 0xb2, 0x69, 0xb1, 0x21, 0xda, 0x07, 0x70, 0xe7, 0xca, 0x4c, 0x22, 0x36, 0xf7,
+	0xe9, 0x86, 0x1e, 0x30, 0x8f, 0x6a, 0xf0, 0x80, 0x5c, 0x4b, 0x0f, 0x48, 0x39, 0x9f, 0xc2, 0xc8,
+	0xf9, 0x94, 0x44, 0x82, 0x47, 0x53, 0x5a, 0x85, 0x5e, 0x66, 0x91, 0xdd, 0x41, 0xd7, 0x9c, 0x4f,
+	0xa1, 0xd3, 0xee, 0x97, 0x99, 0x0c, 0x32, 0x5b, 0x3e, 0x68, 0x31, 0x3f, 0xde, 0x31, 0xcc, 0xf7,
+	0xb9, 0xca, 0xc3, 0x1e, 0x95, 0x8e, 0xb4, 0xf4, 0x57, 0x08, 0xd2, 0x5b, 0x96, 0x66, 0x48, 0x25,
+	0xc2, 0x27, 0x57, 0x27, 0x2a, 0xd9, 0x31, 0x57, 0xa8, 0x49, 0xba, 0x21, 0xdb, 0xae, 0x86, 0xcb,
+	0x10, 0x2b, 0x4b, 0x07, 0x92, 0x69, 0x69, 0x86, 0xa8, 0x6b, 0x9a, 0xe2, 0x0c, 0x49, 0xc6, 0xd7,
+	0x0c, 0x2e, 0xe3, 0x3e, 0xe7, 0xd8, 0xd4, 0x34, 0x85, 0xd9, 0x92, 0x3c, 0xac, 0x22, 0xb7, 0xe3,
+	0x89, 0x9c, 0xc7, 0x9e, 0x68, 0xd9, 0x43, 0x6b, 0xa6, 0xff, 0x13, 0x82, 0xc1, 0x26, 0x42, 0xf0,
+	0x28, 0x74, 0x51, 0x0b, 0xc4, 0x9a, 0x07, 0x73, 0x37, 0x34, 0xa8, 0x9f, 0xdd, 0x12, 0xc2, 0xb4,
+	0x75, 0x83, 0xba, 0xf4, 0x25, 0x08, 0xa9, 0x5a, 0x91, 0xae, 0x5c, 0x4a, 0xd4, 0x45, 0x89, 0x42,
+	0x46, 0x60, 0x0f, 0x09, 0xec, 0x31, 0x5e, 0x83, 0x1e, 0x26, 0xa8, 0x28, 0x9b, 0x8e, 0xab, 0xda,
+	0xa3, 0xdb, 0x95, 0x1f, 0x71, 0x8d, 0x04, 0xdf, 0x19, 0x8b, 0x53, 0xc6, 0x65, 0xd9, 0xe4, 0x7e,
+	0x69, 0xa6, 0xff, 0x6b, 0x3b, 0x5c, 0xae, 0x1b, 0xc6, 0x65, 0xa2, 0x28, 0xab, 0xa6, 0xac, 0x68,
+	0xea, 0xed, 0x85, 0xa9, 0x29, 0x66, 0xf8, 0x4d, 0x08, 0x57, 0x4c, 0x62, 0x78, 0xec, 0x4e, 0xff,
+	0x4d, 0x15, 0x85, 0xfe, 0xc3, 0x2b, 0xd4, 0xb1, 0x23, 0x99, 0x64, 0x6e, 0x86, 0x29, 0x30, 0x82,
+	0xa3, 0x5f, 0x20, 0xfe, 0xe9, 0x4b, 0x84, 0x04, 0x97, 0x07, 0x7f, 0x04, 0x61, 0x5d, 0x32, 0xcd,
+	0x27, 0x9a, 0x51, 0x64, 0x5d, 0x8a, 0xe4, 0x86, 0x1a, 0x46, 0x7f, 0x8b, 0x14, 0x0c, 0xc2, 0x1c,
+	0x26, 0x4f, 0x3d, 0x1e, 0x09, 0x2e, 0x03, 0xfe, 0x04, 0x62, 0x26, 0x29, 0x54, 0x0c, 0x22, 0x72,
+	0xef, 0xe4, 0xab, 0xb2, 0xaf, 0x41, 0xc4, 0x4a, 0x59, 0xb7, 0x0e, 0xe8, 0xc2, 0xb3, 0xa9, 0xf9,
+	0xf2, 0xc4, 0xdb, 0x10, 0xb3, 0x8c, 0x8a, 0x69, 0x91, 0xa2, 0x58, 0x90, 0xc4, 0x8a, 0xa1, 0x24,
+	0xdb, 0x59, 0x0f, 0x32, 0xaf, 0xab, 0x08, 0xf1, 0x5e, 0x44, 0x74, 0x52, 0xce, 0xa4, 0x6a, 0x5d,
+	0xe9, 0x30, 0x42, 0xa3, 0x5f, 0x7c, 0x11, 0xae, 0xf5, 0xe5, 0x6e, 0x9b, 0xd0, 0xcd, 0xa5, 0x2c,
+	0x49, 0x0f, 0x0d, 0x05, 0x4f, 0x43, 0x5c, 0xd2, 0x65, 0xd1, 0x24, 0xc6, 0x3e, 0x31, 0xec, 0x09,
+	0xed, 0x6c, 0x98, 0xab, 0xbb, 0x48, 0x88, 0x4a, 0xba, 0xbc, 0xc5, 0x48, 0xd8, 0xac, 0xde, 0x84,
+	0x7e, 0x0f, 0x93, 0xac, 0x8b, 0x52, 0xb1, 0x68, 0x10, 0xd3, 0x4c, 0x86, 0xeb, 0x58, 0x9f, 0x52,
+	0x56, 0xec, 0xb2, 0xae, 0xea, 0x8b, 0x36, 0x19, 0x9e, 0xad, 0x53, 0xaa, 0x6b, 0x86, 0x95, 0xec,
+	0x4a, 0xa1, 0xd1, 0x68, 0x3e, 0x4a, 0x39, 0xc3, 0x63, 0x1d, 0xc9, 0xbf, 0xfd, 0xdb, 0xe0, 0xa8,
+	0x57, 0xed, 0xa6, 0x66, 0x58, 0x78, 0x0e, 0x7a, 0x64, 0xb3, 0x60, 0xca, 0xa2, 0x54, 0x28, 0x10,
+	0xd3, 0x14, 0x3f, 0xd7, 0x54, 0x92, 0x04, 0xa6, 0x12, 0x78, 0x17, 0x93, 0x5f, 0x20, 0x21, 0xce,
+	0x88, 0x16, 0x19, 0xcd, 0x67, 0x9a, 0x4a, 0xf0, 0x04, 0x44, 0xf7, 0x35, 0xa5, 0x52, 0x26, 0xa2,
+	0x6e, 0x90, 0x5d, 0xf9, 0x69, 0x32, 0x52, 0x67, 0x66, 0xf2, 0x96, 0xd0, 0x6d, 0xb7, 0x6f, 0xb2,
+	0x66, 0x3c, 0x06, 0x5d, 0x74, 0x08, 0x45, 0x5d, 0xb2, 0xf6, 0x92, 0xdd, 0x8c, 0xd6, 0x36, 0xcc,
+	0xe8, 0x48, 0x7e, 0x11, 0xf8, 0xe3, 0x00, 0x12, 0xc2, 0xb4, 0x7d, 0x53, 0xb2, 0xf6, 0xf2, 0x97,
+	0xa1, 0x7b, 0xcf, 0xb2, 0x74, 0x53, 0x2c, 0xec, 0x69, 0x72, 0x81, 0xe0, 0x38, 0x0f, 0x75, 0xc1,
+	0xa3, 0x2a, 0x0a, 0xce, 0x64, 0x66, 0xf3, 0x57, 0x20, 0xc6, 0x47, 0xc7, 0x4b, 0xd2, 0x79, 0x58,
+	0x45, 0x1d, 0x94, 0x64, 0x3e, 0xb3, 0xb0, 0x16, 0x0a, 0x07, 0x13, 0xa1, 0xb5, 0x50, 0xb8, 0x23,
+	0xd1, 0x99, 0xfe, 0xdf, 0x41, 0xf8, 0x41, 0x9d, 0x17, 0xdf, 0xdd, 0x5c, 0xd9, 0x90, 0xcb, 0x3b,
+	0x15, 0x93, 0x3f, 0x5d, 0xdc, 0x9d, 0xb1, 0x7d, 0xf9, 0x3a, 0xf4, 0x9a, 0xf6, 0xa3, 0xba, 0xd9,
+	0x43, 0x8d, 0x2b, 0xad, 0x87, 0x53, 0x79, 0xe6, 0x6f, 0x19, 0x86, 0x1a, 0x58, 0x3d, 0x73, 0x18,
+	0x68, 0x98, 0x43, 0x61, 0xa0, 0x4e, 0x40, 0xcb, 0x59, 0x0c, 0x9e, 0x62, 0x16, 0xbd, 0x6b, 0x30,
+	0xf4, 0x8e, 0x6b, 0xb0, 0xfd, 0xac, 0x6b, 0x70, 0x12, 0x22, 0x3a, 0x31, 0x76, 0x45, 0x5d, 0x53,
+	0xe4, 0xc2, 0x41, 0xb2, 0x83, 0xe9, 0x8f, 0xfd, 0x4d, 0x15, 0xb5, 0x79, 0x1c, 0x08, 0x28, 0xc9,
+	0x26, 0xa3, 0xc0, 0xef, 0x01, 0x28, 0x72, 0x59, 0xb6, 0x44, 0x59, 0xd3, 0x4d, 0xb6, 0x34, 0xa2,
+	0xf9, 0x10, 0xa5, 0x17, 0xba, 0xd8, 0xf3, 0x55, 0x4d, 0x37, 0x6b, 0x44, 0xe5, 0x1d, 0xdd, 0x5e,
+	0x04, 0xf5, 0x44, 0xf7, 0x77, 0x74, 0x33, 0xfd, 0xc7, 0x01, 0x98, 0xac, 0x9b, 0xd9, 0xcd, 0x8a,
+	0x41, 0xb6, 0x6a, 0x43, 0x4b, 0x03, 0xbf, 0x51, 0xd8, 0x23, 0xa6, 0x65, 0x48, 0x96, 0xc6, 0x36,
+	0x77, 0xfc, 0x5b, 0x00, 0x05, 0x85, 0xae, 0x56, 0x43, 0x94, 0x8b, 0x7c, 0x6a, 0x53, 0x7c, 0x61,
+	0x27, 0x50, 0x72, 0x80, 0x7e, 0x4c, 0x18, 0xb1, 0x5c, 0xf7, 0x8f, 0x7f, 0x28, 0x8d, 0x7f, 0x3e,
+	0x35, 0x7e, 0x5d, 0xfc, 0xc7, 0x63, 0x57, 0x85, 0x2e, 0xce, 0xb3, 0x5a, 0xc4, 0xb7, 0x60, 0x90,
+	0xa8, 0xd2, 0x8e, 0x42, 0x44, 0x67, 0xc2, 0x2d, 0x4d, 0xd7, 0x14, 0xad, 0x74, 0xc0, 0xe6, 0x39,
+	0x9c, 0x0f, 0xf3, 0xe8, 0xd1, 0x26, 0xf4, 0xdb, 0x84, 0xdc, 0xa2, 0x6d, 0x4e, 0x86, 0x6f, 0xc2,
+	0x80, 0x2b, 0xc1, 0x90, 0x0b, 0x56, 0x4d, 0x40, 0xb0, 0x41, 0x40, 0x9f, 0x23, 0x80, 0x92, 0xb9,
+	0xfc, 0x79, 0xe8, 0x90, 0x0c, 0x43, 0x3a, 0x30, 0x79, 0xb4, 0x1b, 0xf3, 0xdd, 0xae, 0x36, 0x4d,
+	0x6d, 0x91, 0x52, 0xd5, 0x65, 0x13, 0x02, 0xe7, 0x4c, 0xff, 0x67, 0x04, 0xfd, 0xbe, 0x14, 0x78,
+	0x0d, 0x22, 0xbb, 0x8a, 0x64, 0xee, 0x89, 0x8c, 0x92, 0x8d, 0x50, 0x24, 0xf7, 0x9e, 0xaf, 0x8a,
+	0xdb, 0x94, 0x8e, 0x89, 0xf0, 0x78, 0x06, 0xec, 0xba, 0x4f, 0x6b, 0xb2, 0x76, 0x14, 0x89, 0x6f,
+	0x59, 0x2d, 0x65, 0xe5, 0x29, 0xd9, 0x31, 0x59, 0xec, 0x69, 0xfa, 0xaf, 0x10, 0xc4, 0xea, 0x89,
+	0xf0, 0x2d, 0x18, 0x72, 0x06, 0x52, 0x95, 0x74, 0x73, 0x4f, 0xb3, 0xc4, 0xa2, 0x6c, 0x90, 0x82,
+	0xa5, 0x19, 0xb6, 0xe1, 0x61, 0xee, 0x33, 0x7c, 0xc6, 0xb6, 0x38, 0xd5, 0xb2, 0x43, 0x84, 0x73,
+	0xd0, 0x4d, 0x9e, 0xd2, 0x75, 0x26, 0x1a, 0x15, 0x85, 0x38, 0x2b, 0x35, 0xee, 0x78, 0xaf, 0xed,
+	0x13, 0x39, 0x21, 0x62, 0x13, 0x09, 0x94, 0x06, 0xff, 0x2e, 0x74, 0x7b, 0x3a, 0xd5, 0x3a, 0x75,
+	0xa9, 0x19, 0xbc, 0xa2, 0x16, 0x75, 0x4d, 0x56, 0x2d, 0xcf, 0x2e, 0x1c, 0xf6, 0xdd, 0x85, 0x23,
+	0xb5, 0x3e, 0x9b, 0xe9, 0xff, 0xd5, 0x0e, 0xf8, 0xb8, 0x0c, 0x3c, 0x0a, 0x9d, 0xe5, 0x52, 0xd9,
+	0x12, 0x65, 0x9d, 0x5b, 0x1c, 0x75, 0x2c, 0x0e, 0x19, 0x01, 0x9d, 0x6e, 0x49, 0x1d, 0xb4, 0x7d,
+	0x55, 0xc7, 0x9f, 0x40, 0x94, 0x51, 0x16, 0x55, 0xd3, 0x0e, 0x66, 0x41, 0x46, 0x3f, 0x58, 0xb7,
+	0x3e, 0x03, 0xb5, 0x8d, 0xa9, 0x4d, 0x88, 0x50, 0xfa, 0x65, 0xd5, 0x64, 0x61, 0xed, 0x63, 0xe8,
+	0xa2, 0x01, 0xc9, 0xd2, 0x1e, 0x13, 0x95, 0x7b, 0xdb, 0xc9, 0xa1, 0x41, 0xd2, 0xe5, 0x6d, 0xca,
+	0x80, 0xe7, 0x21, 0xae, 0xee, 0x9a, 0x22, 0xe1, 0x66, 0x53, 0x73, 0x3b, 0xfc, 0xcc, 0x45, 0x42,
+	0x54, 0xdd, 0x35, 0x9d, 0xde, 0xad, 0xea, 0x78, 0x1d, 0xfa, 0xeb, 0x18, 0x5d, 0xeb, 0x3b, 0x5b,
+	0x5b, 0x8f, 0x04, 0xec, 0x11, 0xe4, 0x74, 0xe2, 0xa7, 0x01, 0xe8, 0x50, 0xe8, 0xfc, 0xd3, 0x40,
+	0x42, 0xe7, 0x6a, 0xfa, 0x94, 0x73, 0x35, 0xb1, 0xce, 0xb8, 0x56, 0x54, 0xcb, 0x38, 0xc8, 0xff,
+	0x09, 0x9b, 0xa4, 0xee, 0x3f, 0x40, 0x5d, 0xe9, 0x4e, 0xa3, 0x3d, 0x81, 0x92, 0x3c, 0x98, 0xfe,
+	0x01, 0x0a, 0x24, 0xfa, 0x9c, 0xa6, 0x31, 0xa7, 0xe9, 0xe8, 0xcf, 0xff, 0x5b, 0xb0, 0xf7, 0xc5,
+	0x2b, 0x14, 0xc7, 0xd1, 0x5f, 0x57, 0x51, 0xd7, 0xba, 0xb4, 0x43, 0x94, 0xd4, 0x63, 0x72, 0xe0,
+	0x79, 0x7e, 0xe4, 0x3e, 0xbf, 0x67, 0x3f, 0x87, 0x17, 0xaf, 0x50, 0x07, 0x0e, 0xfd, 0xac, 0x8a,
+	0xda, 0xe8, 0xaf, 0x1d, 0x2f, 0x5e, 0x51, 0xd7, 0xa0, 0x1f, 0xfb, 0x5f, 0xbc, 0x42, 0x3d, 0xc3,
+	0xf1, 0x5f, 0x57, 0x51, 0xc4, 0xe6, 0xd8, 0x97, 0x94, 0x0a, 0xf1, 0xb4, 0x1c, 0xb9, 0x2d, 0x8f,
+	0x9c, 0x16, 0x26, 0x6d, 0x98, 0x49, 0x13, 0x78, 0xf7, 0x87, 0xaf, 0x43, 0xc4, 0xd3, 0x25, 0x9c,
+	0x80, 0xe0, 0x63, 0x72, 0xc0, 0x01, 0x13, 0xfd, 0x88, 0xfb, 0xa0, 0x9d, 0x89, 0xb6, 0xdd, 0x4a,
+	0xb0, 0x7f, 0xb9, 0x11, 0x58, 0x40, 0xf9, 0x14, 0x77, 0x24, 0x67, 0x4e, 0xd8, 0x9e, 0x1b, 0xa0,
+	0x13, 0x4e, 0xf7, 0xdc, 0x5c, 0x66, 0x9a, 0xee, 0xdb, 0xde, 0x49, 0x63, 0x04, 0x1d, 0x1c, 0xa2,
+	0x04, 0xe7, 0x32, 0xf3, 0x6b, 0xa1, 0x30, 0x4a, 0x04, 0x38, 0x48, 0xf9, 0xd7, 0x21, 0xbe, 0x9a,
+	0xdd, 0xf0, 0x81, 0x6f, 0x40, 0xd8, 0x94, 0x54, 0x86, 0xa3, 0x79, 0x5c, 0xbe, 0xfc, 0x4d, 0x15,
+	0xb5, 0xaf, 0x6e, 0x2d, 0x6d, 0xad, 0x3a, 0x13, 0x1e, 0x35, 0x22, 0x82, 0xfd, 0x44, 0x08, 0xdc,
+	0x5e, 0x12, 0x3a, 0x4d, 0x49, 0x65, 0xbc, 0x2b, 0x14, 0x21, 0xed, 0x4a, 0x15, 0xc5, 0x12, 0x77,
+	0x4d, 0x5b, 0x84, 0xbd, 0x30, 0x2e, 0x7d, 0x53, 0x45, 0xc1, 0xa7, 0xbb, 0xa6, 0x57, 0x00, 0xfd,
+	0x5d, 0x08, 0x91, 0xa7, 0xd6, 0x8c, 0x10, 0xe5, 0x5c, 0xb7, 0x4d, 0x26, 0x66, 0x0e, 0x62, 0x1e,
+	0x31, 0x9a, 0x6e, 0xf1, 0xe5, 0x92, 0x70, 0xd8, 0x9d, 0xe9, 0x15, 0xba, 0x5d, 0xc6, 0x07, 0xba,
+	0x85, 0x6f, 0x03, 0x76, 0xf8, 0xca, 0x5a, 0x45, 0xb5, 0x28, 0x2b, 0x8d, 0xce, 0x34, 0xeb, 0x4e,
+	0xba, 0xce, 0x4a, 0xd7, 0x7c, 0xc8, 0xb3, 0xd2, 0x13, 0x9c, 0xe7, 0x3e, 0x65, 0x79, 0xa0, 0x5b,
+	0x26, 0x5e, 0x86, 0x0b, 0x45, 0xd9, 0x64, 0x11, 0x4d, 0x37, 0x08, 0x29, 0xeb, 0x96, 0x28, 0x59,
+	0x96, 0x54, 0xd8, 0x2b, 0x13, 0xd5, 0x32, 0xd9, 0xde, 0xec, 0x84, 0xb4, 0x21, 0x4e, 0xb8, 0x69,
+	0xd3, 0x2d, 0xd6, 0xc8, 0xf0, 0x7d, 0xe8, 0xb5, 0x93, 0x3a, 0x45, 0x2b, 0xc9, 0xaa, 0x68, 0xc9,
+	0x65, 0xa2, 0x55, 0x2c, 0xb6, 0xf4, 0xda, 0xd9, 0x80, 0x04, 0x72, 0x53, 0x47, 0x55, 0x14, 0x82,
+	0x40, 0x6e, 0xca, 0x8d, 0x74, 0x63, 0xa1, 0x64, 0x71, 0x14, 0x09, 0x76, 0x3a, 0xb8, 0x4e, 0x19,
+	0xb7, 0x6d, 0xbe, 0x5a, 0xbc, 0xe3, 0x9b, 0x4e, 0xe7, 0x49, 0xf1, 0x8e, 0x4d, 0xe9, 0x19, 0xe3,
+	0xdd, 0xa2, 0xbd, 0x2d, 0xfd, 0x51, 0x88, 0xc7, 0xbb, 0x3a, 0x19, 0xbf, 0x29, 0xf1, 0x8e, 0x07,
+	0x1a, 0xa2, 0xd0, 0xa9, 0x3a, 0x21, 0xd0, 0xd4, 0x75, 0x70, 0x82, 0xad, 0xdd, 0xef, 0x49, 0xa0,
+	0x21, 0x8a, 0x13, 0x68, 0x9c, 0x2e, 0x7d, 0xb7, 0x81, 0xc6, 0x8e, 0x23, 0xe9, 0x3f, 0x09, 0xc0,
+	0x48, 0x5d, 0xf2, 0xb7, 0x41, 0x2c, 0x49, 0xd7, 0xb7, 0x0d, 0xb9, 0x48, 0x54, 0xe7, 0xb8, 0x23,
+	0xa9, 0xb2, 0x87, 0xe2, 0x8e, 0x54, 0x78, 0x4c, 0xd4, 0xa2, 0xa8, 0xa9, 0x96, 0xa4, 0x8b, 0xaa,
+	0x64, 0xf2, 0x5c, 0xe4, 0x23, 0xdf, 0x09, 0xf2, 0x11, 0x9b, 0xb7, 0x05, 0x3c, 0xa0, 0xfc, 0x1b,
+	0x92, 0xc9, 0x0f, 0x72, 0xfa, 0x55, 0xbf, 0xc6, 0xa6, 0x7a, 0x4d, 0x49, 0x65, 0xfe, 0xf8, 0x96,
+	0x7a, 0xb7, 0xec, 0x60, 0xe7, 0xaf, 0x77, 0x4b, 0x52, 0x29, 0x30, 0x72, 0x14, 0x7a, 0x80, 0x91,
+	0xcf, 0xd8, 0xfd, 0xab, 0x38, 0xbc, 0x7f, 0x3a, 0x65, 0xf8, 0x9f, 0xd6, 0x30, 0x51, 0xd1, 0x90,
+	0x1b, 0x30, 0xd1, 0xbd, 0x6f, 0xaa, 0xa8, 0x8b, 0xf5, 0x6d, 0xdc, 0x94, 0x54, 0x67, 0x8d, 0xcd,
+	0x1a, 0xd3, 0x42, 0xed, 0xa9, 0xd0, 0xe3, 0x7e, 0x1c, 0x27, 0x05, 0x4d, 0xd5, 0xca, 0x07, 0x42,
+	0xaf, 0xfd, 0x48, 0x95, 0xcc, 0xf1, 0x5d, 0x85, 0x3c, 0x2d, 0x19, 0x5a, 0x45, 0x77, 0x51, 0xd5,
+	0x32, 0x53, 0xb3, 0x61, 0x03, 0x93, 0x9e, 0xb2, 0xa4, 0x4a, 0x25, 0x42, 0x03, 0x9b, 0xa8, 0xc8,
+	0xbb, 0x34, 0x02, 0x84, 0xfc, 0x23, 0x40, 0xbc, 0x46, 0xb9, 0x2e, 0xef, 0xae, 0xea, 0x78, 0x13,
+	0x06, 0x1b, 0x98, 0xdd, 0xa0, 0xd0, 0x7e, 0x52, 0x50, 0xe8, 0xab, 0x13, 0xe6, 0x44, 0x87, 0x49,
+	0x88, 0x14, 0x25, 0x4b, 0x72, 0x0c, 0xe9, 0xf4, 0xcf, 0x65, 0xba, 0x28, 0x8d, 0x6d, 0xc2, 0x32,
+	0xf4, 0xb8, 0x0c, 0xae, 0xf2, 0xf0, 0x49, 0x39, 0x4c, 0x8c, 0x0b, 0x70, 0xd4, 0x8e, 0x40, 0xd0,
+	0xdc, 0x2f, 0x33, 0x3c, 0xdf, 0x95, 0xef, 0xf6, 0x6c, 0x43, 0x01, 0x81, 0x36, 0xe0, 0x51, 0x0f,
+	0xfc, 0x03, 0x1f, 0x22, 0x7f, 0xa0, 0x17, 0x39, 0x3b, 0xd0, 0xeb, 0x54, 0x35, 0xb1, 0xb0, 0x27,
+	0xe9, 0xc9, 0x68, 0x8b, 0x53, 0x96, 0x80, 0xd0, 0xa1, 0x6a, 0x4b, 0x7b, 0x92, 0x8e, 0x1f, 0x32,
+	0xbb, 0x6c, 0x8e, 0x18, 0xe3, 0x58, 0x68, 0x71, 0xbe, 0xe7, 0xeb, 0x82, 0x54, 0x0e, 0xf3, 0xf9,
+	0x80, 0xd0, 0x59, 0x31, 0x09, 0x13, 0x3b, 0x0e, 0x11, 0x99, 0x79, 0x8c, 0x3d, 0x9c, 0x3d, 0x3e,
+	0x3d, 0x06, 0x9b, 0x80, 0x8d, 0xde, 0x0d, 0x88, 0x39, 0x0e, 0xcc, 0xcf, 0x2a, 0x30, 0xe3, 0xe8,
+	0x75, 0x50, 0x56, 0x2d, 0xd1, 0xdf, 0x14, 0xa2, 0x9c, 0x94, 0x1f, 0x5b, 0xac, 0x40, 0xbf, 0x8d,
+	0x42, 0xa5, 0x52, 0xc9, 0x20, 0x25, 0xc9, 0x22, 0x62, 0xc5, 0x94, 0x4a, 0x24, 0xd9, 0xcb, 0x00,
+	0x69, 0x8f, 0x57, 0x44, 0x68, 0x2c, 0x90, 0x2c, 0x0a, 0xbd, 0x8c, 0x7e, 0xd1, 0x21, 0x7f, 0x48,
+	0xa9, 0xf1, 0x0c, 0xf4, 0xd8, 0x62, 0xf8, 0x99, 0x89, 0x29, 0x7f, 0x4e, 0x92, 0x7d, 0x6c, 0x3b,
+	0xae, 0x61, 0xbd, 0x38, 0x23, 0x79, 0xc4, 0x28, 0xb6, 0xe4, 0xcf, 0x09, 0xfe, 0x21, 0xc4, 0x39,
+	0x3d, 0xcf, 0x13, 0xcc, 0x64, 0x3f, 0x1b, 0xc5, 0x51, 0xff, 0xe3, 0x49, 0x3a, 0x64, 0x36, 0xfb,
+	0x32, 0xa7, 0xf7, 0x48, 0x8f, 0xed, 0xd7, 0xb5, 0xe0, 0x3f, 0xac, 0x6d, 0x55, 0x03, 0x6c, 0xab,
+	0xba, 0xf3, 0x0e, 0x11, 0xe9, 0xfb, 0xb6, 0x7d, 0xe1, 0x8b, 0xd0, 0x61, 0x90, 0x92, 0xac, 0xa9,
+	0xc9, 0x41, 0xe6, 0x2b, 0x76, 0xca, 0xc5, 0x9f, 0xe1, 0x7f, 0x02, 0x9d, 0xdc, 0x4d, 0x92, 0x49,
+	0x36, 0x76, 0x53, 0x2d, 0x26, 0x44, 0x36, 0xac, 0x8a, 0xa4, 0xf0, 0x71, 0x74, 0xcf, 0x8c, 0x9b,
+	0x9c, 0x5f, 0x73, 0xb1, 0xf8, 0x13, 0xc0, 0x05, 0x45, 0xa6, 0x61, 0xab, 0x40, 0x0c, 0x4b, 0xde,
+	0x95, 0x0b, 0x92, 0x45, 0x92, 0x43, 0xee, 0xd1, 0x4a, 0xd0, 0x0d, 0x1c, 0xb7, 0x84, 0x1e, 0x9b,
+	0x72, 0xa9, 0x46, 0x88, 0xef, 0xbb, 0xec, 0xba, 0x21, 0xef, 0x53, 0xaf, 0xa5, 0xbb, 0xef, 0xf0,
+	0xe9, 0x16, 0x7c, 0xc2, 0x66, 0xdd, 0xb4, 0x39, 0xef, 0x91, 0x03, 0xbc, 0x0c, 0x03, 0x9e, 0x63,
+	0x52, 0xaf, 0x45, 0x17, 0x7c, 0x2d, 0xea, 0x73, 0x8f, 0x43, 0x3d, 0x46, 0xbd, 0x43, 0x4a, 0x70,
+	0x43, 0x7b, 0x53, 0x45, 0x8f, 0xe1, 0x36, 0x0c, 0xf3, 0x61, 0x4c, 0x71, 0x1f, 0x4c, 0x6d, 0x4a,
+	0x86, 0x54, 0x26, 0x16, 0x31, 0x4c, 0x3c, 0x9a, 0xcd, 0x4c, 0x67, 0xe6, 0x32, 0xd7, 0x33, 0xd9,
+	0xa9, 0x4c, 0x36, 0x9b, 0xc9, 0xe6, 0x32, 0xb9, 0xd9, 0x4c, 0x6e, 0x2e, 0x93, 0x9b, 0xcf, 0x64,
+	0xe7, 0x33, 0xd9, 0x85, 0x4c, 0xf6, 0x7a, 0x26, 0x37, 0x95, 0xc9, 0x65, 0xe1, 0x0a, 0xf4, 0xf3,
+	0x59, 0x49, 0x39, 0xf2, 0xd8, 0xf9, 0x3c, 0x0e, 0xe7, 0x72, 0x99, 0xdc, 0x74, 0x26, 0x37, 0x43,
+	0x37, 0xd2, 0xfa, 0xad, 0xe3, 0xf8, 0x21, 0xe4, 0x05, 0x08, 0x3b, 0xa1, 0xfd, 0xd8, 0xf1, 0x63,
+	0x3e, 0x05, 0x11, 0x1a, 0xf5, 0x9c, 0x5d, 0x98, 0xc6, 0x89, 0xe8, 0x61, 0x15, 0x75, 0x1f, 0x55,
+	0x51, 0x7b, 0x76, 0x3a, 0x93, 0x9d, 0xf1, 0x1e, 0x50, 0xae, 0x85, 0xc2, 0xdd, 0x89, 0x68, 0xfa,
+	0x2f, 0x02, 0xf0, 0xde, 0x29, 0x22, 0x21, 0xbe, 0x0e, 0x51, 0x26, 0xbb, 0xe1, 0xd4, 0xbd, 0xcf,
+	0x1b, 0x8b, 0xdc, 0x40, 0xd8, 0x4d, 0x49, 0x1f, 0x3a, 0xe1, 0xff, 0x36, 0xf4, 0x31, 0x56, 0x4b,
+	0x32, 0x4a, 0xc4, 0xaa, 0x49, 0x08, 0xb4, 0x90, 0x80, 0x29, 0xc7, 0x36, 0x63, 0x70, 0xe5, 0xfc,
+	0x10, 0xfa, 0x99, 0x1c, 0x59, 0x95, 0x2d, 0x59, 0xb2, 0x34, 0x43, 0x34, 0x99, 0x17, 0xf1, 0xe4,
+	0xa6, 0x85, 0x8b, 0x75, 0x53, 0x1d, 0x87, 0x4e, 0x50, 0xea, 0xa5, 0x52, 0x56, 0x1d, 0x21, 0x36,
+	0x19, 0xde, 0x83, 0x8b, 0x5e, 0x23, 0x8f, 0xe9, 0x08, 0x9d, 0x4d, 0xc7, 0x50, 0xcd, 0xfe, 0x06,
+	0x4d, 0xe9, 0x7f, 0x7b, 0x72, 0x16, 0xc4, 0x53, 0xbd, 0x53, 0x67, 0x41, 0xaa, 0x64, 0xfa, 0x64,
+	0x41, 0xaa, 0x64, 0x3a, 0x59, 0x10, 0x4d, 0x79, 0xce, 0x9a, 0x05, 0xcd, 0x41, 0xb7, 0x93, 0xd6,
+	0x79, 0xa6, 0xcb, 0x67, 0xff, 0xca, 0x09, 0x11, 0x4e, 0x78, 0x9e, 0x3d, 0xfd, 0x7d, 0xcb, 0x9e,
+	0xe6, 0x00, 0x4b, 0x15, 0x4b, 0x13, 0xf9, 0x71, 0x23, 0x3f, 0x2d, 0xef, 0x6e, 0x38, 0xf0, 0x4d,
+	0x50, 0x9a, 0x15, 0x46, 0xc2, 0x4f, 0xcb, 0x1f, 0x42, 0x8f, 0x97, 0xaf, 0x20, 0x17, 0x0d, 0x93,
+	0xe7, 0x5f, 0x1f, 0xfa, 0xbe, 0xb9, 0xb5, 0x53, 0x97, 0x2d, 0xcb, 0x90, 0xd5, 0x92, 0xf3, 0xa6,
+	0x55, 0x88, 0xd7, 0xe4, 0x2e, 0x51, 0x09, 0x78, 0xf2, 0x58, 0x56, 0x14, 0x63, 0x7d, 0xaf, 0x99,
+	0xd2, 0x90, 0x0a, 0x7d, 0xdc, 0x2c, 0x15, 0x8a, 0x37, 0xf0, 0x9d, 0x3e, 0x03, 0x4a, 0x34, 0x70,
+	0x1e, 0xcb, 0x80, 0x66, 0xa0, 0x47, 0xdd, 0x35, 0x6b, 0x47, 0x2a, 0xb2, 0xa6, 0x9a, 0x3c, 0xdf,
+	0xf3, 0x70, 0xa9, 0xbb, 0xa6, 0x73, 0x82, 0x42, 0x09, 0xfc, 0xf2, 0x26, 0xfc, 0xff, 0x22, 0x6f,
+	0xea, 0x7d, 0xfb, 0xbc, 0x89, 0x87, 0x95, 0xef, 0x71, 0xde, 0xd4, 0xd7, 0x3a, 0x6f, 0xea, 0xff,
+	0xbb, 0xcc, 0x9b, 0x06, 0xde, 0x2d, 0x6f, 0x1a, 0xfc, 0xee, 0xf3, 0xa6, 0xe4, 0xdf, 0x4d, 0xde,
+	0x64, 0xbc, 0xa9, 0x22, 0x15, 0x56, 0x5b, 0xe6, 0x4d, 0xd7, 0x8e, 0xe7, 0x4d, 0x3c, 0x0b, 0xca,
+	0xb0, 0x4c, 0x25, 0x93, 0x9d, 0xcd, 0x64, 0xe7, 0xec, 0x1c, 0xaa, 0x45, 0xea, 0xe4, 0x64, 0x57,
+	0xef, 0x9a, 0x3a, 0xd5, 0xbd, 0xb9, 0xfd, 0xaa, 0x03, 0x7a, 0x7d, 0x96, 0x27, 0x5e, 0x81, 0xa8,
+	0xa9, 0x4b, 0x05, 0x22, 0x1a, 0x84, 0xbd, 0x2a, 0x75, 0x5e, 0xe3, 0x7d, 0x53, 0x45, 0x21, 0x55,
+	0x53, 0x89, 0xb3, 0x39, 0xc4, 0x8d, 0xa8, 0xc0, 0x1e, 0x08, 0xed, 0xd6, 0x9e, 0x5c, 0x78, 0x2c,
+	0x74, 0x33, 0x36, 0xc1, 0xe6, 0xc2, 0xe3, 0x10, 0x77, 0xdf, 0x1b, 0xf1, 0x78, 0x1c, 0xf0, 0xb8,
+	0x6d, 0xcc, 0x69, 0xe4, 0x91, 0x78, 0x12, 0x12, 0x2e, 0xb9, 0xa3, 0x38, 0xe8, 0xa1, 0x77, 0x85,
+	0x39, 0xf2, 0xc7, 0x20, 0x66, 0xea, 0x8a, 0x6c, 0x89, 0x9a, 0x2a, 0x16, 0x14, 0x4d, 0xb5, 0x5f,
+	0xce, 0x3a, 0x07, 0xb8, 0xdd, 0xac, 0xed, 0x81, 0xba, 0x44, 0x5b, 0xf0, 0x55, 0x00, 0xa2, 0x16,
+	0x8c, 0x03, 0x16, 0xc3, 0xea, 0x0e, 0x7a, 0x3d, 0xcf, 0xf1, 0x02, 0x24, 0x2a, 0xaa, 0xfc, 0x54,
+	0xd4, 0x89, 0x51, 0x96, 0x4d, 0x93, 0xc5, 0x43, 0xfb, 0x58, 0x97, 0xae, 0xf6, 0x76, 0x08, 0xce,
+	0xcf, 0xcf, 0xdb, 0xb6, 0x50, 0xb2, 0xcd, 0x1a, 0x15, 0xfe, 0x00, 0xba, 0xbd, 0xef, 0xc8, 0xd8,
+	0xee, 0xeb, 0x68, 0x88, 0x98, 0xb5, 0xf7, 0x62, 0xf8, 0x43, 0x88, 0xd6, 0x6f, 0x51, 0x61, 0x4f,
+	0x17, 0xf9, 0xcb, 0x32, 0x3e, 0x20, 0xb3, 0xbc, 0xfa, 0x42, 0xb6, 0x0e, 0x44, 0xd3, 0x3a, 0x50,
+	0x08, 0xdf, 0x64, 0x63, 0x47, 0x55, 0xd4, 0x01, 0x21, 0x6a, 0x02, 0xdf, 0x49, 0x38, 0xd5, 0x16,
+	0x25, 0xc2, 0xd7, 0x20, 0x66, 0xc9, 0x84, 0x6e, 0x4f, 0x8e, 0x0a, 0xf0, 0xa8, 0x88, 0xf2, 0x36,
+	0xae, 0x63, 0x1c, 0x3a, 0x54, 0x4d, 0xfc, 0x89, 0x66, 0xb2, 0xad, 0xb2, 0x79, 0x65, 0x47, 0xbb,
+	0xaa, 0xfd, 0xb6, 0x66, 0xe2, 0x71, 0x80, 0x9f, 0x68, 0xa6, 0x23, 0x37, 0x7a, 0x6c, 0x3b, 0xa7,
+	0xd9, 0x49, 0xd7, 0x4f, 0x34, 0x93, 0x4b, 0xbf, 0x09, 0xbd, 0x52, 0x51, 0xd2, 0x2d, 0x79, 0x9f,
+	0x88, 0x1e, 0xbe, 0x98, 0x2f, 0x5f, 0x8f, 0x43, 0xfa, 0xdb, 0x0e, 0xff, 0x8d, 0x9b, 0x6f, 0xaa,
+	0xe8, 0x06, 0x2c, 0xc0, 0x25, 0x67, 0x61, 0x3d, 0xd8, 0xd8, 0x5e, 0xdc, 0x4c, 0xd9, 0xee, 0x9a,
+	0x72, 0xfd, 0x75, 0x30, 0x9b, 0xc9, 0x65, 0xa6, 0x33, 0x33, 0x99, 0xd9, 0xcc, 0x5c, 0x66, 0x3e,
+	0xb3, 0xe0, 0xac, 0xb6, 0xfc, 0x38, 0xf4, 0xd4, 0xd4, 0x3a, 0x68, 0x21, 0xf9, 0xba, 0x8a, 0xba,
+	0x7f, 0x66, 0xe7, 0xb0, 0x91, 0xa3, 0x2a, 0x0a, 0x67, 0x73, 0x19, 0x07, 0x34, 0x44, 0x12, 0xdd,
+	0xe9, 0x3f, 0x0b, 0xc2, 0x85, 0x16, 0x31, 0x12, 0x7f, 0x59, 0xdb, 0xa2, 0xec, 0x72, 0xa6, 0x8f,
+	0xcf, 0x1a, 0x66, 0xbf, 0x77, 0xfb, 0x12, 0x86, 0x10, 0xab, 0x6c, 0xb1, 0x23, 0x24, 0xfb, 0xec,
+	0x97, 0x26, 0x04, 0xbf, 0xab, 0x34, 0xe1, 0x1d, 0x82, 0x76, 0xfa, 0x55, 0x98, 0x97, 0xef, 0xd5,
+	0xe5, 0x10, 0x6c, 0x66, 0xa7, 0x6a, 0x49, 0x1b, 0x2f, 0x42, 0x44, 0x8d, 0x65, 0x37, 0x4e, 0xd6,
+	0x66, 0x73, 0xe1, 0x1f, 0xb1, 0xb2, 0x45, 0x49, 0xd7, 0x45, 0xcb, 0x3e, 0x17, 0x67, 0xe1, 0xa2,
+	0xd9, 0x8b, 0x89, 0xd6, 0xc7, 0xe9, 0xbc, 0x70, 0xb1, 0xf6, 0x10, 0x3f, 0x47, 0x30, 0xa4, 0x57,
+	0x0c, 0xbb, 0xe4, 0x45, 0x2e, 0x10, 0x51, 0xf3, 0x54, 0x5b, 0xb0, 0x10, 0x13, 0xc9, 0x2d, 0x9f,
+	0xac, 0xe9, 0xe4, 0xaa, 0x8d, 0xbb, 0x6d, 0xc2, 0x20, 0x55, 0xe4, 0xd3, 0x8c, 0xf7, 0x00, 0x6b,
+	0x76, 0x51, 0x9d, 0x48, 0xdc, 0xf2, 0x3e, 0x16, 0xb5, 0x22, 0xb9, 0xf9, 0x93, 0x95, 0xfb, 0x56,
+	0x06, 0xd2, 0xd5, 0xae, 0x35, 0x36, 0xe0, 0x4f, 0x20, 0x56, 0xa8, 0x98, 0x96, 0x56, 0x76, 0x2a,
+	0x3f, 0x58, 0xbc, 0x6b, 0x51, 0x6d, 0x66, 0x53, 0x73, 0x75, 0xf8, 0x0f, 0x83, 0x70, 0x51, 0x2a,
+	0xee, 0x4b, 0x6a, 0x81, 0x14, 0x45, 0xf7, 0x83, 0xee, 0x6e, 0xc5, 0xfc, 0x9d, 0xd1, 0xbd, 0x26,
+	0xef, 0x8c, 0xfc, 0x3c, 0x62, 0x62, 0x91, 0x8b, 0x71, 0xfe, 0xaf, 0x6d, 0xec, 0xf6, 0xe2, 0xfd,
+	0x17, 0x81, 0xd7, 0xbc, 0x38, 0xd1, 0x7f, 0x01, 0xdf, 0xf2, 0x5d, 0xc0, 0x93, 0x2f, 0x5e, 0xa1,
+	0x6b, 0xf8, 0xc3, 0x5f, 0x57, 0x91, 0x53, 0x38, 0x95, 0x2a, 0x28, 0x92, 0x69, 0xa6, 0x4c, 0x9d,
+	0x14, 0x68, 0x5e, 0x92, 0x72, 0xad, 0x4e, 0x51, 0x64, 0x44, 0x79, 0x92, 0x2f, 0x5e, 0xa1, 0x3e,
+	0x8c, 0x8f, 0xaa, 0x28, 0xe6, 0x1a, 0x91, 0xda, 0xe0, 0x8d, 0xcd, 0x57, 0xf8, 0xcd, 0x17, 0xaf,
+	0xd0, 0x8d, 0xe1, 0x85, 0x5f, 0x57, 0xd1, 0xcc, 0x89, 0xaa, 0xd8, 0x1a, 0x49, 0xed, 0x6a, 0x46,
+	0xaa, 0x24, 0xef, 0x13, 0xd5, 0x09, 0x2b, 0x43, 0x2f, 0x5e, 0xa1, 0xfe, 0xe1, 0xde, 0xa3, 0x2a,
+	0x8a, 0xd7, 0x34, 0xfb, 0x86, 0x83, 0x61, 0xa9, 0xe9, 0x70, 0x0d, 0xdf, 0x87, 0xcb, 0x27, 0x0c,
+	0xe6, 0x99, 0x52, 0xaf, 0xdf, 0x7a, 0x53, 0x45, 0x1f, 0x41, 0x0a, 0x86, 0x9c, 0x5e, 0xf1, 0xda,
+	0x5e, 0x4f, 0xe6, 0x15, 0xcc, 0x66, 0x72, 0x30, 0x08, 0x98, 0x17, 0x3a, 0x7b, 0x9b, 0xd0, 0x6c,
+	0xfe, 0x2a, 0x44, 0x79, 0xcd, 0x2f, 0xdf, 0x16, 0x28, 0xde, 0x0f, 0x1f, 0x56, 0x51, 0xe0, 0xa8,
+	0x8a, 0x3a, 0x17, 0xd8, 0x46, 0x72, 0xdd, 0xad, 0xfb, 0xb5, 0x73, 0xa6, 0x50, 0xa2, 0x3d, 0xfd,
+	0x2f, 0x11, 0x0c, 0x1f, 0x77, 0x16, 0xb7, 0xe4, 0x56, 0x85, 0x78, 0x7d, 0x08, 0x71, 0x36, 0x89,
+	0x6b, 0x67, 0x70, 0xbb, 0x86, 0x92, 0x57, 0xef, 0x3b, 0xed, 0x58, 0x5d, 0xfc, 0x31, 0xd3, 0xff,
+	0xa3, 0xf6, 0x96, 0x6e, 0x89, 0xce, 0xab, 0x4f, 0x05, 0xe9, 0x34, 0xc4, 0xa5, 0xcf, 0xdd, 0x10,
+	0xe2, 0x39, 0xe1, 0xe8, 0xf2, 0x9e, 0x29, 0x44, 0xa5, 0xcf, 0xf9, 0xea, 0x77, 0xeb, 0x25, 0x6b,
+	0x4c, 0x9e, 0x5a, 0xbb, 0x60, 0x63, 0xbd, 0x64, 0x9b, 0x80, 0x5d, 0xd6, 0x5a, 0xa5, 0x9d, 0x6f,
+	0xe1, 0x63, 0xe8, 0xe4, 0xc2, 0xc7, 0xba, 0x42, 0xc6, 0xf6, 0x96, 0x85, 0x8c, 0x38, 0x03, 0xd8,
+	0xd0, 0x34, 0x4b, 0xe4, 0x98, 0xc2, 0xae, 0x41, 0x62, 0x01, 0x38, 0x2c, 0x24, 0x68, 0xcb, 0x12,
+	0x6b, 0x58, 0x61, 0xcf, 0x7d, 0xcb, 0x1e, 0x7d, 0x5e, 0xdd, 0xfd, 0x7b, 0x04, 0x57, 0xbd, 0x03,
+	0xda, 0xb4, 0x98, 0xb1, 0xa1, 0x2e, 0x0f, 0x9d, 0xb1, 0x2e, 0x2f, 0x70, 0x9a, 0xba, 0xbc, 0xa0,
+	0x7f, 0x5d, 0xde, 0x73, 0x04, 0x57, 0xbc, 0x36, 0xfa, 0x57, 0x5f, 0xcf, 0x42, 0x98, 0xdd, 0x58,
+	0x28, 0x68, 0x0a, 0xb7, 0x6e, 0x88, 0x25, 0xf0, 0xfb, 0xe5, 0x5d, 0xc7, 0xca, 0xb0, 0xd1, 0x21,
+	0xb0, 0x07, 0x82, 0x4b, 0x8a, 0xdf, 0x87, 0x88, 0x41, 0x74, 0x85, 0x82, 0x23, 0x9a, 0x2a, 0x07,
+	0x58, 0xfa, 0xcb, 0x13, 0x59, 0x4f, 0x43, 0xfa, 0x2f, 0x10, 0x5c, 0xf2, 0x1a, 0x71, 0xfc, 0xf5,
+	0xf0, 0x8f, 0x20, 0x6c, 0x12, 0x85, 0x55, 0x82, 0xf1, 0x45, 0x70, 0xab, 0xd5, 0x7e, 0xe1, 0x2f,
+	0x65, 0x62, 0x8b, 0x8b, 0x60, 0x31, 0x42, 0x70, 0x25, 0xe2, 0x69, 0x88, 0xba, 0x27, 0x2c, 0xac,
+	0xb6, 0x3c, 0xe0, 0xce, 0x00, 0x72, 0x67, 0x20, 0x24, 0x74, 0x9b, 0xb5, 0xdc, 0xcb, 0x1c, 0xfe,
+	0x08, 0xa2, 0x75, 0xf2, 0xce, 0x94, 0x39, 0xfc, 0x19, 0x82, 0x0f, 0xbc, 0xb6, 0x6e, 0xfa, 0xef,
+	0x98, 0xac, 0xef, 0x1f, 0x41, 0x27, 0x3f, 0x2a, 0xe4, 0x63, 0x7f, 0xe5, 0x9b, 0x2a, 0x6a, 0xdf,
+	0x51, 0xb4, 0xc2, 0x63, 0x2f, 0x7a, 0xb2, 0x9f, 0x08, 0xa1, 0x5d, 0x59, 0x21, 0x82, 0xc3, 0x81,
+	0x3f, 0x06, 0xa0, 0x3e, 0x22, 0xb2, 0x19, 0xe7, 0x9e, 0x72, 0xe9, 0x9b, 0x2a, 0x42, 0x53, 0x94,
+	0xaf, 0x77, 0xac, 0x27, 0x1f, 0x9f, 0xca, 0x64, 0xa7, 0xa6, 0xc6, 0xb3, 0x53, 0xfc, 0x9f, 0xd0,
+	0x45, 0x19, 0xd6, 0x29, 0x3d, 0x9e, 0x83, 0xf8, 0x8e, 0xa4, 0x16, 0x9f, 0xc8, 0x45, 0x6b, 0x8f,
+	0x8b, 0x08, 0x1e, 0x3b, 0x0b, 0x4c, 0x76, 0x0b, 0x31, 0x97, 0x8a, 0xf1, 0xa5, 0x05, 0x18, 0xf0,
+	0xf6, 0x6e, 0x89, 0x6d, 0xae, 0xac, 0x33, 0x0b, 0x10, 0x3a, 0x90, 0xca, 0x8e, 0x17, 0x5d, 0xf5,
+	0x54, 0x6f, 0xb3, 0xe7, 0xee, 0x68, 0xa7, 0x3c, 0xd5, 0xaf, 0xac, 0x25, 0xfd, 0xd7, 0x00, 0xfd,
+	0xde, 0x18, 0xc7, 0x24, 0x3b, 0xa5, 0x40, 0xbe, 0xb9, 0x96, 0xb7, 0x36, 0x90, 0x55, 0xe6, 0x37,
+	0x64, 0x5c, 0x53, 0x10, 0x29, 0x12, 0xb3, 0x60, 0xc8, 0xba, 0xeb, 0x9e, 0x8d, 0xcb, 0x2e, 0x20,
+	0x78, 0x49, 0x70, 0x0e, 0xfa, 0x9d, 0xe2, 0x21, 0x47, 0x23, 0xdb, 0x02, 0xed, 0x6a, 0x50, 0xa1,
+	0x97, 0x37, 0x7a, 0x2d, 0xc4, 0x3f, 0x3c, 0x96, 0xd7, 0xd9, 0xa9, 0x48, 0xee, 0xec, 0x0e, 0x7c,
+	0x3c, 0xad, 0xfb, 0xbc, 0x55, 0x56, 0x07, 0x4c, 0xcf, 0xc7, 0x27, 0xea, 0x69, 0xe1, 0x7c, 0xad,
+	0xb2, 0xb9, 0x92, 0x6f, 0x36, 0x67, 0x9f, 0xb6, 0xce, 0x9d, 0xa8, 0xf4, 0x0c, 0xc9, 0xdc, 0xf6,
+	0xb1, 0x64, 0x2e, 0xc1, 0x94, 0x5c, 0x3b, 0x51, 0x49, 0xcd, 0xf1, 0x8e, 0xe7, 0x78, 0xcb, 0x10,
+	0x33, 0x48, 0x41, 0x91, 0xe4, 0xb2, 0xf7, 0x84, 0xb7, 0x2b, 0x7f, 0xe9, 0xa8, 0x8a, 0x12, 0xd0,
+	0xb1, 0x4c, 0x14, 0x62, 0x11, 0xe8, 0x10, 0x88, 0x25, 0xc9, 0xaa, 0xe3, 0xea, 0x09, 0x21, 0xca,
+	0x99, 0x78, 0x24, 0xbe, 0x01, 0x03, 0x92, 0xa2, 0x68, 0x4f, 0x9c, 0xd3, 0x52, 0xf2, 0x54, 0x97,
+	0x54, 0x8a, 0xe3, 0x19, 0xa2, 0x75, 0x60, 0x7b, 0x1f, 0xa3, 0xb1, 0x21, 0xc9, 0x8a, 0x43, 0x81,
+	0xbf, 0x0a, 0xc2, 0x05, 0x37, 0xb9, 0x74, 0x03, 0x50, 0x2d, 0xc9, 0xb4, 0xab, 0xb7, 0x56, 0x4f,
+	0xdc, 0xed, 0xdd, 0x95, 0xe0, 0xe6, 0x98, 0x0e, 0x48, 0x6c, 0x48, 0x31, 0x7f, 0x1a, 0x38, 0x4f,
+	0x2f, 0xed, 0xf4, 0x72, 0x48, 0x6a, 0x36, 0x52, 0x78, 0x01, 0x70, 0xdd, 0xda, 0xf6, 0xbe, 0xcb,
+	0x70, 0xf2, 0x8d, 0x7f, 0x17, 0x40, 0x42, 0xc2, 0xf4, 0x2e, 0x55, 0xa9, 0x4c, 0x86, 0xd7, 0x61,
+	0xa4, 0xf5, 0x04, 0x9c, 0x29, 0x2d, 0x5d, 0x7b, 0x53, 0x45, 0xb7, 0xe1, 0x1a, 0x24, 0x9d, 0xd1,
+	0x60, 0x8a, 0xbc, 0xa9, 0x67, 0x7c, 0x21, 0xe3, 0x9c, 0x56, 0xb0, 0x73, 0x87, 0x66, 0x19, 0xea,
+	0x7c, 0xfe, 0x83, 0xc6, 0x0c, 0x75, 0xe0, 0x75, 0x15, 0x45, 0x0e, 0xab, 0x28, 0x74, 0x54, 0x45,
+	0x90, 0xcd, 0xf2, 0x53, 0x8e, 0x39, 0x3b, 0x31, 0xb5, 0xeb, 0x3e, 0xf9, 0xc1, 0xde, 0x0b, 0x04,
+	0x43, 0xc7, 0x9c, 0xcd, 0xcd, 0x51, 0xcb, 0xb5, 0x1c, 0x95, 0x0d, 0x96, 0x9b, 0xa3, 0x8e, 0x9d,
+	0xde, 0x6b, 0x4f, 0x91, 0xa2, 0x2e, 0xd9, 0xb2, 0xd3, 0xb3, 0xd0, 0x9d, 0xd7, 0xd4, 0xe2, 0xba,
+	0x54, 0xb0, 0x5f, 0xb0, 0xfe, 0x00, 0x42, 0x86, 0x64, 0xd9, 0xf1, 0x3e, 0x9a, 0xef, 0xf9, 0xa6,
+	0x8a, 0x02, 0xd3, 0x53, 0x4e, 0x8d, 0xe4, 0xc8, 0x28, 0x12, 0x58, 0x73, 0xfa, 0xbf, 0x84, 0xf8,
+	0xa5, 0x36, 0xca, 0xec, 0x01, 0xe9, 0x9f, 0x78, 0xaf, 0x21, 0xe6, 0x3f, 0x3c, 0xaa, 0xa2, 0x8b,
+	0xd0, 0xbe, 0xa3, 0xa9, 0xc5, 0x29, 0xfb, 0xbf, 0xac, 0xfd, 0x5f, 0xce, 0xfe, 0x6f, 0xba, 0x06,
+	0xdd, 0xed, 0x1b, 0x8b, 0xbf, 0x87, 0x6a, 0x97, 0xe2, 0x02, 0xac, 0x80, 0xd4, 0x3c, 0xaa, 0xa2,
+	0x25, 0x08, 0x11, 0x6b, 0x6f, 0x8a, 0xfd, 0xcc, 0xb2, 0x9f, 0x39, 0xf6, 0x73, 0x9a, 0xfd, 0x9c,
+	0x61, 0x3f, 0x67, 0xd9, 0xcf, 0x39, 0xf6, 0x73, 0x9e, 0xfd, 0x5c, 0x60, 0x3f, 0xaf, 0x43, 0x3b,
+	0xe5, 0x62, 0x5d, 0xe8, 0xfa, 0x7d, 0xd4, 0x91, 0x66, 0xea, 0x4e, 0xa8, 0xca, 0x74, 0x6c, 0xc0,
+	0xf3, 0x10, 0x52, 0xa4, 0x82, 0xce, 0x5f, 0xbb, 0x5e, 0xf1, 0x9d, 0x01, 0xef, 0xf0, 0xdd, 0x6d,
+	0x13, 0x18, 0x03, 0xfe, 0x08, 0xa2, 0x52, 0x81, 0x9d, 0xac, 0xd1, 0xb4, 0xa1, 0xa2, 0xf3, 0x9b,
+	0x25, 0xcd, 0xc0, 0x72, 0xb7, 0x4d, 0x9c, 0x67, 0xb4, 0xf8, 0x3e, 0xf4, 0x2b, 0xb2, 0xfa, 0x98,
+	0x06, 0x51, 0x45, 0x56, 0x4b, 0xf6, 0xa5, 0xc3, 0x7d, 0x49, 0x61, 0xd9, 0x73, 0x34, 0x3f, 0x44,
+	0xb7, 0x78, 0x9a, 0x2c, 0xd2, 0x04, 0xc3, 0xb9, 0x1a, 0xf3, 0xcf, 0x3e, 0x18, 0xfd, 0xeb, 0xa0,
+	0xd0, 0x4b, 0xf9, 0x36, 0x6d, 0xb6, 0x55, 0xce, 0x85, 0xaf, 0x43, 0x94, 0x89, 0xab, 0xe8, 0x62,
+	0x91, 0x28, 0xd2, 0x01, 0xbf, 0x75, 0xd2, 0xcf, 0xc5, 0x04, 0x73, 0xb6, 0x94, 0xf6, 0xb1, 0x60,
+	0xf2, 0x97, 0x9d, 0x42, 0x84, 0xd2, 0x3e, 0xd4, 0x97, 0x29, 0xe5, 0x8d, 0xab, 0x6f, 0xaa, 0x28,
+	0x05, 0x23, 0x30, 0x44, 0x3b, 0x99, 0x6a, 0x76, 0x43, 0x73, 0x04, 0x22, 0xb4, 0xd3, 0xcd, 0xae,
+	0x2c, 0xd9, 0x08, 0x2d, 0xfd, 0x1f, 0x11, 0x24, 0x1b, 0x5c, 0xa6, 0xe6, 0xf5, 0x1a, 0x74, 0x53,
+	0x87, 0x68, 0x80, 0x65, 0xa3, 0xcd, 0x5d, 0xbe, 0xde, 0xef, 0xf2, 0x69, 0x7f, 0x87, 0xaf, 0xaf,
+	0xb5, 0xdd, 0xa9, 0x29, 0xbe, 0x31, 0xf8, 0xa6, 0x8a, 0x7a, 0xa1, 0xc7, 0xf6, 0x7e, 0xde, 0x33,
+	0x13, 0xa3, 0x6c, 0xfa, 0xf7, 0x10, 0xa4, 0xbc, 0x8b, 0x6a, 0xcb, 0x92, 0x2c, 0xb9, 0x20, 0x68,
+	0x15, 0xcb, 0x63, 0xae, 0x5c, 0xcb, 0x8f, 0x0c, 0xd6, 0xc2, 0x0d, 0x1e, 0x69, 0x7c, 0x4f, 0x52,
+	0x63, 0xf6, 0x31, 0xd3, 0xdf, 0xf9, 0x9c, 0x94, 0xca, 0x56, 0x99, 0xfe, 0x15, 0x82, 0x9e, 0x47,
+	0x77, 0x36, 0x1f, 0xd6, 0x8f, 0x3a, 0x3b, 0x7d, 0x66, 0xf7, 0xa4, 0xea, 0xaf, 0x59, 0xc5, 0x5e,
+	0xd7, 0x12, 0xec, 0xaf, 0x03, 0x54, 0x18, 0xa3, 0x72, 0x80, 0xdf, 0x4d, 0x88, 0x1c, 0xbf, 0x5e,
+	0x75, 0xc9, 0xf1, 0xa7, 0xf9, 0xa9, 0x79, 0xb7, 0x24, 0xba, 0x76, 0xdd, 0x0a, 0xcc, 0xda, 0x5d,
+	0xab, 0x4f, 0xa1, 0x7b, 0x97, 0x48, 0x16, 0xcd, 0x8f, 0x58, 0x99, 0x79, 0x47, 0x8b, 0x8b, 0xc5,
+	0xd4, 0xe8, 0xdb, 0x36, 0x31, 0xeb, 0x7b, 0xec, 0x9b, 0x2a, 0x82, 0x87, 0x1b, 0xeb, 0xab, 0x4b,
+	0x2b, 0x1b, 0x5b, 0x2b, 0xcb, 0x42, 0x64, 0xb7, 0xd6, 0xc8, 0xe1, 0xdd, 0xe7, 0x90, 0xc8, 0xdf,
+	0xd9, 0xac, 0xef, 0xe9, 0x05, 0x08, 0x4a, 0xa6, 0xca, 0x4d, 0xed, 0xe2, 0xb5, 0x66, 0xa3, 0x48,
+	0xa0, 0x4f, 0xf1, 0x12, 0xb4, 0xeb, 0x84, 0x6e, 0xec, 0xf6, 0x4d, 0xee, 0xc1, 0x06, 0x43, 0x76,
+	0x4a, 0xfa, 0xc4, 0x26, 0x21, 0x86, 0xdf, 0x9b, 0xb3, 0x29, 0x24, 0xd8, 0xbc, 0x5c, 0xf7, 0x5f,
+	0x21, 0xe8, 0x5f, 0xd7, 0x0a, 0x92, 0xb2, 0xa4, 0xa9, 0x96, 0xa1, 0x29, 0x9b, 0x8a, 0xa4, 0x12,
+	0x0e, 0xd1, 0xbb, 0x64, 0xd5, 0x94, 0x8b, 0x44, 0xdc, 0x57, 0x79, 0xe5, 0x6c, 0xb3, 0x75, 0x1c,
+	0xb6, 0x09, 0x1f, 0xd1, 0x09, 0x02, 0xad, 0x62, 0x39, 0x5c, 0xc1, 0x96, 0x5c, 0x5d, 0x9c, 0xf2,
+	0x91, 0x8a, 0x97, 0x01, 0x76, 0x4a, 0xba, 0x58, 0x60, 0x43, 0xc0, 0xc3, 0xce, 0x0f, 0xfc, 0xc3,
+	0x4e, 0xc3, 0x40, 0x09, 0x5d, 0x3b, 0x25, 0xdd, 0x7e, 0x92, 0xbf, 0x52, 0xbb, 0xaf, 0xdd, 0x1a,
+	0x4f, 0xff, 0x6a, 0x04, 0x62, 0x77, 0x14, 0x6d, 0x47, 0x52, 0xb6, 0x74, 0x52, 0x60, 0xbd, 0xbd,
+	0x06, 0x11, 0xa6, 0x40, 0x64, 0xa7, 0xc7, 0x3c, 0x90, 0x3b, 0xbb, 0xf4, 0xa1, 0x7d, 0x2d, 0x89,
+	0x10, 0x8b, 0x1d, 0xf0, 0xe2, 0x35, 0x18, 0xda, 0xd7, 0x14, 0x8b, 0x18, 0x86, 0x24, 0x9a, 0xda,
+	0xae, 0xf5, 0x44, 0x32, 0x88, 0xb8, 0x4f, 0x0c, 0xb3, 0x79, 0xf6, 0x3f, 0xe8, 0x30, 0x6c, 0x71,
+	0xfa, 0x47, 0x36, 0x39, 0xbe, 0xff, 0xd6, 0xf7, 0xa1, 0xa1, 0x36, 0xbb, 0xb5, 0xd0, 0xfd, 0x18,
+	0xb0, 0x3b, 0x06, 0x9a, 0xaa, 0x32, 0x54, 0x69, 0xdf, 0x4a, 0x38, 0xcb, 0x8d, 0x7f, 0x97, 0xd5,
+	0xa3, 0xc2, 0x69, 0x5c, 0x72, 0xc5, 0xe2, 0x5d, 0x48, 0x38, 0x1c, 0xbb, 0xb2, 0x41, 0x9e, 0x48,
+	0x8a, 0xc2, 0x0f, 0x34, 0x5b, 0xab, 0xba, 0xf4, 0xf2, 0xd9, 0x31, 0x46, 0xcf, 0x77, 0x0b, 0xc4,
+	0x79, 0xdb, 0x6d, 0xde, 0x84, 0xef, 0x42, 0x52, 0xd3, 0x09, 0x9d, 0x70, 0xb5, 0x24, 0x9a, 0x07,
+	0xa6, 0x45, 0xca, 0xee, 0x70, 0x77, 0xf8, 0x0e, 0xf7, 0x80, 0x4b, 0xbf, 0xc5, 0xc8, 0x9d, 0xd1,
+	0x36, 0x60, 0xd0, 0xf5, 0x4f, 0xfb, 0x35, 0x88, 0x7b, 0x8b, 0xb8, 0xf3, 0x14, 0x86, 0x5f, 0x7c,
+	0xf9, 0x2c, 0xde, 0xc0, 0xe7, 0xb1, 0xbb, 0xdf, 0x71, 0x68, 0x9b, 0xc2, 0xb9, 0x71, 0xac, 0xc3,
+	0x80, 0xb3, 0x90, 0x1a, 0x54, 0x86, 0xdf, 0x59, 0x65, 0x1f, 0x5f, 0x79, 0xf5, 0x1a, 0xb7, 0x21,
+	0xe6, 0x5e, 0xc4, 0x17, 0x15, 0xd9, 0xb4, 0x38, 0x82, 0x6b, 0x71, 0xde, 0x77, 0xec, 0x7b, 0x03,
+	0x28, 0xce, 0x91, 0xbd, 0x0f, 0xf1, 0x4a, 0xed, 0xc2, 0x8b, 0xe7, 0x0b, 0x05, 0x3e, 0x68, 0xb9,
+	0xc6, 0x7b, 0x38, 0x87, 0x2b, 0xde, 0xc4, 0x4b, 0x10, 0x53, 0x48, 0x49, 0x2a, 0x1c, 0xb8, 0xbb,
+	0x5e, 0xa4, 0xb9, 0x88, 0x7c, 0x88, 0x46, 0x69, 0x6a, 0x8b, 0xcd, 0xe3, 0xec, 0x58, 0x37, 0x21,
+	0xae, 0x6a, 0x62, 0xdd, 0xde, 0x99, 0x68, 0x61, 0x08, 0x12, 0xa2, 0xaa, 0xe6, 0xd9, 0x80, 0xf1,
+	0xef, 0x40, 0xc2, 0xc3, 0x6c, 0x8f, 0x51, 0x0f, 0x13, 0x30, 0x7e, 0x9a, 0xcd, 0xd7, 0xdd, 0x12,
+	0xef, 0x22, 0x21, 0x56, 0xdb, 0x5f, 0xd9, 0x30, 0xad, 0x41, 0xbf, 0xaa, 0xb9, 0x28, 0xcc, 0x33,
+	0x52, 0xbd, 0x2d, 0x0b, 0xa8, 0x7b, 0x55, 0x8d, 0x6f, 0xbd, 0x9e, 0xb1, 0x2a, 0xc0, 0xc0, 0x31,
+	0x41, 0xb6, 0xb1, 0x7d, 0x67, 0x9f, 0xd0, 0x80, 0xd0, 0x67, 0x36, 0x68, 0x60, 0x06, 0xe7, 0xa1,
+	0xc7, 0x63, 0x30, 0x3f, 0xf8, 0x18, 0x68, 0x61, 0x6c, 0x50, 0x88, 0xbb, 0xc6, 0xf2, 0x13, 0x10,
+	0xc9, 0x53, 0x2b, 0xe7, 0x19, 0x52, 0xbb, 0x8c, 0x62, 0xf2, 0x94, 0xc7, 0xcc, 0xae, 0xa5, 0xc1,
+	0x5a, 0x45, 0x5c, 0xdd, 0xb8, 0xfa, 0x1f, 0x99, 0x0c, 0xb5, 0x30, 0x35, 0xe4, 0x7f, 0x94, 0xf2,
+	0xe3, 0x46, 0x68, 0xc6, 0xac, 0xb5, 0x8b, 0x65, 0x27, 0x4e, 0x07, 0x38, 0x5c, 0x63, 0x43, 0xf5,
+	0x00, 0x8e, 0xd9, 0x7a, 0x0f, 0x7a, 0x55, 0x4d, 0x2c, 0x16, 0x44, 0xe7, 0xda, 0x31, 0xab, 0xf3,
+	0x4b, 0x5e, 0x3c, 0xd1, 0xd1, 0xdb, 0x85, 0x84, 0xaa, 0x2d, 0x17, 0x96, 0x6c, 0xb6, 0x3b, 0x94,
+	0x0b, 0x97, 0x20, 0x71, 0x4c, 0xd2, 0x25, 0x26, 0xe9, 0x34, 0x5f, 0xe3, 0x31, 0xf8, 0xf2, 0xd9,
+	0x31, 0x76, 0xae, 0x2a, 0x56, 0xac, 0x57, 0x64, 0xc1, 0x60, 0x23, 0xa5, 0x68, 0xc7, 0x97, 0xe4,
+	0xfb, 0xdf, 0x85, 0xbe, 0xbe, 0x7a, 0x7d, 0xab, 0x4c, 0x34, 0xfe, 0x04, 0x22, 0xce, 0xfd, 0xb7,
+	0x92, 0x5e, 0x49, 0x5e, 0x3e, 0x71, 0x8c, 0x3a, 0x04, 0xe0, 0x0c, 0x77, 0xf4, 0x0a, 0xfe, 0x08,
+	0x80, 0xdf, 0x07, 0xa6, 0xdc, 0xa9, 0x53, 0x70, 0x77, 0xd9, 0xf4, 0x94, 0xf9, 0x01, 0x44, 0x38,
+	0xf3, 0x3e, 0xe5, 0x9e, 0x61, 0xdc, 0xef, 0x37, 0xcd, 0xeb, 0xea, 0x32, 0x8f, 0x9a, 0x35, 0xb6,
+	0x88, 0x47, 0x25, 0xbd, 0x82, 0x77, 0xa1, 0x8f, 0x58, 0x85, 0xa2, 0xdb, 0x7d, 0x27, 0xd2, 0x5f,
+	0x61, 0x19, 0xa3, 0xff, 0x72, 0x5d, 0xb1, 0x0a, 0x45, 0x3e, 0x2e, 0x3c, 0x80, 0xb3, 0x81, 0xec,
+	0xfc, 0xfa, 0x19, 0xfa, 0x65, 0x15, 0x21, 0x01, 0x93, 0x63, 0x04, 0xf8, 0x01, 0x24, 0x3d, 0x6b,
+	0xd6, 0x64, 0xf9, 0xb6, 0x93, 0x93, 0xbf, 0xd7, 0x62, 0x3d, 0x74, 0x0a, 0xfd, 0xee, 0xd2, 0xf5,
+	0xa6, 0xf8, 0xf8, 0x31, 0xf4, 0xfb, 0x4b, 0xbb, 0xca, 0xa4, 0xcd, 0x9e, 0xb8, 0x28, 0xfc, 0x00,
+	0xc3, 0xdd, 0x4e, 0xc1, 0x09, 0x0b, 0x75, 0xca, 0xb6, 0xe1, 0x2a, 0x1f, 0x76, 0xf7, 0xe6, 0x25,
+	0xcb, 0xbd, 0xec, 0xfc, 0x4f, 0x2c, 0x6a, 0x4f, 0x54, 0x45, 0x93, 0x8a, 0xc9, 0x1f, 0xd8, 0x27,
+	0x5f, 0x74, 0x9c, 0x85, 0x94, 0xcd, 0xc1, 0xdf, 0xb6, 0x33, 0xcd, 0xf6, 0x74, 0x2c, 0x73, 0x6a,
+	0x7c, 0x1b, 0xec, 0x1c, 0xcd, 0xce, 0xd1, 0x3f, 0x64, 0x23, 0x3e, 0xd2, 0xdc, 0xee, 0xfa, 0x41,
+	0xee, 0xda, 0x75, 0x9e, 0xe1, 0x4f, 0x21, 0x62, 0xca, 0x6a, 0x49, 0x21, 0xa2, 0x29, 0x5b, 0x24,
+	0x39, 0x76, 0x8a, 0x4d, 0x3a, 0xf9, 0xf2, 0x59, 0x88, 0x12, 0x73, 0x69, 0x9e, 0x0d, 0x1a, 0x6c,
+	0x51, 0x5b, 0xb2, 0x45, 0xf0, 0x36, 0x0c, 0x2a, 0x5a, 0xc9, 0x14, 0x4d, 0xcb, 0x20, 0x52, 0x99,
+	0xe6, 0x32, 0xdc, 0x8f, 0x8b, 0xc9, 0xcc, 0x89, 0x7e, 0x1b, 0x16, 0xfa, 0x29, 0xf3, 0x96, 0xc3,
+	0xbb, 0xcc, 0x59, 0xf1, 0x8f, 0xa0, 0x5b, 0xd1, 0x4a, 0xa2, 0x41, 0x0a, 0x44, 0xde, 0x27, 0x46,
+	0x72, 0xfc, 0xd4, 0x4b, 0xb5, 0xf7, 0xe5, 0xb3, 0x3a, 0x56, 0xae, 0x27, 0xa2, 0x68, 0x25, 0x81,
+	0x3f, 0xc2, 0x37, 0xa1, 0xbb, 0x48, 0xd4, 0x03, 0x51, 0x52, 0x14, 0xb1, 0x62, 0xee, 0x24, 0x27,
+	0x4f, 0x34, 0xb4, 0x4b, 0x00, 0xca, 0xb1, 0xa8, 0x28, 0x0f, 0xcd, 0x1d, 0x7c, 0x0b, 0xa2, 0xf6,
+	0xb1, 0xa6, 0x23, 0x60, 0xea, 0x14, 0x02, 0x22, 0x8c, 0x85, 0x4b, 0x78, 0x04, 0x50, 0x31, 0x77,
+	0x9c, 0xa3, 0xd5, 0xec, 0xa9, 0x7b, 0xd7, 0xf3, 0xf2, 0x99, 0x87, 0x91, 0x4b, 0xee, 0xaa, 0x98,
+	0x3b, 0xfc, 0xc0, 0xf5, 0x33, 0x88, 0x3c, 0x5e, 0x30, 0x9d, 0x95, 0x9a, 0xcc, 0x9d, 0x5a, 0x70,
+	0xff, 0xcb, 0x67, 0x5e, 0x4e, 0xc7, 0x83, 0xe0, 0xf1, 0x82, 0xc9, 0x57, 0x29, 0x2e, 0x40, 0xaf,
+	0x42, 0x41, 0x15, 0xf5, 0x68, 0x8a, 0xaa, 0x44, 0x9d, 0xc2, 0xaa, 0xe4, 0x74, 0x8b, 0xaf, 0x6e,
+	0xf0, 0x05, 0x61, 0x35, 0xff, 0xec, 0x51, 0x1a, 0xdb, 0xf1, 0x8f, 0x21, 0xca, 0xbe, 0x2b, 0x8c,
+	0x65, 0x06, 0xaa, 0xa4, 0x24, 0x7f, 0xd9, 0x79, 0xea, 0x3e, 0xf4, 0xbd, 0x7c, 0x56, 0xcf, 0xcc,
+	0x94, 0x74, 0xd3, 0x47, 0xab, 0xfc, 0x09, 0x5e, 0x81, 0x78, 0x89, 0xa8, 0x34, 0x8d, 0x26, 0x45,
+	0xf1, 0x40, 0x2a, 0x2b, 0x66, 0xf2, 0x57, 0x9d, 0xec, 0x74, 0xea, 0x82, 0xd7, 0xcf, 0x1b, 0x5f,
+	0xb2, 0xc4, 0x5c, 0xa6, 0xdf, 0xa1, 0x3c, 0xf9, 0x51, 0x48, 0xd4, 0x72, 0x17, 0x8e, 0xcb, 0xfa,
+	0x5e, 0x57, 0xd1, 0x07, 0x87, 0x55, 0xd4, 0x75, 0x54, 0x45, 0xe1, 0x69, 0xa7, 0x32, 0x2a, 0x05,
+	0xec, 0xac, 0xc2, 0x7b, 0x83, 0x22, 0x71, 0x58, 0x45, 0x71, 0x76, 0x83, 0x62, 0x2e, 0x93, 0x9d,
+	0xcf, 0x8f, 0x43, 0xf2, 0x78, 0x3e, 0xe4, 0x21, 0xef, 0x3d, 0xac, 0x22, 0xcc, 0xc8, 0xaf, 0x67,
+	0x72, 0x53, 0xf9, 0xb1, 0x5a, 0x50, 0xab, 0x3f, 0xb5, 0xa4, 0xb4, 0x03, 0x87, 0x55, 0xd4, 0x4f,
+	0x69, 0x59, 0xed, 0x63, 0xfe, 0x43, 0xe8, 0xab, 0x4f, 0x09, 0x3c, 0xa4, 0x43, 0x87, 0x55, 0x94,
+	0x64, 0xa4, 0xb3, 0x99, 0xdc, 0x5c, 0x7e, 0xca, 0x67, 0x9f, 0xe4, 0xd4, 0xfd, 0xaf, 0xab, 0xe8,
+	0x22, 0xaf, 0xe3, 0xba, 0xc0, 0x38, 0x16, 0x32, 0xb9, 0xeb, 0xf9, 0xf7, 0x01, 0x4a, 0x7a, 0xc5,
+	0x5b, 0xec, 0x75, 0x99, 0x13, 0x8d, 0xb0, 0x11, 0xc8, 0x66, 0xa6, 0x73, 0x99, 0xd9, 0x5c, 0x3e,
+	0x0b, 0x17, 0x7d, 0xa3, 0xb0, 0xd7, 0x98, 0xf7, 0x0e, 0xab, 0x28, 0x4d, 0x45, 0x4f, 0xcf, 0x66,
+	0xa6, 0xe7, 0xf2, 0xe3, 0xd0, 0xc7, 0x82, 0x8a, 0xb3, 0x88, 0xbd, 0x96, 0x64, 0xb8, 0x92, 0x6b,
+	0x94, 0x7c, 0x66, 0x26, 0x33, 0x33, 0x9b, 0x1f, 0x87, 0x9e, 0xda, 0xa2, 0xf0, 0x1a, 0x34, 0xc9,
+	0x69, 0x27, 0xa8, 0x41, 0x33, 0xf3, 0x99, 0x99, 0x85, 0xcc, 0xcc, 0xf5, 0xb5, 0x50, 0xb8, 0x2b,
+	0x01, 0x6b, 0xa1, 0x70, 0x3c, 0x91, 0x58, 0x0b, 0x85, 0x71, 0xa2, 0x77, 0x2d, 0x14, 0xee, 0x4f,
+	0x0c, 0xac, 0x85, 0xc2, 0xc9, 0xc4, 0xd0, 0x5a, 0x28, 0x7c, 0x21, 0x71, 0x71, 0x2d, 0x14, 0x1e,
+	0x49, 0x5c, 0x5e, 0x0b, 0x85, 0xd3, 0x89, 0xf7, 0xd6, 0x42, 0xe1, 0xd1, 0xc4, 0x87, 0x6b, 0xa1,
+	0xf0, 0xb5, 0x44, 0x66, 0x2d, 0x14, 0x9e, 0x48, 0x4c, 0xa6, 0xbf, 0x1a, 0x86, 0xd8, 0x92, 0x41,
+	0x24, 0x8b, 0xbc, 0x1d, 0xd6, 0xbe, 0x71, 0x22, 0xd6, 0x6e, 0x8e, 0xad, 0xa5, 0xb7, 0x06, 0xc3,
+	0x7d, 0x7e, 0x60, 0xd8, 0x0f, 0x02, 0xff, 0xe8, 0x2d, 0x21, 0x70, 0xaf, 0x0f, 0x04, 0x3e, 0x0e,
+	0x7c, 0x17, 0x4e, 0x02, 0xbe, 0x4d, 0x81, 0xee, 0xde, 0xbb, 0x01, 0x5d, 0x7c, 0x1c, 0x75, 0x36,
+	0x83, 0xb7, 0xbb, 0xef, 0x04, 0x6f, 0xfd, 0x14, 0x9d, 0x16, 0xd4, 0x46, 0xbf, 0x03, 0x50, 0xfb,
+	0x49, 0xed, 0xdb, 0x1f, 0xf8, 0xe9, 0xd3, 0x68, 0xeb, 0xfa, 0x2e, 0x4e, 0x6d, 0xe7, 0x1e, 0xf8,
+	0x1e, 0x44, 0xbc, 0x78, 0x27, 0xd6, 0xa2, 0x98, 0xd0, 0xe7, 0xcb, 0xf0, 0xee, 0xb6, 0xd1, 0xbd,
+	0xd2, 0x45, 0x38, 0xe7, 0xa0, 0xf6, 0x1c, 0xd4, 0xfe, 0x3d, 0x06, 0xb5, 0x2b, 0x67, 0x06, 0xb5,
+	0xbe, 0x70, 0xb6, 0xf0, 0x4e, 0x70, 0xb6, 0xd7, 0x07, 0x5e, 0xfa, 0x40, 0x59, 0xfd, 0xbb, 0x80,
+	0xb2, 0x4d, 0x74, 0xf9, 0xc3, 0xd8, 0xf9, 0x53, 0xc3, 0xd8, 0x06, 0x00, 0x3b, 0x7b, 0x5a, 0x00,
+	0x5b, 0x0f, 0x5d, 0x57, 0xdf, 0x01, 0xba, 0x36, 0x80, 0xd6, 0xdf, 0x6c, 0x30, 0xb9, 0x71, 0x16,
+	0x30, 0x79, 0x0a, 0x18, 0xb9, 0xf1, 0x56, 0x28, 0xad, 0x39, 0x3e, 0xfb, 0x47, 0x6f, 0x8d, 0xcf,
+	0xe2, 0x0d, 0xf8, 0xac, 0x11, 0x9b, 0x2d, 0x9c, 0x1e, 0x9b, 0x35, 0xa0, 0xb2, 0x1b, 0x67, 0x40,
+	0x65, 0x8d, 0x78, 0x4c, 0x78, 0x4b, 0x3c, 0x16, 0xad, 0xc3, 0x63, 0x75, 0x58, 0xec, 0xc6, 0xff,
+	0x44, 0xff, 0xfd, 0x66, 0xc3, 0x1b, 0x99, 0x37, 0x55, 0xf4, 0x0a, 0x41, 0x8a, 0xbf, 0x6f, 0x6f,
+	0x78, 0xfb, 0xda, 0x95, 0x65, 0x57, 0x2a, 0x72, 0x99, 0x39, 0xb8, 0x00, 0x98, 0x67, 0x08, 0x29,
+	0xcf, 0x1e, 0xd3, 0x9e, 0x9d, 0xcd, 0x64, 0x59, 0xa5, 0xad, 0xd3, 0xe8, 0xc9, 0xd9, 0xd0, 0x0c,
+	0xf4, 0x43, 0xc2, 0x69, 0x70, 0x93, 0x2d, 0x34, 0x0b, 0x57, 0xa0, 0xdf, 0x2d, 0x92, 0xa8, 0x53,
+	0x18, 0xce, 0x2e, 0x64, 0x72, 0xd9, 0x4c, 0x6e, 0x06, 0x46, 0x61, 0xc0, 0xa9, 0xcd, 0x68, 0xa0,
+	0x89, 0xe5, 0xe6, 0x33, 0xd3, 0x53, 0x99, 0xe9, 0x99, 0xcc, 0xcc, 0x74, 0x66, 0x66, 0xae, 0x29,
+	0xf0, 0x19, 0xe5, 0xb7, 0xc2, 0xc3, 0x33, 0x53, 0xf6, 0x1d, 0x8f, 0xfc, 0x48, 0x3d, 0xf0, 0x89,
+	0x3f, 0xff, 0x16, 0x79, 0x1f, 0xe4, 0x17, 0x5a, 0xc0, 0x9e, 0x8b, 0xcf, 0xbf, 0x45, 0x4d, 0x5b,
+	0xf3, 0xb9, 0x66, 0x08, 0x68, 0xe8, 0xf9, 0xb7, 0xc8, 0xbf, 0x29, 0x3f, 0xd5, 0x04, 0x09, 0x25,
+	0x9f, 0x7f, 0x8b, 0x7c, 0x5b, 0xf2, 0x73, 0xcd, 0x01, 0xd1, 0x85, 0xe7, 0xdf, 0xa2, 0x66, 0x8d,
+	0xf9, 0x8b, 0x75, 0xb0, 0x28, 0xf6, 0xfc, 0x5b, 0xe4, 0xf9, 0x3d, 0x7f, 0xeb, 0x04, 0x30, 0x94,
+	0x7a, 0xfe, 0x2d, 0x6a, 0x49, 0x41, 0x7b, 0xe2, 0x8b, 0x8d, 0x58, 0x4f, 0xfc, 0x5a, 0xf2, 0x63,
+	0x7e, 0xf0, 0xa8, 0xff, 0xf9, 0xb7, 0xe8, 0xf8, 0x63, 0xfb, 0x0a, 0xff, 0x99, 0xb0, 0x51, 0x0d,
+	0x15, 0xfd, 0x9f, 0x21, 0x88, 0x0b, 0x44, 0x57, 0xa4, 0x42, 0x0d, 0x16, 0x9d, 0x23, 0x9d, 0x73,
+	0xa4, 0x73, 0x8e, 0x74, 0xce, 0x91, 0xce, 0x39, 0xd2, 0x39, 0x47, 0x3a, 0xe7, 0x48, 0xe7, 0x1c,
+	0xe9, 0x9c, 0x23, 0x9d, 0xef, 0x21, 0xd2, 0x39, 0xf4, 0x45, 0x3a, 0x7f, 0x8a, 0x60, 0xc4, 0x1f,
+	0xe9, 0x74, 0x9e, 0xe3, 0x9c, 0x73, 0x9c, 0xf3, 0xff, 0x1b, 0xe7, 0xd8, 0x5f, 0xe1, 0xfc, 0xf6,
+	0x68, 0xe7, 0xcb, 0x61, 0x88, 0xdc, 0x21, 0xd6, 0xf9, 0x0b, 0xa0, 0x73, 0x58, 0x74, 0x0e, 0x8b,
+	0xce, 0x61, 0xd1, 0x39, 0x2c, 0x3a, 0x87, 0x45, 0xe7, 0xb0, 0xe8, 0x1c, 0x16, 0x9d, 0xc3, 0xa2,
+	0x73, 0x58, 0x74, 0xfe, 0x02, 0xe8, 0x1c, 0x18, 0xfd, 0x43, 0x7c, 0x01, 0x74, 0x0f, 0x22, 0x3c,
+	0xde, 0x49, 0x56, 0xc5, 0xc4, 0x1f, 0xc3, 0xb0, 0xb4, 0x2f, 0xc9, 0x8a, 0xfd, 0x87, 0xad, 0x1a,
+	0x51, 0x8e, 0x7d, 0xcd, 0x3b, 0xe9, 0x52, 0x34, 0xc0, 0x9c, 0xb1, 0xaf, 0x10, 0x0c, 0xf8, 0x57,
+	0x91, 0xe3, 0xf7, 0xe0, 0xf2, 0xca, 0xf6, 0xd2, 0xb2, 0xb8, 0xb4, 0xfe, 0x70, 0x6b, 0x7b, 0x45,
+	0x10, 0xb7, 0x56, 0xb7, 0x57, 0xc4, 0xf5, 0x07, 0x4b, 0x8b, 0xeb, 0xe2, 0xc6, 0xca, 0xf6, 0xa7,
+	0x0f, 0x84, 0x7b, 0x89, 0x36, 0x3c, 0x06, 0xef, 0x37, 0x23, 0x5a, 0xdd, 0xd8, 0x5a, 0x5d, 0x5e,
+	0x71, 0x69, 0x11, 0x1e, 0x85, 0xab, 0xc7, 0x69, 0xef, 0x2f, 0x6e, 0x2c, 0xde, 0x59, 0xb9, 0xbf,
+	0xb2, 0xb1, 0xed, 0x52, 0x06, 0xc6, 0x0e, 0x20, 0xde, 0xf0, 0x57, 0x56, 0x71, 0x12, 0xfa, 0x96,
+	0x57, 0x1e, 0xad, 0x2e, 0xad, 0x88, 0x0f, 0x3e, 0xdd, 0x58, 0x11, 0xc4, 0xd5, 0x8d, 0x47, 0x8b,
+	0xeb, 0xab, 0xcb, 0x89, 0x36, 0xdc, 0x07, 0x89, 0xba, 0x96, 0x47, 0x2b, 0x42, 0x02, 0xe1, 0xcb,
+	0x70, 0xa1, 0xfe, 0xe9, 0xbd, 0x85, 0x2d, 0x91, 0x8a, 0x17, 0xd7, 0x1f, 0x2c, 0x2e, 0x27, 0x02,
+	0xb8, 0x1f, 0x7a, 0xea, 0x08, 0xee, 0x3e, 0xd8, 0xda, 0x4e, 0x04, 0xc7, 0x26, 0xa1, 0xcb, 0xad,
+	0xf1, 0xc6, 0x3d, 0x10, 0xbd, 0xff, 0x70, 0x7d, 0x7b, 0x75, 0x73, 0x7d, 0x85, 0x59, 0x9b, 0x68,
+	0xc3, 0x71, 0x88, 0x6c, 0xad, 0x6e, 0xdc, 0x71, 0x1e, 0xa0, 0xb1, 0x7f, 0x8e, 0xe0, 0xf2, 0x09,
+	0x7f, 0xa4, 0x16, 0x5f, 0x81, 0x4b, 0xbc, 0x73, 0xe2, 0xea, 0xc6, 0xf6, 0x8a, 0x70, 0x7b, 0x71,
+	0x69, 0x45, 0x7c, 0xb8, 0xb5, 0x22, 0x0a, 0x2b, 0x77, 0x1e, 0xae, 0x2f, 0x0a, 0x89, 0xb6, 0xe6,
+	0x24, 0x0f, 0x1e, 0x6e, 0xd3, 0x71, 0x4c, 0x20, 0x9c, 0x82, 0x8b, 0xfe, 0x24, 0xf6, 0x48, 0x27,
+	0x02, 0x63, 0x9f, 0x40, 0xbc, 0xe1, 0x12, 0x29, 0x8e, 0x81, 0xe7, 0x0a, 0x69, 0xa2, 0x0d, 0x87,
+	0x21, 0x44, 0x49, 0x12, 0x08, 0x77, 0x42, 0xf0, 0xd1, 0xa7, 0x5b, 0x89, 0x00, 0xfb, 0xb0, 0xb4,
+	0x95, 0x08, 0xe5, 0x7f, 0x8a, 0x0e, 0x7f, 0x3e, 0xd2, 0xf6, 0xf5, 0xcf, 0x47, 0xda, 0xfe, 0xf2,
+	0xe7, 0x23, 0xe8, 0x8b, 0xa3, 0x11, 0xf4, 0x47, 0x47, 0x23, 0xe8, 0x67, 0x47, 0x23, 0xe8, 0xf0,
+	0x68, 0x04, 0x7d, 0x7d, 0x34, 0x82, 0xfe, 0xfc, 0x68, 0x04, 0xfd, 0xf2, 0x68, 0xa4, 0xed, 0x2f,
+	0x8f, 0x46, 0xd0, 0x97, 0xbf, 0x18, 0x69, 0x7b, 0xfd, 0x8b, 0x11, 0x74, 0xf8, 0x8b, 0x91, 0xb6,
+	0xaf, 0x7f, 0x31, 0xd2, 0xf6, 0xd9, 0x6a, 0x49, 0xd3, 0x1f, 0x97, 0x26, 0x1c, 0x44, 0x3d, 0x51,
+	0x31, 0x27, 0xd9, 0x87, 0x5d, 0xcd, 0x28, 0x8f, 0xeb, 0x86, 0xb6, 0x2f, 0x17, 0x89, 0x31, 0xee,
+	0x34, 0x4f, 0xea, 0x3b, 0x25, 0x6d, 0x92, 0x3c, 0xb5, 0xf8, 0x9f, 0x26, 0xf6, 0xfe, 0xd9, 0xe7,
+	0x9d, 0x0e, 0xf6, 0xfd, 0x3d, 0xd3, 0xff, 0x37, 0x00, 0x00, 0xff, 0xff, 0x94, 0x45, 0x43, 0x6c,
+	0x14, 0x7a, 0x00, 0x00,
+}
+
 func (x EtcdClusterNetworkType) String() string {
 	s, ok := EtcdClusterNetworkType_name[int32(x)]
 	if ok {
@@ -14961,7 +13096,7 @@ func (this *FlashBladeEndpoint) GoString() string {
 	for k, _ := range this.Lables {
 		keysForLables = append(keysForLables, k)
 	}
-	sortkeys.Strings(keysForLables)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLables)
 	mapStringForLables := "map[string]string{"
 	for _, k := range keysForLables {
 		mapStringForLables += fmt.Sprintf("%#v: %#v,", k, this.Lables[k])
@@ -15039,7 +13174,7 @@ func (this *FlashArrayEndpoint) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -15127,7 +13262,7 @@ func (this *StorageDeviceNetappBackendOntapSanType) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -15247,7 +13382,7 @@ func (this *StorageDeviceNetappBackendOntapNasType) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -15356,7 +13491,7 @@ func (this *OntapVirtualStoragePoolType) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -15386,7 +13521,7 @@ func (this *FleetStorageDeviceType) GoString() string {
 	for k, _ := range this.AdvancedAdvancedParameters {
 		keysForAdvancedAdvancedParameters = append(keysForAdvancedAdvancedParameters, k)
 	}
-	sortkeys.Strings(keysForAdvancedAdvancedParameters)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedAdvancedParameters)
 	mapStringForAdvancedAdvancedParameters := "map[string]string{"
 	for _, k := range keysForAdvancedAdvancedParameters {
 		mapStringForAdvancedAdvancedParameters += fmt.Sprintf("%#v: %#v,", k, this.AdvancedAdvancedParameters[k])
@@ -15506,7 +13641,7 @@ func (this *StorageClassNetappTridentType) GoString() string {
 	for k, _ := range this.Selector {
 		keysForSelector = append(keysForSelector, k)
 	}
-	sortkeys.Strings(keysForSelector)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSelector)
 	mapStringForSelector := "map[string]string{"
 	for _, k := range keysForSelector {
 		mapStringForSelector += fmt.Sprintf("%#v: %#v,", k, this.Selector[k])
@@ -15559,7 +13694,7 @@ func (this *FleetStorageClassType) GoString() string {
 	for k, _ := range this.AdvancedStorageParameters {
 		keysForAdvancedStorageParameters = append(keysForAdvancedStorageParameters, k)
 	}
-	sortkeys.Strings(keysForAdvancedStorageParameters)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedStorageParameters)
 	mapStringForAdvancedStorageParameters := "map[string]string{"
 	for _, k := range keysForAdvancedStorageParameters {
 		mapStringForAdvancedStorageParameters += fmt.Sprintf("%#v: %#v,", k, this.AdvancedStorageParameters[k])
@@ -16764,7 +14899,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *NetworkingDeviceInstanceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16772,34 +14907,41 @@ func (m *NetworkingDeviceInstanceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NetworkingDeviceInstanceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkingDeviceInstanceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.Use != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Use))
+		i--
+		dAtA[i] = 0x18
+	}
 	if len(m.Interface) > 0 {
-		for _, msg := range m.Interface {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Interface) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Interface[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.Use != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Use))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GenericDeviceInstanceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16807,17 +14949,22 @@ func (m *GenericDeviceInstanceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GenericDeviceInstanceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GenericDeviceInstanceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *DeviceInstanceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16825,49 +14972,64 @@ func (m *DeviceInstanceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DeviceInstanceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeviceInstanceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.DeviceInstance != nil {
+		{
+			size := m.DeviceInstance.Size()
+			i -= size
+			if _, err := m.DeviceInstance.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.Owner != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Owner))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.DeviceInstance != nil {
-		nn1, err := m.DeviceInstance.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *DeviceInstanceType_NetworkDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeviceInstanceType_NetworkDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetworkDevice != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetworkDevice.Size()))
-		n2, err := m.NetworkDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetworkDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetInterfaceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16875,29 +15037,36 @@ func (m *FleetInterfaceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetInterfaceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetInterfaceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
-		for _, msg := range m.Interfaces {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Interfaces) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Interfaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetDeviceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16905,29 +15074,36 @@ func (m *FleetDeviceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetDeviceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetDeviceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Devices) > 0 {
-		for _, msg := range m.Devices {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Devices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Devices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16935,29 +15111,36 @@ func (m *StorageDeviceOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) 
 }
 
 func (m *StorageDeviceOpenebsEnterpriseType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceOpenebsEnterpriseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.MayastorPools) > 0 {
-		for _, msg := range m.MayastorPools {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.MayastorPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.MayastorPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OpenebsMayastorPoolType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -16965,44 +15148,45 @@ func (m *OpenebsMayastorPoolType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OpenebsMayastorPoolType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OpenebsMayastorPoolType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.PoolName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PoolName)))
-		i += copy(dAtA[i:], m.PoolName)
-	}
-	if len(m.Node) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Node)))
-		i += copy(dAtA[i:], m.Node)
-	}
 	if len(m.PoolDiskDevices) > 0 {
-		for _, s := range m.PoolDiskDevices {
+		for iNdEx := len(m.PoolDiskDevices) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.PoolDiskDevices[iNdEx])
+			copy(dAtA[i:], m.PoolDiskDevices[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.PoolDiskDevices[iNdEx])))
+			i--
 			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	if len(m.Node) > 0 {
+		i -= len(m.Node)
+		copy(dAtA[i:], m.Node)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Node)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.PoolName) > 0 {
+		i -= len(m.PoolName)
+		copy(dAtA[i:], m.PoolName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PoolName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceDellIsilonF800Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17010,108 +15194,148 @@ func (m *StorageDeviceDellIsilonF800Type) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageDeviceDellIsilonF800Type) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceDellIsilonF800Type) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Username) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
-		i += copy(dAtA[i:], m.Username)
-	}
-	if m.Password != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Password.Size()))
-		n3, err := m.Password.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
-	}
-	if m.HttpsChoice != nil {
-		nn4, err := m.HttpsChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn4
-	}
-	if m.AddressChoice != nil {
-		nn5, err := m.AddressChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn5
-	}
-	if m.ApiServerPort != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ApiServerPort))
-	}
-	if len(m.IscsiAccessZone) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.IscsiAccessZone)))
-		i += copy(dAtA[i:], m.IscsiAccessZone)
+	if len(m.BasePath) > 0 {
+		i -= len(m.BasePath)
+		copy(dAtA[i:], m.BasePath)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BasePath)))
+		i--
+		dAtA[i] = 0x62
 	}
 	if len(m.VolumePrefix) > 0 {
-		dAtA[i] = 0x5a
-		i++
+		i -= len(m.VolumePrefix)
+		copy(dAtA[i:], m.VolumePrefix)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolumePrefix)))
-		i += copy(dAtA[i:], m.VolumePrefix)
+		i--
+		dAtA[i] = 0x5a
 	}
-	if len(m.BasePath) > 0 {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BasePath)))
-		i += copy(dAtA[i:], m.BasePath)
+	if len(m.IscsiAccessZone) > 0 {
+		i -= len(m.IscsiAccessZone)
+		copy(dAtA[i:], m.IscsiAccessZone)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.IscsiAccessZone)))
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	if m.ApiServerPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ApiServerPort))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.AddressChoice != nil {
+		{
+			size := m.AddressChoice.Size()
+			i -= size
+			if _, err := m.AddressChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.HttpsChoice != nil {
+		{
+			size := m.HttpsChoice.Size()
+			i -= size
+			if _, err := m.HttpsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceDellIsilonF800Type_SecureNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceDellIsilonF800Type_SecureNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SecureNetwork != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SecureNetwork.Size()))
-		n6, err := m.SecureNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SecureNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceDellIsilonF800Type_TrustedCaUrl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x2a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceDellIsilonF800Type_TrustedCaUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.TrustedCaUrl)
+	copy(dAtA[i:], m.TrustedCaUrl)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaUrl)))
-	i += copy(dAtA[i:], m.TrustedCaUrl)
-	return i, nil
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceDellIsilonF800Type_ApiServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x3a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceDellIsilonF800Type_ApiServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ApiServerName)
+	copy(dAtA[i:], m.ApiServerName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiServerName)))
-	i += copy(dAtA[i:], m.ApiServerName)
-	return i, nil
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceDellIsilonF800Type_ApiServerIpAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceDellIsilonF800Type_ApiServerIpAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ApiServerIpAddress)
+	copy(dAtA[i:], m.ApiServerIpAddress)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiServerIpAddress)))
-	i += copy(dAtA[i:], m.ApiServerIpAddress)
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceHPENimbusStorageAf40Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17119,66 +15343,77 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Marshal() (dAtA []byte, err erro
 }
 
 func (m *StorageDeviceHPENimbusStorageAf40Type) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceHPENimbusStorageAf40Type) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageServerName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageServerName)))
-		i += copy(dAtA[i:], m.StorageServerName)
-	}
-	if len(m.StorageServerIpAddress) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageServerIpAddress)))
-		i += copy(dAtA[i:], m.StorageServerIpAddress)
-	}
-	if m.ApiServerPort != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ApiServerPort))
-	}
-	if len(m.Username) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
-		i += copy(dAtA[i:], m.Username)
-	}
-	if m.Password != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Password.Size()))
-		n7, err := m.Password.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-	}
-	if len(m.PerfPolicy) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PerfPolicy)))
-		i += copy(dAtA[i:], m.PerfPolicy)
+	if m.LimitMbps != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LimitMbps))
+		i--
+		dAtA[i] = 0x40
 	}
 	if m.LimitIops != 0 {
-		dAtA[i] = 0x38
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.LimitIops))
+		i--
+		dAtA[i] = 0x38
 	}
-	if m.LimitMbps != 0 {
-		dAtA[i] = 0x40
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LimitMbps))
+	if len(m.PerfPolicy) > 0 {
+		i -= len(m.PerfPolicy)
+		copy(dAtA[i:], m.PerfPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PerfPolicy)))
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ApiServerPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ApiServerPort))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.StorageServerIpAddress) > 0 {
+		i -= len(m.StorageServerIpAddress)
+		copy(dAtA[i:], m.StorageServerIpAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageServerIpAddress)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.StorageServerName) > 0 {
+		i -= len(m.StorageServerName)
+		copy(dAtA[i:], m.StorageServerName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageServerName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDevicePureStorageServiceOrchestratorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17186,53 +15421,61 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Marshal() (dAtA []byte
 }
 
 func (m *StorageDevicePureStorageServiceOrchestratorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDevicePureStorageServiceOrchestratorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ClusterId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClusterId)))
-		i += copy(dAtA[i:], m.ClusterId)
-	}
-	if m.EnableStorageTopology {
-		dAtA[i] = 0x10
-		i++
-		if m.EnableStorageTopology {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.Arrays != nil {
+		{
+			size, err := m.Arrays.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i++
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.EnableStrictTopology {
-		dAtA[i] = 0x18
-		i++
+		i--
 		if m.EnableStrictTopology {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.Arrays != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Arrays.Size()))
-		n8, err := m.Arrays.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.EnableStorageTopology {
+		i--
+		if m.EnableStorageTopology {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.ClusterId) > 0 {
+		i -= len(m.ClusterId)
+		copy(dAtA[i:], m.ClusterId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClusterId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PsoArrayConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17240,37 +15483,46 @@ func (m *PsoArrayConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PsoArrayConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PsoArrayConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.FlashArray != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FlashArray.Size()))
-		n9, err := m.FlashArray.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n9
-	}
 	if m.FlashBlade != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FlashBlade.Size()))
-		n10, err := m.FlashBlade.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FlashBlade.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.FlashArray != nil {
+		{
+			size, err := m.FlashArray.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FlashBladeType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17278,45 +15530,53 @@ func (m *FlashBladeType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FlashBladeType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if len(m.FlashBlades) > 0 {
+		for iNdEx := len(m.FlashBlades) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FlashBlades[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ExportRules) > 0 {
+		i -= len(m.ExportRules)
+		copy(dAtA[i:], m.ExportRules)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExportRules)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.EnableSnapshotDirectory {
-		dAtA[i] = 0x8
-		i++
+		i--
 		if m.EnableSnapshotDirectory {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x8
 	}
-	if len(m.ExportRules) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExportRules)))
-		i += copy(dAtA[i:], m.ExportRules)
-	}
-	if len(m.FlashBlades) > 0 {
-		for _, msg := range m.FlashBlades {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FlashBladeEndpoint) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17324,95 +15584,132 @@ func (m *FlashBladeEndpoint) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FlashBladeEndpoint) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.MgmtEndpoint != nil {
-		nn11, err := m.MgmtEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn11
-	}
-	if m.ApiToken != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ApiToken.Size()))
-		n12, err := m.ApiToken.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n12
-	}
-	if m.NfsEndpoint != nil {
-		nn13, err := m.NfsEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn13
-	}
 	if len(m.Lables) > 0 {
 		keysForLables := make([]string, 0, len(m.Lables))
-		for k, _ := range m.Lables {
+		for k := range m.Lables {
 			keysForLables = append(keysForLables, string(k))
 		}
-		sortkeys.Strings(keysForLables)
-		for _, k := range keysForLables {
-			dAtA[i] = 0x42
-			i++
-			v := m.Lables[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLables)
+		for iNdEx := len(keysForLables) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Lables[string(keysForLables[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLables[iNdEx])
+			copy(dAtA[i:], keysForLables[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLables[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x42
 		}
 	}
-	return i, nil
+	if m.NfsEndpoint != nil {
+		{
+			size := m.NfsEndpoint.Size()
+			i -= size
+			if _, err := m.NfsEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ApiToken != nil {
+		{
+			size, err := m.ApiToken.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.MgmtEndpoint != nil {
+		{
+			size := m.MgmtEndpoint.Size()
+			i -= size
+			if _, err := m.MgmtEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FlashBladeEndpoint_MgmtIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeEndpoint_MgmtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MgmtIp)
+	copy(dAtA[i:], m.MgmtIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.MgmtIp)))
-	i += copy(dAtA[i:], m.MgmtIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *FlashBladeEndpoint_MgmtDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeEndpoint_MgmtDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MgmtDnsName)
+	copy(dAtA[i:], m.MgmtDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.MgmtDnsName)))
-	i += copy(dAtA[i:], m.MgmtDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *FlashBladeEndpoint_NfsEndpointIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x32
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeEndpoint_NfsEndpointIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.NfsEndpointIp)
+	copy(dAtA[i:], m.NfsEndpointIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.NfsEndpointIp)))
-	i += copy(dAtA[i:], m.NfsEndpointIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x32
+	return len(dAtA) - i, nil
 }
 func (m *FlashBladeEndpoint_NfsEndpointDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x3a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashBladeEndpoint_NfsEndpointDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.NfsEndpointDnsName)
+	copy(dAtA[i:], m.NfsEndpointDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.NfsEndpointDnsName)))
-	i += copy(dAtA[i:], m.NfsEndpointDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
 }
 func (m *FlashArrayType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17420,77 +15717,81 @@ func (m *FlashArrayType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FlashArrayType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashArrayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SanType) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SanType)))
-		i += copy(dAtA[i:], m.SanType)
-	}
-	if len(m.DefaultFsType) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.DefaultFsType)))
-		i += copy(dAtA[i:], m.DefaultFsType)
-	}
-	if len(m.DefaultFsOpt) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.DefaultFsOpt)))
-		i += copy(dAtA[i:], m.DefaultFsOpt)
-	}
-	if len(m.DefaultMountOpts) > 0 {
-		for _, s := range m.DefaultMountOpts {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if len(m.FlashArrays) > 0 {
+		for iNdEx := len(m.FlashArrays) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FlashArrays[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i--
+			dAtA[i] = 0x3a
 		}
 	}
+	if m.IscsiLoginTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IscsiLoginTimeout))
+		i--
+		dAtA[i] = 0x30
+	}
 	if m.DisablePreemptAttachments {
-		dAtA[i] = 0x28
-		i++
+		i--
 		if m.DisablePreemptAttachments {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x28
 	}
-	if m.IscsiLoginTimeout != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IscsiLoginTimeout))
-	}
-	if len(m.FlashArrays) > 0 {
-		for _, msg := range m.FlashArrays {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+	if len(m.DefaultMountOpts) > 0 {
+		for iNdEx := len(m.DefaultMountOpts) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.DefaultMountOpts[iNdEx])
+			copy(dAtA[i:], m.DefaultMountOpts[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.DefaultMountOpts[iNdEx])))
+			i--
+			dAtA[i] = 0x22
 		}
 	}
-	return i, nil
+	if len(m.DefaultFsOpt) > 0 {
+		i -= len(m.DefaultFsOpt)
+		copy(dAtA[i:], m.DefaultFsOpt)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DefaultFsOpt)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.DefaultFsType) > 0 {
+		i -= len(m.DefaultFsType)
+		copy(dAtA[i:], m.DefaultFsType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DefaultFsType)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SanType) > 0 {
+		i -= len(m.SanType)
+		copy(dAtA[i:], m.SanType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SanType)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FlashArrayEndpoint) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17498,72 +15799,95 @@ func (m *FlashArrayEndpoint) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FlashArrayEndpoint) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashArrayEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.MgmtEndpoint != nil {
-		nn14, err := m.MgmtEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn14
-	}
-	if m.ApiToken != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ApiToken.Size()))
-		n15, err := m.ApiToken.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
 	if len(m.Labels) > 0 {
 		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
+		for k := range m.Labels {
 			keysForLabels = append(keysForLabels, string(k))
 		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0x2a
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x2a
 		}
 	}
-	return i, nil
+	if m.ApiToken != nil {
+		{
+			size, err := m.ApiToken.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.MgmtEndpoint != nil {
+		{
+			size := m.MgmtEndpoint.Size()
+			i -= size
+			if _, err := m.MgmtEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FlashArrayEndpoint_MgmtIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashArrayEndpoint_MgmtIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MgmtIp)
+	copy(dAtA[i:], m.MgmtIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.MgmtIp)))
-	i += copy(dAtA[i:], m.MgmtIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *FlashArrayEndpoint_MgmtDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FlashArrayEndpoint_MgmtDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.MgmtDnsName)
+	copy(dAtA[i:], m.MgmtDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.MgmtDnsName)))
-	i += copy(dAtA[i:], m.MgmtDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappTridentType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17571,52 +15895,73 @@ func (m *StorageDeviceNetappTridentType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageDeviceNetappTridentType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappTridentType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.BackendChoice != nil {
-		nn16, err := m.BackendChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.BackendChoice.Size()
+			i -= size
+			if _, err := m.BackendChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn16
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceNetappTridentType_NetappBackendOntapNas) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappTridentType_NetappBackendOntapNas) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetappBackendOntapNas != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetappBackendOntapNas.Size()))
-		n17, err := m.NetappBackendOntapNas.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetappBackendOntapNas.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappTridentType_NetappBackendOntapSan) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappTridentType_NetappBackendOntapSan) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetappBackendOntapSan != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetappBackendOntapSan.Size()))
-		n18, err := m.NetappBackendOntapSan.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetappBackendOntapSan.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17624,242 +15969,309 @@ func (m *StorageDeviceNetappBackendOntapSanType) Marshal() (dAtA []byte, err err
 }
 
 func (m *StorageDeviceNetappBackendOntapSanType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageDriverName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDriverName)))
-		i += copy(dAtA[i:], m.StorageDriverName)
-	}
-	if m.ManagementLif != nil {
-		nn19, err := m.ManagementLif.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn19
-	}
-	if m.DataLif != nil {
-		nn20, err := m.DataLif.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn20
-	}
-	if len(m.Svm) > 0 {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Svm)))
-		i += copy(dAtA[i:], m.Svm)
-	}
-	if len(m.Username) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
-		i += copy(dAtA[i:], m.Username)
-	}
-	if m.Password != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Password.Size()))
-		n21, err := m.Password.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	if m.ChapChoice != nil {
-		nn22, err := m.ChapChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn22
-	}
-	if len(m.IgroupName) > 0 {
-		dAtA[i] = 0x8a
-		i++
+	if len(m.TrustedCaCertificate) > 0 {
+		i -= len(m.TrustedCaCertificate)
+		copy(dAtA[i:], m.TrustedCaCertificate)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaCertificate)))
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.IgroupName)))
-		i += copy(dAtA[i:], m.IgroupName)
+		i--
+		dAtA[i] = 0xda
 	}
-	if len(m.StoragePrefix) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePrefix)))
-		i += copy(dAtA[i:], m.StoragePrefix)
-	}
-	if m.LimitAggregateUsage != 0 {
-		dAtA[i] = 0x98
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LimitAggregateUsage))
-	}
-	if m.LimitVolumeSize != 0 {
-		dAtA[i] = 0xa0
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LimitVolumeSize))
-	}
-	if m.VolumeDefaults != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VolumeDefaults.Size()))
-		n23, err := m.VolumeDefaults.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	if len(m.Labels) > 0 {
-		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
-			keysForLabels = append(keysForLabels, string(k))
-		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0xb2
-			i++
-			dAtA[i] = 0x1
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	if len(m.Region) > 0 {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
-		i += copy(dAtA[i:], m.Region)
-	}
-	if len(m.Storage) > 0 {
-		for _, msg := range m.Storage {
-			dAtA[i] = 0xc2
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ClientPrivateKey != nil {
+		{
+			size, err := m.ClientPrivateKey.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
 	if len(m.ClientCertificate) > 0 {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
+		i -= len(m.ClientCertificate)
+		copy(dAtA[i:], m.ClientCertificate)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientCertificate)))
-		i += copy(dAtA[i:], m.ClientCertificate)
-	}
-	if m.ClientPrivateKey != nil {
-		dAtA[i] = 0xd2
-		i++
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientPrivateKey.Size()))
-		n24, err := m.ClientPrivateKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		i--
+		dAtA[i] = 0xca
+	}
+	if len(m.Storage) > 0 {
+		for iNdEx := len(m.Storage) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Storage[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xc2
 		}
-		i += n24
 	}
-	if len(m.TrustedCaCertificate) > 0 {
-		dAtA[i] = 0xda
-		i++
+	if len(m.Region) > 0 {
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaCertificate)))
-		i += copy(dAtA[i:], m.TrustedCaCertificate)
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if m.VolumeDefaults != nil {
+		{
+			size, err := m.VolumeDefaults.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	if m.LimitVolumeSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LimitVolumeSize))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa0
+	}
+	if m.LimitAggregateUsage != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LimitAggregateUsage))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x98
+	}
+	if len(m.StoragePrefix) > 0 {
+		i -= len(m.StoragePrefix)
+		copy(dAtA[i:], m.StoragePrefix)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePrefix)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if len(m.IgroupName) > 0 {
+		i -= len(m.IgroupName)
+		copy(dAtA[i:], m.IgroupName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.IgroupName)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if m.ChapChoice != nil {
+		{
+			size := m.ChapChoice.Size()
+			i -= size
+			if _, err := m.ChapChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Svm) > 0 {
+		i -= len(m.Svm)
+		copy(dAtA[i:], m.Svm)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Svm)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.DataLif != nil {
+		{
+			size := m.DataLif.Size()
+			i -= size
+			if _, err := m.DataLif.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ManagementLif != nil {
+		{
+			size := m.ManagementLif.Size()
+			i -= size
+			if _, err := m.ManagementLif.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.StorageDriverName) > 0 {
+		i -= len(m.StorageDriverName)
+		copy(dAtA[i:], m.StorageDriverName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDriverName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ManagementLifIp)
+	copy(dAtA[i:], m.ManagementLifIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ManagementLifIp)))
-	i += copy(dAtA[i:], m.ManagementLifIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x2a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ManagementLifDnsName)
+	copy(dAtA[i:], m.ManagementLifDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ManagementLifDnsName)))
-	i += copy(dAtA[i:], m.ManagementLifDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType_DataLifIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x3a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_DataLifIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DataLifIp)
+	copy(dAtA[i:], m.DataLifIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.DataLifIp)))
-	i += copy(dAtA[i:], m.DataLifIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType_DataLifDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_DataLifDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DataLifDnsName)
+	copy(dAtA[i:], m.DataLifDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.DataLifDnsName)))
-	i += copy(dAtA[i:], m.DataLifDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType_NoChap) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_NoChap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoChap != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoChap.Size()))
-		n25, err := m.NoChap.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoChap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapSanType_UseChap) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapSanType_UseChap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UseChap != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UseChap.Size()))
-		n26, err := m.UseChap.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UseChap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n26
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *DeviceNetappBackendOntapSanChapType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17867,49 +16279,60 @@ func (m *DeviceNetappBackendOntapSanChapType) Marshal() (dAtA []byte, err error)
 }
 
 func (m *DeviceNetappBackendOntapSanChapType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeviceNetappBackendOntapSanChapType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ChapUsername) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ChapUsername)))
-		i += copy(dAtA[i:], m.ChapUsername)
-	}
-	if len(m.ChapTargetUsername) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ChapTargetUsername)))
-		i += copy(dAtA[i:], m.ChapTargetUsername)
+	if m.ChapTargetInitiatorSecret != nil {
+		{
+			size, err := m.ChapTargetInitiatorSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.ChapInitiatorSecret != nil {
+		{
+			size, err := m.ChapInitiatorSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ChapInitiatorSecret.Size()))
-		n27, err := m.ChapInitiatorSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n27
 	}
-	if m.ChapTargetInitiatorSecret != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ChapTargetInitiatorSecret.Size()))
-		n28, err := m.ChapTargetInitiatorSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n28
+	if len(m.ChapTargetUsername) > 0 {
+		i -= len(m.ChapTargetUsername)
+		copy(dAtA[i:], m.ChapTargetUsername)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ChapTargetUsername)))
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.ChapUsername) > 0 {
+		i -= len(m.ChapUsername)
+		copy(dAtA[i:], m.ChapUsername)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ChapUsername)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceNetappBackendOntapNasType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -17917,231 +16340,287 @@ func (m *StorageDeviceNetappBackendOntapNasType) Marshal() (dAtA []byte, err err
 }
 
 func (m *StorageDeviceNetappBackendOntapNasType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapNasType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageDriverName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDriverName)))
-		i += copy(dAtA[i:], m.StorageDriverName)
+	if len(m.TrustedCaCertificate) > 0 {
+		i -= len(m.TrustedCaCertificate)
+		copy(dAtA[i:], m.TrustedCaCertificate)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaCertificate)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	if len(m.BackendName) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BackendName)))
-		i += copy(dAtA[i:], m.BackendName)
-	}
-	if m.ManagementLif != nil {
-		nn29, err := m.ManagementLif.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.ClientPrivateKey != nil {
+		{
+			size, err := m.ClientPrivateKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn29
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	if m.DataLif != nil {
-		nn30, err := m.DataLif.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.ClientCertificate) > 0 {
+		i -= len(m.ClientCertificate)
+		copy(dAtA[i:], m.ClientCertificate)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientCertificate)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	if len(m.Storage) > 0 {
+		for iNdEx := len(m.Storage) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Storage[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xaa
 		}
-		i += nn30
 	}
-	if len(m.Svm) > 0 {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Svm)))
-		i += copy(dAtA[i:], m.Svm)
+	if len(m.Region) > 0 {
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	if len(m.Username) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
-		i += copy(dAtA[i:], m.Username)
-	}
-	if m.Password != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Password.Size()))
-		n31, err := m.Password.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
 		}
-		i += n31
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x9a
+		}
+	}
+	if m.VolumeDefaults != nil {
+		{
+			size, err := m.VolumeDefaults.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if len(m.NfsMountOptions) > 0 {
+		i -= len(m.NfsMountOptions)
+		copy(dAtA[i:], m.NfsMountOptions)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.NfsMountOptions)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if len(m.LimitVolumeSize) > 0 {
+		i -= len(m.LimitVolumeSize)
+		copy(dAtA[i:], m.LimitVolumeSize)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LimitVolumeSize)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	if len(m.LimitAggregateUsage) > 0 {
+		i -= len(m.LimitAggregateUsage)
+		copy(dAtA[i:], m.LimitAggregateUsage)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LimitAggregateUsage)))
+		i--
+		dAtA[i] = 0x7a
+	}
+	if len(m.StoragePrefix) > 0 {
+		i -= len(m.StoragePrefix)
+		copy(dAtA[i:], m.StoragePrefix)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePrefix)))
+		i--
+		dAtA[i] = 0x72
+	}
+	if m.AutoExportCidrs != nil {
+		{
+			size, err := m.AutoExportCidrs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
 	}
 	if m.AutoExportPolicy {
-		dAtA[i] = 0x60
-		i++
+		i--
 		if m.AutoExportPolicy {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x60
 	}
-	if m.AutoExportCidrs != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AutoExportCidrs.Size()))
-		n32, err := m.AutoExportCidrs.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n32
-	}
-	if len(m.StoragePrefix) > 0 {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePrefix)))
-		i += copy(dAtA[i:], m.StoragePrefix)
-	}
-	if len(m.LimitAggregateUsage) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.LimitAggregateUsage)))
-		i += copy(dAtA[i:], m.LimitAggregateUsage)
-	}
-	if len(m.LimitVolumeSize) > 0 {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.LimitVolumeSize)))
-		i += copy(dAtA[i:], m.LimitVolumeSize)
-	}
-	if len(m.NfsMountOptions) > 0 {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.NfsMountOptions)))
-		i += copy(dAtA[i:], m.NfsMountOptions)
-	}
-	if m.VolumeDefaults != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VolumeDefaults.Size()))
-		n33, err := m.VolumeDefaults.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n33
-	}
-	if len(m.Labels) > 0 {
-		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
-			keysForLabels = append(keysForLabels, string(k))
-		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0x9a
-			i++
-			dAtA[i] = 0x1
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	if len(m.Region) > 0 {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
-		i += copy(dAtA[i:], m.Region)
-	}
-	if len(m.Storage) > 0 {
-		for _, msg := range m.Storage {
-			dAtA[i] = 0xaa
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Svm) > 0 {
+		i -= len(m.Svm)
+		copy(dAtA[i:], m.Svm)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Svm)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.DataLif != nil {
+		{
+			size := m.DataLif.Size()
+			i -= size
+			if _, err := m.DataLif.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
-	if len(m.ClientCertificate) > 0 {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientCertificate)))
-		i += copy(dAtA[i:], m.ClientCertificate)
-	}
-	if m.ClientPrivateKey != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientPrivateKey.Size()))
-		n34, err := m.ClientPrivateKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.ManagementLif != nil {
+		{
+			size := m.ManagementLif.Size()
+			i -= size
+			if _, err := m.ManagementLif.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n34
 	}
-	if len(m.TrustedCaCertificate) > 0 {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaCertificate)))
-		i += copy(dAtA[i:], m.TrustedCaCertificate)
+	if len(m.BackendName) > 0 {
+		i -= len(m.BackendName)
+		copy(dAtA[i:], m.BackendName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BackendName)))
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.StorageDriverName) > 0 {
+		i -= len(m.StorageDriverName)
+		copy(dAtA[i:], m.StorageDriverName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDriverName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ManagementLifIp)
+	copy(dAtA[i:], m.ManagementLifIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ManagementLifIp)))
-	i += copy(dAtA[i:], m.ManagementLifIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x2a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ManagementLifDnsName)
+	copy(dAtA[i:], m.ManagementLifDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ManagementLifDnsName)))
-	i += copy(dAtA[i:], m.ManagementLifDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapNasType_DataLifIp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x3a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapNasType_DataLifIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DataLifIp)
+	copy(dAtA[i:], m.DataLifIp)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.DataLifIp)))
-	i += copy(dAtA[i:], m.DataLifIp)
-	return i, nil
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
 }
 func (m *StorageDeviceNetappBackendOntapNasType_DataLifDnsName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageDeviceNetappBackendOntapNasType_DataLifDnsName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DataLifDnsName)
+	copy(dAtA[i:], m.DataLifDnsName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.DataLifDnsName)))
-	i += copy(dAtA[i:], m.DataLifDnsName)
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
 }
 func (m *OntapVolumeDefaults) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18149,125 +16628,157 @@ func (m *OntapVolumeDefaults) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OntapVolumeDefaults) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OntapVolumeDefaults) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SpaceReserve) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SpaceReserve)))
-		i += copy(dAtA[i:], m.SpaceReserve)
-	}
-	if len(m.SnapshotPolicy) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SnapshotPolicy)))
-		i += copy(dAtA[i:], m.SnapshotPolicy)
-	}
-	if len(m.SnapshotReserve) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SnapshotReserve)))
-		i += copy(dAtA[i:], m.SnapshotReserve)
-	}
-	if m.SplitOnClone {
-		dAtA[i] = 0x20
-		i++
-		if m.SplitOnClone {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
+	if m.QosPolicyChoice != nil {
+		{
+			size := m.QosPolicyChoice.Size()
+			i -= size
+			if _, err := m.QosPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i++
 	}
-	if m.Encryption {
-		dAtA[i] = 0x28
-		i++
-		if m.Encryption {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
+	if len(m.TieringPolicy) > 0 {
+		i -= len(m.TieringPolicy)
+		copy(dAtA[i:], m.TieringPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TieringPolicy)))
+		i--
+		dAtA[i] = 0x52
 	}
-	if m.UnixPermissions != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UnixPermissions))
+	if len(m.SecurityStyle) > 0 {
+		i -= len(m.SecurityStyle)
+		copy(dAtA[i:], m.SecurityStyle)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SecurityStyle)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.ExportPolicy) > 0 {
+		i -= len(m.ExportPolicy)
+		copy(dAtA[i:], m.ExportPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExportPolicy)))
+		i--
+		dAtA[i] = 0x42
 	}
 	if m.SnapshotDir {
-		dAtA[i] = 0x38
-		i++
+		i--
 		if m.SnapshotDir {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x38
 	}
-	if len(m.ExportPolicy) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExportPolicy)))
-		i += copy(dAtA[i:], m.ExportPolicy)
+	if m.UnixPermissions != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UnixPermissions))
+		i--
+		dAtA[i] = 0x30
 	}
-	if len(m.SecurityStyle) > 0 {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SecurityStyle)))
-		i += copy(dAtA[i:], m.SecurityStyle)
-	}
-	if len(m.TieringPolicy) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TieringPolicy)))
-		i += copy(dAtA[i:], m.TieringPolicy)
-	}
-	if m.QosPolicyChoice != nil {
-		nn35, err := m.QosPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Encryption {
+		i--
+		if m.Encryption {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
 		}
-		i += nn35
+		i--
+		dAtA[i] = 0x28
 	}
-	return i, nil
+	if m.SplitOnClone {
+		i--
+		if m.SplitOnClone {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.SnapshotReserve) > 0 {
+		i -= len(m.SnapshotReserve)
+		copy(dAtA[i:], m.SnapshotReserve)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SnapshotReserve)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.SnapshotPolicy) > 0 {
+		i -= len(m.SnapshotPolicy)
+		copy(dAtA[i:], m.SnapshotPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SnapshotPolicy)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SpaceReserve) > 0 {
+		i -= len(m.SpaceReserve)
+		copy(dAtA[i:], m.SpaceReserve)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SpaceReserve)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *OntapVolumeDefaults_NoQos) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OntapVolumeDefaults_NoQos) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoQos != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoQos.Size()))
-		n36, err := m.NoQos.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoQos.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *OntapVolumeDefaults_QosPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x6a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OntapVolumeDefaults_QosPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.QosPolicy)
+	copy(dAtA[i:], m.QosPolicy)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.QosPolicy)))
-	i += copy(dAtA[i:], m.QosPolicy)
-	return i, nil
+	i--
+	dAtA[i] = 0x6a
+	return len(dAtA) - i, nil
 }
 func (m *OntapVolumeDefaults_AdaptiveQosPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x72
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OntapVolumeDefaults_AdaptiveQosPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.AdaptiveQosPolicy)
+	copy(dAtA[i:], m.AdaptiveQosPolicy)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.AdaptiveQosPolicy)))
-	i += copy(dAtA[i:], m.AdaptiveQosPolicy)
-	return i, nil
+	i--
+	dAtA[i] = 0x72
+	return len(dAtA) - i, nil
 }
 func (m *OntapVirtualStoragePoolType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18275,55 +16786,65 @@ func (m *OntapVirtualStoragePoolType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OntapVirtualStoragePoolType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OntapVirtualStoragePoolType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Labels) > 0 {
-		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
-			keysForLabels = append(keysForLabels, string(k))
+	if m.VolumeDefaults != nil {
+		{
+			size, err := m.VolumeDefaults.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0xa
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Zone) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Zone)
+		copy(dAtA[i:], m.Zone)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Zone)))
-		i += copy(dAtA[i:], m.Zone)
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.VolumeDefaults != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VolumeDefaults.Size()))
-		n37, err := m.VolumeDefaults.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
 		}
-		i += n37
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetStorageDeviceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18331,108 +16852,146 @@ func (m *FleetStorageDeviceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStorageDeviceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageDevice) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDevice)))
-		i += copy(dAtA[i:], m.StorageDevice)
+	if m.DeviceChoice != nil {
+		{
+			size := m.DeviceChoice.Size()
+			i -= size
+			if _, err := m.DeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if len(m.AdvancedAdvancedParameters) > 0 {
 		keysForAdvancedAdvancedParameters := make([]string, 0, len(m.AdvancedAdvancedParameters))
-		for k, _ := range m.AdvancedAdvancedParameters {
+		for k := range m.AdvancedAdvancedParameters {
 			keysForAdvancedAdvancedParameters = append(keysForAdvancedAdvancedParameters, string(k))
 		}
-		sortkeys.Strings(keysForAdvancedAdvancedParameters)
-		for _, k := range keysForAdvancedAdvancedParameters {
-			dAtA[i] = 0x2a
-			i++
-			v := m.AdvancedAdvancedParameters[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedAdvancedParameters)
+		for iNdEx := len(keysForAdvancedAdvancedParameters) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.AdvancedAdvancedParameters[string(keysForAdvancedAdvancedParameters[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForAdvancedAdvancedParameters[iNdEx])
+			copy(dAtA[i:], keysForAdvancedAdvancedParameters[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForAdvancedAdvancedParameters[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x2a
 		}
 	}
-	if m.DeviceChoice != nil {
-		nn38, err := m.DeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn38
+	if len(m.StorageDevice) > 0 {
+		i -= len(m.StorageDevice)
+		copy(dAtA[i:], m.StorageDevice)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDevice)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetStorageDeviceType_NetappTrident) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceType_NetappTrident) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetappTrident != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetappTrident.Size()))
-		n39, err := m.NetappTrident.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetappTrident.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n39
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageDeviceType_PureServiceOrchestrator) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceType_PureServiceOrchestrator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PureServiceOrchestrator != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PureServiceOrchestrator.Size()))
-		n40, err := m.PureServiceOrchestrator.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PureServiceOrchestrator.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n40
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageDeviceType_OpenebsEnterprise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceType_OpenebsEnterprise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OpenebsEnterprise != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OpenebsEnterprise.Size()))
-		n41, err := m.OpenebsEnterprise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OpenebsEnterprise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n41
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageDeviceType_CustomStorage) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceType_CustomStorage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorage != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorage.Size()))
-		n42, err := m.CustomStorage.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorage.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n42
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageDeviceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18440,29 +16999,36 @@ func (m *FleetStorageDeviceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStorageDeviceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageDeviceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StorageDevices) > 0 {
-		for _, msg := range m.StorageDevices {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StorageDevices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StorageDevices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassDellIsilonF800Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18470,62 +17036,83 @@ func (m *StorageClassDellIsilonF800Type) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassDellIsilonF800Type) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassDellIsilonF800Type) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.HttpsChoice != nil {
-		nn43, err := m.HttpsChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn43
-	}
-	if len(m.IscsiAccessZone) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.IscsiAccessZone)))
-		i += copy(dAtA[i:], m.IscsiAccessZone)
-	}
-	if len(m.BasePath) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BasePath)))
-		i += copy(dAtA[i:], m.BasePath)
-	}
 	if m.RootClientEnable {
-		dAtA[i] = 0x30
-		i++
+		i--
 		if m.RootClientEnable {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if len(m.BasePath) > 0 {
+		i -= len(m.BasePath)
+		copy(dAtA[i:], m.BasePath)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BasePath)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.IscsiAccessZone) > 0 {
+		i -= len(m.IscsiAccessZone)
+		copy(dAtA[i:], m.IscsiAccessZone)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.IscsiAccessZone)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.HttpsChoice != nil {
+		{
+			size := m.HttpsChoice.Size()
+			i -= size
+			if _, err := m.HttpsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassDellIsilonF800Type_AzServiceName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassDellIsilonF800Type_AzServiceName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.AzServiceName)
+	copy(dAtA[i:], m.AzServiceName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.AzServiceName)))
-	i += copy(dAtA[i:], m.AzServiceName)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *StorageClassDellIsilonF800Type_AzServiceIpAddress) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassDellIsilonF800Type_AzServiceIpAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.AzServiceIpAddress)
+	copy(dAtA[i:], m.AzServiceIpAddress)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.AzServiceIpAddress)))
-	i += copy(dAtA[i:], m.AzServiceIpAddress)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *StorageClassHPENimbusStorageAf40Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18533,33 +17120,39 @@ func (m *StorageClassHPENimbusStorageAf40Type) Marshal() (dAtA []byte, err error
 }
 
 func (m *StorageClassHPENimbusStorageAf40Type) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassHPENimbusStorageAf40Type) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.PerfPolicy) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PerfPolicy)))
-		i += copy(dAtA[i:], m.PerfPolicy)
+	if m.LimitMbps != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LimitMbps))
+		i--
+		dAtA[i] = 0x18
 	}
 	if m.LimitIops != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.LimitIops))
+		i--
+		dAtA[i] = 0x10
 	}
-	if m.LimitMbps != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LimitMbps))
+	if len(m.PerfPolicy) > 0 {
+		i -= len(m.PerfPolicy)
+		copy(dAtA[i:], m.PerfPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PerfPolicy)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18567,28 +17160,34 @@ func (m *StorageClassOpenebsEnterpriseType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassOpenebsEnterpriseType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassOpenebsEnterpriseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
-	}
 	if m.Replication != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Replication))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.Protocol) > 0 {
+		i -= len(m.Protocol)
+		copy(dAtA[i:], m.Protocol)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassNetappTridentType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18596,45 +17195,53 @@ func (m *StorageClassNetappTridentType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassNetappTridentType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassNetappTridentType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if len(m.StoragePools) > 0 {
+		i -= len(m.StoragePools)
+		copy(dAtA[i:], m.StoragePools)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePools)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Selector) > 0 {
 		keysForSelector := make([]string, 0, len(m.Selector))
-		for k, _ := range m.Selector {
+		for k := range m.Selector {
 			keysForSelector = append(keysForSelector, string(k))
 		}
-		sortkeys.Strings(keysForSelector)
-		for _, k := range keysForSelector {
-			dAtA[i] = 0xa
-			i++
-			v := m.Selector[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForSelector)
+		for iNdEx := len(keysForSelector) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Selector[string(keysForSelector[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForSelector[iNdEx])
+			copy(dAtA[i:], keysForSelector[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForSelector[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	if len(m.StoragePools) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StoragePools)))
-		i += copy(dAtA[i:], m.StoragePools)
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassPureServiceOrchestratorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18642,34 +17249,41 @@ func (m *StorageClassPureServiceOrchestratorType) Marshal() (dAtA []byte, err er
 }
 
 func (m *StorageClassPureServiceOrchestratorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassPureServiceOrchestratorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Backend) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Backend)))
-		i += copy(dAtA[i:], m.Backend)
+	if len(m.BandwidthLimit) > 0 {
+		i -= len(m.BandwidthLimit)
+		copy(dAtA[i:], m.BandwidthLimit)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BandwidthLimit)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if m.IopsLimit != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.IopsLimit))
+		i--
+		dAtA[i] = 0x10
 	}
-	if len(m.BandwidthLimit) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BandwidthLimit)))
-		i += copy(dAtA[i:], m.BandwidthLimit)
+	if len(m.Backend) > 0 {
+		i -= len(m.Backend)
+		copy(dAtA[i:], m.Backend)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Backend)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageClassCustomType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18677,23 +17291,29 @@ func (m *StorageClassCustomType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageClassCustomType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageClassCustomType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Yaml) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.Yaml)
+		copy(dAtA[i:], m.Yaml)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Yaml)))
-		i += copy(dAtA[i:], m.Yaml)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetStorageClassType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18701,148 +17321,189 @@ func (m *FleetStorageClassType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStorageClassType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.StorageDevice) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDevice)))
-		i += copy(dAtA[i:], m.StorageDevice)
-	}
-	if len(m.Description) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
-	}
-	if m.DefaultStorageClass {
-		dAtA[i] = 0x18
-		i++
-		if m.DefaultStorageClass {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if len(m.AdvancedStorageParameters) > 0 {
-		keysForAdvancedStorageParameters := make([]string, 0, len(m.AdvancedStorageParameters))
-		for k, _ := range m.AdvancedStorageParameters {
-			keysForAdvancedStorageParameters = append(keysForAdvancedStorageParameters, string(k))
-		}
-		sortkeys.Strings(keysForAdvancedStorageParameters)
-		for _, k := range keysForAdvancedStorageParameters {
-			dAtA[i] = 0x3a
-			i++
-			v := m.AdvancedStorageParameters[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	if len(m.StorageClassName) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageClassName)))
-		i += copy(dAtA[i:], m.StorageClassName)
-	}
 	if m.DeviceChoice != nil {
-		nn44, err := m.DeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.DeviceChoice.Size()
+			i -= size
+			if _, err := m.DeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn44
-	}
-	if len(m.ReclaimPolicy) > 0 {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ReclaimPolicy)))
-		i += copy(dAtA[i:], m.ReclaimPolicy)
 	}
 	if m.AllowVolumeExpansion {
-		dAtA[i] = 0x68
-		i++
+		i--
 		if m.AllowVolumeExpansion {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x68
 	}
-	return i, nil
+	if len(m.ReclaimPolicy) > 0 {
+		i -= len(m.ReclaimPolicy)
+		copy(dAtA[i:], m.ReclaimPolicy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ReclaimPolicy)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.StorageClassName) > 0 {
+		i -= len(m.StorageClassName)
+		copy(dAtA[i:], m.StorageClassName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageClassName)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.AdvancedStorageParameters) > 0 {
+		keysForAdvancedStorageParameters := make([]string, 0, len(m.AdvancedStorageParameters))
+		for k := range m.AdvancedStorageParameters {
+			keysForAdvancedStorageParameters = append(keysForAdvancedStorageParameters, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedStorageParameters)
+		for iNdEx := len(keysForAdvancedStorageParameters) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.AdvancedStorageParameters[string(keysForAdvancedStorageParameters[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForAdvancedStorageParameters[iNdEx])
+			copy(dAtA[i:], keysForAdvancedStorageParameters[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForAdvancedStorageParameters[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if m.DefaultStorageClass {
+		i--
+		if m.DefaultStorageClass {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.StorageDevice) > 0 {
+		i -= len(m.StorageDevice)
+		copy(dAtA[i:], m.StorageDevice)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StorageDevice)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetStorageClassType_NetappTrident) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassType_NetappTrident) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetappTrident != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetappTrident.Size()))
-		n45, err := m.NetappTrident.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetappTrident.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n45
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageClassType_PureServiceOrchestrator) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassType_PureServiceOrchestrator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PureServiceOrchestrator != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PureServiceOrchestrator.Size()))
-		n46, err := m.PureServiceOrchestrator.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PureServiceOrchestrator.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n46
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageClassType_OpenebsEnterprise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassType_OpenebsEnterprise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OpenebsEnterprise != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OpenebsEnterprise.Size()))
-		n47, err := m.OpenebsEnterprise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OpenebsEnterprise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n47
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageClassType_CustomStorage) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassType_CustomStorage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorage != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorage.Size()))
-		n48, err := m.CustomStorage.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorage.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n48
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStorageClassListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18850,29 +17511,36 @@ func (m *FleetStorageClassListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStorageClassListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageClassListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StorageClasses) > 0 {
-		for _, msg := range m.StorageClasses {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StorageClasses) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StorageClasses[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *BondLacpType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18880,22 +17548,27 @@ func (m *BondLacpType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BondLacpType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BondLacpType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Rate != 0 {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Rate))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetBondDeviceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18903,83 +17576,99 @@ func (m *FleetBondDeviceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetBondDeviceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetBondDeviceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if len(m.Devices) > 0 {
-		for _, s := range m.Devices {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if m.LacpChoice != nil {
-		nn49, err := m.LacpChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn49
+	if m.LinkUpDelay != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LinkUpDelay))
+		i--
+		dAtA[i] = 0x38
 	}
 	if m.LinkPollingInterval != 0 {
-		dAtA[i] = 0x30
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.LinkPollingInterval))
+		i--
+		dAtA[i] = 0x30
 	}
-	if m.LinkUpDelay != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LinkUpDelay))
+	if m.LacpChoice != nil {
+		{
+			size := m.LacpChoice.Size()
+			i -= size
+			if _, err := m.LacpChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
-	return i, nil
+	if len(m.Devices) > 0 {
+		for iNdEx := len(m.Devices) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Devices[iNdEx])
+			copy(dAtA[i:], m.Devices[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Devices[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetBondDeviceType_Lacp) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetBondDeviceType_Lacp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Lacp != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Lacp.Size()))
-		n50, err := m.Lacp.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Lacp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n50
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetBondDeviceType_ActiveBackup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetBondDeviceType_ActiveBackup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveBackup != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveBackup.Size()))
-		n51, err := m.ActiveBackup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveBackup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n51
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetBondDevicesListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -18987,29 +17676,36 @@ func (m *FleetBondDevicesListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetBondDevicesListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetBondDevicesListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.BondDevices) > 0 {
-		for _, msg := range m.BondDevices {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.BondDevices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BondDevices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FleetStorageStaticRoutesListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19017,29 +17713,36 @@ func (m *FleetStorageStaticRoutesListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStorageStaticRoutesListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStorageStaticRoutesListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StorageRoutes) > 0 {
-		for _, msg := range m.StorageRoutes {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StorageRoutes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StorageRoutes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *VGPUConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19047,33 +17750,39 @@ func (m *VGPUConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *VGPUConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VGPUConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ServerAddress) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerAddress)))
-		i += copy(dAtA[i:], m.ServerAddress)
+	if m.FeatureType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FeatureType))
+		i--
+		dAtA[i] = 0x30
 	}
 	if m.ServerPort != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerPort))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.FeatureType != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FeatureType))
+	if len(m.ServerAddress) > 0 {
+		i -= len(m.ServerAddress)
+		copy(dAtA[i:], m.ServerAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerAddress)))
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *BGPConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19081,34 +17790,41 @@ func (m *BGPConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BGPConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BGPConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.Asn != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
+		i--
+		dAtA[i] = 0x18
+	}
 	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.Asn != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LocalControlPlaneType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19116,62 +17832,85 @@ func (m *LocalControlPlaneType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LocalControlPlaneType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalControlPlaneType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkChoice != nil {
-		nn52, err := m.NetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn52
-	}
 	if m.BgpConfig != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BgpConfig.Size()))
-		n53, err := m.BgpConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BgpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n53
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	if m.NetworkChoice != nil {
+		{
+			size := m.NetworkChoice.Size()
+			i -= size
+			if _, err := m.NetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *LocalControlPlaneType_InsideVn) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalControlPlaneType_InsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InsideVn != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideVn.Size()))
-		n54, err := m.InsideVn.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n54
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *LocalControlPlaneType_OutsideVn) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalControlPlaneType_OutsideVn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideVn != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideVn.Size()))
-		n55, err := m.OutsideVn.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideVn.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n55
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19179,638 +17918,846 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.FleetLabel) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
-		i += copy(dAtA[i:], m.FleetLabel)
+	if len(m.GeneratedYamls) > 0 {
+		for iNdEx := len(m.GeneratedYamls) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GeneratedYamls[iNdEx])
+			copy(dAtA[i:], m.GeneratedYamls[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.GeneratedYamls[iNdEx])))
+			i--
+			dAtA[i] = 0x3e
+			i--
+			dAtA[i] = 0xca
+		}
 	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.Devices) > 0 {
-		for _, msg := range m.Devices {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.NetworkConnectors) > 0 {
-		for _, msg := range m.NetworkConnectors {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.NetworkFirewall) > 0 {
-		for _, msg := range m.NetworkFirewall {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if len(m.OutsideVirtualNetwork) > 0 {
-		for _, msg := range m.OutsideVirtualNetwork {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.InsideVirtualNetwork) > 0 {
-		for _, msg := range m.InsideVirtualNetwork {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.InterfaceChoice != nil {
-		nn56, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn56
-	}
-	if m.BondChoice != nil {
-		nn57, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn57
-	}
-	if m.StorageInterfaceChoice != nil {
-		nn58, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn58
-	}
-	if m.StorageDeviceChoice != nil {
-		nn59, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn59
-	}
-	if m.StorageClassChoice != nil {
-		nn60, err := m.StorageClassChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn60
-	}
-	if m.DcClusterGroupChoice != nil {
-		nn61, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn61
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
 	}
 	if m.GpuChoice != nil {
-		nn62, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn62
 	}
-	if m.EtcdClusterNetwork != 0 {
-		dAtA[i] = 0x88
-		i++
+	if m.LocalControlPlane != nil {
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x9a
+	}
+	if m.K8SCluster != nil {
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.SingleSite) > 0 {
+		for iNdEx := len(m.SingleSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SingleSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2
+			i--
+			dAtA[i] = 0xd2
+		}
+	}
+	if m.FleetType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FleetType))
+		i--
 		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EtcdClusterNetwork))
+		i--
+		dAtA[i] = 0xc8
 	}
-	if m.StorageStaticRoutesChoice != nil {
-		nn63, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.InterfaceChoice != nil {
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn63
+	}
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.EnableDefaultFleetConfigDownload {
-		dAtA[i] = 0xa8
-		i++
-		dAtA[i] = 0x2
-		i++
+		i--
 		if m.EnableDefaultFleetConfigDownload {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
-	}
-	if m.FleetType != 0 {
-		dAtA[i] = 0xc8
-		i++
+		i--
 		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FleetType))
+		i--
+		dAtA[i] = 0xa8
 	}
-	if len(m.SingleSite) > 0 {
-		for _, msg := range m.SingleSite {
-			dAtA[i] = 0xd2
-			i++
-			dAtA[i] = 0x2
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.StorageStaticRoutesChoice != nil {
+		{
+			size := m.StorageStaticRoutesChoice.Size()
+			i -= size
+			if _, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if m.LogsReceiverChoice != nil {
-		nn64, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn64
+	if m.EtcdClusterNetwork != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EtcdClusterNetwork))
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x88
 	}
-	if m.UsbPolicyChoice != nil {
-		nn65, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn65
-	}
-	if m.K8SCluster != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n66, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n66
-	}
-	if m.LocalControlPlane != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalControlPlane.Size()))
-		n67, err := m.LocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n67
-	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n68, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n68
-	}
-	if len(m.GeneratedYamls) > 0 {
-		for _, s := range m.GeneratedYamls {
-			dAtA[i] = 0xca
-			i++
-			dAtA[i] = 0x3e
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.StorageClassChoice != nil {
+		{
+			size := m.StorageClassChoice.Size()
+			i -= size
+			if _, err := m.StorageClassChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	if m.StorageDeviceChoice != nil {
+		{
+			size := m.StorageDeviceChoice.Size()
+			i -= size
+			if _, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.StorageInterfaceChoice != nil {
+		{
+			size := m.StorageInterfaceChoice.Size()
+			i -= size
+			if _, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.InsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.InsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.OutsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.OutsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.NetworkFirewall) > 0 {
+		for iNdEx := len(m.NetworkFirewall) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkFirewall[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.NetworkConnectors) > 0 {
+		for iNdEx := len(m.NetworkConnectors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkConnectors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Devices) > 0 {
+		for iNdEx := len(m.Devices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Devices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.FleetLabel) > 0 {
+		i -= len(m.FleetLabel)
+		copy(dAtA[i:], m.FleetLabel)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n69, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n69
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LegacyDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LegacyDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LegacyDevices != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LegacyDevices.Size()))
-		n70, err := m.LegacyDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LegacyDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n70
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n71, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n71
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n72, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n72
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoStorageInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoStorageInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageInterfaces != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageInterfaces.Size()))
-		n73, err := m.NoStorageInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n73
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_StorageInterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_StorageInterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageInterfaceList != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterfaceList.Size()))
-		n74, err := m.StorageInterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageInterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n74
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoStorageDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoStorageDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageDevice != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageDevice.Size()))
-		n75, err := m.NoStorageDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n75
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_StorageDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_StorageDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageDeviceList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageDeviceList.Size()))
-		n76, err := m.StorageDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n76
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DefaultStorageClass) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultStorageClass) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageClass != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageClass.Size()))
-		n77, err := m.DefaultStorageClass.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageClass.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n77
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_StorageClassList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_StorageClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageClassList != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageClassList.Size()))
-		n78, err := m.StorageClassList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageClassList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n78
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoDcClusterGroup != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoDcClusterGroup.Size()))
-		n79, err := m.NoDcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n79
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroup != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroup.Size()))
-		n80, err := m.DcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n80
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n81, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n81
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n82, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n82
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoStorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoStorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageStaticRoutes.Size()))
-		n83, err := m.NoStorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n83
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_StorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_StorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageStaticRoutes != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageStaticRoutes.Size()))
-		n84, err := m.StorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n84
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DcClusterGroupInside) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DcClusterGroupInside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroupInside != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroupInside.Size()))
-		n85, err := m.DcClusterGroupInside.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroupInside.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n85
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DefaultInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultInterfaces != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultInterfaces.Size()))
-		n86, err := m.DefaultInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n86
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n87, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n87
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n88, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n88
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n89, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n89
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n90, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n90
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n91, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n91
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n92, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n92
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -19818,545 +18765,749 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.FleetLabel) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
-		i += copy(dAtA[i:], m.FleetLabel)
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.NetworkConnectors) > 0 {
-		for _, msg := range m.NetworkConnectors {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.GpuChoice != nil {
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.NetworkFirewall) > 0 {
-		for _, msg := range m.NetworkFirewall {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if len(m.OutsideVirtualNetwork) > 0 {
-		for _, msg := range m.OutsideVirtualNetwork {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
-		}
-	}
-	if len(m.InsideVirtualNetwork) > 0 {
-		for _, msg := range m.InsideVirtualNetwork {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
 	if m.InterfaceChoice != nil {
-		nn93, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn93
-	}
-	if m.BondChoice != nil {
-		nn94, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn94
-	}
-	if m.StorageInterfaceChoice != nil {
-		nn95, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn95
-	}
-	if m.StorageDeviceChoice != nil {
-		nn96, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn96
-	}
-	if m.StorageClassChoice != nil {
-		nn97, err := m.StorageClassChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn97
 	}
 	if m.DcClusterGroupChoice != nil {
-		nn98, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn98
-	}
-	if m.GpuChoice != nil {
-		nn99, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn99
-	}
-	if m.StorageStaticRoutesChoice != nil {
-		nn100, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn100
 	}
 	if m.EnableDefaultFleetConfigDownload {
-		dAtA[i] = 0xa8
-		i++
-		dAtA[i] = 0x2
-		i++
+		i--
 		if m.EnableDefaultFleetConfigDownload {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa8
 	}
-	if m.LogsReceiverChoice != nil {
-		nn101, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageStaticRoutesChoice != nil {
+		{
+			size := m.StorageStaticRoutesChoice.Size()
+			i -= size
+			if _, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn101
 	}
-	if m.UsbPolicyChoice != nil {
-		nn102, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageClassChoice != nil {
+		{
+			size := m.StorageClassChoice.Size()
+			i -= size
+			if _, err := m.StorageClassChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn102
 	}
-	return i, nil
+	if m.StorageDeviceChoice != nil {
+		{
+			size := m.StorageDeviceChoice.Size()
+			i -= size
+			if _, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.StorageInterfaceChoice != nil {
+		{
+			size := m.StorageInterfaceChoice.Size()
+			i -= size
+			if _, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.InsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.InsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.OutsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.OutsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.NetworkFirewall) > 0 {
+		for iNdEx := len(m.NetworkFirewall) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkFirewall[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.NetworkConnectors) > 0 {
+		for iNdEx := len(m.NetworkConnectors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkConnectors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.FleetLabel) > 0 {
+		i -= len(m.FleetLabel)
+		copy(dAtA[i:], m.FleetLabel)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n103, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n103
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DeviceList != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeviceList.Size()))
-		n104, err := m.DeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n104
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n105, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n105
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n106, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n106
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoStorageInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoStorageInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageInterfaces != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageInterfaces.Size()))
-		n107, err := m.NoStorageInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n107
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_StorageInterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_StorageInterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageInterfaceList != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterfaceList.Size()))
-		n108, err := m.StorageInterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageInterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n108
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoStorageDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoStorageDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageDevice != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageDevice.Size()))
-		n109, err := m.NoStorageDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n109
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_StorageDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_StorageDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageDeviceList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageDeviceList.Size()))
-		n110, err := m.StorageDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n110
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DefaultStorageClass) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultStorageClass) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageClass != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageClass.Size()))
-		n111, err := m.DefaultStorageClass.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageClass.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n111
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_StorageClassList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_StorageClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageClassList != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageClassList.Size()))
-		n112, err := m.StorageClassList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageClassList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n112
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoDcClusterGroup != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoDcClusterGroup.Size()))
-		n113, err := m.NoDcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n113
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroup != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroup.Size()))
-		n114, err := m.DcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n114
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n115, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n115
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n116, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n116
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoStorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoStorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageStaticRoutes.Size()))
-		n117, err := m.NoStorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n117
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_StorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_StorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageStaticRoutes != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageStaticRoutes.Size()))
-		n118, err := m.StorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n118
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DcClusterGroupInside) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DcClusterGroupInside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroupInside != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroupInside.Size()))
-		n119, err := m.DcClusterGroupInside.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroupInside.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n119
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DefaultConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultConfig != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultConfig.Size()))
-		n120, err := m.DefaultConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n120
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n121, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n121
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n122, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n122
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n123, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n123
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n124, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n124
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n125, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n125
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n126, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n126
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -20364,539 +19515,742 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.NetworkConnectors) > 0 {
-		for _, msg := range m.NetworkConnectors {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.GpuChoice != nil {
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.NetworkFirewall) > 0 {
-		for _, msg := range m.NetworkFirewall {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if len(m.OutsideVirtualNetwork) > 0 {
-		for _, msg := range m.OutsideVirtualNetwork {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
-		}
-	}
-	if len(m.InsideVirtualNetwork) > 0 {
-		for _, msg := range m.InsideVirtualNetwork {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
 	if m.InterfaceChoice != nil {
-		nn127, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn127
-	}
-	if m.BondChoice != nil {
-		nn128, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn128
-	}
-	if m.StorageInterfaceChoice != nil {
-		nn129, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn129
-	}
-	if m.StorageDeviceChoice != nil {
-		nn130, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn130
-	}
-	if m.StorageClassChoice != nil {
-		nn131, err := m.StorageClassChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn131
 	}
 	if m.DcClusterGroupChoice != nil {
-		nn132, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn132
-	}
-	if m.GpuChoice != nil {
-		nn133, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn133
-	}
-	if m.StorageStaticRoutesChoice != nil {
-		nn134, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn134
 	}
 	if m.EnableDefaultFleetConfigDownload {
-		dAtA[i] = 0xa8
-		i++
-		dAtA[i] = 0x2
-		i++
+		i--
 		if m.EnableDefaultFleetConfigDownload {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa8
 	}
-	if m.LogsReceiverChoice != nil {
-		nn135, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageStaticRoutesChoice != nil {
+		{
+			size := m.StorageStaticRoutesChoice.Size()
+			i -= size
+			if _, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn135
 	}
-	if m.UsbPolicyChoice != nil {
-		nn136, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageClassChoice != nil {
+		{
+			size := m.StorageClassChoice.Size()
+			i -= size
+			if _, err := m.StorageClassChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn136
 	}
-	return i, nil
+	if m.StorageDeviceChoice != nil {
+		{
+			size := m.StorageDeviceChoice.Size()
+			i -= size
+			if _, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.StorageInterfaceChoice != nil {
+		{
+			size := m.StorageInterfaceChoice.Size()
+			i -= size
+			if _, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.InsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.InsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.OutsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.OutsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.NetworkFirewall) > 0 {
+		for iNdEx := len(m.NetworkFirewall) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkFirewall[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.NetworkConnectors) > 0 {
+		for iNdEx := len(m.NetworkConnectors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkConnectors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n137, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n137
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DeviceList != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeviceList.Size()))
-		n138, err := m.DeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n138
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n139, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n139
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n140, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n140
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoStorageInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoStorageInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageInterfaces != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageInterfaces.Size()))
-		n141, err := m.NoStorageInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n141
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_StorageInterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_StorageInterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageInterfaceList != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterfaceList.Size()))
-		n142, err := m.StorageInterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageInterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n142
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoStorageDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoStorageDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageDevice != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageDevice.Size()))
-		n143, err := m.NoStorageDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n143
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_StorageDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_StorageDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageDeviceList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageDeviceList.Size()))
-		n144, err := m.StorageDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n144
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DefaultStorageClass) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultStorageClass) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageClass != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageClass.Size()))
-		n145, err := m.DefaultStorageClass.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageClass.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n145
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_StorageClassList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_StorageClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageClassList != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageClassList.Size()))
-		n146, err := m.StorageClassList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageClassList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n146
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoDcClusterGroup != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoDcClusterGroup.Size()))
-		n147, err := m.NoDcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n147
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroup != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroup.Size()))
-		n148, err := m.DcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n148
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n149, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n149
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n150, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n150
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoStorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoStorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageStaticRoutes.Size()))
-		n151, err := m.NoStorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n151
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_StorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_StorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageStaticRoutes != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageStaticRoutes.Size()))
-		n152, err := m.StorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n152
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DcClusterGroupInside) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DcClusterGroupInside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroupInside != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroupInside.Size()))
-		n153, err := m.DcClusterGroupInside.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroupInside.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n153
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DefaultConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultConfig != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultConfig.Size()))
-		n154, err := m.DefaultConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n154
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n155, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n155
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n156, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n156
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n157, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n157
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n158, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n158
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n159, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n159
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n160, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n160
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -20904,545 +20258,749 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.FleetLabel) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
-		i += copy(dAtA[i:], m.FleetLabel)
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.NetworkConnectors) > 0 {
-		for _, msg := range m.NetworkConnectors {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.GpuChoice != nil {
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.NetworkFirewall) > 0 {
-		for _, msg := range m.NetworkFirewall {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if len(m.OutsideVirtualNetwork) > 0 {
-		for _, msg := range m.OutsideVirtualNetwork {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
-		}
-	}
-	if len(m.InsideVirtualNetwork) > 0 {
-		for _, msg := range m.InsideVirtualNetwork {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
 	if m.InterfaceChoice != nil {
-		nn161, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn161
-	}
-	if m.BondChoice != nil {
-		nn162, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn162
-	}
-	if m.StorageInterfaceChoice != nil {
-		nn163, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn163
-	}
-	if m.StorageDeviceChoice != nil {
-		nn164, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn164
-	}
-	if m.StorageClassChoice != nil {
-		nn165, err := m.StorageClassChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn165
 	}
 	if m.DcClusterGroupChoice != nil {
-		nn166, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn166
-	}
-	if m.GpuChoice != nil {
-		nn167, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn167
-	}
-	if m.StorageStaticRoutesChoice != nil {
-		nn168, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn168
 	}
 	if m.EnableDefaultFleetConfigDownload {
-		dAtA[i] = 0xa8
-		i++
-		dAtA[i] = 0x2
-		i++
+		i--
 		if m.EnableDefaultFleetConfigDownload {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa8
 	}
-	if m.LogsReceiverChoice != nil {
-		nn169, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageStaticRoutesChoice != nil {
+		{
+			size := m.StorageStaticRoutesChoice.Size()
+			i -= size
+			if _, err := m.StorageStaticRoutesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn169
 	}
-	if m.UsbPolicyChoice != nil {
-		nn170, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageClassChoice != nil {
+		{
+			size := m.StorageClassChoice.Size()
+			i -= size
+			if _, err := m.StorageClassChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn170
 	}
-	return i, nil
+	if m.StorageDeviceChoice != nil {
+		{
+			size := m.StorageDeviceChoice.Size()
+			i -= size
+			if _, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.StorageInterfaceChoice != nil {
+		{
+			size := m.StorageInterfaceChoice.Size()
+			i -= size
+			if _, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.InsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.InsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.OutsideVirtualNetwork) > 0 {
+		for iNdEx := len(m.OutsideVirtualNetwork) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideVirtualNetwork[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.NetworkFirewall) > 0 {
+		for iNdEx := len(m.NetworkFirewall) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkFirewall[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.NetworkConnectors) > 0 {
+		for iNdEx := len(m.NetworkConnectors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkConnectors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.FleetLabel) > 0 {
+		i -= len(m.FleetLabel)
+		copy(dAtA[i:], m.FleetLabel)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.FleetLabel)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n171, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n171
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DeviceList != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DeviceList.Size()))
-		n172, err := m.DeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n172
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n173, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n173
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n174, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n174
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoStorageInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoStorageInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageInterfaces != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageInterfaces.Size()))
-		n175, err := m.NoStorageInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n175
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_StorageInterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_StorageInterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageInterfaceList != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterfaceList.Size()))
-		n176, err := m.StorageInterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageInterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n176
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoStorageDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoStorageDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageDevice != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageDevice.Size()))
-		n177, err := m.NoStorageDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n177
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_StorageDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_StorageDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageDeviceList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageDeviceList.Size()))
-		n178, err := m.StorageDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n178
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DefaultStorageClass) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultStorageClass) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageClass != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageClass.Size()))
-		n179, err := m.DefaultStorageClass.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageClass.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n179
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_StorageClassList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_StorageClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageClassList != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageClassList.Size()))
-		n180, err := m.StorageClassList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageClassList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n180
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoDcClusterGroup != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoDcClusterGroup.Size()))
-		n181, err := m.NoDcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n181
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroup != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroup.Size()))
-		n182, err := m.DcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n182
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n183, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n183
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n184, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n184
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoStorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoStorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageStaticRoutes.Size()))
-		n185, err := m.NoStorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n185
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_StorageStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_StorageStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageStaticRoutes != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageStaticRoutes.Size()))
-		n186, err := m.StorageStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n186
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DcClusterGroupInside) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DcClusterGroupInside) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroupInside != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroupInside.Size()))
-		n187, err := m.DcClusterGroupInside.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroupInside.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n187
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DefaultConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultConfig != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultConfig.Size()))
-		n188, err := m.DefaultConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n188
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n189, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n189
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n190, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n190
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n191, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n191
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n192, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n192
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n193, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n193
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n194, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n194
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FleetStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -21450,29 +21008,40 @@ func (m *FleetStatus) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FleetStatus) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FleetStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.AvailableSoftwareVersion) > 0 {
-		dAtA[i] = 0xa
-		i++
+		i -= len(m.AvailableSoftwareVersion)
+		copy(dAtA[i:], m.AvailableSoftwareVersion)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.AvailableSoftwareVersion)))
-		i += copy(dAtA[i:], m.AvailableSoftwareVersion)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *NetworkingDeviceInstanceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Interface) > 0 {
@@ -21488,12 +21057,18 @@ func (m *NetworkingDeviceInstanceType) Size() (n int) {
 }
 
 func (m *GenericDeviceInstanceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	return n
 }
 
 func (m *DeviceInstanceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -21510,6 +21085,9 @@ func (m *DeviceInstanceType) Size() (n int) {
 }
 
 func (m *DeviceInstanceType_NetworkDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkDevice != nil {
@@ -21519,6 +21097,9 @@ func (m *DeviceInstanceType_NetworkDevice) Size() (n int) {
 	return n
 }
 func (m *FleetInterfaceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
@@ -21531,6 +21112,9 @@ func (m *FleetInterfaceListType) Size() (n int) {
 }
 
 func (m *FleetDeviceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Devices) > 0 {
@@ -21543,6 +21127,9 @@ func (m *FleetDeviceListType) Size() (n int) {
 }
 
 func (m *StorageDeviceOpenebsEnterpriseType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.MayastorPools) > 0 {
@@ -21555,6 +21142,9 @@ func (m *StorageDeviceOpenebsEnterpriseType) Size() (n int) {
 }
 
 func (m *OpenebsMayastorPoolType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.PoolName)
@@ -21575,6 +21165,9 @@ func (m *OpenebsMayastorPoolType) Size() (n int) {
 }
 
 func (m *StorageDeviceDellIsilonF800Type) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Username)
@@ -21610,6 +21203,9 @@ func (m *StorageDeviceDellIsilonF800Type) Size() (n int) {
 }
 
 func (m *StorageDeviceDellIsilonF800Type_SecureNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SecureNetwork != nil {
@@ -21619,6 +21215,9 @@ func (m *StorageDeviceDellIsilonF800Type_SecureNetwork) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceDellIsilonF800Type_TrustedCaUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.TrustedCaUrl)
@@ -21626,6 +21225,9 @@ func (m *StorageDeviceDellIsilonF800Type_TrustedCaUrl) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceDellIsilonF800Type_ApiServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ApiServerName)
@@ -21633,6 +21235,9 @@ func (m *StorageDeviceDellIsilonF800Type_ApiServerName) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceDellIsilonF800Type_ApiServerIpAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ApiServerIpAddress)
@@ -21640,6 +21245,9 @@ func (m *StorageDeviceDellIsilonF800Type_ApiServerIpAddress) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceHPENimbusStorageAf40Type) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageServerName)
@@ -21675,6 +21283,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Size() (n int) {
 }
 
 func (m *StorageDevicePureStorageServiceOrchestratorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClusterId)
@@ -21695,6 +21306,9 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Size() (n int) {
 }
 
 func (m *PsoArrayConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FlashArray != nil {
@@ -21709,6 +21323,9 @@ func (m *PsoArrayConfiguration) Size() (n int) {
 }
 
 func (m *FlashBladeType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableSnapshotDirectory {
@@ -21728,6 +21345,9 @@ func (m *FlashBladeType) Size() (n int) {
 }
 
 func (m *FlashBladeEndpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MgmtEndpoint != nil {
@@ -21752,6 +21372,9 @@ func (m *FlashBladeEndpoint) Size() (n int) {
 }
 
 func (m *FlashBladeEndpoint_MgmtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.MgmtIp)
@@ -21759,6 +21382,9 @@ func (m *FlashBladeEndpoint_MgmtIp) Size() (n int) {
 	return n
 }
 func (m *FlashBladeEndpoint_MgmtDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.MgmtDnsName)
@@ -21766,6 +21392,9 @@ func (m *FlashBladeEndpoint_MgmtDnsName) Size() (n int) {
 	return n
 }
 func (m *FlashBladeEndpoint_NfsEndpointIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.NfsEndpointIp)
@@ -21773,6 +21402,9 @@ func (m *FlashBladeEndpoint_NfsEndpointIp) Size() (n int) {
 	return n
 }
 func (m *FlashBladeEndpoint_NfsEndpointDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.NfsEndpointDnsName)
@@ -21780,6 +21412,9 @@ func (m *FlashBladeEndpoint_NfsEndpointDnsName) Size() (n int) {
 	return n
 }
 func (m *FlashArrayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SanType)
@@ -21816,6 +21451,9 @@ func (m *FlashArrayType) Size() (n int) {
 }
 
 func (m *FlashArrayEndpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MgmtEndpoint != nil {
@@ -21837,6 +21475,9 @@ func (m *FlashArrayEndpoint) Size() (n int) {
 }
 
 func (m *FlashArrayEndpoint_MgmtIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.MgmtIp)
@@ -21844,6 +21485,9 @@ func (m *FlashArrayEndpoint_MgmtIp) Size() (n int) {
 	return n
 }
 func (m *FlashArrayEndpoint_MgmtDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.MgmtDnsName)
@@ -21851,6 +21495,9 @@ func (m *FlashArrayEndpoint_MgmtDnsName) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappTridentType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BackendChoice != nil {
@@ -21860,6 +21507,9 @@ func (m *StorageDeviceNetappTridentType) Size() (n int) {
 }
 
 func (m *StorageDeviceNetappTridentType_NetappBackendOntapNas) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetappBackendOntapNas != nil {
@@ -21869,6 +21519,9 @@ func (m *StorageDeviceNetappTridentType_NetappBackendOntapNas) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappTridentType_NetappBackendOntapSan) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetappBackendOntapSan != nil {
@@ -21878,6 +21531,9 @@ func (m *StorageDeviceNetappTridentType_NetappBackendOntapSan) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageDriverName)
@@ -21957,6 +21613,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Size() (n int) {
 }
 
 func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ManagementLifIp)
@@ -21964,6 +21623,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifIp) Size() (n int) 
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ManagementLifDnsName)
@@ -21971,6 +21633,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_ManagementLifDnsName) Size() (n 
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType_DataLifIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DataLifIp)
@@ -21978,6 +21643,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_DataLifIp) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType_DataLifDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DataLifDnsName)
@@ -21985,6 +21653,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_DataLifDnsName) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType_NoChap) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoChap != nil {
@@ -21994,6 +21665,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_NoChap) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapSanType_UseChap) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UseChap != nil {
@@ -22003,6 +21677,9 @@ func (m *StorageDeviceNetappBackendOntapSanType_UseChap) Size() (n int) {
 	return n
 }
 func (m *DeviceNetappBackendOntapSanChapType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ChapUsername)
@@ -22025,6 +21702,9 @@ func (m *DeviceNetappBackendOntapSanChapType) Size() (n int) {
 }
 
 func (m *StorageDeviceNetappBackendOntapNasType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageDriverName)
@@ -22114,6 +21794,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Size() (n int) {
 }
 
 func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ManagementLifIp)
@@ -22121,6 +21804,9 @@ func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifIp) Size() (n int) 
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ManagementLifDnsName)
@@ -22128,6 +21814,9 @@ func (m *StorageDeviceNetappBackendOntapNasType_ManagementLifDnsName) Size() (n 
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapNasType_DataLifIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DataLifIp)
@@ -22135,6 +21824,9 @@ func (m *StorageDeviceNetappBackendOntapNasType_DataLifIp) Size() (n int) {
 	return n
 }
 func (m *StorageDeviceNetappBackendOntapNasType_DataLifDnsName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DataLifDnsName)
@@ -22142,6 +21834,9 @@ func (m *StorageDeviceNetappBackendOntapNasType_DataLifDnsName) Size() (n int) {
 	return n
 }
 func (m *OntapVolumeDefaults) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SpaceReserve)
@@ -22187,6 +21882,9 @@ func (m *OntapVolumeDefaults) Size() (n int) {
 }
 
 func (m *OntapVolumeDefaults_NoQos) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoQos != nil {
@@ -22196,6 +21894,9 @@ func (m *OntapVolumeDefaults_NoQos) Size() (n int) {
 	return n
 }
 func (m *OntapVolumeDefaults_QosPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.QosPolicy)
@@ -22203,6 +21904,9 @@ func (m *OntapVolumeDefaults_QosPolicy) Size() (n int) {
 	return n
 }
 func (m *OntapVolumeDefaults_AdaptiveQosPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AdaptiveQosPolicy)
@@ -22210,6 +21914,9 @@ func (m *OntapVolumeDefaults_AdaptiveQosPolicy) Size() (n int) {
 	return n
 }
 func (m *OntapVirtualStoragePoolType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Labels) > 0 {
@@ -22232,6 +21939,9 @@ func (m *OntapVirtualStoragePoolType) Size() (n int) {
 }
 
 func (m *FleetStorageDeviceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageDevice)
@@ -22253,6 +21963,9 @@ func (m *FleetStorageDeviceType) Size() (n int) {
 }
 
 func (m *FleetStorageDeviceType_NetappTrident) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetappTrident != nil {
@@ -22262,6 +21975,9 @@ func (m *FleetStorageDeviceType_NetappTrident) Size() (n int) {
 	return n
 }
 func (m *FleetStorageDeviceType_PureServiceOrchestrator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PureServiceOrchestrator != nil {
@@ -22271,6 +21987,9 @@ func (m *FleetStorageDeviceType_PureServiceOrchestrator) Size() (n int) {
 	return n
 }
 func (m *FleetStorageDeviceType_OpenebsEnterprise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OpenebsEnterprise != nil {
@@ -22280,6 +21999,9 @@ func (m *FleetStorageDeviceType_OpenebsEnterprise) Size() (n int) {
 	return n
 }
 func (m *FleetStorageDeviceType_CustomStorage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorage != nil {
@@ -22289,6 +22011,9 @@ func (m *FleetStorageDeviceType_CustomStorage) Size() (n int) {
 	return n
 }
 func (m *FleetStorageDeviceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StorageDevices) > 0 {
@@ -22301,6 +22026,9 @@ func (m *FleetStorageDeviceListType) Size() (n int) {
 }
 
 func (m *StorageClassDellIsilonF800Type) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HttpsChoice != nil {
@@ -22321,6 +22049,9 @@ func (m *StorageClassDellIsilonF800Type) Size() (n int) {
 }
 
 func (m *StorageClassDellIsilonF800Type_AzServiceName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AzServiceName)
@@ -22328,6 +22059,9 @@ func (m *StorageClassDellIsilonF800Type_AzServiceName) Size() (n int) {
 	return n
 }
 func (m *StorageClassDellIsilonF800Type_AzServiceIpAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AzServiceIpAddress)
@@ -22335,6 +22069,9 @@ func (m *StorageClassDellIsilonF800Type_AzServiceIpAddress) Size() (n int) {
 	return n
 }
 func (m *StorageClassHPENimbusStorageAf40Type) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.PerfPolicy)
@@ -22351,6 +22088,9 @@ func (m *StorageClassHPENimbusStorageAf40Type) Size() (n int) {
 }
 
 func (m *StorageClassOpenebsEnterpriseType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Protocol)
@@ -22364,6 +22104,9 @@ func (m *StorageClassOpenebsEnterpriseType) Size() (n int) {
 }
 
 func (m *StorageClassNetappTridentType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Selector) > 0 {
@@ -22382,6 +22125,9 @@ func (m *StorageClassNetappTridentType) Size() (n int) {
 }
 
 func (m *StorageClassPureServiceOrchestratorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Backend)
@@ -22399,6 +22145,9 @@ func (m *StorageClassPureServiceOrchestratorType) Size() (n int) {
 }
 
 func (m *StorageClassCustomType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Yaml)
@@ -22409,6 +22158,9 @@ func (m *StorageClassCustomType) Size() (n int) {
 }
 
 func (m *FleetStorageClassType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.StorageDevice)
@@ -22448,6 +22200,9 @@ func (m *FleetStorageClassType) Size() (n int) {
 }
 
 func (m *FleetStorageClassType_NetappTrident) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetappTrident != nil {
@@ -22457,6 +22212,9 @@ func (m *FleetStorageClassType_NetappTrident) Size() (n int) {
 	return n
 }
 func (m *FleetStorageClassType_PureServiceOrchestrator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PureServiceOrchestrator != nil {
@@ -22466,6 +22224,9 @@ func (m *FleetStorageClassType_PureServiceOrchestrator) Size() (n int) {
 	return n
 }
 func (m *FleetStorageClassType_OpenebsEnterprise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OpenebsEnterprise != nil {
@@ -22475,6 +22236,9 @@ func (m *FleetStorageClassType_OpenebsEnterprise) Size() (n int) {
 	return n
 }
 func (m *FleetStorageClassType_CustomStorage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorage != nil {
@@ -22484,6 +22248,9 @@ func (m *FleetStorageClassType_CustomStorage) Size() (n int) {
 	return n
 }
 func (m *FleetStorageClassListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StorageClasses) > 0 {
@@ -22496,6 +22263,9 @@ func (m *FleetStorageClassListType) Size() (n int) {
 }
 
 func (m *BondLacpType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Rate != 0 {
@@ -22505,6 +22275,9 @@ func (m *BondLacpType) Size() (n int) {
 }
 
 func (m *FleetBondDeviceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -22530,6 +22303,9 @@ func (m *FleetBondDeviceType) Size() (n int) {
 }
 
 func (m *FleetBondDeviceType_Lacp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Lacp != nil {
@@ -22539,6 +22315,9 @@ func (m *FleetBondDeviceType_Lacp) Size() (n int) {
 	return n
 }
 func (m *FleetBondDeviceType_ActiveBackup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveBackup != nil {
@@ -22548,6 +22327,9 @@ func (m *FleetBondDeviceType_ActiveBackup) Size() (n int) {
 	return n
 }
 func (m *FleetBondDevicesListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.BondDevices) > 0 {
@@ -22560,6 +22342,9 @@ func (m *FleetBondDevicesListType) Size() (n int) {
 }
 
 func (m *FleetStorageStaticRoutesListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StorageRoutes) > 0 {
@@ -22572,6 +22357,9 @@ func (m *FleetStorageStaticRoutesListType) Size() (n int) {
 }
 
 func (m *VGPUConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ServerAddress)
@@ -22588,6 +22376,9 @@ func (m *VGPUConfiguration) Size() (n int) {
 }
 
 func (m *BGPConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Peers) > 0 {
@@ -22603,6 +22394,9 @@ func (m *BGPConfiguration) Size() (n int) {
 }
 
 func (m *LocalControlPlaneType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkChoice != nil {
@@ -22616,6 +22410,9 @@ func (m *LocalControlPlaneType) Size() (n int) {
 }
 
 func (m *LocalControlPlaneType_InsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InsideVn != nil {
@@ -22625,6 +22422,9 @@ func (m *LocalControlPlaneType_InsideVn) Size() (n int) {
 	return n
 }
 func (m *LocalControlPlaneType_OutsideVn) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideVn != nil {
@@ -22634,6 +22434,9 @@ func (m *LocalControlPlaneType_OutsideVn) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.FleetLabel)
@@ -22745,6 +22548,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -22754,6 +22560,9 @@ func (m *GlobalSpecType_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LegacyDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LegacyDevices != nil {
@@ -22763,6 +22572,9 @@ func (m *GlobalSpecType_LegacyDevices) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -22772,6 +22584,9 @@ func (m *GlobalSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -22781,6 +22596,9 @@ func (m *GlobalSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoStorageInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageInterfaces != nil {
@@ -22790,6 +22608,9 @@ func (m *GlobalSpecType_NoStorageInterfaces) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_StorageInterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceList != nil {
@@ -22799,6 +22620,9 @@ func (m *GlobalSpecType_StorageInterfaceList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoStorageDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageDevice != nil {
@@ -22808,6 +22632,9 @@ func (m *GlobalSpecType_NoStorageDevice) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_StorageDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageDeviceList != nil {
@@ -22817,6 +22644,9 @@ func (m *GlobalSpecType_StorageDeviceList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DefaultStorageClass) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageClass != nil {
@@ -22826,6 +22656,9 @@ func (m *GlobalSpecType_DefaultStorageClass) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_StorageClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageClassList != nil {
@@ -22835,6 +22668,9 @@ func (m *GlobalSpecType_StorageClassList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoDcClusterGroup != nil {
@@ -22844,6 +22680,9 @@ func (m *GlobalSpecType_NoDcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroup != nil {
@@ -22853,6 +22692,9 @@ func (m *GlobalSpecType_DcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -22862,6 +22704,9 @@ func (m *GlobalSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -22871,6 +22716,9 @@ func (m *GlobalSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoStorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageStaticRoutes != nil {
@@ -22880,6 +22728,9 @@ func (m *GlobalSpecType_NoStorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_StorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageStaticRoutes != nil {
@@ -22889,6 +22740,9 @@ func (m *GlobalSpecType_StorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DcClusterGroupInside) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroupInside != nil {
@@ -22898,6 +22752,9 @@ func (m *GlobalSpecType_DcClusterGroupInside) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DefaultInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultInterfaces != nil {
@@ -22907,6 +22764,9 @@ func (m *GlobalSpecType_DefaultInterfaces) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -22916,6 +22776,9 @@ func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -22925,6 +22788,9 @@ func (m *GlobalSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -22934,6 +22800,9 @@ func (m *GlobalSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -22943,6 +22812,9 @@ func (m *GlobalSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -22952,6 +22824,9 @@ func (m *GlobalSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -22961,6 +22836,9 @@ func (m *GlobalSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.FleetLabel)
@@ -23036,6 +22914,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -23045,6 +22926,9 @@ func (m *CreateSpecType_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DeviceList != nil {
@@ -23054,6 +22938,9 @@ func (m *CreateSpecType_DeviceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -23063,6 +22950,9 @@ func (m *CreateSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -23072,6 +22962,9 @@ func (m *CreateSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoStorageInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageInterfaces != nil {
@@ -23081,6 +22974,9 @@ func (m *CreateSpecType_NoStorageInterfaces) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_StorageInterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceList != nil {
@@ -23090,6 +22986,9 @@ func (m *CreateSpecType_StorageInterfaceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoStorageDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageDevice != nil {
@@ -23099,6 +22998,9 @@ func (m *CreateSpecType_NoStorageDevice) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_StorageDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageDeviceList != nil {
@@ -23108,6 +23010,9 @@ func (m *CreateSpecType_StorageDeviceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DefaultStorageClass) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageClass != nil {
@@ -23117,6 +23022,9 @@ func (m *CreateSpecType_DefaultStorageClass) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_StorageClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageClassList != nil {
@@ -23126,6 +23034,9 @@ func (m *CreateSpecType_StorageClassList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoDcClusterGroup != nil {
@@ -23135,6 +23046,9 @@ func (m *CreateSpecType_NoDcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroup != nil {
@@ -23144,6 +23058,9 @@ func (m *CreateSpecType_DcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -23153,6 +23070,9 @@ func (m *CreateSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -23162,6 +23082,9 @@ func (m *CreateSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoStorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageStaticRoutes != nil {
@@ -23171,6 +23094,9 @@ func (m *CreateSpecType_NoStorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_StorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageStaticRoutes != nil {
@@ -23180,6 +23106,9 @@ func (m *CreateSpecType_StorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DcClusterGroupInside) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroupInside != nil {
@@ -23189,6 +23118,9 @@ func (m *CreateSpecType_DcClusterGroupInside) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DefaultConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultConfig != nil {
@@ -23198,6 +23130,9 @@ func (m *CreateSpecType_DefaultConfig) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -23207,6 +23142,9 @@ func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -23216,6 +23154,9 @@ func (m *CreateSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -23225,6 +23166,9 @@ func (m *CreateSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -23234,6 +23178,9 @@ func (m *CreateSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -23243,6 +23190,9 @@ func (m *CreateSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -23252,6 +23202,9 @@ func (m *CreateSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VolterraSoftwareVersion)
@@ -23323,6 +23276,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -23332,6 +23288,9 @@ func (m *ReplaceSpecType_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DeviceList != nil {
@@ -23341,6 +23300,9 @@ func (m *ReplaceSpecType_DeviceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -23350,6 +23312,9 @@ func (m *ReplaceSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -23359,6 +23324,9 @@ func (m *ReplaceSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoStorageInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageInterfaces != nil {
@@ -23368,6 +23336,9 @@ func (m *ReplaceSpecType_NoStorageInterfaces) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_StorageInterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceList != nil {
@@ -23377,6 +23348,9 @@ func (m *ReplaceSpecType_StorageInterfaceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoStorageDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageDevice != nil {
@@ -23386,6 +23360,9 @@ func (m *ReplaceSpecType_NoStorageDevice) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_StorageDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageDeviceList != nil {
@@ -23395,6 +23372,9 @@ func (m *ReplaceSpecType_StorageDeviceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DefaultStorageClass) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageClass != nil {
@@ -23404,6 +23384,9 @@ func (m *ReplaceSpecType_DefaultStorageClass) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_StorageClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageClassList != nil {
@@ -23413,6 +23396,9 @@ func (m *ReplaceSpecType_StorageClassList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoDcClusterGroup != nil {
@@ -23422,6 +23408,9 @@ func (m *ReplaceSpecType_NoDcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroup != nil {
@@ -23431,6 +23420,9 @@ func (m *ReplaceSpecType_DcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -23440,6 +23432,9 @@ func (m *ReplaceSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -23449,6 +23444,9 @@ func (m *ReplaceSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoStorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageStaticRoutes != nil {
@@ -23458,6 +23456,9 @@ func (m *ReplaceSpecType_NoStorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_StorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageStaticRoutes != nil {
@@ -23467,6 +23468,9 @@ func (m *ReplaceSpecType_StorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DcClusterGroupInside) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroupInside != nil {
@@ -23476,6 +23480,9 @@ func (m *ReplaceSpecType_DcClusterGroupInside) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DefaultConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultConfig != nil {
@@ -23485,6 +23492,9 @@ func (m *ReplaceSpecType_DefaultConfig) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -23494,6 +23504,9 @@ func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -23503,6 +23516,9 @@ func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -23512,6 +23528,9 @@ func (m *ReplaceSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -23521,6 +23540,9 @@ func (m *ReplaceSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -23530,6 +23552,9 @@ func (m *ReplaceSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -23539,6 +23564,9 @@ func (m *ReplaceSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.FleetLabel)
@@ -23614,6 +23642,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -23623,6 +23654,9 @@ func (m *GetSpecType_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DeviceList != nil {
@@ -23632,6 +23666,9 @@ func (m *GetSpecType_DeviceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -23641,6 +23678,9 @@ func (m *GetSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -23650,6 +23690,9 @@ func (m *GetSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoStorageInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageInterfaces != nil {
@@ -23659,6 +23702,9 @@ func (m *GetSpecType_NoStorageInterfaces) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_StorageInterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceList != nil {
@@ -23668,6 +23714,9 @@ func (m *GetSpecType_StorageInterfaceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoStorageDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageDevice != nil {
@@ -23677,6 +23726,9 @@ func (m *GetSpecType_NoStorageDevice) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_StorageDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageDeviceList != nil {
@@ -23686,6 +23738,9 @@ func (m *GetSpecType_StorageDeviceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DefaultStorageClass) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageClass != nil {
@@ -23695,6 +23750,9 @@ func (m *GetSpecType_DefaultStorageClass) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_StorageClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageClassList != nil {
@@ -23704,6 +23762,9 @@ func (m *GetSpecType_StorageClassList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoDcClusterGroup != nil {
@@ -23713,6 +23774,9 @@ func (m *GetSpecType_NoDcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroup != nil {
@@ -23722,6 +23786,9 @@ func (m *GetSpecType_DcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -23731,6 +23798,9 @@ func (m *GetSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -23740,6 +23810,9 @@ func (m *GetSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoStorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageStaticRoutes != nil {
@@ -23749,6 +23822,9 @@ func (m *GetSpecType_NoStorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_StorageStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageStaticRoutes != nil {
@@ -23758,6 +23834,9 @@ func (m *GetSpecType_StorageStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DcClusterGroupInside) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroupInside != nil {
@@ -23767,6 +23846,9 @@ func (m *GetSpecType_DcClusterGroupInside) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DefaultConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultConfig != nil {
@@ -23776,6 +23858,9 @@ func (m *GetSpecType_DefaultConfig) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -23785,6 +23870,9 @@ func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -23794,6 +23882,9 @@ func (m *GetSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -23803,6 +23894,9 @@ func (m *GetSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -23812,6 +23906,9 @@ func (m *GetSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -23821,6 +23918,9 @@ func (m *GetSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -23830,6 +23930,9 @@ func (m *GetSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *FleetStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AvailableSoftwareVersion)
@@ -23840,14 +23943,7 @@ func (m *FleetStatus) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -23856,8 +23952,13 @@ func (this *NetworkingDeviceInstanceType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForInterface := "[]*ObjectRefType{"
+	for _, f := range this.Interface {
+		repeatedStringForInterface += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInterface += "}"
 	s := strings.Join([]string{`&NetworkingDeviceInstanceType{`,
-		`Interface:` + strings.Replace(fmt.Sprintf("%v", this.Interface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Interface:` + repeatedStringForInterface + `,`,
 		`Use:` + fmt.Sprintf("%v", this.Use) + `,`,
 		`}`,
 	}, "")
@@ -23898,8 +23999,13 @@ func (this *FleetInterfaceListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForInterfaces := "[]*ObjectRefType{"
+	for _, f := range this.Interfaces {
+		repeatedStringForInterfaces += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInterfaces += "}"
 	s := strings.Join([]string{`&FleetInterfaceListType{`,
-		`Interfaces:` + strings.Replace(fmt.Sprintf("%v", this.Interfaces), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Interfaces:` + repeatedStringForInterfaces + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23908,8 +24014,13 @@ func (this *FleetDeviceListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDevices := "[]*DeviceInstanceType{"
+	for _, f := range this.Devices {
+		repeatedStringForDevices += strings.Replace(f.String(), "DeviceInstanceType", "DeviceInstanceType", 1) + ","
+	}
+	repeatedStringForDevices += "}"
 	s := strings.Join([]string{`&FleetDeviceListType{`,
-		`Devices:` + strings.Replace(fmt.Sprintf("%v", this.Devices), "DeviceInstanceType", "DeviceInstanceType", 1) + `,`,
+		`Devices:` + repeatedStringForDevices + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23918,8 +24029,13 @@ func (this *StorageDeviceOpenebsEnterpriseType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForMayastorPools := "[]*OpenebsMayastorPoolType{"
+	for _, f := range this.MayastorPools {
+		repeatedStringForMayastorPools += strings.Replace(f.String(), "OpenebsMayastorPoolType", "OpenebsMayastorPoolType", 1) + ","
+	}
+	repeatedStringForMayastorPools += "}"
 	s := strings.Join([]string{`&StorageDeviceOpenebsEnterpriseType{`,
-		`MayastorPools:` + strings.Replace(fmt.Sprintf("%v", this.MayastorPools), "OpenebsMayastorPoolType", "OpenebsMayastorPoolType", 1) + `,`,
+		`MayastorPools:` + repeatedStringForMayastorPools + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23942,7 +24058,7 @@ func (this *StorageDeviceDellIsilonF800Type) String() string {
 	}
 	s := strings.Join([]string{`&StorageDeviceDellIsilonF800Type{`,
 		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
-		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`HttpsChoice:` + fmt.Sprintf("%v", this.HttpsChoice) + `,`,
 		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
 		`ApiServerPort:` + fmt.Sprintf("%v", this.ApiServerPort) + `,`,
@@ -23958,7 +24074,7 @@ func (this *StorageDeviceDellIsilonF800Type_SecureNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&StorageDeviceDellIsilonF800Type_SecureNetwork{`,
-		`SecureNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SecureNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`SecureNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SecureNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24002,7 +24118,7 @@ func (this *StorageDeviceHPENimbusStorageAf40Type) String() string {
 		`StorageServerIpAddress:` + fmt.Sprintf("%v", this.StorageServerIpAddress) + `,`,
 		`ApiServerPort:` + fmt.Sprintf("%v", this.ApiServerPort) + `,`,
 		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
-		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`PerfPolicy:` + fmt.Sprintf("%v", this.PerfPolicy) + `,`,
 		`LimitIops:` + fmt.Sprintf("%v", this.LimitIops) + `,`,
 		`LimitMbps:` + fmt.Sprintf("%v", this.LimitMbps) + `,`,
@@ -24018,7 +24134,7 @@ func (this *StorageDevicePureStorageServiceOrchestratorType) String() string {
 		`ClusterId:` + fmt.Sprintf("%v", this.ClusterId) + `,`,
 		`EnableStorageTopology:` + fmt.Sprintf("%v", this.EnableStorageTopology) + `,`,
 		`EnableStrictTopology:` + fmt.Sprintf("%v", this.EnableStrictTopology) + `,`,
-		`Arrays:` + strings.Replace(fmt.Sprintf("%v", this.Arrays), "PsoArrayConfiguration", "PsoArrayConfiguration", 1) + `,`,
+		`Arrays:` + strings.Replace(this.Arrays.String(), "PsoArrayConfiguration", "PsoArrayConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24028,8 +24144,8 @@ func (this *PsoArrayConfiguration) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PsoArrayConfiguration{`,
-		`FlashArray:` + strings.Replace(fmt.Sprintf("%v", this.FlashArray), "FlashArrayType", "FlashArrayType", 1) + `,`,
-		`FlashBlade:` + strings.Replace(fmt.Sprintf("%v", this.FlashBlade), "FlashBladeType", "FlashBladeType", 1) + `,`,
+		`FlashArray:` + strings.Replace(this.FlashArray.String(), "FlashArrayType", "FlashArrayType", 1) + `,`,
+		`FlashBlade:` + strings.Replace(this.FlashBlade.String(), "FlashBladeType", "FlashBladeType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24038,10 +24154,15 @@ func (this *FlashBladeType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForFlashBlades := "[]*FlashBladeEndpoint{"
+	for _, f := range this.FlashBlades {
+		repeatedStringForFlashBlades += strings.Replace(f.String(), "FlashBladeEndpoint", "FlashBladeEndpoint", 1) + ","
+	}
+	repeatedStringForFlashBlades += "}"
 	s := strings.Join([]string{`&FlashBladeType{`,
 		`EnableSnapshotDirectory:` + fmt.Sprintf("%v", this.EnableSnapshotDirectory) + `,`,
 		`ExportRules:` + fmt.Sprintf("%v", this.ExportRules) + `,`,
-		`FlashBlades:` + strings.Replace(fmt.Sprintf("%v", this.FlashBlades), "FlashBladeEndpoint", "FlashBladeEndpoint", 1) + `,`,
+		`FlashBlades:` + repeatedStringForFlashBlades + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24054,7 +24175,7 @@ func (this *FlashBladeEndpoint) String() string {
 	for k, _ := range this.Lables {
 		keysForLables = append(keysForLables, k)
 	}
-	sortkeys.Strings(keysForLables)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLables)
 	mapStringForLables := "map[string]string{"
 	for _, k := range keysForLables {
 		mapStringForLables += fmt.Sprintf("%v: %v,", k, this.Lables[k])
@@ -24062,7 +24183,7 @@ func (this *FlashBladeEndpoint) String() string {
 	mapStringForLables += "}"
 	s := strings.Join([]string{`&FlashBladeEndpoint{`,
 		`MgmtEndpoint:` + fmt.Sprintf("%v", this.MgmtEndpoint) + `,`,
-		`ApiToken:` + strings.Replace(fmt.Sprintf("%v", this.ApiToken), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ApiToken:` + strings.Replace(fmt.Sprintf("%v", this.ApiToken), "SecretType", "schema.SecretType", 1) + `,`,
 		`NfsEndpoint:` + fmt.Sprintf("%v", this.NfsEndpoint) + `,`,
 		`Lables:` + mapStringForLables + `,`,
 		`}`,
@@ -24113,6 +24234,11 @@ func (this *FlashArrayType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForFlashArrays := "[]*FlashArrayEndpoint{"
+	for _, f := range this.FlashArrays {
+		repeatedStringForFlashArrays += strings.Replace(f.String(), "FlashArrayEndpoint", "FlashArrayEndpoint", 1) + ","
+	}
+	repeatedStringForFlashArrays += "}"
 	s := strings.Join([]string{`&FlashArrayType{`,
 		`SanType:` + fmt.Sprintf("%v", this.SanType) + `,`,
 		`DefaultFsType:` + fmt.Sprintf("%v", this.DefaultFsType) + `,`,
@@ -24120,7 +24246,7 @@ func (this *FlashArrayType) String() string {
 		`DefaultMountOpts:` + fmt.Sprintf("%v", this.DefaultMountOpts) + `,`,
 		`DisablePreemptAttachments:` + fmt.Sprintf("%v", this.DisablePreemptAttachments) + `,`,
 		`IscsiLoginTimeout:` + fmt.Sprintf("%v", this.IscsiLoginTimeout) + `,`,
-		`FlashArrays:` + strings.Replace(fmt.Sprintf("%v", this.FlashArrays), "FlashArrayEndpoint", "FlashArrayEndpoint", 1) + `,`,
+		`FlashArrays:` + repeatedStringForFlashArrays + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24133,7 +24259,7 @@ func (this *FlashArrayEndpoint) String() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -24141,7 +24267,7 @@ func (this *FlashArrayEndpoint) String() string {
 	mapStringForLabels += "}"
 	s := strings.Join([]string{`&FlashArrayEndpoint{`,
 		`MgmtEndpoint:` + fmt.Sprintf("%v", this.MgmtEndpoint) + `,`,
-		`ApiToken:` + strings.Replace(fmt.Sprintf("%v", this.ApiToken), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ApiToken:` + strings.Replace(fmt.Sprintf("%v", this.ApiToken), "SecretType", "schema.SecretType", 1) + `,`,
 		`Labels:` + mapStringForLabels + `,`,
 		`}`,
 	}, "")
@@ -24201,11 +24327,16 @@ func (this *StorageDeviceNetappBackendOntapSanType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorage := "[]*OntapVirtualStoragePoolType{"
+	for _, f := range this.Storage {
+		repeatedStringForStorage += strings.Replace(f.String(), "OntapVirtualStoragePoolType", "OntapVirtualStoragePoolType", 1) + ","
+	}
+	repeatedStringForStorage += "}"
 	keysForLabels := make([]string, 0, len(this.Labels))
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -24217,18 +24348,18 @@ func (this *StorageDeviceNetappBackendOntapSanType) String() string {
 		`DataLif:` + fmt.Sprintf("%v", this.DataLif) + `,`,
 		`Svm:` + fmt.Sprintf("%v", this.Svm) + `,`,
 		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
-		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`ChapChoice:` + fmt.Sprintf("%v", this.ChapChoice) + `,`,
 		`IgroupName:` + fmt.Sprintf("%v", this.IgroupName) + `,`,
 		`StoragePrefix:` + fmt.Sprintf("%v", this.StoragePrefix) + `,`,
 		`LimitAggregateUsage:` + fmt.Sprintf("%v", this.LimitAggregateUsage) + `,`,
 		`LimitVolumeSize:` + fmt.Sprintf("%v", this.LimitVolumeSize) + `,`,
-		`VolumeDefaults:` + strings.Replace(fmt.Sprintf("%v", this.VolumeDefaults), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
+		`VolumeDefaults:` + strings.Replace(this.VolumeDefaults.String(), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Region:` + fmt.Sprintf("%v", this.Region) + `,`,
-		`Storage:` + strings.Replace(fmt.Sprintf("%v", this.Storage), "OntapVirtualStoragePoolType", "OntapVirtualStoragePoolType", 1) + `,`,
+		`Storage:` + repeatedStringForStorage + `,`,
 		`ClientCertificate:` + fmt.Sprintf("%v", this.ClientCertificate) + `,`,
-		`ClientPrivateKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientPrivateKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ClientPrivateKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientPrivateKey), "SecretType", "schema.SecretType", 1) + `,`,
 		`TrustedCaCertificate:` + fmt.Sprintf("%v", this.TrustedCaCertificate) + `,`,
 		`}`,
 	}, "")
@@ -24279,7 +24410,7 @@ func (this *StorageDeviceNetappBackendOntapSanType_NoChap) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&StorageDeviceNetappBackendOntapSanType_NoChap{`,
-		`NoChap:` + strings.Replace(fmt.Sprintf("%v", this.NoChap), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoChap:` + strings.Replace(fmt.Sprintf("%v", this.NoChap), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24301,8 +24432,8 @@ func (this *DeviceNetappBackendOntapSanChapType) String() string {
 	s := strings.Join([]string{`&DeviceNetappBackendOntapSanChapType{`,
 		`ChapUsername:` + fmt.Sprintf("%v", this.ChapUsername) + `,`,
 		`ChapTargetUsername:` + fmt.Sprintf("%v", this.ChapTargetUsername) + `,`,
-		`ChapInitiatorSecret:` + strings.Replace(fmt.Sprintf("%v", this.ChapInitiatorSecret), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
-		`ChapTargetInitiatorSecret:` + strings.Replace(fmt.Sprintf("%v", this.ChapTargetInitiatorSecret), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ChapInitiatorSecret:` + strings.Replace(fmt.Sprintf("%v", this.ChapInitiatorSecret), "SecretType", "schema.SecretType", 1) + `,`,
+		`ChapTargetInitiatorSecret:` + strings.Replace(fmt.Sprintf("%v", this.ChapTargetInitiatorSecret), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24311,11 +24442,16 @@ func (this *StorageDeviceNetappBackendOntapNasType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorage := "[]*OntapVirtualStoragePoolType{"
+	for _, f := range this.Storage {
+		repeatedStringForStorage += strings.Replace(f.String(), "OntapVirtualStoragePoolType", "OntapVirtualStoragePoolType", 1) + ","
+	}
+	repeatedStringForStorage += "}"
 	keysForLabels := make([]string, 0, len(this.Labels))
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -24328,19 +24464,19 @@ func (this *StorageDeviceNetappBackendOntapNasType) String() string {
 		`DataLif:` + fmt.Sprintf("%v", this.DataLif) + `,`,
 		`Svm:` + fmt.Sprintf("%v", this.Svm) + `,`,
 		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
-		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`AutoExportPolicy:` + fmt.Sprintf("%v", this.AutoExportPolicy) + `,`,
-		`AutoExportCidrs:` + strings.Replace(fmt.Sprintf("%v", this.AutoExportCidrs), "PrefixStringListType", "ves_io_schema_views.PrefixStringListType", 1) + `,`,
+		`AutoExportCidrs:` + strings.Replace(fmt.Sprintf("%v", this.AutoExportCidrs), "PrefixStringListType", "views.PrefixStringListType", 1) + `,`,
 		`StoragePrefix:` + fmt.Sprintf("%v", this.StoragePrefix) + `,`,
 		`LimitAggregateUsage:` + fmt.Sprintf("%v", this.LimitAggregateUsage) + `,`,
 		`LimitVolumeSize:` + fmt.Sprintf("%v", this.LimitVolumeSize) + `,`,
 		`NfsMountOptions:` + fmt.Sprintf("%v", this.NfsMountOptions) + `,`,
-		`VolumeDefaults:` + strings.Replace(fmt.Sprintf("%v", this.VolumeDefaults), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
+		`VolumeDefaults:` + strings.Replace(this.VolumeDefaults.String(), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Region:` + fmt.Sprintf("%v", this.Region) + `,`,
-		`Storage:` + strings.Replace(fmt.Sprintf("%v", this.Storage), "OntapVirtualStoragePoolType", "OntapVirtualStoragePoolType", 1) + `,`,
+		`Storage:` + repeatedStringForStorage + `,`,
 		`ClientCertificate:` + fmt.Sprintf("%v", this.ClientCertificate) + `,`,
-		`ClientPrivateKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientPrivateKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ClientPrivateKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientPrivateKey), "SecretType", "schema.SecretType", 1) + `,`,
 		`TrustedCaCertificate:` + fmt.Sprintf("%v", this.TrustedCaCertificate) + `,`,
 		`}`,
 	}, "")
@@ -24411,7 +24547,7 @@ func (this *OntapVolumeDefaults_NoQos) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&OntapVolumeDefaults_NoQos{`,
-		`NoQos:` + strings.Replace(fmt.Sprintf("%v", this.NoQos), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoQos:` + strings.Replace(fmt.Sprintf("%v", this.NoQos), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24444,7 +24580,7 @@ func (this *OntapVirtualStoragePoolType) String() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -24453,7 +24589,7 @@ func (this *OntapVirtualStoragePoolType) String() string {
 	s := strings.Join([]string{`&OntapVirtualStoragePoolType{`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Zone:` + fmt.Sprintf("%v", this.Zone) + `,`,
-		`VolumeDefaults:` + strings.Replace(fmt.Sprintf("%v", this.VolumeDefaults), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
+		`VolumeDefaults:` + strings.Replace(this.VolumeDefaults.String(), "OntapVolumeDefaults", "OntapVolumeDefaults", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24466,7 +24602,7 @@ func (this *FleetStorageDeviceType) String() string {
 	for k, _ := range this.AdvancedAdvancedParameters {
 		keysForAdvancedAdvancedParameters = append(keysForAdvancedAdvancedParameters, k)
 	}
-	sortkeys.Strings(keysForAdvancedAdvancedParameters)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedAdvancedParameters)
 	mapStringForAdvancedAdvancedParameters := "map[string]string{"
 	for _, k := range keysForAdvancedAdvancedParameters {
 		mapStringForAdvancedAdvancedParameters += fmt.Sprintf("%v: %v,", k, this.AdvancedAdvancedParameters[k])
@@ -24515,7 +24651,7 @@ func (this *FleetStorageDeviceType_CustomStorage) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FleetStorageDeviceType_CustomStorage{`,
-		`CustomStorage:` + strings.Replace(fmt.Sprintf("%v", this.CustomStorage), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`CustomStorage:` + strings.Replace(fmt.Sprintf("%v", this.CustomStorage), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24524,8 +24660,13 @@ func (this *FleetStorageDeviceListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorageDevices := "[]*FleetStorageDeviceType{"
+	for _, f := range this.StorageDevices {
+		repeatedStringForStorageDevices += strings.Replace(f.String(), "FleetStorageDeviceType", "FleetStorageDeviceType", 1) + ","
+	}
+	repeatedStringForStorageDevices += "}"
 	s := strings.Join([]string{`&FleetStorageDeviceListType{`,
-		`StorageDevices:` + strings.Replace(fmt.Sprintf("%v", this.StorageDevices), "FleetStorageDeviceType", "FleetStorageDeviceType", 1) + `,`,
+		`StorageDevices:` + repeatedStringForStorageDevices + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24594,7 +24735,7 @@ func (this *StorageClassNetappTridentType) String() string {
 	for k, _ := range this.Selector {
 		keysForSelector = append(keysForSelector, k)
 	}
-	sortkeys.Strings(keysForSelector)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSelector)
 	mapStringForSelector := "map[string]string{"
 	for _, k := range keysForSelector {
 		mapStringForSelector += fmt.Sprintf("%v: %v,", k, this.Selector[k])
@@ -24637,7 +24778,7 @@ func (this *FleetStorageClassType) String() string {
 	for k, _ := range this.AdvancedStorageParameters {
 		keysForAdvancedStorageParameters = append(keysForAdvancedStorageParameters, k)
 	}
-	sortkeys.Strings(keysForAdvancedStorageParameters)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForAdvancedStorageParameters)
 	mapStringForAdvancedStorageParameters := "map[string]string{"
 	for _, k := range keysForAdvancedStorageParameters {
 		mapStringForAdvancedStorageParameters += fmt.Sprintf("%v: %v,", k, this.AdvancedStorageParameters[k])
@@ -24700,8 +24841,13 @@ func (this *FleetStorageClassListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorageClasses := "[]*FleetStorageClassType{"
+	for _, f := range this.StorageClasses {
+		repeatedStringForStorageClasses += strings.Replace(f.String(), "FleetStorageClassType", "FleetStorageClassType", 1) + ","
+	}
+	repeatedStringForStorageClasses += "}"
 	s := strings.Join([]string{`&FleetStorageClassListType{`,
-		`StorageClasses:` + strings.Replace(fmt.Sprintf("%v", this.StorageClasses), "FleetStorageClassType", "FleetStorageClassType", 1) + `,`,
+		`StorageClasses:` + repeatedStringForStorageClasses + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24745,7 +24891,7 @@ func (this *FleetBondDeviceType_ActiveBackup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&FleetBondDeviceType_ActiveBackup{`,
-		`ActiveBackup:` + strings.Replace(fmt.Sprintf("%v", this.ActiveBackup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ActiveBackup:` + strings.Replace(fmt.Sprintf("%v", this.ActiveBackup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24754,8 +24900,13 @@ func (this *FleetBondDevicesListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForBondDevices := "[]*FleetBondDeviceType{"
+	for _, f := range this.BondDevices {
+		repeatedStringForBondDevices += strings.Replace(f.String(), "FleetBondDeviceType", "FleetBondDeviceType", 1) + ","
+	}
+	repeatedStringForBondDevices += "}"
 	s := strings.Join([]string{`&FleetBondDevicesListType{`,
-		`BondDevices:` + strings.Replace(fmt.Sprintf("%v", this.BondDevices), "FleetBondDeviceType", "FleetBondDeviceType", 1) + `,`,
+		`BondDevices:` + repeatedStringForBondDevices + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24764,8 +24915,13 @@ func (this *FleetStorageStaticRoutesListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorageRoutes := "[]*StaticRouteType{"
+	for _, f := range this.StorageRoutes {
+		repeatedStringForStorageRoutes += strings.Replace(fmt.Sprintf("%v", f), "StaticRouteType", "schema.StaticRouteType", 1) + ","
+	}
+	repeatedStringForStorageRoutes += "}"
 	s := strings.Join([]string{`&FleetStorageStaticRoutesListType{`,
-		`StorageRoutes:` + strings.Replace(fmt.Sprintf("%v", this.StorageRoutes), "StaticRouteType", "ves_io_schema4.StaticRouteType", 1) + `,`,
+		`StorageRoutes:` + repeatedStringForStorageRoutes + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24786,8 +24942,13 @@ func (this *BGPConfiguration) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPeers := "[]*Peer{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(fmt.Sprintf("%v", f), "Peer", "bgp.Peer", 1) + ","
+	}
+	repeatedStringForPeers += "}"
 	s := strings.Join([]string{`&BGPConfiguration{`,
-		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "ves_io_schema_bgp.Peer", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
 		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
 		`}`,
 	}, "")
@@ -24799,7 +24960,7 @@ func (this *LocalControlPlaneType) String() string {
 	}
 	s := strings.Join([]string{`&LocalControlPlaneType{`,
 		`NetworkChoice:` + fmt.Sprintf("%v", this.NetworkChoice) + `,`,
-		`BgpConfig:` + strings.Replace(fmt.Sprintf("%v", this.BgpConfig), "BGPConfiguration", "BGPConfiguration", 1) + `,`,
+		`BgpConfig:` + strings.Replace(this.BgpConfig.String(), "BGPConfiguration", "BGPConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24809,7 +24970,7 @@ func (this *LocalControlPlaneType_InsideVn) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&LocalControlPlaneType_InsideVn{`,
-		`InsideVn:` + strings.Replace(fmt.Sprintf("%v", this.InsideVn), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`InsideVn:` + strings.Replace(fmt.Sprintf("%v", this.InsideVn), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24819,7 +24980,7 @@ func (this *LocalControlPlaneType_OutsideVn) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&LocalControlPlaneType_OutsideVn{`,
-		`OutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVn), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`OutsideVn:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVn), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24828,15 +24989,45 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDevices := "[]*DeviceInstanceType{"
+	for _, f := range this.Devices {
+		repeatedStringForDevices += strings.Replace(f.String(), "DeviceInstanceType", "DeviceInstanceType", 1) + ","
+	}
+	repeatedStringForDevices += "}"
+	repeatedStringForNetworkConnectors := "[]*ObjectRefType{"
+	for _, f := range this.NetworkConnectors {
+		repeatedStringForNetworkConnectors += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkConnectors += "}"
+	repeatedStringForNetworkFirewall := "[]*ObjectRefType{"
+	for _, f := range this.NetworkFirewall {
+		repeatedStringForNetworkFirewall += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkFirewall += "}"
+	repeatedStringForOutsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.OutsideVirtualNetwork {
+		repeatedStringForOutsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOutsideVirtualNetwork += "}"
+	repeatedStringForInsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.InsideVirtualNetwork {
+		repeatedStringForInsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInsideVirtualNetwork += "}"
+	repeatedStringForSingleSite := "[]*ObjectRefType{"
+	for _, f := range this.SingleSite {
+		repeatedStringForSingleSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForSingleSite += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`FleetLabel:` + fmt.Sprintf("%v", this.FleetLabel) + `,`,
 		`VolterraSoftwareVersion:` + fmt.Sprintf("%v", this.VolterraSoftwareVersion) + `,`,
-		`Devices:` + strings.Replace(fmt.Sprintf("%v", this.Devices), "DeviceInstanceType", "DeviceInstanceType", 1) + `,`,
-		`NetworkConnectors:` + strings.Replace(fmt.Sprintf("%v", this.NetworkConnectors), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`NetworkFirewall:` + strings.Replace(fmt.Sprintf("%v", this.NetworkFirewall), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Devices:` + repeatedStringForDevices + `,`,
+		`NetworkConnectors:` + repeatedStringForNetworkConnectors + `,`,
+		`NetworkFirewall:` + repeatedStringForNetworkFirewall + `,`,
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
-		`OutsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`InsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`OutsideVirtualNetwork:` + repeatedStringForOutsideVirtualNetwork + `,`,
+		`InsideVirtualNetwork:` + repeatedStringForInsideVirtualNetwork + `,`,
 		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
 		`BondChoice:` + fmt.Sprintf("%v", this.BondChoice) + `,`,
 		`StorageInterfaceChoice:` + fmt.Sprintf("%v", this.StorageInterfaceChoice) + `,`,
@@ -24848,12 +25039,12 @@ func (this *GlobalSpecType) String() string {
 		`StorageStaticRoutesChoice:` + fmt.Sprintf("%v", this.StorageStaticRoutesChoice) + `,`,
 		`EnableDefaultFleetConfigDownload:` + fmt.Sprintf("%v", this.EnableDefaultFleetConfigDownload) + `,`,
 		`FleetType:` + fmt.Sprintf("%v", this.FleetType) + `,`,
-		`SingleSite:` + strings.Replace(fmt.Sprintf("%v", this.SingleSite), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`SingleSite:` + repeatedStringForSingleSite + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`UsbPolicyChoice:` + fmt.Sprintf("%v", this.UsbPolicyChoice) + `,`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "LocalControlPlaneType", 1) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`LocalControlPlane:` + strings.Replace(this.LocalControlPlane.String(), "LocalControlPlaneType", "LocalControlPlaneType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`GeneratedYamls:` + fmt.Sprintf("%v", this.GeneratedYamls) + `,`,
 		`}`,
 	}, "")
@@ -24874,7 +25065,7 @@ func (this *GlobalSpecType_LegacyDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LegacyDevices{`,
-		`LegacyDevices:` + strings.Replace(fmt.Sprintf("%v", this.LegacyDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LegacyDevices:` + strings.Replace(fmt.Sprintf("%v", this.LegacyDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24884,7 +25075,7 @@ func (this *GlobalSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24904,7 +25095,7 @@ func (this *GlobalSpecType_NoStorageInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoStorageInterfaces{`,
-		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24924,7 +25115,7 @@ func (this *GlobalSpecType_NoStorageDevice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoStorageDevice{`,
-		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24944,7 +25135,7 @@ func (this *GlobalSpecType_DefaultStorageClass) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DefaultStorageClass{`,
-		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24964,7 +25155,7 @@ func (this *GlobalSpecType_NoDcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoDcClusterGroup{`,
-		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24974,7 +25165,7 @@ func (this *GlobalSpecType_DcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DcClusterGroup{`,
-		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24984,7 +25175,7 @@ func (this *GlobalSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24994,7 +25185,7 @@ func (this *GlobalSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25004,7 +25195,7 @@ func (this *GlobalSpecType_NoStorageStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoStorageStaticRoutes{`,
-		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25024,7 +25215,7 @@ func (this *GlobalSpecType_DcClusterGroupInside) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DcClusterGroupInside{`,
-		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25034,7 +25225,7 @@ func (this *GlobalSpecType_DefaultInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DefaultInterfaces{`,
-		`DefaultInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.DefaultInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.DefaultInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25044,7 +25235,7 @@ func (this *GlobalSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25054,7 +25245,7 @@ func (this *GlobalSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25064,7 +25255,7 @@ func (this *GlobalSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25074,7 +25265,7 @@ func (this *GlobalSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25084,7 +25275,7 @@ func (this *GlobalSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25103,14 +25294,34 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForNetworkConnectors := "[]*ObjectRefType{"
+	for _, f := range this.NetworkConnectors {
+		repeatedStringForNetworkConnectors += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkConnectors += "}"
+	repeatedStringForNetworkFirewall := "[]*ObjectRefType{"
+	for _, f := range this.NetworkFirewall {
+		repeatedStringForNetworkFirewall += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkFirewall += "}"
+	repeatedStringForOutsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.OutsideVirtualNetwork {
+		repeatedStringForOutsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOutsideVirtualNetwork += "}"
+	repeatedStringForInsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.InsideVirtualNetwork {
+		repeatedStringForInsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInsideVirtualNetwork += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`FleetLabel:` + fmt.Sprintf("%v", this.FleetLabel) + `,`,
 		`VolterraSoftwareVersion:` + fmt.Sprintf("%v", this.VolterraSoftwareVersion) + `,`,
-		`NetworkConnectors:` + strings.Replace(fmt.Sprintf("%v", this.NetworkConnectors), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`NetworkFirewall:` + strings.Replace(fmt.Sprintf("%v", this.NetworkFirewall), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`NetworkConnectors:` + repeatedStringForNetworkConnectors + `,`,
+		`NetworkFirewall:` + repeatedStringForNetworkFirewall + `,`,
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
-		`OutsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`InsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`OutsideVirtualNetwork:` + repeatedStringForOutsideVirtualNetwork + `,`,
+		`InsideVirtualNetwork:` + repeatedStringForInsideVirtualNetwork + `,`,
 		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
 		`BondChoice:` + fmt.Sprintf("%v", this.BondChoice) + `,`,
 		`StorageInterfaceChoice:` + fmt.Sprintf("%v", this.StorageInterfaceChoice) + `,`,
@@ -25151,7 +25362,7 @@ func (this *CreateSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25171,7 +25382,7 @@ func (this *CreateSpecType_NoStorageInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoStorageInterfaces{`,
-		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25191,7 +25402,7 @@ func (this *CreateSpecType_NoStorageDevice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoStorageDevice{`,
-		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25211,7 +25422,7 @@ func (this *CreateSpecType_DefaultStorageClass) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DefaultStorageClass{`,
-		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25231,7 +25442,7 @@ func (this *CreateSpecType_NoDcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoDcClusterGroup{`,
-		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25241,7 +25452,7 @@ func (this *CreateSpecType_DcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DcClusterGroup{`,
-		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25251,7 +25462,7 @@ func (this *CreateSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25261,7 +25472,7 @@ func (this *CreateSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25271,7 +25482,7 @@ func (this *CreateSpecType_NoStorageStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoStorageStaticRoutes{`,
-		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25291,7 +25502,7 @@ func (this *CreateSpecType_DcClusterGroupInside) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DcClusterGroupInside{`,
-		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25301,7 +25512,7 @@ func (this *CreateSpecType_DefaultConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DefaultConfig{`,
-		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25311,7 +25522,7 @@ func (this *CreateSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25321,7 +25532,7 @@ func (this *CreateSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25331,7 +25542,7 @@ func (this *CreateSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25341,7 +25552,7 @@ func (this *CreateSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25351,7 +25562,7 @@ func (this *CreateSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25370,13 +25581,33 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForNetworkConnectors := "[]*ObjectRefType{"
+	for _, f := range this.NetworkConnectors {
+		repeatedStringForNetworkConnectors += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkConnectors += "}"
+	repeatedStringForNetworkFirewall := "[]*ObjectRefType{"
+	for _, f := range this.NetworkFirewall {
+		repeatedStringForNetworkFirewall += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkFirewall += "}"
+	repeatedStringForOutsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.OutsideVirtualNetwork {
+		repeatedStringForOutsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOutsideVirtualNetwork += "}"
+	repeatedStringForInsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.InsideVirtualNetwork {
+		repeatedStringForInsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInsideVirtualNetwork += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`VolterraSoftwareVersion:` + fmt.Sprintf("%v", this.VolterraSoftwareVersion) + `,`,
-		`NetworkConnectors:` + strings.Replace(fmt.Sprintf("%v", this.NetworkConnectors), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`NetworkFirewall:` + strings.Replace(fmt.Sprintf("%v", this.NetworkFirewall), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`NetworkConnectors:` + repeatedStringForNetworkConnectors + `,`,
+		`NetworkFirewall:` + repeatedStringForNetworkFirewall + `,`,
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
-		`OutsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`InsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`OutsideVirtualNetwork:` + repeatedStringForOutsideVirtualNetwork + `,`,
+		`InsideVirtualNetwork:` + repeatedStringForInsideVirtualNetwork + `,`,
 		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
 		`BondChoice:` + fmt.Sprintf("%v", this.BondChoice) + `,`,
 		`StorageInterfaceChoice:` + fmt.Sprintf("%v", this.StorageInterfaceChoice) + `,`,
@@ -25417,7 +25648,7 @@ func (this *ReplaceSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25437,7 +25668,7 @@ func (this *ReplaceSpecType_NoStorageInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoStorageInterfaces{`,
-		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25457,7 +25688,7 @@ func (this *ReplaceSpecType_NoStorageDevice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoStorageDevice{`,
-		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25477,7 +25708,7 @@ func (this *ReplaceSpecType_DefaultStorageClass) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DefaultStorageClass{`,
-		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25497,7 +25728,7 @@ func (this *ReplaceSpecType_NoDcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoDcClusterGroup{`,
-		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25507,7 +25738,7 @@ func (this *ReplaceSpecType_DcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DcClusterGroup{`,
-		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25517,7 +25748,7 @@ func (this *ReplaceSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25527,7 +25758,7 @@ func (this *ReplaceSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25537,7 +25768,7 @@ func (this *ReplaceSpecType_NoStorageStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoStorageStaticRoutes{`,
-		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25557,7 +25788,7 @@ func (this *ReplaceSpecType_DcClusterGroupInside) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DcClusterGroupInside{`,
-		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25567,7 +25798,7 @@ func (this *ReplaceSpecType_DefaultConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DefaultConfig{`,
-		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25577,7 +25808,7 @@ func (this *ReplaceSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25587,7 +25818,7 @@ func (this *ReplaceSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25597,7 +25828,7 @@ func (this *ReplaceSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25607,7 +25838,7 @@ func (this *ReplaceSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25617,7 +25848,7 @@ func (this *ReplaceSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25636,14 +25867,34 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForNetworkConnectors := "[]*ObjectRefType{"
+	for _, f := range this.NetworkConnectors {
+		repeatedStringForNetworkConnectors += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkConnectors += "}"
+	repeatedStringForNetworkFirewall := "[]*ObjectRefType{"
+	for _, f := range this.NetworkFirewall {
+		repeatedStringForNetworkFirewall += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkFirewall += "}"
+	repeatedStringForOutsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.OutsideVirtualNetwork {
+		repeatedStringForOutsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOutsideVirtualNetwork += "}"
+	repeatedStringForInsideVirtualNetwork := "[]*ObjectRefType{"
+	for _, f := range this.InsideVirtualNetwork {
+		repeatedStringForInsideVirtualNetwork += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForInsideVirtualNetwork += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`FleetLabel:` + fmt.Sprintf("%v", this.FleetLabel) + `,`,
 		`VolterraSoftwareVersion:` + fmt.Sprintf("%v", this.VolterraSoftwareVersion) + `,`,
-		`NetworkConnectors:` + strings.Replace(fmt.Sprintf("%v", this.NetworkConnectors), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`NetworkFirewall:` + strings.Replace(fmt.Sprintf("%v", this.NetworkFirewall), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`NetworkConnectors:` + repeatedStringForNetworkConnectors + `,`,
+		`NetworkFirewall:` + repeatedStringForNetworkFirewall + `,`,
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
-		`OutsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`InsideVirtualNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideVirtualNetwork), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`OutsideVirtualNetwork:` + repeatedStringForOutsideVirtualNetwork + `,`,
+		`InsideVirtualNetwork:` + repeatedStringForInsideVirtualNetwork + `,`,
 		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
 		`BondChoice:` + fmt.Sprintf("%v", this.BondChoice) + `,`,
 		`StorageInterfaceChoice:` + fmt.Sprintf("%v", this.StorageInterfaceChoice) + `,`,
@@ -25684,7 +25935,7 @@ func (this *GetSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25704,7 +25955,7 @@ func (this *GetSpecType_NoStorageInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoStorageInterfaces{`,
-		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25724,7 +25975,7 @@ func (this *GetSpecType_NoStorageDevice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoStorageDevice{`,
-		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25744,7 +25995,7 @@ func (this *GetSpecType_DefaultStorageClass) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DefaultStorageClass{`,
-		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25764,7 +26015,7 @@ func (this *GetSpecType_NoDcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoDcClusterGroup{`,
-		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25774,7 +26025,7 @@ func (this *GetSpecType_DcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DcClusterGroup{`,
-		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25784,7 +26035,7 @@ func (this *GetSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25794,7 +26045,7 @@ func (this *GetSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25804,7 +26055,7 @@ func (this *GetSpecType_NoStorageStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoStorageStaticRoutes{`,
-		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25824,7 +26075,7 @@ func (this *GetSpecType_DcClusterGroupInside) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DcClusterGroupInside{`,
-		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroupInside:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroupInside), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25834,7 +26085,7 @@ func (this *GetSpecType_DefaultConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DefaultConfig{`,
-		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25844,7 +26095,7 @@ func (this *GetSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25854,7 +26105,7 @@ func (this *GetSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25864,7 +26115,7 @@ func (this *GetSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25874,7 +26125,7 @@ func (this *GetSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25884,7 +26135,7 @@ func (this *GetSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -25932,7 +26183,7 @@ func (m *NetworkingDeviceInstanceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -25960,7 +26211,7 @@ func (m *NetworkingDeviceInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -25969,10 +26220,13 @@ func (m *NetworkingDeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Interface = append(m.Interface, &ves_io_schema4.ObjectRefType{})
+			m.Interface = append(m.Interface, &schema.ObjectRefType{})
 			if err := m.Interface[len(m.Interface)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -25991,7 +26245,7 @@ func (m *NetworkingDeviceInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Use |= (NetworkingDeviceInstanceUseType(b) & 0x7F) << shift
+				m.Use |= NetworkingDeviceInstanceUseType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26003,6 +26257,9 @@ func (m *NetworkingDeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26032,7 +26289,7 @@ func (m *GenericDeviceInstanceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26053,6 +26310,9 @@ func (m *GenericDeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26082,7 +26342,7 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26110,7 +26370,7 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26120,6 +26380,9 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26139,7 +26402,7 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Owner |= (DeviceOwnerType(b) & 0x7F) << shift
+				m.Owner |= DeviceOwnerType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26158,7 +26421,7 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26167,6 +26430,9 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26183,6 +26449,9 @@ func (m *DeviceInstanceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26212,7 +26481,7 @@ func (m *FleetInterfaceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26240,7 +26509,7 @@ func (m *FleetInterfaceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26249,10 +26518,13 @@ func (m *FleetInterfaceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Interfaces = append(m.Interfaces, &ves_io_schema_views.ObjectRefType{})
+			m.Interfaces = append(m.Interfaces, &views.ObjectRefType{})
 			if err := m.Interfaces[len(m.Interfaces)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -26264,6 +26536,9 @@ func (m *FleetInterfaceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26293,7 +26568,7 @@ func (m *FleetDeviceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26321,7 +26596,7 @@ func (m *FleetDeviceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26330,6 +26605,9 @@ func (m *FleetDeviceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26345,6 +26623,9 @@ func (m *FleetDeviceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26374,7 +26655,7 @@ func (m *StorageDeviceOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26402,7 +26683,7 @@ func (m *StorageDeviceOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26411,6 +26692,9 @@ func (m *StorageDeviceOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26426,6 +26710,9 @@ func (m *StorageDeviceOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26455,7 +26742,7 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26483,7 +26770,7 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26493,6 +26780,9 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26512,7 +26802,7 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26522,6 +26812,9 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26541,7 +26834,7 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26551,6 +26844,9 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26563,6 +26859,9 @@ func (m *OpenebsMayastorPoolType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26592,7 +26891,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26620,7 +26919,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26630,6 +26929,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26649,7 +26951,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26658,11 +26960,14 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Password == nil {
-				m.Password = &ves_io_schema4.SecretType{}
+				m.Password = &schema.SecretType{}
 			}
 			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -26682,7 +26987,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26691,10 +26996,13 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -26714,7 +27022,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26724,6 +27032,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26743,7 +27054,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26753,6 +27064,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26772,7 +27086,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26782,6 +27096,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26801,7 +27118,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ApiServerPort |= (uint32(b) & 0x7F) << shift
+				m.ApiServerPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26820,7 +27137,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26830,6 +27147,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26849,7 +27169,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26859,6 +27179,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26878,7 +27201,7 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26888,6 +27211,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26900,6 +27226,9 @@ func (m *StorageDeviceDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -26929,7 +27258,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -26957,7 +27286,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26967,6 +27296,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -26986,7 +27318,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -26996,6 +27328,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27015,7 +27350,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ApiServerPort |= (uint32(b) & 0x7F) << shift
+				m.ApiServerPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27034,7 +27369,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27044,6 +27379,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27063,7 +27401,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27072,11 +27410,14 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Password == nil {
-				m.Password = &ves_io_schema4.SecretType{}
+				m.Password = &schema.SecretType{}
 			}
 			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -27096,7 +27437,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27106,6 +27447,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27125,7 +27469,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitIops |= (uint32(b) & 0x7F) << shift
+				m.LimitIops |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27144,7 +27488,7 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitMbps |= (uint32(b) & 0x7F) << shift
+				m.LimitMbps |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27156,6 +27500,9 @@ func (m *StorageDeviceHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -27185,7 +27532,7 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -27213,7 +27560,7 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27223,6 +27570,9 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27242,7 +27592,7 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27262,7 +27612,7 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27282,7 +27632,7 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27291,6 +27641,9 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27308,6 +27661,9 @@ func (m *StorageDevicePureStorageServiceOrchestratorType) Unmarshal(dAtA []byte)
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -27337,7 +27693,7 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -27365,7 +27721,7 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27374,6 +27730,9 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27398,7 +27757,7 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27407,6 +27766,9 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27424,6 +27786,9 @@ func (m *PsoArrayConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -27453,7 +27818,7 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -27481,7 +27846,7 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27501,7 +27866,7 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27511,6 +27876,9 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27530,7 +27898,7 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27539,6 +27907,9 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27554,6 +27925,9 @@ func (m *FlashBladeType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -27583,7 +27957,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -27611,7 +27985,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27621,6 +27995,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27640,7 +28017,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27650,6 +28027,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27669,7 +28049,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27678,11 +28058,14 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ApiToken == nil {
-				m.ApiToken = &ves_io_schema4.SecretType{}
+				m.ApiToken = &schema.SecretType{}
 			}
 			if err := m.ApiToken.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -27702,7 +28085,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27712,6 +28095,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27731,7 +28117,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27741,6 +28127,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27760,7 +28149,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27769,6 +28158,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27789,7 +28181,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -27806,7 +28198,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -27816,6 +28208,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -27832,7 +28227,7 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -27842,6 +28237,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -27873,6 +28271,9 @@ func (m *FlashBladeEndpoint) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27900,7 +28301,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -27928,7 +28329,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27938,6 +28339,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27957,7 +28361,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27967,6 +28371,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -27986,7 +28393,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -27996,6 +28403,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28015,7 +28425,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28025,6 +28435,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28044,7 +28457,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28064,7 +28477,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IscsiLoginTimeout |= (int32(b) & 0x7F) << shift
+				m.IscsiLoginTimeout |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28083,7 +28496,7 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28092,6 +28505,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28107,6 +28523,9 @@ func (m *FlashArrayType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -28136,7 +28555,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -28164,7 +28583,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28174,6 +28593,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28193,7 +28615,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28203,6 +28625,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28222,7 +28647,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28231,11 +28656,14 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ApiToken == nil {
-				m.ApiToken = &ves_io_schema4.SecretType{}
+				m.ApiToken = &schema.SecretType{}
 			}
 			if err := m.ApiToken.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -28255,7 +28683,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28264,6 +28692,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28284,7 +28715,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -28301,7 +28732,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -28311,6 +28742,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -28327,7 +28761,7 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -28337,6 +28771,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -28366,6 +28803,9 @@ func (m *FlashArrayEndpoint) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -28395,7 +28835,7 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -28423,7 +28863,7 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28432,6 +28872,9 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28455,7 +28898,7 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28464,6 +28907,9 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28480,6 +28926,9 @@ func (m *StorageDeviceNetappTridentType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -28509,7 +28958,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -28537,7 +28986,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28547,6 +28996,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28566,7 +29018,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28576,6 +29028,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28595,7 +29050,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28605,6 +29060,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28624,7 +29082,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28634,6 +29092,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28653,7 +29114,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28663,6 +29124,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28682,7 +29146,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28692,6 +29156,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28711,7 +29178,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28721,6 +29188,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28740,7 +29210,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28749,11 +29219,14 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Password == nil {
-				m.Password = &ves_io_schema4.SecretType{}
+				m.Password = &schema.SecretType{}
 			}
 			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -28773,7 +29246,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28782,10 +29255,13 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -28805,7 +29281,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28814,6 +29290,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28837,7 +29316,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28847,6 +29326,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28866,7 +29348,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28876,6 +29358,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28895,7 +29380,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitAggregateUsage |= (uint32(b) & 0x7F) << shift
+				m.LimitAggregateUsage |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28914,7 +29399,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitVolumeSize |= (int32(b) & 0x7F) << shift
+				m.LimitVolumeSize |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28933,7 +29418,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28942,6 +29427,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28966,7 +29454,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -28975,6 +29463,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -28995,7 +29486,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -29012,7 +29503,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -29022,6 +29513,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -29038,7 +29532,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -29048,6 +29542,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -29084,7 +29581,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29094,6 +29591,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29113,7 +29613,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29122,6 +29622,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29144,7 +29647,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29154,6 +29657,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29173,7 +29679,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29182,11 +29688,14 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ClientPrivateKey == nil {
-				m.ClientPrivateKey = &ves_io_schema4.SecretType{}
+				m.ClientPrivateKey = &schema.SecretType{}
 			}
 			if err := m.ClientPrivateKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -29206,7 +29715,7 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29216,6 +29725,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29228,6 +29740,9 @@ func (m *StorageDeviceNetappBackendOntapSanType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -29257,7 +29772,7 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -29285,7 +29800,7 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29295,6 +29810,9 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29314,7 +29832,7 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29324,6 +29842,9 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29343,7 +29864,7 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29352,11 +29873,14 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ChapInitiatorSecret == nil {
-				m.ChapInitiatorSecret = &ves_io_schema4.SecretType{}
+				m.ChapInitiatorSecret = &schema.SecretType{}
 			}
 			if err := m.ChapInitiatorSecret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -29376,7 +29900,7 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29385,11 +29909,14 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ChapTargetInitiatorSecret == nil {
-				m.ChapTargetInitiatorSecret = &ves_io_schema4.SecretType{}
+				m.ChapTargetInitiatorSecret = &schema.SecretType{}
 			}
 			if err := m.ChapTargetInitiatorSecret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -29402,6 +29929,9 @@ func (m *DeviceNetappBackendOntapSanChapType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -29431,7 +29961,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -29459,7 +29989,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29469,6 +29999,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29488,7 +30021,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29498,6 +30031,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29517,7 +30053,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29527,6 +30063,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29546,7 +30085,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29556,6 +30095,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29575,7 +30117,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29585,6 +30127,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29604,7 +30149,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29614,6 +30159,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29633,7 +30181,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29643,6 +30191,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29662,7 +30213,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29672,6 +30223,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29691,7 +30245,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29700,11 +30254,14 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Password == nil {
-				m.Password = &ves_io_schema4.SecretType{}
+				m.Password = &schema.SecretType{}
 			}
 			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -29724,7 +30281,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29744,7 +30301,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29753,11 +30310,14 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.AutoExportCidrs == nil {
-				m.AutoExportCidrs = &ves_io_schema_views.PrefixStringListType{}
+				m.AutoExportCidrs = &views.PrefixStringListType{}
 			}
 			if err := m.AutoExportCidrs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -29777,7 +30337,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29787,6 +30347,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29806,7 +30369,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29816,6 +30379,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29835,7 +30401,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29845,6 +30411,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29864,7 +30433,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29874,6 +30443,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29893,7 +30465,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29902,6 +30474,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29926,7 +30501,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -29935,6 +30510,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -29955,7 +30533,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -29972,7 +30550,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -29982,6 +30560,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -29998,7 +30579,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -30008,6 +30589,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -30044,7 +30628,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30054,6 +30638,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30073,7 +30660,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30082,6 +30669,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30104,7 +30694,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30114,6 +30704,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30133,7 +30726,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30142,11 +30735,14 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ClientPrivateKey == nil {
-				m.ClientPrivateKey = &ves_io_schema4.SecretType{}
+				m.ClientPrivateKey = &schema.SecretType{}
 			}
 			if err := m.ClientPrivateKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -30166,7 +30762,7 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30176,6 +30772,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30188,6 +30787,9 @@ func (m *StorageDeviceNetappBackendOntapNasType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -30217,7 +30819,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -30245,7 +30847,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30255,6 +30857,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30274,7 +30879,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30284,6 +30889,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30303,7 +30911,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30313,6 +30921,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30332,7 +30943,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30352,7 +30963,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30372,7 +30983,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnixPermissions |= (int32(b) & 0x7F) << shift
+				m.UnixPermissions |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30391,7 +31002,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30411,7 +31022,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30421,6 +31032,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30440,7 +31054,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30450,6 +31064,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30469,7 +31086,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30479,6 +31096,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30498,7 +31118,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30507,10 +31127,13 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -30530,7 +31153,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30540,6 +31163,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30559,7 +31185,7 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30569,6 +31195,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30581,6 +31210,9 @@ func (m *OntapVolumeDefaults) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -30610,7 +31242,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -30638,7 +31270,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30647,6 +31279,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30667,7 +31302,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -30684,7 +31319,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -30694,6 +31329,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -30710,7 +31348,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -30720,6 +31358,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -30756,7 +31397,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30766,6 +31407,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30785,7 +31429,7 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30794,6 +31438,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30811,6 +31458,9 @@ func (m *OntapVirtualStoragePoolType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -30840,7 +31490,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -30868,7 +31518,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30878,6 +31528,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30897,7 +31550,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -30906,6 +31559,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -30926,7 +31582,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -30943,7 +31599,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -30953,6 +31609,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -30969,7 +31628,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -30979,6 +31638,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -31015,7 +31677,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31024,6 +31686,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31047,7 +31712,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31056,6 +31721,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31079,7 +31747,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31088,6 +31756,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31111,7 +31782,7 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31120,10 +31791,13 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -31136,6 +31810,9 @@ func (m *FleetStorageDeviceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31165,7 +31842,7 @@ func (m *FleetStorageDeviceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31193,7 +31870,7 @@ func (m *FleetStorageDeviceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31202,6 +31879,9 @@ func (m *FleetStorageDeviceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31217,6 +31897,9 @@ func (m *FleetStorageDeviceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31246,7 +31929,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31274,7 +31957,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31284,6 +31967,9 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31303,7 +31989,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31313,6 +31999,9 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31332,7 +32021,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31342,6 +32031,9 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31361,7 +32053,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31371,6 +32063,9 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31390,7 +32085,7 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31403,6 +32098,9 @@ func (m *StorageClassDellIsilonF800Type) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31432,7 +32130,7 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31460,7 +32158,7 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31470,6 +32168,9 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31489,7 +32190,7 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitIops |= (uint32(b) & 0x7F) << shift
+				m.LimitIops |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31508,7 +32209,7 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LimitMbps |= (uint32(b) & 0x7F) << shift
+				m.LimitMbps |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31520,6 +32221,9 @@ func (m *StorageClassHPENimbusStorageAf40Type) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31549,7 +32253,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31577,7 +32281,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31587,6 +32291,9 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31606,7 +32313,7 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Replication |= (int32(b) & 0x7F) << shift
+				m.Replication |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31618,6 +32325,9 @@ func (m *StorageClassOpenebsEnterpriseType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31647,7 +32357,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31675,7 +32385,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31684,6 +32394,9 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31704,7 +32417,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -31721,7 +32434,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -31731,6 +32444,9 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -31747,7 +32463,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -31757,6 +32473,9 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -31793,7 +32512,7 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31803,6 +32522,9 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31815,6 +32537,9 @@ func (m *StorageClassNetappTridentType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31844,7 +32569,7 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31872,7 +32597,7 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31882,6 +32607,9 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31901,7 +32629,7 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IopsLimit |= (uint32(b) & 0x7F) << shift
+				m.IopsLimit |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31920,7 +32648,7 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -31930,6 +32658,9 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -31942,6 +32673,9 @@ func (m *StorageClassPureServiceOrchestratorType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -31971,7 +32705,7 @@ func (m *StorageClassCustomType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -31999,7 +32733,7 @@ func (m *StorageClassCustomType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32009,6 +32743,9 @@ func (m *StorageClassCustomType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32021,6 +32758,9 @@ func (m *StorageClassCustomType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32050,7 +32790,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32078,7 +32818,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32088,6 +32828,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32107,7 +32850,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32117,6 +32860,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32136,7 +32882,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32156,7 +32902,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32165,6 +32911,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32185,7 +32934,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -32202,7 +32951,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -32212,6 +32961,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -32228,7 +32980,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -32238,6 +32990,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -32274,7 +33029,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32284,6 +33039,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32303,7 +33061,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32312,6 +33070,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32335,7 +33096,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32344,6 +33105,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32367,7 +33131,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32376,6 +33140,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32399,7 +33166,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32409,6 +33176,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32428,7 +33198,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32448,7 +33218,7 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32457,6 +33227,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32473,6 +33246,9 @@ func (m *FleetStorageClassType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32502,7 +33278,7 @@ func (m *FleetStorageClassListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32530,7 +33306,7 @@ func (m *FleetStorageClassListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32539,6 +33315,9 @@ func (m *FleetStorageClassListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32554,6 +33333,9 @@ func (m *FleetStorageClassListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32583,7 +33365,7 @@ func (m *BondLacpType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32611,7 +33393,7 @@ func (m *BondLacpType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Rate |= (uint32(b) & 0x7F) << shift
+				m.Rate |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32623,6 +33405,9 @@ func (m *BondLacpType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32652,7 +33437,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32680,7 +33465,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32690,6 +33475,9 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32709,7 +33497,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32719,6 +33507,9 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32738,7 +33529,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32747,6 +33538,9 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32770,7 +33564,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32779,10 +33573,13 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -32802,7 +33599,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LinkPollingInterval |= (uint32(b) & 0x7F) << shift
+				m.LinkPollingInterval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32821,7 +33618,7 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LinkUpDelay |= (uint32(b) & 0x7F) << shift
+				m.LinkUpDelay |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32833,6 +33630,9 @@ func (m *FleetBondDeviceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32862,7 +33662,7 @@ func (m *FleetBondDevicesListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32890,7 +33690,7 @@ func (m *FleetBondDevicesListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32899,6 +33699,9 @@ func (m *FleetBondDevicesListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -32914,6 +33717,9 @@ func (m *FleetBondDevicesListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -32943,7 +33749,7 @@ func (m *FleetStorageStaticRoutesListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -32971,7 +33777,7 @@ func (m *FleetStorageStaticRoutesListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -32980,10 +33786,13 @@ func (m *FleetStorageStaticRoutesListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.StorageRoutes = append(m.StorageRoutes, &ves_io_schema4.StaticRouteType{})
+			m.StorageRoutes = append(m.StorageRoutes, &schema.StaticRouteType{})
 			if err := m.StorageRoutes[len(m.StorageRoutes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -32995,6 +33804,9 @@ func (m *FleetStorageStaticRoutesListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -33024,7 +33836,7 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -33052,7 +33864,7 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33062,6 +33874,9 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33081,7 +33896,7 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ServerPort |= (uint32(b) & 0x7F) << shift
+				m.ServerPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33100,7 +33915,7 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FeatureType |= (VGPUFeatureType(b) & 0x7F) << shift
+				m.FeatureType |= VGPUFeatureType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33112,6 +33927,9 @@ func (m *VGPUConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -33141,7 +33959,7 @@ func (m *BGPConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -33169,7 +33987,7 @@ func (m *BGPConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33178,10 +33996,13 @@ func (m *BGPConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Peers = append(m.Peers, &ves_io_schema_bgp.Peer{})
+			m.Peers = append(m.Peers, &bgp.Peer{})
 			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33200,7 +34021,7 @@ func (m *BGPConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Asn |= (uint32(b) & 0x7F) << shift
+				m.Asn |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33212,6 +34033,9 @@ func (m *BGPConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -33241,7 +34065,7 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -33269,7 +34093,7 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33278,10 +34102,13 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33301,7 +34128,7 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33310,10 +34137,13 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33333,7 +34163,7 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33342,6 +34172,9 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33359,6 +34192,9 @@ func (m *LocalControlPlaneType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -33388,7 +34224,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -33416,7 +34252,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33426,6 +34262,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33445,7 +34284,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33455,6 +34294,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33474,7 +34316,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33483,6 +34325,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33505,7 +34350,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33514,10 +34359,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkConnectors = append(m.NetworkConnectors, &ves_io_schema4.ObjectRefType{})
+			m.NetworkConnectors = append(m.NetworkConnectors, &schema.ObjectRefType{})
 			if err := m.NetworkConnectors[len(m.NetworkConnectors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33536,7 +34384,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33545,10 +34393,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkFirewall = append(m.NetworkFirewall, &ves_io_schema4.ObjectRefType{})
+			m.NetworkFirewall = append(m.NetworkFirewall, &schema.ObjectRefType{})
 			if err := m.NetworkFirewall[len(m.NetworkFirewall)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33567,7 +34418,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33577,6 +34428,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33596,7 +34450,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33605,10 +34459,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.OutsideVirtualNetwork[len(m.OutsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33627,7 +34484,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33636,10 +34493,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.InsideVirtualNetwork[len(m.InsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33658,7 +34518,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33667,6 +34527,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33690,7 +34553,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33699,10 +34562,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33722,7 +34588,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33731,10 +34597,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33754,7 +34623,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33763,6 +34632,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33786,7 +34658,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33795,10 +34667,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33818,7 +34693,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33827,6 +34702,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33850,7 +34728,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33859,10 +34737,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33882,7 +34763,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33891,6 +34772,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33914,7 +34798,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33923,10 +34807,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -33946,7 +34833,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33955,6 +34842,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -33978,7 +34868,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -33987,10 +34877,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34010,7 +34903,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34019,10 +34912,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34042,7 +34938,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34051,10 +34947,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34074,7 +34973,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34083,10 +34982,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34106,7 +35008,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EtcdClusterNetwork |= (EtcdClusterNetworkType(b) & 0x7F) << shift
+				m.EtcdClusterNetwork |= EtcdClusterNetworkType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34125,7 +35027,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34134,10 +35036,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34157,7 +35062,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34166,6 +35071,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34189,7 +35097,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34209,7 +35117,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34218,10 +35126,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34241,7 +35152,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34250,10 +35161,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34273,7 +35187,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FleetType |= (FleetType(b) & 0x7F) << shift
+				m.FleetType |= FleetType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34292,7 +35206,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34301,10 +35215,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SingleSite = append(m.SingleSite, &ves_io_schema4.ObjectRefType{})
+			m.SingleSite = append(m.SingleSite, &schema.ObjectRefType{})
 			if err := m.SingleSite[len(m.SingleSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34323,7 +35240,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34332,10 +35249,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34355,7 +35275,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34364,10 +35284,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34387,7 +35310,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34396,10 +35319,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34419,7 +35345,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34428,10 +35354,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34451,7 +35380,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34460,10 +35389,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34483,7 +35415,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34492,11 +35424,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.K8SCluster == nil {
-				m.K8SCluster = &ves_io_schema_views.ObjectRefType{}
+				m.K8SCluster = &views.ObjectRefType{}
 			}
 			if err := m.K8SCluster.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -34516,7 +35451,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34525,6 +35460,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34549,7 +35487,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34558,6 +35496,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34581,7 +35522,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34590,11 +35531,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -34614,7 +35558,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34624,6 +35568,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34636,6 +35583,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -34665,7 +35615,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -34693,7 +35643,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34703,6 +35653,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34722,7 +35675,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34732,6 +35685,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34751,7 +35707,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34760,10 +35716,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkConnectors = append(m.NetworkConnectors, &ves_io_schema4.ObjectRefType{})
+			m.NetworkConnectors = append(m.NetworkConnectors, &schema.ObjectRefType{})
 			if err := m.NetworkConnectors[len(m.NetworkConnectors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34782,7 +35741,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34791,10 +35750,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkFirewall = append(m.NetworkFirewall, &ves_io_schema4.ObjectRefType{})
+			m.NetworkFirewall = append(m.NetworkFirewall, &schema.ObjectRefType{})
 			if err := m.NetworkFirewall[len(m.NetworkFirewall)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34813,7 +35775,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34823,6 +35785,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34842,7 +35807,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34851,10 +35816,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.OutsideVirtualNetwork[len(m.OutsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34873,7 +35841,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34882,10 +35850,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.InsideVirtualNetwork[len(m.InsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -34904,7 +35875,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34913,6 +35884,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34936,7 +35910,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34945,6 +35919,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -34968,7 +35945,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -34977,10 +35954,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35000,7 +35980,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35009,6 +35989,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35032,7 +36015,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35041,10 +36024,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35064,7 +36050,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35073,6 +36059,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35096,7 +36085,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35105,10 +36094,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35128,7 +36120,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35137,6 +36129,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35160,7 +36155,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35169,10 +36164,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35192,7 +36190,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35201,6 +36199,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35224,7 +36225,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35233,10 +36234,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35256,7 +36260,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35265,10 +36269,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35288,7 +36295,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35297,10 +36304,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35320,7 +36330,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35329,10 +36339,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35352,7 +36365,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35361,10 +36374,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35384,7 +36400,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35393,6 +36409,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35416,7 +36435,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35436,7 +36455,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35445,10 +36464,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35468,7 +36490,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35477,10 +36499,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35500,7 +36525,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35509,10 +36534,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35532,7 +36560,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35541,10 +36569,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35564,7 +36595,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35573,10 +36604,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35596,7 +36630,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35605,10 +36639,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35628,7 +36665,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35637,10 +36674,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35660,7 +36700,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35669,6 +36709,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35685,6 +36728,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -35714,7 +36760,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -35742,7 +36788,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35752,6 +36798,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35771,7 +36820,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35780,10 +36829,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkConnectors = append(m.NetworkConnectors, &ves_io_schema4.ObjectRefType{})
+			m.NetworkConnectors = append(m.NetworkConnectors, &schema.ObjectRefType{})
 			if err := m.NetworkConnectors[len(m.NetworkConnectors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35802,7 +36854,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35811,10 +36863,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkFirewall = append(m.NetworkFirewall, &ves_io_schema4.ObjectRefType{})
+			m.NetworkFirewall = append(m.NetworkFirewall, &schema.ObjectRefType{})
 			if err := m.NetworkFirewall[len(m.NetworkFirewall)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35833,7 +36888,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35843,6 +36898,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35862,7 +36920,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35871,10 +36929,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.OutsideVirtualNetwork[len(m.OutsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35893,7 +36954,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35902,10 +36963,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.InsideVirtualNetwork[len(m.InsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -35924,7 +36988,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35933,6 +36997,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35956,7 +37023,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35965,6 +37032,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -35988,7 +37058,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -35997,10 +37067,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36020,7 +37093,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36029,6 +37102,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36052,7 +37128,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36061,10 +37137,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36084,7 +37163,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36093,6 +37172,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36116,7 +37198,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36125,10 +37207,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36148,7 +37233,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36157,6 +37242,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36180,7 +37268,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36189,10 +37277,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36212,7 +37303,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36221,6 +37312,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36244,7 +37338,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36253,10 +37347,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36276,7 +37373,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36285,10 +37382,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36308,7 +37408,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36317,10 +37417,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36340,7 +37443,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36349,10 +37452,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36372,7 +37478,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36381,10 +37487,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36404,7 +37513,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36413,6 +37522,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36436,7 +37548,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36456,7 +37568,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36465,10 +37577,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36488,7 +37603,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36497,10 +37612,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36520,7 +37638,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36529,10 +37647,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36552,7 +37673,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36561,10 +37682,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36584,7 +37708,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36593,10 +37717,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36616,7 +37743,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36625,10 +37752,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36648,7 +37778,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36657,10 +37787,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36680,7 +37813,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36689,6 +37822,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36705,6 +37841,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -36734,7 +37873,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -36762,7 +37901,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36772,6 +37911,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36791,7 +37933,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36801,6 +37943,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36820,7 +37965,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36829,10 +37974,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkConnectors = append(m.NetworkConnectors, &ves_io_schema4.ObjectRefType{})
+			m.NetworkConnectors = append(m.NetworkConnectors, &schema.ObjectRefType{})
 			if err := m.NetworkConnectors[len(m.NetworkConnectors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36851,7 +37999,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36860,10 +38008,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkFirewall = append(m.NetworkFirewall, &ves_io_schema4.ObjectRefType{})
+			m.NetworkFirewall = append(m.NetworkFirewall, &schema.ObjectRefType{})
 			if err := m.NetworkFirewall[len(m.NetworkFirewall)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36882,7 +38033,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36892,6 +38043,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -36911,7 +38065,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36920,10 +38074,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.OutsideVirtualNetwork = append(m.OutsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.OutsideVirtualNetwork[len(m.OutsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36942,7 +38099,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36951,10 +38108,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &ves_io_schema4.ObjectRefType{})
+			m.InsideVirtualNetwork = append(m.InsideVirtualNetwork, &schema.ObjectRefType{})
 			if err := m.InsideVirtualNetwork[len(m.InsideVirtualNetwork)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -36973,7 +38133,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -36982,6 +38142,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37005,7 +38168,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37014,6 +38177,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37037,7 +38203,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37046,10 +38212,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37069,7 +38238,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37078,6 +38247,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37101,7 +38273,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37110,10 +38282,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37133,7 +38308,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37142,6 +38317,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37165,7 +38343,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37174,10 +38352,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37197,7 +38378,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37206,6 +38387,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37229,7 +38413,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37238,10 +38422,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37261,7 +38448,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37270,6 +38457,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37293,7 +38483,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37302,10 +38492,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37325,7 +38518,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37334,10 +38527,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37357,7 +38553,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37366,10 +38562,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37389,7 +38588,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37398,10 +38597,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37421,7 +38623,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37430,10 +38632,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37453,7 +38658,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37462,6 +38667,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37485,7 +38693,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37505,7 +38713,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37514,10 +38722,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37537,7 +38748,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37546,10 +38757,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37569,7 +38783,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37578,10 +38792,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37601,7 +38818,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37610,10 +38827,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37633,7 +38853,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37642,10 +38862,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37665,7 +38888,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37674,10 +38897,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37697,7 +38923,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37706,10 +38932,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -37729,7 +38958,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37738,6 +38967,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37754,6 +38986,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -37783,7 +39018,7 @@ func (m *FleetStatus) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -37811,7 +39046,7 @@ func (m *FleetStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -37821,6 +39056,9 @@ func (m *FleetStatus) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -37833,6 +39071,9 @@ func (m *FleetStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -37850,6 +39091,7 @@ func (m *FleetStatus) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -37881,10 +39123,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -37901,522 +39141,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/fleet/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/fleet/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 7390 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x4d, 0x70, 0x1b, 0x49,
-	0x96, 0x1e, 0x13, 0x00, 0x49, 0xf0, 0x81, 0xf8, 0x61, 0xf2, 0x0f, 0xa4, 0x24, 0x0a, 0x42, 0x6b,
-	0xba, 0xd9, 0x14, 0xf8, 0x03, 0xf0, 0x57, 0xea, 0x6e, 0xad, 0x08, 0x92, 0x92, 0x48, 0x51, 0x14,
-	0xb7, 0x48, 0xa9, 0xbd, 0x3d, 0xe3, 0x29, 0x17, 0x81, 0x24, 0x58, 0xab, 0x42, 0x55, 0x4d, 0x55,
-	0x81, 0x12, 0xdb, 0xa1, 0x70, 0x87, 0x2e, 0x6b, 0xcb, 0xde, 0x88, 0xf6, 0xb6, 0x4f, 0xbb, 0x0e,
-	0x87, 0xed, 0xf0, 0x61, 0x43, 0x07, 0xdb, 0xc7, 0xdd, 0x85, 0x0e, 0x0a, 0x39, 0x1c, 0x31, 0xe1,
-	0x83, 0x83, 0xe1, 0x83, 0x3d, 0xd1, 0xb1, 0x87, 0x1d, 0xee, 0x65, 0x66, 0x7c, 0xd8, 0x8d, 0x8d,
-	0x3d, 0x6c, 0xe8, 0xb2, 0x8e, 0xcc, 0xca, 0x2a, 0x14, 0xc0, 0x02, 0x48, 0x4a, 0xed, 0xf5, 0x4e,
-	0x9b, 0x3a, 0x50, 0x60, 0xe6, 0x7b, 0x2f, 0x5f, 0x66, 0xbe, 0x7c, 0xf9, 0xbe, 0xcc, 0x97, 0x20,
-	0x5c, 0xde, 0x27, 0xe6, 0x84, 0xac, 0x4d, 0x9a, 0x85, 0x3d, 0x52, 0x96, 0x26, 0x77, 0x15, 0x42,
-	0xac, 0x49, 0xeb, 0x40, 0x27, 0xe6, 0x84, 0x6e, 0x68, 0x96, 0x86, 0x7b, 0x6d, 0x82, 0x09, 0x9b,
-	0x60, 0x82, 0x11, 0x0c, 0x8f, 0x97, 0x64, 0x6b, 0xaf, 0xb2, 0x33, 0x51, 0xd0, 0xca, 0x93, 0x25,
-	0xad, 0xa4, 0x4d, 0x32, 0xda, 0x9d, 0xca, 0x2e, 0xfb, 0x8d, 0xfd, 0xc2, 0x3e, 0xd9, 0x32, 0x86,
-	0x2f, 0x97, 0x34, 0xad, 0xa4, 0x90, 0x1a, 0x95, 0x25, 0x97, 0x89, 0x69, 0x49, 0x65, 0x9d, 0x13,
-	0x5c, 0xaa, 0xd7, 0x62, 0xa7, 0xa4, 0x7b, 0x75, 0x18, 0x1e, 0xac, 0xaf, 0x56, 0x89, 0xc5, 0x2b,
-	0x2e, 0xd4, 0x57, 0x68, 0xba, 0x25, 0x6b, 0xaa, 0xe9, 0x2f, 0x54, 0xdf, 0xb7, 0x44, 0xaf, 0xd0,
-	0xa1, 0xfa, 0x6a, 0x6f, 0xd5, 0xc5, 0xfa, 0xaa, 0x7d, 0x49, 0x91, 0x8b, 0x92, 0x45, 0x78, 0x6d,
-	0xaa, 0xa1, 0x56, 0x26, 0x4f, 0xc4, 0xfa, 0x96, 0x2f, 0x1f, 0xa7, 0x30, 0xbd, 0x0d, 0xa4, 0xdf,
-	0x20, 0xb8, 0xb8, 0x41, 0xac, 0x27, 0x9a, 0xf1, 0x58, 0x56, 0x4b, 0xcb, 0x64, 0x5f, 0x2e, 0x90,
-	0x55, 0xd5, 0xb4, 0x24, 0xb5, 0x40, 0xb6, 0x0f, 0x74, 0x82, 0xbf, 0x80, 0x2e, 0x59, 0xb5, 0x88,
-	0xb1, 0x2b, 0x15, 0x48, 0x32, 0x90, 0x0a, 0x8e, 0x46, 0x72, 0x17, 0x27, 0xea, 0x67, 0xe2, 0xc1,
-	0xce, 0x6f, 0x93, 0x82, 0x25, 0x90, 0x5d, 0xca, 0x90, 0x1f, 0x79, 0xf9, 0xac, 0x47, 0xb5, 0x25,
-	0x8a, 0x2e, 0xe7, 0x9f, 0xfc, 0xf2, 0x75, 0xb0, 0xfd, 0xf7, 0x50, 0x20, 0x81, 0x84, 0x9a, 0x38,
-	0x7c, 0x1b, 0x82, 0x15, 0x93, 0x24, 0x83, 0x29, 0x34, 0x1a, 0xcb, 0xcd, 0x4c, 0xf8, 0xcc, 0xef,
-	0x44, 0x33, 0xdd, 0x1e, 0x9a, 0x4c, 0x3d, 0x81, 0x0a, 0x48, 0x5f, 0x80, 0xa1, 0x3b, 0x44, 0x25,
-	0x86, 0x5c, 0x38, 0xde, 0x81, 0xf4, 0xbf, 0x0e, 0x00, 0xf6, 0xe9, 0x17, 0x86, 0x90, 0x2a, 0x95,
-	0x49, 0x12, 0xa5, 0xd0, 0x68, 0x97, 0xc0, 0x3e, 0xe3, 0x3b, 0xd0, 0xae, 0x3d, 0x51, 0x89, 0xc1,
-	0x35, 0xba, 0xea, 0xab, 0x91, 0x2d, 0xeb, 0x01, 0xa5, 0x63, 0xfd, 0x8d, 0xd0, 0xbe, 0x75, 0x3c,
-	0x47, 0xc1, 0x61, 0x84, 0x04, 0x9b, 0x1f, 0x7f, 0x01, 0x31, 0x67, 0x08, 0x8a, 0x8c, 0x3c, 0x19,
-	0x4a, 0xa1, 0xd1, 0x48, 0x2e, 0x7b, 0xa6, 0x3e, 0x52, 0xf1, 0x77, 0xdb, 0x84, 0x28, 0x17, 0x65,
-	0x57, 0xde, 0xb8, 0xfc, 0xa6, 0x8a, 0x2e, 0xc0, 0x10, 0xf4, 0xd9, 0xbf, 0xa7, 0x96, 0x34, 0x75,
-	0x57, 0x2e, 0x55, 0x0c, 0x89, 0xce, 0x3b, 0x46, 0xd9, 0x7c, 0x0a, 0xe2, 0x76, 0xa3, 0xa2, 0xcc,
-	0x05, 0xe1, 0xe8, 0xeb, 0x2a, 0x0a, 0x1d, 0x56, 0x51, 0xfb, 0x51, 0x15, 0xa1, 0x99, 0xb5, 0x50,
-	0x38, 0x90, 0x08, 0xae, 0x85, 0xc2, 0xed, 0x89, 0x8e, 0xf4, 0xd7, 0x08, 0x06, 0x6e, 0x53, 0x35,
-	0x56, 0x9d, 0x69, 0x59, 0x97, 0x4d, 0x8b, 0x0d, 0xd1, 0x3e, 0x80, 0x3b, 0x57, 0x66, 0x12, 0xb1,
-	0xb9, 0x4f, 0x37, 0xf4, 0x80, 0x59, 0x54, 0x83, 0x05, 0xe4, 0x5a, 0x5a, 0x40, 0xca, 0xf9, 0x14,
-	0x46, 0xce, 0xa7, 0x24, 0x12, 0x3c, 0x2d, 0xa5, 0x55, 0xe8, 0x65, 0x1a, 0xd9, 0x1d, 0x74, 0xd5,
-	0xf9, 0x1c, 0x3a, 0xed, 0x7e, 0x99, 0xc9, 0x20, 0xd3, 0xe5, 0xa3, 0x16, 0xf3, 0xe3, 0x1d, 0xc3,
-	0x7c, 0x9f, 0xdb, 0x78, 0xd8, 0xd3, 0xa4, 0x23, 0x2d, 0xfd, 0x0d, 0x82, 0xf4, 0x96, 0xa5, 0x19,
-	0x52, 0x89, 0xf0, 0xc9, 0xd5, 0x89, 0x4a, 0x76, 0xcc, 0x15, 0xaa, 0x92, 0x6e, 0xc8, 0xb6, 0xa9,
-	0xe1, 0x32, 0xc4, 0xca, 0xd2, 0x81, 0x64, 0x5a, 0x9a, 0x21, 0xea, 0x9a, 0xa6, 0x38, 0x43, 0x92,
-	0xf1, 0x55, 0x83, 0xcb, 0xb8, 0xcf, 0x39, 0x36, 0x35, 0x4d, 0x61, 0xba, 0x24, 0x0f, 0xab, 0xc8,
-	0xed, 0x78, 0x22, 0xe7, 0xd1, 0x27, 0x5a, 0xf6, 0xd0, 0x9a, 0xe9, 0xff, 0x88, 0x60, 0xb0, 0x89,
-	0x10, 0x3c, 0x0a, 0x5d, 0x54, 0x03, 0xb1, 0x66, 0xc1, 0xdc, 0x0c, 0x0d, 0x6a, 0x67, 0xb7, 0x84,
-	0x30, 0xad, 0xdd, 0xa0, 0x26, 0x7d, 0x09, 0x42, 0xaa, 0x56, 0xa4, 0x2b, 0x97, 0x12, 0x75, 0x51,
-	0xa2, 0x90, 0x11, 0xd8, 0x43, 0x02, 0x2b, 0xc6, 0x6b, 0xd0, 0xc3, 0x04, 0x15, 0x65, 0xd3, 0x31,
-	0x55, 0x7b, 0x74, 0xbb, 0xf2, 0x23, 0xae, 0x92, 0xe0, 0x3b, 0x63, 0x71, 0xca, 0xb8, 0x2c, 0x9b,
-	0xdc, 0x2e, 0xcd, 0xf4, 0x7f, 0x69, 0x87, 0xcb, 0x75, 0xc3, 0xb8, 0x4c, 0x14, 0x65, 0xd5, 0x94,
-	0x15, 0x4d, 0xbd, 0xbd, 0x30, 0x35, 0xc5, 0x14, 0xbf, 0x09, 0xe1, 0x8a, 0x49, 0x0c, 0x8f, 0xde,
-	0xe9, 0xbf, 0xa9, 0xa2, 0xd0, 0xbf, 0x7f, 0x85, 0x3a, 0x76, 0x24, 0x93, 0xcc, 0xcd, 0xb0, 0x06,
-	0x8c, 0xe0, 0xe8, 0x57, 0x88, 0x7f, 0xfa, 0x1a, 0x21, 0xc1, 0xe5, 0xc1, 0x9f, 0x40, 0x58, 0x97,
-	0x4c, 0xf3, 0x89, 0x66, 0x14, 0x59, 0x97, 0x22, 0xb9, 0xa1, 0x86, 0xd1, 0xdf, 0x22, 0x05, 0x83,
-	0x30, 0x83, 0xc9, 0x53, 0x8b, 0x47, 0x82, 0xcb, 0x80, 0x3f, 0x83, 0x98, 0x49, 0x0a, 0x15, 0x83,
-	0x88, 0xdc, 0x3a, 0xf9, 0xaa, 0xec, 0x6b, 0x10, 0xb1, 0x52, 0xd6, 0xad, 0x03, 0xba, 0xf0, 0x6c,
-	0x6a, 0xbe, 0x3c, 0xf1, 0x36, 0xc4, 0x2c, 0xa3, 0x62, 0x5a, 0xa4, 0x28, 0x16, 0x24, 0xb1, 0x62,
-	0x28, 0xc9, 0x76, 0xd6, 0x83, 0xcc, 0xeb, 0x2a, 0x42, 0xbc, 0x17, 0x11, 0x9d, 0x94, 0x33, 0xa9,
-	0x5a, 0x57, 0x3a, 0x8c, 0xd0, 0xe8, 0x57, 0x5f, 0x85, 0x6b, 0x7d, 0xb9, 0xdb, 0x26, 0x74, 0x73,
-	0x29, 0x4b, 0xd2, 0x43, 0x43, 0xc1, 0xd3, 0x10, 0x97, 0x74, 0x59, 0x34, 0x89, 0xb1, 0x4f, 0x0c,
-	0x7b, 0x42, 0x3b, 0x1b, 0xe6, 0xea, 0x2e, 0x12, 0xa2, 0x92, 0x2e, 0x6f, 0x31, 0x12, 0x36, 0xab,
-	0x37, 0xa1, 0xdf, 0xc3, 0x24, 0xeb, 0xa2, 0x54, 0x2c, 0x1a, 0xc4, 0x34, 0x93, 0xe1, 0x3a, 0xd6,
-	0xa7, 0x94, 0x15, 0xbb, 0xac, 0xab, 0xfa, 0xa2, 0x4d, 0x86, 0x67, 0xeb, 0x1a, 0xd5, 0x35, 0xc3,
-	0x4a, 0x76, 0xa5, 0xd0, 0x68, 0x34, 0x1f, 0xa5, 0x9c, 0xe1, 0xb1, 0x8e, 0xe4, 0xdf, 0xfe, 0x6d,
-	0x70, 0xd4, 0xdb, 0xec, 0xa6, 0x66, 0x58, 0x78, 0x0e, 0x7a, 0x64, 0xb3, 0x60, 0xca, 0xa2, 0x54,
-	0x28, 0x10, 0xd3, 0x14, 0xbf, 0xd4, 0x54, 0x92, 0x04, 0xd6, 0x24, 0xf0, 0x2e, 0x26, 0xbf, 0x42,
-	0x42, 0x9c, 0x11, 0x2d, 0x32, 0x9a, 0x2f, 0x34, 0x95, 0xe0, 0x09, 0x88, 0xee, 0x6b, 0x4a, 0xa5,
-	0x4c, 0x44, 0xdd, 0x20, 0xbb, 0xf2, 0xd3, 0x64, 0xa4, 0x4e, 0xcd, 0xe4, 0x2d, 0xa1, 0xdb, 0xae,
-	0xdf, 0x64, 0xd5, 0x78, 0x0c, 0xba, 0xe8, 0x10, 0x8a, 0xba, 0x64, 0xed, 0x25, 0xbb, 0x19, 0xad,
-	0xad, 0x98, 0xd1, 0x91, 0xfc, 0x2a, 0xf0, 0x47, 0x01, 0x24, 0x84, 0x69, 0xfd, 0xa6, 0x64, 0xed,
-	0xe5, 0x2f, 0x43, 0xf7, 0x9e, 0x65, 0xe9, 0xa6, 0x58, 0xd8, 0xd3, 0xe4, 0x02, 0xc1, 0x71, 0xee,
-	0xea, 0x82, 0x47, 0x55, 0x14, 0x9c, 0xc9, 0xcc, 0xe6, 0xaf, 0x40, 0x8c, 0x8f, 0x8e, 0x97, 0xa4,
-	0xf3, 0xb0, 0x8a, 0x3a, 0x28, 0xc9, 0x7c, 0x66, 0x61, 0x2d, 0x14, 0x0e, 0x26, 0x42, 0x6b, 0xa1,
-	0x70, 0x47, 0xa2, 0x33, 0xfd, 0xbf, 0x82, 0xf0, 0x83, 0x3a, 0x2b, 0xbe, 0xbb, 0xb9, 0xb2, 0x21,
-	0x97, 0x77, 0x2a, 0x26, 0x2f, 0x5d, 0xdc, 0x9d, 0xb1, 0x6d, 0xf9, 0x3a, 0xf4, 0x9a, 0x76, 0x51,
-	0xdd, 0xec, 0xa1, 0xc6, 0x95, 0xd6, 0xc3, 0xa9, 0x3c, 0xf3, 0xb7, 0x0c, 0x43, 0x0d, 0xac, 0x9e,
-	0x39, 0x0c, 0x34, 0xcc, 0xa1, 0x30, 0x50, 0x27, 0xa0, 0xe5, 0x2c, 0x06, 0x4f, 0x31, 0x8b, 0xde,
-	0x35, 0x18, 0x7a, 0xcf, 0x35, 0xd8, 0x7e, 0xd6, 0x35, 0x38, 0x09, 0x11, 0x9d, 0x18, 0xbb, 0xa2,
-	0xae, 0x29, 0x72, 0xe1, 0x20, 0xd9, 0xc1, 0xda, 0x8f, 0xfd, 0x4d, 0x15, 0xb5, 0x79, 0x0c, 0x08,
-	0x28, 0xc9, 0x26, 0xa3, 0xc0, 0x1f, 0x00, 0x28, 0x72, 0x59, 0xb6, 0x44, 0x59, 0xd3, 0x4d, 0xb6,
-	0x34, 0xa2, 0xf9, 0x10, 0xa5, 0x17, 0xba, 0x58, 0xf9, 0xaa, 0xa6, 0x9b, 0x35, 0xa2, 0xf2, 0x8e,
-	0x6e, 0x2f, 0x82, 0x7a, 0xa2, 0xfb, 0x3b, 0xba, 0x99, 0xfe, 0xa3, 0x00, 0x4c, 0xd6, 0xcd, 0xec,
-	0x66, 0xc5, 0x20, 0x5b, 0xb5, 0xa1, 0xa5, 0x8e, 0xdf, 0x28, 0xec, 0x11, 0xd3, 0x32, 0x24, 0x4b,
-	0x63, 0x9b, 0x3b, 0xfe, 0x0d, 0x80, 0x82, 0x42, 0x57, 0xab, 0x21, 0xca, 0x45, 0x3e, 0xb5, 0x29,
-	0xbe, 0xb0, 0x13, 0x28, 0x39, 0x40, 0x3f, 0x26, 0x8c, 0x58, 0xae, 0xfb, 0xc7, 0x3f, 0x94, 0xc6,
-	0xbf, 0x9c, 0x1a, 0xbf, 0x2e, 0xfe, 0xc3, 0xb1, 0xab, 0x42, 0x17, 0xe7, 0x59, 0x2d, 0xe2, 0x5b,
-	0x30, 0x48, 0x54, 0x69, 0x47, 0x21, 0xa2, 0x33, 0xe1, 0x96, 0xa6, 0x6b, 0x8a, 0x56, 0x3a, 0x60,
-	0xf3, 0x1c, 0xce, 0x87, 0xb9, 0xf7, 0x68, 0x13, 0xfa, 0x6d, 0x42, 0xae, 0xd1, 0x36, 0x27, 0xc3,
-	0x37, 0x61, 0xc0, 0x95, 0x60, 0xc8, 0x05, 0xab, 0x26, 0x20, 0xd8, 0x20, 0xa0, 0xcf, 0x11, 0x40,
-	0xc9, 0x5c, 0xfe, 0x3c, 0x74, 0x48, 0x86, 0x21, 0x1d, 0x98, 0xdc, 0xdb, 0x8d, 0xf9, 0x6e, 0x57,
-	0x9b, 0xa6, 0xb6, 0x48, 0xa9, 0xea, 0xa2, 0x09, 0x81, 0x73, 0xa6, 0xff, 0x13, 0x82, 0x7e, 0x5f,
-	0x0a, 0xbc, 0x06, 0x91, 0x5d, 0x45, 0x32, 0xf7, 0x44, 0x46, 0xc9, 0x46, 0x28, 0x92, 0xfb, 0xc0,
-	0xb7, 0x89, 0xdb, 0x94, 0x8e, 0x89, 0xf0, 0x58, 0x06, 0xec, 0xba, 0xa5, 0x35, 0x59, 0x3b, 0x8a,
-	0xc4, 0xb7, 0xac, 0x96, 0xb2, 0xf2, 0x94, 0xec, 0x98, 0x2c, 0x56, 0x9a, 0xfe, 0x2b, 0x04, 0xb1,
-	0x7a, 0x22, 0x7c, 0x0b, 0x86, 0x9c, 0x81, 0x54, 0x25, 0xdd, 0xdc, 0xd3, 0x2c, 0xb1, 0x28, 0x1b,
-	0xa4, 0x60, 0x69, 0x86, 0xad, 0x78, 0x98, 0xdb, 0x0c, 0x9f, 0xb1, 0x2d, 0x4e, 0xb5, 0xec, 0x10,
-	0xe1, 0x1c, 0x74, 0x93, 0xa7, 0x74, 0x9d, 0x89, 0x46, 0x45, 0x21, 0xce, 0x4a, 0x8d, 0x3b, 0xd6,
-	0x6b, 0xdb, 0x44, 0x4e, 0x88, 0xd8, 0x44, 0x02, 0xa5, 0xc1, 0xbf, 0x0d, 0xdd, 0x9e, 0x4e, 0xb5,
-	0x0e, 0x5d, 0x6a, 0x0a, 0xaf, 0xa8, 0x45, 0x5d, 0x93, 0x55, 0xcb, 0xb3, 0x0b, 0x87, 0x7d, 0x77,
-	0xe1, 0x48, 0xad, 0xcf, 0x66, 0xfa, 0x7f, 0xb6, 0x03, 0x3e, 0x2e, 0x03, 0x8f, 0x42, 0x67, 0xb9,
-	0x54, 0xb6, 0x44, 0x59, 0xe7, 0x1a, 0x47, 0x1d, 0x8d, 0x43, 0x46, 0x40, 0xa7, 0x5b, 0x52, 0x07,
-	0xad, 0x5f, 0xd5, 0xf1, 0x67, 0x10, 0x65, 0x94, 0x45, 0xd5, 0xb4, 0x9d, 0x59, 0x90, 0xd1, 0x0f,
-	0xd6, 0xad, 0xcf, 0x40, 0x6d, 0x63, 0x6a, 0x13, 0x22, 0x94, 0x7e, 0x59, 0x35, 0x99, 0x5b, 0xfb,
-	0x14, 0xba, 0xa8, 0x43, 0xb2, 0xb4, 0xc7, 0x44, 0xe5, 0xd6, 0x76, 0xb2, 0x6b, 0x90, 0x74, 0x79,
-	0x9b, 0x32, 0xe0, 0x79, 0x88, 0xab, 0xbb, 0xa6, 0x48, 0xb8, 0xda, 0x54, 0xdd, 0x0e, 0x3f, 0x75,
-	0x91, 0x10, 0x55, 0x77, 0x4d, 0xa7, 0x77, 0xab, 0x3a, 0x5e, 0x87, 0xfe, 0x3a, 0x46, 0x57, 0xfb,
-	0xce, 0xd6, 0xda, 0x23, 0x01, 0x7b, 0x04, 0x39, 0x9d, 0xf8, 0x9d, 0x00, 0x74, 0x28, 0x74, 0xfe,
-	0xa9, 0x23, 0xa1, 0x73, 0x35, 0x7d, 0xca, 0xb9, 0x9a, 0x58, 0x67, 0x5c, 0x2b, 0xaa, 0x65, 0x1c,
-	0xe4, 0xff, 0x98, 0x4d, 0x52, 0xf7, 0xef, 0xa3, 0xae, 0x74, 0xa7, 0xd1, 0x9e, 0x40, 0x49, 0xee,
-	0x4c, 0x7f, 0x1f, 0x05, 0x12, 0x7d, 0x4e, 0xd5, 0x98, 0x53, 0x75, 0xf4, 0x67, 0xff, 0x35, 0xd8,
-	0xfb, 0xe2, 0x15, 0x8a, 0xe3, 0xe8, 0xaf, 0xaa, 0xa8, 0x6b, 0x5d, 0xda, 0x21, 0x4a, 0xea, 0x31,
-	0x39, 0xf0, 0x94, 0x1f, 0xb9, 0xe5, 0xf7, 0xec, 0x72, 0x78, 0xf1, 0x0a, 0x75, 0xe0, 0xd0, 0x4f,
-	0xab, 0xa8, 0x8d, 0xfe, 0xda, 0xf1, 0xe2, 0x15, 0x35, 0x0d, 0xfa, 0xb1, 0xff, 0xc5, 0x2b, 0xd4,
-	0x33, 0x1c, 0xff, 0x55, 0x15, 0x45, 0x6c, 0x8e, 0x7d, 0x49, 0xa9, 0x10, 0x4f, 0xcd, 0x91, 0x5b,
-	0xf3, 0xc8, 0xa9, 0x61, 0xd2, 0x86, 0x99, 0x34, 0x81, 0x77, 0x7f, 0xf8, 0x3a, 0x44, 0x3c, 0x5d,
-	0xc2, 0x09, 0x08, 0x3e, 0x26, 0x07, 0x1c, 0x30, 0xd1, 0x8f, 0xb8, 0x0f, 0xda, 0x99, 0x68, 0xdb,
-	0xac, 0x04, 0xfb, 0x97, 0x1b, 0x81, 0x05, 0x94, 0x4f, 0x71, 0x43, 0x72, 0xe6, 0x84, 0xed, 0xb9,
-	0x01, 0x3a, 0xe1, 0x74, 0xcf, 0xcd, 0x65, 0xa6, 0xe9, 0xbe, 0xed, 0x9d, 0x34, 0x46, 0xd0, 0xc1,
-	0x21, 0x4a, 0x70, 0x2e, 0x33, 0xbf, 0x16, 0x0a, 0xa3, 0x44, 0x80, 0x83, 0x94, 0x7f, 0x15, 0xe2,
-	0xab, 0xd9, 0x75, 0x1f, 0xf8, 0x06, 0x84, 0x4d, 0x49, 0x65, 0x38, 0x9a, 0xfb, 0xe5, 0xcb, 0xdf,
-	0x56, 0x51, 0xfb, 0xea, 0xd6, 0xd2, 0xd6, 0xaa, 0x33, 0xe1, 0x51, 0x23, 0x22, 0xd8, 0x25, 0x42,
-	0xe0, 0xf6, 0x92, 0xd0, 0x69, 0x4a, 0x2a, 0xe3, 0x5d, 0xa1, 0x08, 0x69, 0x57, 0xaa, 0x28, 0x96,
-	0xb8, 0x6b, 0xda, 0x22, 0xec, 0x85, 0x71, 0xe9, 0xdb, 0x2a, 0x0a, 0x3e, 0xdd, 0x35, 0xbd, 0x02,
-	0xe8, 0xef, 0x42, 0x88, 0x3c, 0xb5, 0x66, 0x84, 0x28, 0xe7, 0xba, 0x6d, 0x32, 0x31, 0x73, 0x10,
-	0xf3, 0x88, 0xd1, 0x74, 0x8b, 0x2f, 0x97, 0x84, 0xc3, 0xee, 0x4c, 0xaf, 0xd0, 0xed, 0x32, 0x3e,
-	0xd0, 0x2d, 0x7c, 0x1b, 0xb0, 0xc3, 0x57, 0xd6, 0x2a, 0xaa, 0x45, 0x59, 0xa9, 0x77, 0xa6, 0x51,
-	0x77, 0xd2, 0x35, 0x56, 0xba, 0xe6, 0x43, 0x9e, 0x95, 0x9e, 0xe0, 0x3c, 0xf7, 0x29, 0xcb, 0x03,
-	0xdd, 0x32, 0xf1, 0x32, 0x5c, 0x28, 0xca, 0x26, 0xf3, 0x68, 0xba, 0x41, 0x48, 0x59, 0xb7, 0x44,
-	0xc9, 0xb2, 0xa4, 0xc2, 0x5e, 0x99, 0xa8, 0x96, 0xc9, 0xf6, 0x66, 0xc7, 0xa5, 0x0d, 0x71, 0xc2,
-	0x4d, 0x9b, 0x6e, 0xb1, 0x46, 0x86, 0xef, 0x43, 0xaf, 0x1d, 0xd4, 0x29, 0x5a, 0x49, 0x56, 0x45,
-	0x4b, 0x2e, 0x13, 0xad, 0x62, 0xb1, 0xa5, 0xd7, 0xce, 0x06, 0x24, 0x90, 0x9b, 0x3a, 0xaa, 0xa2,
-	0x10, 0x04, 0x72, 0x53, 0xae, 0xa7, 0x1b, 0x0b, 0x25, 0x8b, 0xa3, 0x48, 0xb0, 0xc3, 0xc1, 0x75,
-	0xca, 0xb8, 0x6d, 0xf3, 0xd5, 0xfc, 0x1d, 0xdf, 0x74, 0x3a, 0x4f, 0xf2, 0x77, 0x6c, 0x4a, 0xcf,
-	0xe8, 0xef, 0x16, 0xed, 0x6d, 0xe9, 0x0f, 0x43, 0xdc, 0xdf, 0xd5, 0xc9, 0xf8, 0x75, 0xf1, 0x77,
-	0xdc, 0xd1, 0x10, 0x85, 0x4e, 0xd5, 0x09, 0x8e, 0xa6, 0xae, 0x83, 0x13, 0x6c, 0xed, 0x7e, 0x4f,
-	0x1c, 0x0d, 0x51, 0x1c, 0x47, 0xe3, 0x74, 0xe9, 0xbb, 0x75, 0x34, 0xb6, 0x1f, 0x49, 0xff, 0x71,
-	0x00, 0x46, 0xea, 0x82, 0xbf, 0x0d, 0x62, 0x49, 0xba, 0xbe, 0x6d, 0xc8, 0x45, 0xa2, 0x3a, 0xc7,
-	0x1d, 0x49, 0x95, 0x15, 0x8a, 0x3b, 0x52, 0xe1, 0x31, 0x51, 0x8b, 0xa2, 0xa6, 0x5a, 0x92, 0x2e,
-	0xaa, 0x92, 0xc9, 0x63, 0x91, 0x4f, 0x7c, 0x27, 0xc8, 0x47, 0x6c, 0xde, 0x16, 0xf0, 0x80, 0xf2,
-	0x6f, 0x48, 0x26, 0x3f, 0xc8, 0xe9, 0x57, 0xfd, 0x2a, 0x9b, 0xb6, 0x6b, 0x4a, 0x2a, 0xb3, 0xc7,
-	0x77, 0x6c, 0x77, 0xcb, 0x76, 0x76, 0xfe, 0xed, 0x6e, 0x49, 0x2a, 0x05, 0x46, 0x4e, 0x83, 0x1e,
-	0x60, 0xe4, 0x33, 0x76, 0xff, 0x32, 0x0e, 0x1f, 0x9e, 0xae, 0x31, 0xfc, 0x8f, 0x6b, 0x98, 0xa8,
-	0x68, 0xc8, 0x0d, 0x98, 0xe8, 0xde, 0xb7, 0x55, 0xd4, 0xc5, 0xfa, 0x36, 0x6e, 0x4a, 0xaa, 0xb3,
-	0xc6, 0x66, 0x8d, 0x69, 0xa1, 0x56, 0x2a, 0xf4, 0xb8, 0x1f, 0xc7, 0x49, 0x41, 0x53, 0xb5, 0xf2,
-	0x81, 0xd0, 0x6b, 0x17, 0xa9, 0x92, 0x39, 0xbe, 0xab, 0x90, 0xa7, 0x25, 0x43, 0xab, 0xe8, 0x2e,
-	0xaa, 0x5a, 0x66, 0xcd, 0x6c, 0xd8, 0xc0, 0xa4, 0xa7, 0x2c, 0xa9, 0x52, 0x89, 0x50, 0xc7, 0x26,
-	0x2a, 0xf2, 0x2e, 0xf5, 0x00, 0x21, 0x7f, 0x0f, 0x10, 0xaf, 0x51, 0xae, 0xcb, 0xbb, 0xab, 0x3a,
-	0xde, 0x84, 0xc1, 0x06, 0x66, 0xd7, 0x29, 0xb4, 0x9f, 0xe4, 0x14, 0xfa, 0xea, 0x84, 0x39, 0xde,
-	0x61, 0x12, 0x22, 0x45, 0xc9, 0x92, 0x1c, 0x45, 0x3a, 0xfd, 0x63, 0x99, 0x2e, 0x4a, 0x63, 0xab,
-	0xb0, 0x0c, 0x3d, 0x2e, 0x83, 0xdb, 0x78, 0xf8, 0xa4, 0x18, 0x26, 0xc6, 0x05, 0x38, 0xcd, 0x8e,
-	0x40, 0xd0, 0xdc, 0x2f, 0x33, 0x3c, 0xdf, 0x95, 0xef, 0xf6, 0x6c, 0x43, 0x01, 0x81, 0x56, 0xe0,
-	0x51, 0x0f, 0xfc, 0x03, 0x1f, 0x22, 0x7f, 0xa0, 0x17, 0x39, 0x3b, 0xd0, 0xeb, 0x54, 0x35, 0xb1,
-	0xb0, 0x27, 0xe9, 0xc9, 0x68, 0x8b, 0x53, 0x96, 0x80, 0xd0, 0xa1, 0x6a, 0x4b, 0x7b, 0x92, 0x8e,
-	0x1f, 0x32, 0xbd, 0x6c, 0x8e, 0x18, 0xe3, 0x58, 0x68, 0x71, 0xbe, 0xe7, 0x6b, 0x82, 0x54, 0x0e,
-	0xb3, 0xf9, 0x80, 0xd0, 0x59, 0x31, 0x09, 0x13, 0x3b, 0x0e, 0x11, 0x99, 0x59, 0x8c, 0x3d, 0x9c,
-	0x3d, 0x3e, 0x3d, 0x06, 0x9b, 0x80, 0x8d, 0xde, 0x0d, 0x88, 0x39, 0x06, 0xcc, 0xcf, 0x2a, 0x30,
-	0xe3, 0xe8, 0x75, 0x50, 0x56, 0x2d, 0xd0, 0xdf, 0x14, 0xa2, 0x9c, 0x94, 0x1f, 0x5b, 0xac, 0x40,
-	0xbf, 0x8d, 0x42, 0xa5, 0x52, 0xc9, 0x20, 0x25, 0xc9, 0x22, 0x62, 0xc5, 0x94, 0x4a, 0x24, 0xd9,
-	0xcb, 0x00, 0x69, 0x8f, 0x57, 0x44, 0x68, 0x2c, 0x90, 0x2c, 0x0a, 0xbd, 0x8c, 0x7e, 0xd1, 0x21,
-	0x7f, 0x48, 0xa9, 0xf1, 0x0c, 0xf4, 0xd8, 0x62, 0xf8, 0x99, 0x89, 0x29, 0x7f, 0x49, 0x92, 0x7d,
-	0x6c, 0x3b, 0xae, 0x61, 0xbd, 0x38, 0x23, 0x79, 0xc4, 0x28, 0xb6, 0xe4, 0x2f, 0x09, 0xfe, 0x21,
-	0xc4, 0x39, 0x3d, 0x8f, 0x13, 0xcc, 0x64, 0x3f, 0x1b, 0xc5, 0x51, 0xff, 0xe3, 0x49, 0x3a, 0x64,
-	0x36, 0xfb, 0x32, 0xa7, 0xf7, 0x48, 0x8f, 0xed, 0xd7, 0xd5, 0xe0, 0x3f, 0xa8, 0x6d, 0x55, 0x03,
-	0x6c, 0xab, 0xba, 0xf3, 0x1e, 0x1e, 0xe9, 0xfb, 0xb6, 0x7d, 0xe1, 0x8b, 0xd0, 0x61, 0x90, 0x92,
-	0xac, 0xa9, 0xc9, 0x41, 0x66, 0x2b, 0x76, 0xc8, 0xc5, 0xcb, 0xf0, 0x3f, 0x82, 0x4e, 0x6e, 0x26,
-	0xc9, 0x24, 0x1b, 0xbb, 0xa9, 0x16, 0x13, 0x22, 0x1b, 0x56, 0x45, 0x52, 0xf8, 0x38, 0xba, 0x67,
-	0xc6, 0x4d, 0xce, 0xaf, 0xb9, 0x58, 0xfc, 0x19, 0xe0, 0x82, 0x22, 0x53, 0xb7, 0x55, 0x20, 0x86,
-	0x25, 0xef, 0xca, 0x05, 0xc9, 0x22, 0xc9, 0x21, 0xf7, 0x68, 0x25, 0xe8, 0x3a, 0x8e, 0x5b, 0x42,
-	0x8f, 0x4d, 0xb9, 0x54, 0x23, 0xc4, 0xf7, 0x5d, 0x76, 0xdd, 0x90, 0xf7, 0xa9, 0xd5, 0xd2, 0xdd,
-	0x77, 0xf8, 0x74, 0x0b, 0x3e, 0x61, 0xb3, 0x6e, 0xda, 0x9c, 0xf7, 0xc8, 0x01, 0x5e, 0x86, 0x01,
-	0xcf, 0x31, 0xa9, 0x57, 0xa3, 0x0b, 0xbe, 0x1a, 0xf5, 0xb9, 0xc7, 0xa1, 0x1e, 0xa5, 0xde, 0x23,
-	0x24, 0xb8, 0xa1, 0xbd, 0xa9, 0xa2, 0xc7, 0x70, 0x1b, 0x86, 0xf9, 0x30, 0xa6, 0xb8, 0x0d, 0xa6,
-	0x36, 0x25, 0x43, 0x2a, 0x13, 0x8b, 0x18, 0x26, 0x1e, 0xcd, 0x66, 0xa6, 0x33, 0x73, 0x99, 0xeb,
-	0x99, 0xec, 0x54, 0x26, 0x9b, 0xcd, 0x64, 0x73, 0x99, 0xdc, 0x6c, 0x26, 0x37, 0x97, 0xc9, 0xcd,
-	0x67, 0xb2, 0xf3, 0x99, 0xec, 0x42, 0x26, 0x7b, 0x3d, 0x93, 0x9b, 0xca, 0xe4, 0xb2, 0x70, 0x05,
-	0xfa, 0xf9, 0xac, 0xa4, 0x1c, 0x79, 0xec, 0x7c, 0x1e, 0x87, 0x73, 0xb9, 0x4c, 0x6e, 0x3a, 0x93,
-	0x9b, 0xa1, 0x1b, 0x69, 0xfd, 0xd6, 0x71, 0xfc, 0x10, 0xf2, 0x02, 0x84, 0x1d, 0xd7, 0x7e, 0xec,
-	0xf8, 0x31, 0x9f, 0x82, 0x08, 0xf5, 0x7a, 0xce, 0x2e, 0x4c, 0xfd, 0x44, 0xf4, 0xb0, 0x8a, 0xba,
-	0x8f, 0xaa, 0xa8, 0x3d, 0x3b, 0x9d, 0xc9, 0xce, 0x78, 0x0f, 0x28, 0xd7, 0x42, 0xe1, 0xee, 0x44,
-	0x34, 0xfd, 0x17, 0x01, 0xf8, 0xe0, 0x14, 0x9e, 0x10, 0x5f, 0x87, 0x28, 0x93, 0xdd, 0x70, 0xea,
-	0xde, 0xe7, 0xf5, 0x45, 0xae, 0x23, 0xec, 0xa6, 0xa4, 0x0f, 0x1d, 0xf7, 0x7f, 0x1b, 0xfa, 0x18,
-	0xab, 0x25, 0x19, 0x25, 0x62, 0xd5, 0x24, 0x04, 0x5a, 0x48, 0xc0, 0x94, 0x63, 0x9b, 0x31, 0xb8,
-	0x72, 0x7e, 0x08, 0xfd, 0x4c, 0x8e, 0xac, 0xca, 0x96, 0x2c, 0x59, 0x9a, 0x21, 0x9a, 0xcc, 0x8a,
-	0x78, 0x70, 0xd3, 0xc2, 0xc4, 0xba, 0x69, 0x1b, 0x87, 0x8e, 0x53, 0xea, 0xa5, 0x52, 0x56, 0x1d,
-	0x21, 0x36, 0x19, 0xde, 0x83, 0x8b, 0x5e, 0x25, 0x8f, 0xb5, 0x11, 0x3a, 0x5b, 0x1b, 0x43, 0x35,
-	0xfd, 0x1b, 0x5a, 0x4a, 0xff, 0x9b, 0x93, 0xa3, 0x20, 0x1e, 0xea, 0x9d, 0x3a, 0x0a, 0x52, 0x25,
-	0xd3, 0x27, 0x0a, 0x52, 0x25, 0xd3, 0x89, 0x82, 0x68, 0xc8, 0x73, 0xd6, 0x28, 0x68, 0x0e, 0xba,
-	0x9d, 0xb0, 0xce, 0x33, 0x5d, 0x3e, 0xfb, 0x57, 0x4e, 0x88, 0x70, 0xc2, 0xf3, 0xe8, 0xe9, 0xef,
-	0x5b, 0xf4, 0x34, 0x07, 0x58, 0xaa, 0x58, 0x9a, 0xc8, 0x8f, 0x1b, 0xf9, 0x69, 0x79, 0x77, 0xc3,
-	0x81, 0x6f, 0x82, 0xd2, 0xac, 0x30, 0x12, 0x7e, 0x5a, 0xfe, 0x10, 0x7a, 0xbc, 0x7c, 0x05, 0xb9,
-	0x68, 0x98, 0x3c, 0xfe, 0xfa, 0xd8, 0xf7, 0xe6, 0xd6, 0x0e, 0x5d, 0xb6, 0x2c, 0x43, 0x56, 0x4b,
-	0xce, 0x4d, 0xab, 0x10, 0xaf, 0xc9, 0x5d, 0xa2, 0x12, 0xf0, 0xe4, 0xb1, 0xa8, 0x28, 0xc6, 0xfa,
-	0x5e, 0x53, 0xa5, 0x21, 0x14, 0xfa, 0xb4, 0x59, 0x28, 0x14, 0x6f, 0xe0, 0x3b, 0x7d, 0x04, 0x94,
-	0x68, 0xe0, 0x3c, 0x16, 0x01, 0xcd, 0x40, 0x8f, 0xba, 0x6b, 0xd6, 0x8e, 0x54, 0x64, 0x4d, 0x35,
-	0x79, 0xbc, 0xe7, 0xe1, 0x52, 0x77, 0x4d, 0xe7, 0x04, 0x85, 0x12, 0xf8, 0xc5, 0x4d, 0xf8, 0xff,
-	0x46, 0xdc, 0xd4, 0xfb, 0xee, 0x71, 0x13, 0x77, 0x2b, 0xdf, 0xe3, 0xb8, 0xa9, 0xaf, 0x75, 0xdc,
-	0xd4, 0xff, 0x77, 0x19, 0x37, 0x0d, 0xbc, 0x5f, 0xdc, 0x34, 0xf8, 0xdd, 0xc7, 0x4d, 0xc9, 0xbf,
-	0x9b, 0xb8, 0xc9, 0x78, 0x53, 0x45, 0x2a, 0xac, 0xb6, 0x8c, 0x9b, 0xae, 0x1d, 0x8f, 0x9b, 0x78,
-	0x14, 0x94, 0x61, 0x91, 0x4a, 0x26, 0x3b, 0x9b, 0xc9, 0xce, 0xd9, 0x31, 0x54, 0x8b, 0xd0, 0xc9,
-	0x89, 0xae, 0xde, 0x37, 0x74, 0xaa, 0xbb, 0xb9, 0xfd, 0xa6, 0x03, 0x7a, 0x7d, 0x96, 0x27, 0x5e,
-	0x81, 0xa8, 0xa9, 0x4b, 0x05, 0x22, 0x1a, 0x84, 0x5d, 0x95, 0x3a, 0xd7, 0x78, 0xdf, 0x56, 0x51,
-	0x48, 0xd5, 0x54, 0xe2, 0x6c, 0x0e, 0x71, 0x23, 0x2a, 0xb0, 0x02, 0xa1, 0xdd, 0xda, 0x93, 0x0b,
-	0x8f, 0x85, 0x6e, 0xc6, 0x26, 0xd8, 0x5c, 0x78, 0x1c, 0xe2, 0xee, 0xbd, 0x11, 0xf7, 0xc7, 0x01,
-	0x8f, 0xd9, 0xc6, 0x9c, 0x4a, 0xee, 0x89, 0x27, 0x21, 0xe1, 0x92, 0x3b, 0x0d, 0x07, 0x3d, 0xf4,
-	0xae, 0x30, 0x47, 0xfe, 0x18, 0xc4, 0x4c, 0x5d, 0x91, 0x2d, 0x51, 0x53, 0xc5, 0x82, 0xa2, 0xa9,
-	0xf6, 0xe5, 0xac, 0x73, 0x80, 0xdb, 0xcd, 0xea, 0x1e, 0xa8, 0x4b, 0xb4, 0x06, 0x5f, 0x05, 0x20,
-	0x6a, 0xc1, 0x38, 0x60, 0x3e, 0xac, 0xee, 0xa0, 0xd7, 0x53, 0x8e, 0x17, 0x20, 0x51, 0x51, 0xe5,
-	0xa7, 0xa2, 0x4e, 0x8c, 0xb2, 0x6c, 0x9a, 0xcc, 0x1f, 0xda, 0xc7, 0xba, 0x74, 0xb5, 0xb7, 0x43,
-	0x70, 0x7e, 0x7e, 0xde, 0xd6, 0x85, 0x92, 0x6d, 0xd6, 0xa8, 0xf0, 0x47, 0xd0, 0xed, 0xbd, 0x23,
-	0x63, 0xbb, 0xaf, 0xd3, 0x42, 0xc4, 0xac, 0xdd, 0x8b, 0xe1, 0x8f, 0x21, 0x5a, 0xbf, 0x45, 0x85,
-	0x3d, 0x5d, 0xe4, 0x97, 0x65, 0x7c, 0x40, 0x66, 0x79, 0xf6, 0x85, 0x6c, 0x1d, 0x88, 0xa6, 0x75,
-	0xa0, 0x10, 0xbe, 0xc9, 0xc6, 0x8e, 0xaa, 0xa8, 0x03, 0x42, 0x54, 0x05, 0xbe, 0x93, 0x70, 0xaa,
-	0x2d, 0x4a, 0x84, 0xaf, 0x41, 0xcc, 0x92, 0x09, 0xdd, 0x9e, 0x9c, 0x26, 0xc0, 0xd3, 0x44, 0x94,
-	0xd7, 0xf1, 0x36, 0xc6, 0xa1, 0x43, 0xd5, 0xc4, 0x9f, 0x68, 0x26, 0xdb, 0x2a, 0x9b, 0x67, 0x76,
-	0xb4, 0xab, 0xda, 0x6f, 0x6a, 0x26, 0x1e, 0x07, 0xf8, 0x89, 0x66, 0x3a, 0x72, 0xa3, 0xc7, 0xb6,
-	0x73, 0x1a, 0x9d, 0x74, 0xfd, 0x44, 0x33, 0xb9, 0xf4, 0x9b, 0xd0, 0x2b, 0x15, 0x25, 0xdd, 0x92,
-	0xf7, 0x89, 0xe8, 0xe1, 0x8b, 0xf9, 0xf2, 0xf5, 0x38, 0xa4, 0xbf, 0xe9, 0xf0, 0xdf, 0xb8, 0xf9,
-	0xa6, 0x8a, 0x6e, 0xc0, 0x02, 0x5c, 0x72, 0x16, 0xd6, 0x83, 0x8d, 0xed, 0xc5, 0xcd, 0x94, 0x6d,
-	0xae, 0x29, 0xd7, 0x5e, 0x07, 0xb3, 0x99, 0x5c, 0x66, 0x3a, 0x33, 0x93, 0x99, 0xcd, 0xcc, 0x65,
-	0xe6, 0x33, 0x0b, 0xce, 0x6a, 0xcb, 0x8f, 0x43, 0x4f, 0xad, 0x59, 0x07, 0x2d, 0x24, 0x5f, 0x57,
-	0x51, 0xf7, 0x4f, 0xed, 0x18, 0x36, 0x72, 0x54, 0x45, 0xe1, 0x6c, 0x2e, 0xe3, 0x80, 0x86, 0x48,
-	0xa2, 0x3b, 0xfd, 0xa7, 0x41, 0xb8, 0xd0, 0xc2, 0x47, 0xe2, 0xaf, 0x6b, 0x5b, 0x94, 0x9d, 0xce,
-	0xf4, 0xe9, 0x59, 0xdd, 0xec, 0xf7, 0x6e, 0x5f, 0xc2, 0x10, 0x62, 0x99, 0x2d, 0xb6, 0x87, 0x64,
-	0x9f, 0xfd, 0xc2, 0x84, 0xe0, 0x77, 0x15, 0x26, 0xbc, 0x87, 0xd3, 0x4e, 0xbf, 0x0a, 0xf3, 0xf4,
-	0xbd, 0xba, 0x18, 0x82, 0xcd, 0xec, 0x54, 0x2d, 0x68, 0xe3, 0x49, 0x88, 0xa8, 0x31, 0xed, 0xc6,
-	0x89, 0xda, 0x6c, 0x2e, 0xfc, 0x07, 0x41, 0xb8, 0x28, 0x15, 0xf7, 0x25, 0xb5, 0x40, 0x8a, 0xa2,
-	0xfb, 0x41, 0x77, 0xdd, 0x3f, 0xbf, 0xa7, 0xb8, 0xd7, 0xe4, 0x9e, 0xc2, 0x4f, 0x8b, 0x89, 0x45,
-	0x2e, 0xc6, 0xf9, 0xbf, 0xb6, 0x99, 0xd8, 0x06, 0xf3, 0xcf, 0x03, 0xaf, 0x79, 0x42, 0x9c, 0xbf,
-	0xd1, 0xdc, 0xf2, 0x35, 0x9a, 0xc9, 0x17, 0xaf, 0xd0, 0x35, 0xfc, 0xf1, 0xaf, 0xaa, 0xc8, 0x49,
-	0xd6, 0x49, 0x15, 0x14, 0xc9, 0x34, 0x53, 0xa6, 0x4e, 0x0a, 0x74, 0x2f, 0x4c, 0xb9, 0x5a, 0xa7,
-	0x68, 0x34, 0x4e, 0x79, 0x92, 0x2f, 0x5e, 0xa1, 0x3e, 0x8c, 0x8f, 0xaa, 0x28, 0xe6, 0x2a, 0x91,
-	0xda, 0xe0, 0x95, 0xcd, 0xad, 0xea, 0xe6, 0x8b, 0x57, 0xe8, 0xc6, 0xf0, 0xc2, 0xaf, 0xaa, 0x68,
-	0xe6, 0xc4, 0xa6, 0xd8, 0xbc, 0xa4, 0x76, 0x35, 0x23, 0x55, 0x92, 0xf7, 0x89, 0xea, 0x98, 0xf2,
-	0xd0, 0x8b, 0x57, 0xa8, 0x7f, 0xb8, 0xf7, 0xa8, 0x8a, 0xe2, 0xb5, 0x96, 0x7d, 0x4d, 0x70, 0x58,
-	0x6a, 0x3a, 0x5c, 0xf8, 0x47, 0x2c, 0xa9, 0x54, 0xd2, 0x75, 0xd1, 0xb2, 0x6f, 0x2d, 0x98, 0x33,
-	0x6f, 0x76, 0x6d, 0xd4, 0xfa, 0xb2, 0x83, 0xa7, 0x95, 0xd6, 0x0a, 0xf1, 0x73, 0x04, 0x43, 0x7a,
-	0xc5, 0xb0, 0x13, 0x92, 0xe4, 0x02, 0x11, 0x35, 0x4f, 0x2e, 0x0c, 0xdb, 0x00, 0x22, 0xb9, 0xe5,
-	0x93, 0x5b, 0x3a, 0x39, 0xa7, 0xe6, 0x6e, 0x9b, 0x30, 0x48, 0x1b, 0xf2, 0xa9, 0xc6, 0x7b, 0x80,
-	0x35, 0x3b, 0xe5, 0x51, 0x24, 0x6e, 0xf2, 0x25, 0xdb, 0x53, 0x22, 0xb9, 0xf9, 0x93, 0x1b, 0xf7,
-	0xcd, 0xdb, 0xa4, 0xbe, 0x58, 0x6b, 0xac, 0xc0, 0x9f, 0x41, 0xac, 0x50, 0x31, 0x2d, 0xad, 0xec,
-	0xe4, 0xe5, 0xb0, 0xdd, 0xa8, 0x45, 0x2e, 0xa0, 0x4d, 0xcd, 0x9b, 0x1b, 0xbe, 0x0f, 0x97, 0x4f,
-	0x30, 0xec, 0x33, 0x85, 0x5e, 0xbf, 0xf1, 0xa6, 0x8a, 0x3e, 0x81, 0x14, 0x0c, 0x39, 0x16, 0xc6,
-	0x73, 0x7b, 0x3d, 0xb3, 0x1f, 0xcc, 0x66, 0x72, 0x30, 0x08, 0x98, 0x27, 0x3a, 0x7b, 0xab, 0xd0,
-	0x6c, 0xfe, 0x2a, 0x44, 0x79, 0xce, 0x2f, 0xdf, 0x16, 0x28, 0xde, 0x0f, 0x1f, 0x56, 0x51, 0xe0,
-	0xa8, 0x8a, 0x3a, 0x17, 0xd8, 0x46, 0x72, 0xdd, 0xcd, 0xfb, 0xb5, 0x63, 0xa6, 0x50, 0xa2, 0x3d,
-	0xfd, 0x2f, 0x10, 0x0c, 0x1f, 0x5f, 0xb8, 0x6e, 0xca, 0xad, 0x0a, 0xf1, 0x7a, 0x17, 0xe2, 0x6c,
-	0x12, 0xd7, 0xce, 0xe0, 0x02, 0x1a, 0x52, 0x5e, 0xbd, 0x77, 0xda, 0xb1, 0x3a, 0xff, 0x63, 0xa6,
-	0xff, 0x7b, 0xed, 0x96, 0x6e, 0x89, 0xae, 0x31, 0x9f, 0x0c, 0xd2, 0x69, 0x88, 0x4b, 0x5f, 0xba,
-	0x46, 0xea, 0x39, 0xe1, 0xe8, 0xf2, 0x9e, 0x29, 0x44, 0xa5, 0x2f, 0xb9, 0x7d, 0xb9, 0xf9, 0x92,
-	0x35, 0x26, 0x4f, 0xae, 0x5d, 0xb0, 0x31, 0x5f, 0xb2, 0x4d, 0xc0, 0x2e, 0x6b, 0x2d, 0xd3, 0xce,
-	0x37, 0xf1, 0x31, 0x74, 0x72, 0xe2, 0x63, 0x5d, 0x22, 0x63, 0x7b, 0xcb, 0x44, 0x46, 0x9c, 0x01,
-	0x6c, 0x68, 0x9a, 0x25, 0x72, 0x4c, 0x61, 0xe7, 0x20, 0xb1, 0x25, 0x1e, 0x16, 0x12, 0xb4, 0x66,
-	0x89, 0x55, 0xac, 0xb0, 0x72, 0xdf, 0xb4, 0x47, 0x9f, 0xab, 0xbb, 0x7f, 0x87, 0xe0, 0xaa, 0x77,
-	0x40, 0x9b, 0x26, 0x33, 0x36, 0xe4, 0xe5, 0xa1, 0x33, 0xe6, 0xe5, 0x05, 0x4e, 0x93, 0x97, 0x17,
-	0xf4, 0xcf, 0xcb, 0x7b, 0x8e, 0xe0, 0x8a, 0x57, 0x47, 0xff, 0xec, 0xeb, 0x59, 0x08, 0xb3, 0x17,
-	0x0b, 0x05, 0x4d, 0xe1, 0xda, 0x0d, 0xb1, 0x00, 0x7e, 0xbf, 0xbc, 0xeb, 0x68, 0x19, 0x36, 0x3a,
-	0x04, 0x56, 0x20, 0xb8, 0xa4, 0xf8, 0x43, 0x88, 0x18, 0x44, 0x57, 0x28, 0x38, 0xa2, 0xa1, 0x72,
-	0x80, 0x85, 0xbf, 0x3c, 0x90, 0xf5, 0x54, 0xa4, 0xff, 0x02, 0xc1, 0x25, 0xaf, 0x12, 0xc7, 0xaf,
-	0x87, 0x7f, 0x04, 0x61, 0x93, 0x28, 0x2c, 0x13, 0x8c, 0x2f, 0x82, 0x5b, 0xad, 0x3c, 0x92, 0xbf,
-	0x94, 0x89, 0x2d, 0x2e, 0x82, 0xf9, 0x08, 0xc1, 0x95, 0x88, 0xa7, 0x21, 0xea, 0x9e, 0xb0, 0xb0,
-	0xdc, 0xf2, 0x80, 0x3b, 0x03, 0xc8, 0x9d, 0x81, 0x90, 0xd0, 0x6d, 0xd6, 0x62, 0x2f, 0x73, 0xf8,
-	0x13, 0x88, 0xd6, 0xc9, 0x3b, 0x53, 0xe4, 0xf0, 0xa7, 0x08, 0x3e, 0xf2, 0xea, 0xba, 0xe9, 0xef,
-	0x93, 0x59, 0xdf, 0x3f, 0x81, 0x4e, 0x7e, 0x54, 0xc8, 0xc7, 0xfe, 0xca, 0xb7, 0x55, 0xd4, 0xbe,
-	0xa3, 0x68, 0x85, 0xc7, 0x5e, 0xf4, 0x64, 0x97, 0x08, 0xa1, 0x5d, 0x59, 0x21, 0x82, 0xc3, 0x81,
-	0x3f, 0x05, 0xa0, 0x36, 0x22, 0xb2, 0x19, 0xe7, 0x96, 0x72, 0xe9, 0xdb, 0x2a, 0x42, 0x53, 0x94,
-	0xaf, 0x77, 0xac, 0x27, 0x1f, 0x9f, 0xca, 0x64, 0xa7, 0xa6, 0xc6, 0xb3, 0x53, 0xfc, 0x9f, 0xd0,
-	0x45, 0x19, 0xd6, 0x29, 0x3d, 0x9e, 0x83, 0xf8, 0x8e, 0xa4, 0x16, 0x9f, 0xc8, 0x45, 0x6b, 0x8f,
-	0x8b, 0x08, 0x1e, 0x3b, 0x0b, 0x4c, 0x76, 0x0b, 0x31, 0x97, 0x8a, 0xf1, 0xa5, 0x05, 0x18, 0xf0,
-	0xf6, 0x6e, 0x89, 0xb9, 0x6f, 0xd6, 0x99, 0x05, 0x08, 0x1d, 0x48, 0x65, 0xc7, 0x8a, 0xae, 0x7a,
-	0xb2, 0xb7, 0x59, 0xb9, 0x3b, 0xda, 0x29, 0x4f, 0xf6, 0x2b, 0xab, 0x49, 0xff, 0x35, 0x40, 0xbf,
-	0xd7, 0xc7, 0x31, 0xc9, 0x4e, 0x2a, 0x90, 0x6f, 0xac, 0xe5, 0xcd, 0x0d, 0x64, 0x99, 0xf9, 0x0d,
-	0x11, 0xd7, 0x14, 0x44, 0x8a, 0xc4, 0x2c, 0x18, 0xb2, 0xee, 0x9a, 0x67, 0xe3, 0xb2, 0x0b, 0x08,
-	0x5e, 0x12, 0x9c, 0x83, 0x7e, 0x27, 0x79, 0xc8, 0x69, 0x91, 0x85, 0x23, 0x76, 0x36, 0xa8, 0xd0,
-	0xcb, 0x2b, 0xbd, 0x1a, 0xe2, 0x6f, 0x82, 0x70, 0xc1, 0x0d, 0xe7, 0x5c, 0x33, 0xab, 0x85, 0x75,
-	0x76, 0x8e, 0xce, 0xea, 0x89, 0x3e, 0xdd, 0xed, 0xaf, 0x1b, 0xd5, 0x39, 0x50, 0xa0, 0x21, 0xa8,
-	0xfb, 0x9d, 0xc0, 0x79, 0x40, 0x67, 0x07, 0x74, 0x43, 0x52, 0xb3, 0x91, 0xc2, 0x0b, 0x80, 0xeb,
-	0x66, 0xd0, 0x7b, 0x62, 0xed, 0xec, 0x2a, 0xff, 0x36, 0x80, 0x84, 0x84, 0xe9, 0xf5, 0x28, 0xf6,
-	0x8d, 0x4a, 0x63, 0x24, 0x68, 0x07, 0x2f, 0xb9, 0xb3, 0x3b, 0xa4, 0xe3, 0x81, 0xe0, 0x97, 0xad,
-	0xe2, 0x40, 0x60, 0xed, 0x7c, 0x7a, 0x62, 0x3b, 0x2d, 0x9c, 0x49, 0xab, 0xf8, 0xaf, 0xe4, 0x1b,
-	0xff, 0xd9, 0xa7, 0xe7, 0x73, 0x27, 0x36, 0x7a, 0x86, 0xf0, 0x6f, 0x19, 0x62, 0x06, 0x29, 0x28,
-	0x92, 0x5c, 0xf6, 0x9e, 0xad, 0x77, 0xe5, 0x2f, 0x1d, 0x55, 0x51, 0x02, 0x3a, 0x96, 0x89, 0x42,
-	0x2c, 0x02, 0x1d, 0x02, 0xb1, 0x24, 0x59, 0x75, 0x9c, 0x4c, 0x42, 0x88, 0x72, 0x26, 0xbe, 0x07,
-	0xde, 0x80, 0x01, 0x49, 0x51, 0xb4, 0x27, 0xce, 0x39, 0x35, 0x79, 0xaa, 0x4b, 0xaa, 0x49, 0x17,
-	0x72, 0xd4, 0x73, 0x60, 0xd2, 0xc7, 0x68, 0x6c, 0x30, 0xb8, 0xe2, 0x50, 0xe0, 0xed, 0x63, 0x01,
-	0x68, 0x82, 0x75, 0xf3, 0xda, 0x89, 0xdd, 0xac, 0xb9, 0xb2, 0xe3, 0x71, 0xe9, 0x3a, 0x8c, 0xb4,
-	0x5e, 0x9a, 0x67, 0x0a, 0x4b, 0xd7, 0xde, 0x54, 0xd1, 0x6d, 0xb8, 0x06, 0x49, 0x67, 0x9d, 0xb0,
-	0xf6, 0xbd, 0xa1, 0x67, 0x7c, 0x21, 0xe3, 0x9c, 0x56, 0xb0, 0x73, 0x87, 0x66, 0x11, 0xea, 0x7c,
-	0xfe, 0xa3, 0xc6, 0x08, 0x75, 0xe0, 0x75, 0x15, 0x45, 0x0e, 0xab, 0x28, 0x74, 0x54, 0x45, 0x90,
-	0xcd, 0xf2, 0x53, 0x8e, 0x39, 0x3b, 0x30, 0xb5, 0xf3, 0x3e, 0xf9, 0xc1, 0xde, 0x0b, 0x04, 0x43,
-	0xc7, 0xdc, 0x90, 0x1b, 0xa3, 0x96, 0x6b, 0x31, 0x2a, 0x5b, 0x46, 0x6e, 0x8c, 0x3a, 0x76, 0x7a,
-	0x7f, 0x76, 0x8a, 0x10, 0x75, 0xc9, 0x96, 0x9d, 0x9e, 0x85, 0xee, 0xbc, 0xa6, 0x16, 0xd7, 0xa5,
-	0x82, 0x7d, 0xc1, 0xfa, 0x03, 0x08, 0x19, 0x92, 0x65, 0xfb, 0xfb, 0x68, 0xbe, 0xe7, 0xdb, 0x2a,
-	0x0a, 0x4c, 0x4f, 0x39, 0x39, 0x92, 0x23, 0xa3, 0x48, 0x60, 0xd5, 0xe9, 0xff, 0x1c, 0xe2, 0x8f,
-	0xda, 0x28, 0xb3, 0x07, 0xa4, 0x7f, 0xe6, 0x7d, 0x86, 0x98, 0xff, 0xf8, 0xa8, 0x8a, 0x2e, 0x42,
-	0xfb, 0x8e, 0xa6, 0x16, 0xa7, 0xec, 0xff, 0xb2, 0xf6, 0x7f, 0x39, 0xfb, 0xbf, 0xe9, 0x1a, 0x74,
-	0xb7, 0x5f, 0x2c, 0xfe, 0x2e, 0xaa, 0x3d, 0x8a, 0x0b, 0xb0, 0x04, 0x52, 0xf3, 0xa8, 0x8a, 0x96,
-	0x20, 0x44, 0xac, 0xbd, 0x29, 0xf6, 0x33, 0xcb, 0x7e, 0xe6, 0xd8, 0xcf, 0x69, 0xf6, 0x73, 0x86,
-	0xfd, 0x9c, 0x65, 0x3f, 0xe7, 0xd8, 0xcf, 0x79, 0xf6, 0x73, 0x81, 0xfd, 0xbc, 0x0e, 0xed, 0x94,
-	0x8b, 0x75, 0xa1, 0xeb, 0xf7, 0x50, 0x47, 0x9a, 0x35, 0x77, 0x42, 0x56, 0xa6, 0xa3, 0x03, 0x9e,
-	0x87, 0x90, 0x22, 0x15, 0x74, 0x7e, 0xed, 0x7a, 0xc5, 0x77, 0x06, 0xbc, 0xc3, 0x77, 0xb7, 0x4d,
-	0x60, 0x0c, 0xf8, 0x13, 0x88, 0x4a, 0x05, 0x76, 0xb2, 0x46, 0xc3, 0x86, 0x8a, 0xce, 0x5f, 0x96,
-	0x34, 0x83, 0x63, 0xdd, 0x36, 0x71, 0x9e, 0xd1, 0xe2, 0xfb, 0xd0, 0xaf, 0xc8, 0xea, 0x63, 0xba,
-	0x94, 0x15, 0x59, 0x2d, 0xd9, 0x8f, 0x0e, 0xf7, 0x25, 0x85, 0x45, 0xcf, 0xd1, 0xfc, 0x10, 0xdd,
-	0xe2, 0x69, 0xb0, 0x48, 0x03, 0x0c, 0xe7, 0x69, 0xcc, 0x3f, 0xfd, 0x68, 0xf4, 0xaf, 0x83, 0x42,
-	0x2f, 0xe5, 0xdb, 0xb4, 0xd9, 0x56, 0x39, 0x17, 0xbe, 0x0e, 0x51, 0x26, 0xae, 0xa2, 0x8b, 0x45,
-	0xa2, 0x48, 0x07, 0xfc, 0xd5, 0x49, 0x3f, 0x17, 0x13, 0xcc, 0xd9, 0x52, 0xda, 0xc7, 0x82, 0xc9,
-	0x5f, 0x74, 0x0a, 0x11, 0x4a, 0xfb, 0x50, 0x5f, 0xa6, 0x94, 0x37, 0xae, 0xbe, 0xa9, 0xa2, 0x14,
-	0x8c, 0xc0, 0x10, 0xed, 0x64, 0xaa, 0xd9, 0x0b, 0xcd, 0x11, 0x88, 0xd0, 0x4e, 0x37, 0x7b, 0xb2,
-	0x64, 0x23, 0xb4, 0xf4, 0x7f, 0x40, 0x90, 0x6c, 0x30, 0x99, 0x9a, 0xd5, 0x6b, 0xd0, 0x4d, 0x0d,
-	0xa2, 0x01, 0x96, 0x8d, 0x36, 0x37, 0xf9, 0x7a, 0xbb, 0xcb, 0xa7, 0xfd, 0x0d, 0xbe, 0x3e, 0xd7,
-	0x76, 0xa7, 0xd6, 0xf0, 0x8d, 0xc1, 0x37, 0x55, 0xd4, 0x0b, 0x3d, 0xb6, 0xf5, 0xf3, 0x9e, 0x99,
-	0x18, 0x65, 0xd3, 0xbf, 0x8b, 0x20, 0xe5, 0x5d, 0x54, 0x5b, 0x96, 0x64, 0xc9, 0x05, 0x41, 0xab,
-	0x58, 0x1e, 0x75, 0xe5, 0x5a, 0x7c, 0x64, 0xb0, 0x1a, 0xae, 0xf0, 0x48, 0xe3, 0x3d, 0x49, 0x8d,
-	0xd9, 0x47, 0x4d, 0x7f, 0xe3, 0x73, 0x42, 0x2a, 0xbb, 0xc9, 0xf4, 0x2f, 0x11, 0xf4, 0x3c, 0xba,
-	0xb3, 0xf9, 0xb0, 0x7e, 0xd4, 0xd9, 0xe9, 0x33, 0x7b, 0x27, 0x55, 0xff, 0xcc, 0x2a, 0xf6, 0xba,
-	0x16, 0x60, 0xff, 0x2c, 0x40, 0x85, 0x31, 0x2a, 0x07, 0xf8, 0xdd, 0x84, 0xc8, 0xf1, 0xe7, 0x55,
-	0x97, 0x1c, 0x7b, 0x9a, 0x9f, 0x9a, 0x77, 0x53, 0xa2, 0x6b, 0xcf, 0xad, 0xc0, 0xac, 0xbd, 0xb5,
-	0xfa, 0x1c, 0xba, 0x77, 0x89, 0x64, 0xd1, 0xfd, 0x94, 0xa5, 0x99, 0x77, 0xb4, 0x78, 0x58, 0x4c,
-	0x95, 0xbe, 0x6d, 0x13, 0xb3, 0xbe, 0xc7, 0xbe, 0xad, 0x22, 0x78, 0xb8, 0xb1, 0xbe, 0xba, 0xb4,
-	0xb2, 0xb1, 0xb5, 0xb2, 0x2c, 0x44, 0x76, 0x6b, 0x95, 0x1c, 0xde, 0x7d, 0x09, 0x89, 0xfc, 0x9d,
-	0xcd, 0xfa, 0x9e, 0x2e, 0x41, 0xbb, 0x4e, 0x68, 0x54, 0x67, 0x3f, 0xd6, 0x1e, 0x6c, 0x68, 0x6b,
-	0xa7, 0xa4, 0x4f, 0x6c, 0x12, 0x62, 0xf8, 0x5d, 0x8e, 0x4d, 0x21, 0xc1, 0xe6, 0xc5, 0x17, 0x20,
-	0x28, 0x99, 0x2a, 0xef, 0x6f, 0x17, 0x4f, 0x58, 0x1b, 0x45, 0x02, 0x2d, 0xe5, 0x6d, 0xff, 0x15,
-	0x82, 0xfe, 0x75, 0xad, 0x20, 0x29, 0x4b, 0x9a, 0x6a, 0x19, 0x9a, 0xb2, 0xa9, 0x48, 0x2a, 0xe1,
-	0x10, 0xbd, 0x4b, 0x56, 0x4d, 0xb9, 0x48, 0xc4, 0x7d, 0x95, 0x67, 0xce, 0x36, 0x5b, 0xc7, 0x61,
-	0x9b, 0xf0, 0x11, 0x9d, 0x20, 0xd0, 0x2a, 0x96, 0xc3, 0x15, 0x6c, 0xc9, 0xd5, 0xc5, 0x29, 0x1f,
-	0xa9, 0x78, 0x19, 0x60, 0xa7, 0xa4, 0x8b, 0x05, 0x36, 0x04, 0xdc, 0xed, 0xfc, 0xc0, 0xdf, 0xed,
-	0x34, 0x0c, 0x94, 0xd0, 0xb5, 0x53, 0xd2, 0xed, 0x92, 0xfc, 0x95, 0xda, 0x7b, 0xed, 0xd6, 0x78,
-	0xfa, 0x97, 0x23, 0x10, 0xbb, 0xa3, 0x68, 0x3b, 0x92, 0xb2, 0xa5, 0x93, 0x02, 0xeb, 0xed, 0x35,
-	0x88, 0xb0, 0x06, 0x44, 0x76, 0x7a, 0xcc, 0x1d, 0xb9, 0x13, 0xbf, 0x1d, 0xda, 0xcf, 0x92, 0x08,
-	0xb1, 0xd8, 0x01, 0x2f, 0x5e, 0x83, 0xa1, 0x7d, 0x4d, 0xb1, 0x88, 0x61, 0x48, 0xa2, 0xa9, 0xed,
-	0x5a, 0x4f, 0x24, 0x83, 0x88, 0xfb, 0xc4, 0x30, 0x9b, 0x47, 0xff, 0x83, 0x0e, 0xc3, 0x16, 0xa7,
-	0x7f, 0x64, 0x93, 0xe3, 0xfb, 0xef, 0xfc, 0x1e, 0x1a, 0x6a, 0x53, 0x5f, 0x73, 0xdd, 0x8f, 0x01,
-	0xbb, 0x63, 0xa0, 0xa9, 0x2a, 0x43, 0x95, 0xf6, 0xab, 0x84, 0xb3, 0xbc, 0xf8, 0x77, 0x59, 0x3d,
-	0x4d, 0x38, 0x95, 0x4b, 0xae, 0x58, 0xbc, 0x0b, 0x09, 0x87, 0x63, 0x57, 0x36, 0xc8, 0x13, 0x49,
-	0x51, 0xf8, 0xe1, 0x72, 0xeb, 0xa6, 0x2e, 0xbd, 0x7c, 0x76, 0x8c, 0xd1, 0xf3, 0xdd, 0x02, 0x71,
-	0x5e, 0x77, 0x9b, 0x57, 0xe1, 0xbb, 0x90, 0xd4, 0x74, 0x42, 0x27, 0x5c, 0x2d, 0x89, 0xe6, 0x81,
-	0x69, 0x91, 0xb2, 0x3b, 0xdc, 0x1d, 0xbe, 0xc3, 0x3d, 0xe0, 0xd2, 0x6f, 0x31, 0x72, 0x67, 0xb4,
-	0x0d, 0x18, 0x74, 0xed, 0xd3, 0xbe, 0x06, 0x71, 0x5f, 0x11, 0x77, 0x9e, 0x42, 0xf1, 0x8b, 0x2f,
-	0x9f, 0xc5, 0x1b, 0xf8, 0x3c, 0x7a, 0xf7, 0x3b, 0x06, 0x6d, 0x53, 0x38, 0x2f, 0x8e, 0x75, 0x18,
-	0x70, 0x16, 0x52, 0x43, 0x93, 0xe1, 0xf7, 0x6e, 0xb2, 0x8f, 0xaf, 0xbc, 0xfa, 0x16, 0xb7, 0x21,
-	0xe6, 0x3e, 0xc4, 0x17, 0x15, 0xd9, 0xb4, 0x78, 0xc4, 0xdf, 0xe2, 0xbc, 0xef, 0xd8, 0xf7, 0x06,
-	0xd0, 0xa8, 0x54, 0xf6, 0x16, 0xe2, 0x25, 0x88, 0x29, 0xa4, 0x24, 0x15, 0x0e, 0xdc, 0xed, 0x2a,
-	0xd2, 0x7c, 0x7d, 0xe7, 0x43, 0xd4, 0xbd, 0x52, 0x21, 0x36, 0x8f, 0xb3, 0xd5, 0xdc, 0x84, 0xb8,
-	0xaa, 0x89, 0x75, 0x9b, 0x5e, 0xa2, 0x85, 0x97, 0x40, 0x42, 0x54, 0xd5, 0x3c, 0x3b, 0x27, 0xfe,
-	0x2d, 0x48, 0x78, 0x98, 0xed, 0xce, 0xf5, 0x30, 0x01, 0xe3, 0xa7, 0xd9, 0x35, 0xdd, 0xbd, 0xec,
-	0x2e, 0x12, 0x62, 0xb5, 0x8d, 0x91, 0xf5, 0x6f, 0x0d, 0xfa, 0x55, 0xcd, 0x05, 0xd6, 0x9e, 0xef,
-	0x4c, 0xe8, 0x6d, 0x99, 0xf9, 0xdc, 0xab, 0x6a, 0x7c, 0xcf, 0x74, 0xc7, 0xd0, 0xc4, 0x05, 0x18,
-	0x38, 0x26, 0xc8, 0x56, 0xb6, 0xef, 0xec, 0x33, 0x11, 0x10, 0xfa, 0xcc, 0x86, 0x16, 0x98, 0xc2,
-	0x79, 0xe8, 0xf1, 0x28, 0xcc, 0x4f, 0x2c, 0x06, 0x5a, 0x28, 0x1b, 0x14, 0xe2, 0xae, 0xb2, 0xfc,
-	0xe8, 0x42, 0xf2, 0x24, 0xb9, 0x79, 0x86, 0xd4, 0xce, 0x7f, 0x98, 0x3c, 0xe5, 0xf9, 0xb0, 0xab,
-	0x69, 0xb0, 0x96, 0xca, 0x56, 0x37, 0xae, 0xfe, 0x67, 0x1d, 0x43, 0x2d, 0x54, 0x0d, 0xf9, 0x9f,
-	0x81, 0xfc, 0xb8, 0x11, 0x6d, 0x33, 0x6d, 0xed, 0x2c, 0xd7, 0x89, 0xd3, 0x21, 0x05, 0x57, 0xd9,
-	0x50, 0x3d, 0x26, 0x67, 0xba, 0xde, 0x83, 0x5e, 0x55, 0x13, 0x8b, 0x05, 0xd1, 0x79, 0x2f, 0xcc,
-	0x12, 0xf4, 0x92, 0x17, 0x4f, 0x34, 0xf4, 0x76, 0x21, 0xa1, 0x6a, 0xcb, 0x85, 0x25, 0x9b, 0xed,
-	0x0e, 0xe5, 0xc2, 0x25, 0x48, 0x1c, 0x93, 0x74, 0x89, 0x49, 0x3a, 0xcd, 0xf7, 0x6f, 0x0c, 0xbe,
-	0x7c, 0x76, 0x8c, 0x9d, 0x37, 0x15, 0x2b, 0xd6, 0x37, 0xf4, 0x19, 0x44, 0x9c, 0x27, 0x64, 0x25,
-	0xbd, 0x92, 0xbc, 0x7c, 0xa2, 0xb6, 0x1d, 0x02, 0x70, 0x86, 0x3b, 0x7a, 0x05, 0x7f, 0x02, 0xc0,
-	0x9f, 0xd4, 0x52, 0xee, 0xd4, 0x29, 0xb8, 0xbb, 0x6c, 0x7a, 0xca, 0xbc, 0x0b, 0x7d, 0xc4, 0x2a,
-	0x14, 0x5d, 0x3d, 0x1d, 0xdf, 0x76, 0x85, 0xc5, 0x48, 0xfe, 0x76, 0xbe, 0x62, 0x15, 0x8a, 0xbc,
-	0x03, 0xdc, 0x65, 0xb1, 0x1e, 0x77, 0xfe, 0xec, 0x19, 0xfa, 0x45, 0x15, 0x21, 0x01, 0x93, 0x63,
-	0x04, 0xf8, 0x01, 0x24, 0x3d, 0xc6, 0x6e, 0xb2, 0x08, 0xd3, 0x89, 0x42, 0x3f, 0x68, 0x61, 0x48,
-	0x9d, 0x42, 0xbf, 0x6b, 0xf3, 0xde, 0xa0, 0x16, 0x3f, 0x86, 0x7e, 0x7f, 0x69, 0x57, 0x99, 0xb4,
-	0xd9, 0x13, 0xad, 0xc9, 0x2f, 0x44, 0xbe, 0xdb, 0x29, 0x38, 0xeb, 0xa9, 0xae, 0xb1, 0x6d, 0xb8,
-	0xca, 0x87, 0xd8, 0x7d, 0x6b, 0xc8, 0xa2, 0x0d, 0x3b, 0xe2, 0x11, 0x8b, 0xda, 0x13, 0x55, 0xd1,
-	0xa4, 0x62, 0xf2, 0x07, 0xf6, 0x89, 0x03, 0x1d, 0x66, 0x21, 0x65, 0x73, 0xf0, 0xfb, 0x65, 0xd6,
-	0xb2, 0x1d, 0xe8, 0x2c, 0x73, 0x6a, 0x6c, 0xc1, 0x60, 0xa3, 0x85, 0x88, 0xf6, 0x86, 0x90, 0xfc,
-	0xf0, 0xbb, 0xb0, 0xb3, 0xbe, 0x7a, 0x3b, 0x5b, 0x65, 0xa2, 0xf1, 0x4a, 0xed, 0xe1, 0xa3, 0xc7,
-	0x49, 0x7e, 0xd4, 0x32, 0xd6, 0xeb, 0xe1, 0x1c, 0x1e, 0x17, 0x79, 0x1b, 0xec, 0x90, 0xca, 0x0e,
-	0xa9, 0x3f, 0x66, 0xe6, 0x32, 0xd2, 0x7c, 0xd0, 0xeb, 0x2d, 0xa4, 0x6b, 0xd7, 0x29, 0xc3, 0x9f,
-	0x43, 0xc4, 0x94, 0xd5, 0x92, 0x42, 0x44, 0x53, 0xb6, 0x48, 0x72, 0xec, 0x14, 0x7b, 0x6a, 0xf2,
-	0xe5, 0xb3, 0x10, 0x25, 0xe6, 0xd2, 0x3c, 0xfb, 0x29, 0xd8, 0xa2, 0xb6, 0x64, 0x8b, 0xe0, 0x6d,
-	0x18, 0x54, 0xb4, 0x92, 0x29, 0x9a, 0x96, 0x41, 0xa4, 0x32, 0x0d, 0x3d, 0xf8, 0x9a, 0x29, 0x26,
-	0x33, 0x27, 0xae, 0x91, 0xb0, 0xd0, 0x4f, 0x99, 0xb7, 0x1c, 0xde, 0x65, 0xce, 0x8a, 0x7f, 0x04,
-	0xdd, 0x8a, 0x56, 0x12, 0x0d, 0x52, 0x20, 0xf2, 0x3e, 0x31, 0x92, 0xe3, 0xa7, 0x9e, 0xa8, 0xde,
-	0x97, 0xcf, 0xea, 0x58, 0x79, 0x3b, 0x11, 0x45, 0x2b, 0x09, 0xbc, 0x08, 0xdf, 0x84, 0xee, 0x22,
-	0x51, 0x0f, 0x44, 0x49, 0x51, 0xc4, 0x8a, 0xb9, 0x93, 0x9c, 0x3c, 0x51, 0xd1, 0x2e, 0x01, 0x28,
-	0xc7, 0xa2, 0xa2, 0x3c, 0x34, 0x77, 0xf0, 0x2d, 0x88, 0xda, 0x67, 0x61, 0x8e, 0x80, 0xa9, 0x53,
-	0x08, 0x88, 0x30, 0x16, 0x2e, 0xe1, 0x11, 0x40, 0xc5, 0xdc, 0x71, 0xce, 0xe3, 0xb2, 0xa7, 0xee,
-	0x5d, 0xcf, 0xcb, 0x67, 0x1e, 0x46, 0x2e, 0xb9, 0xab, 0x62, 0xee, 0xf0, 0x53, 0xba, 0x2f, 0x20,
-	0xf2, 0x78, 0xc1, 0x74, 0xcc, 0x34, 0x99, 0x3b, 0xb5, 0xe0, 0xfe, 0x97, 0xcf, 0xbc, 0x9c, 0x8e,
-	0x05, 0xc1, 0xe3, 0x05, 0x93, 0x1b, 0x37, 0x2e, 0x40, 0xaf, 0x42, 0x31, 0x10, 0x5d, 0x8e, 0x14,
-	0x04, 0x89, 0x3a, 0x45, 0x41, 0xc9, 0xe9, 0x16, 0xdf, 0xb4, 0xe0, 0x8b, 0x99, 0x6a, 0xf6, 0xd9,
-	0xa3, 0x34, 0xd6, 0xe3, 0x07, 0x10, 0xe1, 0x2e, 0x60, 0x9f, 0xba, 0xd9, 0x19, 0x26, 0xfc, 0xc3,
-	0xa6, 0x18, 0xb2, 0x0e, 0xe5, 0xd4, 0xdc, 0xb6, 0x2d, 0xe2, 0x51, 0x49, 0xaf, 0xe0, 0x1f, 0x43,
-	0x94, 0x7d, 0x57, 0x18, 0x5b, 0x84, 0xaa, 0xa4, 0x24, 0x7f, 0xd1, 0x79, 0xea, 0x41, 0xe9, 0x7b,
-	0xf9, 0xac, 0x9e, 0x99, 0x69, 0xdd, 0x4d, 0x8b, 0x56, 0x79, 0x09, 0x5e, 0x81, 0x78, 0x89, 0xa8,
-	0x34, 0x8c, 0x26, 0x45, 0xf1, 0x40, 0x2a, 0x2b, 0x66, 0xf2, 0x97, 0x9d, 0xec, 0x74, 0xea, 0x82,
-	0x77, 0xe1, 0x34, 0x5e, 0xb2, 0xc4, 0x5c, 0xa6, 0xdf, 0xa2, 0x3c, 0xf9, 0x51, 0x48, 0xd4, 0x42,
-	0x20, 0x8e, 0xcb, 0xfa, 0x5e, 0x57, 0xd1, 0x47, 0x87, 0x55, 0xd4, 0x75, 0x54, 0x45, 0xe1, 0x69,
-	0x27, 0x33, 0x2a, 0x05, 0xec, 0xac, 0xc2, 0xfb, 0x82, 0x22, 0x71, 0x58, 0x45, 0x71, 0xf6, 0x82,
-	0x62, 0x2e, 0x93, 0x9d, 0xcf, 0x8f, 0x43, 0xf2, 0x78, 0x58, 0xe5, 0x21, 0xef, 0x3d, 0xac, 0x22,
-	0xcc, 0xc8, 0xaf, 0x67, 0x72, 0x53, 0xf9, 0xb1, 0x9a, 0x8b, 0xaf, 0x3f, 0xb5, 0xa4, 0xb4, 0x03,
-	0x87, 0x55, 0xd4, 0x4f, 0x69, 0x59, 0xee, 0x63, 0xfe, 0x63, 0xe8, 0xab, 0x8f, 0x2c, 0x3c, 0xa4,
-	0x43, 0x87, 0x55, 0x94, 0x64, 0xa4, 0xb3, 0x99, 0xdc, 0x5c, 0x7e, 0xca, 0xc7, 0xed, 0x72, 0xea,
-	0xfe, 0xd7, 0x55, 0x74, 0x91, 0xe7, 0x71, 0x5d, 0x60, 0x1c, 0x0b, 0x99, 0xdc, 0xf5, 0xfc, 0x87,
-	0x00, 0x25, 0xbd, 0xe2, 0x4d, 0xf6, 0xba, 0xcc, 0x89, 0x46, 0xd8, 0x08, 0x64, 0x33, 0xd3, 0xb9,
-	0xcc, 0x6c, 0x2e, 0x9f, 0x85, 0x8b, 0xbe, 0x7b, 0x92, 0x57, 0x99, 0x0f, 0x0e, 0xab, 0x28, 0x4d,
-	0x45, 0x4f, 0xcf, 0x66, 0xa6, 0xe7, 0xf2, 0xe3, 0xd0, 0xc7, 0xbc, 0x94, 0xe3, 0x15, 0xbc, 0x9a,
-	0x64, 0x78, 0x23, 0xd7, 0x28, 0xf9, 0xcc, 0x4c, 0x66, 0x66, 0x36, 0x3f, 0x0e, 0x3d, 0xb5, 0x55,
-	0xe6, 0x55, 0x68, 0x92, 0xd3, 0x4e, 0x50, 0x85, 0x66, 0xe6, 0x33, 0x33, 0x0b, 0x99, 0x99, 0xeb,
-	0x6b, 0xa1, 0x70, 0x57, 0x02, 0xd6, 0x42, 0xe1, 0x78, 0x22, 0xb1, 0x16, 0x0a, 0xe3, 0x44, 0xef,
-	0x5a, 0x28, 0xdc, 0x9f, 0x18, 0x58, 0x0b, 0x85, 0x93, 0x89, 0xa1, 0xb5, 0x50, 0xf8, 0x42, 0xe2,
-	0xe2, 0x5a, 0x28, 0x3c, 0x92, 0xb8, 0xbc, 0x16, 0x0a, 0xa7, 0x13, 0x1f, 0xac, 0x85, 0xc2, 0xa3,
-	0x89, 0x8f, 0xd7, 0x42, 0xe1, 0x6b, 0x89, 0xcc, 0x5a, 0x28, 0x3c, 0x91, 0x98, 0x4c, 0x7f, 0x33,
-	0x0c, 0xb1, 0x25, 0x83, 0x48, 0x16, 0x79, 0x37, 0xac, 0x7d, 0xe3, 0x44, 0xac, 0xdd, 0x1c, 0x5b,
-	0x4b, 0xef, 0x0c, 0x86, 0xfb, 0xfc, 0xc0, 0xb0, 0x1f, 0x04, 0xfe, 0xd1, 0x3b, 0x42, 0xe0, 0x5e,
-	0x1f, 0x08, 0x7c, 0x1c, 0xf8, 0x2e, 0x9c, 0x04, 0x7c, 0x9b, 0x02, 0xdd, 0xbd, 0xf7, 0x03, 0xba,
-	0xf8, 0x38, 0xea, 0x6c, 0x06, 0x6f, 0x77, 0xdf, 0x0b, 0xde, 0xfa, 0x35, 0x74, 0x5a, 0x50, 0x1b,
-	0xfd, 0x0e, 0x40, 0xed, 0x3d, 0x88, 0x78, 0x71, 0x4f, 0xac, 0x45, 0x36, 0xa0, 0xcf, 0xb7, 0xd9,
-	0xdd, 0x6d, 0xa3, 0xbb, 0xa7, 0x8b, 0x74, 0xce, 0xc1, 0xed, 0x39, 0xb8, 0xfd, 0x7b, 0x0c, 0x6e,
-	0x57, 0xce, 0x0c, 0x6e, 0x7d, 0x61, 0x6d, 0xe1, 0xbd, 0x60, 0x6d, 0xaf, 0x0f, 0xdc, 0xf0, 0x81,
-	0xb4, 0xf3, 0xa7, 0x86, 0xb4, 0x0d, 0x60, 0x76, 0xf6, 0xb4, 0x60, 0xb6, 0x1e, 0xc6, 0xfe, 0x7a,
-	0xc3, 0xcb, 0x8d, 0xb3, 0xc0, 0xcb, 0x53, 0x00, 0x4b, 0xfd, 0xbb, 0x00, 0x96, 0x4d, 0x66, 0xda,
-	0x1f, 0x54, 0x7e, 0x56, 0xfb, 0x16, 0x1e, 0x7e, 0x0b, 0x30, 0xda, 0x3a, 0x93, 0x93, 0x53, 0xdb,
-	0x8a, 0xe3, 0x8d, 0x77, 0xc2, 0x6a, 0xcd, 0x51, 0xda, 0x3f, 0x78, 0x67, 0x94, 0x16, 0x6f, 0x40,
-	0x69, 0x8d, 0x08, 0x6d, 0xe1, 0xf4, 0x08, 0xad, 0x01, 0x9b, 0xdd, 0x38, 0x03, 0x36, 0x6b, 0x44,
-	0x65, 0xc2, 0x3b, 0xa2, 0xb2, 0x68, 0x1d, 0x2a, 0xab, 0x47, 0x64, 0xab, 0xef, 0x01, 0x68, 0xea,
-	0xa1, 0xcc, 0x8d, 0xff, 0x81, 0xfe, 0xdb, 0xcd, 0x86, 0x1b, 0x99, 0x37, 0x55, 0xf4, 0x0a, 0x41,
-	0x8a, 0xdf, 0xb7, 0x37, 0xdc, 0xbe, 0x76, 0x65, 0xd9, 0x93, 0x8a, 0x5c, 0x66, 0x0e, 0x2e, 0x00,
-	0xe6, 0x11, 0x42, 0xca, 0xb3, 0x45, 0xb5, 0x67, 0x67, 0x33, 0x59, 0x96, 0x69, 0xeb, 0x54, 0x7a,
-	0x62, 0x36, 0x34, 0x03, 0xfd, 0x90, 0x70, 0x2a, 0xdc, 0x60, 0x0b, 0xcd, 0xc2, 0x15, 0xe8, 0x77,
-	0x93, 0x24, 0xea, 0x1a, 0x0c, 0x67, 0x17, 0x32, 0xb9, 0x6c, 0x26, 0x37, 0x03, 0xa3, 0x30, 0xe0,
-	0xe4, 0x66, 0x34, 0xd0, 0xc4, 0x72, 0xf3, 0x99, 0xe9, 0xa9, 0xcc, 0xf4, 0x4c, 0x66, 0x66, 0x3a,
-	0x33, 0x33, 0xd7, 0x14, 0xf8, 0x8c, 0xf2, 0x57, 0xe1, 0xe1, 0x99, 0x29, 0xfb, 0x8d, 0x47, 0x7e,
-	0xa4, 0x1e, 0xf8, 0xc4, 0x9f, 0xbf, 0x45, 0xde, 0x82, 0xfc, 0x42, 0x0b, 0xd8, 0x73, 0xf1, 0xf9,
-	0x5b, 0xd4, 0xb4, 0x36, 0x9f, 0x6b, 0x86, 0x80, 0x86, 0x9e, 0xbf, 0x45, 0xfe, 0x55, 0xf9, 0xa9,
-	0x26, 0x48, 0x28, 0xf9, 0xfc, 0x2d, 0xf2, 0xad, 0xc9, 0xcf, 0x35, 0x07, 0x44, 0x17, 0x9e, 0xbf,
-	0x45, 0xcd, 0x2a, 0xf3, 0x17, 0xeb, 0x60, 0x51, 0xec, 0xf9, 0x5b, 0xe4, 0xf9, 0x3d, 0x7f, 0xeb,
-	0x04, 0x30, 0x94, 0x7a, 0xfe, 0x16, 0xb5, 0xa4, 0xa0, 0x3d, 0xf1, 0xc5, 0x46, 0xac, 0x27, 0x7e,
-	0x35, 0xf9, 0x31, 0x3f, 0x78, 0xd4, 0xff, 0xfc, 0x2d, 0x3a, 0x5e, 0x6c, 0x3f, 0xe1, 0x3f, 0x13,
-	0x36, 0xaa, 0xa1, 0xa2, 0xff, 0x3d, 0x04, 0x71, 0x81, 0xe8, 0x8a, 0x54, 0xa8, 0xc1, 0xa2, 0x73,
-	0xa4, 0x73, 0x8e, 0x74, 0xce, 0x91, 0xce, 0x39, 0xd2, 0x39, 0x47, 0x3a, 0xe7, 0x48, 0xe7, 0x1c,
-	0xe9, 0x9c, 0x23, 0x9d, 0x73, 0xa4, 0xf3, 0x3d, 0x44, 0x3a, 0x87, 0xbe, 0x48, 0xe7, 0x4f, 0x10,
-	0x8c, 0xf8, 0x23, 0x9d, 0xce, 0x73, 0x9c, 0x73, 0x8e, 0x73, 0xfe, 0x5f, 0xe3, 0x1c, 0xfb, 0x2b,
-	0x9c, 0xdf, 0x1d, 0xed, 0x7c, 0x3d, 0x0c, 0x91, 0x3b, 0xc4, 0x3a, 0xbf, 0x00, 0x3a, 0x87, 0x45,
-	0xe7, 0xb0, 0xe8, 0x1c, 0x16, 0x9d, 0xc3, 0xa2, 0x73, 0x58, 0x74, 0x0e, 0x8b, 0xce, 0x61, 0xd1,
-	0x39, 0x2c, 0x3a, 0x87, 0x45, 0xe7, 0x17, 0x40, 0xe7, 0xc0, 0xe8, 0xff, 0xc7, 0x0b, 0xa0, 0x7b,
-	0x10, 0xe1, 0xbe, 0x5e, 0xb2, 0x2a, 0x26, 0xfe, 0x14, 0x86, 0xa5, 0x7d, 0x49, 0x56, 0xec, 0x3f,
-	0x6c, 0xd5, 0x88, 0x72, 0xec, 0x67, 0xde, 0x49, 0x97, 0xa2, 0x01, 0xe6, 0x8c, 0x7d, 0x83, 0x60,
-	0xc0, 0x3f, 0xa7, 0x1e, 0x7f, 0x00, 0x97, 0x57, 0xb6, 0x97, 0x96, 0xc5, 0xa5, 0xf5, 0x87, 0x5b,
-	0xdb, 0x2b, 0x82, 0xb8, 0xb5, 0xba, 0xbd, 0x22, 0xae, 0x3f, 0x58, 0x5a, 0x5c, 0x17, 0x37, 0x56,
-	0xb6, 0x3f, 0x7f, 0x20, 0xdc, 0x4b, 0xb4, 0xe1, 0x31, 0xf8, 0xb0, 0x19, 0xd1, 0xea, 0xc6, 0xd6,
-	0xea, 0xf2, 0x8a, 0x4b, 0x8b, 0xf0, 0x28, 0x5c, 0x3d, 0x4e, 0x7b, 0x7f, 0x71, 0x63, 0xf1, 0xce,
-	0xca, 0xfd, 0x95, 0x8d, 0x6d, 0x97, 0x32, 0x30, 0x76, 0x00, 0xf1, 0x86, 0xbf, 0xb2, 0x8a, 0x93,
-	0xd0, 0xb7, 0xbc, 0xf2, 0x68, 0x75, 0x69, 0x45, 0x7c, 0xf0, 0xf9, 0xc6, 0x8a, 0x20, 0xae, 0x6e,
-	0x3c, 0x5a, 0x5c, 0x5f, 0x5d, 0x4e, 0xb4, 0xe1, 0x3e, 0x48, 0xd4, 0xd5, 0x3c, 0x5a, 0x11, 0x12,
-	0x08, 0x5f, 0x86, 0x0b, 0xf5, 0xa5, 0xf7, 0x16, 0xb6, 0x44, 0x2a, 0x5e, 0x5c, 0x7f, 0xb0, 0xb8,
-	0x9c, 0x08, 0xe0, 0x7e, 0xe8, 0xa9, 0x23, 0xb8, 0xfb, 0x60, 0x6b, 0x3b, 0x11, 0x1c, 0x9b, 0x84,
-	0x2e, 0x37, 0x69, 0x1c, 0xf7, 0x40, 0xf4, 0xfe, 0xc3, 0xf5, 0xed, 0xd5, 0xcd, 0xf5, 0x15, 0xa6,
-	0x6d, 0xa2, 0x0d, 0xc7, 0x21, 0xb2, 0xb5, 0xba, 0x71, 0xc7, 0x29, 0x40, 0x63, 0xff, 0x0c, 0xc1,
-	0xe5, 0x13, 0xfe, 0x48, 0x2d, 0xbe, 0x02, 0x97, 0x78, 0xe7, 0xc4, 0xd5, 0x8d, 0xed, 0x15, 0xe1,
-	0xf6, 0xe2, 0xd2, 0x8a, 0xf8, 0x70, 0x6b, 0x45, 0x14, 0x56, 0xee, 0x3c, 0x5c, 0x5f, 0x14, 0x12,
-	0x6d, 0xcd, 0x49, 0x1e, 0x3c, 0xdc, 0xa6, 0xe3, 0x98, 0x40, 0x38, 0x05, 0x17, 0xfd, 0x49, 0xec,
-	0x91, 0x4e, 0x04, 0xc6, 0x3e, 0x83, 0x78, 0xc3, 0x23, 0x52, 0x1c, 0x03, 0xcf, 0x13, 0xd2, 0x44,
-	0x1b, 0x0e, 0x43, 0x88, 0x92, 0x24, 0x10, 0xee, 0x84, 0xe0, 0xa3, 0xcf, 0xb7, 0x12, 0x01, 0xf6,
-	0x61, 0x69, 0x2b, 0x11, 0xca, 0xff, 0x93, 0xc3, 0x9f, 0x8f, 0xb4, 0xfd, 0xec, 0xe7, 0x23, 0x6d,
-	0x7f, 0xf9, 0xf3, 0x11, 0xf4, 0xd5, 0xd1, 0x08, 0xfa, 0xc3, 0xa3, 0x11, 0xf4, 0xd3, 0xa3, 0x11,
-	0x74, 0x78, 0x34, 0x82, 0x7e, 0x76, 0x34, 0x82, 0xfe, 0xec, 0x68, 0x04, 0xfd, 0xe2, 0x68, 0xa4,
-	0xed, 0x2f, 0x8f, 0x46, 0xd0, 0xd7, 0x7f, 0x3e, 0xd2, 0xf6, 0xfa, 0xcf, 0x47, 0xd0, 0x17, 0xab,
-	0x25, 0x4d, 0x7f, 0x5c, 0x9a, 0x70, 0x80, 0xf4, 0x44, 0xc5, 0x9c, 0x64, 0x1f, 0x76, 0x35, 0xa3,
-	0x3c, 0xae, 0x1b, 0xda, 0xbe, 0x5c, 0x24, 0xc6, 0xb8, 0x53, 0x3d, 0xa9, 0xef, 0x94, 0xb4, 0x49,
-	0xf2, 0xd4, 0xe2, 0x7f, 0x91, 0xd8, 0xfb, 0xd7, 0x9e, 0x77, 0x3a, 0xd8, 0xd7, 0xf6, 0x4c, 0xff,
-	0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc6, 0x37, 0x60, 0x77, 0x0b, 0x7a, 0x00, 0x00,
-}

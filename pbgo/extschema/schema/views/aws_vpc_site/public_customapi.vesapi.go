@@ -426,7 +426,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVIPInfo",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/aws_vpc_siteSetVIPInfoResponse"
                         }
@@ -483,15 +483,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"aws-vpc-site-1\"\nName of the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -522,7 +526,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVPCK8SHostnames",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/aws_vpc_siteSetVPCK8SHostnamesResponse"
                         }
@@ -579,15 +583,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"aws-vpc-site-1\"\nName of the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

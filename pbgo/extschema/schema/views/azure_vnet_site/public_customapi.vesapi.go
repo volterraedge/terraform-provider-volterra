@@ -291,7 +291,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.azure_vnet_site.CustomAPI.SetVIPInfo",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/azure_vnet_siteSetVIPInfoResponse"
                         }
@@ -348,15 +348,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"aws-vpc-site-1\"\nName of the object to be configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

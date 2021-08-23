@@ -3,21 +3,28 @@
 
 package vesenv
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf "github.com/golang/protobuf/protoc-gen-go/descriptor"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // BFSecretInfo is a type used in vesenv package to hold information
 // about operator defined secrets in blindfold.
@@ -32,17 +39,45 @@ type BFSecretInfo struct {
 	// to use in secret_policy_rule.Object ClientNameMatcher differs based on location.
 	// This is the set of GC services that are allowed access for this secret
 	// E.g. for container_registry password this would be 'akar', has to be non-empty
-	GcServices []string `protobuf:"bytes,3,rep,name=gc_services,json=gcServices" json:"gc_services,omitempty"`
+	GcServices []string `protobuf:"bytes,3,rep,name=gc_services,json=gcServices,proto3" json:"gc_services,omitempty"`
 	// This is the set of non-gc services, if any, that are allowed access for this secret
 	// E.g. for container_registry password this would be 'rakar'
-	NonGcServices []string `protobuf:"bytes,4,rep,name=non_gc_services,json=nonGcServices" json:"non_gc_services,omitempty"`
+	NonGcServices []string `protobuf:"bytes,4,rep,name=non_gc_services,json=nonGcServices,proto3" json:"non_gc_services,omitempty"`
 	// This is the set of jobs that run on GC, e.g. terraform jobs for view-like sites
-	GcJobs []string `protobuf:"bytes,5,rep,name=gc_jobs,json=gcJobs" json:"gc_jobs,omitempty"`
+	GcJobs []string `protobuf:"bytes,5,rep,name=gc_jobs,json=gcJobs,proto3" json:"gc_jobs,omitempty"`
 }
 
-func (m *BFSecretInfo) Reset()                    { *m = BFSecretInfo{} }
-func (*BFSecretInfo) ProtoMessage()               {}
-func (*BFSecretInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{0} }
+func (m *BFSecretInfo) Reset()      { *m = BFSecretInfo{} }
+func (*BFSecretInfo) ProtoMessage() {}
+func (*BFSecretInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{0}
+}
+func (m *BFSecretInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BFSecretInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BFSecretInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BFSecretInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BFSecretInfo.Merge(m, src)
+}
+func (m *BFSecretInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *BFSecretInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_BFSecretInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BFSecretInfo proto.InternalMessageInfo
 
 func (m *BFSecretInfo) GetPolicyUid() string {
 	if m != nil {
@@ -98,9 +133,37 @@ type BFSecretChoice struct {
 	Choice isBFSecretChoice_Choice `protobuf_oneof:"choice"`
 }
 
-func (m *BFSecretChoice) Reset()                    { *m = BFSecretChoice{} }
-func (*BFSecretChoice) ProtoMessage()               {}
-func (*BFSecretChoice) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{1} }
+func (m *BFSecretChoice) Reset()      { *m = BFSecretChoice{} }
+func (*BFSecretChoice) ProtoMessage() {}
+func (*BFSecretChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{1}
+}
+func (m *BFSecretChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BFSecretChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BFSecretChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BFSecretChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BFSecretChoice.Merge(m, src)
+}
+func (m *BFSecretChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *BFSecretChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_BFSecretChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BFSecretChoice proto.InternalMessageInfo
 
 type isBFSecretChoice_Choice interface {
 	isBFSecretChoice_Choice()
@@ -110,22 +173,22 @@ type isBFSecretChoice_Choice interface {
 }
 
 type BFSecretChoice_VesContainerRegistryPassword struct {
-	VesContainerRegistryPassword bool `protobuf:"varint,1,opt,name=ves_container_registry_password,json=vesContainerRegistryPassword,proto3,oneof"`
+	VesContainerRegistryPassword bool `protobuf:"varint,1,opt,name=ves_container_registry_password,json=vesContainerRegistryPassword,proto3,oneof" json:"ves_container_registry_password,omitempty"`
 }
 type BFSecretChoice_VesAlertReceiverSlackUrl struct {
-	VesAlertReceiverSlackUrl bool `protobuf:"varint,2,opt,name=ves_alert_receiver_slack_url,json=vesAlertReceiverSlackUrl,proto3,oneof"`
+	VesAlertReceiverSlackUrl bool `protobuf:"varint,2,opt,name=ves_alert_receiver_slack_url,json=vesAlertReceiverSlackUrl,proto3,oneof" json:"ves_alert_receiver_slack_url,omitempty"`
 }
 type BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey struct {
-	VesAlertReceiverPagerdutyRoutingKey bool `protobuf:"varint,3,opt,name=ves_alert_receiver_pagerduty_routing_key,json=vesAlertReceiverPagerdutyRoutingKey,proto3,oneof"`
+	VesAlertReceiverPagerdutyRoutingKey bool `protobuf:"varint,3,opt,name=ves_alert_receiver_pagerduty_routing_key,json=vesAlertReceiverPagerdutyRoutingKey,proto3,oneof" json:"ves_alert_receiver_pagerduty_routing_key,omitempty"`
 }
 type BFSecretChoice_VesAlertReceiverOpsgenieApiKey struct {
-	VesAlertReceiverOpsgenieApiKey bool `protobuf:"varint,4,opt,name=ves_alert_receiver_opsgenie_api_key,json=vesAlertReceiverOpsgenieApiKey,proto3,oneof"`
+	VesAlertReceiverOpsgenieApiKey bool `protobuf:"varint,4,opt,name=ves_alert_receiver_opsgenie_api_key,json=vesAlertReceiverOpsgenieApiKey,proto3,oneof" json:"ves_alert_receiver_opsgenie_api_key,omitempty"`
 }
 type BFSecretChoice_VesTerraformJobViewSite struct {
-	VesTerraformJobViewSite bool `protobuf:"varint,5,opt,name=ves_terraform_job_view_site,json=vesTerraformJobViewSite,proto3,oneof"`
+	VesTerraformJobViewSite bool `protobuf:"varint,5,opt,name=ves_terraform_job_view_site,json=vesTerraformJobViewSite,proto3,oneof" json:"ves_terraform_job_view_site,omitempty"`
 }
 type BFSecretChoice_VesK8SClusterArgocdAdminPassword struct {
-	VesK8SClusterArgocdAdminPassword bool `protobuf:"varint,6,opt,name=ves_k8s_cluster_argocd_admin_password,json=vesK8sClusterArgocdAdminPassword,proto3,oneof"`
+	VesK8SClusterArgocdAdminPassword bool `protobuf:"varint,6,opt,name=ves_k8s_cluster_argocd_admin_password,json=vesK8sClusterArgocdAdminPassword,proto3,oneof" json:"ves_k8s_cluster_argocd_admin_password,omitempty"`
 }
 
 func (*BFSecretChoice_VesContainerRegistryPassword) isBFSecretChoice_Choice()        {}
@@ -184,9 +247,9 @@ func (m *BFSecretChoice) GetVesK8SClusterArgocdAdminPassword() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*BFSecretChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _BFSecretChoice_OneofMarshaler, _BFSecretChoice_OneofUnmarshaler, _BFSecretChoice_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*BFSecretChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*BFSecretChoice_VesContainerRegistryPassword)(nil),
 		(*BFSecretChoice_VesAlertReceiverSlackUrl)(nil),
 		(*BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey)(nil),
@@ -196,146 +259,42 @@ func (*BFSecretChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _BFSecretChoice_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*BFSecretChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *BFSecretChoice_VesContainerRegistryPassword:
-		t := uint64(0)
-		if x.VesContainerRegistryPassword {
-			t = 1
-		}
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *BFSecretChoice_VesAlertReceiverSlackUrl:
-		t := uint64(0)
-		if x.VesAlertReceiverSlackUrl {
-			t = 1
-		}
-		_ = b.EncodeVarint(2<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey:
-		t := uint64(0)
-		if x.VesAlertReceiverPagerdutyRoutingKey {
-			t = 1
-		}
-		_ = b.EncodeVarint(3<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *BFSecretChoice_VesAlertReceiverOpsgenieApiKey:
-		t := uint64(0)
-		if x.VesAlertReceiverOpsgenieApiKey {
-			t = 1
-		}
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *BFSecretChoice_VesTerraformJobViewSite:
-		t := uint64(0)
-		if x.VesTerraformJobViewSite {
-			t = 1
-		}
-		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *BFSecretChoice_VesK8SClusterArgocdAdminPassword:
-		t := uint64(0)
-		if x.VesK8SClusterArgocdAdminPassword {
-			t = 1
-		}
-		_ = b.EncodeVarint(6<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("BFSecretChoice.Choice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _BFSecretChoice_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*BFSecretChoice)
-	switch tag {
-	case 1: // choice.ves_container_registry_password
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesContainerRegistryPassword{x != 0}
-		return true, err
-	case 2: // choice.ves_alert_receiver_slack_url
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesAlertReceiverSlackUrl{x != 0}
-		return true, err
-	case 3: // choice.ves_alert_receiver_pagerduty_routing_key
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey{x != 0}
-		return true, err
-	case 4: // choice.ves_alert_receiver_opsgenie_api_key
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesAlertReceiverOpsgenieApiKey{x != 0}
-		return true, err
-	case 5: // choice.ves_terraform_job_view_site
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesTerraformJobViewSite{x != 0}
-		return true, err
-	case 6: // choice.ves_k8s_cluster_argocd_admin_password
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &BFSecretChoice_VesK8SClusterArgocdAdminPassword{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _BFSecretChoice_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*BFSecretChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *BFSecretChoice_VesContainerRegistryPassword:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
-	case *BFSecretChoice_VesAlertReceiverSlackUrl:
-		n += proto.SizeVarint(2<<3 | proto.WireVarint)
-		n += 1
-	case *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey:
-		n += proto.SizeVarint(3<<3 | proto.WireVarint)
-		n += 1
-	case *BFSecretChoice_VesAlertReceiverOpsgenieApiKey:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += 1
-	case *BFSecretChoice_VesTerraformJobViewSite:
-		n += proto.SizeVarint(5<<3 | proto.WireVarint)
-		n += 1
-	case *BFSecretChoice_VesK8SClusterArgocdAdminPassword:
-		n += proto.SizeVarint(6<<3 | proto.WireVarint)
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 type ReEncryptSecretItemType struct {
 	FieldPath  string `protobuf:"bytes,1,opt,name=field_path,json=fieldPath,proto3" json:"field_path,omitempty"`
 	PolicyName string `protobuf:"bytes,2,opt,name=policy_name,json=policyName,proto3" json:"policy_name,omitempty"`
 }
 
-func (m *ReEncryptSecretItemType) Reset()                    { *m = ReEncryptSecretItemType{} }
-func (*ReEncryptSecretItemType) ProtoMessage()               {}
-func (*ReEncryptSecretItemType) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{2} }
+func (m *ReEncryptSecretItemType) Reset()      { *m = ReEncryptSecretItemType{} }
+func (*ReEncryptSecretItemType) ProtoMessage() {}
+func (*ReEncryptSecretItemType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{2}
+}
+func (m *ReEncryptSecretItemType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReEncryptSecretItemType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReEncryptSecretItemType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReEncryptSecretItemType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReEncryptSecretItemType.Merge(m, src)
+}
+func (m *ReEncryptSecretItemType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReEncryptSecretItemType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReEncryptSecretItemType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReEncryptSecretItemType proto.InternalMessageInfo
 
 func (m *ReEncryptSecretItemType) GetFieldPath() string {
 	if m != nil {
@@ -352,12 +311,40 @@ func (m *ReEncryptSecretItemType) GetPolicyName() string {
 }
 
 type ReEncryptSecretsType struct {
-	Items []*ReEncryptSecretItemType `protobuf:"bytes,1,rep,name=items" json:"items,omitempty"`
+	Items []*ReEncryptSecretItemType `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
 }
 
-func (m *ReEncryptSecretsType) Reset()                    { *m = ReEncryptSecretsType{} }
-func (*ReEncryptSecretsType) ProtoMessage()               {}
-func (*ReEncryptSecretsType) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{3} }
+func (m *ReEncryptSecretsType) Reset()      { *m = ReEncryptSecretsType{} }
+func (*ReEncryptSecretsType) ProtoMessage() {}
+func (*ReEncryptSecretsType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{3}
+}
+func (m *ReEncryptSecretsType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReEncryptSecretsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReEncryptSecretsType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReEncryptSecretsType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReEncryptSecretsType.Merge(m, src)
+}
+func (m *ReEncryptSecretsType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReEncryptSecretsType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReEncryptSecretsType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReEncryptSecretsType proto.InternalMessageInfo
 
 func (m *ReEncryptSecretsType) GetItems() []*ReEncryptSecretItemType {
 	if m != nil {
@@ -372,9 +359,37 @@ type ServiceSlugInfo struct {
 	Daemon string `protobuf:"bytes,2,opt,name=daemon,proto3" json:"daemon,omitempty"`
 }
 
-func (m *ServiceSlugInfo) Reset()                    { *m = ServiceSlugInfo{} }
-func (*ServiceSlugInfo) ProtoMessage()               {}
-func (*ServiceSlugInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{4} }
+func (m *ServiceSlugInfo) Reset()      { *m = ServiceSlugInfo{} }
+func (*ServiceSlugInfo) ProtoMessage() {}
+func (*ServiceSlugInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{4}
+}
+func (m *ServiceSlugInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceSlugInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceSlugInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceSlugInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceSlugInfo.Merge(m, src)
+}
+func (m *ServiceSlugInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceSlugInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceSlugInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceSlugInfo proto.InternalMessageInfo
 
 func (m *ServiceSlugInfo) GetValue() string {
 	if m != nil {
@@ -411,9 +426,37 @@ type ServiceSlugChoice struct {
 	Choice isServiceSlugChoice_Choice `protobuf_oneof:"choice"`
 }
 
-func (m *ServiceSlugChoice) Reset()                    { *m = ServiceSlugChoice{} }
-func (*ServiceSlugChoice) ProtoMessage()               {}
-func (*ServiceSlugChoice) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{5} }
+func (m *ServiceSlugChoice) Reset()      { *m = ServiceSlugChoice{} }
+func (*ServiceSlugChoice) ProtoMessage() {}
+func (*ServiceSlugChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{5}
+}
+func (m *ServiceSlugChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceSlugChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceSlugChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceSlugChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceSlugChoice.Merge(m, src)
+}
+func (m *ServiceSlugChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceSlugChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceSlugChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceSlugChoice proto.InternalMessageInfo
 
 type isServiceSlugChoice_Choice interface {
 	isServiceSlugChoice_Choice()
@@ -423,46 +466,46 @@ type isServiceSlugChoice_Choice interface {
 }
 
 type ServiceSlugChoice_Alert struct {
-	Alert bool `protobuf:"varint,1,opt,name=alert,proto3,oneof"`
+	Alert bool `protobuf:"varint,1,opt,name=alert,proto3,oneof" json:"alert,omitempty"`
 }
 type ServiceSlugChoice_Config struct {
-	Config bool `protobuf:"varint,2,opt,name=config,proto3,oneof"`
+	Config bool `protobuf:"varint,2,opt,name=config,proto3,oneof" json:"config,omitempty"`
 }
 type ServiceSlugChoice_Data struct {
-	Data bool `protobuf:"varint,3,opt,name=data,proto3,oneof"`
+	Data bool `protobuf:"varint,3,opt,name=data,proto3,oneof" json:"data,omitempty"`
 }
 type ServiceSlugChoice_Infraprotect struct {
-	Infraprotect bool `protobuf:"varint,4,opt,name=infraprotect,proto3,oneof"`
+	Infraprotect bool `protobuf:"varint,4,opt,name=infraprotect,proto3,oneof" json:"infraprotect,omitempty"`
 }
 type ServiceSlugChoice_Kms struct {
-	Kms bool `protobuf:"varint,5,opt,name=kms,proto3,oneof"`
+	Kms bool `protobuf:"varint,5,opt,name=kms,proto3,oneof" json:"kms,omitempty"`
 }
 type ServiceSlugChoice_Ml struct {
-	Ml bool `protobuf:"varint,6,opt,name=ml,proto3,oneof"`
+	Ml bool `protobuf:"varint,6,opt,name=ml,proto3,oneof" json:"ml,omitempty"`
 }
 type ServiceSlugChoice_Operate struct {
-	Operate bool `protobuf:"varint,7,opt,name=operate,proto3,oneof"`
+	Operate bool `protobuf:"varint,7,opt,name=operate,proto3,oneof" json:"operate,omitempty"`
 }
 type ServiceSlugChoice_Register struct {
-	Register bool `protobuf:"varint,8,opt,name=register,proto3,oneof"`
+	Register bool `protobuf:"varint,8,opt,name=register,proto3,oneof" json:"register,omitempty"`
 }
 type ServiceSlugChoice_SecretManagement struct {
-	SecretManagement bool `protobuf:"varint,9,opt,name=secret_management,json=secretManagement,proto3,oneof"`
+	SecretManagement bool `protobuf:"varint,9,opt,name=secret_management,json=secretManagement,proto3,oneof" json:"secret_management,omitempty"`
 }
 type ServiceSlugChoice_Terraform struct {
-	Terraform bool `protobuf:"varint,10,opt,name=terraform,proto3,oneof"`
+	Terraform bool `protobuf:"varint,10,opt,name=terraform,proto3,oneof" json:"terraform,omitempty"`
 }
 type ServiceSlugChoice_Tpm struct {
-	Tpm bool `protobuf:"varint,11,opt,name=tpm,proto3,oneof"`
+	Tpm bool `protobuf:"varint,11,opt,name=tpm,proto3,oneof" json:"tpm,omitempty"`
 }
 type ServiceSlugChoice_Uam struct {
-	Uam bool `protobuf:"varint,12,opt,name=uam,proto3,oneof"`
+	Uam bool `protobuf:"varint,12,opt,name=uam,proto3,oneof" json:"uam,omitempty"`
 }
 type ServiceSlugChoice_Web struct {
-	Web bool `protobuf:"varint,13,opt,name=web,proto3,oneof"`
+	Web bool `protobuf:"varint,13,opt,name=web,proto3,oneof" json:"web,omitempty"`
 }
 type ServiceSlugChoice_DeviceId struct {
-	DeviceId bool `protobuf:"varint,14,opt,name=device_id,json=deviceId,proto3,oneof"`
+	DeviceId bool `protobuf:"varint,14,opt,name=device_id,json=deviceId,proto3,oneof" json:"device_id,omitempty"`
 }
 
 func (*ServiceSlugChoice_Alert) isServiceSlugChoice_Choice()            {}
@@ -585,9 +628,9 @@ func (m *ServiceSlugChoice) GetDeviceId() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ServiceSlugChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ServiceSlugChoice_OneofMarshaler, _ServiceSlugChoice_OneofUnmarshaler, _ServiceSlugChoice_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ServiceSlugChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ServiceSlugChoice_Alert)(nil),
 		(*ServiceSlugChoice_Config)(nil),
 		(*ServiceSlugChoice_Data)(nil),
@@ -605,285 +648,45 @@ func (*ServiceSlugChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buf
 	}
 }
 
-func _ServiceSlugChoice_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ServiceSlugChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *ServiceSlugChoice_Alert:
-		t := uint64(0)
-		if x.Alert {
-			t = 1
-		}
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Config:
-		t := uint64(0)
-		if x.Config {
-			t = 1
-		}
-		_ = b.EncodeVarint(2<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Data:
-		t := uint64(0)
-		if x.Data {
-			t = 1
-		}
-		_ = b.EncodeVarint(3<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Infraprotect:
-		t := uint64(0)
-		if x.Infraprotect {
-			t = 1
-		}
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Kms:
-		t := uint64(0)
-		if x.Kms {
-			t = 1
-		}
-		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Ml:
-		t := uint64(0)
-		if x.Ml {
-			t = 1
-		}
-		_ = b.EncodeVarint(6<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Operate:
-		t := uint64(0)
-		if x.Operate {
-			t = 1
-		}
-		_ = b.EncodeVarint(7<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Register:
-		t := uint64(0)
-		if x.Register {
-			t = 1
-		}
-		_ = b.EncodeVarint(8<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_SecretManagement:
-		t := uint64(0)
-		if x.SecretManagement {
-			t = 1
-		}
-		_ = b.EncodeVarint(9<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Terraform:
-		t := uint64(0)
-		if x.Terraform {
-			t = 1
-		}
-		_ = b.EncodeVarint(10<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Tpm:
-		t := uint64(0)
-		if x.Tpm {
-			t = 1
-		}
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Uam:
-		t := uint64(0)
-		if x.Uam {
-			t = 1
-		}
-		_ = b.EncodeVarint(12<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_Web:
-		t := uint64(0)
-		if x.Web {
-			t = 1
-		}
-		_ = b.EncodeVarint(13<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceSlugChoice_DeviceId:
-		t := uint64(0)
-		if x.DeviceId {
-			t = 1
-		}
-		_ = b.EncodeVarint(14<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("ServiceSlugChoice.Choice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ServiceSlugChoice_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ServiceSlugChoice)
-	switch tag {
-	case 1: // choice.alert
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Alert{x != 0}
-		return true, err
-	case 2: // choice.config
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Config{x != 0}
-		return true, err
-	case 3: // choice.data
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Data{x != 0}
-		return true, err
-	case 4: // choice.infraprotect
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Infraprotect{x != 0}
-		return true, err
-	case 5: // choice.kms
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Kms{x != 0}
-		return true, err
-	case 6: // choice.ml
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Ml{x != 0}
-		return true, err
-	case 7: // choice.operate
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Operate{x != 0}
-		return true, err
-	case 8: // choice.register
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Register{x != 0}
-		return true, err
-	case 9: // choice.secret_management
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_SecretManagement{x != 0}
-		return true, err
-	case 10: // choice.terraform
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Terraform{x != 0}
-		return true, err
-	case 11: // choice.tpm
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Tpm{x != 0}
-		return true, err
-	case 12: // choice.uam
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Uam{x != 0}
-		return true, err
-	case 13: // choice.web
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_Web{x != 0}
-		return true, err
-	case 14: // choice.device_id
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceSlugChoice_DeviceId{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ServiceSlugChoice_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ServiceSlugChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *ServiceSlugChoice_Alert:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Config:
-		n += proto.SizeVarint(2<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Data:
-		n += proto.SizeVarint(3<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Infraprotect:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Kms:
-		n += proto.SizeVarint(5<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Ml:
-		n += proto.SizeVarint(6<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Operate:
-		n += proto.SizeVarint(7<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Register:
-		n += proto.SizeVarint(8<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_SecretManagement:
-		n += proto.SizeVarint(9<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Terraform:
-		n += proto.SizeVarint(10<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Tpm:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Uam:
-		n += proto.SizeVarint(12<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_Web:
-		n += proto.SizeVarint(13<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceSlugChoice_DeviceId:
-		n += proto.SizeVarint(14<<3 | proto.WireVarint)
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // ServiceInfo encapsulates information of a service in VES environment
 type ServiceInfo struct {
 	// Name of the daemon e.g. akar, nio, vega
 	Daemon string `protobuf:"bytes,1,opt,name=daemon,proto3" json:"daemon,omitempty"`
 	// Locations where daemon runs in e.g. GC, RE, CE
-	Locations []string `protobuf:"bytes,2,rep,name=locations" json:"locations,omitempty"`
+	Locations []string `protobuf:"bytes,2,rep,name=locations,proto3" json:"locations,omitempty"`
 }
 
-func (m *ServiceInfo) Reset()                    { *m = ServiceInfo{} }
-func (*ServiceInfo) ProtoMessage()               {}
-func (*ServiceInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{6} }
+func (m *ServiceInfo) Reset()      { *m = ServiceInfo{} }
+func (*ServiceInfo) ProtoMessage() {}
+func (*ServiceInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{6}
+}
+func (m *ServiceInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceInfo.Merge(m, src)
+}
+func (m *ServiceInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceInfo proto.InternalMessageInfo
 
 func (m *ServiceInfo) GetDaemon() string {
 	if m != nil {
@@ -906,9 +709,37 @@ type NameToUid struct {
 	Uid       string `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
-func (m *NameToUid) Reset()                    { *m = NameToUid{} }
-func (*NameToUid) ProtoMessage()               {}
-func (*NameToUid) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{7} }
+func (m *NameToUid) Reset()      { *m = NameToUid{} }
+func (*NameToUid) ProtoMessage() {}
+func (*NameToUid) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{7}
+}
+func (m *NameToUid) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NameToUid) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NameToUid.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NameToUid) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NameToUid.Merge(m, src)
+}
+func (m *NameToUid) XXX_Size() int {
+	return m.Size()
+}
+func (m *NameToUid) XXX_DiscardUnknown() {
+	xxx_messageInfo_NameToUid.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NameToUid proto.InternalMessageInfo
 
 func (m *NameToUid) GetNamespace() string {
 	if m != nil {
@@ -939,9 +770,37 @@ type QuotaResourceKeyInfo struct {
 	Daemon string `protobuf:"bytes,2,opt,name=daemon,proto3" json:"daemon,omitempty"`
 }
 
-func (m *QuotaResourceKeyInfo) Reset()                    { *m = QuotaResourceKeyInfo{} }
-func (*QuotaResourceKeyInfo) ProtoMessage()               {}
-func (*QuotaResourceKeyInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{8} }
+func (m *QuotaResourceKeyInfo) Reset()      { *m = QuotaResourceKeyInfo{} }
+func (*QuotaResourceKeyInfo) ProtoMessage() {}
+func (*QuotaResourceKeyInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{8}
+}
+func (m *QuotaResourceKeyInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QuotaResourceKeyInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QuotaResourceKeyInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QuotaResourceKeyInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuotaResourceKeyInfo.Merge(m, src)
+}
+func (m *QuotaResourceKeyInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *QuotaResourceKeyInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuotaResourceKeyInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QuotaResourceKeyInfo proto.InternalMessageInfo
 
 func (m *QuotaResourceKeyInfo) GetValue() string {
 	if m != nil {
@@ -965,9 +824,37 @@ type RouteTargetInfo struct {
 	ForObjectTypes string `protobuf:"bytes,2,opt,name=for_object_types,json=forObjectTypes,proto3" json:"for_object_types,omitempty"`
 }
 
-func (m *RouteTargetInfo) Reset()                    { *m = RouteTargetInfo{} }
-func (*RouteTargetInfo) ProtoMessage()               {}
-func (*RouteTargetInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{9} }
+func (m *RouteTargetInfo) Reset()      { *m = RouteTargetInfo{} }
+func (*RouteTargetInfo) ProtoMessage() {}
+func (*RouteTargetInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{9}
+}
+func (m *RouteTargetInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RouteTargetInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RouteTargetInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RouteTargetInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteTargetInfo.Merge(m, src)
+}
+func (m *RouteTargetInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *RouteTargetInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteTargetInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RouteTargetInfo proto.InternalMessageInfo
 
 func (m *RouteTargetInfo) GetValue() int32 {
 	if m != nil {
@@ -988,9 +875,37 @@ type APIGroupElementItem struct {
 	PathRegex string `protobuf:"bytes,2,opt,name=path_regex,json=pathRegex,proto3" json:"path_regex,omitempty"`
 }
 
-func (m *APIGroupElementItem) Reset()                    { *m = APIGroupElementItem{} }
-func (*APIGroupElementItem) ProtoMessage()               {}
-func (*APIGroupElementItem) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{10} }
+func (m *APIGroupElementItem) Reset()      { *m = APIGroupElementItem{} }
+func (*APIGroupElementItem) ProtoMessage() {}
+func (*APIGroupElementItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{10}
+}
+func (m *APIGroupElementItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIGroupElementItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIGroupElementItem.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIGroupElementItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIGroupElementItem.Merge(m, src)
+}
+func (m *APIGroupElementItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIGroupElementItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIGroupElementItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIGroupElementItem proto.InternalMessageInfo
 
 func (m *APIGroupElementItem) GetMethod() string {
 	if m != nil {
@@ -1014,12 +929,40 @@ type APIGroupElementInfo struct {
 	// This is the namespace in which api_group_element has to be created. If not specified it will be created in default NS.
 	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// optional method to path-regex mappings, allows for specifying more than one path for same method (e.g. additional_bindings)
-	Items []*APIGroupElementItem `protobuf:"bytes,2,rep,name=items" json:"items,omitempty"`
+	Items []*APIGroupElementItem `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 }
 
-func (m *APIGroupElementInfo) Reset()                    { *m = APIGroupElementInfo{} }
-func (*APIGroupElementInfo) ProtoMessage()               {}
-func (*APIGroupElementInfo) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{11} }
+func (m *APIGroupElementInfo) Reset()      { *m = APIGroupElementInfo{} }
+func (*APIGroupElementInfo) ProtoMessage() {}
+func (*APIGroupElementInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{11}
+}
+func (m *APIGroupElementInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIGroupElementInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIGroupElementInfo.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIGroupElementInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIGroupElementInfo.Merge(m, src)
+}
+func (m *APIGroupElementInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIGroupElementInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIGroupElementInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIGroupElementInfo proto.InternalMessageInfo
 
 func (m *APIGroupElementInfo) GetName() string {
 	if m != nil {
@@ -1049,9 +992,37 @@ type APIGroupNameMapItem struct {
 	ApiGroupNames string `protobuf:"bytes,2,opt,name=api_group_names,json=apiGroupNames,proto3" json:"api_group_names,omitempty"`
 }
 
-func (m *APIGroupNameMapItem) Reset()                    { *m = APIGroupNameMapItem{} }
-func (*APIGroupNameMapItem) ProtoMessage()               {}
-func (*APIGroupNameMapItem) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{12} }
+func (m *APIGroupNameMapItem) Reset()      { *m = APIGroupNameMapItem{} }
+func (*APIGroupNameMapItem) ProtoMessage() {}
+func (*APIGroupNameMapItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{12}
+}
+func (m *APIGroupNameMapItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIGroupNameMapItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIGroupNameMapItem.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIGroupNameMapItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIGroupNameMapItem.Merge(m, src)
+}
+func (m *APIGroupNameMapItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIGroupNameMapItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIGroupNameMapItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIGroupNameMapItem proto.InternalMessageInfo
 
 func (m *APIGroupNameMapItem) GetRpcName() string {
 	if m != nil {
@@ -1068,12 +1039,40 @@ func (m *APIGroupNameMapItem) GetApiGroupNames() string {
 }
 
 type APIGroupNameMap struct {
-	RpcMappings []*APIGroupNameMapItem `protobuf:"bytes,1,rep,name=rpc_mappings,json=rpcMappings" json:"rpc_mappings,omitempty"`
+	RpcMappings []*APIGroupNameMapItem `protobuf:"bytes,1,rep,name=rpc_mappings,json=rpcMappings,proto3" json:"rpc_mappings,omitempty"`
 }
 
-func (m *APIGroupNameMap) Reset()                    { *m = APIGroupNameMap{} }
-func (*APIGroupNameMap) ProtoMessage()               {}
-func (*APIGroupNameMap) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{13} }
+func (m *APIGroupNameMap) Reset()      { *m = APIGroupNameMap{} }
+func (*APIGroupNameMap) ProtoMessage() {}
+func (*APIGroupNameMap) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7f6a27edde895262, []int{13}
+}
+func (m *APIGroupNameMap) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIGroupNameMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIGroupNameMap.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIGroupNameMap) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIGroupNameMap.Merge(m, src)
+}
+func (m *APIGroupNameMap) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIGroupNameMap) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIGroupNameMap.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIGroupNameMap proto.InternalMessageInfo
 
 func (m *APIGroupNameMap) GetRpcMappings() []*APIGroupNameMapItem {
 	if m != nil {
@@ -1083,119 +1082,119 @@ func (m *APIGroupNameMap) GetRpcMappings() []*APIGroupNameMapItem {
 }
 
 var E_SvcSlugInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*ServiceSlugInfo)(nil),
 	Field:         50100,
 	Name:          "ves.io.schema.vesenv.svc_slug_info",
-	Tag:           "bytes,50100,opt,name=svc_slug_info,json=svcSlugInfo",
+	Tag:           "bytes,50100,opt,name=svc_slug_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_QuotaRkeyInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*QuotaResourceKeyInfo)(nil),
 	Field:         50101,
 	Name:          "ves.io.schema.vesenv.quota_rkey_info",
-	Tag:           "bytes,50101,opt,name=quota_rkey_info,json=quotaRkeyInfo",
+	Tag:           "bytes,50101,opt,name=quota_rkey_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_BfSecretInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*BFSecretInfo)(nil),
 	Field:         50102,
 	Name:          "ves.io.schema.vesenv.bf_secret_info",
-	Tag:           "bytes,50102,opt,name=bf_secret_info,json=bfSecretInfo",
+	Tag:           "bytes,50102,opt,name=bf_secret_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_SvcInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*ServiceInfo)(nil),
 	Field:         50103,
 	Name:          "ves.io.schema.vesenv.svc_info",
-	Tag:           "bytes,50103,opt,name=svc_info,json=svcInfo",
+	Tag:           "bytes,50103,opt,name=svc_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_NameToUid = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*NameToUid)(nil),
 	Field:         50104,
 	Name:          "ves.io.schema.vesenv.name_to_uid",
-	Tag:           "bytes,50104,opt,name=name_to_uid,json=nameToUid",
+	Tag:           "bytes,50104,opt,name=name_to_uid",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_RouteTargetInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*RouteTargetInfo)(nil),
 	Field:         50105,
 	Name:          "ves.io.schema.vesenv.route_target_info",
-	Tag:           "bytes,50105,opt,name=route_target_info,json=routeTargetInfo",
+	Tag:           "bytes,50105,opt,name=route_target_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_CrudServiceSlugChoice = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*ServiceSlugChoice)(nil),
 	Field:         50200,
 	Name:          "ves.io.schema.vesenv.crud_service_slug_choice",
-	Tag:           "bytes,50200,opt,name=crud_service_slug_choice,json=crudServiceSlugChoice",
+	Tag:           "bytes,50200,opt,name=crud_service_slug_choice",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_CrudApiGroupPrefixes = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         50201,
 	Name:          "ves.io.schema.vesenv.crud_api_group_prefixes",
-	Tag:           "bytes,50201,opt,name=crud_api_group_prefixes,json=crudApiGroupPrefixes",
+	Tag:           "bytes,50201,opt,name=crud_api_group_prefixes",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_CrudApiGroupNames = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*APIGroupNameMap)(nil),
 	Field:         50202,
 	Name:          "ves.io.schema.vesenv.crud_api_group_names",
-	Tag:           "bytes,50202,opt,name=crud_api_group_names,json=crudApiGroupNames",
+	Tag:           "bytes,50202,opt,name=crud_api_group_names",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_ReEncryptSecrets = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*ReEncryptSecretsType)(nil),
 	Field:         50203,
 	Name:          "ves.io.schema.vesenv.re_encrypt_secrets",
-	Tag:           "bytes,50203,opt,name=re_encrypt_secrets,json=reEncryptSecrets",
+	Tag:           "bytes,50203,opt,name=re_encrypt_secrets",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_ApiGroupNames = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MethodOptions)(nil),
+	ExtendedType:  (*descriptor.MethodOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         50300,
 	Name:          "ves.io.schema.vesenv.api_group_names",
-	Tag:           "bytes,50300,opt,name=api_group_names,json=apiGroupNames",
+	Tag:           "bytes,50300,opt,name=api_group_names",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_ApiGroupElementInfo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MethodOptions)(nil),
+	ExtendedType:  (*descriptor.MethodOptions)(nil),
 	ExtensionType: (*APIGroupElementInfo)(nil),
 	Field:         50301,
 	Name:          "ves.io.schema.vesenv.api_group_element_info",
-	Tag:           "bytes,50301,opt,name=api_group_element_info,json=apiGroupElementInfo",
+	Tag:           "bytes,50301,opt,name=api_group_element_info",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
 var E_ServiceSlugChoice = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*ServiceSlugChoice)(nil),
 	Field:         50400,
 	Name:          "ves.io.schema.vesenv.service_slug_choice",
-	Tag:           "bytes,50400,opt,name=service_slug_choice,json=serviceSlugChoice",
+	Tag:           "bytes,50400,opt,name=service_slug_choice",
 	Filename:      "ves.io/schema/vesenv/options.proto",
 }
 
@@ -1228,6 +1227,148 @@ func init() {
 	proto.RegisterExtension(E_ApiGroupElementInfo)
 	proto.RegisterExtension(E_ServiceSlugChoice)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/vesenv/options.proto", fileDescriptor_7f6a27edde895262)
+}
+
+var fileDescriptor_7f6a27edde895262 = []byte{
+	// 2128 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x58, 0xcd, 0x73, 0x1b, 0x49,
+	0x15, 0x97, 0xe2, 0x4f, 0xb5, 0xed, 0xd8, 0x9e, 0x78, 0xe3, 0x21, 0x1b, 0x14, 0xa3, 0x64, 0x43,
+	0x76, 0x61, 0x64, 0x5b, 0x1f, 0xb6, 0xa4, 0x82, 0xda, 0xb2, 0xc3, 0xee, 0x2a, 0xc9, 0x86, 0x24,
+	0x93, 0x2c, 0xb5, 0x40, 0x51, 0x43, 0x4f, 0xcf, 0x9b, 0xf1, 0x44, 0x23, 0xf5, 0xd0, 0x3d, 0x92,
+	0xa3, 0xdd, 0x2a, 0x48, 0x01, 0x55, 0x84, 0x1b, 0x47, 0x3e, 0x6e, 0x3e, 0x71, 0x76, 0xed, 0xf2,
+	0xa5, 0x13, 0x2c, 0x50, 0x70, 0xa0, 0x2a, 0xc5, 0x29, 0xc7, 0x8d, 0x73, 0xe1, 0xb8, 0x7f, 0x00,
+	0x54, 0x51, 0xdd, 0xd3, 0x63, 0xc9, 0x8a, 0x88, 0x1d, 0x4e, 0x9a, 0xf7, 0xfa, 0xf5, 0xef, 0xf7,
+	0x5e, 0xcf, 0x7b, 0x6f, 0x5e, 0x0b, 0xe5, 0x3a, 0xc0, 0xf3, 0x3e, 0x5d, 0xe5, 0x64, 0x07, 0x9a,
+	0x78, 0xb5, 0x03, 0x1c, 0x5a, 0x9d, 0x55, 0x1a, 0x46, 0x3e, 0x6d, 0xf1, 0x7c, 0xc8, 0x68, 0x44,
+	0xb5, 0xa5, 0xd8, 0x26, 0x1f, 0xdb, 0xe4, 0x63, 0x9b, 0x73, 0x86, 0xe7, 0x47, 0x3b, 0x6d, 0x3b,
+	0x4f, 0x68, 0x73, 0xd5, 0xa3, 0x1e, 0x5d, 0x95, 0xc6, 0x76, 0xdb, 0x95, 0x92, 0x14, 0xe4, 0x53,
+	0x0c, 0x72, 0x6e, 0xc5, 0xa3, 0xd4, 0x0b, 0xa0, 0x6f, 0xe5, 0x00, 0x27, 0xcc, 0x0f, 0x23, 0xca,
+	0x62, 0x8b, 0xdc, 0x3f, 0xd2, 0x68, 0x76, 0xfb, 0xed, 0xbb, 0x40, 0x18, 0x44, 0xd7, 0x5a, 0x2e,
+	0xd5, 0x3e, 0x8f, 0x50, 0x48, 0x03, 0x9f, 0x74, 0xad, 0xb6, 0xef, 0xe8, 0x93, 0x2b, 0xe9, 0x2b,
+	0x19, 0x33, 0x13, 0x6b, 0xde, 0xf3, 0x1d, 0xed, 0x02, 0x9a, 0x51, 0xcb, 0x2d, 0xdc, 0x04, 0x3d,
+	0x2d, 0xd7, 0xd5, 0x8e, 0xaf, 0xe3, 0x26, 0x68, 0xaf, 0x22, 0x65, 0x6d, 0xf9, 0x8e, 0x7e, 0x6a,
+	0x25, 0x7d, 0x65, 0xc2, 0x9c, 0x8e, 0x15, 0xd7, 0xe4, 0x6e, 0x8f, 0x58, 0x1c, 0x58, 0xc7, 0x27,
+	0xc0, 0xf5, 0xb1, 0x95, 0x31, 0xb1, 0xdb, 0x23, 0x77, 0x95, 0x46, 0xbb, 0x8c, 0xe6, 0x5b, 0xb4,
+	0x65, 0x0d, 0x1a, 0x8d, 0x4b, 0xa3, 0xb9, 0x16, 0x6d, 0xbd, 0xd3, 0xb7, 0x5b, 0x46, 0x53, 0x1e,
+	0xb1, 0xee, 0x53, 0x9b, 0xeb, 0x13, 0x72, 0x7d, 0xd2, 0x23, 0xd7, 0xa9, 0xcd, 0x73, 0x1f, 0x65,
+	0xd0, 0xe9, 0x24, 0x9e, 0xab, 0x3b, 0xd4, 0x27, 0xa0, 0x7d, 0x9c, 0x46, 0x17, 0x3a, 0xc0, 0x2d,
+	0x42, 0x5b, 0x11, 0xf6, 0x5b, 0xc0, 0x2c, 0x06, 0x9e, 0xcf, 0x23, 0xd6, 0xb5, 0x42, 0xcc, 0xf9,
+	0x2e, 0x65, 0x8e, 0x8c, 0x63, 0x7a, 0x3b, 0xd8, 0xef, 0xe9, 0x3b, 0x48, 0xbc, 0x0f, 0xc3, 0xa7,
+	0xc6, 0xa1, 0xbd, 0x91, 0xd8, 0x1b, 0x3c, 0x04, 0x62, 0x78, 0x24, 0xfe, 0x4d, 0x36, 0x2f, 0xfc,
+	0xf1, 0xc7, 0x5f, 0x3d, 0x37, 0x8e, 0x1b, 0x98, 0xe5, 0x26, 0x98, 0xf8, 0x29, 0x5c, 0x2a, 0x57,
+	0x36, 0x8a, 0x4e, 0xa1, 0x5a, 0x36, 0xdc, 0x32, 0x2e, 0x1a, 0xa5, 0x0d, 0xbc, 0x6e, 0x54, 0xca,
+	0x6b, 0x9b, 0x46, 0xb9, 0x48, 0x8a, 0xd5, 0x35, 0xd7, 0x2d, 0xdb, 0xd5, 0x62, 0x3d, 0x65, 0x9e,
+	0xef, 0x00, 0xbf, 0x9a, 0xb0, 0x98, 0x8a, 0xe4, 0xb6, 0x82, 0x15, 0x7e, 0x0b, 0x03, 0x0b, 0x07,
+	0xc0, 0x22, 0x8b, 0x01, 0x01, 0xbf, 0x03, 0xcc, 0xe2, 0x01, 0x26, 0x0d, 0xab, 0xcd, 0x02, 0x79,
+	0xba, 0xd3, 0xdb, 0x7c, 0xbf, 0xa7, 0x53, 0x54, 0x56, 0x4e, 0x4b, 0x63, 0x23, 0x31, 0x3e, 0xea,
+	0x70, 0x5f, 0x2b, 0x20, 0x8c, 0x36, 0x0b, 0x16, 0xfe, 0x94, 0xb8, 0x7e, 0x6e, 0x12, 0x47, 0x3b,
+	0xd0, 0xc2, 0x85, 0x4b, 0x50, 0x81, 0x42, 0xa9, 0xec, 0xda, 0x46, 0xa5, 0x5a, 0xdc, 0x30, 0x4a,
+	0x8e, 0x4b, 0x8c, 0x8a, 0x0d, 0x8e, 0x61, 0x97, 0x49, 0x61, 0x9d, 0xac, 0x93, 0xcd, 0x8d, 0xca,
+	0x5a, 0x3d, 0x65, 0xea, 0x1d, 0xe0, 0x5b, 0x82, 0xcc, 0x54, 0xa8, 0x77, 0x05, 0xe8, 0x7b, 0x2c,
+	0xd0, 0x9e, 0xa4, 0xd1, 0x95, 0x11, 0x7e, 0x87, 0xd8, 0x03, 0xe6, 0xb4, 0xa3, 0xae, 0xc5, 0x68,
+	0x3b, 0xf2, 0x5b, 0x9e, 0xd5, 0x80, 0xae, 0x3e, 0x26, 0x63, 0xf8, 0xc1, 0x7e, 0x4f, 0xff, 0x10,
+	0x6d, 0xbd, 0x4c, 0x0c, 0x87, 0x70, 0x86, 0x82, 0x33, 0x1a, 0xd0, 0x5d, 0xf8, 0xe4, 0xf9, 0x78,
+	0x88, 0xbd, 0xe1, 0x42, 0xb1, 0x5c, 0x32, 0xd6, 0x5c, 0xbb, 0x62, 0x94, 0x4a, 0x22, 0xb2, 0xc2,
+	0x46, 0xc5, 0x28, 0x97, 0x9d, 0x02, 0x14, 0xc9, 0x66, 0xc1, 0x76, 0x9c, 0x7a, 0xca, 0xbc, 0x38,
+	0x1c, 0xcf, 0xed, 0x84, 0xc0, 0x8c, 0xf1, 0x6f, 0x40, 0x57, 0xfb, 0x7b, 0x1a, 0x5d, 0x1c, 0x11,
+	0x1a, 0x0d, 0xb9, 0x07, 0x2d, 0x1f, 0x2c, 0x1c, 0xfa, 0x32, 0xaa, 0x71, 0x19, 0xd5, 0x07, 0xfb,
+	0x3d, 0xbd, 0x83, 0xbe, 0xf2, 0x32, 0x51, 0x25, 0x48, 0x06, 0x0e, 0x7d, 0x19, 0xd0, 0x9f, 0x47,
+	0xbc, 0xa0, 0x8d, 0x4d, 0xb2, 0x59, 0x75, 0x6c, 0x83, 0x14, 0x71, 0xd5, 0x28, 0xb9, 0xeb, 0xeb,
+	0x06, 0xde, 0x2c, 0x14, 0x0d, 0xb7, 0x5a, 0xda, 0x70, 0x5c, 0xbb, 0x44, 0x70, 0x51, 0xbc, 0xa0,
+	0xec, 0x70, 0x40, 0xb7, 0x14, 0xf6, 0x56, 0xe8, 0x8b, 0x58, 0x3e, 0x49, 0xa3, 0x57, 0x45, 0x2c,
+	0x11, 0x30, 0x86, 0x5d, 0xca, 0x9a, 0xa2, 0x9c, 0xac, 0x8e, 0x0f, 0xbb, 0x16, 0xf7, 0x23, 0xd0,
+	0x27, 0x64, 0x0c, 0x3f, 0x4c, 0xef, 0xf7, 0xf4, 0xef, 0xa3, 0xa2, 0x0a, 0x42, 0x2c, 0x1b, 0x62,
+	0xf9, 0xa8, 0xff, 0x0e, 0x84, 0x01, 0xed, 0x36, 0xa1, 0x15, 0x19, 0x24, 0xa0, 0x6d, 0xc7, 0x20,
+	0x0c, 0x9c, 0x85, 0xbf, 0x24, 0xbe, 0xbf, 0xb1, 0x7c, 0x48, 0x62, 0xdc, 0xa7, 0x76, 0x1f, 0xa5,
+	0x70, 0xa9, 0x8c, 0x4b, 0xc4, 0x59, 0x77, 0x0b, 0xc6, 0xe6, 0xe6, 0x5a, 0xd9, 0x28, 0x01, 0x14,
+	0x8d, 0x8a, 0xbb, 0x0e, 0xc6, 0x7a, 0xa9, 0x6c, 0x17, 0xd7, 0x2a, 0x6b, 0xee, 0x5a, 0x75, 0xbd,
+	0x9e, 0x32, 0x97, 0x3b, 0xc0, 0xef, 0x25, 0x18, 0xd7, 0xa9, 0xfd, 0x0d, 0x1f, 0x76, 0xef, 0xfa,
+	0x11, 0x68, 0x7f, 0x48, 0xa3, 0xd7, 0x44, 0x14, 0x8d, 0x0a, 0xb7, 0x48, 0xd0, 0xe6, 0x11, 0x30,
+	0x0b, 0x33, 0x8f, 0x12, 0xc7, 0xc2, 0x4e, 0xd3, 0x6f, 0xf5, 0x4b, 0x7c, 0x52, 0xc6, 0xe3, 0xed,
+	0xf7, 0x74, 0x22, 0xf3, 0x53, 0x84, 0xd3, 0xa8, 0x70, 0x43, 0xed, 0x32, 0xe2, 0x5d, 0x86, 0xdc,
+	0xd5, 0xaf, 0xed, 0xbf, 0x1e, 0x9e, 0xff, 0x54, 0x13, 0xb7, 0x99, 0x4f, 0xa0, 0x70, 0x69, 0x13,
+	0x60, 0xcd, 0x2d, 0x54, 0x85, 0xcf, 0xa5, 0x35, 0xa3, 0x54, 0x28, 0x57, 0x0d, 0x7b, 0xa3, 0x5a,
+	0x32, 0xdc, 0x62, 0x69, 0xa3, 0xba, 0x51, 0xc0, 0xa5, 0x6a, 0x49, 0x64, 0xd4, 0x4a, 0x07, 0xf8,
+	0x8d, 0x0a, 0xbf, 0x1a, 0xe3, 0x6f, 0x49, 0xf8, 0x2d, 0x81, 0x9e, 0x54, 0xf8, 0xf6, 0x34, 0x9a,
+	0x24, 0xb2, 0x47, 0xe5, 0xbe, 0x89, 0x96, 0x4d, 0x78, 0xab, 0x45, 0x58, 0x37, 0x8c, 0x54, 0x33,
+	0x8e, 0xa0, 0x79, 0xaf, 0x1b, 0x82, 0x68, 0xc8, 0xae, 0x0f, 0x81, 0x63, 0x85, 0x38, 0xda, 0x51,
+	0x0d, 0x37, 0x23, 0x35, 0xb7, 0x71, 0xb4, 0x33, 0xdc, 0x90, 0x4f, 0x0d, 0x37, 0xe4, 0xdc, 0xb7,
+	0xd1, 0xd2, 0x10, 0x34, 0x97, 0xb8, 0x57, 0xd1, 0x84, 0x1f, 0x41, 0x93, 0xeb, 0xe9, 0x95, 0xb1,
+	0x2b, 0x33, 0x05, 0x23, 0x3f, 0xea, 0x83, 0x93, 0xff, 0x1f, 0x5e, 0x99, 0xf1, 0xde, 0xdc, 0x9b,
+	0x68, 0x5e, 0xf5, 0xe4, 0xbb, 0x41, 0xdb, 0x93, 0x1f, 0x90, 0x25, 0x34, 0xd1, 0xc1, 0x41, 0x3b,
+	0xf9, 0x36, 0xc4, 0x82, 0x76, 0x16, 0x4d, 0x3a, 0x18, 0x9a, 0xb4, 0xa5, 0x3c, 0x54, 0x52, 0xee,
+	0x9f, 0x13, 0x68, 0x71, 0x00, 0x41, 0xb5, 0xec, 0x2f, 0xa1, 0x09, 0x59, 0x2e, 0xaa, 0x2f, 0x9f,
+	0xd9, 0xeb, 0xe9, 0xf3, 0x4a, 0xa5, 0xa9, 0x3a, 0xa8, 0xa7, 0x4c, 0xa5, 0xf8, 0x32, 0x9a, 0x24,
+	0xb4, 0xe5, 0xfa, 0x9e, 0x6a, 0x88, 0xda, 0x5e, 0x4f, 0x3f, 0x9d, 0xe8, 0x34, 0xf9, 0xf2, 0xea,
+	0x29, 0x33, 0x91, 0x2f, 0xa3, 0x71, 0x07, 0x47, 0x58, 0x35, 0x9e, 0x85, 0xbd, 0x9e, 0x3e, 0x1b,
+	0x6b, 0xb4, 0x71, 0x9b, 0x06, 0x51, 0x3d, 0x65, 0xc6, 0xd2, 0x36, 0x9a, 0xf5, 0x5b, 0x2e, 0xc3,
+	0xe2, 0x33, 0x09, 0x24, 0x52, 0x25, 0x7d, 0x7e, 0xaf, 0xa7, 0xeb, 0x47, 0x57, 0xb4, 0x69, 0xf9,
+	0xd0, 0x88, 0xfc, 0x7a, 0xca, 0x3c, 0xba, 0x72, 0x09, 0x8d, 0x35, 0x9a, 0x5c, 0x55, 0x52, 0x4c,
+	0x25, 0x14, 0xda, 0x44, 0x03, 0xba, 0xa1, 0x70, 0x4a, 0x4a, 0x17, 0xd1, 0xa9, 0x66, 0xa0, 0xd2,
+	0x73, 0x71, 0xaf, 0xa7, 0xcf, 0x09, 0x59, 0x9b, 0xc2, 0x22, 0x6b, 0xfc, 0x07, 0xf5, 0x94, 0x29,
+	0xc4, 0x3c, 0x9a, 0xa2, 0x21, 0x30, 0x1c, 0x81, 0x3e, 0x35, 0x10, 0x65, 0xa2, 0xd4, 0xc6, 0xfc,
+	0x30, 0xac, 0xa7, 0xcc, 0x43, 0xb9, 0x8c, 0xa6, 0xe3, 0xaf, 0x16, 0x30, 0x7d, 0x5a, 0x6e, 0x58,
+	0xde, 0xeb, 0xe9, 0x67, 0xfa, 0x5a, 0x2d, 0xc9, 0xe7, 0x7a, 0xca, 0xec, 0x2b, 0xef, 0xa0, 0x45,
+	0x2e, 0x5f, 0xb4, 0xd5, 0xc4, 0x2d, 0xec, 0x81, 0x28, 0x69, 0x3d, 0x23, 0xf7, 0xe7, 0xf6, 0x7a,
+	0x7a, 0x76, 0xc4, 0xb2, 0x96, 0xb1, 0x03, 0xbf, 0xe5, 0xb8, 0x34, 0x10, 0x49, 0xbf, 0x10, 0xaf,
+	0xdf, 0xec, 0x2f, 0x6f, 0xa2, 0xcc, 0x61, 0xf5, 0xeb, 0x68, 0xc0, 0x95, 0xbe, 0x5a, 0x9b, 0xec,
+	0xb4, 0x83, 0x50, 0xc6, 0x3a, 0xa0, 0x7c, 0x1d, 0x8d, 0x45, 0x61, 0x53, 0x9f, 0x91, 0x5b, 0x5e,
+	0xd9, 0xeb, 0xe9, 0x8b, 0x52, 0xa1, 0xa1, 0x28, 0x6c, 0xc6, 0xf4, 0xf2, 0x08, 0x85, 0xea, 0x22,
+	0x1a, 0x6b, 0xe3, 0xa6, 0x3e, 0x2b, 0x4d, 0xe7, 0xf7, 0x7a, 0xfa, 0x8c, 0x54, 0x68, 0xe3, 0xd0,
+	0xdd, 0x15, 0x99, 0x22, 0x85, 0x8b, 0x68, 0x6c, 0x17, 0x6c, 0x7d, 0x6e, 0xd0, 0x68, 0x17, 0xec,
+	0xbe, 0x91, 0x10, 0xaa, 0x28, 0xe3, 0x80, 0xc8, 0x46, 0x31, 0xbe, 0x9c, 0x96, 0xa6, 0xe7, 0xf6,
+	0x7a, 0xfa, 0xd9, 0x01, 0xb5, 0xd6, 0x7f, 0x14, 0x67, 0x17, 0x0b, 0xd7, 0x06, 0xab, 0xf9, 0x2a,
+	0x9a, 0x51, 0x39, 0x2d, 0x2b, 0xa2, 0x9f, 0xfb, 0xe9, 0xc1, 0xdc, 0xd7, 0xce, 0xa3, 0x4c, 0x40,
+	0x09, 0x96, 0x53, 0x9f, 0x7e, 0x4a, 0x8e, 0x31, 0x7d, 0x45, 0xee, 0x16, 0xca, 0x88, 0xfa, 0xbd,
+	0x47, 0xc5, 0xd8, 0x75, 0x1e, 0x65, 0x44, 0x79, 0xf3, 0x10, 0x13, 0x90, 0xa9, 0x9b, 0x31, 0xfb,
+	0x0a, 0x4d, 0x43, 0xe3, 0x03, 0xd3, 0x98, 0x7c, 0xd6, 0x16, 0xd0, 0x58, 0x5b, 0x4d, 0x60, 0x19,
+	0x53, 0x3c, 0xe6, 0xbe, 0x86, 0x96, 0xee, 0xb4, 0x69, 0x84, 0x4d, 0xe0, 0xb4, 0xcd, 0x08, 0xdc,
+	0x80, 0xee, 0xff, 0x51, 0xb0, 0x77, 0xd0, 0xbc, 0xf8, 0x20, 0xc2, 0x3d, 0xcc, 0x3c, 0x35, 0x32,
+	0x1e, 0x01, 0x98, 0x48, 0x00, 0xae, 0xa0, 0x05, 0x97, 0x32, 0x8b, 0xda, 0xf7, 0x81, 0x44, 0x56,
+	0xd4, 0x0d, 0x81, 0x2b, 0xa8, 0xd3, 0x2e, 0x65, 0xb7, 0xa4, 0x5a, 0xb4, 0x12, 0x9e, 0x7b, 0x17,
+	0x9d, 0xd9, 0xba, 0x7d, 0xed, 0x1d, 0x46, 0xdb, 0xe1, 0x5b, 0x81, 0x4c, 0x1a, 0xd1, 0x66, 0x84,
+	0x07, 0x4d, 0x88, 0x76, 0xa8, 0x93, 0x1c, 0x5b, 0x2c, 0xc9, 0x09, 0x15, 0x47, 0x3b, 0x62, 0x8a,
+	0x83, 0x07, 0x0a, 0x32, 0x23, 0x34, 0xa6, 0x50, 0xe4, 0x1e, 0xa5, 0x9f, 0x87, 0x13, 0x5e, 0x8e,
+	0x3a, 0xa4, 0x17, 0x1f, 0xeb, 0x9b, 0x49, 0x87, 0x3c, 0x25, 0x3b, 0xe4, 0xeb, 0xa3, 0x3b, 0xe4,
+	0x08, 0xd7, 0x93, 0xee, 0xf8, 0x7e, 0xdf, 0x13, 0xf1, 0x2a, 0x6f, 0xe2, 0x50, 0x06, 0xf6, 0x39,
+	0x34, 0xcd, 0x42, 0x32, 0x38, 0x40, 0x4f, 0xb1, 0x90, 0xc8, 0xe9, 0xf9, 0x32, 0x9a, 0x17, 0x33,
+	0x84, 0x27, 0xb6, 0x48, 0x83, 0xe4, 0xcc, 0xe6, 0x70, 0xe8, 0x1f, 0x02, 0xf1, 0x9c, 0x85, 0xe6,
+	0x87, 0x90, 0xb5, 0x77, 0xd1, 0xac, 0x40, 0x6d, 0xe2, 0x30, 0xf4, 0x5b, 0x5e, 0xd2, 0xd6, 0x8f,
+	0x71, 0x7a, 0xc0, 0x2d, 0x73, 0x86, 0x85, 0xe4, 0xa6, 0xda, 0x5d, 0xbb, 0x8f, 0xe6, 0x78, 0x87,
+	0x58, 0x3c, 0x68, 0x7b, 0x96, 0x2f, 0xef, 0x05, 0xf9, 0xf8, 0x2e, 0x91, 0x4f, 0xee, 0x12, 0xf9,
+	0xb7, 0xc5, 0x37, 0xe8, 0x56, 0x7c, 0x69, 0xd1, 0x3f, 0xfa, 0x89, 0x38, 0xbe, 0x99, 0xc2, 0x6b,
+	0xa3, 0xf9, 0x86, 0x3e, 0x12, 0xe6, 0x0c, 0xef, 0x90, 0x44, 0xa8, 0x71, 0x34, 0xff, 0x3d, 0x91,
+	0x98, 0x16, 0x6b, 0x40, 0xf7, 0x44, 0x6c, 0x1f, 0x2b, 0xb6, 0x37, 0x46, 0xb3, 0x8d, 0x4a, 0x73,
+	0x73, 0x4e, 0x72, 0x98, 0x8d, 0x58, 0xac, 0xf9, 0xe8, 0xb4, 0xed, 0x5a, 0xaa, 0x9b, 0x9d, 0x84,
+	0xf3, 0x37, 0x8a, 0x33, 0x37, 0x9a, 0x73, 0xf0, 0x12, 0x65, 0xce, 0xda, 0x6e, 0x5f, 0xaa, 0x7d,
+	0x07, 0x4d, 0x8b, 0xb3, 0x3c, 0x09, 0xc9, 0x6f, 0x15, 0xc9, 0x17, 0x5e, 0x78, 0x8c, 0x92, 0x63,
+	0x8a, 0x77, 0x88, 0x84, 0xff, 0x2e, 0x9a, 0x11, 0x99, 0x62, 0x45, 0x54, 0x5c, 0xd9, 0x8e, 0x63,
+	0xf8, 0x9d, 0x62, 0xb8, 0x30, 0x9a, 0xe1, 0xb0, 0xe5, 0xc4, 0x85, 0x20, 0x1f, 0x6b, 0x0c, 0x2d,
+	0x8a, 0x21, 0x1b, 0xac, 0x48, 0x16, 0xfd, 0x89, 0x22, 0xf9, 0xfd, 0x8b, 0x13, 0x62, 0xa8, 0x87,
+	0x98, 0xf3, 0xec, 0xa8, 0xa2, 0xf6, 0xa3, 0x34, 0xd2, 0x09, 0x6b, 0x3b, 0xc9, 0x45, 0x30, 0x4e,
+	0xc5, 0xb8, 0xc1, 0x6a, 0x17, 0x9e, 0xe3, 0xbe, 0x09, 0x9c, 0x63, 0x0f, 0x12, 0xf6, 0x9f, 0x3f,
+	0x8a, 0xd9, 0xbf, 0x78, 0x6c, 0x3a, 0xc6, 0x13, 0x87, 0xf9, 0x8a, 0xe0, 0x7a, 0x4e, 0x5d, 0x7b,
+	0x1f, 0x2d, 0x4b, 0x27, 0xfa, 0x45, 0x19, 0x32, 0x70, 0xfd, 0x07, 0xc0, 0x8f, 0xf7, 0xe1, 0x17,
+	0x8f, 0xe2, 0x8e, 0xb2, 0x24, 0x10, 0xb6, 0x54, 0xf9, 0xde, 0x56, 0xdb, 0x6b, 0x5d, 0xb4, 0x34,
+	0x84, 0x2c, 0xcb, 0xfd, 0x78, 0xd8, 0x5f, 0x3e, 0x7a, 0xe1, 0xc1, 0x0e, 0x55, 0xb6, 0xb9, 0x38,
+	0xc8, 0x2e, 0x9b, 0x47, 0xed, 0x43, 0xa4, 0x31, 0xb0, 0x20, 0x9e, 0xeb, 0x54, 0x09, 0x9c, 0x80,
+	0xf8, 0x57, 0x8f, 0x5e, 0x58, 0x74, 0xa3, 0x86, 0x4c, 0x73, 0x81, 0x0d, 0x69, 0x6b, 0xf5, 0xe7,
+	0x3a, 0x9c, 0x96, 0x1d, 0xc1, 0x2c, 0x3a, 0x7d, 0x42, 0xfc, 0x6f, 0x75, 0x90, 0x47, 0x7b, 0x60,
+	0xed, 0x61, 0x1a, 0x9d, 0xed, 0x43, 0x41, 0xdc, 0x7e, 0xe3, 0xdc, 0x3c, 0x0e, 0xf1, 0x3f, 0x2a,
+	0x94, 0x13, 0xb6, 0x74, 0x91, 0xa0, 0x67, 0x12, 0xf2, 0x01, 0x65, 0xed, 0x03, 0x74, 0xe6, 0x64,
+	0xe9, 0xa9, 0x32, 0x2b, 0xe1, 0xff, 0xf4, 0xa7, 0x2f, 0x99, 0x9e, 0x8b, 0x7c, 0x58, 0xb5, 0xfd,
+	0x30, 0xfd, 0xf8, 0x69, 0x36, 0xf5, 0xe4, 0x69, 0x36, 0xf5, 0xd9, 0xd3, 0x6c, 0xfa, 0xe1, 0x41,
+	0x36, 0xfd, 0xeb, 0x83, 0x6c, 0xfa, 0x6f, 0x07, 0xd9, 0xf4, 0xe3, 0x83, 0x6c, 0xfa, 0xd3, 0x83,
+	0x6c, 0xfa, 0x5f, 0x07, 0xd9, 0xd4, 0x67, 0x07, 0xd9, 0xf4, 0xcf, 0x9e, 0x65, 0x53, 0x8f, 0x9f,
+	0x65, 0x53, 0x4f, 0x9e, 0x65, 0x53, 0xdf, 0xba, 0xee, 0xd1, 0xb0, 0xe1, 0xe5, 0x3b, 0x34, 0x90,
+	0x93, 0x56, 0xbe, 0xcd, 0x57, 0xfb, 0x97, 0xb3, 0x90, 0xd1, 0x8e, 0xef, 0x00, 0x33, 0x92, 0xe5,
+	0xd5, 0xd0, 0xf6, 0xe8, 0x2a, 0x3c, 0x88, 0xd4, 0x5f, 0x55, 0x47, 0xfe, 0xb1, 0xb2, 0x27, 0x65,
+	0x7c, 0xc5, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x95, 0xde, 0xba, 0xf6, 0xd0, 0x12, 0x00, 0x00,
+}
+
 func (this *BFSecretInfo) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2476,7 +2617,7 @@ func valueToGoStringOptions(v interface{}, typ string) string {
 func (m *BFSecretInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2484,79 +2625,68 @@ func (m *BFSecretInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BFSecretInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.PolicyName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.PolicyName)))
-		i += copy(dAtA[i:], m.PolicyName)
+	if len(m.PolicyUid) > 0 {
+		i -= len(m.PolicyUid)
+		copy(dAtA[i:], m.PolicyUid)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.PolicyUid)))
+		i--
+		dAtA[i] = 0x32
 	}
-	if m.PolicyId != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(m.PolicyId))
-	}
-	if len(m.GcServices) > 0 {
-		for _, s := range m.GcServices {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.GcJobs) > 0 {
+		for iNdEx := len(m.GcJobs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GcJobs[iNdEx])
+			copy(dAtA[i:], m.GcJobs[iNdEx])
+			i = encodeVarintOptions(dAtA, i, uint64(len(m.GcJobs[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
 		}
 	}
 	if len(m.NonGcServices) > 0 {
-		for _, s := range m.NonGcServices {
+		for iNdEx := len(m.NonGcServices) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NonGcServices[iNdEx])
+			copy(dAtA[i:], m.NonGcServices[iNdEx])
+			i = encodeVarintOptions(dAtA, i, uint64(len(m.NonGcServices[iNdEx])))
+			i--
 			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.GcJobs) > 0 {
-		for _, s := range m.GcJobs {
-			dAtA[i] = 0x2a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.GcServices) > 0 {
+		for iNdEx := len(m.GcServices) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GcServices[iNdEx])
+			copy(dAtA[i:], m.GcServices[iNdEx])
+			i = encodeVarintOptions(dAtA, i, uint64(len(m.GcServices[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
-	if len(m.PolicyUid) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.PolicyUid)))
-		i += copy(dAtA[i:], m.PolicyUid)
+	if m.PolicyId != 0 {
+		i = encodeVarintOptions(dAtA, i, uint64(m.PolicyId))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.PolicyName) > 0 {
+		i -= len(m.PolicyName)
+		copy(dAtA[i:], m.PolicyName)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.PolicyName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *BFSecretChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2564,96 +2694,133 @@ func (m *BFSecretChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BFSecretChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn1, err := m.Choice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *BFSecretChoice_VesContainerRegistryPassword) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesContainerRegistryPassword) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesContainerRegistryPassword {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
 }
 func (m *BFSecretChoice_VesAlertReceiverSlackUrl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x10
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesAlertReceiverSlackUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesAlertReceiverSlackUrl {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x10
+	return len(dAtA) - i, nil
 }
 func (m *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x18
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesAlertReceiverPagerdutyRoutingKey {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x18
+	return len(dAtA) - i, nil
 }
 func (m *BFSecretChoice_VesAlertReceiverOpsgenieApiKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesAlertReceiverOpsgenieApiKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesAlertReceiverOpsgenieApiKey {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *BFSecretChoice_VesTerraformJobViewSite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x28
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesTerraformJobViewSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesTerraformJobViewSite {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x28
+	return len(dAtA) - i, nil
 }
 func (m *BFSecretChoice_VesK8SClusterArgocdAdminPassword) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x30
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BFSecretChoice_VesK8SClusterArgocdAdminPassword) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VesK8SClusterArgocdAdminPassword {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x30
+	return len(dAtA) - i, nil
 }
 func (m *ReEncryptSecretItemType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2661,29 +2828,36 @@ func (m *ReEncryptSecretItemType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReEncryptSecretItemType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReEncryptSecretItemType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.FieldPath) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.FieldPath)))
-		i += copy(dAtA[i:], m.FieldPath)
-	}
 	if len(m.PolicyName) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.PolicyName)
+		copy(dAtA[i:], m.PolicyName)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.PolicyName)))
-		i += copy(dAtA[i:], m.PolicyName)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.FieldPath) > 0 {
+		i -= len(m.FieldPath)
+		copy(dAtA[i:], m.FieldPath)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.FieldPath)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReEncryptSecretsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2691,29 +2865,36 @@ func (m *ReEncryptSecretsType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReEncryptSecretsType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReEncryptSecretsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Items) > 0 {
-		for _, msg := range m.Items {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ServiceSlugInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2721,29 +2902,36 @@ func (m *ServiceSlugInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ServiceSlugInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Value) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Value)))
-		i += copy(dAtA[i:], m.Value)
-	}
 	if len(m.Daemon) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Daemon)
+		copy(dAtA[i:], m.Daemon)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.Daemon)))
-		i += copy(dAtA[i:], m.Daemon)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ServiceSlugChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2751,192 +2939,269 @@ func (m *ServiceSlugChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ServiceSlugChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn2, err := m.Choice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ServiceSlugChoice_Alert) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Alert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Alert {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Config) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x10
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Config) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Config {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x10
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Data) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x18
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Data) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Data {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x18
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Infraprotect) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Infraprotect) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Infraprotect {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Kms) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x28
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Kms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Kms {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x28
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Ml) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x30
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Ml) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Ml {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x30
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Operate) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x38
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Operate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Operate {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x38
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Register) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Register) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Register {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_SecretManagement) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x48
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_SecretManagement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.SecretManagement {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x48
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Terraform) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x50
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Terraform) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Terraform {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x50
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Tpm) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Tpm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Tpm {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x58
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Uam) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x60
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Uam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Uam {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x60
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_Web) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x68
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_Web) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Web {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x68
+	return len(dAtA) - i, nil
 }
 func (m *ServiceSlugChoice_DeviceId) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x70
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSlugChoice_DeviceId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.DeviceId {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x70
+	return len(dAtA) - i, nil
 }
 func (m *ServiceInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2944,38 +3209,38 @@ func (m *ServiceInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ServiceInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Daemon) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Daemon)))
-		i += copy(dAtA[i:], m.Daemon)
-	}
 	if len(m.Locations) > 0 {
-		for _, s := range m.Locations {
+		for iNdEx := len(m.Locations) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Locations[iNdEx])
+			copy(dAtA[i:], m.Locations[iNdEx])
+			i = encodeVarintOptions(dAtA, i, uint64(len(m.Locations[iNdEx])))
+			i--
 			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	if len(m.Daemon) > 0 {
+		i -= len(m.Daemon)
+		copy(dAtA[i:], m.Daemon)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Daemon)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *NameToUid) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2983,35 +3248,43 @@ func (m *NameToUid) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NameToUid) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NameToUid) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Uid) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Uid)
+		copy(dAtA[i:], m.Uid)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.Uid)))
-		i += copy(dAtA[i:], m.Uid)
+		i--
+		dAtA[i] = 0x12
 	}
-	if len(m.Namespace) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Namespace)))
-		i += copy(dAtA[i:], m.Namespace)
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *QuotaResourceKeyInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3019,29 +3292,36 @@ func (m *QuotaResourceKeyInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *QuotaResourceKeyInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Value) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Value)))
-		i += copy(dAtA[i:], m.Value)
-	}
 	if len(m.Daemon) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Daemon)
+		copy(dAtA[i:], m.Daemon)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.Daemon)))
-		i += copy(dAtA[i:], m.Daemon)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *RouteTargetInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3049,28 +3329,34 @@ func (m *RouteTargetInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RouteTargetInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Value != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(m.Value))
-	}
 	if len(m.ForObjectTypes) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.ForObjectTypes)
+		copy(dAtA[i:], m.ForObjectTypes)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.ForObjectTypes)))
-		i += copy(dAtA[i:], m.ForObjectTypes)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Value != 0 {
+		i = encodeVarintOptions(dAtA, i, uint64(m.Value))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *APIGroupElementItem) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3078,29 +3364,36 @@ func (m *APIGroupElementItem) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *APIGroupElementItem) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIGroupElementItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Method) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Method)))
-		i += copy(dAtA[i:], m.Method)
-	}
 	if len(m.PathRegex) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.PathRegex)
+		copy(dAtA[i:], m.PathRegex)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.PathRegex)))
-		i += copy(dAtA[i:], m.PathRegex)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Method) > 0 {
+		i -= len(m.Method)
+		copy(dAtA[i:], m.Method)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Method)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *APIGroupElementInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3108,41 +3401,50 @@ func (m *APIGroupElementInfo) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *APIGroupElementInfo) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIGroupElementInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Items) > 0 {
-		for _, msg := range m.Items {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if len(m.Namespace) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Namespace)))
-		i += copy(dAtA[i:], m.Namespace)
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *APIGroupNameMapItem) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3150,29 +3452,36 @@ func (m *APIGroupNameMapItem) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *APIGroupNameMapItem) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIGroupNameMapItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.RpcName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.RpcName)))
-		i += copy(dAtA[i:], m.RpcName)
-	}
 	if len(m.ApiGroupNames) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.ApiGroupNames)
+		copy(dAtA[i:], m.ApiGroupNames)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.ApiGroupNames)))
-		i += copy(dAtA[i:], m.ApiGroupNames)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.RpcName) > 0 {
+		i -= len(m.RpcName)
+		copy(dAtA[i:], m.RpcName)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.RpcName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *APIGroupNameMap) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3180,35 +3489,47 @@ func (m *APIGroupNameMap) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *APIGroupNameMap) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIGroupNameMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.RpcMappings) > 0 {
-		for _, msg := range m.RpcMappings {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.RpcMappings) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RpcMappings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintOptions(dAtA []byte, offset int, v uint64) int {
+	offset -= sovOptions(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *BFSecretInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.PolicyName)
@@ -3244,6 +3565,9 @@ func (m *BFSecretInfo) Size() (n int) {
 }
 
 func (m *BFSecretChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Choice != nil {
@@ -3253,42 +3577,63 @@ func (m *BFSecretChoice) Size() (n int) {
 }
 
 func (m *BFSecretChoice_VesContainerRegistryPassword) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *BFSecretChoice_VesAlertReceiverSlackUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *BFSecretChoice_VesAlertReceiverOpsgenieApiKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *BFSecretChoice_VesTerraformJobViewSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *BFSecretChoice_VesK8SClusterArgocdAdminPassword) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ReEncryptSecretItemType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.FieldPath)
@@ -3303,6 +3648,9 @@ func (m *ReEncryptSecretItemType) Size() (n int) {
 }
 
 func (m *ReEncryptSecretsType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Items) > 0 {
@@ -3315,6 +3663,9 @@ func (m *ReEncryptSecretsType) Size() (n int) {
 }
 
 func (m *ServiceSlugInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Value)
@@ -3329,6 +3680,9 @@ func (m *ServiceSlugInfo) Size() (n int) {
 }
 
 func (m *ServiceSlugChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Choice != nil {
@@ -3338,90 +3692,135 @@ func (m *ServiceSlugChoice) Size() (n int) {
 }
 
 func (m *ServiceSlugChoice_Alert) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Config) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Data) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Infraprotect) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Kms) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Ml) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Operate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Register) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_SecretManagement) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Terraform) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Tpm) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Uam) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_Web) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceSlugChoice_DeviceId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Daemon)
@@ -3438,6 +3837,9 @@ func (m *ServiceInfo) Size() (n int) {
 }
 
 func (m *NameToUid) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -3456,6 +3858,9 @@ func (m *NameToUid) Size() (n int) {
 }
 
 func (m *QuotaResourceKeyInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Value)
@@ -3470,6 +3875,9 @@ func (m *QuotaResourceKeyInfo) Size() (n int) {
 }
 
 func (m *RouteTargetInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Value != 0 {
@@ -3483,6 +3891,9 @@ func (m *RouteTargetInfo) Size() (n int) {
 }
 
 func (m *APIGroupElementItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Method)
@@ -3497,6 +3908,9 @@ func (m *APIGroupElementItem) Size() (n int) {
 }
 
 func (m *APIGroupElementInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -3517,6 +3931,9 @@ func (m *APIGroupElementInfo) Size() (n int) {
 }
 
 func (m *APIGroupNameMapItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.RpcName)
@@ -3531,6 +3948,9 @@ func (m *APIGroupNameMapItem) Size() (n int) {
 }
 
 func (m *APIGroupNameMap) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.RpcMappings) > 0 {
@@ -3543,14 +3963,7 @@ func (m *APIGroupNameMap) Size() (n int) {
 }
 
 func sovOptions(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozOptions(x uint64) (n int) {
 	return sovOptions(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -3655,8 +4068,13 @@ func (this *ReEncryptSecretsType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForItems := "[]*ReEncryptSecretItemType{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "ReEncryptSecretItemType", "ReEncryptSecretItemType", 1) + ","
+	}
+	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&ReEncryptSecretsType{`,
-		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "ReEncryptSecretItemType", "ReEncryptSecretItemType", 1) + `,`,
+		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3882,9 +4300,14 @@ func (this *APIGroupElementInfo) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForItems := "[]*APIGroupElementItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "APIGroupElementItem", "APIGroupElementItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&APIGroupElementInfo{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "APIGroupElementItem", "APIGroupElementItem", 1) + `,`,
+		`Items:` + repeatedStringForItems + `,`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`}`,
 	}, "")
@@ -3905,8 +4328,13 @@ func (this *APIGroupNameMap) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRpcMappings := "[]*APIGroupNameMapItem{"
+	for _, f := range this.RpcMappings {
+		repeatedStringForRpcMappings += strings.Replace(f.String(), "APIGroupNameMapItem", "APIGroupNameMapItem", 1) + ","
+	}
+	repeatedStringForRpcMappings += "}"
 	s := strings.Join([]string{`&APIGroupNameMap{`,
-		`RpcMappings:` + strings.Replace(fmt.Sprintf("%v", this.RpcMappings), "APIGroupNameMapItem", "APIGroupNameMapItem", 1) + `,`,
+		`RpcMappings:` + repeatedStringForRpcMappings + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3934,7 +4362,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3962,7 +4390,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3972,6 +4400,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3991,7 +4422,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PolicyId |= (int32(b) & 0x7F) << shift
+				m.PolicyId |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4010,7 +4441,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4020,6 +4451,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4039,7 +4473,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4049,6 +4483,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4068,7 +4505,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4078,6 +4515,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4097,7 +4537,7 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4107,6 +4547,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4119,6 +4562,9 @@ func (m *BFSecretInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4148,7 +4594,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4176,7 +4622,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4197,7 +4643,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4218,7 +4664,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4239,7 +4685,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4260,7 +4706,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4281,7 +4727,7 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4295,6 +4741,9 @@ func (m *BFSecretChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4324,7 +4773,7 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4352,7 +4801,7 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4362,6 +4811,9 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4381,7 +4833,7 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4391,6 +4843,9 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4403,6 +4858,9 @@ func (m *ReEncryptSecretItemType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4432,7 +4890,7 @@ func (m *ReEncryptSecretsType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4460,7 +4918,7 @@ func (m *ReEncryptSecretsType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4469,6 +4927,9 @@ func (m *ReEncryptSecretsType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4484,6 +4945,9 @@ func (m *ReEncryptSecretsType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4513,7 +4977,7 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4541,7 +5005,7 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4551,6 +5015,9 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4570,7 +5037,7 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4580,6 +5047,9 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4592,6 +5062,9 @@ func (m *ServiceSlugInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4621,7 +5094,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4649,7 +5122,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4670,7 +5143,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4691,7 +5164,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4712,7 +5185,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4733,7 +5206,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4754,7 +5227,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4775,7 +5248,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4796,7 +5269,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4817,7 +5290,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4838,7 +5311,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4859,7 +5332,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4880,7 +5353,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4901,7 +5374,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4922,7 +5395,7 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4936,6 +5409,9 @@ func (m *ServiceSlugChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4965,7 +5441,7 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4993,7 +5469,7 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5003,6 +5479,9 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5022,7 +5501,7 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5032,6 +5511,9 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5044,6 +5526,9 @@ func (m *ServiceInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5073,7 +5558,7 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5101,7 +5586,7 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5111,6 +5596,9 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5130,7 +5618,7 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5140,6 +5628,9 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5159,7 +5650,7 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5169,6 +5660,9 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5181,6 +5675,9 @@ func (m *NameToUid) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5210,7 +5707,7 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5238,7 +5735,7 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5248,6 +5745,9 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5267,7 +5767,7 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5277,6 +5777,9 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5289,6 +5792,9 @@ func (m *QuotaResourceKeyInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5318,7 +5824,7 @@ func (m *RouteTargetInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5346,7 +5852,7 @@ func (m *RouteTargetInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Value |= (int32(b) & 0x7F) << shift
+				m.Value |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5365,7 +5871,7 @@ func (m *RouteTargetInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5375,6 +5881,9 @@ func (m *RouteTargetInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5387,6 +5896,9 @@ func (m *RouteTargetInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5416,7 +5928,7 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5444,7 +5956,7 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5454,6 +5966,9 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5473,7 +5988,7 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5483,6 +5998,9 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5495,6 +6013,9 @@ func (m *APIGroupElementItem) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5524,7 +6045,7 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5552,7 +6073,7 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5562,6 +6083,9 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5581,7 +6105,7 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5590,6 +6114,9 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5612,7 +6139,7 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5622,6 +6149,9 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5634,6 +6164,9 @@ func (m *APIGroupElementInfo) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5663,7 +6196,7 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5691,7 +6224,7 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5701,6 +6234,9 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5720,7 +6256,7 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5730,6 +6266,9 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5742,6 +6281,9 @@ func (m *APIGroupNameMapItem) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -5771,7 +6313,7 @@ func (m *APIGroupNameMap) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5799,7 +6341,7 @@ func (m *APIGroupNameMap) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5808,6 +6350,9 @@ func (m *APIGroupNameMap) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5825,6 +6370,9 @@ func (m *APIGroupNameMap) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthOptions
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5840,6 +6388,7 @@ func (m *APIGroupNameMap) Unmarshal(dAtA []byte) error {
 func skipOptions(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -5871,10 +6420,8 @@ func skipOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -5891,192 +6438,34 @@ func skipOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthOptions
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowOptions
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipOptions(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupOptions
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthOptions
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthOptions = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowOptions   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthOptions        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowOptions          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupOptions = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/vesenv/options.proto", fileDescriptorOptions) }
-
-var fileDescriptorOptions = []byte{
-	// 2119 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x58, 0xcd, 0x73, 0x1b, 0x49,
-	0x15, 0x97, 0xe2, 0x4f, 0xb5, 0xed, 0xd8, 0x9e, 0x78, 0xd7, 0x43, 0x36, 0xab, 0x18, 0x25, 0x1b,
-	0xb2, 0x0b, 0x23, 0xdb, 0xfa, 0xb2, 0xa4, 0x82, 0xda, 0xb2, 0xc3, 0xee, 0x2a, 0xc9, 0x86, 0x24,
-	0x93, 0x84, 0x5a, 0xa0, 0xa8, 0xa1, 0xa7, 0xe7, 0xcd, 0x78, 0xa2, 0x91, 0x7a, 0xe8, 0x1e, 0xc9,
-	0xd1, 0x6e, 0x15, 0x6c, 0x01, 0x55, 0x84, 0x1b, 0x47, 0x3e, 0x6e, 0x3e, 0x71, 0x76, 0xed, 0xf2,
-	0xa5, 0x13, 0x2c, 0x50, 0x70, 0xa0, 0x6a, 0x8b, 0xd3, 0x1e, 0x37, 0xe6, 0xc2, 0x71, 0xff, 0x00,
-	0xa8, 0xa2, 0xba, 0xa7, 0xc7, 0x92, 0x15, 0x11, 0x3b, 0x9c, 0x34, 0xef, 0xf5, 0xeb, 0xdf, 0xef,
-	0xbd, 0x9e, 0xf7, 0x5e, 0xbf, 0x11, 0xca, 0x75, 0x81, 0xe7, 0x7d, 0xba, 0xce, 0xc9, 0x2e, 0xb4,
-	0xf0, 0x7a, 0x17, 0x38, 0xb4, 0xbb, 0xeb, 0x34, 0x8c, 0x7c, 0xda, 0xe6, 0xf9, 0x90, 0xd1, 0x88,
-	0x6a, 0x2b, 0xb1, 0x4d, 0x3e, 0xb6, 0xc9, 0xc7, 0x36, 0xe7, 0x0d, 0xcf, 0x8f, 0x76, 0x3b, 0x76,
-	0x9e, 0xd0, 0xd6, 0xba, 0x47, 0x3d, 0xba, 0x2e, 0x8d, 0xed, 0x8e, 0x2b, 0x25, 0x29, 0xc8, 0xa7,
-	0x18, 0xe4, 0xfc, 0x9a, 0x47, 0xa9, 0x17, 0xc0, 0xc0, 0xca, 0x01, 0x4e, 0x98, 0x1f, 0x46, 0x94,
-	0xc5, 0x16, 0xb9, 0xbf, 0xa7, 0xd1, 0xfc, 0xce, 0x9b, 0xf7, 0x80, 0x30, 0x88, 0xae, 0xb7, 0x5d,
-	0xaa, 0x5d, 0x44, 0x73, 0x21, 0x0d, 0x7c, 0xd2, 0xb3, 0xda, 0xb8, 0x05, 0x7a, 0x7a, 0x2d, 0x7d,
-	0x35, 0x63, 0xa2, 0x58, 0xf5, 0x35, 0xdc, 0x02, 0xed, 0x25, 0x94, 0x51, 0x06, 0xbe, 0xa3, 0x9f,
-	0x59, 0x4b, 0x5f, 0x9d, 0x32, 0x67, 0x63, 0xc5, 0x75, 0x47, 0xec, 0xf6, 0x88, 0xc5, 0x81, 0x75,
-	0x7d, 0x02, 0x5c, 0x9f, 0x58, 0x9b, 0x10, 0xbb, 0x3d, 0x72, 0x4f, 0x69, 0xb4, 0x2b, 0x68, 0xb1,
-	0x4d, 0xdb, 0xd6, 0xb0, 0xd1, 0xa4, 0x34, 0x5a, 0x68, 0xd3, 0xf6, 0x5b, 0x03, 0xbb, 0x55, 0x34,
-	0xe3, 0x11, 0xeb, 0x21, 0xb5, 0xb9, 0x3e, 0x25, 0xd7, 0xa7, 0x3d, 0x72, 0x83, 0xda, 0x5c, 0x7b,
-	0x19, 0x29, 0x67, 0xac, 0x8e, 0xef, 0xe8, 0xd3, 0xd2, 0x3d, 0xe5, 0xd0, 0x03, 0xdf, 0xc9, 0x7d,
-	0x90, 0x41, 0x67, 0x93, 0x78, 0xae, 0xed, 0x52, 0x9f, 0x80, 0xf6, 0x61, 0x1a, 0x5d, 0xec, 0x02,
-	0xb7, 0x08, 0x6d, 0x47, 0xd8, 0x6f, 0x03, 0xb3, 0x18, 0x78, 0x3e, 0x8f, 0x58, 0xcf, 0x0a, 0x31,
-	0xe7, 0x7b, 0x94, 0x39, 0x32, 0xcc, 0xd9, 0x9d, 0xe0, 0xa0, 0xaf, 0xef, 0x22, 0xf1, 0x3e, 0x0c,
-	0x9f, 0x1a, 0x47, 0xf6, 0x46, 0x62, 0x6f, 0xf0, 0x10, 0x88, 0xe1, 0x91, 0xf8, 0x37, 0xd9, 0xbc,
-	0xf4, 0x87, 0x1f, 0x7d, 0xe5, 0xfc, 0x24, 0x6e, 0x62, 0x96, 0x9b, 0x62, 0xe2, 0xa7, 0x70, 0xb9,
-	0x5c, 0xad, 0x14, 0x9d, 0x42, 0xad, 0x6c, 0xb8, 0x65, 0x5c, 0x34, 0x4a, 0x15, 0xbc, 0x69, 0x54,
-	0xcb, 0x1b, 0x5b, 0x46, 0xb9, 0x48, 0x8a, 0xb5, 0x0d, 0xd7, 0x2d, 0xdb, 0xb5, 0x62, 0x23, 0x65,
-	0x5e, 0xe8, 0x02, 0xbf, 0x96, 0xb0, 0x98, 0x8a, 0xe4, 0x8e, 0x82, 0x15, 0x7e, 0x0b, 0x03, 0x0b,
-	0x07, 0xc0, 0x22, 0x8b, 0x01, 0x01, 0xbf, 0x0b, 0xcc, 0xe2, 0x01, 0x26, 0x4d, 0xab, 0xc3, 0x02,
-	0x79, 0xf8, 0xb3, 0x3b, 0xfc, 0xa0, 0xaf, 0x53, 0x54, 0x56, 0x4e, 0x4b, 0x63, 0x23, 0x31, 0x3e,
-	0xee, 0xf0, 0x40, 0x2b, 0x20, 0x8c, 0x0e, 0x0b, 0x96, 0xfe, 0x98, 0xb8, 0x7e, 0x7e, 0x1a, 0x47,
-	0xbb, 0xd0, 0xc6, 0x85, 0xcb, 0x50, 0x85, 0x42, 0xa9, 0xec, 0xda, 0x46, 0xb5, 0x56, 0xac, 0x18,
-	0x25, 0xc7, 0x25, 0x46, 0xd5, 0x06, 0xc7, 0xb0, 0xcb, 0xa4, 0xb0, 0x49, 0x36, 0xc9, 0x56, 0xa5,
-	0xba, 0xd1, 0x48, 0x99, 0x7a, 0x17, 0xf8, 0xb6, 0x20, 0x33, 0x15, 0xea, 0x3d, 0x01, 0xfa, 0x80,
-	0x05, 0xda, 0x27, 0x69, 0x74, 0x75, 0x8c, 0xdf, 0x21, 0xf6, 0x80, 0x39, 0x9d, 0xa8, 0x67, 0x31,
-	0xda, 0x89, 0xfc, 0xb6, 0x67, 0x35, 0xa1, 0xa7, 0x4f, 0xc8, 0x18, 0xbe, 0x7f, 0xd0, 0xd7, 0xdf,
-	0x43, 0xdb, 0xcf, 0x13, 0xc3, 0x11, 0x9c, 0xa1, 0xe0, 0x8c, 0x26, 0xf4, 0x96, 0x3e, 0x7a, 0x3a,
-	0x1e, 0x62, 0x57, 0x5c, 0x28, 0x96, 0x4b, 0xc6, 0x86, 0x6b, 0x57, 0x8d, 0x52, 0x49, 0x44, 0x56,
-	0xa8, 0x54, 0x8d, 0x72, 0xd9, 0x29, 0x40, 0x91, 0x6c, 0x15, 0x6c, 0xc7, 0x69, 0xa4, 0xcc, 0x4b,
-	0xa3, 0xf1, 0xdc, 0x49, 0x08, 0xcc, 0x18, 0xff, 0x26, 0xf4, 0xb4, 0xbf, 0xa5, 0xd1, 0xa5, 0x31,
-	0xa1, 0xd1, 0x90, 0x7b, 0xd0, 0xf6, 0xc1, 0xc2, 0xa1, 0x2f, 0xa3, 0x9a, 0x94, 0x51, 0xbd, 0x7b,
-	0xd0, 0xd7, 0xbb, 0xe8, 0xcb, 0xcf, 0x13, 0x55, 0x82, 0x64, 0xe0, 0xd0, 0x97, 0x01, 0xfd, 0x69,
-	0xcc, 0x0b, 0xaa, 0x6c, 0x91, 0xad, 0x9a, 0x63, 0x1b, 0xa4, 0x88, 0x6b, 0x46, 0xc9, 0xdd, 0xdc,
-	0x34, 0xf0, 0x56, 0xa1, 0x68, 0xb8, 0xb5, 0x52, 0xc5, 0x71, 0xed, 0x12, 0xc1, 0x45, 0xf1, 0x82,
-	0xb2, 0xa3, 0x01, 0xdd, 0x56, 0xd8, 0xdb, 0xa1, 0x2f, 0x62, 0xf9, 0x28, 0x8d, 0x5e, 0x12, 0xb1,
-	0x44, 0xc0, 0x18, 0x76, 0x29, 0x6b, 0x89, 0x6a, 0xb3, 0xba, 0x3e, 0xec, 0x59, 0xdc, 0x8f, 0x40,
-	0x9f, 0x92, 0x31, 0xfc, 0x20, 0x7d, 0xd0, 0xd7, 0xbf, 0x87, 0x8a, 0x2a, 0x08, 0xb1, 0x6c, 0x88,
-	0xe5, 0xe3, 0xfe, 0x3b, 0x10, 0x06, 0xb4, 0xd7, 0x82, 0x76, 0x64, 0x90, 0x80, 0x76, 0x1c, 0x83,
-	0x30, 0x70, 0x96, 0xfe, 0x9c, 0xf8, 0xfe, 0xda, 0xea, 0x11, 0x89, 0xf1, 0x90, 0xda, 0x03, 0x94,
-	0xc2, 0xe5, 0x32, 0x2e, 0x11, 0x67, 0xd3, 0x2d, 0x18, 0x5b, 0x5b, 0x1b, 0x65, 0xa3, 0x04, 0x50,
-	0x34, 0xaa, 0xee, 0x26, 0x18, 0x9b, 0xa5, 0xb2, 0x5d, 0xdc, 0xa8, 0x6e, 0xb8, 0x1b, 0xb5, 0xcd,
-	0x46, 0xca, 0x5c, 0xed, 0x02, 0xbf, 0x9f, 0x60, 0xdc, 0xa0, 0xf6, 0xd7, 0x7d, 0xd8, 0xbb, 0xe7,
-	0x47, 0xa0, 0xfd, 0x3e, 0x8d, 0x5e, 0x11, 0x51, 0x34, 0xab, 0xdc, 0x22, 0x41, 0x87, 0x47, 0xc0,
-	0x2c, 0xcc, 0x3c, 0x4a, 0x1c, 0x0b, 0x3b, 0x2d, 0xbf, 0x3d, 0x28, 0xf1, 0x69, 0x19, 0x8f, 0x77,
-	0xd0, 0xd7, 0x89, 0xcc, 0x4f, 0x11, 0x4e, 0xb3, 0xca, 0x0d, 0xb5, 0xcb, 0x88, 0x77, 0x19, 0x72,
-	0xd7, 0xa0, 0xb6, 0xff, 0x72, 0x74, 0xfe, 0x33, 0x2d, 0xdc, 0x61, 0x3e, 0x81, 0xc2, 0xe5, 0x2d,
-	0x80, 0x0d, 0xb7, 0x50, 0x13, 0x3e, 0x97, 0x36, 0x8c, 0x52, 0xa1, 0x5c, 0x33, 0xec, 0x4a, 0xad,
-	0x64, 0xb8, 0xc5, 0x52, 0xa5, 0x56, 0x29, 0xe0, 0x52, 0xad, 0x24, 0x32, 0x6a, 0xad, 0x0b, 0xfc,
-	0x66, 0x95, 0x5f, 0x8b, 0xf1, 0xb7, 0x25, 0xfc, 0xb6, 0x40, 0x4f, 0x2a, 0x7c, 0x67, 0x16, 0x4d,
-	0x13, 0xd9, 0xa3, 0x72, 0xdf, 0x40, 0xab, 0x26, 0xbc, 0xd1, 0x26, 0xac, 0x17, 0x46, 0xaa, 0x19,
-	0x47, 0xd0, 0xba, 0xdf, 0x0b, 0x41, 0x34, 0x3c, 0xd7, 0x87, 0xc0, 0xb1, 0x42, 0x1c, 0xed, 0xaa,
-	0x7e, 0x9c, 0x91, 0x9a, 0x3b, 0x38, 0xda, 0x1d, 0xed, 0xd7, 0x67, 0x46, 0xfb, 0x75, 0xee, 0x5b,
-	0x68, 0x65, 0x04, 0x9a, 0x4b, 0xdc, 0x6b, 0x68, 0xca, 0x8f, 0xa0, 0xc5, 0xf5, 0xf4, 0xda, 0xc4,
-	0xd5, 0xb9, 0x82, 0x91, 0x1f, 0x77, 0xe1, 0xe4, 0xff, 0x87, 0x57, 0x66, 0xbc, 0x37, 0xf7, 0x3a,
-	0x5a, 0x54, 0x2d, 0xfb, 0x5e, 0xd0, 0xf1, 0xe4, 0x05, 0xb2, 0x82, 0xa6, 0xba, 0x38, 0xe8, 0x24,
-	0x57, 0x47, 0x2c, 0x68, 0x2f, 0xa2, 0x69, 0x07, 0x43, 0x8b, 0xb6, 0x95, 0x87, 0x4a, 0xca, 0xfd,
-	0x63, 0x0a, 0x2d, 0x0f, 0x21, 0xa8, 0x96, 0xfd, 0x45, 0x34, 0x25, 0xcb, 0x45, 0xf5, 0xe5, 0x73,
-	0xfb, 0x7d, 0x7d, 0x51, 0xa9, 0x34, 0x55, 0x07, 0x8d, 0x94, 0xa9, 0x14, 0x5f, 0x42, 0xd3, 0x84,
-	0xb6, 0x5d, 0xdf, 0x53, 0x0d, 0x51, 0xdb, 0xef, 0xeb, 0x67, 0x13, 0x9d, 0x26, 0x5f, 0x5e, 0x23,
-	0x65, 0x26, 0xf2, 0x15, 0x34, 0xe9, 0xe0, 0x08, 0xab, 0xc6, 0xb3, 0xb4, 0xdf, 0xd7, 0xe7, 0x63,
-	0x8d, 0x36, 0x69, 0xd3, 0x20, 0x6a, 0xa4, 0xcc, 0x58, 0xda, 0x41, 0xf3, 0x7e, 0xdb, 0x65, 0x58,
-	0x5c, 0x93, 0x40, 0x22, 0x55, 0xd2, 0x17, 0xf6, 0xfb, 0xba, 0x7e, 0x7c, 0x45, 0x9b, 0x95, 0x0f,
-	0xcd, 0xc8, 0x6f, 0xa4, 0xcc, 0xe3, 0x2b, 0x97, 0xd1, 0x44, 0xb3, 0xc5, 0x55, 0x25, 0xc5, 0x54,
-	0x42, 0xa1, 0x4d, 0x35, 0xa1, 0x17, 0x0a, 0xa7, 0xa4, 0x74, 0x09, 0x9d, 0x69, 0x05, 0x2a, 0x3d,
-	0x97, 0xf7, 0xfb, 0xfa, 0x82, 0x90, 0xb5, 0x19, 0x2c, 0xb2, 0xc6, 0x7f, 0xd4, 0x48, 0x99, 0x42,
-	0xcc, 0xa3, 0x19, 0x1a, 0x02, 0xc3, 0x11, 0xe8, 0x33, 0x43, 0x51, 0x26, 0x4a, 0x6d, 0xc2, 0x0f,
-	0xc3, 0x46, 0xca, 0x3c, 0x92, 0xcb, 0x68, 0x36, 0xbe, 0xb5, 0x80, 0xe9, 0xb3, 0x72, 0xc3, 0xea,
-	0x7e, 0x5f, 0x3f, 0x37, 0xd0, 0x6a, 0x49, 0x3e, 0x37, 0x52, 0xe6, 0x40, 0x79, 0x17, 0x2d, 0x73,
-	0xf9, 0xa2, 0xad, 0x16, 0x6e, 0x63, 0x0f, 0x44, 0x49, 0xeb, 0x19, 0xb9, 0x3f, 0xb7, 0xdf, 0xd7,
-	0xb3, 0x63, 0x96, 0xb5, 0x8c, 0x1d, 0xf8, 0x6d, 0xc7, 0xa5, 0x81, 0x48, 0xfa, 0xa5, 0x78, 0xfd,
-	0xd6, 0x60, 0x79, 0x0b, 0x65, 0x8e, 0xaa, 0x5f, 0x47, 0x43, 0xae, 0x0c, 0xd4, 0xda, 0x74, 0xb7,
-	0x13, 0x84, 0x32, 0xd6, 0x21, 0xe5, 0xab, 0x68, 0x22, 0x0a, 0x5b, 0xfa, 0x9c, 0xdc, 0xf2, 0xc2,
-	0x7e, 0x5f, 0x5f, 0x96, 0x0a, 0x0d, 0x45, 0x61, 0x2b, 0xa6, 0x97, 0x47, 0x28, 0x54, 0x97, 0xd0,
-	0x44, 0x07, 0xb7, 0xf4, 0x79, 0x69, 0xba, 0xb8, 0xdf, 0xd7, 0xe7, 0xa4, 0x42, 0x9b, 0x84, 0xde,
-	0x9e, 0xc8, 0x14, 0x29, 0x5c, 0x42, 0x13, 0x7b, 0x60, 0xeb, 0x0b, 0xc3, 0x46, 0x7b, 0x60, 0x0f,
-	0x8c, 0x84, 0x50, 0x43, 0x19, 0x07, 0x44, 0x36, 0x8a, 0xe9, 0xe6, 0xac, 0x34, 0x3d, 0xbf, 0xdf,
-	0xd7, 0x5f, 0x1c, 0x52, 0x6b, 0x83, 0x47, 0x71, 0x76, 0xb1, 0x70, 0x7d, 0xb8, 0x9a, 0xaf, 0xa1,
-	0x39, 0x95, 0xd3, 0xb2, 0x22, 0x06, 0xb9, 0x9f, 0x1e, 0xce, 0x7d, 0xed, 0x02, 0xca, 0x04, 0x94,
-	0x60, 0x39, 0xf5, 0xe9, 0x67, 0xe4, 0x94, 0x33, 0x50, 0xe4, 0x6e, 0xa3, 0x8c, 0xa8, 0xdf, 0xfb,
-	0xf4, 0x81, 0xef, 0x68, 0x1a, 0x9a, 0x1c, 0x1a, 0xc7, 0xe4, 0xb3, 0xb6, 0x84, 0x26, 0x3a, 0x6a,
-	0x04, 0xcb, 0x98, 0xe2, 0x51, 0x00, 0x8a, 0x15, 0x1e, 0x62, 0x02, 0x32, 0xc1, 0x33, 0xe6, 0x40,
-	0x91, 0xfb, 0x2a, 0x5a, 0xb9, 0xdb, 0xa1, 0x11, 0x36, 0x81, 0xd3, 0x0e, 0x23, 0x70, 0x13, 0x7a,
-	0xff, 0x47, 0xc1, 0xde, 0x45, 0x8b, 0xe2, 0x42, 0x84, 0xfb, 0x98, 0x79, 0x6a, 0x64, 0x3c, 0x06,
-	0x30, 0x95, 0x00, 0x5c, 0x45, 0x4b, 0x2e, 0x65, 0x16, 0xb5, 0x1f, 0x02, 0x89, 0xac, 0xa8, 0x17,
-	0x02, 0x57, 0x50, 0x67, 0x5d, 0xca, 0x6e, 0x4b, 0xb5, 0x68, 0x25, 0x3c, 0xf7, 0x36, 0x3a, 0xb7,
-	0x7d, 0xe7, 0xfa, 0x5b, 0x8c, 0x76, 0xc2, 0x37, 0x02, 0x99, 0x34, 0xa2, 0xcd, 0x08, 0x0f, 0x5a,
-	0x10, 0xed, 0x52, 0x27, 0x39, 0xb6, 0x58, 0x92, 0x13, 0x20, 0x8e, 0x76, 0xc5, 0x14, 0x07, 0x8f,
-	0x14, 0x64, 0x46, 0x68, 0x4c, 0xa1, 0xc8, 0x3d, 0x4e, 0x3f, 0x0d, 0x27, 0xbc, 0x1c, 0x77, 0x84,
-	0xaf, 0x27, 0x3d, 0xf0, 0x8c, 0xec, 0x81, 0xaf, 0x8e, 0xef, 0x81, 0x63, 0x9c, 0x53, 0xfd, 0xef,
-	0x84, 0x13, 0x7f, 0x67, 0xe0, 0x89, 0x78, 0x95, 0xb7, 0x70, 0x28, 0x03, 0xfb, 0x1c, 0x9a, 0x65,
-	0x21, 0x19, 0x9e, 0xaf, 0x67, 0x58, 0x48, 0xe4, 0x70, 0x7d, 0x05, 0x2d, 0x8a, 0x19, 0xc2, 0x13,
-	0x5b, 0xa4, 0x41, 0x72, 0x66, 0x0b, 0x38, 0xf4, 0x8f, 0x80, 0x78, 0xce, 0x42, 0x8b, 0x23, 0xc8,
-	0xda, 0xdb, 0x68, 0x5e, 0xa0, 0xb6, 0x70, 0x18, 0xfa, 0x6d, 0x2f, 0x69, 0xeb, 0x27, 0x84, 0x34,
-	0xe4, 0x96, 0x39, 0xc7, 0x42, 0x72, 0x4b, 0xed, 0xae, 0x3f, 0x44, 0x0b, 0xbc, 0x4b, 0x2c, 0x1e,
-	0x74, 0x3c, 0xcb, 0x17, 0xc7, 0xf7, 0x72, 0x3e, 0xfe, 0x96, 0xc8, 0x27, 0xdf, 0x12, 0xf9, 0x37,
-	0xc5, 0x1d, 0x74, 0x3b, 0xfe, 0x68, 0xd1, 0x3f, 0xf8, 0xb1, 0x88, 0x7e, 0xae, 0xf0, 0xca, 0x78,
-	0xbe, 0x91, 0x4b, 0xc2, 0x9c, 0xe3, 0x5d, 0x92, 0x08, 0x75, 0x8e, 0x16, 0xbf, 0x2b, 0x12, 0xd3,
-	0x62, 0x4d, 0xe8, 0x9d, 0x8a, 0xed, 0x43, 0xc5, 0xf6, 0xda, 0x78, 0xb6, 0x71, 0x69, 0x6e, 0x2e,
-	0x48, 0x0e, 0xb3, 0x19, 0x8b, 0x75, 0x1f, 0x9d, 0xb5, 0x5d, 0x4b, 0x75, 0xb3, 0xd3, 0x70, 0xfe,
-	0x5a, 0x71, 0xe6, 0xc6, 0x73, 0x0e, 0x7f, 0x44, 0x99, 0xf3, 0xb6, 0x3b, 0x90, 0xea, 0xdf, 0x46,
-	0xb3, 0xe2, 0x2c, 0x4f, 0x43, 0xf2, 0x1b, 0x45, 0xf2, 0xf9, 0x67, 0x1e, 0xa3, 0xe4, 0x98, 0xe1,
-	0x5d, 0x22, 0xe1, 0xbf, 0x83, 0xe6, 0x44, 0xa6, 0x58, 0x11, 0x15, 0x9f, 0x44, 0x27, 0x31, 0xfc,
-	0x56, 0x31, 0x5c, 0x1c, 0xcf, 0x70, 0xd4, 0x72, 0xe2, 0x3c, 0x96, 0x8f, 0x75, 0x86, 0x96, 0xc5,
-	0x90, 0x0d, 0x56, 0x24, 0x8b, 0xfe, 0x54, 0x91, 0xfc, 0xee, 0xd9, 0x09, 0x31, 0xd2, 0x43, 0xcc,
-	0x45, 0x76, 0x5c, 0x51, 0xff, 0x61, 0x1a, 0xe9, 0x84, 0x75, 0x9c, 0xe4, 0x3b, 0x31, 0x4e, 0xc5,
-	0xb8, 0xc1, 0x6a, 0x17, 0x9f, 0xe2, 0xbe, 0x05, 0x9c, 0x63, 0x0f, 0x12, 0xf6, 0x9f, 0x3d, 0x8e,
-	0xd9, 0xbf, 0x70, 0x62, 0x3a, 0xc6, 0x13, 0x87, 0xf9, 0x82, 0xe0, 0x7a, 0x4a, 0x5d, 0x7f, 0x07,
-	0xad, 0x4a, 0x27, 0x06, 0x45, 0x19, 0x32, 0x70, 0xfd, 0x47, 0xc0, 0x4f, 0xf6, 0xe1, 0xe7, 0x8f,
-	0xe3, 0x86, 0xb0, 0x22, 0x10, 0xb6, 0x55, 0xf9, 0xde, 0x51, 0xdb, 0xeb, 0x3d, 0xb4, 0x32, 0x82,
-	0x2c, 0xcb, 0xfd, 0x64, 0xd8, 0x5f, 0x3c, 0x7e, 0xe6, 0xc1, 0x8e, 0x54, 0xb6, 0xb9, 0x3c, 0xcc,
-	0x2e, 0x9b, 0x47, 0xfd, 0x3d, 0xa4, 0x31, 0xb0, 0x20, 0x9e, 0xeb, 0x54, 0x09, 0x9c, 0x82, 0xf8,
-	0x97, 0x8f, 0x9f, 0x59, 0x74, 0xe3, 0x86, 0x4c, 0x73, 0x89, 0x8d, 0x68, 0xeb, 0x8d, 0xa7, 0x3a,
-	0x9c, 0x96, 0x1d, 0xc3, 0x2c, 0x3a, 0x7d, 0x42, 0xfc, 0x6f, 0x75, 0x90, 0xc7, 0x7b, 0x60, 0xfd,
-	0xfd, 0x34, 0x7a, 0x71, 0x00, 0x05, 0x71, 0x73, 0x8e, 0x73, 0xf3, 0x24, 0xc4, 0xff, 0xa8, 0x50,
-	0x4e, 0xd9, 0xf0, 0x45, 0x82, 0x9e, 0x4b, 0xc8, 0x87, 0x94, 0xf5, 0x77, 0xd1, 0xb9, 0xd3, 0xa5,
-	0xa7, 0xca, 0xac, 0x84, 0xff, 0xd3, 0x9f, 0x3c, 0x67, 0x7a, 0x2e, 0xf3, 0x51, 0xd5, 0xce, 0xa3,
-	0x8f, 0x9f, 0x64, 0x53, 0x9f, 0x3c, 0xc9, 0xa6, 0x3e, 0x7b, 0x92, 0x4d, 0xbf, 0x7f, 0x98, 0x4d,
-	0xff, 0xea, 0x30, 0x9b, 0xfe, 0xeb, 0x61, 0x36, 0xfd, 0xf1, 0x61, 0x36, 0xfd, 0xe9, 0x61, 0x36,
-	0xfd, 0xaf, 0xc3, 0x6c, 0xea, 0xb3, 0xc3, 0x6c, 0xfa, 0xa7, 0xff, 0xcc, 0xa6, 0xbe, 0x79, 0xc3,
-	0xa3, 0x61, 0xd3, 0xcb, 0x77, 0x69, 0x20, 0x07, 0xac, 0x7c, 0x87, 0xaf, 0x0f, 0xbe, 0xc9, 0x42,
-	0x46, 0xbb, 0xbe, 0x03, 0xcc, 0x48, 0x96, 0xd7, 0x43, 0xdb, 0xa3, 0xeb, 0xf0, 0x28, 0x52, 0xff,
-	0x50, 0x1d, 0xfb, 0xa3, 0xca, 0x9e, 0x96, 0x61, 0x15, 0xff, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x99,
-	0x80, 0x04, 0x1e, 0xc7, 0x12, 0x00, 0x00,
-}

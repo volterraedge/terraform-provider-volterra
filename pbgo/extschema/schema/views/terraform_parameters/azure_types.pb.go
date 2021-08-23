@@ -3,30 +3,33 @@
 
 package terraform_parameters
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import ves_io_schema_certified_hardware "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	certified_hardware "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Azure Terraform Instance Parameters
 //
@@ -67,7 +70,7 @@ type AzureInstanceType struct {
 	//
 	// x-displayName: " Azure Image Parameters"
 	// Azure Image parameters
-	Marketplace *ves_io_schema_certified_hardware.Marketplace `protobuf:"bytes,9,opt,name=marketplace" json:"marketplace,omitempty"`
+	Marketplace *certified_hardware.Marketplace `protobuf:"bytes,9,opt,name=marketplace,proto3" json:"marketplace,omitempty"`
 	// Cloud Instance AZ
 	//
 	// x-displayName: "Cloud Instance Az"
@@ -80,9 +83,33 @@ type AzureInstanceType struct {
 	NodeCount int32 `protobuf:"varint,11,opt,name=node_count,json=nodeCount,proto3" json:"node_count,omitempty"`
 }
 
-func (m *AzureInstanceType) Reset()                    { *m = AzureInstanceType{} }
-func (*AzureInstanceType) ProtoMessage()               {}
-func (*AzureInstanceType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{0} }
+func (m *AzureInstanceType) Reset()      { *m = AzureInstanceType{} }
+func (*AzureInstanceType) ProtoMessage() {}
+func (*AzureInstanceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{0}
+}
+func (m *AzureInstanceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureInstanceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureInstanceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureInstanceType.Merge(m, src)
+}
+func (m *AzureInstanceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureInstanceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureInstanceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureInstanceType proto.InternalMessageInfo
 
 func (m *AzureInstanceType) GetVoltNodeId() string {
 	if m != nil {
@@ -126,7 +153,7 @@ func (m *AzureInstanceType) GetDiskSize() string {
 	return ""
 }
 
-func (m *AzureInstanceType) GetMarketplace() *ves_io_schema_certified_hardware.Marketplace {
+func (m *AzureInstanceType) GetMarketplace() *certified_hardware.Marketplace {
 	if m != nil {
 		return m.Marketplace
 	}
@@ -171,9 +198,33 @@ type AzureSubnetParamType struct {
 	Ipv6 string `protobuf:"bytes,3,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
 }
 
-func (m *AzureSubnetParamType) Reset()                    { *m = AzureSubnetParamType{} }
-func (*AzureSubnetParamType) ProtoMessage()               {}
-func (*AzureSubnetParamType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{1} }
+func (m *AzureSubnetParamType) Reset()      { *m = AzureSubnetParamType{} }
+func (*AzureSubnetParamType) ProtoMessage() {}
+func (*AzureSubnetParamType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{1}
+}
+func (m *AzureSubnetParamType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureSubnetParamType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureSubnetParamType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureSubnetParamType.Merge(m, src)
+}
+func (m *AzureSubnetParamType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureSubnetParamType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureSubnetParamType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureSubnetParamType proto.InternalMessageInfo
 
 func (m *AzureSubnetParamType) GetResourceGroup() string {
 	if m != nil {
@@ -216,8 +267,30 @@ type AzureExistingSubnetParamType struct {
 func (m *AzureExistingSubnetParamType) Reset()      { *m = AzureExistingSubnetParamType{} }
 func (*AzureExistingSubnetParamType) ProtoMessage() {}
 func (*AzureExistingSubnetParamType) Descriptor() ([]byte, []int) {
-	return fileDescriptorAzureTypes, []int{2}
+	return fileDescriptor_cfa180cd722a5ccd, []int{2}
 }
+func (m *AzureExistingSubnetParamType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureExistingSubnetParamType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureExistingSubnetParamType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureExistingSubnetParamType.Merge(m, src)
+}
+func (m *AzureExistingSubnetParamType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureExistingSubnetParamType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureExistingSubnetParamType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureExistingSubnetParamType proto.InternalMessageInfo
 
 func (m *AzureExistingSubnetParamType) GetSubnetName() string {
 	if m != nil {
@@ -242,17 +315,41 @@ type AzureSubnetChoice struct {
 	//
 	// x-displayName: "New Subnet"
 	// Parameters for creating new subnet
-	SubnetParam *AzureSubnetParamType `protobuf:"bytes,1,opt,name=subnet_param,json=subnetParam" json:"subnet_param,omitempty"`
+	SubnetParam *AzureSubnetParamType `protobuf:"bytes,1,opt,name=subnet_param,json=subnetParam,proto3" json:"subnet_param,omitempty"`
 	// Existing Subnet Name
 	//
 	// x-displayName: "Existing Subnet Name"
 	// Information about existing subnet
-	ExistingSubnet *AzureExistingSubnetParamType `protobuf:"bytes,3,opt,name=existing_subnet,json=existingSubnet" json:"existing_subnet,omitempty"`
+	ExistingSubnet *AzureExistingSubnetParamType `protobuf:"bytes,3,opt,name=existing_subnet,json=existingSubnet,proto3" json:"existing_subnet,omitempty"`
 }
 
-func (m *AzureSubnetChoice) Reset()                    { *m = AzureSubnetChoice{} }
-func (*AzureSubnetChoice) ProtoMessage()               {}
-func (*AzureSubnetChoice) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{3} }
+func (m *AzureSubnetChoice) Reset()      { *m = AzureSubnetChoice{} }
+func (*AzureSubnetChoice) ProtoMessage() {}
+func (*AzureSubnetChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{3}
+}
+func (m *AzureSubnetChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureSubnetChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureSubnetChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureSubnetChoice.Merge(m, src)
+}
+func (m *AzureSubnetChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureSubnetChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureSubnetChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureSubnetChoice proto.InternalMessageInfo
 
 func (m *AzureSubnetChoice) GetSubnetParam() *AzureSubnetParamType {
 	if m != nil {
@@ -287,7 +384,7 @@ type AzureSubnetType struct {
 	//
 	// x-displayName: "Subnet Parameters"
 	// Subnet parameters for existing subnet or new subnet
-	Subnet *AzureSubnetChoice `protobuf:"bytes,4,opt,name=subnet" json:"subnet,omitempty"`
+	Subnet *AzureSubnetChoice `protobuf:"bytes,4,opt,name=subnet,proto3" json:"subnet,omitempty"`
 	// Interface Type
 	//
 	// x-displayName: "Interface Type"
@@ -295,9 +392,33 @@ type AzureSubnetType struct {
 	InterfaceType InterfaceType `protobuf:"varint,5,opt,name=interface_type,json=interfaceType,proto3,enum=ves.io.schema.views.terraform_parameters.InterfaceType" json:"interface_type,omitempty"`
 }
 
-func (m *AzureSubnetType) Reset()                    { *m = AzureSubnetType{} }
-func (*AzureSubnetType) ProtoMessage()               {}
-func (*AzureSubnetType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{4} }
+func (m *AzureSubnetType) Reset()      { *m = AzureSubnetType{} }
+func (*AzureSubnetType) ProtoMessage() {}
+func (*AzureSubnetType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{4}
+}
+func (m *AzureSubnetType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureSubnetType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureSubnetType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureSubnetType.Merge(m, src)
+}
+func (m *AzureSubnetType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureSubnetType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureSubnetType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureSubnetType proto.InternalMessageInfo
 
 func (m *AzureSubnetType) GetVoltSubnetId() string {
 	if m != nil {
@@ -351,9 +472,33 @@ type AzureVnetParamsType struct {
 	PrimaryIpv4 string `protobuf:"bytes,3,opt,name=primary_ipv4,json=primaryIpv4,proto3" json:"primary_ipv4,omitempty"`
 }
 
-func (m *AzureVnetParamsType) Reset()                    { *m = AzureVnetParamsType{} }
-func (*AzureVnetParamsType) ProtoMessage()               {}
-func (*AzureVnetParamsType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{5} }
+func (m *AzureVnetParamsType) Reset()      { *m = AzureVnetParamsType{} }
+func (*AzureVnetParamsType) ProtoMessage() {}
+func (*AzureVnetParamsType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{5}
+}
+func (m *AzureVnetParamsType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVnetParamsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVnetParamsType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVnetParamsType.Merge(m, src)
+}
+func (m *AzureVnetParamsType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVnetParamsType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVnetParamsType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureVnetParamsType proto.InternalMessageInfo
 
 func (m *AzureVnetParamsType) GetResourceGroup() string {
 	if m != nil {
@@ -385,26 +530,50 @@ type AzureVnetInfoType struct {
 	//
 	// x-displayName: "New Vnet Parameters"
 	// Parameters for creating new Vnet
-	NewVnet *ves_io_schema_views1.AzureVnetParamsType `protobuf:"bytes,1,opt,name=new_vnet,json=newVnet" json:"new_vnet,omitempty"`
+	NewVnet *views.AzureVnetParamsType `protobuf:"bytes,1,opt,name=new_vnet,json=newVnet,proto3" json:"new_vnet,omitempty"`
 	// Existing Vnet
 	//
 	// x-displayName: "Existing Vnet"
 	// Information about existing Vnet
-	Vnet *ves_io_schema_views1.AzureVnetType `protobuf:"bytes,2,opt,name=vnet" json:"vnet,omitempty"`
+	Vnet *views.AzureVnetType `protobuf:"bytes,2,opt,name=vnet,proto3" json:"vnet,omitempty"`
 }
 
-func (m *AzureVnetInfoType) Reset()                    { *m = AzureVnetInfoType{} }
-func (*AzureVnetInfoType) ProtoMessage()               {}
-func (*AzureVnetInfoType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{6} }
+func (m *AzureVnetInfoType) Reset()      { *m = AzureVnetInfoType{} }
+func (*AzureVnetInfoType) ProtoMessage() {}
+func (*AzureVnetInfoType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{6}
+}
+func (m *AzureVnetInfoType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVnetInfoType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVnetInfoType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVnetInfoType.Merge(m, src)
+}
+func (m *AzureVnetInfoType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVnetInfoType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVnetInfoType.DiscardUnknown(m)
+}
 
-func (m *AzureVnetInfoType) GetNewVnet() *ves_io_schema_views1.AzureVnetParamsType {
+var xxx_messageInfo_AzureVnetInfoType proto.InternalMessageInfo
+
+func (m *AzureVnetInfoType) GetNewVnet() *views.AzureVnetParamsType {
 	if m != nil {
 		return m.NewVnet
 	}
 	return nil
 }
 
-func (m *AzureVnetInfoType) GetVnet() *ves_io_schema_views1.AzureVnetType {
+func (m *AzureVnetInfoType) GetVnet() *views.AzureVnetType {
 	if m != nil {
 		return m.Vnet
 	}
@@ -438,8 +607,30 @@ type AvailabilitySetsInfoType struct {
 func (m *AvailabilitySetsInfoType) Reset()      { *m = AvailabilitySetsInfoType{} }
 func (*AvailabilitySetsInfoType) ProtoMessage() {}
 func (*AvailabilitySetsInfoType) Descriptor() ([]byte, []int) {
-	return fileDescriptorAzureTypes, []int{7}
+	return fileDescriptor_cfa180cd722a5ccd, []int{7}
 }
+func (m *AvailabilitySetsInfoType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AvailabilitySetsInfoType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AvailabilitySetsInfoType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AvailabilitySetsInfoType.Merge(m, src)
+}
+func (m *AvailabilitySetsInfoType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AvailabilitySetsInfoType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AvailabilitySetsInfoType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AvailabilitySetsInfoType proto.InternalMessageInfo
 
 func (m *AvailabilitySetsInfoType) GetEnable() string {
 	if m != nil {
@@ -506,27 +697,27 @@ type AzureVnetSiteType struct {
 	//
 	// x-displayName: "Vnet"
 	// Vnet parameters to instantiate this site
-	Vnet *AzureVnetInfoType `protobuf:"bytes,7,opt,name=vnet" json:"vnet,omitempty"`
+	Vnet *AzureVnetInfoType `protobuf:"bytes,7,opt,name=vnet,proto3" json:"vnet,omitempty"`
 	// List of Subnets
 	//
 	// x-displayName: "List of Subnets"
 	// List of Subnets that TF script needs
-	Subnets []*AzureSubnetType `protobuf:"bytes,8,rep,name=subnets" json:"subnets,omitempty"`
+	Subnets []*AzureSubnetType `protobuf:"bytes,8,rep,name=subnets,proto3" json:"subnets,omitempty"`
 	// List of Master Nodes
 	//
 	// x-displayName: "List of Master Nodes"
 	// List of Master Nodes in this Site that TF script needs to instantiate
-	MasterNodes []*AzureInstanceType `protobuf:"bytes,9,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
+	MasterNodes []*AzureInstanceType `protobuf:"bytes,9,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
 	// List of Inside VIP Port Config
 	//
 	// x-displayName: "List of Inside VIP Port Config"
 	// List of Ports which will be used to create cloud loadbalancer listener
-	InsideVipPortConfig []*VIPPortConfig `protobuf:"bytes,16,rep,name=inside_vip_port_config,json=insideVipPortConfig" json:"inside_vip_port_config,omitempty"`
+	InsideVipPortConfig []*VIPPortConfig `protobuf:"bytes,16,rep,name=inside_vip_port_config,json=insideVipPortConfig,proto3" json:"inside_vip_port_config,omitempty"`
 	// List of Outside VIP Port Config
 	//
 	// x-displayName: "List of Outside VIP Port Config"
 	// List of Ports which will be used to create cloud loadbalancer listener
-	OutsideVipPortConfig []*VIPPortConfig `protobuf:"bytes,17,rep,name=outside_vip_port_config,json=outsideVipPortConfig" json:"outside_vip_port_config,omitempty"`
+	OutsideVipPortConfig []*VIPPortConfig `protobuf:"bytes,17,rep,name=outside_vip_port_config,json=outsideVipPortConfig,proto3" json:"outside_vip_port_config,omitempty"`
 	// Worker Node Scaling
 	//
 	// x-displayName: "Worker Node Scaling"
@@ -546,12 +737,36 @@ type AzureVnetSiteType struct {
 	//
 	// x-displayName: "Availability Sets Information"
 	// Provides information related to availability sets
-	AvailabilitySet *AvailabilitySetsInfoType `protobuf:"bytes,18,opt,name=availability_set,json=availabilitySet" json:"availability_set,omitempty"`
+	AvailabilitySet *AvailabilitySetsInfoType `protobuf:"bytes,18,opt,name=availability_set,json=availabilitySet,proto3" json:"availability_set,omitempty"`
 }
 
-func (m *AzureVnetSiteType) Reset()                    { *m = AzureVnetSiteType{} }
-func (*AzureVnetSiteType) ProtoMessage()               {}
-func (*AzureVnetSiteType) Descriptor() ([]byte, []int) { return fileDescriptorAzureTypes, []int{8} }
+func (m *AzureVnetSiteType) Reset()      { *m = AzureVnetSiteType{} }
+func (*AzureVnetSiteType) ProtoMessage() {}
+func (*AzureVnetSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cfa180cd722a5ccd, []int{8}
+}
+func (m *AzureVnetSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVnetSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVnetSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVnetSiteType.Merge(m, src)
+}
+func (m *AzureVnetSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVnetSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVnetSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureVnetSiteType proto.InternalMessageInfo
 
 func (m *AzureVnetSiteType) GetSiteName() string {
 	if m != nil {
@@ -685,6 +900,102 @@ func init() {
 	proto.RegisterType((*AzureVnetSiteType)(nil), "ves.io.schema.views.terraform_parameters.AzureVnetSiteType")
 	golang_proto.RegisterType((*AzureVnetSiteType)(nil), "ves.io.schema.views.terraform_parameters.AzureVnetSiteType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/terraform_parameters/azure_types.proto", fileDescriptor_cfa180cd722a5ccd)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/terraform_parameters/azure_types.proto", fileDescriptor_cfa180cd722a5ccd)
+}
+
+var fileDescriptor_cfa180cd722a5ccd = []byte{
+	// 1334 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x56, 0x41, 0x6f, 0xdb, 0xc6,
+	0x12, 0x16, 0x25, 0xd9, 0x96, 0x96, 0x92, 0x2c, 0x33, 0xc6, 0x0b, 0xe3, 0x24, 0x8c, 0x23, 0xe4,
+	0x20, 0x04, 0xb1, 0xf4, 0x9e, 0x5f, 0x90, 0x20, 0x79, 0xc0, 0x43, 0x63, 0xb7, 0x4d, 0xe5, 0xb6,
+	0x49, 0x40, 0x17, 0x3e, 0x14, 0x68, 0x88, 0x95, 0xb8, 0xa2, 0x16, 0xa6, 0xb8, 0xc4, 0x72, 0x29,
+	0x45, 0x3e, 0xe5, 0x27, 0xe4, 0xd0, 0x63, 0x7b, 0xef, 0x6f, 0x68, 0x7b, 0xc8, 0xb1, 0xc7, 0x1c,
+	0x73, 0x6c, 0xe4, 0x4b, 0x7b, 0x28, 0x90, 0x63, 0x7a, 0x2b, 0x38, 0xbb, 0x92, 0xa8, 0x44, 0x69,
+	0x6c, 0xf7, 0x46, 0x7e, 0xf3, 0xcd, 0xec, 0xec, 0xb7, 0x33, 0xb3, 0x8b, 0xee, 0x0e, 0x48, 0xd4,
+	0xa0, 0xac, 0x19, 0x75, 0x7a, 0xa4, 0x8f, 0x9b, 0x03, 0x4a, 0x86, 0x51, 0x53, 0x10, 0xce, 0x71,
+	0x97, 0xf1, 0xbe, 0x13, 0x62, 0x8e, 0xfb, 0x44, 0x10, 0x1e, 0x35, 0xf1, 0x51, 0xcc, 0x89, 0x23,
+	0x46, 0x21, 0x89, 0x1a, 0x21, 0x67, 0x82, 0x19, 0x75, 0xe9, 0xdb, 0x90, 0xbe, 0x0d, 0xf0, 0x6d,
+	0x2c, 0xf2, 0xdd, 0xd8, 0xf2, 0xa8, 0xe8, 0xc5, 0xed, 0x46, 0x87, 0xf5, 0x9b, 0x1e, 0xf3, 0x58,
+	0x13, 0x02, 0xb4, 0xe3, 0x2e, 0xfc, 0xc1, 0x0f, 0x7c, 0xc9, 0xc0, 0x1b, 0x17, 0x3c, 0xc6, 0x3c,
+	0x9f, 0xcc, 0x58, 0x38, 0x18, 0x29, 0xd3, 0x8d, 0xf9, 0x7c, 0x3b, 0x84, 0x0b, 0xda, 0xa5, 0xc4,
+	0x75, 0x7a, 0x98, 0xbb, 0x43, 0xcc, 0x49, 0x33, 0x95, 0xe1, 0xc6, 0xc5, 0x79, 0x36, 0x0b, 0x05,
+	0x65, 0xc1, 0xc4, 0x78, 0x61, 0xde, 0x98, 0xf6, 0xbb, 0xf4, 0x96, 0x2a, 0xd8, 0xa7, 0x2e, 0x16,
+	0x44, 0x59, 0x37, 0xdf, 0xd5, 0xcc, 0x99, 0x0f, 0x7d, 0x6d, 0x91, 0xaa, 0x11, 0x15, 0x73, 0xfa,
+	0x6d, 0xdc, 0x3c, 0xb1, 0xf6, 0x69, 0xaf, 0x2b, 0x0b, 0xbd, 0x66, 0x84, 0xda, 0x9f, 0x59, 0xb4,
+	0x76, 0x2f, 0x39, 0xac, 0x56, 0x10, 0x09, 0x1c, 0x74, 0xc8, 0x57, 0xa3, 0x90, 0x18, 0x9b, 0xa8,
+	0x34, 0x60, 0xbe, 0x70, 0x02, 0xe6, 0x12, 0x87, 0xba, 0xa6, 0xb6, 0xa9, 0xd5, 0x8b, 0x36, 0x4a,
+	0xb0, 0x07, 0xcc, 0x25, 0x2d, 0x77, 0xca, 0x18, 0x04, 0x44, 0x24, 0x8c, 0xdc, 0x8c, 0x71, 0x10,
+	0x10, 0xd1, 0x72, 0x8d, 0x3a, 0xaa, 0x86, 0x71, 0xdb, 0xa7, 0x1d, 0x27, 0x8a, 0xdb, 0x8a, 0x95,
+	0x07, 0x56, 0x45, 0xe2, 0xfb, 0x00, 0xb7, 0x5c, 0xe3, 0x3a, 0x5a, 0x0b, 0x39, 0x1d, 0x60, 0x41,
+	0x52, 0xd4, 0x25, 0xa0, 0xae, 0x2a, 0xc3, 0x94, 0x7b, 0x15, 0x95, 0xfa, 0xb8, 0xd3, 0xa3, 0x81,
+	0x54, 0xc7, 0x5c, 0x06, 0x9a, 0xae, 0x30, 0x48, 0xfe, 0x22, 0x2a, 0xba, 0x34, 0x3a, 0x74, 0x22,
+	0x7a, 0x44, 0xcc, 0x15, 0xb0, 0x17, 0x12, 0x60, 0x9f, 0x1e, 0x11, 0xe3, 0x21, 0xd2, 0xfb, 0x98,
+	0x1f, 0x12, 0x11, 0xfa, 0xb8, 0x43, 0xcc, 0xe2, 0xa6, 0x56, 0xd7, 0xb7, 0xb7, 0x1a, 0xf3, 0xc5,
+	0xf9, 0x6e, 0xa1, 0x34, 0xbe, 0x9c, 0x39, 0xd9, 0xe9, 0x08, 0x46, 0x05, 0x65, 0xf1, 0x91, 0x89,
+	0x60, 0x99, 0x2c, 0x3e, 0x32, 0x2e, 0x23, 0x04, 0xaa, 0x75, 0x58, 0x1c, 0x08, 0x53, 0xdf, 0xd4,
+	0xea, 0x4b, 0x76, 0x31, 0x41, 0x76, 0x13, 0x60, 0x2f, 0x5f, 0xc8, 0x56, 0x73, 0x7b, 0xf9, 0x42,
+	0xa1, 0x5a, 0xac, 0x3d, 0xd3, 0xd0, 0x3a, 0x68, 0x2f, 0x77, 0xf7, 0x28, 0x39, 0x42, 0xd8, 0xc1,
+	0xbf, 0x51, 0x85, 0x93, 0x88, 0xc5, 0xbc, 0x43, 0x1c, 0x8f, 0xb3, 0x38, 0x94, 0x07, 0xb0, 0x53,
+	0xfc, 0xf1, 0xf7, 0xe7, 0xb9, 0x3c, 0xcf, 0x9a, 0x1f, 0xd9, 0xe5, 0x09, 0xe1, 0x7e, 0x62, 0x37,
+	0x6a, 0x28, 0x4f, 0xc3, 0xc1, 0x4d, 0x33, 0x0b, 0xbc, 0xca, 0x9b, 0x9f, 0xb4, 0x4c, 0xc2, 0x5d,
+	0xe2, 0xb9, 0x37, 0x9a, 0x66, 0x83, 0x4d, 0x71, 0x6e, 0xc9, 0xa3, 0x9a, 0xe3, 0x3c, 0xcd, 0x4a,
+	0xce, 0xad, 0x1a, 0x43, 0x97, 0x20, 0xa3, 0x4f, 0x9e, 0xd0, 0x48, 0xd0, 0xc0, 0x7b, 0x3b, 0xb3,
+	0x2b, 0x48, 0x57, 0x47, 0x14, 0xe0, 0x3e, 0x99, 0xd4, 0x85, 0x84, 0x1e, 0xe0, 0x3e, 0x31, 0x1a,
+	0xe8, 0x9c, 0x22, 0xa4, 0x76, 0x10, 0xca, 0xbc, 0xec, 0x35, 0x69, 0xb2, 0xa7, 0xa9, 0x87, 0xb5,
+	0x3f, 0x34, 0x55, 0x7f, 0x72, 0xa5, 0xdd, 0x1e, 0xa3, 0x1d, 0x62, 0x60, 0x54, 0x52, 0x51, 0xa0,
+	0xae, 0x61, 0x1d, 0x7d, 0xfb, 0xff, 0x8d, 0x93, 0xce, 0x90, 0xc6, 0x22, 0x59, 0x6d, 0x95, 0x3a,
+	0x00, 0x06, 0x43, 0xab, 0x44, 0x6d, 0x52, 0x55, 0x1d, 0x08, 0xa3, 0x6f, 0x7f, 0x7a, 0xca, 0x55,
+	0xde, 0x23, 0x95, 0x5d, 0x21, 0x73, 0x06, 0x79, 0xf2, 0xb5, 0x6f, 0xb3, 0x68, 0x35, 0x95, 0x1c,
+	0x88, 0x7a, 0x0d, 0x55, 0xa0, 0x97, 0x66, 0xc5, 0x2f, 0x75, 0x85, 0x0e, 0x9b, 0x56, 0xfe, 0xdb,
+	0x1d, 0x97, 0x7d, 0xa7, 0xe3, 0xf6, 0xd1, 0xb2, 0xda, 0x49, 0x1e, 0x76, 0xf2, 0xbf, 0x33, 0xe9,
+	0x25, 0x8f, 0xc0, 0x56, 0xa1, 0x8c, 0xc7, 0xa8, 0x42, 0x03, 0x41, 0x78, 0x17, 0x77, 0x54, 0xcb,
+	0x25, 0x9d, 0x59, 0xd9, 0xbe, 0x7d, 0xf2, 0xe0, 0xad, 0x89, 0x3f, 0xe8, 0x52, 0xa6, 0xe9, 0xdf,
+	0xbd, 0x7c, 0x21, 0x57, 0xcd, 0xd7, 0xbe, 0xd7, 0xd0, 0x39, 0xc8, 0xe1, 0x60, 0xa2, 0x61, 0x74,
+	0xc6, 0x4e, 0xb8, 0x8a, 0xf2, 0x50, 0x9a, 0xb2, 0x13, 0xca, 0x93, 0x2a, 0x97, 0x5c, 0x30, 0x19,
+	0xff, 0x41, 0xa5, 0x90, 0xd3, 0x3e, 0xe6, 0x23, 0x07, 0x9a, 0x26, 0xb7, 0xb0, 0x69, 0x74, 0xc5,
+	0x69, 0x85, 0x83, 0x9b, 0x49, 0xab, 0xae, 0x4d, 0xf3, 0x6b, 0x05, 0x5d, 0x06, 0xd9, 0xed, 0xa2,
+	0x42, 0x40, 0x86, 0x70, 0x22, 0xaa, 0x44, 0xeb, 0x0b, 0x55, 0x59, 0xb0, 0x33, 0x7b, 0x25, 0x20,
+	0xc3, 0x04, 0x32, 0x6e, 0xa1, 0x3c, 0x04, 0xc8, 0x42, 0x80, 0xda, 0xdf, 0x07, 0x00, 0x57, 0xe0,
+	0xd7, 0x7e, 0xd6, 0x90, 0x79, 0x6f, 0x80, 0xa9, 0x8f, 0xdb, 0xd4, 0xa7, 0x62, 0xb4, 0x4f, 0x44,
+	0x34, 0xcd, 0xec, 0x06, 0x5a, 0x26, 0x01, 0x6e, 0xfb, 0xaa, 0x45, 0x77, 0xd6, 0x93, 0x8d, 0xad,
+	0xf2, 0xb2, 0x9d, 0x17, 0x3c, 0x26, 0xf6, 0x52, 0x17, 0xfb, 0x11, 0xb1, 0x15, 0xc7, 0xb8, 0x8d,
+	0xca, 0x5d, 0x1c, 0xfb, 0xc2, 0x71, 0x59, 0x1f, 0xd3, 0x20, 0x82, 0xfa, 0x29, 0xef, 0x18, 0x20,
+	0xdc, 0xf5, 0x6c, 0x5d, 0x53, 0x1f, 0x66, 0xce, 0x2e, 0x01, 0xf1, 0x63, 0xc9, 0x33, 0xee, 0xa0,
+	0x4a, 0x1c, 0x26, 0x97, 0xdd, 0xd4, 0x73, 0xe9, 0x3d, 0x9e, 0xeb, 0x76, 0x59, 0x32, 0x95, 0x6b,
+	0xed, 0x69, 0x21, 0xa5, 0xe8, 0x3e, 0x15, 0xd3, 0xd9, 0x0d, 0x37, 0x5f, 0x6a, 0xba, 0x14, 0x12,
+	0x00, 0x66, 0xcb, 0x65, 0x84, 0xe4, 0xbb, 0x02, 0xac, 0xab, 0x60, 0x2d, 0x02, 0x02, 0xe6, 0x0f,
+	0x37, 0xc8, 0x15, 0xa4, 0x77, 0x7d, 0x42, 0x84, 0xe3, 0xe3, 0x36, 0xf1, 0x27, 0x77, 0x16, 0x40,
+	0x5f, 0x24, 0x48, 0x72, 0xbb, 0xa4, 0x66, 0xff, 0x50, 0xdd, 0x57, 0xfa, 0x14, 0xfb, 0x6c, 0x98,
+	0x50, 0x64, 0x12, 0x9c, 0x78, 0x94, 0x05, 0xea, 0x9e, 0xd2, 0x01, 0xb3, 0x01, 0x32, 0x6e, 0x20,
+	0x63, 0x42, 0x49, 0x8d, 0x40, 0x79, 0x53, 0x55, 0x15, 0x71, 0x3a, 0x01, 0x8d, 0x87, 0xea, 0xfc,
+	0x57, 0xce, 0xd4, 0xb3, 0xe9, 0x7a, 0x94, 0x85, 0x61, 0xec, 0xa3, 0x15, 0xd9, 0xbb, 0x91, 0x59,
+	0xd8, 0xcc, 0xd5, 0xf5, 0xed, 0x3b, 0x67, 0x9a, 0x03, 0xb2, 0x4a, 0x55, 0x24, 0xe3, 0x71, 0x72,
+	0xef, 0x46, 0x82, 0x70, 0x78, 0x13, 0x44, 0x66, 0x11, 0x22, 0x9f, 0x36, 0xdb, 0xf4, 0x23, 0x23,
+	0xb9, 0x46, 0x93, 0x80, 0xc9, 0x83, 0x22, 0x32, 0x7c, 0xf4, 0x2f, 0x1a, 0x44, 0xd4, 0x25, 0xce,
+	0x80, 0x86, 0x4e, 0xc8, 0xb8, 0x70, 0x3a, 0x2c, 0xe8, 0x52, 0xcf, 0xac, 0xc2, 0x4a, 0xa7, 0x18,
+	0x37, 0x07, 0xad, 0x47, 0x8f, 0x18, 0x17, 0xbb, 0xe0, 0x6e, 0x9f, 0x93, 0x61, 0x0f, 0x68, 0x38,
+	0x03, 0x8d, 0x00, 0x9d, 0x67, 0xb1, 0x58, 0xb8, 0xdc, 0xda, 0x3f, 0x5b, 0x6e, 0x5d, 0xc5, 0x9d,
+	0x5f, 0xef, 0x2a, 0x2a, 0x0d, 0x19, 0x3f, 0x9c, 0xaa, 0x57, 0x49, 0xba, 0xc4, 0xd6, 0x25, 0x26,
+	0x05, 0xf8, 0x06, 0x95, 0x3c, 0x2c, 0xc8, 0x10, 0x8f, 0xe4, 0x94, 0xd5, 0x61, 0xca, 0xde, 0x3d,
+	0x79, 0x1e, 0xbb, 0x3e, 0x8b, 0xdd, 0xfb, 0x32, 0x84, 0xd4, 0xd7, 0x9b, 0xfd, 0x18, 0xe7, 0xd1,
+	0x4a, 0x14, 0xf5, 0x9c, 0x43, 0x32, 0x32, 0xcb, 0x50, 0x88, 0xcb, 0x51, 0xd4, 0xfb, 0x9c, 0x8c,
+	0x8c, 0x3e, 0xaa, 0xe2, 0xd4, 0x14, 0x71, 0x22, 0x22, 0x4c, 0x03, 0x4a, 0x71, 0xe7, 0x14, 0x87,
+	0xfb, 0x9e, 0x39, 0x64, 0xaf, 0xe2, 0x79, 0xcb, 0x5e, 0xbe, 0x80, 0xaa, 0xfa, 0x5e, 0xbe, 0x50,
+	0xaa, 0x96, 0x77, 0xbe, 0xd3, 0x5e, 0xbc, 0xb2, 0x32, 0x2f, 0x5f, 0x59, 0x99, 0xd7, 0xaf, 0x2c,
+	0xed, 0xe9, 0xd8, 0xd2, 0x7e, 0x18, 0x5b, 0xda, 0x2f, 0x63, 0x4b, 0x7b, 0x31, 0xb6, 0xb4, 0x97,
+	0x63, 0x4b, 0xfb, 0x75, 0x6c, 0x69, 0xbf, 0x8d, 0xad, 0xcc, 0xeb, 0xb1, 0xa5, 0x3d, 0x3b, 0xb6,
+	0x32, 0xcf, 0x8f, 0x2d, 0xed, 0xc5, 0xb1, 0x95, 0x79, 0x79, 0x6c, 0x65, 0xbe, 0x7e, 0xec, 0xb1,
+	0xf0, 0xd0, 0x6b, 0x24, 0xfd, 0x9d, 0xe4, 0xd4, 0x88, 0x53, 0xef, 0xe1, 0xad, 0x90, 0xb3, 0x01,
+	0x75, 0x09, 0xdf, 0x9a, 0x98, 0x9b, 0x61, 0xdb, 0x63, 0x4d, 0xf2, 0x44, 0xa8, 0xa7, 0xf0, 0x07,
+	0xdf, 0xd1, 0xed, 0x65, 0x78, 0x21, 0xff, 0xf7, 0xaf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe1, 0x35,
+	0xcc, 0x60, 0xf6, 0x0c, 0x00, 0x00,
+}
+
 func (this *AzureInstanceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1186,7 +1497,7 @@ func valueToGoStringAzureTypes(v interface{}, typ string) string {
 func (m *AzureInstanceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1194,74 +1505,88 @@ func (m *AzureInstanceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureInstanceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureInstanceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VoltNodeId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltNodeId)))
-		i += copy(dAtA[i:], m.VoltNodeId)
-	}
-	if len(m.VoltVnetId) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
-		i += copy(dAtA[i:], m.VoltVnetId)
-	}
-	if len(m.PublicSubnetId) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PublicSubnetId)))
-		i += copy(dAtA[i:], m.PublicSubnetId)
-	}
-	if len(m.PrivateSubnetId) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PrivateSubnetId)))
-		i += copy(dAtA[i:], m.PrivateSubnetId)
-	}
-	if len(m.MachineType) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.MachineType)))
-		i += copy(dAtA[i:], m.MachineType)
-	}
-	if len(m.DiskSize) > 0 {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.DiskSize)))
-		i += copy(dAtA[i:], m.DiskSize)
-	}
-	if m.Marketplace != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.Marketplace.Size()))
-		n1, err := m.Marketplace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
+	if m.NodeCount != 0 {
+		i = encodeVarintAzureTypes(dAtA, i, uint64(m.NodeCount))
+		i--
+		dAtA[i] = 0x58
 	}
 	if len(m.Az) > 0 {
-		dAtA[i] = 0x52
-		i++
+		i -= len(m.Az)
+		copy(dAtA[i:], m.Az)
 		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Az)))
-		i += copy(dAtA[i:], m.Az)
+		i--
+		dAtA[i] = 0x52
 	}
-	if m.NodeCount != 0 {
-		dAtA[i] = 0x58
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.NodeCount))
+	if m.Marketplace != nil {
+		{
+			size, err := m.Marketplace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	if len(m.DiskSize) > 0 {
+		i -= len(m.DiskSize)
+		copy(dAtA[i:], m.DiskSize)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.DiskSize)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.MachineType) > 0 {
+		i -= len(m.MachineType)
+		copy(dAtA[i:], m.MachineType)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.MachineType)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.PrivateSubnetId) > 0 {
+		i -= len(m.PrivateSubnetId)
+		copy(dAtA[i:], m.PrivateSubnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PrivateSubnetId)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.PublicSubnetId) > 0 {
+		i -= len(m.PublicSubnetId)
+		copy(dAtA[i:], m.PublicSubnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PublicSubnetId)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.VoltVnetId) > 0 {
+		i -= len(m.VoltVnetId)
+		copy(dAtA[i:], m.VoltVnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VoltNodeId) > 0 {
+		i -= len(m.VoltNodeId)
+		copy(dAtA[i:], m.VoltNodeId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltNodeId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureSubnetParamType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1269,35 +1594,43 @@ func (m *AzureSubnetParamType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureSubnetParamType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureSubnetParamType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ResourceGroup) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.ResourceGroup)))
-		i += copy(dAtA[i:], m.ResourceGroup)
+	if len(m.Ipv6) > 0 {
+		i -= len(m.Ipv6)
+		copy(dAtA[i:], m.Ipv6)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Ipv6)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Ipv4) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Ipv4)
+		copy(dAtA[i:], m.Ipv4)
 		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Ipv4)))
-		i += copy(dAtA[i:], m.Ipv4)
+		i--
+		dAtA[i] = 0x12
 	}
-	if len(m.Ipv6) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Ipv6)))
-		i += copy(dAtA[i:], m.Ipv6)
+	if len(m.ResourceGroup) > 0 {
+		i -= len(m.ResourceGroup)
+		copy(dAtA[i:], m.ResourceGroup)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.ResourceGroup)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureExistingSubnetParamType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1305,29 +1638,36 @@ func (m *AzureExistingSubnetParamType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureExistingSubnetParamType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureExistingSubnetParamType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SubnetName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SubnetName)))
-		i += copy(dAtA[i:], m.SubnetName)
-	}
 	if len(m.SubnetResourceGrp) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.SubnetResourceGrp)
+		copy(dAtA[i:], m.SubnetResourceGrp)
 		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SubnetResourceGrp)))
-		i += copy(dAtA[i:], m.SubnetResourceGrp)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.SubnetName) > 0 {
+		i -= len(m.SubnetName)
+		copy(dAtA[i:], m.SubnetName)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SubnetName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureSubnetChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1335,37 +1675,46 @@ func (m *AzureSubnetChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureSubnetChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureSubnetChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SubnetParam != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.SubnetParam.Size()))
-		n2, err := m.SubnetParam.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
-	}
 	if m.ExistingSubnet != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.ExistingSubnet.Size()))
-		n3, err := m.ExistingSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ExistingSubnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.SubnetParam != nil {
+		{
+			size, err := m.SubnetParam.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureSubnetType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1373,44 +1722,53 @@ func (m *AzureSubnetType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureSubnetType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureSubnetType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VoltSubnetId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltSubnetId)))
-		i += copy(dAtA[i:], m.VoltSubnetId)
-	}
-	if len(m.VoltVnetId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
-		i += copy(dAtA[i:], m.VoltVnetId)
+	if m.InterfaceType != 0 {
+		i = encodeVarintAzureTypes(dAtA, i, uint64(m.InterfaceType))
+		i--
+		dAtA[i] = 0x28
 	}
 	if m.Subnet != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.Subnet.Size()))
-		n4, err := m.Subnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Subnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.InterfaceType != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.InterfaceType))
+	if len(m.VoltVnetId) > 0 {
+		i -= len(m.VoltVnetId)
+		copy(dAtA[i:], m.VoltVnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.VoltSubnetId) > 0 {
+		i -= len(m.VoltSubnetId)
+		copy(dAtA[i:], m.VoltSubnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltSubnetId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureVnetParamsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1418,35 +1776,43 @@ func (m *AzureVnetParamsType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureVnetParamsType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ResourceGroup) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.ResourceGroup)))
-		i += copy(dAtA[i:], m.ResourceGroup)
+	if len(m.PrimaryIpv4) > 0 {
+		i -= len(m.PrimaryIpv4)
+		copy(dAtA[i:], m.PrimaryIpv4)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PrimaryIpv4)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Name) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
 		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+		i--
+		dAtA[i] = 0x12
 	}
-	if len(m.PrimaryIpv4) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.PrimaryIpv4)))
-		i += copy(dAtA[i:], m.PrimaryIpv4)
+	if len(m.ResourceGroup) > 0 {
+		i -= len(m.ResourceGroup)
+		copy(dAtA[i:], m.ResourceGroup)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.ResourceGroup)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureVnetInfoType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1454,37 +1820,46 @@ func (m *AzureVnetInfoType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureVnetInfoType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetInfoType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NewVnet != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.NewVnet.Size()))
-		n5, err := m.NewVnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
 	if m.Vnet != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.Vnet.Size()))
-		n6, err := m.Vnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Vnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.NewVnet != nil {
+		{
+			size, err := m.NewVnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AvailabilitySetsInfoType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1492,33 +1867,39 @@ func (m *AvailabilitySetsInfoType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AvailabilitySetsInfoType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AvailabilitySetsInfoType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Enable) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Enable)))
-		i += copy(dAtA[i:], m.Enable)
+	if m.UpdateDomains != 0 {
+		i = encodeVarintAzureTypes(dAtA, i, uint64(m.UpdateDomains))
+		i--
+		dAtA[i] = 0x28
 	}
 	if m.FaultDomains != 0 {
-		dAtA[i] = 0x20
-		i++
 		i = encodeVarintAzureTypes(dAtA, i, uint64(m.FaultDomains))
+		i--
+		dAtA[i] = 0x20
 	}
-	if m.UpdateDomains != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.UpdateDomains))
+	if len(m.Enable) > 0 {
+		i -= len(m.Enable)
+		copy(dAtA[i:], m.Enable)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.Enable)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureVnetSiteType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1526,155 +1907,185 @@ func (m *AzureVnetSiteType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureVnetSiteType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SiteName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SiteName)))
-		i += copy(dAtA[i:], m.SiteName)
-	}
-	if len(m.VoltVnetId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
-		i += copy(dAtA[i:], m.VoltVnetId)
-	}
-	if len(m.FleetLabel) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.FleetLabel)))
-		i += copy(dAtA[i:], m.FleetLabel)
-	}
-	if len(m.CertifiedHw) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.CertifiedHw)))
-		i += copy(dAtA[i:], m.CertifiedHw)
-	}
-	if len(m.AzureRegion) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureRegion)))
-		i += copy(dAtA[i:], m.AzureRegion)
-	}
-	if len(m.AzureResourceGrp) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureResourceGrp)))
-		i += copy(dAtA[i:], m.AzureResourceGrp)
-	}
-	if m.Vnet != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.Vnet.Size()))
-		n7, err := m.Vnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-	}
-	if len(m.Subnets) > 0 {
-		for _, msg := range m.Subnets {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintAzureTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.AvailabilitySet != nil {
+		{
+			size, err := m.AvailabilitySet.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.MasterNodes) > 0 {
-		for _, msg := range m.MasterNodes {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintAzureTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.GatewayType != 0 {
-		dAtA[i] = 0x58
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.GatewayType))
-	}
-	if len(m.SshKey) > 0 {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SshKey)))
-		i += copy(dAtA[i:], m.SshKey)
-	}
-	if m.WorkerNodes != 0 {
-		dAtA[i] = 0x70
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.WorkerNodes))
-	}
-	if len(m.AzureName) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureName)))
-		i += copy(dAtA[i:], m.AzureName)
-	}
-	if len(m.InsideVipPortConfig) > 0 {
-		for _, msg := range m.InsideVipPortConfig {
-			dAtA[i] = 0x82
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintAzureTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
 	if len(m.OutsideVipPortConfig) > 0 {
-		for _, msg := range m.OutsideVipPortConfig {
-			dAtA[i] = 0x8a
-			i++
+		for iNdEx := len(m.OutsideVipPortConfig) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OutsideVipPortConfig[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x1
-			i++
-			i = encodeVarintAzureTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+			i--
+			dAtA[i] = 0x8a
+		}
+	}
+	if len(m.InsideVipPortConfig) > 0 {
+		for iNdEx := len(m.InsideVipPortConfig) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InsideVipPortConfig[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x82
+		}
+	}
+	if len(m.AzureName) > 0 {
+		i -= len(m.AzureName)
+		copy(dAtA[i:], m.AzureName)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureName)))
+		i--
+		dAtA[i] = 0x7a
+	}
+	if m.WorkerNodes != 0 {
+		i = encodeVarintAzureTypes(dAtA, i, uint64(m.WorkerNodes))
+		i--
+		dAtA[i] = 0x70
+	}
+	if len(m.SshKey) > 0 {
+		i -= len(m.SshKey)
+		copy(dAtA[i:], m.SshKey)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SshKey)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.GatewayType != 0 {
+		i = encodeVarintAzureTypes(dAtA, i, uint64(m.GatewayType))
+		i--
+		dAtA[i] = 0x58
+	}
+	if len(m.MasterNodes) > 0 {
+		for iNdEx := len(m.MasterNodes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.MasterNodes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.Subnets) > 0 {
+		for iNdEx := len(m.Subnets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subnets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintAzureTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if m.Vnet != nil {
+		{
+			size, err := m.Vnet.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintAzureTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x3a
 	}
-	if m.AvailabilitySet != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintAzureTypes(dAtA, i, uint64(m.AvailabilitySet.Size()))
-		n8, err := m.AvailabilitySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n8
+	if len(m.AzureResourceGrp) > 0 {
+		i -= len(m.AzureResourceGrp)
+		copy(dAtA[i:], m.AzureResourceGrp)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureResourceGrp)))
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	if len(m.AzureRegion) > 0 {
+		i -= len(m.AzureRegion)
+		copy(dAtA[i:], m.AzureRegion)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.AzureRegion)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.CertifiedHw) > 0 {
+		i -= len(m.CertifiedHw)
+		copy(dAtA[i:], m.CertifiedHw)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.CertifiedHw)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.FleetLabel) > 0 {
+		i -= len(m.FleetLabel)
+		copy(dAtA[i:], m.FleetLabel)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.FleetLabel)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VoltVnetId) > 0 {
+		i -= len(m.VoltVnetId)
+		copy(dAtA[i:], m.VoltVnetId)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.VoltVnetId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintAzureTypes(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintAzureTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovAzureTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *AzureInstanceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VoltNodeId)
@@ -1716,6 +2127,9 @@ func (m *AzureInstanceType) Size() (n int) {
 }
 
 func (m *AzureSubnetParamType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ResourceGroup)
@@ -1734,6 +2148,9 @@ func (m *AzureSubnetParamType) Size() (n int) {
 }
 
 func (m *AzureExistingSubnetParamType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SubnetName)
@@ -1748,6 +2165,9 @@ func (m *AzureExistingSubnetParamType) Size() (n int) {
 }
 
 func (m *AzureSubnetChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SubnetParam != nil {
@@ -1762,6 +2182,9 @@ func (m *AzureSubnetChoice) Size() (n int) {
 }
 
 func (m *AzureSubnetType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VoltSubnetId)
@@ -1783,6 +2206,9 @@ func (m *AzureSubnetType) Size() (n int) {
 }
 
 func (m *AzureVnetParamsType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ResourceGroup)
@@ -1801,6 +2227,9 @@ func (m *AzureVnetParamsType) Size() (n int) {
 }
 
 func (m *AzureVnetInfoType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NewVnet != nil {
@@ -1815,6 +2244,9 @@ func (m *AzureVnetInfoType) Size() (n int) {
 }
 
 func (m *AvailabilitySetsInfoType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Enable)
@@ -1831,6 +2263,9 @@ func (m *AvailabilitySetsInfoType) Size() (n int) {
 }
 
 func (m *AzureVnetSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SiteName)
@@ -1907,14 +2342,7 @@ func (m *AzureVnetSiteType) Size() (n int) {
 }
 
 func sovAzureTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozAzureTypes(x uint64) (n int) {
 	return sovAzureTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1930,7 +2358,7 @@ func (this *AzureInstanceType) String() string {
 		`PrivateSubnetId:` + fmt.Sprintf("%v", this.PrivateSubnetId) + `,`,
 		`MachineType:` + fmt.Sprintf("%v", this.MachineType) + `,`,
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
-		`Marketplace:` + strings.Replace(fmt.Sprintf("%v", this.Marketplace), "Marketplace", "ves_io_schema_certified_hardware.Marketplace", 1) + `,`,
+		`Marketplace:` + strings.Replace(fmt.Sprintf("%v", this.Marketplace), "Marketplace", "certified_hardware.Marketplace", 1) + `,`,
 		`Az:` + fmt.Sprintf("%v", this.Az) + `,`,
 		`NodeCount:` + fmt.Sprintf("%v", this.NodeCount) + `,`,
 		`}`,
@@ -1965,8 +2393,8 @@ func (this *AzureSubnetChoice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AzureSubnetChoice{`,
-		`SubnetParam:` + strings.Replace(fmt.Sprintf("%v", this.SubnetParam), "AzureSubnetParamType", "AzureSubnetParamType", 1) + `,`,
-		`ExistingSubnet:` + strings.Replace(fmt.Sprintf("%v", this.ExistingSubnet), "AzureExistingSubnetParamType", "AzureExistingSubnetParamType", 1) + `,`,
+		`SubnetParam:` + strings.Replace(this.SubnetParam.String(), "AzureSubnetParamType", "AzureSubnetParamType", 1) + `,`,
+		`ExistingSubnet:` + strings.Replace(this.ExistingSubnet.String(), "AzureExistingSubnetParamType", "AzureExistingSubnetParamType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1978,7 +2406,7 @@ func (this *AzureSubnetType) String() string {
 	s := strings.Join([]string{`&AzureSubnetType{`,
 		`VoltSubnetId:` + fmt.Sprintf("%v", this.VoltSubnetId) + `,`,
 		`VoltVnetId:` + fmt.Sprintf("%v", this.VoltVnetId) + `,`,
-		`Subnet:` + strings.Replace(fmt.Sprintf("%v", this.Subnet), "AzureSubnetChoice", "AzureSubnetChoice", 1) + `,`,
+		`Subnet:` + strings.Replace(this.Subnet.String(), "AzureSubnetChoice", "AzureSubnetChoice", 1) + `,`,
 		`InterfaceType:` + fmt.Sprintf("%v", this.InterfaceType) + `,`,
 		`}`,
 	}, "")
@@ -2001,8 +2429,8 @@ func (this *AzureVnetInfoType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AzureVnetInfoType{`,
-		`NewVnet:` + strings.Replace(fmt.Sprintf("%v", this.NewVnet), "AzureVnetParamsType", "ves_io_schema_views1.AzureVnetParamsType", 1) + `,`,
-		`Vnet:` + strings.Replace(fmt.Sprintf("%v", this.Vnet), "AzureVnetType", "ves_io_schema_views1.AzureVnetType", 1) + `,`,
+		`NewVnet:` + strings.Replace(fmt.Sprintf("%v", this.NewVnet), "AzureVnetParamsType", "views.AzureVnetParamsType", 1) + `,`,
+		`Vnet:` + strings.Replace(fmt.Sprintf("%v", this.Vnet), "AzureVnetType", "views.AzureVnetType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2023,6 +2451,26 @@ func (this *AzureVnetSiteType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSubnets := "[]*AzureSubnetType{"
+	for _, f := range this.Subnets {
+		repeatedStringForSubnets += strings.Replace(f.String(), "AzureSubnetType", "AzureSubnetType", 1) + ","
+	}
+	repeatedStringForSubnets += "}"
+	repeatedStringForMasterNodes := "[]*AzureInstanceType{"
+	for _, f := range this.MasterNodes {
+		repeatedStringForMasterNodes += strings.Replace(f.String(), "AzureInstanceType", "AzureInstanceType", 1) + ","
+	}
+	repeatedStringForMasterNodes += "}"
+	repeatedStringForInsideVipPortConfig := "[]*VIPPortConfig{"
+	for _, f := range this.InsideVipPortConfig {
+		repeatedStringForInsideVipPortConfig += strings.Replace(fmt.Sprintf("%v", f), "VIPPortConfig", "VIPPortConfig", 1) + ","
+	}
+	repeatedStringForInsideVipPortConfig += "}"
+	repeatedStringForOutsideVipPortConfig := "[]*VIPPortConfig{"
+	for _, f := range this.OutsideVipPortConfig {
+		repeatedStringForOutsideVipPortConfig += strings.Replace(fmt.Sprintf("%v", f), "VIPPortConfig", "VIPPortConfig", 1) + ","
+	}
+	repeatedStringForOutsideVipPortConfig += "}"
 	s := strings.Join([]string{`&AzureVnetSiteType{`,
 		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
 		`VoltVnetId:` + fmt.Sprintf("%v", this.VoltVnetId) + `,`,
@@ -2030,16 +2478,16 @@ func (this *AzureVnetSiteType) String() string {
 		`CertifiedHw:` + fmt.Sprintf("%v", this.CertifiedHw) + `,`,
 		`AzureRegion:` + fmt.Sprintf("%v", this.AzureRegion) + `,`,
 		`AzureResourceGrp:` + fmt.Sprintf("%v", this.AzureResourceGrp) + `,`,
-		`Vnet:` + strings.Replace(fmt.Sprintf("%v", this.Vnet), "AzureVnetInfoType", "AzureVnetInfoType", 1) + `,`,
-		`Subnets:` + strings.Replace(fmt.Sprintf("%v", this.Subnets), "AzureSubnetType", "AzureSubnetType", 1) + `,`,
-		`MasterNodes:` + strings.Replace(fmt.Sprintf("%v", this.MasterNodes), "AzureInstanceType", "AzureInstanceType", 1) + `,`,
+		`Vnet:` + strings.Replace(this.Vnet.String(), "AzureVnetInfoType", "AzureVnetInfoType", 1) + `,`,
+		`Subnets:` + repeatedStringForSubnets + `,`,
+		`MasterNodes:` + repeatedStringForMasterNodes + `,`,
 		`GatewayType:` + fmt.Sprintf("%v", this.GatewayType) + `,`,
 		`SshKey:` + fmt.Sprintf("%v", this.SshKey) + `,`,
 		`WorkerNodes:` + fmt.Sprintf("%v", this.WorkerNodes) + `,`,
 		`AzureName:` + fmt.Sprintf("%v", this.AzureName) + `,`,
-		`InsideVipPortConfig:` + strings.Replace(fmt.Sprintf("%v", this.InsideVipPortConfig), "VIPPortConfig", "VIPPortConfig", 1) + `,`,
-		`OutsideVipPortConfig:` + strings.Replace(fmt.Sprintf("%v", this.OutsideVipPortConfig), "VIPPortConfig", "VIPPortConfig", 1) + `,`,
-		`AvailabilitySet:` + strings.Replace(fmt.Sprintf("%v", this.AvailabilitySet), "AvailabilitySetsInfoType", "AvailabilitySetsInfoType", 1) + `,`,
+		`InsideVipPortConfig:` + repeatedStringForInsideVipPortConfig + `,`,
+		`OutsideVipPortConfig:` + repeatedStringForOutsideVipPortConfig + `,`,
+		`AvailabilitySet:` + strings.Replace(this.AvailabilitySet.String(), "AvailabilitySetsInfoType", "AvailabilitySetsInfoType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2067,7 +2515,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2095,7 +2543,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2105,6 +2553,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2124,7 +2575,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2134,6 +2585,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2153,7 +2607,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2163,6 +2617,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2182,7 +2639,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2192,6 +2649,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2211,7 +2671,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2221,6 +2681,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2240,7 +2703,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2250,6 +2713,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2269,7 +2735,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2278,11 +2744,14 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Marketplace == nil {
-				m.Marketplace = &ves_io_schema_certified_hardware.Marketplace{}
+				m.Marketplace = &certified_hardware.Marketplace{}
 			}
 			if err := m.Marketplace.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2302,7 +2771,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2312,6 +2781,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2331,7 +2803,7 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodeCount |= (int32(b) & 0x7F) << shift
+				m.NodeCount |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2343,6 +2815,9 @@ func (m *AzureInstanceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2372,7 +2847,7 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2400,7 +2875,7 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2410,6 +2885,9 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2429,7 +2907,7 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2439,6 +2917,9 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2458,7 +2939,7 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2468,6 +2949,9 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2480,6 +2964,9 @@ func (m *AzureSubnetParamType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2509,7 +2996,7 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2537,7 +3024,7 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2547,6 +3034,9 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2566,7 +3056,7 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2576,6 +3066,9 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2588,6 +3081,9 @@ func (m *AzureExistingSubnetParamType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2617,7 +3113,7 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2645,7 +3141,7 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2654,6 +3150,9 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2678,7 +3177,7 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2687,6 +3186,9 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2704,6 +3206,9 @@ func (m *AzureSubnetChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2733,7 +3238,7 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2761,7 +3266,7 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2771,6 +3276,9 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2790,7 +3298,7 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2800,6 +3308,9 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2819,7 +3330,7 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2828,6 +3339,9 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2852,7 +3366,7 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.InterfaceType |= (InterfaceType(b) & 0x7F) << shift
+				m.InterfaceType |= InterfaceType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2864,6 +3378,9 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2893,7 +3410,7 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2921,7 +3438,7 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2931,6 +3448,9 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2950,7 +3470,7 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2960,6 +3480,9 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2979,7 +3502,7 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2989,6 +3512,9 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3001,6 +3527,9 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3030,7 +3559,7 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3058,7 +3587,7 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3067,11 +3596,14 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.NewVnet == nil {
-				m.NewVnet = &ves_io_schema_views1.AzureVnetParamsType{}
+				m.NewVnet = &views.AzureVnetParamsType{}
 			}
 			if err := m.NewVnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3091,7 +3623,7 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3100,11 +3632,14 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Vnet == nil {
-				m.Vnet = &ves_io_schema_views1.AzureVnetType{}
+				m.Vnet = &views.AzureVnetType{}
 			}
 			if err := m.Vnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3117,6 +3652,9 @@ func (m *AzureVnetInfoType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3146,7 +3684,7 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3174,7 +3712,7 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3184,6 +3722,9 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3203,7 +3744,7 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FaultDomains |= (uint32(b) & 0x7F) << shift
+				m.FaultDomains |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3222,7 +3763,7 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UpdateDomains |= (uint32(b) & 0x7F) << shift
+				m.UpdateDomains |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3234,6 +3775,9 @@ func (m *AvailabilitySetsInfoType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3263,7 +3807,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3291,7 +3835,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3301,6 +3845,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3320,7 +3867,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3330,6 +3877,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3349,7 +3899,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3359,6 +3909,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3378,7 +3931,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3388,6 +3941,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3407,7 +3963,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3417,6 +3973,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3436,7 +3995,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3446,6 +4005,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3465,7 +4027,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3474,6 +4036,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3498,7 +4063,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3507,6 +4072,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3529,7 +4097,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3538,6 +4106,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3560,7 +4131,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.GatewayType |= (CloudGatewayType(b) & 0x7F) << shift
+				m.GatewayType |= CloudGatewayType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3579,7 +4150,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3589,6 +4160,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3608,7 +4182,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.WorkerNodes |= (uint32(b) & 0x7F) << shift
+				m.WorkerNodes |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3627,7 +4201,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3637,6 +4211,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3656,7 +4233,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3665,6 +4242,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3687,7 +4267,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3696,6 +4276,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3718,7 +4301,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3727,6 +4310,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthAzureTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3746,6 +4332,9 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthAzureTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAzureTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3761,6 +4350,7 @@ func (m *AzureVnetSiteType) Unmarshal(dAtA []byte) error {
 func skipAzureTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3792,10 +4382,8 @@ func skipAzureTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3812,147 +4400,34 @@ func skipAzureTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthAzureTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowAzureTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipAzureTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupAzureTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthAzureTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthAzureTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowAzureTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthAzureTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAzureTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAzureTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/views/terraform_parameters/azure_types.proto", fileDescriptorAzureTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/terraform_parameters/azure_types.proto", fileDescriptorAzureTypes)
-}
-
-var fileDescriptorAzureTypes = []byte{
-	// 1322 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x56, 0xcf, 0x6f, 0x13, 0xc7,
-	0x17, 0xcf, 0xda, 0x4e, 0x62, 0xcf, 0xc6, 0x8e, 0xb3, 0x44, 0x5f, 0x96, 0x00, 0x26, 0x58, 0x1c,
-	0x2c, 0x44, 0xec, 0x6f, 0x53, 0x04, 0x82, 0x4a, 0x55, 0x49, 0xda, 0x52, 0xa7, 0x2d, 0xa0, 0x4d,
-	0x95, 0x43, 0xa5, 0xb2, 0x1a, 0x7b, 0xc7, 0xeb, 0x51, 0xd6, 0x3b, 0xab, 0xd9, 0x59, 0x1b, 0xe7,
-	0xc4, 0x9f, 0xc0, 0x81, 0x6b, 0xef, 0xfd, 0x1b, 0xda, 0x1e, 0x38, 0xf6, 0xc8, 0x91, 0x63, 0x31,
-	0x97, 0xf6, 0x50, 0x89, 0x23, 0xbd, 0x55, 0xf3, 0x66, 0x6c, 0xaf, 0xc1, 0x94, 0x24, 0xbd, 0xed,
-	0xbe, 0xf7, 0x79, 0x6f, 0xde, 0x7c, 0xde, 0xaf, 0x41, 0xb7, 0xfb, 0x24, 0xae, 0x53, 0xd6, 0x88,
-	0xdb, 0x5d, 0xd2, 0xc3, 0x8d, 0x3e, 0x25, 0x83, 0xb8, 0x21, 0x08, 0xe7, 0xb8, 0xc3, 0x78, 0xcf,
-	0x8d, 0x30, 0xc7, 0x3d, 0x22, 0x08, 0x8f, 0x1b, 0xf8, 0x28, 0xe1, 0xc4, 0x15, 0xc3, 0x88, 0xc4,
-	0xf5, 0x88, 0x33, 0xc1, 0xac, 0x9a, 0xb2, 0xad, 0x2b, 0xdb, 0x3a, 0xd8, 0xd6, 0xe7, 0xd9, 0x6e,
-	0x6c, 0xf9, 0x54, 0x74, 0x93, 0x56, 0xbd, 0xcd, 0x7a, 0x0d, 0x9f, 0xf9, 0xac, 0x01, 0x0e, 0x5a,
-	0x49, 0x07, 0xfe, 0xe0, 0x07, 0xbe, 0x94, 0xe3, 0x8d, 0x73, 0x3e, 0x63, 0x7e, 0x40, 0xa6, 0x28,
-	0x1c, 0x0e, 0xb5, 0xea, 0xda, 0x6c, 0xbc, 0x6d, 0xc2, 0x05, 0xed, 0x50, 0xe2, 0xb9, 0x5d, 0xcc,
-	0xbd, 0x01, 0xe6, 0xa4, 0x91, 0x8a, 0x70, 0xe3, 0xfc, 0x2c, 0x9a, 0x45, 0x82, 0xb2, 0x70, 0xac,
-	0x3c, 0x37, 0xab, 0x4c, 0xdb, 0x5d, 0x78, 0x8b, 0x15, 0x1c, 0x50, 0x0f, 0x0b, 0xa2, 0xb5, 0x9b,
-	0xef, 0x72, 0xe6, 0xce, 0xba, 0xbe, 0x32, 0x8f, 0xd5, 0x98, 0x8a, 0x19, 0xfe, 0x36, 0xae, 0x1f,
-	0x9b, 0xfb, 0xb4, 0xd5, 0xa5, 0xb9, 0x56, 0x53, 0x40, 0xf5, 0xef, 0x0c, 0x5a, 0xbb, 0x23, 0x93,
-	0xd5, 0x0c, 0x63, 0x81, 0xc3, 0x36, 0xf9, 0x6e, 0x18, 0x11, 0x6b, 0x13, 0xad, 0xf4, 0x59, 0x20,
-	0xdc, 0x90, 0x79, 0xc4, 0xa5, 0x9e, 0x6d, 0x6c, 0x1a, 0xb5, 0x82, 0x83, 0xa4, 0xec, 0x1e, 0xf3,
-	0x48, 0xd3, 0x9b, 0x20, 0xfa, 0x21, 0x11, 0x12, 0x91, 0x9d, 0x22, 0x0e, 0x42, 0x22, 0x9a, 0x9e,
-	0x55, 0x43, 0xe5, 0x28, 0x69, 0x05, 0xb4, 0xed, 0xc6, 0x49, 0x4b, 0xa3, 0x72, 0x80, 0x2a, 0x29,
-	0xf9, 0x3e, 0x88, 0x9b, 0x9e, 0x75, 0x15, 0xad, 0x45, 0x9c, 0xf6, 0xb1, 0x20, 0x29, 0xe8, 0x22,
-	0x40, 0x57, 0xb5, 0x62, 0x82, 0xbd, 0x8c, 0x56, 0x7a, 0xb8, 0xdd, 0xa5, 0xa1, 0x62, 0xc7, 0x5e,
-	0x02, 0x98, 0xa9, 0x65, 0x10, 0xfc, 0x79, 0x54, 0xf0, 0x68, 0x7c, 0xe8, 0xc6, 0xf4, 0x88, 0xd8,
-	0xcb, 0xa0, 0xcf, 0x4b, 0xc1, 0x3e, 0x3d, 0x22, 0xd6, 0x7d, 0x64, 0xf6, 0x30, 0x3f, 0x24, 0x22,
-	0x0a, 0x70, 0x9b, 0xd8, 0x85, 0x4d, 0xa3, 0x66, 0x6e, 0x6f, 0xd5, 0x67, 0x8b, 0xf3, 0xdd, 0x42,
-	0xa9, 0x7f, 0x3b, 0x35, 0x72, 0xd2, 0x1e, 0xac, 0x12, 0xca, 0xe0, 0x23, 0x1b, 0xc1, 0x31, 0x19,
-	0x7c, 0x64, 0x5d, 0x44, 0x08, 0x58, 0x6b, 0xb3, 0x24, 0x14, 0xb6, 0xb9, 0x69, 0xd4, 0x16, 0x9d,
-	0x82, 0x94, 0xec, 0x4a, 0xc1, 0x5e, 0x2e, 0x9f, 0x29, 0x67, 0xf7, 0x72, 0xf9, 0x7c, 0xb9, 0x50,
-	0x7d, 0x62, 0xa0, 0x75, 0xe0, 0x5e, 0xdd, 0xee, 0x81, 0x4c, 0x21, 0xdc, 0xe0, 0xff, 0xa8, 0xc4,
-	0x49, 0xcc, 0x12, 0xde, 0x26, 0xae, 0xcf, 0x59, 0x12, 0xa9, 0x04, 0xec, 0x14, 0x7e, 0xfe, 0xf3,
-	0x59, 0x36, 0xc7, 0x33, 0xf6, 0x67, 0x4e, 0x71, 0x0c, 0xb8, 0x2b, 0xf5, 0x56, 0x15, 0xe5, 0x68,
-	0xd4, 0xbf, 0x6e, 0x67, 0x00, 0x57, 0x7a, 0xf3, 0x8b, 0xb1, 0x20, 0xb1, 0x8b, 0x3c, 0xfb, 0xc6,
-	0x30, 0x1c, 0xd0, 0x69, 0xcc, 0x0d, 0x95, 0xaa, 0x19, 0xcc, 0xe3, 0x8c, 0xc2, 0xdc, 0xa8, 0x32,
-	0x74, 0x01, 0x22, 0xfa, 0xe2, 0x11, 0x8d, 0x05, 0x0d, 0xfd, 0xb7, 0x23, 0xbb, 0x84, 0x4c, 0x9d,
-	0xa2, 0x10, 0xf7, 0xc8, 0xb8, 0x2e, 0x94, 0xe8, 0x1e, 0xee, 0x11, 0xab, 0x8e, 0xce, 0x68, 0x40,
-	0xea, 0x06, 0x91, 0x8a, 0xcb, 0x59, 0x53, 0x2a, 0x67, 0x12, 0x7a, 0x54, 0xfd, 0xcb, 0xd0, 0xf5,
-	0xa7, 0x4e, 0xda, 0xed, 0x32, 0xda, 0x26, 0x16, 0x46, 0x2b, 0xda, 0x0b, 0xd4, 0x35, 0x9c, 0x63,
-	0x6e, 0x7f, 0x5a, 0x3f, 0xee, 0x0c, 0xa9, 0xcf, 0xa3, 0xd5, 0xd1, 0xa1, 0x83, 0xc0, 0x62, 0x68,
-	0x95, 0xe8, 0x4b, 0xea, 0xaa, 0x03, 0x62, 0xcc, 0xed, 0x2f, 0x4f, 0x78, 0xca, 0x7b, 0xa8, 0x72,
-	0x4a, 0x64, 0x46, 0xa1, 0x32, 0x5f, 0x7d, 0x9a, 0x41, 0xab, 0xa9, 0xe0, 0x80, 0xd4, 0x2b, 0xa8,
-	0x04, 0xbd, 0x34, 0x2d, 0x7e, 0xc5, 0x2b, 0x74, 0xd8, 0xa4, 0xf2, 0xdf, 0xee, 0xb8, 0xcc, 0x3b,
-	0x1d, 0xb7, 0x8f, 0x96, 0xf4, 0x4d, 0x72, 0x70, 0x93, 0x4f, 0x4e, 0xc5, 0x97, 0x4a, 0x81, 0xa3,
-	0x5d, 0x59, 0x0f, 0x51, 0x89, 0x86, 0x82, 0xf0, 0x0e, 0x6e, 0xeb, 0x96, 0x93, 0x9d, 0x59, 0xda,
-	0xbe, 0x79, 0x7c, 0xe7, 0xcd, 0xb1, 0x3d, 0xf0, 0x52, 0xa4, 0xe9, 0xdf, 0xbd, 0x5c, 0x3e, 0x5b,
-	0xce, 0x55, 0x7f, 0x34, 0xd0, 0x19, 0x88, 0xe1, 0x60, 0xcc, 0x61, 0x7c, 0xca, 0x4e, 0xb8, 0x8c,
-	0x72, 0x50, 0x9a, 0xaa, 0x13, 0x8a, 0xe3, 0x2a, 0x57, 0x58, 0x50, 0x59, 0x1f, 0xa1, 0x95, 0x88,
-	0xd3, 0x1e, 0xe6, 0x43, 0x17, 0x9a, 0x26, 0x3b, 0xb7, 0x69, 0x4c, 0x8d, 0x69, 0x46, 0xfd, 0xeb,
-	0xb2, 0x55, 0xd7, 0x26, 0xf1, 0x35, 0xc3, 0x0e, 0x83, 0xe8, 0x76, 0x51, 0x3e, 0x24, 0x03, 0xc8,
-	0x88, 0x2e, 0xd1, 0xda, 0x5c, 0x56, 0xe6, 0xdc, 0xcc, 0x59, 0x0e, 0xc9, 0x40, 0x8a, 0xac, 0x1b,
-	0x28, 0x07, 0x0e, 0x32, 0xe0, 0xa0, 0xfa, 0xef, 0x0e, 0xc0, 0x14, 0xf0, 0xd5, 0x5f, 0x0d, 0x64,
-	0xdf, 0xe9, 0x63, 0x1a, 0xe0, 0x16, 0x0d, 0xa8, 0x18, 0xee, 0x13, 0x11, 0x4f, 0x22, 0xbb, 0x86,
-	0x96, 0x48, 0x88, 0x5b, 0x81, 0x6e, 0xd1, 0x9d, 0x75, 0x79, 0xb1, 0x55, 0x5e, 0x74, 0x72, 0x82,
-	0x27, 0xc4, 0x59, 0xec, 0xe0, 0x20, 0x26, 0x8e, 0xc6, 0x58, 0x37, 0x51, 0xb1, 0x83, 0x93, 0x40,
-	0xb8, 0x1e, 0xeb, 0x61, 0x1a, 0xc6, 0x50, 0x3f, 0xc5, 0x1d, 0x0b, 0x88, 0xbb, 0x9a, 0xa9, 0x19,
-	0xfa, 0xc3, 0xce, 0x3a, 0x2b, 0x00, 0xfc, 0x5c, 0xe1, 0xac, 0x5b, 0xa8, 0x94, 0x44, 0x72, 0xd9,
-	0x4d, 0x2c, 0x17, 0xdf, 0x63, 0xb9, 0xee, 0x14, 0x15, 0x52, 0x9b, 0x56, 0x1f, 0xe7, 0x53, 0x8c,
-	0xee, 0x53, 0x31, 0x99, 0xdd, 0xb0, 0xf9, 0x52, 0xd3, 0x25, 0x2f, 0x05, 0x30, 0x5b, 0x3e, 0xdc,
-	0x01, 0x97, 0x90, 0xd9, 0x09, 0x08, 0x11, 0x6e, 0x80, 0x5b, 0x24, 0x18, 0x2f, 0x25, 0x10, 0x7d,
-	0x23, 0x25, 0x72, 0x7d, 0xa4, 0x86, 0xfb, 0x40, 0x2f, 0x24, 0x73, 0x22, 0xfb, 0x6a, 0x20, 0x21,
-	0xea, 0xf5, 0xc2, 0x89, 0x4f, 0x59, 0xa8, 0x17, 0x91, 0x09, 0x32, 0x07, 0x44, 0xd6, 0x35, 0x64,
-	0x8d, 0x21, 0xa9, 0x19, 0xa7, 0x56, 0x51, 0x59, 0x03, 0x27, 0x23, 0xce, 0xba, 0xaf, 0x13, 0xbc,
-	0x7c, 0xaa, 0xa6, 0x4c, 0x17, 0x9c, 0xca, 0xbc, 0xb5, 0x8f, 0x96, 0x55, 0x73, 0xc6, 0x76, 0x7e,
-	0x33, 0x5b, 0x33, 0xb7, 0x6f, 0x9d, 0xaa, 0xd1, 0x55, 0x19, 0x6a, 0x4f, 0xd6, 0x43, 0xb9, 0x58,
-	0x63, 0x41, 0x38, 0x2c, 0xfd, 0xd8, 0x2e, 0x80, 0xe7, 0x93, 0x46, 0x9b, 0x7e, 0x45, 0xc8, 0x3d,
-	0x29, 0x1d, 0xca, 0x17, 0x43, 0x6c, 0xfd, 0x80, 0x56, 0x7c, 0x2c, 0xc8, 0x00, 0x0f, 0xd5, 0x14,
-	0x31, 0x61, 0x8a, 0xdc, 0x3e, 0xbe, 0xff, 0xdd, 0x80, 0x25, 0xde, 0x5d, 0xe5, 0x42, 0xb9, 0xf7,
-	0xa7, 0x3f, 0xd6, 0x59, 0xb4, 0x1c, 0xc7, 0x5d, 0xf7, 0x90, 0x0c, 0xed, 0x22, 0xe4, 0x61, 0x29,
-	0x8e, 0xbb, 0x5f, 0x93, 0xa1, 0x4c, 0xe7, 0x80, 0xf1, 0xc3, 0xc9, 0xbd, 0x4a, 0xb2, 0x40, 0x1d,
-	0x53, 0xc9, 0x54, 0x68, 0x17, 0x11, 0x52, 0xe9, 0x84, 0xaa, 0x5b, 0x05, 0xf3, 0x02, 0x48, 0xa0,
-	0xec, 0x02, 0xf4, 0x3f, 0x1a, 0xc6, 0xd4, 0x23, 0x6e, 0x9f, 0x46, 0x6e, 0xc4, 0xb8, 0x70, 0xdb,
-	0x2c, 0xec, 0x50, 0xdf, 0x2e, 0x03, 0x47, 0x27, 0x98, 0x84, 0x07, 0xcd, 0x07, 0x0f, 0x18, 0x17,
-	0xbb, 0x60, 0xee, 0x9c, 0x51, 0x6e, 0x0f, 0x68, 0x34, 0x15, 0x5a, 0x21, 0x3a, 0xcb, 0x12, 0x31,
-	0xf7, 0xb8, 0xb5, 0xff, 0x76, 0xdc, 0xba, 0xf6, 0x3b, 0x7b, 0x5e, 0x0f, 0x95, 0x71, 0x6a, 0x8a,
-	0xb8, 0x31, 0x11, 0xb6, 0x05, 0x95, 0xba, 0x73, 0x82, 0xdc, 0xbf, 0x67, 0x0e, 0x39, 0xab, 0x78,
-	0x56, 0xb3, 0x97, 0xcb, 0xa3, 0xb2, 0xb9, 0x97, 0xcb, 0xaf, 0x94, 0x8b, 0x3b, 0x4f, 0x8d, 0xe7,
-	0x2f, 0x2b, 0x0b, 0x2f, 0x5e, 0x56, 0x16, 0x5e, 0xbf, 0xac, 0x18, 0x8f, 0x47, 0x15, 0xe3, 0xa7,
-	0x51, 0xc5, 0xf8, 0x6d, 0x54, 0x31, 0x9e, 0x8f, 0x2a, 0xc6, 0x8b, 0x51, 0xc5, 0xf8, 0x7d, 0x54,
-	0x31, 0xfe, 0x18, 0x55, 0x16, 0x5e, 0x8f, 0x2a, 0xc6, 0x93, 0x57, 0x95, 0x85, 0x67, 0xaf, 0x2a,
-	0xc6, 0xf7, 0x0f, 0x7d, 0x16, 0x1d, 0xfa, 0x75, 0xd9, 0xf6, 0x32, 0x96, 0x7a, 0x92, 0x7a, 0x07,
-	0x6f, 0x45, 0x9c, 0xf5, 0xa9, 0x47, 0xf8, 0xd6, 0x58, 0xdd, 0x88, 0x5a, 0x3e, 0x6b, 0x90, 0x47,
-	0x42, 0x3f, 0x81, 0x3f, 0xf8, 0x7e, 0x6e, 0x2d, 0xc1, 0xcb, 0xf8, 0xe3, 0x7f, 0x02, 0x00, 0x00,
-	0xff, 0xff, 0x9c, 0x80, 0xe4, 0xaf, 0xee, 0x0c, 0x00, 0x00,
-}

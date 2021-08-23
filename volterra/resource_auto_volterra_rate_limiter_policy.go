@@ -526,16 +526,19 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Tenant = v.(string)
+
 							}
 
 						}
@@ -661,8 +664,7 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 								headers[i].Match = matchInt
 
-								matchInt.Presence =
-									v.(bool)
+								matchInt.Presence = v.(bool)
 
 							}
 
@@ -1020,16 +1022,19 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								actionChoiceInt.CustomRateLimiter.Tenant = v.(string)
+
 							}
 
 						}
@@ -1155,8 +1160,7 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 
 								headers[i].Match = matchInt
 
-								matchInt.Presence =
-									v.(bool)
+								matchInt.Presence = v.(bool)
 
 							}
 

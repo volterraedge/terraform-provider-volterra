@@ -1641,7 +1641,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_k8sCreateResponse"
                         }
@@ -1698,9 +1698,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1731,7 +1733,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_k8sReplaceResponse"
                         }
@@ -1788,15 +1790,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "metadata.name",
+                        "description": "name\n\nx-example: \"acmecorp-web\"\nThe configuration object to be replaced will be looked up by name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -1827,7 +1833,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_k8sListResponse"
                         }
@@ -1884,9 +1890,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of virtual_k8s",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "label_filter",
@@ -1905,6 +1913,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Fields"
                     },
                     {
@@ -1916,6 +1925,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Status Fields"
                     }
                 ],
@@ -1939,7 +1949,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_k8sGetResponse"
                         }
@@ -1996,15 +2006,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "response_format",
@@ -2039,10 +2053,8 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/googleprotobufEmpty"
-                        }
+                        "description": "A successful response.",
+                        "schema": {}
                     },
                     "401": {
                         "description": "Returned when operation is not authorized",
@@ -2096,15 +2108,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nName of the configuration object",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -2130,11 +2146,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "googleprotobufEmpty": {
-            "type": "object",
-            "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
-            "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
-        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",

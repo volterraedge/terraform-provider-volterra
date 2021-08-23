@@ -3,27 +3,30 @@
 
 package waf_rules
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // SeverityType
 //
@@ -68,6 +71,7 @@ var SeverityType_name = map[int32]string{
 	6: "INFO",
 	7: "DEBUG",
 }
+
 var SeverityType_value = map[string]int32{
 	"EMERGENCY": 0,
 	"ALERT":     1,
@@ -79,7 +83,9 @@ var SeverityType_value = map[string]int32{
 	"DEBUG":     7,
 }
 
-func (SeverityType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (SeverityType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{0}
+}
 
 // RuleModeType
 //
@@ -100,12 +106,15 @@ var RuleModeType_name = map[int32]string{
 	0: "EXCLUDE",
 	1: "INCLUDE",
 }
+
 var RuleModeType_value = map[string]int32{
 	"EXCLUDE": 0,
 	"INCLUDE": 1,
 }
 
-func (RuleModeType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (RuleModeType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{1}
+}
 
 // Rule
 //
@@ -134,10 +143,10 @@ type Rules struct {
 	//
 	// x-displayName: "Tags"
 	// x-example: "["attack-sqli", "attack-protocol"]"
-	// Tags are a set of string labels associated with a rule. For eg a particular rule may be under
-	// "attack-sqli" and "attack-protocol" tags. This is used by user to find out Tags associated with a
-	// Rule.
-	Tags []string `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
+	//Tags are a set of string labels associated with a rule. For eg a particular rule may be under
+	//"attack-sqli" and "attack-protocol" tags. This is used by user to find out Tags associated with a
+	//Rule.
+	Tags []string `protobuf:"bytes,4,rep,name=tags,proto3" json:"tags,omitempty"`
 	// severity
 	//
 	// x-displayName: "Severity"
@@ -145,9 +154,33 @@ type Rules struct {
 	Severity SeverityType `protobuf:"varint,5,opt,name=severity,proto3,enum=ves.io.schema.waf_rules.SeverityType" json:"severity,omitempty"`
 }
 
-func (m *Rules) Reset()                    { *m = Rules{} }
-func (*Rules) ProtoMessage()               {}
-func (*Rules) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *Rules) Reset()      { *m = Rules{} }
+func (*Rules) ProtoMessage() {}
+func (*Rules) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{0}
+}
+func (m *Rules) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Rules) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Rules) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Rules.Merge(m, src)
+}
+func (m *Rules) XXX_Size() int {
+	return m.Size()
+}
+func (m *Rules) XXX_DiscardUnknown() {
+	xxx_messageInfo_Rules.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Rules proto.InternalMessageInfo
 
 func (m *Rules) GetMode() RuleModeType {
 	if m != nil {
@@ -193,7 +226,7 @@ type GlobalSpecType struct {
 	// x-displayName: "Mode"
 	// x-required
 	// WAF Mode is blocking or Alert
-	Mode ves_io_schema4.WafModeType `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
+	Mode schema.WafModeType `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
 	// anomaly_score_threshold
 	//
 	// x-displayName: "Anomaly Score Threshold"
@@ -214,7 +247,7 @@ type GlobalSpecType struct {
 	// x-displayName: "Rule IDs"
 	// x-example: "[941210, 941310]"
 	// rule IDs to be included or excluded in this WAF instance
-	RuleIds []ves_io_schema_waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
+	RuleIds []waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,proto3,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
 	// rule_list_type
 	//
 	// x-displayName: "Rule List Type"
@@ -225,18 +258,42 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "WAF"
 	// A reference to WAF object
-	Waf []*ves_io_schema4.ObjectRefType `protobuf:"bytes,6,rep,name=waf" json:"waf,omitempty"`
+	Waf []*schema.ObjectRefType `protobuf:"bytes,6,rep,name=waf,proto3" json:"waf,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{1}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetMode() ves_io_schema4.WafModeType {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetMode() schema.WafModeType {
 	if m != nil {
 		return m.Mode
 	}
-	return ves_io_schema4.BLOCK
+	return schema.BLOCK
 }
 
 func (m *GlobalSpecType) GetAnomalyScoreThreshold() uint32 {
@@ -253,7 +310,7 @@ func (m *GlobalSpecType) GetParanoiaLevel() uint32 {
 	return 0
 }
 
-func (m *GlobalSpecType) GetRuleIds() []ves_io_schema_waf_rule_list.WafRuleID {
+func (m *GlobalSpecType) GetRuleIds() []waf_rule_list.WafRuleID {
 	if m != nil {
 		return m.RuleIds
 	}
@@ -267,7 +324,7 @@ func (m *GlobalSpecType) GetRuleListType() RuleModeType {
 	return EXCLUDE
 }
 
-func (m *GlobalSpecType) GetWaf() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetWaf() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Waf
 	}
@@ -279,22 +336,46 @@ func (m *GlobalSpecType) GetWaf() []*ves_io_schema4.ObjectRefType {
 // x-displayName: "Create WAF Rules"
 // Create App type will create the configuration in namespace metadata.namespace
 type CreateSpecType struct {
-	Mode                  ves_io_schema4.WafModeType              `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
-	AnomalyScoreThreshold uint32                                  `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
-	ParanoiaLevel         uint32                                  `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
-	RuleIds               []ves_io_schema_waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
-	RuleListType          RuleModeType                            `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
+	Mode                  schema.WafModeType        `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
+	AnomalyScoreThreshold uint32                    `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
+	ParanoiaLevel         uint32                    `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
+	RuleIds               []waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,proto3,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
+	RuleListType          RuleModeType              `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{2}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetMode() ves_io_schema4.WafModeType {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetMode() schema.WafModeType {
 	if m != nil {
 		return m.Mode
 	}
-	return ves_io_schema4.BLOCK
+	return schema.BLOCK
 }
 
 func (m *CreateSpecType) GetAnomalyScoreThreshold() uint32 {
@@ -311,7 +392,7 @@ func (m *CreateSpecType) GetParanoiaLevel() uint32 {
 	return 0
 }
 
-func (m *CreateSpecType) GetRuleIds() []ves_io_schema_waf_rule_list.WafRuleID {
+func (m *CreateSpecType) GetRuleIds() []waf_rule_list.WafRuleID {
 	if m != nil {
 		return m.RuleIds
 	}
@@ -331,22 +412,46 @@ func (m *CreateSpecType) GetRuleListType() RuleModeType {
 // Update the configuration by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 type ReplaceSpecType struct {
-	Mode                  ves_io_schema4.WafModeType              `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
-	AnomalyScoreThreshold uint32                                  `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
-	ParanoiaLevel         uint32                                  `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
-	RuleIds               []ves_io_schema_waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
-	RuleListType          RuleModeType                            `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
+	Mode                  schema.WafModeType        `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
+	AnomalyScoreThreshold uint32                    `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
+	ParanoiaLevel         uint32                    `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
+	RuleIds               []waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,proto3,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
+	RuleListType          RuleModeType              `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{3}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
 
-func (m *ReplaceSpecType) GetMode() ves_io_schema4.WafModeType {
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
+
+func (m *ReplaceSpecType) GetMode() schema.WafModeType {
 	if m != nil {
 		return m.Mode
 	}
-	return ves_io_schema4.BLOCK
+	return schema.BLOCK
 }
 
 func (m *ReplaceSpecType) GetAnomalyScoreThreshold() uint32 {
@@ -363,7 +468,7 @@ func (m *ReplaceSpecType) GetParanoiaLevel() uint32 {
 	return 0
 }
 
-func (m *ReplaceSpecType) GetRuleIds() []ves_io_schema_waf_rule_list.WafRuleID {
+func (m *ReplaceSpecType) GetRuleIds() []waf_rule_list.WafRuleID {
 	if m != nil {
 		return m.RuleIds
 	}
@@ -382,22 +487,46 @@ func (m *ReplaceSpecType) GetRuleListType() RuleModeType {
 // x-displayName: "Get WAF Rules"
 // Get App type will read the configuration from namespace metadata.namespace
 type GetSpecType struct {
-	Mode                  ves_io_schema4.WafModeType              `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
-	AnomalyScoreThreshold uint32                                  `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
-	ParanoiaLevel         uint32                                  `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
-	RuleIds               []ves_io_schema_waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
-	RuleListType          RuleModeType                            `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
+	Mode                  schema.WafModeType        `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
+	AnomalyScoreThreshold uint32                    `protobuf:"varint,2,opt,name=anomaly_score_threshold,json=anomalyScoreThreshold,proto3" json:"anomaly_score_threshold,omitempty"`
+	ParanoiaLevel         uint32                    `protobuf:"varint,3,opt,name=paranoia_level,json=paranoiaLevel,proto3" json:"paranoia_level,omitempty"`
+	RuleIds               []waf_rule_list.WafRuleID `protobuf:"varint,4,rep,packed,name=rule_ids,json=ruleIds,proto3,enum=ves.io.schema.waf_rule_list.WafRuleID" json:"rule_ids,omitempty"`
+	RuleListType          RuleModeType              `protobuf:"varint,5,opt,name=rule_list_type,json=ruleListType,proto3,enum=ves.io.schema.waf_rules.RuleModeType" json:"rule_list_type,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00ad238a682aa65c, []int{4}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetMode() ves_io_schema4.WafModeType {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetMode() schema.WafModeType {
 	if m != nil {
 		return m.Mode
 	}
-	return ves_io_schema4.BLOCK
+	return schema.BLOCK
 }
 
 func (m *GetSpecType) GetAnomalyScoreThreshold() uint32 {
@@ -414,7 +543,7 @@ func (m *GetSpecType) GetParanoiaLevel() uint32 {
 	return 0
 }
 
-func (m *GetSpecType) GetRuleIds() []ves_io_schema_waf_rule_list.WafRuleID {
+func (m *GetSpecType) GetRuleIds() []waf_rule_list.WafRuleID {
 	if m != nil {
 		return m.RuleIds
 	}
@@ -429,14 +558,71 @@ func (m *GetSpecType) GetRuleListType() RuleModeType {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.waf_rules.SeverityType", SeverityType_name, SeverityType_value)
+	proto.RegisterEnum("ves.io.schema.waf_rules.RuleModeType", RuleModeType_name, RuleModeType_value)
 	proto.RegisterType((*Rules)(nil), "ves.io.schema.waf_rules.Rules")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.waf_rules.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.waf_rules.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.waf_rules.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.waf_rules.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.waf_rules.SeverityType", SeverityType_name, SeverityType_value)
-	proto.RegisterEnum("ves.io.schema.waf_rules.RuleModeType", RuleModeType_name, RuleModeType_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/waf_rules/types.proto", fileDescriptor_00ad238a682aa65c)
+}
+
+var fileDescriptor_00ad238a682aa65c = []byte{
+	// 761 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcd, 0x6a, 0xeb, 0x46,
+	0x18, 0xd5, 0x48, 0xfe, 0x1d, 0xff, 0x54, 0x1d, 0x08, 0x51, 0xdd, 0x20, 0x8c, 0x4b, 0x5b, 0x63,
+	0x88, 0x54, 0x52, 0x08, 0xb4, 0x8b, 0x16, 0xdb, 0x51, 0x8d, 0xa8, 0x63, 0xc3, 0xc4, 0x21, 0x69,
+	0x37, 0x66, 0x6c, 0x8d, 0x6d, 0xb5, 0x72, 0x46, 0x48, 0xb2, 0x53, 0x2f, 0x0a, 0xd9, 0x75, 0x5b,
+	0xf2, 0x14, 0xa5, 0x8f, 0xd0, 0x55, 0x97, 0x25, 0xa5, 0x25, 0xcb, 0x2c, 0x6f, 0x94, 0xcd, 0xbd,
+	0xbb, 0x3c, 0xc2, 0x65, 0x64, 0x27, 0xd8, 0xe6, 0x86, 0x40, 0xc8, 0xdd, 0x65, 0x63, 0xbe, 0x4f,
+	0xe7, 0x7c, 0x7f, 0xe7, 0x18, 0xcb, 0xf0, 0x93, 0x29, 0xf5, 0x35, 0x9b, 0xe9, 0x7e, 0x7f, 0x44,
+	0xc7, 0x44, 0x3f, 0x25, 0x83, 0xae, 0x37, 0x71, 0xa8, 0xaf, 0x07, 0x33, 0x97, 0xfa, 0x9a, 0xeb,
+	0xb1, 0x80, 0xa1, 0xcd, 0x39, 0x49, 0x9b, 0x93, 0xb4, 0x7b, 0x52, 0x61, 0x7b, 0x68, 0x07, 0xa3,
+	0x49, 0x4f, 0xeb, 0xb3, 0xb1, 0x3e, 0x64, 0x43, 0xa6, 0x47, 0xfc, 0xde, 0x64, 0x10, 0x65, 0x51,
+	0x12, 0x45, 0xf3, 0x3e, 0x85, 0x8f, 0x57, 0x87, 0x31, 0x37, 0xb0, 0xd9, 0xc9, 0x62, 0x48, 0xe1,
+	0xa3, 0x55, 0x70, 0x69, 0x7e, 0x61, 0x6b, 0x15, 0x9a, 0x12, 0xc7, 0xb6, 0x48, 0x40, 0x17, 0x68,
+	0x71, 0x0d, 0xb5, 0xe9, 0x69, 0x77, 0xb5, 0xf5, 0xe7, 0xef, 0x3e, 0xb2, 0xeb, 0xd8, 0x7e, 0xb0,
+	0x3c, 0xa8, 0xf4, 0x2f, 0x80, 0x71, 0xcc, 0x2f, 0x43, 0x5f, 0xc1, 0xd8, 0x98, 0x59, 0x54, 0x01,
+	0x45, 0x50, 0xce, 0xef, 0x7c, 0xaa, 0x3d, 0xa0, 0x80, 0xc6, 0xd9, 0xfb, 0xcc, 0xa2, 0x9d, 0x99,
+	0x4b, 0x71, 0x54, 0x82, 0xf2, 0x50, 0xb4, 0x2d, 0x45, 0x2c, 0x82, 0x72, 0x0e, 0x8b, 0xb6, 0x85,
+	0x8a, 0x30, 0x63, 0x51, 0xbf, 0xef, 0xd9, 0xd1, 0x4e, 0x8a, 0x54, 0x04, 0xe5, 0x34, 0x5e, 0x7e,
+	0x84, 0x10, 0x8c, 0x05, 0x64, 0xe8, 0x2b, 0xb1, 0xa2, 0x54, 0x4e, 0xe3, 0x28, 0x46, 0x55, 0x98,
+	0xf2, 0xe9, 0x94, 0x7a, 0x76, 0x30, 0x53, 0xe2, 0x8f, 0x2c, 0x71, 0xb0, 0x20, 0x46, 0x4b, 0xdc,
+	0x97, 0x95, 0xce, 0x25, 0x98, 0x6f, 0x38, 0xac, 0x47, 0x9c, 0x03, 0x97, 0xf6, 0x39, 0x88, 0xb4,
+	0x95, 0xb3, 0x0a, 0x6b, 0x1d, 0x8f, 0xc8, 0x60, 0xed, 0x96, 0x6f, 0xe1, 0x26, 0x39, 0x61, 0x63,
+	0xe2, 0xcc, 0xba, 0x7e, 0x9f, 0x79, 0xb4, 0x1b, 0x8c, 0x3c, 0xea, 0x8f, 0x98, 0xb3, 0x38, 0xb0,
+	0x96, 0xfc, 0xeb, 0xcd, 0xdf, 0x92, 0x58, 0x11, 0xf0, 0xc6, 0x82, 0x77, 0xc0, 0x69, 0x9d, 0x3b,
+	0x16, 0xfa, 0x02, 0xe6, 0x5d, 0xe2, 0x91, 0x13, 0x66, 0x93, 0xae, 0x43, 0xa7, 0xd4, 0x89, 0xee,
+	0xcf, 0xd5, 0xd2, 0xbc, 0x2e, 0x56, 0x11, 0x95, 0x18, 0xce, 0xdd, 0x11, 0x9a, 0x1c, 0x47, 0xc7,
+	0x30, 0x15, 0x99, 0x63, 0x5b, 0x73, 0x41, 0xf2, 0x3b, 0x9f, 0x3d, 0x70, 0x78, 0xe4, 0x1f, 0x5f,
+	0x9a, 0x9b, 0x60, 0xee, 0xd5, 0x36, 0x78, 0xcf, 0xc4, 0x39, 0x90, 0xe4, 0x33, 0x91, 0x87, 0xf1,
+	0x73, 0x20, 0x2a, 0x00, 0x27, 0x39, 0xd7, 0xb4, 0x7c, 0xf4, 0x3d, 0xcc, 0xdf, 0x97, 0x75, 0xb9,
+	0xed, 0x8f, 0x0a, 0xbb, 0xe2, 0x6e, 0x96, 0x3f, 0x6b, 0xda, 0x7e, 0x10, 0x29, 0xb9, 0x0b, 0xa5,
+	0x53, 0x32, 0x50, 0x12, 0x45, 0xa9, 0x9c, 0xd9, 0xd9, 0x5a, 0xeb, 0xd0, 0xee, 0xfd, 0x44, 0xfb,
+	0x01, 0xa6, 0x03, 0x4e, 0xad, 0x25, 0xfe, 0xfc, 0x95, 0x73, 0x31, 0xff, 0x28, 0xfd, 0x27, 0xc2,
+	0x7c, 0xdd, 0xa3, 0x24, 0xa0, 0x4f, 0x36, 0x65, 0xf7, 0x11, 0x53, 0x9e, 0xcf, 0x8b, 0xea, 0x53,
+	0xbd, 0x78, 0x3f, 0xa2, 0x7f, 0xfd, 0xe1, 0xc5, 0x37, 0x6b, 0xdf, 0xe8, 0xd2, 0xff, 0x22, 0xfc,
+	0x00, 0x53, 0xd7, 0x21, 0xfd, 0x17, 0x41, 0x9f, 0x45, 0xd0, 0x0b, 0x11, 0x66, 0x1a, 0x34, 0x78,
+	0x11, 0xf3, 0x19, 0xc4, 0xac, 0x30, 0x98, 0x5d, 0xfe, 0x71, 0x46, 0x39, 0x98, 0x36, 0xf6, 0x0d,
+	0xdc, 0x30, 0x5a, 0xf5, 0x1f, 0x64, 0x01, 0xa5, 0x61, 0xbc, 0xda, 0x34, 0x70, 0x47, 0x06, 0x28,
+	0x0b, 0x53, 0x75, 0x6c, 0x76, 0xcc, 0x7a, 0xb5, 0x29, 0x8b, 0x1c, 0x30, 0x30, 0x6e, 0x63, 0x59,
+	0x42, 0x19, 0x98, 0x3c, 0xaa, 0xe2, 0x96, 0xd9, 0x6a, 0xc8, 0x31, 0x04, 0x61, 0xa2, 0xd5, 0xee,
+	0x98, 0x75, 0x43, 0x8e, 0xa3, 0x14, 0x8c, 0x99, 0xad, 0xef, 0xda, 0x72, 0x82, 0xb3, 0xf7, 0x8c,
+	0xda, 0x61, 0x43, 0x4e, 0x56, 0xca, 0x30, 0xbb, 0xbc, 0x21, 0xaf, 0x36, 0x8e, 0xeb, 0xcd, 0xc3,
+	0x3d, 0x43, 0x16, 0x78, 0x62, 0xb6, 0xe6, 0x09, 0xa8, 0xfd, 0x06, 0x2e, 0xaf, 0x55, 0xe1, 0xea,
+	0x5a, 0x15, 0x6e, 0xaf, 0x55, 0x70, 0x16, 0xaa, 0xe0, 0x8f, 0x50, 0x05, 0xff, 0x84, 0x2a, 0xb8,
+	0x0c, 0x55, 0x70, 0x15, 0xaa, 0xe0, 0x55, 0xa8, 0x82, 0xd7, 0xa1, 0x2a, 0xdc, 0x86, 0x2a, 0xf8,
+	0xfd, 0x46, 0x15, 0x2e, 0x6f, 0x54, 0xe1, 0xea, 0x46, 0x15, 0x7e, 0xdc, 0x1f, 0x32, 0xf7, 0xe7,
+	0xa1, 0x36, 0x65, 0x4e, 0x40, 0x3d, 0x8f, 0x68, 0x13, 0x5f, 0x8f, 0x82, 0x01, 0xf3, 0xc6, 0xdb,
+	0xae, 0xc7, 0xa6, 0xb6, 0x45, 0xbd, 0xed, 0x3b, 0x58, 0x77, 0x7b, 0x43, 0xa6, 0xd3, 0x5f, 0x82,
+	0xc5, 0xeb, 0x77, 0xfd, 0xaf, 0x46, 0x2f, 0x11, 0xbd, 0x7c, 0xbf, 0x7c, 0x1b, 0x00, 0x00, 0xff,
+	0xff, 0x40, 0xc5, 0xb3, 0x4b, 0x8c, 0x08, 0x00, 0x00,
+}
+
 func (x SeverityType) String() string {
 	s, ok := SeverityType_name[int32(x)]
 	if ok {
@@ -748,7 +934,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *Rules) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -756,53 +942,53 @@ func (m *Rules) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Rules) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Rules) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-	}
-	if m.Id != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
-	}
-	if len(m.Description) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
+	if m.Severity != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Severity))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.Tags) > 0 {
-		for _, s := range m.Tags {
+		for iNdEx := len(m.Tags) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Tags[iNdEx])
+			copy(dAtA[i:], m.Tags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Tags[iNdEx])))
+			i--
 			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if m.Severity != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Severity))
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -810,24 +996,33 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+	if len(m.Waf) > 0 {
+		for iNdEx := len(m.Waf) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Waf[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
 	}
-	if m.AnomalyScoreThreshold != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
-	}
-	if m.ParanoiaLevel != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+	if m.RuleListType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.RuleIds) > 0 {
 		dAtA2 := make([]byte, len(m.RuleIds)*10)
@@ -841,35 +1036,34 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA2[j1] = uint8(num)
 			j1++
 		}
-		dAtA[i] = 0x22
-		i++
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
 		i = encodeVarintTypes(dAtA, i, uint64(j1))
-		i += copy(dAtA[i:], dAtA2[:j1])
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.RuleListType != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+	if m.ParanoiaLevel != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+		i--
+		dAtA[i] = 0x18
 	}
-	if len(m.Waf) > 0 {
-		for _, msg := range m.Waf {
-			dAtA[i] = 0x32
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.AnomalyScoreThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -877,24 +1071,19 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-	}
-	if m.AnomalyScoreThreshold != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
-	}
-	if m.ParanoiaLevel != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+	if m.RuleListType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.RuleIds) > 0 {
 		dAtA4 := make([]byte, len(m.RuleIds)*10)
@@ -908,23 +1097,34 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA4[j3] = uint8(num)
 			j3++
 		}
-		dAtA[i] = 0x22
-		i++
+		i -= j3
+		copy(dAtA[i:], dAtA4[:j3])
 		i = encodeVarintTypes(dAtA, i, uint64(j3))
-		i += copy(dAtA[i:], dAtA4[:j3])
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.RuleListType != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+	if m.ParanoiaLevel != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.AnomalyScoreThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -932,24 +1132,19 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-	}
-	if m.AnomalyScoreThreshold != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
-	}
-	if m.ParanoiaLevel != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+	if m.RuleListType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.RuleIds) > 0 {
 		dAtA6 := make([]byte, len(m.RuleIds)*10)
@@ -963,23 +1158,34 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA6[j5] = uint8(num)
 			j5++
 		}
-		dAtA[i] = 0x22
-		i++
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
 		i = encodeVarintTypes(dAtA, i, uint64(j5))
-		i += copy(dAtA[i:], dAtA6[:j5])
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.RuleListType != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+	if m.ParanoiaLevel != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.AnomalyScoreThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -987,24 +1193,19 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Mode != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
-	}
-	if m.AnomalyScoreThreshold != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
-	}
-	if m.ParanoiaLevel != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+	if m.RuleListType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.RuleIds) > 0 {
 		dAtA8 := make([]byte, len(m.RuleIds)*10)
@@ -1018,29 +1219,45 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA8[j7] = uint8(num)
 			j7++
 		}
-		dAtA[i] = 0x22
-		i++
+		i -= j7
+		copy(dAtA[i:], dAtA8[:j7])
 		i = encodeVarintTypes(dAtA, i, uint64(j7))
-		i += copy(dAtA[i:], dAtA8[:j7])
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.RuleListType != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleListType))
+	if m.ParanoiaLevel != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ParanoiaLevel))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.AnomalyScoreThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.AnomalyScoreThreshold))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Mode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *Rules) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1066,6 +1283,9 @@ func (m *Rules) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1097,6 +1317,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1122,6 +1345,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1147,6 +1373,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Mode != 0 {
@@ -1172,14 +1401,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1202,13 +1424,18 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForWaf := "[]*ObjectRefType{"
+	for _, f := range this.Waf {
+		repeatedStringForWaf += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForWaf += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Mode:` + fmt.Sprintf("%v", this.Mode) + `,`,
 		`AnomalyScoreThreshold:` + fmt.Sprintf("%v", this.AnomalyScoreThreshold) + `,`,
 		`ParanoiaLevel:` + fmt.Sprintf("%v", this.ParanoiaLevel) + `,`,
 		`RuleIds:` + fmt.Sprintf("%v", this.RuleIds) + `,`,
 		`RuleListType:` + fmt.Sprintf("%v", this.RuleListType) + `,`,
-		`Waf:` + strings.Replace(fmt.Sprintf("%v", this.Waf), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Waf:` + repeatedStringForWaf + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1278,7 +1505,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1306,7 +1533,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (RuleModeType(b) & 0x7F) << shift
+				m.Mode |= RuleModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1325,7 +1552,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Id |= (uint32(b) & 0x7F) << shift
+				m.Id |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1344,7 +1571,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1354,6 +1581,9 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1373,7 +1603,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1383,6 +1613,9 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1402,7 +1635,7 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Severity |= (SeverityType(b) & 0x7F) << shift
+				m.Severity |= SeverityType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1414,6 +1647,9 @@ func (m *Rules) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1443,7 +1679,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1471,7 +1707,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (ves_io_schema4.WafModeType(b) & 0x7F) << shift
+				m.Mode |= schema.WafModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1490,7 +1726,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnomalyScoreThreshold |= (uint32(b) & 0x7F) << shift
+				m.AnomalyScoreThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1509,14 +1745,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ParanoiaLevel |= (uint32(b) & 0x7F) << shift
+				m.ParanoiaLevel |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 4:
 			if wireType == 0 {
-				var v ves_io_schema_waf_rule_list.WafRuleID
+				var v waf_rule_list.WafRuleID
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTypes
@@ -1526,7 +1762,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+					v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1543,7 +1779,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1552,11 +1788,18 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
+				var elementCount int
+				if elementCount != 0 && len(m.RuleIds) == 0 {
+					m.RuleIds = make([]waf_rule_list.WafRuleID, 0, elementCount)
+				}
 				for iNdEx < postIndex {
-					var v ves_io_schema_waf_rule_list.WafRuleID
+					var v waf_rule_list.WafRuleID
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTypes
@@ -1566,7 +1809,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+						v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1590,7 +1833,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RuleListType |= (RuleModeType(b) & 0x7F) << shift
+				m.RuleListType |= RuleModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1609,7 +1852,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1618,10 +1861,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Waf = append(m.Waf, &ves_io_schema4.ObjectRefType{})
+			m.Waf = append(m.Waf, &schema.ObjectRefType{})
 			if err := m.Waf[len(m.Waf)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1633,6 +1879,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1662,7 +1911,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1690,7 +1939,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (ves_io_schema4.WafModeType(b) & 0x7F) << shift
+				m.Mode |= schema.WafModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1709,7 +1958,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnomalyScoreThreshold |= (uint32(b) & 0x7F) << shift
+				m.AnomalyScoreThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1728,14 +1977,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ParanoiaLevel |= (uint32(b) & 0x7F) << shift
+				m.ParanoiaLevel |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 4:
 			if wireType == 0 {
-				var v ves_io_schema_waf_rule_list.WafRuleID
+				var v waf_rule_list.WafRuleID
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTypes
@@ -1745,7 +1994,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+					v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1762,7 +2011,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1771,11 +2020,18 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
+				var elementCount int
+				if elementCount != 0 && len(m.RuleIds) == 0 {
+					m.RuleIds = make([]waf_rule_list.WafRuleID, 0, elementCount)
+				}
 				for iNdEx < postIndex {
-					var v ves_io_schema_waf_rule_list.WafRuleID
+					var v waf_rule_list.WafRuleID
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTypes
@@ -1785,7 +2041,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+						v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1809,7 +2065,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RuleListType |= (RuleModeType(b) & 0x7F) << shift
+				m.RuleListType |= RuleModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1821,6 +2077,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1850,7 +2109,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1878,7 +2137,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (ves_io_schema4.WafModeType(b) & 0x7F) << shift
+				m.Mode |= schema.WafModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1897,7 +2156,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnomalyScoreThreshold |= (uint32(b) & 0x7F) << shift
+				m.AnomalyScoreThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1916,14 +2175,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ParanoiaLevel |= (uint32(b) & 0x7F) << shift
+				m.ParanoiaLevel |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 4:
 			if wireType == 0 {
-				var v ves_io_schema_waf_rule_list.WafRuleID
+				var v waf_rule_list.WafRuleID
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTypes
@@ -1933,7 +2192,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+					v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1950,7 +2209,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1959,11 +2218,18 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
+				var elementCount int
+				if elementCount != 0 && len(m.RuleIds) == 0 {
+					m.RuleIds = make([]waf_rule_list.WafRuleID, 0, elementCount)
+				}
 				for iNdEx < postIndex {
-					var v ves_io_schema_waf_rule_list.WafRuleID
+					var v waf_rule_list.WafRuleID
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTypes
@@ -1973,7 +2239,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+						v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1997,7 +2263,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RuleListType |= (RuleModeType(b) & 0x7F) << shift
+				m.RuleListType |= RuleModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2009,6 +2275,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2038,7 +2307,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2066,7 +2335,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= (ves_io_schema4.WafModeType(b) & 0x7F) << shift
+				m.Mode |= schema.WafModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2085,7 +2354,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AnomalyScoreThreshold |= (uint32(b) & 0x7F) << shift
+				m.AnomalyScoreThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2104,14 +2373,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ParanoiaLevel |= (uint32(b) & 0x7F) << shift
+				m.ParanoiaLevel |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 4:
 			if wireType == 0 {
-				var v ves_io_schema_waf_rule_list.WafRuleID
+				var v waf_rule_list.WafRuleID
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTypes
@@ -2121,7 +2390,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+					v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2138,7 +2407,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2147,11 +2416,18 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthTypes
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
+				var elementCount int
+				if elementCount != 0 && len(m.RuleIds) == 0 {
+					m.RuleIds = make([]waf_rule_list.WafRuleID, 0, elementCount)
+				}
 				for iNdEx < postIndex {
-					var v ves_io_schema_waf_rule_list.WafRuleID
+					var v waf_rule_list.WafRuleID
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTypes
@@ -2161,7 +2437,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (ves_io_schema_waf_rule_list.WafRuleID(b) & 0x7F) << shift
+						v |= waf_rule_list.WafRuleID(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -2185,7 +2461,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RuleListType |= (RuleModeType(b) & 0x7F) << shift
+				m.RuleListType |= RuleModeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2197,6 +2473,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2214,6 +2493,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2245,10 +2525,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2265,107 +2543,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/waf_rules/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 755 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0x4d, 0x6b, 0xe3, 0x46,
-	0x18, 0xf6, 0x48, 0xfe, 0x1c, 0x7f, 0x54, 0x1d, 0x08, 0x51, 0xdd, 0x20, 0x8c, 0x4b, 0x5b, 0x63,
-	0x88, 0x54, 0x52, 0x08, 0xb4, 0x87, 0x16, 0xdb, 0x51, 0x8d, 0xa8, 0x63, 0xc3, 0xc4, 0x21, 0x69,
-	0x2f, 0x66, 0x6c, 0x8d, 0x6d, 0xb5, 0x72, 0x46, 0x48, 0xb2, 0x53, 0x1f, 0xca, 0xe6, 0x27, 0x2c,
-	0xf9, 0x15, 0xcb, 0xfe, 0x84, 0x3d, 0xed, 0x71, 0xc9, 0xb2, 0x4b, 0x8e, 0x39, 0x6e, 0xb4, 0x97,
-	0xdd, 0x5b, 0x7e, 0xc2, 0x32, 0xb2, 0x13, 0x6c, 0xb3, 0x21, 0x10, 0xb2, 0xb7, 0x5c, 0xcc, 0xfb,
-	0xea, 0x79, 0xde, 0xaf, 0xe7, 0x31, 0x96, 0xe1, 0x77, 0x13, 0xea, 0xa9, 0x16, 0xd3, 0xbc, 0xde,
-	0x90, 0x8e, 0x88, 0x76, 0x4c, 0xfa, 0x1d, 0x77, 0x6c, 0x53, 0x4f, 0xf3, 0xa7, 0x0e, 0xf5, 0x54,
-	0xc7, 0x65, 0x3e, 0x43, 0xeb, 0x33, 0x92, 0x3a, 0x23, 0xa9, 0x37, 0xa4, 0xfc, 0xe6, 0xc0, 0xf2,
-	0x87, 0xe3, 0xae, 0xda, 0x63, 0x23, 0x6d, 0xc0, 0x06, 0x4c, 0x0b, 0xf9, 0xdd, 0x71, 0x3f, 0xcc,
-	0xc2, 0x24, 0x8c, 0x66, 0x7d, 0xf2, 0xdf, 0x2e, 0x0f, 0x63, 0x8e, 0x6f, 0xb1, 0xa3, 0xf9, 0x90,
-	0xfc, 0x37, 0xcb, 0xe0, 0xc2, 0xfc, 0xfc, 0xc6, 0x32, 0x34, 0x21, 0xb6, 0x65, 0x12, 0x9f, 0xce,
-	0xd1, 0xc2, 0x0a, 0x6a, 0xd1, 0xe3, 0xce, 0x72, 0xeb, 0x1f, 0x3f, 0x7f, 0x64, 0xc7, 0xb6, 0x3c,
-	0x7f, 0x71, 0x50, 0xf1, 0x35, 0x80, 0x31, 0xcc, 0x2f, 0x43, 0xbf, 0xc0, 0xe8, 0x88, 0x99, 0x54,
-	0x06, 0x05, 0x50, 0xca, 0x6d, 0x7d, 0xaf, 0xde, 0xa2, 0x80, 0xca, 0xd9, 0xbb, 0xcc, 0xa4, 0xed,
-	0xa9, 0x43, 0x71, 0x58, 0x82, 0x72, 0x50, 0xb0, 0x4c, 0x59, 0x28, 0x80, 0x52, 0x16, 0x0b, 0x96,
-	0x89, 0x0a, 0x30, 0x6d, 0x52, 0xaf, 0xe7, 0x5a, 0xe1, 0x4e, 0xb2, 0x58, 0x00, 0xa5, 0x14, 0x5e,
-	0x7c, 0x84, 0x10, 0x8c, 0xfa, 0x64, 0xe0, 0xc9, 0xd1, 0x82, 0x58, 0x4a, 0xe1, 0x30, 0x46, 0x15,
-	0x98, 0xf4, 0xe8, 0x84, 0xba, 0x96, 0x3f, 0x95, 0x63, 0x77, 0x2c, 0xb1, 0x37, 0x27, 0x86, 0x4b,
-	0xdc, 0x94, 0x15, 0x4f, 0x45, 0x98, 0xab, 0xdb, 0xac, 0x4b, 0xec, 0x3d, 0x87, 0xf6, 0x38, 0x88,
-	0xd4, 0xa5, 0xb3, 0xf2, 0x2b, 0x1d, 0x0f, 0x48, 0x7f, 0xe5, 0x96, 0xdf, 0xe1, 0x3a, 0x39, 0x62,
-	0x23, 0x62, 0x4f, 0x3b, 0x5e, 0x8f, 0xb9, 0xb4, 0xe3, 0x0f, 0x5d, 0xea, 0x0d, 0x99, 0x3d, 0x3f,
-	0xb0, 0x9a, 0x78, 0xf1, 0xf1, 0xa5, 0x28, 0x94, 0x23, 0x78, 0x6d, 0xce, 0xdb, 0xe3, 0xb4, 0xf6,
-	0x35, 0x0b, 0xfd, 0x04, 0x73, 0x0e, 0x71, 0xc9, 0x11, 0xb3, 0x48, 0xc7, 0xa6, 0x13, 0x6a, 0x87,
-	0xf7, 0x67, 0xab, 0x29, 0x5e, 0x17, 0x2d, 0x0b, 0x72, 0x14, 0x67, 0xaf, 0x09, 0x0d, 0x8e, 0xa3,
-	0x43, 0x98, 0x0c, 0xcd, 0xb1, 0xcc, 0x99, 0x20, 0xb9, 0xad, 0x1f, 0x6e, 0x39, 0x3c, 0xf4, 0x8f,
-	0x2f, 0xcd, 0x4d, 0x30, 0x76, 0xaa, 0x6b, 0xbc, 0x67, 0xfc, 0x14, 0x88, 0xd2, 0x89, 0xc0, 0xc3,
-	0xd8, 0x29, 0x10, 0x64, 0x80, 0x13, 0x9c, 0x6b, 0x98, 0x1e, 0xfa, 0x13, 0xe6, 0x6e, 0xca, 0x3a,
-	0xdc, 0xf6, 0x3b, 0x85, 0x5d, 0x72, 0x37, 0xc3, 0x9f, 0x35, 0x2c, 0xcf, 0x0f, 0x95, 0xdc, 0x86,
-	0xe2, 0x31, 0xe9, 0xcb, 0xf1, 0x82, 0x58, 0x4a, 0x6f, 0x6d, 0xac, 0x74, 0x68, 0x75, 0xff, 0xa1,
-	0x3d, 0x1f, 0xd3, 0x3e, 0xa7, 0x56, 0xe3, 0xcf, 0xff, 0xe7, 0x5c, 0xcc, 0x3f, 0x8a, 0x6f, 0x04,
-	0x98, 0xab, 0xb9, 0x94, 0xf8, 0xf4, 0xde, 0xa6, 0x6c, 0xdf, 0x61, 0xca, 0xc3, 0x79, 0x51, 0xb9,
-	0xaf, 0x17, 0x5f, 0x46, 0xf4, 0x5f, 0xbf, 0x3e, 0xfb, 0x6d, 0xe5, 0x1b, 0x5d, 0x7c, 0x2b, 0xc0,
-	0xaf, 0x30, 0x75, 0x6c, 0xd2, 0x7b, 0x14, 0xf4, 0x41, 0x04, 0x3d, 0x13, 0x60, 0xba, 0x4e, 0xfd,
-	0x47, 0x31, 0x1f, 0x40, 0xcc, 0x32, 0x83, 0x99, 0xc5, 0x1f, 0x67, 0x94, 0x85, 0x29, 0x7d, 0x57,
-	0xc7, 0x75, 0xbd, 0x59, 0xfb, 0x4b, 0x8a, 0xa0, 0x14, 0x8c, 0x55, 0x1a, 0x3a, 0x6e, 0x4b, 0x00,
-	0x65, 0x60, 0xb2, 0x86, 0x8d, 0xb6, 0x51, 0xab, 0x34, 0x24, 0x81, 0x03, 0x3a, 0xc6, 0x2d, 0x2c,
-	0x89, 0x28, 0x0d, 0x13, 0x07, 0x15, 0xdc, 0x34, 0x9a, 0x75, 0x29, 0x8a, 0x20, 0x8c, 0x37, 0x5b,
-	0x6d, 0xa3, 0xa6, 0x4b, 0x31, 0x94, 0x84, 0x51, 0xa3, 0xf9, 0x47, 0x4b, 0x8a, 0x73, 0xf6, 0x8e,
-	0x5e, 0xdd, 0xaf, 0x4b, 0x89, 0x72, 0x09, 0x66, 0x16, 0x37, 0xe4, 0xd5, 0xfa, 0x61, 0xad, 0xb1,
-	0xbf, 0xa3, 0x4b, 0x11, 0x9e, 0x18, 0xcd, 0x59, 0x02, 0xaa, 0x4f, 0xce, 0x2f, 0x95, 0xc8, 0xc5,
-	0xa5, 0x12, 0xb9, 0xba, 0x54, 0xc0, 0x49, 0xa0, 0x80, 0x67, 0x81, 0x02, 0x5e, 0x05, 0x0a, 0x38,
-	0x0f, 0x14, 0x70, 0x11, 0x28, 0xe0, 0x5d, 0xa0, 0x80, 0x0f, 0x81, 0x12, 0xb9, 0x0a, 0x14, 0xf0,
-	0xf4, 0xbd, 0x12, 0xf9, 0x7b, 0x77, 0xc0, 0x9c, 0x7f, 0x07, 0xea, 0x84, 0xd9, 0x3e, 0x75, 0x5d,
-	0xa2, 0x8e, 0x3d, 0x2d, 0x0c, 0xfa, 0xcc, 0x1d, 0x6d, 0x3a, 0x2e, 0x9b, 0x58, 0x26, 0x75, 0x37,
-	0xaf, 0x61, 0xcd, 0xe9, 0x0e, 0x98, 0x46, 0xff, 0xf3, 0xe7, 0x6f, 0xdd, 0xd5, 0x7f, 0x18, 0xdd,
-	0x78, 0xf8, 0xce, 0xfd, 0xf9, 0x53, 0x00, 0x00, 0x00, 0xff, 0xff, 0x93, 0xf8, 0x62, 0x88, 0x83,
-	0x08, 0x00, 0x00,
-}

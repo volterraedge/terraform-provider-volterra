@@ -294,7 +294,7 @@ var CustomSiteStatusAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteSiteStatusMetricsResponse"
                         }
@@ -351,15 +351,19 @@ var CustomSiteStatusAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nOnly system namespace is valid for this request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site",
+                        "description": "Site\n\nx-required\nx-example: \"ce01\"\nName of the site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",

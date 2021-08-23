@@ -3,29 +3,33 @@
 
 package rate_limiter_policy
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-import ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Rate Limiter Rule
 //
@@ -37,27 +41,51 @@ type RateLimiterRule struct {
 	// x-displayName: "Metadata"
 	// x-required
 	// Common attributes for the rule including name and description.
-	Metadata *ves_io_schema4.MessageMetaType `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// spec
 	//
 	// x-displayName: "Rule Specification"
 	// x-required
 	// Specification for the rule including match preicates and actions.
-	Spec *ves_io_schema_service_policy_rule.RateLimiterRuleSpec `protobuf:"bytes,2,opt,name=spec" json:"spec,omitempty"`
+	Spec *service_policy_rule.RateLimiterRuleSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
 }
 
-func (m *RateLimiterRule) Reset()                    { *m = RateLimiterRule{} }
-func (*RateLimiterRule) ProtoMessage()               {}
-func (*RateLimiterRule) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *RateLimiterRule) Reset()      { *m = RateLimiterRule{} }
+func (*RateLimiterRule) ProtoMessage() {}
+func (*RateLimiterRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{0}
+}
+func (m *RateLimiterRule) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimiterRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RateLimiterRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimiterRule.Merge(m, src)
+}
+func (m *RateLimiterRule) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimiterRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimiterRule.DiscardUnknown(m)
+}
 
-func (m *RateLimiterRule) GetMetadata() *ves_io_schema4.MessageMetaType {
+var xxx_messageInfo_RateLimiterRule proto.InternalMessageInfo
+
+func (m *RateLimiterRule) GetMetadata() *schema.MessageMetaType {
 	if m != nil {
 		return m.Metadata
 	}
 	return nil
 }
 
-func (m *RateLimiterRule) GetSpec() *ves_io_schema_service_policy_rule.RateLimiterRuleSpec {
+func (m *RateLimiterRule) GetSpec() *service_policy_rule.RateLimiterRuleSpec {
 	if m != nil {
 		return m.Spec
 	}
@@ -84,17 +112,41 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Rules"
 	// A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified.
-	Rules []*RateLimiterRule `protobuf:"bytes,6,rep,name=rules" json:"rules,omitempty"`
+	Rules []*RateLimiterRule `protobuf:"bytes,6,rep,name=rules,proto3" json:"rules,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{1}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_ServerChoice interface {
 	isGlobalSpecType_ServerChoice()
@@ -104,16 +156,16 @@ type isGlobalSpecType_ServerChoice interface {
 }
 
 type GlobalSpecType_AnyServer struct {
-	AnyServer *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,oneof"`
+	AnyServer *schema.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,proto3,oneof" json:"any_server,omitempty"`
 }
 type GlobalSpecType_ServerName struct {
-	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof"`
+	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof" json:"server_name,omitempty"`
 }
 type GlobalSpecType_ServerNameMatcher struct {
-	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
+	ServerNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,proto3,oneof" json:"server_name_matcher,omitempty"`
 }
 type GlobalSpecType_ServerSelector struct {
-	ServerSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,oneof"`
+	ServerSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,proto3,oneof" json:"server_selector,omitempty"`
 }
 
 func (*GlobalSpecType_AnyServer) isGlobalSpecType_ServerChoice()         {}
@@ -128,7 +180,7 @@ func (m *GlobalSpecType) GetServerChoice() isGlobalSpecType_ServerChoice {
 	return nil
 }
 
-func (m *GlobalSpecType) GetAnyServer() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetAnyServer() *schema.Empty {
 	if x, ok := m.GetServerChoice().(*GlobalSpecType_AnyServer); ok {
 		return x.AnyServer
 	}
@@ -142,14 +194,14 @@ func (m *GlobalSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *GlobalSpecType) GetServerNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetServerChoice().(*GlobalSpecType_ServerNameMatcher); ok {
 		return x.ServerNameMatcher
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetServerSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GlobalSpecType) GetServerSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetServerChoice().(*GlobalSpecType_ServerSelector); ok {
 		return x.ServerSelector
 	}
@@ -163,119 +215,21 @@ func (m *GlobalSpecType) GetRules() []*RateLimiterRule {
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_AnyServer)(nil),
 		(*GlobalSpecType_ServerName)(nil),
 		(*GlobalSpecType_ServerNameMatcher)(nil),
 		(*GlobalSpecType_ServerSelector)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *GlobalSpecType_AnyServer:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AnyServer); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ServerName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ServerName)
-	case *GlobalSpecType_ServerNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerNameMatcher); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ServerSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerSelector); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ServerChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 2: // server_choice.any_server
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GlobalSpecType_AnyServer{msg}
-		return true, err
-	case 3: // server_choice.server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ServerChoice = &GlobalSpecType_ServerName{x}
-		return true, err
-	case 4: // server_choice.server_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GlobalSpecType_ServerNameMatcher{msg}
-		return true, err
-	case 5: // server_choice.server_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GlobalSpecType_ServerSelector{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *GlobalSpecType_AnyServer:
-		s := proto.Size(x.AnyServer)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ServerName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ServerName)))
-		n += len(x.ServerName)
-	case *GlobalSpecType_ServerNameMatcher:
-		s := proto.Size(x.ServerNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ServerSelector:
-		s := proto.Size(x.ServerSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // CreateSpecType
@@ -289,12 +243,36 @@ type CreateSpecType struct {
 	//	*CreateSpecType_ServerNameMatcher
 	//	*CreateSpecType_ServerSelector
 	ServerChoice isCreateSpecType_ServerChoice `protobuf_oneof:"server_choice"`
-	Rules        []*RateLimiterRule            `protobuf:"bytes,6,rep,name=rules" json:"rules,omitempty"`
+	Rules        []*RateLimiterRule            `protobuf:"bytes,6,rep,name=rules,proto3" json:"rules,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{2}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_ServerChoice interface {
 	isCreateSpecType_ServerChoice()
@@ -304,16 +282,16 @@ type isCreateSpecType_ServerChoice interface {
 }
 
 type CreateSpecType_AnyServer struct {
-	AnyServer *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,oneof"`
+	AnyServer *schema.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,proto3,oneof" json:"any_server,omitempty"`
 }
 type CreateSpecType_ServerName struct {
-	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof"`
+	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof" json:"server_name,omitempty"`
 }
 type CreateSpecType_ServerNameMatcher struct {
-	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
+	ServerNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,proto3,oneof" json:"server_name_matcher,omitempty"`
 }
 type CreateSpecType_ServerSelector struct {
-	ServerSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,oneof"`
+	ServerSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,proto3,oneof" json:"server_selector,omitempty"`
 }
 
 func (*CreateSpecType_AnyServer) isCreateSpecType_ServerChoice()         {}
@@ -328,7 +306,7 @@ func (m *CreateSpecType) GetServerChoice() isCreateSpecType_ServerChoice {
 	return nil
 }
 
-func (m *CreateSpecType) GetAnyServer() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetAnyServer() *schema.Empty {
 	if x, ok := m.GetServerChoice().(*CreateSpecType_AnyServer); ok {
 		return x.AnyServer
 	}
@@ -342,14 +320,14 @@ func (m *CreateSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *CreateSpecType) GetServerNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetServerChoice().(*CreateSpecType_ServerNameMatcher); ok {
 		return x.ServerNameMatcher
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetServerSelector() *ves_io_schema4.LabelSelectorType {
+func (m *CreateSpecType) GetServerSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetServerChoice().(*CreateSpecType_ServerSelector); ok {
 		return x.ServerSelector
 	}
@@ -363,112 +341,14 @@ func (m *CreateSpecType) GetRules() []*RateLimiterRule {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_AnyServer)(nil),
 		(*CreateSpecType_ServerName)(nil),
 		(*CreateSpecType_ServerNameMatcher)(nil),
 		(*CreateSpecType_ServerSelector)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *CreateSpecType_AnyServer:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AnyServer); err != nil {
-			return err
-		}
-	case *CreateSpecType_ServerName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ServerName)
-	case *CreateSpecType_ServerNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerNameMatcher); err != nil {
-			return err
-		}
-	case *CreateSpecType_ServerSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerSelector); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ServerChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 2: // server_choice.any_server
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &CreateSpecType_AnyServer{msg}
-		return true, err
-	case 3: // server_choice.server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ServerChoice = &CreateSpecType_ServerName{x}
-		return true, err
-	case 4: // server_choice.server_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &CreateSpecType_ServerNameMatcher{msg}
-		return true, err
-	case 5: // server_choice.server_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &CreateSpecType_ServerSelector{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *CreateSpecType_AnyServer:
-		s := proto.Size(x.AnyServer)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ServerName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ServerName)))
-		n += len(x.ServerName)
-	case *CreateSpecType_ServerNameMatcher:
-		s := proto.Size(x.ServerNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ServerSelector:
-		s := proto.Size(x.ServerSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // ReplaceSpecType
@@ -482,12 +362,36 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_ServerNameMatcher
 	//	*ReplaceSpecType_ServerSelector
 	ServerChoice isReplaceSpecType_ServerChoice `protobuf_oneof:"server_choice"`
-	Rules        []*RateLimiterRule             `protobuf:"bytes,6,rep,name=rules" json:"rules,omitempty"`
+	Rules        []*RateLimiterRule             `protobuf:"bytes,6,rep,name=rules,proto3" json:"rules,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{3}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_ServerChoice interface {
 	isReplaceSpecType_ServerChoice()
@@ -497,16 +401,16 @@ type isReplaceSpecType_ServerChoice interface {
 }
 
 type ReplaceSpecType_AnyServer struct {
-	AnyServer *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,oneof"`
+	AnyServer *schema.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,proto3,oneof" json:"any_server,omitempty"`
 }
 type ReplaceSpecType_ServerName struct {
-	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof"`
+	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof" json:"server_name,omitempty"`
 }
 type ReplaceSpecType_ServerNameMatcher struct {
-	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
+	ServerNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,proto3,oneof" json:"server_name_matcher,omitempty"`
 }
 type ReplaceSpecType_ServerSelector struct {
-	ServerSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,oneof"`
+	ServerSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,proto3,oneof" json:"server_selector,omitempty"`
 }
 
 func (*ReplaceSpecType_AnyServer) isReplaceSpecType_ServerChoice()         {}
@@ -521,7 +425,7 @@ func (m *ReplaceSpecType) GetServerChoice() isReplaceSpecType_ServerChoice {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAnyServer() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetAnyServer() *schema.Empty {
 	if x, ok := m.GetServerChoice().(*ReplaceSpecType_AnyServer); ok {
 		return x.AnyServer
 	}
@@ -535,14 +439,14 @@ func (m *ReplaceSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *ReplaceSpecType) GetServerNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetServerChoice().(*ReplaceSpecType_ServerNameMatcher); ok {
 		return x.ServerNameMatcher
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetServerSelector() *ves_io_schema4.LabelSelectorType {
+func (m *ReplaceSpecType) GetServerSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetServerChoice().(*ReplaceSpecType_ServerSelector); ok {
 		return x.ServerSelector
 	}
@@ -556,112 +460,14 @@ func (m *ReplaceSpecType) GetRules() []*RateLimiterRule {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_AnyServer)(nil),
 		(*ReplaceSpecType_ServerName)(nil),
 		(*ReplaceSpecType_ServerNameMatcher)(nil),
 		(*ReplaceSpecType_ServerSelector)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *ReplaceSpecType_AnyServer:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AnyServer); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ServerName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ServerName)
-	case *ReplaceSpecType_ServerNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerNameMatcher); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ServerSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerSelector); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ServerChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 2: // server_choice.any_server
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &ReplaceSpecType_AnyServer{msg}
-		return true, err
-	case 3: // server_choice.server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ServerChoice = &ReplaceSpecType_ServerName{x}
-		return true, err
-	case 4: // server_choice.server_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &ReplaceSpecType_ServerNameMatcher{msg}
-		return true, err
-	case 5: // server_choice.server_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &ReplaceSpecType_ServerSelector{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *ReplaceSpecType_AnyServer:
-		s := proto.Size(x.AnyServer)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ServerName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ServerName)))
-		n += len(x.ServerName)
-	case *ReplaceSpecType_ServerNameMatcher:
-		s := proto.Size(x.ServerNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ServerSelector:
-		s := proto.Size(x.ServerSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GetSpecType
@@ -675,12 +481,36 @@ type GetSpecType struct {
 	//	*GetSpecType_ServerNameMatcher
 	//	*GetSpecType_ServerSelector
 	ServerChoice isGetSpecType_ServerChoice `protobuf_oneof:"server_choice"`
-	Rules        []*RateLimiterRule         `protobuf:"bytes,6,rep,name=rules" json:"rules,omitempty"`
+	Rules        []*RateLimiterRule         `protobuf:"bytes,6,rep,name=rules,proto3" json:"rules,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{4}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_ServerChoice interface {
 	isGetSpecType_ServerChoice()
@@ -690,16 +520,16 @@ type isGetSpecType_ServerChoice interface {
 }
 
 type GetSpecType_AnyServer struct {
-	AnyServer *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,oneof"`
+	AnyServer *schema.Empty `protobuf:"bytes,2,opt,name=any_server,json=anyServer,proto3,oneof" json:"any_server,omitempty"`
 }
 type GetSpecType_ServerName struct {
-	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof"`
+	ServerName string `protobuf:"bytes,3,opt,name=server_name,json=serverName,proto3,oneof" json:"server_name,omitempty"`
 }
 type GetSpecType_ServerNameMatcher struct {
-	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
+	ServerNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=server_name_matcher,json=serverNameMatcher,proto3,oneof" json:"server_name_matcher,omitempty"`
 }
 type GetSpecType_ServerSelector struct {
-	ServerSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,oneof"`
+	ServerSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=server_selector,json=serverSelector,proto3,oneof" json:"server_selector,omitempty"`
 }
 
 func (*GetSpecType_AnyServer) isGetSpecType_ServerChoice()         {}
@@ -714,7 +544,7 @@ func (m *GetSpecType) GetServerChoice() isGetSpecType_ServerChoice {
 	return nil
 }
 
-func (m *GetSpecType) GetAnyServer() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetAnyServer() *schema.Empty {
 	if x, ok := m.GetServerChoice().(*GetSpecType_AnyServer); ok {
 		return x.AnyServer
 	}
@@ -728,14 +558,14 @@ func (m *GetSpecType) GetServerName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *GetSpecType) GetServerNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetServerChoice().(*GetSpecType_ServerNameMatcher); ok {
 		return x.ServerNameMatcher
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetServerSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GetSpecType) GetServerSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetServerChoice().(*GetSpecType_ServerSelector); ok {
 		return x.ServerSelector
 	}
@@ -749,112 +579,14 @@ func (m *GetSpecType) GetRules() []*RateLimiterRule {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_AnyServer)(nil),
 		(*GetSpecType_ServerName)(nil),
 		(*GetSpecType_ServerNameMatcher)(nil),
 		(*GetSpecType_ServerSelector)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *GetSpecType_AnyServer:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AnyServer); err != nil {
-			return err
-		}
-	case *GetSpecType_ServerName:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ServerName)
-	case *GetSpecType_ServerNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerNameMatcher); err != nil {
-			return err
-		}
-	case *GetSpecType_ServerSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServerSelector); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ServerChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 2: // server_choice.any_server
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GetSpecType_AnyServer{msg}
-		return true, err
-	case 3: // server_choice.server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ServerChoice = &GetSpecType_ServerName{x}
-		return true, err
-	case 4: // server_choice.server_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GetSpecType_ServerNameMatcher{msg}
-		return true, err
-	case 5: // server_choice.server_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ServerChoice = &GetSpecType_ServerSelector{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// server_choice
-	switch x := m.ServerChoice.(type) {
-	case *GetSpecType_AnyServer:
-		s := proto.Size(x.AnyServer)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ServerName:
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ServerName)))
-		n += len(x.ServerName)
-	case *GetSpecType_ServerNameMatcher:
-		s := proto.Size(x.ServerNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ServerSelector:
-		s := proto.Size(x.ServerSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Rate Limiter Policy List
@@ -867,14 +599,38 @@ type PolicyList struct {
 	// x-displayName: "Rate Limiter Policies"
 	// x-required
 	// Ordered list of rate limiter policies.
-	Policies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=policies" json:"policies,omitempty"`
+	Policies []*views.ObjectRefType `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
 }
 
-func (m *PolicyList) Reset()                    { *m = PolicyList{} }
-func (*PolicyList) ProtoMessage()               {}
-func (*PolicyList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *PolicyList) Reset()      { *m = PolicyList{} }
+func (*PolicyList) ProtoMessage() {}
+func (*PolicyList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab32b0e3712b8490, []int{5}
+}
+func (m *PolicyList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PolicyList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PolicyList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyList.Merge(m, src)
+}
+func (m *PolicyList) XXX_Size() int {
+	return m.Size()
+}
+func (m *PolicyList) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyList.DiscardUnknown(m)
+}
 
-func (m *PolicyList) GetPolicies() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_PolicyList proto.InternalMessageInfo
+
+func (m *PolicyList) GetPolicies() []*views.ObjectRefType {
 	if m != nil {
 		return m.Policies
 	}
@@ -895,6 +651,68 @@ func init() {
 	proto.RegisterType((*PolicyList)(nil), "ves.io.schema.views.rate_limiter_policy.PolicyList")
 	golang_proto.RegisterType((*PolicyList)(nil), "ves.io.schema.views.rate_limiter_policy.PolicyList")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/rate_limiter_policy/types.proto", fileDescriptor_ab32b0e3712b8490)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/rate_limiter_policy/types.proto", fileDescriptor_ab32b0e3712b8490)
+}
+
+var fileDescriptor_ab32b0e3712b8490 = []byte{
+	// 795 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0x3f, 0x6f, 0xeb, 0x54,
+	0x14, 0xf7, 0x8d, 0x93, 0xbe, 0xbe, 0x9b, 0xf7, 0xda, 0xd4, 0xaf, 0x08, 0x13, 0xd0, 0x25, 0x64,
+	0x80, 0x0c, 0x8d, 0x8d, 0x5a, 0x5a, 0xa1, 0x0e, 0x08, 0x05, 0xa1, 0x06, 0x68, 0x4b, 0xe5, 0x32,
+	0x20, 0x24, 0x08, 0x37, 0xee, 0x69, 0x62, 0xb0, 0x73, 0xad, 0xeb, 0x9b, 0x40, 0x86, 0x4a, 0x15,
+	0x9f, 0x00, 0x55, 0x42, 0x02, 0x31, 0xb0, 0x21, 0xd4, 0x8f, 0x40, 0x96, 0x8a, 0x09, 0x31, 0x65,
+	0xec, 0x48, 0x9d, 0xa5, 0x6c, 0x9d, 0x99, 0x90, 0xaf, 0x9d, 0x52, 0x9b, 0x48, 0x54, 0x82, 0xa1,
+	0x4f, 0xea, 0x66, 0xdf, 0x73, 0x7e, 0x7f, 0xfc, 0x3b, 0xc7, 0x96, 0xf1, 0xda, 0x00, 0x02, 0xc3,
+	0x61, 0x66, 0x60, 0x77, 0xc1, 0xa3, 0xe6, 0xc0, 0x81, 0x2f, 0x02, 0x93, 0x53, 0x01, 0x2d, 0xd7,
+	0xf1, 0x1c, 0x01, 0xbc, 0xe5, 0x33, 0xd7, 0xb1, 0x87, 0xa6, 0x18, 0xfa, 0x10, 0x18, 0x3e, 0x67,
+	0x82, 0x69, 0xaf, 0xc4, 0x20, 0x23, 0x06, 0x19, 0x12, 0x64, 0xcc, 0x00, 0x95, 0xeb, 0x1d, 0x47,
+	0x74, 0xfb, 0x6d, 0xc3, 0x66, 0x9e, 0xd9, 0x61, 0x1d, 0x66, 0x4a, 0x7c, 0xbb, 0x7f, 0x28, 0xef,
+	0xe4, 0x8d, 0xbc, 0x8a, 0x79, 0xcb, 0xcf, 0xa7, 0xcd, 0x30, 0x5f, 0x38, 0xac, 0x97, 0x88, 0x96,
+	0x2b, 0xe9, 0xe2, 0x3f, 0x6d, 0x95, 0xeb, 0xe9, 0x8e, 0x00, 0xf8, 0xc0, 0xb1, 0x21, 0xf1, 0xd2,
+	0xe2, 0x7d, 0x17, 0x52, 0xed, 0xcf, 0xa5, 0xdb, 0x6f, 0x96, 0x5e, 0xc8, 0xa4, 0x42, 0x5d, 0xe7,
+	0x80, 0x0a, 0x98, 0xed, 0x24, 0x7a, 0xfc, 0x56, 0xda, 0xeb, 0x8b, 0xb3, 0x52, 0xbd, 0x21, 0x50,
+	0xfd, 0x01, 0xe1, 0x45, 0x8b, 0x0a, 0xd8, 0x8e, 0xf3, 0xb2, 0xfa, 0x2e, 0x68, 0x9b, 0x78, 0xde,
+	0x03, 0x41, 0x0f, 0xa8, 0xa0, 0x3a, 0xaa, 0xa0, 0x5a, 0x71, 0x95, 0x18, 0xe9, 0xa0, 0x77, 0x20,
+	0x08, 0x68, 0x07, 0x76, 0x40, 0xd0, 0x0f, 0x86, 0x3e, 0x58, 0xd7, 0xfd, 0xda, 0x1e, 0xce, 0x07,
+	0x3e, 0xd8, 0x7a, 0x4e, 0xe2, 0x36, 0x32, 0xb8, 0x19, 0x49, 0x18, 0x19, 0xf5, 0x7d, 0x1f, 0xec,
+	0x46, 0x7e, 0x3c, 0x42, 0xc8, 0x92, 0x4c, 0xd5, 0x1f, 0xf3, 0x78, 0x61, 0xcb, 0x65, 0x6d, 0xea,
+	0x46, 0xa5, 0x48, 0x4e, 0x5b, 0xc7, 0x98, 0xf6, 0x86, 0xad, 0x88, 0x0d, 0x78, 0x22, 0xb5, 0x9c,
+	0x91, 0x7a, 0xdb, 0xf3, 0xc5, 0xb0, 0xa9, 0x58, 0x0f, 0x69, 0x6f, 0xb8, 0x2f, 0x1b, 0xb5, 0x3a,
+	0x2e, 0xc6, 0x90, 0x56, 0x8f, 0x7a, 0xa0, 0xab, 0x15, 0x54, 0x7b, 0xd8, 0xc0, 0x3f, 0xff, 0x71,
+	0xa6, 0x16, 0xb8, 0x5a, 0x3b, 0xce, 0x35, 0x15, 0x0b, 0xc7, 0x0d, 0xbb, 0xd4, 0x03, 0xed, 0x43,
+	0xfc, 0xe4, 0x46, 0x7b, 0xcb, 0xa3, 0xc2, 0xee, 0x02, 0xd7, 0xf3, 0x52, 0xee, 0xe5, 0x8c, 0x5c,
+	0xfc, 0x44, 0xc6, 0x4e, 0xdc, 0x14, 0xb9, 0x6c, 0xd0, 0xc0, 0xb1, 0x9b, 0x8a, 0xb5, 0xf4, 0x37,
+	0x65, 0x52, 0xd5, 0xde, 0xc3, 0x8b, 0x09, 0x73, 0x00, 0x2e, 0xd8, 0x82, 0x71, 0xbd, 0x20, 0x59,
+	0x2b, 0x19, 0xd6, 0x6d, 0xda, 0x06, 0x77, 0x3f, 0xe9, 0x89, 0x48, 0x9b, 0x8a, 0xb5, 0x10, 0x43,
+	0xa7, 0xa7, 0x1a, 0xe0, 0x42, 0x94, 0x63, 0xa0, 0xcf, 0x55, 0xd4, 0x5a, 0x71, 0xf5, 0x75, 0xe3,
+	0x96, 0xef, 0x44, 0x36, 0xf8, 0xc6, 0x33, 0x51, 0x12, 0x73, 0x27, 0x48, 0x2d, 0x1d, 0xe7, 0x64,
+	0x28, 0x27, 0x28, 0xf7, 0x2a, 0xb2, 0x62, 0x76, 0xed, 0x13, 0xfc, 0x58, 0xee, 0x97, 0xd3, 0x13,
+	0xc0, 0x7b, 0xd4, 0xd5, 0x2f, 0x1f, 0x48, 0xcb, 0xd5, 0x99, 0x7a, 0xef, 0xb7, 0x3f, 0x03, 0x5b,
+	0x58, 0x70, 0x28, 0x93, 0x58, 0x3e, 0x3d, 0x4a, 0x83, 0x2f, 0xa3, 0xf1, 0x3e, 0x8a, 0x8e, 0xde,
+	0x49, 0x4e, 0x36, 0x4b, 0xbf, 0x8c, 0xd0, 0x23, 0x8c, 0x71, 0xc1, 0x92, 0x72, 0x68, 0xa3, 0x51,
+	0xc3, 0x8f, 0x93, 0x94, 0xec, 0x2e, 0x73, 0x6c, 0xd0, 0x9e, 0x3d, 0x1b, 0xa1, 0x5c, 0xb4, 0x19,
+	0xe1, 0x08, 0x3d, 0x58, 0x5d, 0x59, 0x5b, 0x79, 0x6d, 0x65, 0xfd, 0x6a, 0x84, 0xd0, 0xbb, 0xf9,
+	0x79, 0x54, 0xca, 0x55, 0xbf, 0x55, 0xf1, 0xc2, 0x5b, 0x1c, 0xa8, 0x80, 0xff, 0xba, 0x28, 0x2f,
+	0xcd, 0x58, 0x94, 0xa7, 0x73, 0x39, 0x76, 0xff, 0xa7, 0xe5, 0x48, 0xb6, 0x60, 0x73, 0xe9, 0xb7,
+	0x37, 0x32, 0x2f, 0x63, 0xa3, 0x9a, 0x1d, 0xd3, 0xd2, 0x57, 0x7f, 0xa2, 0xf4, 0x51, 0xf5, 0x3b,
+	0x15, 0x2f, 0x5a, 0xe0, 0xbb, 0xd4, 0xbe, 0x9f, 0xcd, 0x5d, 0x9b, 0xcd, 0x37, 0x2a, 0x2e, 0x6e,
+	0x81, 0xb8, 0x9f, 0xcb, 0x1d, 0x9b, 0x4b, 0x0f, 0xe3, 0x3d, 0xc9, 0xbb, 0xed, 0x04, 0x42, 0xfb,
+	0x14, 0xcf, 0x4b, 0x15, 0x07, 0x02, 0x1d, 0x49, 0x5f, 0xb7, 0xf9, 0xf0, 0x56, 0x4e, 0x8f, 0x9e,
+	0xcc, 0x70, 0x3a, 0xfd, 0xba, 0x97, 0xde, 0xb4, 0xae, 0x59, 0x1b, 0xdf, 0xa3, 0xf1, 0x05, 0x51,
+	0xce, 0x2f, 0x88, 0x72, 0x75, 0x41, 0xd0, 0x71, 0x48, 0xd0, 0x4f, 0x21, 0x41, 0xbf, 0x86, 0x04,
+	0x8d, 0x43, 0x82, 0xce, 0x43, 0x82, 0x7e, 0x0f, 0x09, 0xba, 0x0c, 0x89, 0x72, 0x15, 0x12, 0xf4,
+	0xf5, 0x84, 0x28, 0x67, 0x13, 0x82, 0xc6, 0x13, 0xa2, 0x9c, 0x4f, 0x88, 0xf2, 0xd1, 0xc7, 0x1d,
+	0xe6, 0x7f, 0xde, 0x31, 0x06, 0xcc, 0x15, 0xc0, 0x39, 0x35, 0xfa, 0x81, 0x29, 0x2f, 0x0e, 0x19,
+	0xf7, 0xea, 0x3e, 0x67, 0x03, 0xe7, 0x00, 0x78, 0x7d, 0x5a, 0x36, 0xfd, 0x76, 0x87, 0x99, 0xf0,
+	0xa5, 0x98, 0xfe, 0x22, 0xfd, 0xcb, 0x5f, 0x5f, 0x7b, 0x4e, 0xfe, 0xae, 0xac, 0xfd, 0x15, 0x00,
+	0x00, 0xff, 0xff, 0x4d, 0x42, 0x98, 0x29, 0x27, 0x0a, 0x00, 0x00,
+}
+
 func (this *RateLimiterRule) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1719,7 +1537,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *RateLimiterRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1727,37 +1545,46 @@ func (m *RateLimiterRule) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RateLimiterRule) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimiterRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Metadata != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Metadata.Size()))
-		n1, err := m.Metadata.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
 	if m.Spec != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Spec.Size()))
-		n2, err := m.Spec.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1765,98 +1592,136 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ServerChoice != nil {
-		nn3, err := m.ServerChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn3
-	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x32
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
+		i--
 		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n4, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if m.ServerChoice != nil {
+		{
+			size := m.ServerChoice.Size()
+			i -= size
+			if _, err := m.ServerChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AnyServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AnyServer != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n5, err := m.AnyServer.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AnyServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ServerName)
+	copy(dAtA[i:], m.ServerName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
-	i += copy(dAtA[i:], m.ServerName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ServerNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n6, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ServerSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n7, err := m.ServerSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1864,86 +1729,122 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ServerChoice != nil {
-		nn8, err := m.ServerChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn8
-	}
 	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x32
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+		}
+	}
+	if m.ServerChoice != nil {
+		{
+			size := m.ServerChoice.Size()
+			i -= size
+			if _, err := m.ServerChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AnyServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AnyServer != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n9, err := m.AnyServer.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AnyServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ServerName)
+	copy(dAtA[i:], m.ServerName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
-	i += copy(dAtA[i:], m.ServerName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ServerNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n10, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ServerSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n11, err := m.ServerSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1951,86 +1852,122 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ServerChoice != nil {
-		nn12, err := m.ServerChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn12
-	}
 	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x32
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+		}
+	}
+	if m.ServerChoice != nil {
+		{
+			size := m.ServerChoice.Size()
+			i -= size
+			if _, err := m.ServerChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AnyServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AnyServer != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n13, err := m.AnyServer.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AnyServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ServerName)
+	copy(dAtA[i:], m.ServerName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
-	i += copy(dAtA[i:], m.ServerName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ServerNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n14, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ServerSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n15, err := m.ServerSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2038,86 +1975,122 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ServerChoice != nil {
-		nn16, err := m.ServerChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn16
-	}
 	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x32
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+		}
+	}
+	if m.ServerChoice != nil {
+		{
+			size := m.ServerChoice.Size()
+			i -= size
+			if _, err := m.ServerChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AnyServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AnyServer != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n17, err := m.AnyServer.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AnyServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x1a
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ServerName)
+	copy(dAtA[i:], m.ServerName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
-	i += copy(dAtA[i:], m.ServerName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ServerNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n18, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ServerSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServerSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n19, err := m.ServerSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServerSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PolicyList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2125,35 +2098,47 @@ func (m *PolicyList) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PolicyList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PolicyList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Policies) > 0 {
-		for _, msg := range m.Policies {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Policies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Policies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *RateLimiterRule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Metadata != nil {
@@ -2168,6 +2153,9 @@ func (m *RateLimiterRule) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerChoice != nil {
@@ -2187,6 +2175,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_AnyServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AnyServer != nil {
@@ -2196,6 +2187,9 @@ func (m *GlobalSpecType_AnyServer) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ServerName)
@@ -2203,6 +2197,9 @@ func (m *GlobalSpecType_ServerName) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ServerNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerNameMatcher != nil {
@@ -2212,6 +2209,9 @@ func (m *GlobalSpecType_ServerNameMatcher) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ServerSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerSelector != nil {
@@ -2221,6 +2221,9 @@ func (m *GlobalSpecType_ServerSelector) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerChoice != nil {
@@ -2236,6 +2239,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_AnyServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AnyServer != nil {
@@ -2245,6 +2251,9 @@ func (m *CreateSpecType_AnyServer) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ServerName)
@@ -2252,6 +2261,9 @@ func (m *CreateSpecType_ServerName) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ServerNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerNameMatcher != nil {
@@ -2261,6 +2273,9 @@ func (m *CreateSpecType_ServerNameMatcher) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ServerSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerSelector != nil {
@@ -2270,6 +2285,9 @@ func (m *CreateSpecType_ServerSelector) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerChoice != nil {
@@ -2285,6 +2303,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_AnyServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AnyServer != nil {
@@ -2294,6 +2315,9 @@ func (m *ReplaceSpecType_AnyServer) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ServerName)
@@ -2301,6 +2325,9 @@ func (m *ReplaceSpecType_ServerName) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ServerNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerNameMatcher != nil {
@@ -2310,6 +2337,9 @@ func (m *ReplaceSpecType_ServerNameMatcher) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ServerSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerSelector != nil {
@@ -2319,6 +2349,9 @@ func (m *ReplaceSpecType_ServerSelector) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerChoice != nil {
@@ -2334,6 +2367,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_AnyServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AnyServer != nil {
@@ -2343,6 +2379,9 @@ func (m *GetSpecType_AnyServer) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ServerName)
@@ -2350,6 +2389,9 @@ func (m *GetSpecType_ServerName) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ServerNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerNameMatcher != nil {
@@ -2359,6 +2401,9 @@ func (m *GetSpecType_ServerNameMatcher) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ServerSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServerSelector != nil {
@@ -2368,6 +2413,9 @@ func (m *GetSpecType_ServerSelector) Size() (n int) {
 	return n
 }
 func (m *PolicyList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Policies) > 0 {
@@ -2380,14 +2428,7 @@ func (m *PolicyList) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2397,8 +2438,8 @@ func (this *RateLimiterRule) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RateLimiterRule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "ves_io_schema4.MessageMetaType", 1) + `,`,
-		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "RateLimiterRuleSpec", "ves_io_schema_service_policy_rule.RateLimiterRuleSpec", 1) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "RateLimiterRuleSpec", "service_policy_rule.RateLimiterRuleSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2407,10 +2448,15 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*RateLimiterRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "RateLimiterRule", "RateLimiterRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "RateLimiterRule", "RateLimiterRule", 1) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2420,7 +2466,7 @@ func (this *GlobalSpecType_AnyServer) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AnyServer{`,
-		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2440,7 +2486,7 @@ func (this *GlobalSpecType_ServerNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ServerNameMatcher{`,
-		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2450,7 +2496,7 @@ func (this *GlobalSpecType_ServerSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ServerSelector{`,
-		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2459,9 +2505,14 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*RateLimiterRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "RateLimiterRule", "RateLimiterRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "RateLimiterRule", "RateLimiterRule", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2471,7 +2522,7 @@ func (this *CreateSpecType_AnyServer) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AnyServer{`,
-		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2491,7 +2542,7 @@ func (this *CreateSpecType_ServerNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ServerNameMatcher{`,
-		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2501,7 +2552,7 @@ func (this *CreateSpecType_ServerSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ServerSelector{`,
-		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2510,9 +2561,14 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*RateLimiterRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "RateLimiterRule", "RateLimiterRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "RateLimiterRule", "RateLimiterRule", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2522,7 +2578,7 @@ func (this *ReplaceSpecType_AnyServer) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AnyServer{`,
-		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2542,7 +2598,7 @@ func (this *ReplaceSpecType_ServerNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ServerNameMatcher{`,
-		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2552,7 +2608,7 @@ func (this *ReplaceSpecType_ServerSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ServerSelector{`,
-		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2561,9 +2617,14 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*RateLimiterRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "RateLimiterRule", "RateLimiterRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "RateLimiterRule", "RateLimiterRule", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2573,7 +2634,7 @@ func (this *GetSpecType_AnyServer) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AnyServer{`,
-		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2593,7 +2654,7 @@ func (this *GetSpecType_ServerNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ServerNameMatcher{`,
-		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ServerNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ServerNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2603,7 +2664,7 @@ func (this *GetSpecType_ServerSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ServerSelector{`,
-		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2612,8 +2673,13 @@ func (this *PolicyList) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPolicies := "[]*ObjectRefType{"
+	for _, f := range this.Policies {
+		repeatedStringForPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForPolicies += "}"
 	s := strings.Join([]string{`&PolicyList{`,
-		`Policies:` + strings.Replace(fmt.Sprintf("%v", this.Policies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Policies:` + repeatedStringForPolicies + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2641,7 +2707,7 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2669,7 +2735,7 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2678,11 +2744,14 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &ves_io_schema4.MessageMetaType{}
+				m.Metadata = &schema.MessageMetaType{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2702,7 +2771,7 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2711,11 +2780,14 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Spec == nil {
-				m.Spec = &ves_io_schema_service_policy_rule.RateLimiterRuleSpec{}
+				m.Spec = &service_policy_rule.RateLimiterRuleSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2728,6 +2800,9 @@ func (m *RateLimiterRule) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2757,7 +2832,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2785,7 +2860,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2794,10 +2869,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2817,7 +2895,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2827,6 +2905,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2846,7 +2927,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2855,10 +2936,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2878,7 +2962,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2887,10 +2971,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2910,7 +2997,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2919,6 +3006,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2941,7 +3031,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2950,11 +3040,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2967,6 +3060,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2996,7 +3092,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3024,7 +3120,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3033,10 +3129,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3056,7 +3155,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3066,6 +3165,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3085,7 +3187,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3094,10 +3196,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3117,7 +3222,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3126,10 +3231,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3149,7 +3257,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3158,6 +3266,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3173,6 +3284,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3202,7 +3316,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3230,7 +3344,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3239,10 +3353,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3262,7 +3379,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3272,6 +3389,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3291,7 +3411,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3300,10 +3420,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3323,7 +3446,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3332,10 +3455,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3355,7 +3481,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3364,6 +3490,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3379,6 +3508,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3408,7 +3540,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3436,7 +3568,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3445,10 +3577,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3468,7 +3603,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3478,6 +3613,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3497,7 +3635,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3506,10 +3644,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3529,7 +3670,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3538,10 +3679,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3561,7 +3705,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3570,6 +3714,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3585,6 +3732,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3614,7 +3764,7 @@ func (m *PolicyList) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3642,7 +3792,7 @@ func (m *PolicyList) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3651,10 +3801,13 @@ func (m *PolicyList) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Policies = append(m.Policies, &ves_io_schema_views.ObjectRefType{})
+			m.Policies = append(m.Policies, &views.ObjectRefType{})
 			if err := m.Policies[len(m.Policies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3666,6 +3819,9 @@ func (m *PolicyList) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3683,6 +3839,7 @@ func (m *PolicyList) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3714,10 +3871,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3734,114 +3889,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/views/rate_limiter_policy/types.proto", fileDescriptorTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/rate_limiter_policy/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 791 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcd, 0x6f, 0xe3, 0x44,
-	0x14, 0xf7, 0xc4, 0x49, 0x3f, 0x26, 0xfd, 0x48, 0xdd, 0x22, 0x4c, 0x40, 0x26, 0xe4, 0x00, 0x39,
-	0x34, 0x36, 0x6a, 0x69, 0x85, 0x7a, 0x40, 0x28, 0x08, 0x35, 0x40, 0x5b, 0x2a, 0x97, 0x03, 0x42,
-	0x82, 0x30, 0x71, 0x5f, 0x13, 0x83, 0x9d, 0xb1, 0xc6, 0x93, 0x40, 0x0e, 0x95, 0x2a, 0xfe, 0x02,
-	0x54, 0x84, 0x04, 0x27, 0x6e, 0x68, 0xd5, 0x3f, 0x61, 0x73, 0xa9, 0xf6, 0xb4, 0xda, 0x53, 0x8f,
-	0x3d, 0x6e, 0xdd, 0x4b, 0xf7, 0xd6, 0xf3, 0x9e, 0x56, 0x1e, 0x3b, 0xdd, 0xda, 0x1b, 0x69, 0x2b,
-	0xed, 0x1e, 0xba, 0x52, 0x6f, 0xf6, 0xbc, 0xf7, 0xfb, 0xf0, 0xef, 0x3d, 0x5b, 0xc6, 0xcb, 0x3d,
-	0xf0, 0x75, 0x9b, 0x1a, 0xbe, 0xd5, 0x06, 0x97, 0x18, 0x3d, 0x1b, 0x7e, 0xf3, 0x0d, 0x46, 0x38,
-	0x34, 0x1c, 0xdb, 0xb5, 0x39, 0xb0, 0x86, 0x47, 0x1d, 0xdb, 0xea, 0x1b, 0xbc, 0xef, 0x81, 0xaf,
-	0x7b, 0x8c, 0x72, 0xaa, 0x7c, 0x14, 0x81, 0xf4, 0x08, 0xa4, 0x0b, 0x90, 0x3e, 0x02, 0x54, 0xac,
-	0xb6, 0x6c, 0xde, 0xee, 0x36, 0x75, 0x8b, 0xba, 0x46, 0x8b, 0xb6, 0xa8, 0x21, 0xf0, 0xcd, 0xee,
-	0x9e, 0xb8, 0x13, 0x37, 0xe2, 0x2a, 0xe2, 0x2d, 0xbe, 0x9b, 0x34, 0x43, 0x3d, 0x6e, 0xd3, 0x4e,
-	0x2c, 0x5a, 0x2c, 0x25, 0x8b, 0x2f, 0xda, 0x2a, 0x56, 0x93, 0x1d, 0x3e, 0xb0, 0x9e, 0x6d, 0x41,
-	0xec, 0xa5, 0xc1, 0xba, 0x0e, 0x24, 0xda, 0xdf, 0x49, 0xb6, 0x5f, 0x2f, 0xbd, 0x97, 0x4a, 0x85,
-	0x38, 0xf6, 0x2e, 0xe1, 0x30, 0xda, 0x49, 0xf8, 0xf8, 0x8d, 0xa4, 0xd7, 0xf7, 0x47, 0xa5, 0x7a,
-	0x4d, 0xa0, 0xfc, 0x1f, 0xc2, 0xb3, 0x26, 0xe1, 0xb0, 0x11, 0xe5, 0x65, 0x76, 0x1d, 0x50, 0xd6,
-	0xf0, 0x84, 0x0b, 0x9c, 0xec, 0x12, 0x4e, 0x54, 0x54, 0x42, 0x95, 0xfc, 0x92, 0xa6, 0x27, 0x83,
-	0xde, 0x04, 0xdf, 0x27, 0x2d, 0xd8, 0x04, 0x4e, 0xbe, 0xeb, 0x7b, 0x60, 0x5e, 0xf5, 0x2b, 0xdb,
-	0x38, 0xeb, 0x7b, 0x60, 0xa9, 0x19, 0x81, 0x5b, 0x4d, 0xe1, 0x46, 0x24, 0xa1, 0xa7, 0xd4, 0x77,
-	0x3c, 0xb0, 0x6a, 0xd9, 0x93, 0x01, 0x42, 0xa6, 0x60, 0x2a, 0xff, 0x9f, 0xc5, 0x33, 0xeb, 0x0e,
-	0x6d, 0x12, 0x27, 0x2c, 0x85, 0x72, 0xca, 0x0a, 0xc6, 0xa4, 0xd3, 0x6f, 0x84, 0x6c, 0xc0, 0x62,
-	0xa9, 0x85, 0x94, 0xd4, 0x97, 0xae, 0xc7, 0xfb, 0x75, 0xc9, 0x9c, 0x24, 0x9d, 0xfe, 0x8e, 0x68,
-	0x54, 0xaa, 0x38, 0x1f, 0x41, 0x1a, 0x1d, 0xe2, 0x82, 0x2a, 0x97, 0x50, 0x65, 0xb2, 0x86, 0xef,
-	0x3f, 0x39, 0x96, 0x73, 0x4c, 0xae, 0x1c, 0x64, 0xea, 0x92, 0x89, 0xa3, 0x86, 0x2d, 0xe2, 0x82,
-	0xf2, 0x3d, 0x9e, 0xbf, 0xd6, 0xde, 0x70, 0x09, 0xb7, 0xda, 0xc0, 0xd4, 0xac, 0x90, 0xfb, 0x30,
-	0x25, 0x17, 0x3d, 0x91, 0xbe, 0x19, 0x35, 0x85, 0x2e, 0x6b, 0xc4, 0xb7, 0xad, 0xba, 0x64, 0xce,
-	0x3d, 0xa7, 0x8c, 0xab, 0xca, 0x37, 0x78, 0x36, 0x66, 0xf6, 0xc1, 0x01, 0x8b, 0x53, 0xa6, 0xe6,
-	0x04, 0x6b, 0x29, 0xc5, 0xba, 0x41, 0x9a, 0xe0, 0xec, 0xc4, 0x3d, 0x21, 0x69, 0x5d, 0x32, 0x67,
-	0x22, 0xe8, 0xf0, 0x54, 0x01, 0x9c, 0x0b, 0x73, 0xf4, 0xd5, 0xb1, 0x92, 0x5c, 0xc9, 0x2f, 0x7d,
-	0xaa, 0xdf, 0xf0, 0x9d, 0x48, 0x07, 0x5f, 0x7b, 0x2b, 0x4c, 0x62, 0xec, 0x10, 0xc9, 0x85, 0x83,
-	0x8c, 0x08, 0xe5, 0x10, 0x65, 0x3e, 0x46, 0x66, 0xc4, 0xae, 0xfc, 0x84, 0xa7, 0xc5, 0x7e, 0xd9,
-	0x1d, 0x0e, 0xac, 0x43, 0x1c, 0xf5, 0x62, 0x5c, 0x58, 0x2e, 0x8f, 0xd4, 0xfb, 0xb6, 0xf9, 0x0b,
-	0x58, 0xdc, 0x84, 0x3d, 0x91, 0xc4, 0xc2, 0xd1, 0x7e, 0x12, 0x7c, 0x11, 0x8e, 0x77, 0x2a, 0x3c,
-	0xfa, 0x2a, 0x3e, 0x59, 0x2b, 0x3c, 0x18, 0xa0, 0x29, 0x8c, 0x71, 0xce, 0x14, 0x72, 0x68, 0xb5,
-	0x56, 0xc1, 0xd3, 0x71, 0x4a, 0x56, 0x9b, 0xda, 0x16, 0x28, 0x6f, 0x1f, 0x0f, 0x50, 0x26, 0xdc,
-	0x8c, 0x60, 0x80, 0xc6, 0x97, 0x16, 0x97, 0x17, 0x3f, 0x59, 0x5c, 0xb9, 0x1c, 0x20, 0xf4, 0x75,
-	0x76, 0x02, 0x15, 0x32, 0xe5, 0x7f, 0x64, 0x3c, 0xf3, 0x05, 0x03, 0xc2, 0xe1, 0x55, 0x17, 0xe5,
-	0x83, 0x11, 0x8b, 0xf2, 0x66, 0x2e, 0xc7, 0xd6, 0x6b, 0x5a, 0x8e, 0x78, 0x0b, 0xd6, 0xe6, 0x1e,
-	0x7d, 0x96, 0x7a, 0x19, 0x6b, 0xe5, 0xf4, 0x98, 0xe6, 0xfe, 0x78, 0x8a, 0x92, 0x47, 0xe5, 0x7f,
-	0x65, 0x3c, 0x6b, 0x82, 0xe7, 0x10, 0xeb, 0x6e, 0x36, 0xb7, 0x6d, 0x36, 0x7f, 0xcb, 0x38, 0xbf,
-	0x0e, 0xfc, 0x6e, 0x2e, 0xb7, 0x6c, 0x2e, 0x1d, 0x8c, 0xb7, 0x05, 0xef, 0x86, 0xed, 0x73, 0xe5,
-	0x67, 0x3c, 0x21, 0x54, 0x6c, 0xf0, 0x55, 0x24, 0x7c, 0xdd, 0xe4, 0xc3, 0x5b, 0x3a, 0xda, 0x9f,
-	0x1f, 0xe1, 0x74, 0xf8, 0x75, 0x2f, 0x7c, 0x6e, 0x5e, 0xb1, 0xd6, 0xfe, 0x42, 0x27, 0x67, 0x9a,
-	0x74, 0x7a, 0xa6, 0x49, 0x97, 0x67, 0x1a, 0x3a, 0x08, 0x34, 0x74, 0x2f, 0xd0, 0xd0, 0xc3, 0x40,
-	0x43, 0x27, 0x81, 0x86, 0x4e, 0x03, 0x0d, 0x3d, 0x0e, 0x34, 0x74, 0x11, 0x68, 0xd2, 0x65, 0xa0,
-	0xa1, 0x3f, 0xcf, 0x35, 0xe9, 0xf8, 0x5c, 0x43, 0x3f, 0xfc, 0xd8, 0xa2, 0xde, 0xaf, 0x2d, 0xbd,
-	0x47, 0x1d, 0x0e, 0x8c, 0x11, 0xbd, 0xeb, 0x1b, 0xe2, 0x62, 0x8f, 0x32, 0xb7, 0xea, 0x31, 0xda,
-	0xb3, 0x77, 0x81, 0x55, 0x87, 0x65, 0xc3, 0x6b, 0xb6, 0xa8, 0x01, 0xbf, 0xf3, 0xe1, 0xaf, 0xd1,
-	0x4b, 0xfe, 0xf6, 0x9a, 0x63, 0xe2, 0x37, 0x65, 0xf9, 0x59, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa7,
-	0x18, 0xf7, 0xeb, 0x1f, 0x0a, 0x00, 0x00,
-}

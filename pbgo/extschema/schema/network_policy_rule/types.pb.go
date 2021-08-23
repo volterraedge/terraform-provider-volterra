@@ -3,30 +3,32 @@
 
 package network_policy_rule
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Network Policy Rule Action
 //
@@ -47,12 +49,15 @@ var NetworkPolicyRuleAction_name = map[int32]string{
 	0: "DENY",
 	1: "ALLOW",
 }
+
 var NetworkPolicyRuleAction_value = map[string]int32{
 	"DENY":  0,
 	"ALLOW": 1,
 }
 
-func (NetworkPolicyRuleAction) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (NetworkPolicyRuleAction) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{0}
+}
 
 // Log Action
 //
@@ -75,12 +80,15 @@ var LogAction_name = map[int32]string{
 	0: "NOLOG",
 	1: "LOG",
 }
+
 var LogAction_value = map[string]int32{
 	"NOLOG": 0,
 	"LOG":   1,
 }
 
-func (LogAction) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (LogAction) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{1}
+}
 
 // Network Policy Rule Action
 //
@@ -92,14 +100,38 @@ type NetworkPolicyPBRRuleAction struct {
 	// x-displayName: "Forwarding Class"
 	// Ordered list of forwarding class to use for traffic that match enclosing rule
 	// Action valid only when policy is part of PBR.
-	ForwardingClass []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=forwarding_class,json=forwardingClass" json:"forwarding_class,omitempty"`
+	ForwardingClass []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=forwarding_class,json=forwardingClass,proto3" json:"forwarding_class,omitempty"`
 }
 
-func (m *NetworkPolicyPBRRuleAction) Reset()                    { *m = NetworkPolicyPBRRuleAction{} }
-func (*NetworkPolicyPBRRuleAction) ProtoMessage()               {}
-func (*NetworkPolicyPBRRuleAction) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *NetworkPolicyPBRRuleAction) Reset()      { *m = NetworkPolicyPBRRuleAction{} }
+func (*NetworkPolicyPBRRuleAction) ProtoMessage() {}
+func (*NetworkPolicyPBRRuleAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{0}
+}
+func (m *NetworkPolicyPBRRuleAction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkPolicyPBRRuleAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NetworkPolicyPBRRuleAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkPolicyPBRRuleAction.Merge(m, src)
+}
+func (m *NetworkPolicyPBRRuleAction) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkPolicyPBRRuleAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkPolicyPBRRuleAction.DiscardUnknown(m)
+}
 
-func (m *NetworkPolicyPBRRuleAction) GetForwardingClass() []*ves_io_schema4.ObjectRefType {
+var xxx_messageInfo_NetworkPolicyPBRRuleAction proto.InternalMessageInfo
+
+func (m *NetworkPolicyPBRRuleAction) GetForwardingClass() []*schema.ObjectRefType {
 	if m != nil {
 		return m.ForwardingClass
 	}
@@ -121,8 +153,30 @@ type NetworkPolicyRuleAdvancedAction struct {
 func (m *NetworkPolicyRuleAdvancedAction) Reset()      { *m = NetworkPolicyRuleAdvancedAction{} }
 func (*NetworkPolicyRuleAdvancedAction) ProtoMessage() {}
 func (*NetworkPolicyRuleAdvancedAction) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_8508d684cd4d0a5f, []int{1}
 }
+func (m *NetworkPolicyRuleAdvancedAction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkPolicyRuleAdvancedAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NetworkPolicyRuleAdvancedAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkPolicyRuleAdvancedAction.Merge(m, src)
+}
+func (m *NetworkPolicyRuleAdvancedAction) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkPolicyRuleAdvancedAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkPolicyRuleAdvancedAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NetworkPolicyRuleAdvancedAction proto.InternalMessageInfo
 
 func (m *NetworkPolicyRuleAdvancedAction) GetAction() LogAction {
 	if m != nil {
@@ -146,7 +200,7 @@ type GlobalSpecType struct {
 	// x-displayName: "List of Port Ranges"
 	// x-example: "100-200"
 	// List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192
-	Ports []string `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	Ports []string `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	// protocol
 	//
 	// x-displayName: "Protocol"
@@ -174,22 +228,46 @@ type GlobalSpecType struct {
 	// x-example: label_matcher is "app" and say prefix_selector is "app == web, site in (abc, xyz)" then only label app will be matched and not site
 	//
 	// List of label keys to be matched in prefix_selector configured in remote_endpoint
-	LabelMatcher *ves_io_schema4.LabelMatcherType `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
+	LabelMatcher *schema.LabelMatcherType `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
 	// Policy Based Routing Action
 	//
 	// x-displayName: "Policy Based Routing Action"
 	// Action valid only when policy is part of PBR.
-	PbrAction *NetworkPolicyPBRRuleAction `protobuf:"bytes,8,opt,name=pbr_action,json=pbrAction" json:"pbr_action,omitempty"`
+	PbrAction *NetworkPolicyPBRRuleAction `protobuf:"bytes,8,opt,name=pbr_action,json=pbrAction,proto3" json:"pbr_action,omitempty"`
 	// advanced_action
 	//
 	// x-displayName: "Logging Action"
 	// Enable or disable logging.
-	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction" json:"advanced_action,omitempty"`
+	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction,proto3" json:"advanced_action,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{2}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_RemoteEndpoint interface {
 	isGlobalSpecType_RemoteEndpoint()
@@ -199,13 +277,13 @@ type isGlobalSpecType_RemoteEndpoint interface {
 }
 
 type GlobalSpecType_Prefix struct {
-	Prefix *ves_io_schema3.PrefixListType `protobuf:"bytes,4,opt,name=prefix,oneof"`
+	Prefix *schema.PrefixListType `protobuf:"bytes,4,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
 }
 type GlobalSpecType_PrefixSelector struct {
-	PrefixSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,oneof"`
+	PrefixSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,proto3,oneof" json:"prefix_selector,omitempty"`
 }
 type GlobalSpecType_IpPrefixSet struct {
-	IpPrefixSet *ves_io_schema4.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,oneof"`
+	IpPrefixSet *schema.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,proto3,oneof" json:"ip_prefix_set,omitempty"`
 }
 
 func (*GlobalSpecType_Prefix) isGlobalSpecType_RemoteEndpoint()         {}
@@ -240,28 +318,28 @@ func (m *GlobalSpecType) GetProtocol() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetPrefix() *ves_io_schema3.PrefixListType {
+func (m *GlobalSpecType) GetPrefix() *schema.PrefixListType {
 	if x, ok := m.GetRemoteEndpoint().(*GlobalSpecType_Prefix); ok {
 		return x.Prefix
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetPrefixSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GlobalSpecType) GetPrefixSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRemoteEndpoint().(*GlobalSpecType_PrefixSelector); ok {
 		return x.PrefixSelector
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetIpPrefixSet() *ves_io_schema4.IpPrefixSetRefType {
+func (m *GlobalSpecType) GetIpPrefixSet() *schema.IpPrefixSetRefType {
 	if x, ok := m.GetRemoteEndpoint().(*GlobalSpecType_IpPrefixSet); ok {
 		return x.IpPrefixSet
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *GlobalSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
@@ -282,97 +360,13 @@ func (m *GlobalSpecType) GetAdvancedAction() *NetworkPolicyRuleAdvancedAction {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_Prefix)(nil),
 		(*GlobalSpecType_PrefixSelector)(nil),
 		(*GlobalSpecType_IpPrefixSet)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *GlobalSpecType_Prefix:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Prefix); err != nil {
-			return err
-		}
-	case *GlobalSpecType_PrefixSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixSelector); err != nil {
-			return err
-		}
-	case *GlobalSpecType_IpPrefixSet:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpPrefixSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.RemoteEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 4: // remote_endpoint.prefix
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.PrefixListType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GlobalSpecType_Prefix{msg}
-		return true, err
-	case 5: // remote_endpoint.prefix_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GlobalSpecType_PrefixSelector{msg}
-		return true, err
-	case 7: // remote_endpoint.ip_prefix_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.IpPrefixSetRefType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GlobalSpecType_IpPrefixSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *GlobalSpecType_Prefix:
-		s := proto.Size(x.Prefix)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_PrefixSelector:
-		s := proto.Size(x.PrefixSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_IpPrefixSet:
-		s := proto.Size(x.IpPrefixSet)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create Network Policy Rule
@@ -381,20 +375,44 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 // Creates a network policy rule with configured parameters in specified namespace
 type CreateSpecType struct {
 	Action   NetworkPolicyRuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.network_policy_rule.NetworkPolicyRuleAction" json:"action,omitempty"`
-	Ports    []string                `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	Ports    []string                `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	Protocol string                  `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Types that are valid to be assigned to RemoteEndpoint:
 	//	*CreateSpecType_Prefix
 	//	*CreateSpecType_PrefixSelector
 	//	*CreateSpecType_IpPrefixSet
 	RemoteEndpoint isCreateSpecType_RemoteEndpoint  `protobuf_oneof:"remote_endpoint"`
-	LabelMatcher   *ves_io_schema4.LabelMatcherType `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
-	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction" json:"advanced_action,omitempty"`
+	LabelMatcher   *schema.LabelMatcherType         `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
+	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction,proto3" json:"advanced_action,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{3}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_RemoteEndpoint interface {
 	isCreateSpecType_RemoteEndpoint()
@@ -404,13 +422,13 @@ type isCreateSpecType_RemoteEndpoint interface {
 }
 
 type CreateSpecType_Prefix struct {
-	Prefix *ves_io_schema3.PrefixListType `protobuf:"bytes,4,opt,name=prefix,oneof"`
+	Prefix *schema.PrefixListType `protobuf:"bytes,4,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
 }
 type CreateSpecType_PrefixSelector struct {
-	PrefixSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,oneof"`
+	PrefixSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,proto3,oneof" json:"prefix_selector,omitempty"`
 }
 type CreateSpecType_IpPrefixSet struct {
-	IpPrefixSet *ves_io_schema4.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,oneof"`
+	IpPrefixSet *schema.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,proto3,oneof" json:"ip_prefix_set,omitempty"`
 }
 
 func (*CreateSpecType_Prefix) isCreateSpecType_RemoteEndpoint()         {}
@@ -445,28 +463,28 @@ func (m *CreateSpecType) GetProtocol() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetPrefix() *ves_io_schema3.PrefixListType {
+func (m *CreateSpecType) GetPrefix() *schema.PrefixListType {
 	if x, ok := m.GetRemoteEndpoint().(*CreateSpecType_Prefix); ok {
 		return x.Prefix
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetPrefixSelector() *ves_io_schema4.LabelSelectorType {
+func (m *CreateSpecType) GetPrefixSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRemoteEndpoint().(*CreateSpecType_PrefixSelector); ok {
 		return x.PrefixSelector
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetIpPrefixSet() *ves_io_schema4.IpPrefixSetRefType {
+func (m *CreateSpecType) GetIpPrefixSet() *schema.IpPrefixSetRefType {
 	if x, ok := m.GetRemoteEndpoint().(*CreateSpecType_IpPrefixSet); ok {
 		return x.IpPrefixSet
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *CreateSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
@@ -480,97 +498,13 @@ func (m *CreateSpecType) GetAdvancedAction() *NetworkPolicyRuleAdvancedAction {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_Prefix)(nil),
 		(*CreateSpecType_PrefixSelector)(nil),
 		(*CreateSpecType_IpPrefixSet)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *CreateSpecType_Prefix:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Prefix); err != nil {
-			return err
-		}
-	case *CreateSpecType_PrefixSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixSelector); err != nil {
-			return err
-		}
-	case *CreateSpecType_IpPrefixSet:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpPrefixSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.RemoteEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 4: // remote_endpoint.prefix
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.PrefixListType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &CreateSpecType_Prefix{msg}
-		return true, err
-	case 5: // remote_endpoint.prefix_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &CreateSpecType_PrefixSelector{msg}
-		return true, err
-	case 7: // remote_endpoint.ip_prefix_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.IpPrefixSetRefType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &CreateSpecType_IpPrefixSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *CreateSpecType_Prefix:
-		s := proto.Size(x.Prefix)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_PrefixSelector:
-		s := proto.Size(x.PrefixSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_IpPrefixSet:
-		s := proto.Size(x.IpPrefixSet)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Network Policy Rule
@@ -579,20 +513,44 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 // Replaces a network policy rule with configured parameters in specified namespace
 type ReplaceSpecType struct {
 	Action   NetworkPolicyRuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.network_policy_rule.NetworkPolicyRuleAction" json:"action,omitempty"`
-	Ports    []string                `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	Ports    []string                `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	Protocol string                  `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Types that are valid to be assigned to RemoteEndpoint:
 	//	*ReplaceSpecType_Prefix
 	//	*ReplaceSpecType_PrefixSelector
 	//	*ReplaceSpecType_IpPrefixSet
 	RemoteEndpoint isReplaceSpecType_RemoteEndpoint `protobuf_oneof:"remote_endpoint"`
-	LabelMatcher   *ves_io_schema4.LabelMatcherType `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
-	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction" json:"advanced_action,omitempty"`
+	LabelMatcher   *schema.LabelMatcherType         `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
+	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction,proto3" json:"advanced_action,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{4}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_RemoteEndpoint interface {
 	isReplaceSpecType_RemoteEndpoint()
@@ -602,13 +560,13 @@ type isReplaceSpecType_RemoteEndpoint interface {
 }
 
 type ReplaceSpecType_Prefix struct {
-	Prefix *ves_io_schema3.PrefixListType `protobuf:"bytes,4,opt,name=prefix,oneof"`
+	Prefix *schema.PrefixListType `protobuf:"bytes,4,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
 }
 type ReplaceSpecType_PrefixSelector struct {
-	PrefixSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,oneof"`
+	PrefixSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,proto3,oneof" json:"prefix_selector,omitempty"`
 }
 type ReplaceSpecType_IpPrefixSet struct {
-	IpPrefixSet *ves_io_schema4.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,oneof"`
+	IpPrefixSet *schema.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,proto3,oneof" json:"ip_prefix_set,omitempty"`
 }
 
 func (*ReplaceSpecType_Prefix) isReplaceSpecType_RemoteEndpoint()         {}
@@ -643,28 +601,28 @@ func (m *ReplaceSpecType) GetProtocol() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetPrefix() *ves_io_schema3.PrefixListType {
+func (m *ReplaceSpecType) GetPrefix() *schema.PrefixListType {
 	if x, ok := m.GetRemoteEndpoint().(*ReplaceSpecType_Prefix); ok {
 		return x.Prefix
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetPrefixSelector() *ves_io_schema4.LabelSelectorType {
+func (m *ReplaceSpecType) GetPrefixSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRemoteEndpoint().(*ReplaceSpecType_PrefixSelector); ok {
 		return x.PrefixSelector
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetIpPrefixSet() *ves_io_schema4.IpPrefixSetRefType {
+func (m *ReplaceSpecType) GetIpPrefixSet() *schema.IpPrefixSetRefType {
 	if x, ok := m.GetRemoteEndpoint().(*ReplaceSpecType_IpPrefixSet); ok {
 		return x.IpPrefixSet
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *ReplaceSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
@@ -678,97 +636,13 @@ func (m *ReplaceSpecType) GetAdvancedAction() *NetworkPolicyRuleAdvancedAction {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_Prefix)(nil),
 		(*ReplaceSpecType_PrefixSelector)(nil),
 		(*ReplaceSpecType_IpPrefixSet)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *ReplaceSpecType_Prefix:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Prefix); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_PrefixSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixSelector); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_IpPrefixSet:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpPrefixSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.RemoteEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 4: // remote_endpoint.prefix
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.PrefixListType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &ReplaceSpecType_Prefix{msg}
-		return true, err
-	case 5: // remote_endpoint.prefix_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &ReplaceSpecType_PrefixSelector{msg}
-		return true, err
-	case 7: // remote_endpoint.ip_prefix_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.IpPrefixSetRefType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &ReplaceSpecType_IpPrefixSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *ReplaceSpecType_Prefix:
-		s := proto.Size(x.Prefix)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_PrefixSelector:
-		s := proto.Size(x.PrefixSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_IpPrefixSet:
-		s := proto.Size(x.IpPrefixSet)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Network Policy Rule
@@ -777,20 +651,44 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 // Get a network policy rule in specified namespace
 type GetSpecType struct {
 	Action   NetworkPolicyRuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.network_policy_rule.NetworkPolicyRuleAction" json:"action,omitempty"`
-	Ports    []string                `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	Ports    []string                `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	Protocol string                  `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Types that are valid to be assigned to RemoteEndpoint:
 	//	*GetSpecType_Prefix
 	//	*GetSpecType_PrefixSelector
 	//	*GetSpecType_IpPrefixSet
 	RemoteEndpoint isGetSpecType_RemoteEndpoint     `protobuf_oneof:"remote_endpoint"`
-	LabelMatcher   *ves_io_schema4.LabelMatcherType `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
-	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction" json:"advanced_action,omitempty"`
+	LabelMatcher   *schema.LabelMatcherType         `protobuf:"bytes,6,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
+	AdvancedAction *NetworkPolicyRuleAdvancedAction `protobuf:"bytes,10,opt,name=advanced_action,json=advancedAction,proto3" json:"advanced_action,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8508d684cd4d0a5f, []int{5}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_RemoteEndpoint interface {
 	isGetSpecType_RemoteEndpoint()
@@ -800,13 +698,13 @@ type isGetSpecType_RemoteEndpoint interface {
 }
 
 type GetSpecType_Prefix struct {
-	Prefix *ves_io_schema3.PrefixListType `protobuf:"bytes,4,opt,name=prefix,oneof"`
+	Prefix *schema.PrefixListType `protobuf:"bytes,4,opt,name=prefix,proto3,oneof" json:"prefix,omitempty"`
 }
 type GetSpecType_PrefixSelector struct {
-	PrefixSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,oneof"`
+	PrefixSelector *schema.LabelSelectorType `protobuf:"bytes,5,opt,name=prefix_selector,json=prefixSelector,proto3,oneof" json:"prefix_selector,omitempty"`
 }
 type GetSpecType_IpPrefixSet struct {
-	IpPrefixSet *ves_io_schema4.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,oneof"`
+	IpPrefixSet *schema.IpPrefixSetRefType `protobuf:"bytes,7,opt,name=ip_prefix_set,json=ipPrefixSet,proto3,oneof" json:"ip_prefix_set,omitempty"`
 }
 
 func (*GetSpecType_Prefix) isGetSpecType_RemoteEndpoint()         {}
@@ -841,28 +739,28 @@ func (m *GetSpecType) GetProtocol() string {
 	return ""
 }
 
-func (m *GetSpecType) GetPrefix() *ves_io_schema3.PrefixListType {
+func (m *GetSpecType) GetPrefix() *schema.PrefixListType {
 	if x, ok := m.GetRemoteEndpoint().(*GetSpecType_Prefix); ok {
 		return x.Prefix
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetPrefixSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GetSpecType) GetPrefixSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRemoteEndpoint().(*GetSpecType_PrefixSelector); ok {
 		return x.PrefixSelector
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetIpPrefixSet() *ves_io_schema4.IpPrefixSetRefType {
+func (m *GetSpecType) GetIpPrefixSet() *schema.IpPrefixSetRefType {
 	if x, ok := m.GetRemoteEndpoint().(*GetSpecType_IpPrefixSet); ok {
 		return x.IpPrefixSet
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *GetSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
@@ -876,100 +774,20 @@ func (m *GetSpecType) GetAdvancedAction() *NetworkPolicyRuleAdvancedAction {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_Prefix)(nil),
 		(*GetSpecType_PrefixSelector)(nil),
 		(*GetSpecType_IpPrefixSet)(nil),
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *GetSpecType_Prefix:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Prefix); err != nil {
-			return err
-		}
-	case *GetSpecType_PrefixSelector:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixSelector); err != nil {
-			return err
-		}
-	case *GetSpecType_IpPrefixSet:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpPrefixSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.RemoteEndpoint has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 4: // remote_endpoint.prefix
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema3.PrefixListType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GetSpecType_Prefix{msg}
-		return true, err
-	case 5: // remote_endpoint.prefix_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GetSpecType_PrefixSelector{msg}
-		return true, err
-	case 7: // remote_endpoint.ip_prefix_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.IpPrefixSetRefType)
-		err := b.DecodeMessage(msg)
-		m.RemoteEndpoint = &GetSpecType_IpPrefixSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// remote_endpoint
-	switch x := m.RemoteEndpoint.(type) {
-	case *GetSpecType_Prefix:
-		s := proto.Size(x.Prefix)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_PrefixSelector:
-		s := proto.Size(x.PrefixSelector)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_IpPrefixSet:
-		s := proto.Size(x.IpPrefixSet)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
+	proto.RegisterEnum("ves.io.schema.network_policy_rule.NetworkPolicyRuleAction", NetworkPolicyRuleAction_name, NetworkPolicyRuleAction_value)
+	golang_proto.RegisterEnum("ves.io.schema.network_policy_rule.NetworkPolicyRuleAction", NetworkPolicyRuleAction_name, NetworkPolicyRuleAction_value)
+	proto.RegisterEnum("ves.io.schema.network_policy_rule.LogAction", LogAction_name, LogAction_value)
+	golang_proto.RegisterEnum("ves.io.schema.network_policy_rule.LogAction", LogAction_name, LogAction_value)
 	proto.RegisterType((*NetworkPolicyPBRRuleAction)(nil), "ves.io.schema.network_policy_rule.NetworkPolicyPBRRuleAction")
 	golang_proto.RegisterType((*NetworkPolicyPBRRuleAction)(nil), "ves.io.schema.network_policy_rule.NetworkPolicyPBRRuleAction")
 	proto.RegisterType((*NetworkPolicyRuleAdvancedAction)(nil), "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction")
@@ -982,11 +800,79 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.network_policy_rule.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.network_policy_rule.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.network_policy_rule.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.network_policy_rule.NetworkPolicyRuleAction", NetworkPolicyRuleAction_name, NetworkPolicyRuleAction_value)
-	golang_proto.RegisterEnum("ves.io.schema.network_policy_rule.NetworkPolicyRuleAction", NetworkPolicyRuleAction_name, NetworkPolicyRuleAction_value)
-	proto.RegisterEnum("ves.io.schema.network_policy_rule.LogAction", LogAction_name, LogAction_value)
-	golang_proto.RegisterEnum("ves.io.schema.network_policy_rule.LogAction", LogAction_name, LogAction_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/network_policy_rule/types.proto", fileDescriptor_8508d684cd4d0a5f)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/network_policy_rule/types.proto", fileDescriptor_8508d684cd4d0a5f)
+}
+
+var fileDescriptor_8508d684cd4d0a5f = []byte{
+	// 950 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x97, 0x41, 0x6f, 0x1b, 0x45,
+	0x14, 0xc7, 0xf7, 0x65, 0x6d, 0xc7, 0x9e, 0xa4, 0xb6, 0xb5, 0x80, 0x62, 0xdc, 0x76, 0xe3, 0x1a,
+	0x09, 0x59, 0x95, 0xb3, 0x6e, 0x53, 0x09, 0x44, 0x25, 0x8a, 0xb2, 0x09, 0x4a, 0x0a, 0x6e, 0x6c,
+	0x4d, 0x0b, 0x15, 0x08, 0xc9, 0x5a, 0xaf, 0xc7, 0xce, 0x92, 0xb5, 0x67, 0x35, 0xbb, 0x76, 0x9a,
+	0x43, 0xa5, 0x0a, 0xf1, 0x01, 0xaa, 0x48, 0x5c, 0xfa, 0x09, 0x10, 0x27, 0xce, 0xb8, 0x87, 0x1c,
+	0x11, 0xa7, 0x1c, 0xa3, 0x5c, 0x20, 0xeb, 0x4b, 0xb9, 0x45, 0x1c, 0x39, 0xa1, 0x9d, 0x5d, 0xbb,
+	0xd9, 0x75, 0x2b, 0x20, 0x6a, 0x6e, 0xb9, 0xbd, 0xdd, 0xff, 0x9b, 0xff, 0x7b, 0xe3, 0xf9, 0x3d,
+	0x6b, 0x16, 0x2d, 0x0d, 0x88, 0xad, 0x18, 0xb4, 0x62, 0xeb, 0x5b, 0xa4, 0xab, 0x55, 0x7a, 0xc4,
+	0xd9, 0xa1, 0x6c, 0xbb, 0x61, 0x51, 0xd3, 0xd0, 0x77, 0x1b, 0xac, 0x6f, 0x92, 0x8a, 0xb3, 0x6b,
+	0x11, 0x5b, 0xb1, 0x18, 0x75, 0xa8, 0x74, 0xcd, 0x4f, 0x57, 0xfc, 0x74, 0xe5, 0x15, 0xe9, 0xf9,
+	0xa5, 0x8e, 0xe1, 0x6c, 0xf5, 0x9b, 0x8a, 0x4e, 0xbb, 0x95, 0x0e, 0xed, 0xd0, 0x0a, 0x5f, 0xd9,
+	0xec, 0xb7, 0xf9, 0x13, 0x7f, 0xe0, 0x91, 0xef, 0x98, 0x5f, 0x98, 0x6a, 0x20, 0x10, 0x2e, 0x87,
+	0x05, 0x6a, 0x39, 0x06, 0xed, 0x05, 0x7d, 0xe4, 0xdf, 0x0d, 0x8b, 0xa7, 0x5a, 0xcc, 0x5f, 0x09,
+	0x4b, 0x03, 0xcd, 0x34, 0x5a, 0x9a, 0x43, 0x02, 0xb5, 0x10, 0x51, 0x0d, 0xb2, 0xd3, 0x08, 0x5b,
+	0x2f, 0x4e, 0x67, 0xd8, 0xa7, 0x0b, 0x14, 0xbf, 0x07, 0x94, 0xdf, 0xf4, 0x37, 0x5e, 0xe7, 0xfb,
+	0xae, 0xab, 0x18, 0xf7, 0x4d, 0xb2, 0xa2, 0x7b, 0x36, 0x52, 0x1b, 0x65, 0xdb, 0x94, 0xed, 0x68,
+	0xac, 0x65, 0xf4, 0x3a, 0x0d, 0xdd, 0xd4, 0x6c, 0x3b, 0x07, 0x05, 0xb1, 0x34, 0xb7, 0x7c, 0x45,
+	0x09, 0xff, 0x7a, 0xb5, 0xe6, 0xb7, 0x44, 0x77, 0x30, 0x69, 0x3f, 0xd8, 0xb5, 0x88, 0x7a, 0xf5,
+	0xa7, 0xc7, 0x53, 0x0b, 0x7f, 0xf9, 0x73, 0x5f, 0x8c, 0xef, 0xc1, 0x4c, 0x56, 0xc4, 0x99, 0x97,
+	0xda, 0xaa, 0x27, 0x15, 0x19, 0x5a, 0x0c, 0x75, 0xc1, 0x5b, 0x68, 0x0d, 0xb4, 0x9e, 0x4e, 0x5a,
+	0x41, 0x2b, 0x35, 0x94, 0xd0, 0x78, 0x94, 0x83, 0x02, 0x94, 0xd2, 0xcb, 0x65, 0xe5, 0x5f, 0x8f,
+	0x4f, 0xa9, 0xd2, 0x8e, 0xbf, 0x5a, 0x4d, 0x1d, 0x0d, 0x21, 0xbe, 0x59, 0xab, 0xd6, 0xd6, 0x71,
+	0x60, 0x53, 0x7c, 0x9a, 0x40, 0xe9, 0x75, 0x93, 0x36, 0x35, 0xf3, 0xbe, 0x45, 0x74, 0xaf, 0x6d,
+	0xe9, 0x9b, 0x48, 0x8d, 0xdb, 0xff, 0xa1, 0xc6, 0x74, 0xdf, 0x7e, 0xc5, 0xe4, 0xd1, 0x10, 0x62,
+	0x6b, 0x9f, 0x6e, 0x7e, 0x35, 0x2e, 0x28, 0xdd, 0x40, 0x71, 0x8b, 0x32, 0xc7, 0xce, 0xcd, 0x14,
+	0xc4, 0x52, 0x4a, 0xcd, 0x7b, 0x3f, 0x08, 0xda, 0x83, 0xd9, 0x62, 0x9c, 0x89, 0x3f, 0x03, 0x78,
+	0x8f, 0x89, 0x3d, 0x10, 0xb3, 0x4f, 0x00, 0xfb, 0x89, 0xd2, 0x27, 0x28, 0xc9, 0x8f, 0x49, 0xa7,
+	0x66, 0x4e, 0x2c, 0x40, 0x29, 0xa5, 0xbe, 0x77, 0x34, 0x04, 0x71, 0xa5, 0x5a, 0xf5, 0x92, 0x17,
+	0xd8, 0x3b, 0xd8, 0x8b, 0xb1, 0xf8, 0x60, 0xb5, 0x8e, 0xc5, 0x2f, 0xd6, 0xea, 0x38, 0x76, 0x77,
+	0xf5, 0x5e, 0x1d, 0x4f, 0x16, 0x49, 0x1f, 0xa2, 0x84, 0xc5, 0x48, 0xdb, 0x78, 0x94, 0x8b, 0x15,
+	0xa0, 0x34, 0xb7, 0x7c, 0x35, 0xb2, 0xa1, 0x3a, 0x17, 0xab, 0x86, 0xed, 0x78, 0xfb, 0xdf, 0x10,
+	0x70, 0x90, 0x2e, 0x7d, 0x89, 0x32, 0x7e, 0xd4, 0xb0, 0x89, 0x49, 0x74, 0x87, 0xb2, 0x5c, 0x9c,
+	0x3b, 0x14, 0x22, 0x0e, 0x55, 0xad, 0x49, 0xcc, 0xfb, 0x41, 0x0e, 0x3f, 0xfb, 0xd4, 0xb3, 0xe7,
+	0x10, 0x47, 0xa2, 0x00, 0xe2, 0x86, 0x80, 0xd3, 0xbe, 0xcb, 0x38, 0x41, 0x5a, 0x47, 0x97, 0x0c,
+	0xab, 0x31, 0xb1, 0x76, 0x72, 0xb3, 0xdc, 0xf5, 0x5a, 0xc4, 0xf5, 0xae, 0x55, 0x0f, 0xd6, 0x8d,
+	0x91, 0xda, 0x10, 0xf0, 0x9c, 0xf1, 0xf2, 0xad, 0x84, 0xd1, 0x25, 0xd3, 0x2b, 0xdd, 0xe8, 0x6a,
+	0x8e, 0xbe, 0x45, 0x58, 0x2e, 0xc1, 0x8d, 0x16, 0x5f, 0xd5, 0xde, 0x3d, 0x3f, 0x85, 0x77, 0x37,
+	0x7f, 0x32, 0x04, 0x78, 0xf6, 0x1c, 0x62, 0x68, 0x06, 0x44, 0x3c, 0x6f, 0x9e, 0xd2, 0x25, 0x82,
+	0x90, 0xd5, 0x64, 0x8d, 0x00, 0x81, 0x24, 0x37, 0xfc, 0xf8, 0xff, 0x22, 0x10, 0x1a, 0x20, 0x75,
+	0xf6, 0xf0, 0x31, 0xbc, 0x18, 0x02, 0xe0, 0x94, 0xd5, 0x64, 0x01, 0xc9, 0x7d, 0x94, 0xd1, 0x02,
+	0xb6, 0xc7, 0xb5, 0x10, 0xaf, 0xa5, 0x9e, 0x09, 0xb7, 0xd0, 0x98, 0xa8, 0xc9, 0xfd, 0x21, 0x80,
+	0xb7, 0x47, 0x9c, 0xd6, 0xc2, 0xca, 0x65, 0x94, 0x61, 0xa4, 0x4b, 0x1d, 0xd2, 0x20, 0xbd, 0x96,
+	0x45, 0x8d, 0x9e, 0x23, 0x79, 0xc9, 0xb1, 0x83, 0x21, 0xa4, 0x3e, 0x8b, 0x25, 0x53, 0x59, 0x54,
+	0x74, 0x63, 0x28, 0xbd, 0xca, 0x88, 0xe6, 0x90, 0xc9, 0x48, 0xe0, 0x37, 0x37, 0x12, 0x93, 0x41,
+	0x78, 0x3b, 0x34, 0x08, 0x63, 0xd8, 0xf3, 0x51, 0xd8, 0xdf, 0x04, 0xc7, 0x9f, 0x9f, 0x99, 0xe3,
+	0xf3, 0x84, 0x77, 0xed, 0x6c, 0xf0, 0x46, 0x70, 0xdd, 0x3e, 0x47, 0x8e, 0xa2, 0xf4, 0xdc, 0x2e,
+	0xfc, 0x76, 0x27, 0xf2, 0x6f, 0xf9, 0xd7, 0x9d, 0xf9, 0x9b, 0xe5, 0x8f, 0xca, 0xb7, 0xca, 0xcb,
+	0xe5, 0x0f, 0xca, 0x37, 0x6f, 0xa8, 0xef, 0x4f, 0xf3, 0xf5, 0xd6, 0x77, 0x7f, 0x43, 0xf4, 0x65,
+	0x71, 0x14, 0x43, 0x19, 0x4c, 0x2c, 0x53, 0xd3, 0x2f, 0x28, 0xbb, 0xa0, 0xec, 0xbc, 0x28, 0xfb,
+	0x3d, 0x86, 0xe6, 0xd6, 0x89, 0x73, 0x41, 0xd8, 0x05, 0x61, 0xe7, 0x43, 0xd8, 0x75, 0x05, 0x2d,
+	0xbc, 0x06, 0x10, 0x29, 0x89, 0xf8, 0xcd, 0x2f, 0x2b, 0x48, 0x29, 0x14, 0x5f, 0xa9, 0x56, 0x6b,
+	0x0f, 0xb3, 0x70, 0x7d, 0x11, 0xa5, 0x26, 0xf7, 0x51, 0xef, 0x3d, 0xbf, 0x8d, 0x66, 0x05, 0x69,
+	0x16, 0x89, 0x5e, 0x00, 0xea, 0x0f, 0x70, 0x70, 0x2c, 0x0b, 0x87, 0xc7, 0xb2, 0x70, 0x72, 0x2c,
+	0xc3, 0x13, 0x57, 0x86, 0x1f, 0x5d, 0x19, 0x7e, 0x75, 0x65, 0x38, 0x70, 0x65, 0x38, 0x74, 0x65,
+	0xf8, 0xc3, 0x95, 0xe1, 0x85, 0x2b, 0x0b, 0x27, 0xae, 0x0c, 0x4f, 0x47, 0xb2, 0xb0, 0x3f, 0x92,
+	0xe1, 0x60, 0x24, 0x0b, 0x87, 0x23, 0x59, 0xf8, 0xfa, 0x61, 0x87, 0x5a, 0xdb, 0x1d, 0x65, 0x40,
+	0x4d, 0x87, 0x30, 0xa6, 0x29, 0x7d, 0xbb, 0xc2, 0x83, 0x36, 0x65, 0xdd, 0x25, 0x8b, 0xd1, 0x81,
+	0xd1, 0x22, 0x6c, 0x69, 0x2c, 0x57, 0xac, 0x66, 0x87, 0x56, 0xc8, 0x23, 0x27, 0xf8, 0x34, 0x78,
+	0xfd, 0x37, 0x53, 0x33, 0xc1, 0xf1, 0xbd, 0xf5, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb8, 0xae,
+	0xbd, 0x1e, 0x5f, 0x0d, 0x00, 0x00,
+}
+
 func (x NetworkPolicyRuleAction) String() string {
 	s, ok := NetworkPolicyRuleAction_name[int32(x)]
 	if ok {
@@ -1761,7 +1647,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *NetworkPolicyPBRRuleAction) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1769,29 +1655,36 @@ func (m *NetworkPolicyPBRRuleAction) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NetworkPolicyPBRRuleAction) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkPolicyPBRRuleAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ForwardingClass) > 0 {
-		for _, msg := range m.ForwardingClass {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.ForwardingClass) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ForwardingClass[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *NetworkPolicyRuleAdvancedAction) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1799,22 +1692,27 @@ func (m *NetworkPolicyRuleAdvancedAction) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NetworkPolicyRuleAdvancedAction) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkPolicyRuleAdvancedAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1822,122 +1720,151 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
-	}
-	if len(m.Ports) > 0 {
-		for _, s := range m.Ports {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.AdvancedAction != nil {
+		{
+			size, err := m.AdvancedAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
-	}
-	if m.RemoteEndpoint != nil {
-		nn1, err := m.RemoteEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
-	}
-	if m.LabelMatcher != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n2, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
+		i--
+		dAtA[i] = 0x52
 	}
 	if m.PbrAction != nil {
+		{
+			size, err := m.PbrAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PbrAction.Size()))
-		n3, err := m.PbrAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
 	}
-	if m.AdvancedAction != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedAction.Size()))
-		n4, err := m.AdvancedAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.RemoteEndpoint != nil {
+		{
+			size := m.RemoteEndpoint.Size()
+			i -= size
+			if _, err := m.RemoteEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n4
 	}
-	return i, nil
+	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Protocol) > 0 {
+		i -= len(m.Protocol)
+		copy(dAtA[i:], m.Protocol)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ports[iNdEx])
+			copy(dAtA[i:], m.Ports[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ports[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Prefix != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Prefix.Size()))
-		n5, err := m.Prefix.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Prefix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_PrefixSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_PrefixSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PrefixSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixSelector.Size()))
-		n6, err := m.PrefixSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PrefixSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_IpPrefixSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_IpPrefixSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpPrefixSet != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixSet.Size()))
-		n7, err := m.IpPrefixSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpPrefixSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1945,112 +1872,139 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
-	}
-	if len(m.Ports) > 0 {
-		for _, s := range m.Ports {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.AdvancedAction != nil {
+		{
+			size, err := m.AdvancedAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
+		i--
+		dAtA[i] = 0x52
 	}
 	if m.RemoteEndpoint != nil {
-		nn8, err := m.RemoteEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RemoteEndpoint.Size()
+			i -= size
+			if _, err := m.RemoteEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn8
 	}
 	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n9, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n9
 	}
-	if m.AdvancedAction != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedAction.Size()))
-		n10, err := m.AdvancedAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
+	if len(m.Protocol) > 0 {
+		i -= len(m.Protocol)
+		copy(dAtA[i:], m.Protocol)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ports[iNdEx])
+			copy(dAtA[i:], m.Ports[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ports[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Prefix != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Prefix.Size()))
-		n11, err := m.Prefix.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Prefix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_PrefixSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_PrefixSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PrefixSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixSelector.Size()))
-		n12, err := m.PrefixSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PrefixSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_IpPrefixSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_IpPrefixSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpPrefixSet != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixSet.Size()))
-		n13, err := m.IpPrefixSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpPrefixSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2058,112 +2012,139 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
-	}
-	if len(m.Ports) > 0 {
-		for _, s := range m.Ports {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.AdvancedAction != nil {
+		{
+			size, err := m.AdvancedAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
+		i--
+		dAtA[i] = 0x52
 	}
 	if m.RemoteEndpoint != nil {
-		nn14, err := m.RemoteEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RemoteEndpoint.Size()
+			i -= size
+			if _, err := m.RemoteEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn14
 	}
 	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n15, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
 	}
-	if m.AdvancedAction != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedAction.Size()))
-		n16, err := m.AdvancedAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
+	if len(m.Protocol) > 0 {
+		i -= len(m.Protocol)
+		copy(dAtA[i:], m.Protocol)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ports[iNdEx])
+			copy(dAtA[i:], m.Ports[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ports[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Prefix != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Prefix.Size()))
-		n17, err := m.Prefix.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Prefix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_PrefixSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_PrefixSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PrefixSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixSelector.Size()))
-		n18, err := m.PrefixSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PrefixSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_IpPrefixSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_IpPrefixSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpPrefixSet != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixSet.Size()))
-		n19, err := m.IpPrefixSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpPrefixSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2171,118 +2152,150 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
-	}
-	if len(m.Ports) > 0 {
-		for _, s := range m.Ports {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.AdvancedAction != nil {
+		{
+			size, err := m.AdvancedAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
+		i--
+		dAtA[i] = 0x52
 	}
 	if m.RemoteEndpoint != nil {
-		nn20, err := m.RemoteEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RemoteEndpoint.Size()
+			i -= size
+			if _, err := m.RemoteEndpoint.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn20
 	}
 	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n21, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
 	}
-	if m.AdvancedAction != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedAction.Size()))
-		n22, err := m.AdvancedAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
+	if len(m.Protocol) > 0 {
+		i -= len(m.Protocol)
+		copy(dAtA[i:], m.Protocol)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ports[iNdEx])
+			copy(dAtA[i:], m.Ports[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ports[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_Prefix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Prefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Prefix != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Prefix.Size()))
-		n23, err := m.Prefix.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Prefix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_PrefixSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_PrefixSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PrefixSelector != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixSelector.Size()))
-		n24, err := m.PrefixSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PrefixSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_IpPrefixSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_IpPrefixSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IpPrefixSet != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixSet.Size()))
-		n25, err := m.IpPrefixSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IpPrefixSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *NetworkPolicyPBRRuleAction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.ForwardingClass) > 0 {
@@ -2295,6 +2308,9 @@ func (m *NetworkPolicyPBRRuleAction) Size() (n int) {
 }
 
 func (m *NetworkPolicyRuleAdvancedAction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -2304,6 +2320,9 @@ func (m *NetworkPolicyRuleAdvancedAction) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -2338,6 +2357,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_Prefix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Prefix != nil {
@@ -2347,6 +2369,9 @@ func (m *GlobalSpecType_Prefix) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_PrefixSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PrefixSelector != nil {
@@ -2356,6 +2381,9 @@ func (m *GlobalSpecType_PrefixSelector) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_IpPrefixSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpPrefixSet != nil {
@@ -2365,6 +2393,9 @@ func (m *GlobalSpecType_IpPrefixSet) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -2395,6 +2426,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_Prefix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Prefix != nil {
@@ -2404,6 +2438,9 @@ func (m *CreateSpecType_Prefix) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_PrefixSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PrefixSelector != nil {
@@ -2413,6 +2450,9 @@ func (m *CreateSpecType_PrefixSelector) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_IpPrefixSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpPrefixSet != nil {
@@ -2422,6 +2462,9 @@ func (m *CreateSpecType_IpPrefixSet) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -2452,6 +2495,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_Prefix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Prefix != nil {
@@ -2461,6 +2507,9 @@ func (m *ReplaceSpecType_Prefix) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_PrefixSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PrefixSelector != nil {
@@ -2470,6 +2519,9 @@ func (m *ReplaceSpecType_PrefixSelector) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_IpPrefixSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpPrefixSet != nil {
@@ -2479,6 +2531,9 @@ func (m *ReplaceSpecType_IpPrefixSet) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -2509,6 +2564,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_Prefix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Prefix != nil {
@@ -2518,6 +2576,9 @@ func (m *GetSpecType_Prefix) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_PrefixSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PrefixSelector != nil {
@@ -2527,6 +2588,9 @@ func (m *GetSpecType_PrefixSelector) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_IpPrefixSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IpPrefixSet != nil {
@@ -2537,14 +2601,7 @@ func (m *GetSpecType_IpPrefixSet) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2553,8 +2610,13 @@ func (this *NetworkPolicyPBRRuleAction) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForForwardingClass := "[]*ObjectRefType{"
+	for _, f := range this.ForwardingClass {
+		repeatedStringForForwardingClass += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForForwardingClass += "}"
 	s := strings.Join([]string{`&NetworkPolicyPBRRuleAction{`,
-		`ForwardingClass:` + strings.Replace(fmt.Sprintf("%v", this.ForwardingClass), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`ForwardingClass:` + repeatedStringForForwardingClass + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2578,9 +2640,9 @@ func (this *GlobalSpecType) String() string {
 		`Ports:` + fmt.Sprintf("%v", this.Ports) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
 		`RemoteEndpoint:` + fmt.Sprintf("%v", this.RemoteEndpoint) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
-		`PbrAction:` + strings.Replace(fmt.Sprintf("%v", this.PbrAction), "NetworkPolicyPBRRuleAction", "NetworkPolicyPBRRuleAction", 1) + `,`,
-		`AdvancedAction:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedAction), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
+		`PbrAction:` + strings.Replace(this.PbrAction.String(), "NetworkPolicyPBRRuleAction", "NetworkPolicyPBRRuleAction", 1) + `,`,
+		`AdvancedAction:` + strings.Replace(this.AdvancedAction.String(), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2590,7 +2652,7 @@ func (this *GlobalSpecType_Prefix) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Prefix{`,
-		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "ves_io_schema3.PrefixListType", 1) + `,`,
+		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "schema.PrefixListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2600,7 +2662,7 @@ func (this *GlobalSpecType_PrefixSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_PrefixSelector{`,
-		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2610,7 +2672,7 @@ func (this *GlobalSpecType_IpPrefixSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_IpPrefixSet{`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "ves_io_schema4.IpPrefixSetRefType", 1) + `,`,
+		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "schema.IpPrefixSetRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2624,8 +2686,8 @@ func (this *CreateSpecType) String() string {
 		`Ports:` + fmt.Sprintf("%v", this.Ports) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
 		`RemoteEndpoint:` + fmt.Sprintf("%v", this.RemoteEndpoint) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
-		`AdvancedAction:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedAction), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
+		`AdvancedAction:` + strings.Replace(this.AdvancedAction.String(), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2635,7 +2697,7 @@ func (this *CreateSpecType_Prefix) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Prefix{`,
-		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "ves_io_schema3.PrefixListType", 1) + `,`,
+		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "schema.PrefixListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2645,7 +2707,7 @@ func (this *CreateSpecType_PrefixSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_PrefixSelector{`,
-		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2655,7 +2717,7 @@ func (this *CreateSpecType_IpPrefixSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_IpPrefixSet{`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "ves_io_schema4.IpPrefixSetRefType", 1) + `,`,
+		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "schema.IpPrefixSetRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2669,8 +2731,8 @@ func (this *ReplaceSpecType) String() string {
 		`Ports:` + fmt.Sprintf("%v", this.Ports) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
 		`RemoteEndpoint:` + fmt.Sprintf("%v", this.RemoteEndpoint) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
-		`AdvancedAction:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedAction), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
+		`AdvancedAction:` + strings.Replace(this.AdvancedAction.String(), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2680,7 +2742,7 @@ func (this *ReplaceSpecType_Prefix) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_Prefix{`,
-		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "ves_io_schema3.PrefixListType", 1) + `,`,
+		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "schema.PrefixListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2690,7 +2752,7 @@ func (this *ReplaceSpecType_PrefixSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_PrefixSelector{`,
-		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2700,7 +2762,7 @@ func (this *ReplaceSpecType_IpPrefixSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_IpPrefixSet{`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "ves_io_schema4.IpPrefixSetRefType", 1) + `,`,
+		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "schema.IpPrefixSetRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2714,8 +2776,8 @@ func (this *GetSpecType) String() string {
 		`Ports:` + fmt.Sprintf("%v", this.Ports) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
 		`RemoteEndpoint:` + fmt.Sprintf("%v", this.RemoteEndpoint) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
-		`AdvancedAction:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedAction), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
+		`AdvancedAction:` + strings.Replace(this.AdvancedAction.String(), "NetworkPolicyRuleAdvancedAction", "NetworkPolicyRuleAdvancedAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2725,7 +2787,7 @@ func (this *GetSpecType_Prefix) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Prefix{`,
-		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "ves_io_schema3.PrefixListType", 1) + `,`,
+		`Prefix:` + strings.Replace(fmt.Sprintf("%v", this.Prefix), "PrefixListType", "schema.PrefixListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2735,7 +2797,7 @@ func (this *GetSpecType_PrefixSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_PrefixSelector{`,
-		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`PrefixSelector:` + strings.Replace(fmt.Sprintf("%v", this.PrefixSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2745,7 +2807,7 @@ func (this *GetSpecType_IpPrefixSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_IpPrefixSet{`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "ves_io_schema4.IpPrefixSetRefType", 1) + `,`,
+		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "schema.IpPrefixSetRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2773,7 +2835,7 @@ func (m *NetworkPolicyPBRRuleAction) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2801,7 +2863,7 @@ func (m *NetworkPolicyPBRRuleAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2810,10 +2872,13 @@ func (m *NetworkPolicyPBRRuleAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ForwardingClass = append(m.ForwardingClass, &ves_io_schema4.ObjectRefType{})
+			m.ForwardingClass = append(m.ForwardingClass, &schema.ObjectRefType{})
 			if err := m.ForwardingClass[len(m.ForwardingClass)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2825,6 +2890,9 @@ func (m *NetworkPolicyPBRRuleAction) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2854,7 +2922,7 @@ func (m *NetworkPolicyRuleAdvancedAction) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2882,7 +2950,7 @@ func (m *NetworkPolicyRuleAdvancedAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (LogAction(b) & 0x7F) << shift
+				m.Action |= LogAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2894,6 +2962,9 @@ func (m *NetworkPolicyRuleAdvancedAction) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2923,7 +2994,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2951,7 +3022,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (NetworkPolicyRuleAction(b) & 0x7F) << shift
+				m.Action |= NetworkPolicyRuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2970,7 +3041,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2980,6 +3051,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2999,7 +3073,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3009,6 +3083,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3028,7 +3105,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3037,10 +3114,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.PrefixListType{}
+			v := &schema.PrefixListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3060,7 +3140,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3069,10 +3149,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3092,7 +3175,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3101,11 +3184,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3125,7 +3211,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3134,10 +3220,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.IpPrefixSetRefType{}
+			v := &schema.IpPrefixSetRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3157,7 +3246,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3166,6 +3255,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3190,7 +3282,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3199,6 +3291,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3216,6 +3311,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3245,7 +3343,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3273,7 +3371,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (NetworkPolicyRuleAction(b) & 0x7F) << shift
+				m.Action |= NetworkPolicyRuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3292,7 +3390,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3302,6 +3400,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3321,7 +3422,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3331,6 +3432,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3350,7 +3454,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3359,10 +3463,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.PrefixListType{}
+			v := &schema.PrefixListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3382,7 +3489,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3391,10 +3498,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3414,7 +3524,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3423,11 +3533,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3447,7 +3560,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3456,10 +3569,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.IpPrefixSetRefType{}
+			v := &schema.IpPrefixSetRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3479,7 +3595,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3488,6 +3604,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3505,6 +3624,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3534,7 +3656,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3562,7 +3684,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (NetworkPolicyRuleAction(b) & 0x7F) << shift
+				m.Action |= NetworkPolicyRuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3581,7 +3703,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3591,6 +3713,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3610,7 +3735,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3620,6 +3745,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3639,7 +3767,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3648,10 +3776,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.PrefixListType{}
+			v := &schema.PrefixListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3671,7 +3802,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3680,10 +3811,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3703,7 +3837,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3712,11 +3846,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3736,7 +3873,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3745,10 +3882,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.IpPrefixSetRefType{}
+			v := &schema.IpPrefixSetRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3768,7 +3908,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3777,6 +3917,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3794,6 +3937,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3823,7 +3969,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3851,7 +3997,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (NetworkPolicyRuleAction(b) & 0x7F) << shift
+				m.Action |= NetworkPolicyRuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3870,7 +4016,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3880,6 +4026,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3899,7 +4048,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3909,6 +4058,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3928,7 +4080,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3937,10 +4089,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema3.PrefixListType{}
+			v := &schema.PrefixListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3960,7 +4115,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3969,10 +4124,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3992,7 +4150,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4001,11 +4159,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4025,7 +4186,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4034,10 +4195,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.IpPrefixSetRefType{}
+			v := &schema.IpPrefixSetRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4057,7 +4221,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4066,6 +4230,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4085,6 +4252,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4100,6 +4270,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4131,10 +4302,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4151,121 +4320,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/network_policy_rule/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/network_policy_rule/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 942 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x97, 0xc1, 0x6f, 0x1b, 0x45,
-	0x14, 0xc6, 0xf7, 0x65, 0x6d, 0xc7, 0x9e, 0xa4, 0xb6, 0xb5, 0x80, 0x62, 0xdc, 0x76, 0xe3, 0x1a,
-	0x09, 0x59, 0x95, 0xb3, 0x6e, 0x53, 0x09, 0x44, 0x25, 0x8a, 0xb2, 0x09, 0x4a, 0x0a, 0x6e, 0x6c,
-	0x4d, 0x0b, 0x15, 0x08, 0xc9, 0x5a, 0xaf, 0xc7, 0xce, 0x92, 0xb5, 0x67, 0x35, 0x3b, 0x76, 0x9a,
-	0x43, 0xa5, 0x0a, 0x71, 0x45, 0xaa, 0x72, 0xec, 0x5f, 0x80, 0x38, 0x71, 0xc6, 0x3d, 0xe4, 0x88,
-	0x38, 0xe5, 0x18, 0xe5, 0x02, 0x71, 0x2e, 0xe5, 0x16, 0x71, 0xe4, 0x84, 0x76, 0x76, 0xed, 0x66,
-	0xed, 0x54, 0x40, 0x94, 0xdc, 0x72, 0x7b, 0xbb, 0xdf, 0x9b, 0xef, 0xbd, 0xd9, 0xf9, 0x3d, 0x6b,
-	0x8c, 0x16, 0x7a, 0xc4, 0xd5, 0x2c, 0x5a, 0x72, 0xcd, 0x0d, 0xd2, 0x36, 0x4a, 0x1d, 0xc2, 0xb7,
-	0x28, 0xdb, 0xac, 0x39, 0xd4, 0xb6, 0xcc, 0xed, 0x1a, 0xeb, 0xda, 0xa4, 0xc4, 0xb7, 0x1d, 0xe2,
-	0x6a, 0x0e, 0xa3, 0x9c, 0x2a, 0x37, 0xfc, 0x74, 0xcd, 0x4f, 0xd7, 0x4e, 0x49, 0xcf, 0x2e, 0xb4,
-	0x2c, 0xbe, 0xd1, 0xad, 0x6b, 0x26, 0x6d, 0x97, 0x5a, 0xb4, 0x45, 0x4b, 0x62, 0x65, 0xbd, 0xdb,
-	0x14, 0x4f, 0xe2, 0x41, 0x44, 0xbe, 0x63, 0x76, 0x6e, 0xa2, 0x81, 0x40, 0xb8, 0x1a, 0x16, 0xa8,
-	0xc3, 0x2d, 0xda, 0x09, 0xfa, 0xc8, 0xbe, 0x1b, 0x16, 0x4f, 0xb4, 0x98, 0xbd, 0x16, 0x96, 0x7a,
-	0x86, 0x6d, 0x35, 0x0c, 0x4e, 0x02, 0x35, 0x37, 0xa6, 0x5a, 0x64, 0xab, 0x16, 0xb6, 0x9e, 0x9f,
-	0xcc, 0x70, 0x4f, 0x16, 0xc8, 0x7f, 0x0f, 0x28, 0xbb, 0xee, 0x6f, 0xbc, 0x2a, 0xf6, 0x5d, 0xd5,
-	0x31, 0xee, 0xda, 0x64, 0xc9, 0xf4, 0x6c, 0x94, 0x26, 0x4a, 0x37, 0x29, 0xdb, 0x32, 0x58, 0xc3,
-	0xea, 0xb4, 0x6a, 0xa6, 0x6d, 0xb8, 0x6e, 0x06, 0x72, 0x72, 0x61, 0x66, 0xf1, 0x9a, 0x16, 0xfe,
-	0x7a, 0x95, 0xfa, 0xb7, 0xc4, 0xe4, 0x98, 0x34, 0x1f, 0x6d, 0x3b, 0x44, 0xbf, 0xfe, 0xd3, 0xd3,
-	0x89, 0x85, 0xbf, 0xfc, 0xb9, 0x2b, 0x47, 0x77, 0x60, 0x2a, 0x2d, 0xe3, 0xd4, 0x6b, 0x6d, 0xd9,
-	0x93, 0xf2, 0x0c, 0xcd, 0x87, 0xba, 0x10, 0x2d, 0x34, 0x7a, 0x46, 0xc7, 0x24, 0x8d, 0xa0, 0x95,
-	0x0a, 0x8a, 0x19, 0x22, 0xca, 0x40, 0x0e, 0x0a, 0xc9, 0xc5, 0xa2, 0xf6, 0xaf, 0xc7, 0xa7, 0x95,
-	0x69, 0xcb, 0x5f, 0xad, 0x27, 0x0e, 0xfa, 0x10, 0x5d, 0xaf, 0x94, 0x2b, 0xab, 0x38, 0xb0, 0xc9,
-	0x3f, 0x8f, 0xa1, 0xe4, 0xaa, 0x4d, 0xeb, 0x86, 0xfd, 0xd0, 0x21, 0xa6, 0xd7, 0xb6, 0xf2, 0xcd,
-	0x58, 0x8d, 0xbb, 0xff, 0xa1, 0xc6, 0x64, 0xdf, 0x7e, 0xc5, 0xf8, 0x41, 0x1f, 0x22, 0x2b, 0x9f,
-	0xae, 0x7f, 0x35, 0x2c, 0xa8, 0xdc, 0x42, 0x51, 0x87, 0x32, 0xee, 0x66, 0xa6, 0x72, 0x72, 0x21,
-	0xa1, 0x67, 0xbd, 0x0f, 0x82, 0x76, 0x60, 0x3a, 0x1f, 0x65, 0xf2, 0xcf, 0x00, 0xde, 0x63, 0x6c,
-	0x07, 0xe4, 0xf4, 0x33, 0xc0, 0x7e, 0xa2, 0xf2, 0x09, 0x8a, 0x8b, 0x63, 0x32, 0xa9, 0x9d, 0x91,
-	0x73, 0x50, 0x48, 0xe8, 0xef, 0x1d, 0xf4, 0x41, 0x5e, 0x2a, 0x97, 0xbd, 0xe4, 0x39, 0xf6, 0x0e,
-	0xf6, 0x62, 0x2c, 0x3f, 0x5a, 0xae, 0x62, 0xf9, 0x8b, 0x95, 0x2a, 0x8e, 0xdc, 0x5f, 0x7e, 0x50,
-	0xc5, 0xa3, 0x45, 0xca, 0x87, 0x28, 0xe6, 0x30, 0xd2, 0xb4, 0x9e, 0x64, 0x22, 0x39, 0x28, 0xcc,
-	0x2c, 0x5e, 0x1f, 0xdb, 0x50, 0x55, 0x88, 0x65, 0xcb, 0xe5, 0xde, 0xfe, 0xd7, 0x24, 0x1c, 0xa4,
-	0x2b, 0x5f, 0xa2, 0x94, 0x1f, 0xd5, 0x5c, 0x62, 0x13, 0x93, 0x53, 0x96, 0x89, 0x0a, 0x87, 0xdc,
-	0x98, 0x43, 0xd9, 0xa8, 0x13, 0xfb, 0x61, 0x90, 0x23, 0xce, 0x3e, 0xf1, 0xe2, 0x25, 0x44, 0x91,
-	0x2c, 0x81, 0xbc, 0x26, 0xe1, 0xa4, 0xef, 0x32, 0x4c, 0x50, 0x30, 0xba, 0x62, 0x7b, 0x2b, 0x6a,
-	0x6d, 0x83, 0x9b, 0x1b, 0x84, 0x65, 0x62, 0xc2, 0x75, 0xfe, 0x34, 0xd7, 0x07, 0x7e, 0x8a, 0x30,
-	0x9d, 0x3d, 0xee, 0x03, 0xbc, 0x78, 0x09, 0x11, 0x34, 0x05, 0x32, 0x9e, 0xb5, 0x4f, 0xe8, 0xca,
-	0x2a, 0xba, 0x62, 0x39, 0xb5, 0x51, 0xbb, 0x3c, 0x33, 0x2d, 0x3c, 0x6f, 0x8c, 0x79, 0xde, 0x77,
-	0xaa, 0x41, 0x2f, 0x43, 0x4c, 0xd7, 0x24, 0x3c, 0x63, 0xbd, 0x7e, 0xab, 0x10, 0x84, 0x9c, 0x3a,
-	0xab, 0x05, 0x08, 0xc4, 0x85, 0xcb, 0xc7, 0xff, 0x17, 0x81, 0xd0, 0x00, 0xe9, 0xd3, 0xfb, 0x4f,
-	0xe1, 0x55, 0x1f, 0x00, 0x27, 0x9c, 0x3a, 0x0b, 0x48, 0xee, 0xa2, 0x94, 0x11, 0xb0, 0x3d, 0xac,
-	0x85, 0x44, 0x2d, 0xfd, 0x4c, 0xb8, 0x85, 0xc6, 0x44, 0x8f, 0xef, 0xf6, 0x01, 0xbc, 0x8f, 0x85,
-	0x93, 0x46, 0x58, 0xb9, 0x8a, 0x52, 0x8c, 0xb4, 0x29, 0x27, 0x35, 0xd2, 0x69, 0x38, 0xd4, 0xea,
-	0x70, 0xc5, 0x4b, 0x8e, 0xec, 0xf5, 0x21, 0xf1, 0x59, 0x24, 0x9e, 0x48, 0xa3, 0xfc, 0x20, 0x82,
-	0x92, 0xcb, 0x8c, 0x18, 0x9c, 0x8c, 0x46, 0x02, 0x9f, 0xdf, 0x48, 0x8c, 0x06, 0xe1, 0xed, 0xd0,
-	0x20, 0x0c, 0x61, 0xcf, 0x8e, 0xc3, 0x7e, 0x1e, 0x1c, 0x7f, 0x7e, 0x66, 0x8e, 0x4f, 0x81, 0x77,
-	0xe5, 0x6c, 0xf0, 0x5e, 0x14, 0xae, 0x9b, 0x17, 0xc8, 0xd1, 0x38, 0x3d, 0x77, 0x73, 0xbf, 0xdd,
-	0x1b, 0xfb, 0xb5, 0xfc, 0xeb, 0xde, 0xec, 0xed, 0xe2, 0x47, 0xc5, 0x3b, 0xc5, 0xc5, 0xe2, 0x07,
-	0xc5, 0xdb, 0xb7, 0xf4, 0xf7, 0x27, 0xf9, 0x7a, 0xeb, 0xbb, 0xbf, 0x61, 0xfc, 0x65, 0xfe, 0x28,
-	0x82, 0x52, 0x98, 0x38, 0xb6, 0x61, 0x5e, 0x52, 0x76, 0x49, 0xd9, 0x45, 0x51, 0xf6, 0x7b, 0x04,
-	0xcd, 0xac, 0x12, 0x7e, 0x49, 0xd8, 0x25, 0x61, 0x17, 0x43, 0xd8, 0x4d, 0x0d, 0xcd, 0xbd, 0x01,
-	0x10, 0x25, 0x8e, 0xc4, 0xcd, 0x2f, 0x2d, 0x29, 0x09, 0x14, 0x5d, 0x2a, 0x97, 0x2b, 0x8f, 0xd3,
-	0x70, 0x73, 0x1e, 0x25, 0x46, 0xf7, 0x51, 0xef, 0xbd, 0xb8, 0x8d, 0xa6, 0x25, 0x65, 0x1a, 0xc9,
-	0x5e, 0x00, 0xfa, 0x0f, 0xb0, 0x77, 0xa8, 0x4a, 0xfb, 0x87, 0xaa, 0x74, 0x7c, 0xa8, 0xc2, 0xb3,
-	0x81, 0x0a, 0x3f, 0x0e, 0x54, 0xf8, 0x75, 0xa0, 0xc2, 0xde, 0x40, 0x85, 0xfd, 0x81, 0x0a, 0x7f,
-	0x0c, 0x54, 0x78, 0x35, 0x50, 0xa5, 0xe3, 0x81, 0x0a, 0xcf, 0x8f, 0x54, 0x69, 0xf7, 0x48, 0x85,
-	0xaf, 0x1f, 0xb7, 0xa8, 0xb3, 0xd9, 0xd2, 0x7a, 0xd4, 0xe6, 0x84, 0x31, 0x43, 0xeb, 0xba, 0x25,
-	0x11, 0x34, 0x29, 0x6b, 0x2f, 0x38, 0x8c, 0xf6, 0xac, 0x06, 0x61, 0x0b, 0x43, 0xb9, 0xe4, 0xd4,
-	0x5b, 0xb4, 0x44, 0x9e, 0xf0, 0xe0, 0x2f, 0xc1, 0x9b, 0xff, 0x2b, 0xd5, 0x63, 0x02, 0xdb, 0x3b,
-	0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x52, 0xaa, 0x46, 0x4e, 0x57, 0x0d, 0x00, 0x00,
-}

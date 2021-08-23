@@ -588,6 +588,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
 							}
 
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
@@ -760,16 +761,19 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -790,16 +794,19 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -819,8 +826,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 						advertiseWhere[i].PortChoice = portChoiceInt
 
-						portChoiceInt.Port =
-							uint32(v.(int))
+						portChoiceInt.Port = uint32(v.(int))
 
 					}
 
@@ -940,6 +946,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.DnsVolterraManaged =
 			v.(bool)
+
 	}
 
 	//domains
@@ -1010,6 +1017,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.IdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	//listen_port
@@ -1017,6 +1025,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.ListenPort =
 			uint32(v.(int))
+
 	}
 
 	//origin_pools_weights
@@ -1053,16 +1062,19 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -1083,16 +1095,19 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Tenant = v.(string)
+
 					}
 
 				}
@@ -1112,6 +1127,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.WithSni =
 			v.(bool)
+
 	}
 
 	log.Printf("[DEBUG] Creating Volterra TcpLoadbalancer object with struct: %+v", createReq)
@@ -1250,6 +1266,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
 							}
 
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
@@ -1422,16 +1439,19 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -1452,16 +1472,19 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -1481,8 +1504,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 						advertiseWhere[i].PortChoice = portChoiceInt
 
-						portChoiceInt.Port =
-							uint32(v.(int))
+						portChoiceInt.Port = uint32(v.(int))
 
 					}
 
@@ -1599,6 +1621,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 		updateSpec.DnsVolterraManaged =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {
@@ -1665,12 +1688,14 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 		updateSpec.IdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {
 
 		updateSpec.ListenPort =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("origin_pools"); ok && !isIntfNil(v) {
@@ -1732,16 +1757,19 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -1762,16 +1790,19 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Tenant = v.(string)
+
 					}
 
 				}
@@ -1790,6 +1821,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 		updateSpec.WithSni =
 			v.(bool)
+
 	}
 
 	log.Printf("[DEBUG] Updating Volterra TcpLoadbalancer obj with struct: %+v", updateReq)

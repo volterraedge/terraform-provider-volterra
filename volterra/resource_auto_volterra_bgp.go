@@ -640,6 +640,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 								verInt.Ipv4.Addr = v.(string)
+
 							}
 
 						}
@@ -660,6 +661,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 								verInt.Ipv6.Addr = v.(string)
+
 							}
 
 						}
@@ -816,8 +818,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
-						addressChoiceInt.SubnetBeginOffset =
-							uint32(v.(int))
+						addressChoiceInt.SubnetBeginOffset = uint32(v.(int))
 
 					}
 
@@ -828,14 +829,14 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
-						addressChoiceInt.SubnetEndOffset =
-							uint32(v.(int))
+						addressChoiceInt.SubnetEndOffset = uint32(v.(int))
 
 					}
 
 					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Asn = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["family_inet"]; ok && !isIntfNil(v) {
@@ -904,16 +905,19 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Tenant = v.(string)
+
 							}
 
 						}
@@ -976,6 +980,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["port"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Port = uint32(v.(int))
+
 					}
 
 				}
@@ -1025,44 +1030,6 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 							addressChoiceInt := &ves_io_schema_bgp.PeerInternal_FromSite{}
 							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
 							typeChoiceInt.Internal.AddressChoice = addressChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
-						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
-						for _, set := range sl {
-							familyInet6VpnMapStrToI := set.(map[string]interface{})
-
-							enableChoiceTypeFound := false
-
-							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
-
-								enableChoiceTypeFound = true
-
-								if v.(bool) {
-									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
-									enableChoiceInt.Disable = &ves_io_schema.Empty{}
-									familyInet6Vpn.EnableChoice = enableChoiceInt
-								}
-
-							}
-
-							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
-
-								enableChoiceTypeFound = true
-
-								if v.(bool) {
-									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
-									enableChoiceInt.Enable = &ves_io_schema.Empty{}
-									familyInet6Vpn.EnableChoice = enableChoiceInt
-								}
-
-							}
-
 						}
 
 					}
@@ -1201,6 +1168,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["port"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.Internal.Port = uint32(v.(int))
+
 					}
 
 				}
@@ -1466,6 +1434,7 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 								verInt.Ipv4.Addr = v.(string)
+
 							}
 
 						}
@@ -1486,6 +1455,7 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 								verInt.Ipv6.Addr = v.(string)
+
 							}
 
 						}
@@ -1641,8 +1611,7 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
-						addressChoiceInt.SubnetBeginOffset =
-							uint32(v.(int))
+						addressChoiceInt.SubnetBeginOffset = uint32(v.(int))
 
 					}
 
@@ -1653,14 +1622,14 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
-						addressChoiceInt.SubnetEndOffset =
-							uint32(v.(int))
+						addressChoiceInt.SubnetEndOffset = uint32(v.(int))
 
 					}
 
 					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Asn = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["family_inet"]; ok && !isIntfNil(v) {
@@ -1729,16 +1698,19 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								interfaceChoiceInt.Interface.Tenant = v.(string)
+
 							}
 
 						}
@@ -1801,6 +1773,7 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["port"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Port = uint32(v.(int))
+
 					}
 
 				}
@@ -1850,44 +1823,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							addressChoiceInt := &ves_io_schema_bgp.PeerInternal_FromSite{}
 							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
 							typeChoiceInt.Internal.AddressChoice = addressChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
-						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
-						for _, set := range sl {
-							familyInet6VpnMapStrToI := set.(map[string]interface{})
-
-							enableChoiceTypeFound := false
-
-							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
-
-								enableChoiceTypeFound = true
-
-								if v.(bool) {
-									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
-									enableChoiceInt.Disable = &ves_io_schema.Empty{}
-									familyInet6Vpn.EnableChoice = enableChoiceInt
-								}
-
-							}
-
-							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
-
-								enableChoiceTypeFound = true
-
-								if v.(bool) {
-									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
-									enableChoiceInt.Enable = &ves_io_schema.Empty{}
-									familyInet6Vpn.EnableChoice = enableChoiceInt
-								}
-
-							}
-
 						}
 
 					}
@@ -2026,6 +1961,7 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["port"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.Internal.Port = uint32(v.(int))
+
 					}
 
 				}

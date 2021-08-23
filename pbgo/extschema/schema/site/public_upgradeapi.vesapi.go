@@ -426,7 +426,7 @@ var UpgradeAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.UpgradeAPI.UpgradeOS",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteUpgradeOSResponse"
                         }
@@ -483,15 +483,19 @@ var UpgradeAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nSite namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -522,7 +526,7 @@ var UpgradeAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.UpgradeAPI.UpgradeSW",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteUpgradeSWResponse"
                         }
@@ -579,15 +583,19 @@ var UpgradeAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nSite namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

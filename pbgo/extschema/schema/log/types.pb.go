@@ -3,23 +3,29 @@
 
 package log
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // DateAggregationBucket
 //
@@ -44,12 +50,36 @@ type DateAggregationBucket struct {
 	//
 	// x-displayName: "Sub Aggregation"
 	// Sub aggregation data for the date bucket
-	SubAggs map[string]*DateSubAggregationData `protobuf:"bytes,3,rep,name=sub_aggs,json=subAggs" json:"sub_aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+	SubAggs map[string]*DateSubAggregationData `protobuf:"bytes,3,rep,name=sub_aggs,json=subAggs,proto3" json:"sub_aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
-func (m *DateAggregationBucket) Reset()                    { *m = DateAggregationBucket{} }
-func (*DateAggregationBucket) ProtoMessage()               {}
-func (*DateAggregationBucket) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *DateAggregationBucket) Reset()      { *m = DateAggregationBucket{} }
+func (*DateAggregationBucket) ProtoMessage() {}
+func (*DateAggregationBucket) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{0}
+}
+func (m *DateAggregationBucket) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DateAggregationBucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DateAggregationBucket) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DateAggregationBucket.Merge(m, src)
+}
+func (m *DateAggregationBucket) XXX_Size() int {
+	return m.Size()
+}
+func (m *DateAggregationBucket) XXX_DiscardUnknown() {
+	xxx_messageInfo_DateAggregationBucket.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DateAggregationBucket proto.InternalMessageInfo
 
 func (m *DateAggregationBucket) GetTime() uint64 {
 	if m != nil {
@@ -82,12 +112,36 @@ type DateSubAggregationData struct {
 	// x-displayName: "Field Aggregation"
 	//
 	// Field aggregation data
-	FieldAggregation *FieldAggregationData `protobuf:"bytes,1,opt,name=field_aggregation,json=fieldAggregation" json:"field_aggregation,omitempty"`
+	FieldAggregation *FieldAggregationData `protobuf:"bytes,1,opt,name=field_aggregation,json=fieldAggregation,proto3" json:"field_aggregation,omitempty"`
 }
 
-func (m *DateSubAggregationData) Reset()                    { *m = DateSubAggregationData{} }
-func (*DateSubAggregationData) ProtoMessage()               {}
-func (*DateSubAggregationData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *DateSubAggregationData) Reset()      { *m = DateSubAggregationData{} }
+func (*DateSubAggregationData) ProtoMessage() {}
+func (*DateSubAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{1}
+}
+func (m *DateSubAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DateSubAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DateSubAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DateSubAggregationData.Merge(m, src)
+}
+func (m *DateSubAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *DateSubAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_DateSubAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DateSubAggregationData proto.InternalMessageInfo
 
 func (m *DateSubAggregationData) GetFieldAggregation() *FieldAggregationData {
 	if m != nil {
@@ -105,12 +159,36 @@ type DateAggregationData struct {
 	//
 	// x-displayName: "Buckets"
 	// Lists of buckets containing timestamp and the corresponding log count
-	Buckets []*DateAggregationBucket `protobuf:"bytes,2,rep,name=buckets" json:"buckets,omitempty"`
+	Buckets []*DateAggregationBucket `protobuf:"bytes,2,rep,name=buckets,proto3" json:"buckets,omitempty"`
 }
 
-func (m *DateAggregationData) Reset()                    { *m = DateAggregationData{} }
-func (*DateAggregationData) ProtoMessage()               {}
-func (*DateAggregationData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *DateAggregationData) Reset()      { *m = DateAggregationData{} }
+func (*DateAggregationData) ProtoMessage() {}
+func (*DateAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{2}
+}
+func (m *DateAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DateAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DateAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DateAggregationData.Merge(m, src)
+}
+func (m *DateAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *DateAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_DateAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DateAggregationData proto.InternalMessageInfo
 
 func (m *DateAggregationData) GetBuckets() []*DateAggregationBucket {
 	if m != nil {
@@ -138,9 +216,33 @@ type FieldAggregationBucket struct {
 	Count uint64 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
 }
 
-func (m *FieldAggregationBucket) Reset()                    { *m = FieldAggregationBucket{} }
-func (*FieldAggregationBucket) ProtoMessage()               {}
-func (*FieldAggregationBucket) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *FieldAggregationBucket) Reset()      { *m = FieldAggregationBucket{} }
+func (*FieldAggregationBucket) ProtoMessage() {}
+func (*FieldAggregationBucket) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{3}
+}
+func (m *FieldAggregationBucket) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FieldAggregationBucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FieldAggregationBucket) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FieldAggregationBucket.Merge(m, src)
+}
+func (m *FieldAggregationBucket) XXX_Size() int {
+	return m.Size()
+}
+func (m *FieldAggregationBucket) XXX_DiscardUnknown() {
+	xxx_messageInfo_FieldAggregationBucket.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FieldAggregationBucket proto.InternalMessageInfo
 
 func (m *FieldAggregationBucket) GetKey() string {
 	if m != nil {
@@ -165,12 +267,36 @@ type FieldAggregationData struct {
 	//
 	// x-displayName: "Buckets"
 	// Lists of buckets containing field value and the corresponding log count
-	Buckets []*FieldAggregationBucket `protobuf:"bytes,2,rep,name=buckets" json:"buckets,omitempty"`
+	Buckets []*FieldAggregationBucket `protobuf:"bytes,2,rep,name=buckets,proto3" json:"buckets,omitempty"`
 }
 
-func (m *FieldAggregationData) Reset()                    { *m = FieldAggregationData{} }
-func (*FieldAggregationData) ProtoMessage()               {}
-func (*FieldAggregationData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *FieldAggregationData) Reset()      { *m = FieldAggregationData{} }
+func (*FieldAggregationData) ProtoMessage() {}
+func (*FieldAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{4}
+}
+func (m *FieldAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FieldAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FieldAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FieldAggregationData.Merge(m, src)
+}
+func (m *FieldAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *FieldAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_FieldAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FieldAggregationData proto.InternalMessageInfo
 
 func (m *FieldAggregationData) GetBuckets() []*FieldAggregationBucket {
 	if m != nil {
@@ -192,9 +318,33 @@ type CardinalityAggregationData struct {
 	Count uint64 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
 }
 
-func (m *CardinalityAggregationData) Reset()                    { *m = CardinalityAggregationData{} }
-func (*CardinalityAggregationData) ProtoMessage()               {}
-func (*CardinalityAggregationData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *CardinalityAggregationData) Reset()      { *m = CardinalityAggregationData{} }
+func (*CardinalityAggregationData) ProtoMessage() {}
+func (*CardinalityAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{5}
+}
+func (m *CardinalityAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CardinalityAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CardinalityAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CardinalityAggregationData.Merge(m, src)
+}
+func (m *CardinalityAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *CardinalityAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_CardinalityAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CardinalityAggregationData proto.InternalMessageInfo
 
 func (m *CardinalityAggregationData) GetCount() uint64 {
 	if m != nil {
@@ -212,22 +362,46 @@ type LogAggregationData struct {
 	// x-displayName: "Date Aggregation"
 	//
 	// Date aggregation data
-	DateAggregation *DateAggregationData `protobuf:"bytes,3,opt,name=date_aggregation,json=dateAggregation" json:"date_aggregation,omitempty"`
+	DateAggregation *DateAggregationData `protobuf:"bytes,3,opt,name=date_aggregation,json=dateAggregation,proto3" json:"date_aggregation,omitempty"`
 	// field aggregation
 	// x-displayName: "Field Aggregation"
 	//
 	// Field aggregation data
-	FieldAggregation *FieldAggregationData `protobuf:"bytes,4,opt,name=field_aggregation,json=fieldAggregation" json:"field_aggregation,omitempty"`
+	FieldAggregation *FieldAggregationData `protobuf:"bytes,4,opt,name=field_aggregation,json=fieldAggregation,proto3" json:"field_aggregation,omitempty"`
 	// cardinality aggregation
 	// x-displayName: "Cardinality Aggregation"
 	//
 	// Cardinality aggregation data
-	CardinalityAggregation *CardinalityAggregationData `protobuf:"bytes,5,opt,name=cardinality_aggregation,json=cardinalityAggregation" json:"cardinality_aggregation,omitempty"`
+	CardinalityAggregation *CardinalityAggregationData `protobuf:"bytes,5,opt,name=cardinality_aggregation,json=cardinalityAggregation,proto3" json:"cardinality_aggregation,omitempty"`
 }
 
-func (m *LogAggregationData) Reset()                    { *m = LogAggregationData{} }
-func (*LogAggregationData) ProtoMessage()               {}
-func (*LogAggregationData) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *LogAggregationData) Reset()      { *m = LogAggregationData{} }
+func (*LogAggregationData) ProtoMessage() {}
+func (*LogAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{6}
+}
+func (m *LogAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LogAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LogAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LogAggregationData.Merge(m, src)
+}
+func (m *LogAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *LogAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LogAggregationData proto.InternalMessageInfo
 
 func (m *LogAggregationData) GetDateAggregation() *DateAggregationData {
 	if m != nil {
@@ -252,6 +426,7 @@ func (m *LogAggregationData) GetCardinalityAggregation() *CardinalityAggregation
 
 func init() {
 	proto.RegisterType((*DateAggregationBucket)(nil), "ves.io.schema.log.DateAggregationBucket")
+	proto.RegisterMapType((map[string]*DateSubAggregationData)(nil), "ves.io.schema.log.DateAggregationBucket.SubAggsEntry")
 	proto.RegisterType((*DateSubAggregationData)(nil), "ves.io.schema.log.DateSubAggregationData")
 	proto.RegisterType((*DateAggregationData)(nil), "ves.io.schema.log.DateAggregationData")
 	proto.RegisterType((*FieldAggregationBucket)(nil), "ves.io.schema.log.FieldAggregationBucket")
@@ -259,6 +434,47 @@ func init() {
 	proto.RegisterType((*CardinalityAggregationData)(nil), "ves.io.schema.log.CardinalityAggregationData")
 	proto.RegisterType((*LogAggregationData)(nil), "ves.io.schema.log.LogAggregationData")
 }
+
+func init() { proto.RegisterFile("ves.io/schema/log/types.proto", fileDescriptor_18e467d5ba8b30ac) }
+
+var fileDescriptor_18e467d5ba8b30ac = []byte{
+	// 542 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0x31, 0x6f, 0xd3, 0x40,
+	0x18, 0xf5, 0x25, 0x0d, 0x85, 0x0b, 0x12, 0xe9, 0x51, 0x42, 0x14, 0xc4, 0x29, 0xf2, 0x00, 0xe9,
+	0x90, 0xb3, 0x14, 0x84, 0x84, 0x58, 0xa0, 0x69, 0x81, 0x85, 0x01, 0x0c, 0x0b, 0x30, 0x54, 0x67,
+	0xfb, 0x7c, 0xb5, 0xe2, 0xf8, 0x2c, 0xfb, 0x6c, 0xc8, 0x06, 0xff, 0x80, 0x3f, 0x81, 0xc4, 0x4f,
+	0x61, 0xcc, 0x98, 0x91, 0x38, 0x0b, 0x63, 0x67, 0x26, 0x94, 0x73, 0x42, 0x6b, 0xd7, 0x15, 0x95,
+	0xd8, 0xee, 0xbb, 0xf7, 0xdd, 0xf7, 0xde, 0xf7, 0x9e, 0x74, 0xf0, 0x6e, 0xca, 0x62, 0xe2, 0x09,
+	0x23, 0xb6, 0x8f, 0xd9, 0x84, 0x1a, 0xbe, 0xe0, 0x86, 0x9c, 0x86, 0x2c, 0x26, 0x61, 0x24, 0xa4,
+	0x40, 0x3b, 0x39, 0x4c, 0x72, 0x98, 0xf8, 0x82, 0x77, 0x07, 0xdc, 0x93, 0xc7, 0x89, 0x45, 0x6c,
+	0x31, 0x31, 0xb8, 0xe0, 0xc2, 0x50, 0x9d, 0x56, 0xe2, 0xaa, 0x4a, 0x15, 0xea, 0x94, 0x4f, 0xe8,
+	0xde, 0x29, 0x12, 0x88, 0x50, 0x7a, 0x22, 0x58, 0x8f, 0xef, 0xf6, 0x8a, 0x60, 0xea, 0xb1, 0x8f,
+	0x47, 0x85, 0x0e, 0xfd, 0x37, 0x80, 0xb7, 0x0e, 0xa9, 0x64, 0xfb, 0x9c, 0x47, 0x8c, 0xd3, 0x15,
+	0x34, 0x4a, 0xec, 0x31, 0x93, 0x08, 0xc1, 0x2d, 0xe9, 0x4d, 0x58, 0x07, 0xf4, 0x40, 0x7f, 0xcb,
+	0x54, 0x67, 0xb4, 0x0b, 0x1b, 0xb6, 0x48, 0x02, 0xd9, 0xa9, 0xa9, 0xcb, 0xbc, 0x40, 0xaf, 0xe0,
+	0xd5, 0x38, 0xb1, 0x8e, 0x28, 0xe7, 0x71, 0xa7, 0xde, 0xab, 0xf7, 0x9b, 0xc3, 0x87, 0xe4, 0xdc,
+	0x5e, 0xa4, 0x92, 0x85, 0xbc, 0x49, 0xac, 0x7d, 0xce, 0xe3, 0x67, 0x81, 0x8c, 0xa6, 0xe6, 0x76,
+	0x9c, 0x57, 0x5d, 0x06, 0xaf, 0x9f, 0x05, 0x50, 0x0b, 0xd6, 0xc7, 0x6c, 0xaa, 0xa4, 0x5c, 0x33,
+	0x57, 0x47, 0xf4, 0x04, 0x36, 0x52, 0xea, 0x27, 0x4c, 0x29, 0x69, 0x0e, 0xf7, 0x2e, 0x20, 0xcc,
+	0xa7, 0x6c, 0x38, 0x0f, 0xa9, 0xa4, 0x66, 0xfe, 0xee, 0x71, 0xed, 0x11, 0xd0, 0x03, 0xd8, 0xae,
+	0x6e, 0x42, 0x6f, 0xe1, 0x8e, 0xeb, 0x31, 0xdf, 0x59, 0x2d, 0xb5, 0x01, 0x14, 0x7d, 0x73, 0x78,
+	0xbf, 0x82, 0xea, 0xf9, 0xaa, 0xb7, 0x4c, 0xd4, 0x72, 0x4b, 0xb7, 0xfa, 0x3b, 0x78, 0xb3, 0xe4,
+	0x82, 0x22, 0x1b, 0xc1, 0x6d, 0x4b, 0xb9, 0x11, 0x77, 0x6a, 0xca, 0xbe, 0xfe, 0x65, 0xed, 0x33,
+	0x37, 0x0f, 0xf5, 0xa7, 0xb0, 0x5d, 0x16, 0xb1, 0xce, 0xf1, 0xbc, 0x77, 0x95, 0x29, 0xea, 0x1f,
+	0xe0, 0x6e, 0xd5, 0x1a, 0xe8, 0xa0, 0xac, 0x6e, 0xef, 0x12, 0x06, 0x94, 0xe5, 0x0d, 0x61, 0xf7,
+	0x80, 0x46, 0x8e, 0x17, 0x50, 0xdf, 0x93, 0xd3, 0x32, 0xc5, 0x5f, 0x41, 0xe0, 0xac, 0xa0, 0x6f,
+	0x35, 0x88, 0x5e, 0x0a, 0x5e, 0x6e, 0x7e, 0x0d, 0x5b, 0x0e, 0x95, 0xac, 0x90, 0x4c, 0x5d, 0x25,
+	0x73, 0xef, 0xdf, 0xb6, 0xa9, 0x60, 0x6e, 0x38, 0xc5, 0xcb, 0xea, 0xb4, 0xb7, 0xfe, 0x33, 0x6d,
+	0xe4, 0xc2, 0xdb, 0xf6, 0xe9, 0xce, 0x85, 0xd9, 0x0d, 0x35, 0x7b, 0x50, 0x31, 0xfb, 0x62, 0x97,
+	0xcc, 0xb6, 0x5d, 0x89, 0x8d, 0xbe, 0x80, 0xd9, 0x02, 0x6b, 0xf3, 0x05, 0xd6, 0x4e, 0x16, 0x18,
+	0x7c, 0xce, 0x30, 0xf8, 0x9e, 0x61, 0xf0, 0x23, 0xc3, 0x60, 0x96, 0x61, 0x30, 0xcf, 0x30, 0xf8,
+	0x99, 0x61, 0xf0, 0x2b, 0xc3, 0xda, 0x49, 0x86, 0xc1, 0xd7, 0x25, 0xd6, 0x66, 0x4b, 0xac, 0xcd,
+	0x97, 0x58, 0x7b, 0xff, 0x82, 0x8b, 0x70, 0xcc, 0x49, 0x2a, 0x7c, 0xc9, 0xa2, 0x88, 0x92, 0x24,
+	0x36, 0xd4, 0xc1, 0x15, 0xd1, 0x64, 0x10, 0x46, 0x22, 0xf5, 0x1c, 0x16, 0x0d, 0x36, 0xb0, 0x11,
+	0x5a, 0x5c, 0x18, 0xec, 0x93, 0x5c, 0x7f, 0x27, 0xa7, 0x7f, 0x9a, 0x75, 0x45, 0xfd, 0x26, 0x0f,
+	0xfe, 0x04, 0x00, 0x00, 0xff, 0xff, 0xc4, 0x55, 0xfa, 0x0e, 0xef, 0x04, 0x00, 0x00,
+}
+
 func (this *DateAggregationBucket) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -469,7 +685,7 @@ func (this *DateAggregationBucket) GoString() string {
 	for k, _ := range this.SubAggs {
 		keysForSubAggs = append(keysForSubAggs, k)
 	}
-	sortkeys.Strings(keysForSubAggs)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSubAggs)
 	mapStringForSubAggs := "map[string]*DateSubAggregationData{"
 	for _, k := range keysForSubAggs {
 		mapStringForSubAggs += fmt.Sprintf("%#v: %#v,", k, this.SubAggs[k])
@@ -567,7 +783,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *DateAggregationBucket) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -575,60 +791,63 @@ func (m *DateAggregationBucket) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DateAggregationBucket) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DateAggregationBucket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Time != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Time))
-	}
-	if m.Count != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
-	}
 	if len(m.SubAggs) > 0 {
 		keysForSubAggs := make([]string, 0, len(m.SubAggs))
-		for k, _ := range m.SubAggs {
+		for k := range m.SubAggs {
 			keysForSubAggs = append(keysForSubAggs, string(k))
 		}
-		sortkeys.Strings(keysForSubAggs)
-		for _, k := range keysForSubAggs {
-			dAtA[i] = 0x1a
-			i++
-			v := m.SubAggs[string(k)]
-			msgSize := 0
+		github_com_gogo_protobuf_sortkeys.Strings(keysForSubAggs)
+		for iNdEx := len(keysForSubAggs) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.SubAggs[string(keysForSubAggs[iNdEx])]
+			baseI := i
 			if v != nil {
-				msgSize = v.Size()
-				msgSize += 1 + sovTypes(uint64(msgSize))
-			}
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + msgSize
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			if v != nil {
-				dAtA[i] = 0x12
-				i++
-				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
-				n1, err := v.MarshalTo(dAtA[i:])
-				if err != nil {
-					return 0, err
+				{
+					size, err := v.MarshalToSizedBuffer(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintTypes(dAtA, i, uint64(size))
 				}
-				i += n1
+				i--
+				dAtA[i] = 0x12
 			}
+			i -= len(keysForSubAggs[iNdEx])
+			copy(dAtA[i:], keysForSubAggs[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForSubAggs[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
-	return i, nil
+	if m.Count != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Time != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Time))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *DateSubAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -636,27 +855,34 @@ func (m *DateSubAggregationData) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DateSubAggregationData) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DateSubAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.FieldAggregation != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FieldAggregation.Size()))
-		n2, err := m.FieldAggregation.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FieldAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *DateAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -664,29 +890,36 @@ func (m *DateAggregationData) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DateAggregationData) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DateAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Buckets) > 0 {
-		for _, msg := range m.Buckets {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Buckets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Buckets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FieldAggregationBucket) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -694,28 +927,34 @@ func (m *FieldAggregationBucket) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FieldAggregationBucket) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldAggregationBucket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Key) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Key)))
-		i += copy(dAtA[i:], m.Key)
-	}
 	if m.Count != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *FieldAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -723,29 +962,36 @@ func (m *FieldAggregationData) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FieldAggregationData) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Buckets) > 0 {
-		for _, msg := range m.Buckets {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Buckets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Buckets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CardinalityAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -753,22 +999,27 @@ func (m *CardinalityAggregationData) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CardinalityAggregationData) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CardinalityAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Count != 0 {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LogAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -776,53 +1027,69 @@ func (m *LogAggregationData) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LogAggregationData) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LogAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.DateAggregation != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DateAggregation.Size()))
-		n3, err := m.DateAggregation.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.CardinalityAggregation != nil {
+		{
+			size, err := m.CardinalityAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.FieldAggregation != nil {
+		{
+			size, err := m.FieldAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FieldAggregation.Size()))
-		n4, err := m.FieldAggregation.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
 	}
-	if m.CardinalityAggregation != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CardinalityAggregation.Size()))
-		n5, err := m.CardinalityAggregation.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.DateAggregation != nil {
+		{
+			size, err := m.DateAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *DateAggregationBucket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Time != 0 {
@@ -848,6 +1115,9 @@ func (m *DateAggregationBucket) Size() (n int) {
 }
 
 func (m *DateSubAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FieldAggregation != nil {
@@ -858,6 +1128,9 @@ func (m *DateSubAggregationData) Size() (n int) {
 }
 
 func (m *DateAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Buckets) > 0 {
@@ -870,6 +1143,9 @@ func (m *DateAggregationData) Size() (n int) {
 }
 
 func (m *FieldAggregationBucket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Key)
@@ -883,6 +1159,9 @@ func (m *FieldAggregationBucket) Size() (n int) {
 }
 
 func (m *FieldAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Buckets) > 0 {
@@ -895,6 +1174,9 @@ func (m *FieldAggregationData) Size() (n int) {
 }
 
 func (m *CardinalityAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Count != 0 {
@@ -904,6 +1186,9 @@ func (m *CardinalityAggregationData) Size() (n int) {
 }
 
 func (m *LogAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DateAggregation != nil {
@@ -922,14 +1207,7 @@ func (m *LogAggregationData) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -942,7 +1220,7 @@ func (this *DateAggregationBucket) String() string {
 	for k, _ := range this.SubAggs {
 		keysForSubAggs = append(keysForSubAggs, k)
 	}
-	sortkeys.Strings(keysForSubAggs)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSubAggs)
 	mapStringForSubAggs := "map[string]*DateSubAggregationData{"
 	for _, k := range keysForSubAggs {
 		mapStringForSubAggs += fmt.Sprintf("%v: %v,", k, this.SubAggs[k])
@@ -961,7 +1239,7 @@ func (this *DateSubAggregationData) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DateSubAggregationData{`,
-		`FieldAggregation:` + strings.Replace(fmt.Sprintf("%v", this.FieldAggregation), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
+		`FieldAggregation:` + strings.Replace(this.FieldAggregation.String(), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -970,8 +1248,13 @@ func (this *DateAggregationData) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForBuckets := "[]*DateAggregationBucket{"
+	for _, f := range this.Buckets {
+		repeatedStringForBuckets += strings.Replace(f.String(), "DateAggregationBucket", "DateAggregationBucket", 1) + ","
+	}
+	repeatedStringForBuckets += "}"
 	s := strings.Join([]string{`&DateAggregationData{`,
-		`Buckets:` + strings.Replace(fmt.Sprintf("%v", this.Buckets), "DateAggregationBucket", "DateAggregationBucket", 1) + `,`,
+		`Buckets:` + repeatedStringForBuckets + `,`,
 		`}`,
 	}, "")
 	return s
@@ -991,8 +1274,13 @@ func (this *FieldAggregationData) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForBuckets := "[]*FieldAggregationBucket{"
+	for _, f := range this.Buckets {
+		repeatedStringForBuckets += strings.Replace(f.String(), "FieldAggregationBucket", "FieldAggregationBucket", 1) + ","
+	}
+	repeatedStringForBuckets += "}"
 	s := strings.Join([]string{`&FieldAggregationData{`,
-		`Buckets:` + strings.Replace(fmt.Sprintf("%v", this.Buckets), "FieldAggregationBucket", "FieldAggregationBucket", 1) + `,`,
+		`Buckets:` + repeatedStringForBuckets + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1012,9 +1300,9 @@ func (this *LogAggregationData) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&LogAggregationData{`,
-		`DateAggregation:` + strings.Replace(fmt.Sprintf("%v", this.DateAggregation), "DateAggregationData", "DateAggregationData", 1) + `,`,
-		`FieldAggregation:` + strings.Replace(fmt.Sprintf("%v", this.FieldAggregation), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
-		`CardinalityAggregation:` + strings.Replace(fmt.Sprintf("%v", this.CardinalityAggregation), "CardinalityAggregationData", "CardinalityAggregationData", 1) + `,`,
+		`DateAggregation:` + strings.Replace(this.DateAggregation.String(), "DateAggregationData", "DateAggregationData", 1) + `,`,
+		`FieldAggregation:` + strings.Replace(this.FieldAggregation.String(), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
+		`CardinalityAggregation:` + strings.Replace(this.CardinalityAggregation.String(), "CardinalityAggregationData", "CardinalityAggregationData", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1042,7 +1330,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1070,7 +1358,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Time |= (uint64(b) & 0x7F) << shift
+				m.Time |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1089,7 +1377,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Count |= (uint64(b) & 0x7F) << shift
+				m.Count |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1108,7 +1396,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1117,6 +1405,9 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1137,7 +1428,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1154,7 +1445,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1164,6 +1455,9 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -1180,7 +1474,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						mapmsglen |= (int(b) & 0x7F) << shift
+						mapmsglen |= int(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1189,7 +1483,7 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postmsgIndex := iNdEx + mapmsglen
-					if mapmsglen < 0 {
+					if postmsgIndex < 0 {
 						return ErrInvalidLengthTypes
 					}
 					if postmsgIndex > l {
@@ -1226,6 +1520,9 @@ func (m *DateAggregationBucket) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1253,7 +1550,7 @@ func (m *DateSubAggregationData) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1281,7 +1578,7 @@ func (m *DateSubAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1290,6 +1587,9 @@ func (m *DateSubAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1307,6 +1607,9 @@ func (m *DateSubAggregationData) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1336,7 +1639,7 @@ func (m *DateAggregationData) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1364,7 +1667,7 @@ func (m *DateAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1373,6 +1676,9 @@ func (m *DateAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1388,6 +1694,9 @@ func (m *DateAggregationData) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1417,7 +1726,7 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1445,7 +1754,7 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1455,6 +1764,9 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1474,7 +1786,7 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Count |= (uint64(b) & 0x7F) << shift
+				m.Count |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1486,6 +1798,9 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1515,7 +1830,7 @@ func (m *FieldAggregationData) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1543,7 +1858,7 @@ func (m *FieldAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1552,6 +1867,9 @@ func (m *FieldAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1567,6 +1885,9 @@ func (m *FieldAggregationData) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1596,7 +1917,7 @@ func (m *CardinalityAggregationData) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1624,7 +1945,7 @@ func (m *CardinalityAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Count |= (uint64(b) & 0x7F) << shift
+				m.Count |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1636,6 +1957,9 @@ func (m *CardinalityAggregationData) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1665,7 +1989,7 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1693,7 +2017,7 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1702,6 +2026,9 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1726,7 +2053,7 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1735,6 +2062,9 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1759,7 +2089,7 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1768,6 +2098,9 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1787,6 +2120,9 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1802,6 +2138,7 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1833,10 +2170,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1853,93 +2188,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/log/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 534 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xbf, 0x6f, 0xd3, 0x40,
-	0x18, 0xcd, 0xe5, 0x07, 0x85, 0x0b, 0x12, 0xe9, 0x51, 0x42, 0x64, 0xc4, 0x29, 0xf2, 0x00, 0xe9,
-	0x90, 0xb3, 0x14, 0x84, 0x84, 0x58, 0xa0, 0x69, 0x81, 0x85, 0x01, 0x0c, 0x0b, 0x30, 0x54, 0x67,
-	0xfb, 0x7c, 0xb5, 0xe2, 0xf8, 0x2c, 0xfb, 0x6c, 0xf0, 0xc6, 0x9f, 0xc0, 0x3f, 0x81, 0xc4, 0x9f,
-	0xc2, 0xd8, 0xb1, 0x23, 0x31, 0x0b, 0x63, 0x67, 0x26, 0x94, 0x73, 0x42, 0x6b, 0xd7, 0x15, 0x91,
-	0xd8, 0xee, 0xbb, 0xf7, 0xdd, 0xf7, 0xde, 0xf7, 0x9e, 0x74, 0xf0, 0x6e, 0xca, 0x62, 0xe2, 0x09,
-	0x23, 0xb6, 0x8f, 0xd8, 0x9c, 0x1a, 0xbe, 0xe0, 0x86, 0xcc, 0x42, 0x16, 0x93, 0x30, 0x12, 0x52,
-	0xa0, 0xed, 0x02, 0x26, 0x05, 0x4c, 0x7c, 0xc1, 0xb5, 0x31, 0xf7, 0xe4, 0x51, 0x62, 0x11, 0x5b,
-	0xcc, 0x0d, 0x2e, 0xb8, 0x30, 0x54, 0xa7, 0x95, 0xb8, 0xaa, 0x52, 0x85, 0x3a, 0x15, 0x13, 0xb4,
-	0x3b, 0x65, 0x02, 0x11, 0x4a, 0x4f, 0x04, 0xab, 0xf1, 0xda, 0xb0, 0x0c, 0xa6, 0x1e, 0xfb, 0x78,
-	0x58, 0xea, 0xd0, 0x7f, 0x03, 0x78, 0xeb, 0x80, 0x4a, 0xb6, 0xc7, 0x79, 0xc4, 0x38, 0x5d, 0x42,
-	0xd3, 0xc4, 0x9e, 0x31, 0x89, 0x10, 0x6c, 0x4b, 0x6f, 0xce, 0x06, 0x60, 0x08, 0x46, 0x6d, 0x53,
-	0x9d, 0xd1, 0x0e, 0xec, 0xd8, 0x22, 0x09, 0xe4, 0xa0, 0xa9, 0x2e, 0x8b, 0x02, 0xbd, 0x82, 0x57,
-	0xe3, 0xc4, 0x3a, 0xa4, 0x9c, 0xc7, 0x83, 0xd6, 0xb0, 0x35, 0xea, 0x4e, 0x1e, 0x92, 0x0b, 0x7b,
-	0x91, 0x5a, 0x16, 0xf2, 0x26, 0xb1, 0xf6, 0x38, 0x8f, 0x9f, 0x05, 0x32, 0xca, 0xcc, 0xad, 0xb8,
-	0xa8, 0x34, 0x06, 0xaf, 0x9f, 0x07, 0x50, 0x0f, 0xb6, 0x66, 0x2c, 0x53, 0x52, 0xae, 0x99, 0xcb,
-	0x23, 0x7a, 0x02, 0x3b, 0x29, 0xf5, 0x13, 0xa6, 0x94, 0x74, 0x27, 0xbb, 0x97, 0x10, 0x16, 0x53,
-	0xd6, 0x9c, 0x07, 0x54, 0x52, 0xb3, 0x78, 0xf7, 0xb8, 0xf9, 0x08, 0xe8, 0x01, 0xec, 0xd7, 0x37,
-	0xa1, 0xb7, 0x70, 0xdb, 0xf5, 0x98, 0xef, 0x2c, 0x97, 0x5a, 0x03, 0x8a, 0xbe, 0x3b, 0xb9, 0x5f,
-	0x43, 0xf5, 0x7c, 0xd9, 0x5b, 0x25, 0xea, 0xb9, 0x95, 0x5b, 0xfd, 0x1d, 0xbc, 0x59, 0x71, 0x41,
-	0x91, 0x4d, 0xe1, 0x96, 0xa5, 0xdc, 0x88, 0x07, 0x4d, 0x65, 0xdf, 0x68, 0x53, 0xfb, 0xcc, 0xf5,
-	0x43, 0xfd, 0x29, 0xec, 0x57, 0x45, 0xac, 0x72, 0xbc, 0xe8, 0x5d, 0x6d, 0x8a, 0xfa, 0x07, 0xb8,
-	0x53, 0xb7, 0x06, 0xda, 0xaf, 0xaa, 0xdb, 0xdd, 0xc0, 0x80, 0xaa, 0xbc, 0x09, 0xd4, 0xf6, 0x69,
-	0xe4, 0x78, 0x01, 0xf5, 0x3d, 0x99, 0x55, 0x29, 0xfe, 0x0a, 0x02, 0xe7, 0x05, 0x7d, 0x6d, 0x42,
-	0xf4, 0x52, 0xf0, 0x6a, 0xf3, 0x6b, 0xd8, 0x73, 0xa8, 0x64, 0xa5, 0x64, 0x5a, 0x2a, 0x99, 0x7b,
-	0xff, 0xb6, 0x4d, 0x05, 0x73, 0xc3, 0x29, 0x5f, 0xd6, 0xa7, 0xdd, 0xfe, 0xcf, 0xb4, 0x91, 0x0b,
-	0x6f, 0xdb, 0x67, 0x3b, 0x97, 0x66, 0x77, 0xd4, 0xec, 0x71, 0xcd, 0xec, 0xcb, 0x5d, 0x32, 0xfb,
-	0x76, 0x2d, 0x36, 0xcd, 0x8e, 0x17, 0xb8, 0x71, 0xb2, 0xc0, 0x8d, 0xd3, 0x05, 0x06, 0x9f, 0x73,
-	0x0c, 0xbe, 0xe5, 0x18, 0x7c, 0xcf, 0x31, 0x38, 0xce, 0x31, 0x38, 0xc9, 0x31, 0xf8, 0x91, 0x63,
-	0xf0, 0x2b, 0xc7, 0x8d, 0xd3, 0x1c, 0x83, 0x2f, 0x3f, 0x71, 0xe3, 0xfd, 0x0b, 0x2e, 0xc2, 0x19,
-	0x27, 0xa9, 0xf0, 0x25, 0x8b, 0x22, 0x4a, 0x92, 0xd8, 0x50, 0x07, 0x57, 0x44, 0xf3, 0x71, 0x18,
-	0x89, 0xd4, 0x73, 0x58, 0x34, 0x5e, 0xc3, 0x46, 0x68, 0x71, 0x61, 0xb0, 0x4f, 0x72, 0xf5, 0x8b,
-	0x9c, 0x7d, 0x65, 0xd6, 0x15, 0xf5, 0x89, 0x3c, 0xf8, 0x13, 0x00, 0x00, 0xff, 0xff, 0x5e, 0x5a,
-	0x6c, 0xe5, 0xe6, 0x04, 0x00, 0x00,
-}

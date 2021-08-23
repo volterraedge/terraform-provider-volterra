@@ -290,7 +290,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.CustomAPI.GetDnsInfo",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_hostGetDnsInfoResponse"
                         }
@@ -347,15 +347,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the virtual host",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"value\"\nName of the virtual host",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     }
                 ],
                 "tags": [

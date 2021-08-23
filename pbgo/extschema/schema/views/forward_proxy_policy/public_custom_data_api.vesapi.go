@@ -294,7 +294,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.forward_proxy_policy.CustomDataAPI.ForwardProxyPolicyHits",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/forward_proxy_policyForwardProxyPolicyHitsResponse"
                         }
@@ -351,9 +351,11 @@ var CustomDataAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace is used to scope forward proxy policy hits for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

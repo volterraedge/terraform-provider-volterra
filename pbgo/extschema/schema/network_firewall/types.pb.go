@@ -3,30 +3,32 @@
 
 package network_firewall
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Active Network Policies Type
 //
@@ -38,14 +40,38 @@ type ActiveNetworkPoliciesType struct {
 	// x-displayName: "Network Policy"
 	// x-required
 	// Ordered List of Network Policies active for this network firewall
-	NetworkPolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=network_policies,json=networkPolicies" json:"network_policies,omitempty"`
+	NetworkPolicies []*views.ObjectRefType `protobuf:"bytes,1,rep,name=network_policies,json=networkPolicies,proto3" json:"network_policies,omitempty"`
 }
 
-func (m *ActiveNetworkPoliciesType) Reset()                    { *m = ActiveNetworkPoliciesType{} }
-func (*ActiveNetworkPoliciesType) ProtoMessage()               {}
-func (*ActiveNetworkPoliciesType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *ActiveNetworkPoliciesType) Reset()      { *m = ActiveNetworkPoliciesType{} }
+func (*ActiveNetworkPoliciesType) ProtoMessage() {}
+func (*ActiveNetworkPoliciesType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{0}
+}
+func (m *ActiveNetworkPoliciesType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ActiveNetworkPoliciesType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ActiveNetworkPoliciesType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActiveNetworkPoliciesType.Merge(m, src)
+}
+func (m *ActiveNetworkPoliciesType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ActiveNetworkPoliciesType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ActiveNetworkPoliciesType.DiscardUnknown(m)
+}
 
-func (m *ActiveNetworkPoliciesType) GetNetworkPolicies() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_ActiveNetworkPoliciesType proto.InternalMessageInfo
+
+func (m *ActiveNetworkPoliciesType) GetNetworkPolicies() []*views.ObjectRefType {
 	if m != nil {
 		return m.NetworkPolicies
 	}
@@ -62,16 +88,38 @@ type ActiveForwardProxyPoliciesType struct {
 	// x-displayName: "Forward Proxy Policies"
 	// x-required
 	// List of Forward Proxy Policies
-	ForwardProxyPolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=forward_proxy_policies,json=forwardProxyPolicies" json:"forward_proxy_policies,omitempty"`
+	ForwardProxyPolicies []*views.ObjectRefType `protobuf:"bytes,1,rep,name=forward_proxy_policies,json=forwardProxyPolicies,proto3" json:"forward_proxy_policies,omitempty"`
 }
 
 func (m *ActiveForwardProxyPoliciesType) Reset()      { *m = ActiveForwardProxyPoliciesType{} }
 func (*ActiveForwardProxyPoliciesType) ProtoMessage() {}
 func (*ActiveForwardProxyPoliciesType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_e07e50a9abc3814c, []int{1}
+}
+func (m *ActiveForwardProxyPoliciesType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ActiveForwardProxyPoliciesType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ActiveForwardProxyPoliciesType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActiveForwardProxyPoliciesType.Merge(m, src)
+}
+func (m *ActiveForwardProxyPoliciesType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ActiveForwardProxyPoliciesType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ActiveForwardProxyPoliciesType.DiscardUnknown(m)
 }
 
-func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPolicies() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_ActiveForwardProxyPoliciesType proto.InternalMessageInfo
+
+func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPolicies() []*views.ObjectRefType {
 	if m != nil {
 		return m.ForwardProxyPolicies
 	}
@@ -88,14 +136,38 @@ type ActiveFastACLsType struct {
 	// x-displayName: "Fast ACL(s)"
 	// x-required
 	// Ordered List of Fast ACL(s) active for this network firewall
-	FastAcls []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=fast_acls,json=fastAcls" json:"fast_acls,omitempty"`
+	FastAcls []*views.ObjectRefType `protobuf:"bytes,1,rep,name=fast_acls,json=fastAcls,proto3" json:"fast_acls,omitempty"`
 }
 
-func (m *ActiveFastACLsType) Reset()                    { *m = ActiveFastACLsType{} }
-func (*ActiveFastACLsType) ProtoMessage()               {}
-func (*ActiveFastACLsType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ActiveFastACLsType) Reset()      { *m = ActiveFastACLsType{} }
+func (*ActiveFastACLsType) ProtoMessage() {}
+func (*ActiveFastACLsType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{2}
+}
+func (m *ActiveFastACLsType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ActiveFastACLsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ActiveFastACLsType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActiveFastACLsType.Merge(m, src)
+}
+func (m *ActiveFastACLsType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ActiveFastACLsType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ActiveFastACLsType.DiscardUnknown(m)
+}
 
-func (m *ActiveFastACLsType) GetFastAcls() []*ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_ActiveFastACLsType proto.InternalMessageInfo
+
+func (m *ActiveFastACLsType) GetFastAcls() []*views.ObjectRefType {
 	if m != nil {
 		return m.FastAcls
 	}
@@ -115,18 +187,18 @@ type GlobalSpecType struct {
 	// Currently, Network Policy is applied for following Virtual Networks in a site,
 	//    - Site Local Inside
 	//    - Site Local
-	NetworkPolicySet []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=network_policy_set,json=networkPolicySet" json:"network_policy_set,omitempty"`
+	NetworkPolicySet []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=network_policy_set,json=networkPolicySet,proto3" json:"network_policy_set,omitempty"`
 	// Forward proxy policy set
 	//
 	// x-displayName: "Forward Proxy (Service) Policy Set (Legacy)"
 	// L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.
-	ForwardProxyPolicySet []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=forward_proxy_policy_set,json=forwardProxyPolicySet" json:"forward_proxy_policy_set,omitempty"`
+	ForwardProxyPolicySet []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=forward_proxy_policy_set,json=forwardProxyPolicySet,proto3" json:"forward_proxy_policy_set,omitempty"`
 	// Fast ACL Set
 	//
 	// x-displayName: "Fast ACL Set (Legacy)"
 	// Fast ACL set defined for the fleet. Fast ACL set is applied for all sites that are member of the fleet.
 	// The list of Virtual Networks / Interfaces is selected by the Fast ACL set object
-	FastAclSet []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=fast_acl_set,json=fastAclSet" json:"fast_acl_set,omitempty"`
+	FastAclSet []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=fast_acl_set,json=fastAclSet,proto3" json:"fast_acl_set,omitempty"`
 	// Internal Network Policy Config Mode
 	//
 	// x-displayName: "Internal Network Policy Config Mode"
@@ -160,12 +232,36 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{3}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_NetworkPolicyConfigMode interface {
 	isGlobalSpecType_NetworkPolicyConfigMode()
@@ -187,31 +283,31 @@ type isGlobalSpecType_FastAclConfigMode interface {
 }
 
 type GlobalSpecType_DisableNetworkPolicy struct {
-	DisableNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=disable_network_policy,json=disableNetworkPolicy,oneof"`
+	DisableNetworkPolicy *schema.Empty `protobuf:"bytes,6,opt,name=disable_network_policy,json=disableNetworkPolicy,proto3,oneof" json:"disable_network_policy,omitempty"`
 }
 type GlobalSpecType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GlobalSpecType_NetworkPolicyLegacyMode struct {
-	NetworkPolicyLegacyMode *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=network_policy_legacy_mode,json=networkPolicyLegacyMode,oneof"`
+	NetworkPolicyLegacyMode *schema.Empty `protobuf:"bytes,12,opt,name=network_policy_legacy_mode,json=networkPolicyLegacyMode,proto3,oneof" json:"network_policy_legacy_mode,omitempty"`
 }
 type GlobalSpecType_DisableForwardProxyPolicy struct {
-	DisableForwardProxyPolicy *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,oneof"`
+	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,9,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
 type GlobalSpecType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GlobalSpecType_ForwardProxyPolicyLegacyMode struct {
-	ForwardProxyPolicyLegacyMode *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=forward_proxy_policy_legacy_mode,json=forwardProxyPolicyLegacyMode,oneof"`
+	ForwardProxyPolicyLegacyMode *schema.Empty `protobuf:"bytes,14,opt,name=forward_proxy_policy_legacy_mode,json=forwardProxyPolicyLegacyMode,proto3,oneof" json:"forward_proxy_policy_legacy_mode,omitempty"`
 }
 type GlobalSpecType_DisableFastAcl struct {
-	DisableFastAcl *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=disable_fast_acl,json=disableFastAcl,oneof"`
+	DisableFastAcl *schema.Empty `protobuf:"bytes,16,opt,name=disable_fast_acl,json=disableFastAcl,proto3,oneof" json:"disable_fast_acl,omitempty"`
 }
 type GlobalSpecType_ActiveFastAcls struct {
-	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,17,opt,name=active_fast_acls,json=activeFastAcls,oneof"`
+	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,17,opt,name=active_fast_acls,json=activeFastAcls,proto3,oneof" json:"active_fast_acls,omitempty"`
 }
 type GlobalSpecType_FastAclLegacyMode struct {
-	FastAclLegacyMode *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=fast_acl_legacy_mode,json=fastAclLegacyMode,oneof"`
+	FastAclLegacyMode *schema.Empty `protobuf:"bytes,18,opt,name=fast_acl_legacy_mode,json=fastAclLegacyMode,proto3,oneof" json:"fast_acl_legacy_mode,omitempty"`
 }
 
 func (*GlobalSpecType_DisableNetworkPolicy) isGlobalSpecType_NetworkPolicyConfigMode()              {}
@@ -243,28 +339,28 @@ func (m *GlobalSpecType) GetFastAclConfigMode() isGlobalSpecType_FastAclConfigMo
 	return nil
 }
 
-func (m *GlobalSpecType) GetNetworkPolicySet() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetNetworkPolicySet() []*schema.ObjectRefType {
 	if m != nil {
 		return m.NetworkPolicySet
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetForwardProxyPolicySet() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetForwardProxyPolicySet() []*schema.ObjectRefType {
 	if m != nil {
 		return m.ForwardProxyPolicySet
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetFastAclSet() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetFastAclSet() []*schema.ObjectRefType {
 	if m != nil {
 		return m.FastAclSet
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisableNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisableNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyConfigMode().(*GlobalSpecType_DisableNetworkPolicy); ok {
 		return x.DisableNetworkPolicy
 	}
@@ -278,14 +374,14 @@ func (m *GlobalSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNetworkPolicyLegacyMode() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNetworkPolicyLegacyMode() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyConfigMode().(*GlobalSpecType_NetworkPolicyLegacyMode); ok {
 		return x.NetworkPolicyLegacyMode
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisableForwardProxyPolicy() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisableForwardProxyPolicy() *schema.Empty {
 	if x, ok := m.GetForwardProxyPolicyConfigMode().(*GlobalSpecType_DisableForwardProxyPolicy); ok {
 		return x.DisableForwardProxyPolicy
 	}
@@ -299,14 +395,14 @@ func (m *GlobalSpecType) GetActiveForwardProxyPolicies() *ActiveForwardProxyPoli
 	return nil
 }
 
-func (m *GlobalSpecType) GetForwardProxyPolicyLegacyMode() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetForwardProxyPolicyLegacyMode() *schema.Empty {
 	if x, ok := m.GetForwardProxyPolicyConfigMode().(*GlobalSpecType_ForwardProxyPolicyLegacyMode); ok {
 		return x.ForwardProxyPolicyLegacyMode
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisableFastAcl() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisableFastAcl() *schema.Empty {
 	if x, ok := m.GetFastAclConfigMode().(*GlobalSpecType_DisableFastAcl); ok {
 		return x.DisableFastAcl
 	}
@@ -320,23 +416,23 @@ func (m *GlobalSpecType) GetActiveFastAcls() *ActiveFastACLsType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetFastAclLegacyMode() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetFastAclLegacyMode() *schema.Empty {
 	if x, ok := m.GetFastAclConfigMode().(*GlobalSpecType_FastAclLegacyMode); ok {
 		return x.FastAclLegacyMode
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_DisableNetworkPolicy)(nil),
 		(*GlobalSpecType_ActiveNetworkPolicies)(nil),
 		(*GlobalSpecType_NetworkPolicyLegacyMode)(nil),
@@ -347,222 +443,6 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_ActiveFastAcls)(nil),
 		(*GlobalSpecType_FastAclLegacyMode)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// network_policy_config_mode
-	switch x := m.NetworkPolicyConfigMode.(type) {
-	case *GlobalSpecType_DisableNetworkPolicy:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableNetworkPolicy); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case *GlobalSpecType_NetworkPolicyLegacyMode:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetworkPolicyLegacyMode); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.NetworkPolicyConfigMode has unexpected type %T", x)
-	}
-	// forward_proxy_policy_config_mode
-	switch x := m.ForwardProxyPolicyConfigMode.(type) {
-	case *GlobalSpecType_DisableForwardProxyPolicy:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxyPolicy); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ForwardProxyPolicyLegacyMode:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyPolicyLegacyMode); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ForwardProxyPolicyConfigMode has unexpected type %T", x)
-	}
-	// fast_acl_config_mode
-	switch x := m.FastAclConfigMode.(type) {
-	case *GlobalSpecType_DisableFastAcl:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableFastAcl); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ActiveFastAcls:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveFastAcls); err != nil {
-			return err
-		}
-	case *GlobalSpecType_FastAclLegacyMode:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FastAclLegacyMode); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.FastAclConfigMode has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 6: // network_policy_config_mode.disable_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyConfigMode = &GlobalSpecType_DisableNetworkPolicy{msg}
-		return true, err
-	case 7: // network_policy_config_mode.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyConfigMode = &GlobalSpecType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 12: // network_policy_config_mode.network_policy_legacy_mode
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyConfigMode = &GlobalSpecType_NetworkPolicyLegacyMode{msg}
-		return true, err
-	case 9: // forward_proxy_policy_config_mode.disable_forward_proxy_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyConfigMode = &GlobalSpecType_DisableForwardProxyPolicy{msg}
-		return true, err
-	case 10: // forward_proxy_policy_config_mode.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyConfigMode = &GlobalSpecType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 14: // forward_proxy_policy_config_mode.forward_proxy_policy_legacy_mode
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyConfigMode = &GlobalSpecType_ForwardProxyPolicyLegacyMode{msg}
-		return true, err
-	case 16: // fast_acl_config_mode.disable_fast_acl
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FastAclConfigMode = &GlobalSpecType_DisableFastAcl{msg}
-		return true, err
-	case 17: // fast_acl_config_mode.active_fast_acls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveFastACLsType)
-		err := b.DecodeMessage(msg)
-		m.FastAclConfigMode = &GlobalSpecType_ActiveFastAcls{msg}
-		return true, err
-	case 18: // fast_acl_config_mode.fast_acl_legacy_mode
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FastAclConfigMode = &GlobalSpecType_FastAclLegacyMode{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// network_policy_config_mode
-	switch x := m.NetworkPolicyConfigMode.(type) {
-	case *GlobalSpecType_DisableNetworkPolicy:
-		s := proto.Size(x.DisableNetworkPolicy)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_NetworkPolicyLegacyMode:
-		s := proto.Size(x.NetworkPolicyLegacyMode)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_policy_config_mode
-	switch x := m.ForwardProxyPolicyConfigMode.(type) {
-	case *GlobalSpecType_DisableForwardProxyPolicy:
-		s := proto.Size(x.DisableForwardProxyPolicy)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ForwardProxyPolicyLegacyMode:
-		s := proto.Size(x.ForwardProxyPolicyLegacyMode)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// fast_acl_config_mode
-	switch x := m.FastAclConfigMode.(type) {
-	case *GlobalSpecType_DisableFastAcl:
-		s := proto.Size(x.DisableFastAcl)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ActiveFastAcls:
-		s := proto.Size(x.ActiveFastAcls)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_FastAclLegacyMode:
-		s := proto.Size(x.FastAclLegacyMode)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create network firewall
@@ -605,9 +485,33 @@ type CreateSpecType struct {
 	FastAclChoice isCreateSpecType_FastAclChoice `protobuf_oneof:"fast_acl_choice"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{4}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_NetworkPolicyChoice interface {
 	isCreateSpecType_NetworkPolicyChoice()
@@ -629,31 +533,31 @@ type isCreateSpecType_FastAclChoice interface {
 }
 
 type CreateSpecType_DisableNetworkPolicy struct {
-	DisableNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,oneof"`
+	DisableNetworkPolicy *schema.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,proto3,oneof" json:"disable_network_policy,omitempty"`
 }
 type CreateSpecType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type CreateSpecType_NetworkPolicySet struct {
-	NetworkPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,oneof"`
+	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
 type CreateSpecType_DisableForwardProxyPolicy struct {
-	DisableForwardProxyPolicy *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,oneof"`
+	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
 type CreateSpecType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type CreateSpecType_ForwardProxyPolicySet struct {
-	ForwardProxyPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,oneof"`
+	ForwardProxyPolicySet *views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,proto3,oneof" json:"forward_proxy_policy_set,omitempty"`
 }
 type CreateSpecType_DisableFastAcl struct {
-	DisableFastAcl *ves_io_schema4.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,oneof"`
+	DisableFastAcl *schema.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,proto3,oneof" json:"disable_fast_acl,omitempty"`
 }
 type CreateSpecType_ActiveFastAcls struct {
-	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,oneof"`
+	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,proto3,oneof" json:"active_fast_acls,omitempty"`
 }
 type CreateSpecType_FastAclSet struct {
-	FastAclSet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,oneof"`
+	FastAclSet *views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,proto3,oneof" json:"fast_acl_set,omitempty"`
 }
 
 func (*CreateSpecType_DisableNetworkPolicy) isCreateSpecType_NetworkPolicyChoice()            {}
@@ -685,7 +589,7 @@ func (m *CreateSpecType) GetFastAclChoice() isCreateSpecType_FastAclChoice {
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableNetworkPolicy() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*CreateSpecType_DisableNetworkPolicy); ok {
 		return x.DisableNetworkPolicy
 	}
@@ -699,14 +603,14 @@ func (m *CreateSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 	return nil
 }
 
-func (m *CreateSpecType) GetNetworkPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*CreateSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableForwardProxyPolicy() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableForwardProxyPolicy() *schema.Empty {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*CreateSpecType_DisableForwardProxyPolicy); ok {
 		return x.DisableForwardProxyPolicy
 	}
@@ -720,14 +624,14 @@ func (m *CreateSpecType) GetActiveForwardProxyPolicies() *ActiveForwardProxyPoli
 	return nil
 }
 
-func (m *CreateSpecType) GetForwardProxyPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetForwardProxyPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*CreateSpecType_ForwardProxyPolicySet); ok {
 		return x.ForwardProxyPolicySet
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableFastAcl() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableFastAcl() *schema.Empty {
 	if x, ok := m.GetFastAclChoice().(*CreateSpecType_DisableFastAcl); ok {
 		return x.DisableFastAcl
 	}
@@ -741,16 +645,16 @@ func (m *CreateSpecType) GetActiveFastAcls() *ActiveFastACLsType {
 	return nil
 }
 
-func (m *CreateSpecType) GetFastAclSet() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetFastAclSet() *views.ObjectRefType {
 	if x, ok := m.GetFastAclChoice().(*CreateSpecType_FastAclSet); ok {
 		return x.FastAclSet
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_DisableNetworkPolicy)(nil),
 		(*CreateSpecType_ActiveNetworkPolicies)(nil),
 		(*CreateSpecType_NetworkPolicySet)(nil),
@@ -761,222 +665,6 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_ActiveFastAcls)(nil),
 		(*CreateSpecType_FastAclSet)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *CreateSpecType_DisableNetworkPolicy:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableNetworkPolicy); err != nil {
-			return err
-		}
-	case *CreateSpecType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case *CreateSpecType_NetworkPolicySet:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetworkPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *CreateSpecType_DisableForwardProxyPolicy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxyPolicy); err != nil {
-			return err
-		}
-	case *CreateSpecType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *CreateSpecType_ForwardProxyPolicySet:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ForwardProxyPolicyChoice has unexpected type %T", x)
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *CreateSpecType_DisableFastAcl:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableFastAcl); err != nil {
-			return err
-		}
-	case *CreateSpecType_ActiveFastAcls:
-		_ = b.EncodeVarint(30<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveFastAcls); err != nil {
-			return err
-		}
-	case *CreateSpecType_FastAclSet:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FastAclSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.FastAclChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 21: // network_policy_choice.disable_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &CreateSpecType_DisableNetworkPolicy{msg}
-		return true, err
-	case 22: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &CreateSpecType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 23: // network_policy_choice.network_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &CreateSpecType_NetworkPolicySet{msg}
-		return true, err
-	case 25: // forward_proxy_policy_choice.disable_forward_proxy_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &CreateSpecType_DisableForwardProxyPolicy{msg}
-		return true, err
-	case 26: // forward_proxy_policy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &CreateSpecType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 27: // forward_proxy_policy_choice.forward_proxy_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &CreateSpecType_ForwardProxyPolicySet{msg}
-		return true, err
-	case 29: // fast_acl_choice.disable_fast_acl
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &CreateSpecType_DisableFastAcl{msg}
-		return true, err
-	case 30: // fast_acl_choice.active_fast_acls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveFastACLsType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &CreateSpecType_ActiveFastAcls{msg}
-		return true, err
-	case 31: // fast_acl_choice.fast_acl_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &CreateSpecType_FastAclSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *CreateSpecType_DisableNetworkPolicy:
-		s := proto.Size(x.DisableNetworkPolicy)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_NetworkPolicySet:
-		s := proto.Size(x.NetworkPolicySet)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *CreateSpecType_DisableForwardProxyPolicy:
-		s := proto.Size(x.DisableForwardProxyPolicy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ForwardProxyPolicySet:
-		s := proto.Size(x.ForwardProxyPolicySet)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *CreateSpecType_DisableFastAcl:
-		s := proto.Size(x.DisableFastAcl)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ActiveFastAcls:
-		s := proto.Size(x.ActiveFastAcls)
-		n += proto.SizeVarint(30<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_FastAclSet:
-		s := proto.Size(x.FastAclSet)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace network firewall
@@ -1019,9 +707,33 @@ type ReplaceSpecType struct {
 	FastAclChoice isReplaceSpecType_FastAclChoice `protobuf_oneof:"fast_acl_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{5}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_NetworkPolicyChoice interface {
 	isReplaceSpecType_NetworkPolicyChoice()
@@ -1043,31 +755,31 @@ type isReplaceSpecType_FastAclChoice interface {
 }
 
 type ReplaceSpecType_DisableNetworkPolicy struct {
-	DisableNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,oneof"`
+	DisableNetworkPolicy *schema.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,proto3,oneof" json:"disable_network_policy,omitempty"`
 }
 type ReplaceSpecType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type ReplaceSpecType_NetworkPolicySet struct {
-	NetworkPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,oneof"`
+	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
 type ReplaceSpecType_DisableForwardProxyPolicy struct {
-	DisableForwardProxyPolicy *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,oneof"`
+	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
 type ReplaceSpecType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type ReplaceSpecType_ForwardProxyPolicySet struct {
-	ForwardProxyPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,oneof"`
+	ForwardProxyPolicySet *views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,proto3,oneof" json:"forward_proxy_policy_set,omitempty"`
 }
 type ReplaceSpecType_DisableFastAcl struct {
-	DisableFastAcl *ves_io_schema4.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,oneof"`
+	DisableFastAcl *schema.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,proto3,oneof" json:"disable_fast_acl,omitempty"`
 }
 type ReplaceSpecType_ActiveFastAcls struct {
-	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,oneof"`
+	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,proto3,oneof" json:"active_fast_acls,omitempty"`
 }
 type ReplaceSpecType_FastAclSet struct {
-	FastAclSet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,oneof"`
+	FastAclSet *views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,proto3,oneof" json:"fast_acl_set,omitempty"`
 }
 
 func (*ReplaceSpecType_DisableNetworkPolicy) isReplaceSpecType_NetworkPolicyChoice()            {}
@@ -1099,7 +811,7 @@ func (m *ReplaceSpecType) GetFastAclChoice() isReplaceSpecType_FastAclChoice {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableNetworkPolicy() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*ReplaceSpecType_DisableNetworkPolicy); ok {
 		return x.DisableNetworkPolicy
 	}
@@ -1113,14 +825,14 @@ func (m *ReplaceSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType 
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNetworkPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*ReplaceSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableForwardProxyPolicy() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableForwardProxyPolicy() *schema.Empty {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*ReplaceSpecType_DisableForwardProxyPolicy); ok {
 		return x.DisableForwardProxyPolicy
 	}
@@ -1134,14 +846,14 @@ func (m *ReplaceSpecType) GetActiveForwardProxyPolicies() *ActiveForwardProxyPol
 	return nil
 }
 
-func (m *ReplaceSpecType) GetForwardProxyPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetForwardProxyPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*ReplaceSpecType_ForwardProxyPolicySet); ok {
 		return x.ForwardProxyPolicySet
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableFastAcl() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableFastAcl() *schema.Empty {
 	if x, ok := m.GetFastAclChoice().(*ReplaceSpecType_DisableFastAcl); ok {
 		return x.DisableFastAcl
 	}
@@ -1155,16 +867,16 @@ func (m *ReplaceSpecType) GetActiveFastAcls() *ActiveFastACLsType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetFastAclSet() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetFastAclSet() *views.ObjectRefType {
 	if x, ok := m.GetFastAclChoice().(*ReplaceSpecType_FastAclSet); ok {
 		return x.FastAclSet
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_DisableNetworkPolicy)(nil),
 		(*ReplaceSpecType_ActiveNetworkPolicies)(nil),
 		(*ReplaceSpecType_NetworkPolicySet)(nil),
@@ -1175,222 +887,6 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_ActiveFastAcls)(nil),
 		(*ReplaceSpecType_FastAclSet)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *ReplaceSpecType_DisableNetworkPolicy:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableNetworkPolicy); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_NetworkPolicySet:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetworkPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *ReplaceSpecType_DisableForwardProxyPolicy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxyPolicy); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ForwardProxyPolicySet:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ForwardProxyPolicyChoice has unexpected type %T", x)
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *ReplaceSpecType_DisableFastAcl:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableFastAcl); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ActiveFastAcls:
-		_ = b.EncodeVarint(30<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveFastAcls); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_FastAclSet:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FastAclSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.FastAclChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 21: // network_policy_choice.disable_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &ReplaceSpecType_DisableNetworkPolicy{msg}
-		return true, err
-	case 22: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &ReplaceSpecType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 23: // network_policy_choice.network_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &ReplaceSpecType_NetworkPolicySet{msg}
-		return true, err
-	case 25: // forward_proxy_policy_choice.disable_forward_proxy_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &ReplaceSpecType_DisableForwardProxyPolicy{msg}
-		return true, err
-	case 26: // forward_proxy_policy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &ReplaceSpecType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 27: // forward_proxy_policy_choice.forward_proxy_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &ReplaceSpecType_ForwardProxyPolicySet{msg}
-		return true, err
-	case 29: // fast_acl_choice.disable_fast_acl
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &ReplaceSpecType_DisableFastAcl{msg}
-		return true, err
-	case 30: // fast_acl_choice.active_fast_acls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveFastACLsType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &ReplaceSpecType_ActiveFastAcls{msg}
-		return true, err
-	case 31: // fast_acl_choice.fast_acl_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &ReplaceSpecType_FastAclSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *ReplaceSpecType_DisableNetworkPolicy:
-		s := proto.Size(x.DisableNetworkPolicy)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_NetworkPolicySet:
-		s := proto.Size(x.NetworkPolicySet)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *ReplaceSpecType_DisableForwardProxyPolicy:
-		s := proto.Size(x.DisableForwardProxyPolicy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ForwardProxyPolicySet:
-		s := proto.Size(x.ForwardProxyPolicySet)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *ReplaceSpecType_DisableFastAcl:
-		s := proto.Size(x.DisableFastAcl)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ActiveFastAcls:
-		s := proto.Size(x.ActiveFastAcls)
-		n += proto.SizeVarint(30<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_FastAclSet:
-		s := proto.Size(x.FastAclSet)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get network firewall
@@ -1433,9 +929,33 @@ type GetSpecType struct {
 	FastAclChoice isGetSpecType_FastAclChoice `protobuf_oneof:"fast_acl_choice"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{6}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_NetworkPolicyChoice interface {
 	isGetSpecType_NetworkPolicyChoice()
@@ -1457,31 +977,31 @@ type isGetSpecType_FastAclChoice interface {
 }
 
 type GetSpecType_DisableNetworkPolicy struct {
-	DisableNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,oneof"`
+	DisableNetworkPolicy *schema.Empty `protobuf:"bytes,21,opt,name=disable_network_policy,json=disableNetworkPolicy,proto3,oneof" json:"disable_network_policy,omitempty"`
 }
 type GetSpecType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *ActiveNetworkPoliciesType `protobuf:"bytes,22,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GetSpecType_NetworkPolicySet struct {
-	NetworkPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,oneof"`
+	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
 type GetSpecType_DisableForwardProxyPolicy struct {
-	DisableForwardProxyPolicy *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,oneof"`
+	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
 type GetSpecType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *ActiveForwardProxyPoliciesType `protobuf:"bytes,26,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GetSpecType_ForwardProxyPolicySet struct {
-	ForwardProxyPolicySet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,oneof"`
+	ForwardProxyPolicySet *views.ObjectRefType `protobuf:"bytes,27,opt,name=forward_proxy_policy_set,json=forwardProxyPolicySet,proto3,oneof" json:"forward_proxy_policy_set,omitempty"`
 }
 type GetSpecType_DisableFastAcl struct {
-	DisableFastAcl *ves_io_schema4.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,oneof"`
+	DisableFastAcl *schema.Empty `protobuf:"bytes,29,opt,name=disable_fast_acl,json=disableFastAcl,proto3,oneof" json:"disable_fast_acl,omitempty"`
 }
 type GetSpecType_ActiveFastAcls struct {
-	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,oneof"`
+	ActiveFastAcls *ActiveFastACLsType `protobuf:"bytes,30,opt,name=active_fast_acls,json=activeFastAcls,proto3,oneof" json:"active_fast_acls,omitempty"`
 }
 type GetSpecType_FastAclSet struct {
-	FastAclSet *ves_io_schema_views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,oneof"`
+	FastAclSet *views.ObjectRefType `protobuf:"bytes,31,opt,name=fast_acl_set,json=fastAclSet,proto3,oneof" json:"fast_acl_set,omitempty"`
 }
 
 func (*GetSpecType_DisableNetworkPolicy) isGetSpecType_NetworkPolicyChoice()            {}
@@ -1513,7 +1033,7 @@ func (m *GetSpecType) GetFastAclChoice() isGetSpecType_FastAclChoice {
 	return nil
 }
 
-func (m *GetSpecType) GetDisableNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*GetSpecType_DisableNetworkPolicy); ok {
 		return x.DisableNetworkPolicy
 	}
@@ -1527,14 +1047,14 @@ func (m *GetSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 	return nil
 }
 
-func (m *GetSpecType) GetNetworkPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GetSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDisableForwardProxyPolicy() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableForwardProxyPolicy() *schema.Empty {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*GetSpecType_DisableForwardProxyPolicy); ok {
 		return x.DisableForwardProxyPolicy
 	}
@@ -1548,14 +1068,14 @@ func (m *GetSpecType) GetActiveForwardProxyPolicies() *ActiveForwardProxyPolicie
 	return nil
 }
 
-func (m *GetSpecType) GetForwardProxyPolicySet() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetForwardProxyPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetForwardProxyPolicyChoice().(*GetSpecType_ForwardProxyPolicySet); ok {
 		return x.ForwardProxyPolicySet
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDisableFastAcl() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableFastAcl() *schema.Empty {
 	if x, ok := m.GetFastAclChoice().(*GetSpecType_DisableFastAcl); ok {
 		return x.DisableFastAcl
 	}
@@ -1569,16 +1089,16 @@ func (m *GetSpecType) GetActiveFastAcls() *ActiveFastACLsType {
 	return nil
 }
 
-func (m *GetSpecType) GetFastAclSet() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetFastAclSet() *views.ObjectRefType {
 	if x, ok := m.GetFastAclChoice().(*GetSpecType_FastAclSet); ok {
 		return x.FastAclSet
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_DisableNetworkPolicy)(nil),
 		(*GetSpecType_ActiveNetworkPolicies)(nil),
 		(*GetSpecType_NetworkPolicySet)(nil),
@@ -1589,222 +1109,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_ActiveFastAcls)(nil),
 		(*GetSpecType_FastAclSet)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GetSpecType_DisableNetworkPolicy:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableNetworkPolicy); err != nil {
-			return err
-		}
-	case *GetSpecType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case *GetSpecType_NetworkPolicySet:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NetworkPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *GetSpecType_DisableForwardProxyPolicy:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxyPolicy); err != nil {
-			return err
-		}
-	case *GetSpecType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GetSpecType_ForwardProxyPolicySet:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyPolicySet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ForwardProxyPolicyChoice has unexpected type %T", x)
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *GetSpecType_DisableFastAcl:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableFastAcl); err != nil {
-			return err
-		}
-	case *GetSpecType_ActiveFastAcls:
-		_ = b.EncodeVarint(30<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveFastAcls); err != nil {
-			return err
-		}
-	case *GetSpecType_FastAclSet:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FastAclSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.FastAclChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 21: // network_policy_choice.disable_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GetSpecType_DisableNetworkPolicy{msg}
-		return true, err
-	case 22: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GetSpecType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 23: // network_policy_choice.network_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GetSpecType_NetworkPolicySet{msg}
-		return true, err
-	case 25: // forward_proxy_policy_choice.disable_forward_proxy_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &GetSpecType_DisableForwardProxyPolicy{msg}
-		return true, err
-	case 26: // forward_proxy_policy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &GetSpecType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 27: // forward_proxy_policy_choice.forward_proxy_policy_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyPolicyChoice = &GetSpecType_ForwardProxyPolicySet{msg}
-		return true, err
-	case 29: // fast_acl_choice.disable_fast_acl
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &GetSpecType_DisableFastAcl{msg}
-		return true, err
-	case 30: // fast_acl_choice.active_fast_acls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ActiveFastACLsType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &GetSpecType_ActiveFastAcls{msg}
-		return true, err
-	case 31: // fast_acl_choice.fast_acl_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.FastAclChoice = &GetSpecType_FastAclSet{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GetSpecType_DisableNetworkPolicy:
-		s := proto.Size(x.DisableNetworkPolicy)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_NetworkPolicySet:
-		s := proto.Size(x.NetworkPolicySet)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_policy_choice
-	switch x := m.ForwardProxyPolicyChoice.(type) {
-	case *GetSpecType_DisableForwardProxyPolicy:
-		s := proto.Size(x.DisableForwardProxyPolicy)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ForwardProxyPolicySet:
-		s := proto.Size(x.ForwardProxyPolicySet)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// fast_acl_choice
-	switch x := m.FastAclChoice.(type) {
-	case *GetSpecType_DisableFastAcl:
-		s := proto.Size(x.DisableFastAcl)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ActiveFastAcls:
-		s := proto.Size(x.ActiveFastAcls)
-		n += proto.SizeVarint(30<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_FastAclSet:
-		s := proto.Size(x.FastAclSet)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Network firewall status
@@ -1819,9 +1123,33 @@ type NetworkFirewallStatus struct {
 	Installed bool `protobuf:"varint,1,opt,name=installed,proto3" json:"installed,omitempty"`
 }
 
-func (m *NetworkFirewallStatus) Reset()                    { *m = NetworkFirewallStatus{} }
-func (*NetworkFirewallStatus) ProtoMessage()               {}
-func (*NetworkFirewallStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *NetworkFirewallStatus) Reset()      { *m = NetworkFirewallStatus{} }
+func (*NetworkFirewallStatus) ProtoMessage() {}
+func (*NetworkFirewallStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{7}
+}
+func (m *NetworkFirewallStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NetworkFirewallStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NetworkFirewallStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkFirewallStatus.Merge(m, src)
+}
+func (m *NetworkFirewallStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *NetworkFirewallStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkFirewallStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NetworkFirewallStatus proto.InternalMessageInfo
 
 func (m *NetworkFirewallStatus) GetInstalled() bool {
 	if m != nil {
@@ -1848,6 +1176,103 @@ func init() {
 	proto.RegisterType((*NetworkFirewallStatus)(nil), "ves.io.schema.network_firewall.NetworkFirewallStatus")
 	golang_proto.RegisterType((*NetworkFirewallStatus)(nil), "ves.io.schema.network_firewall.NetworkFirewallStatus")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/network_firewall/types.proto", fileDescriptor_e07e50a9abc3814c)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/network_firewall/types.proto", fileDescriptor_e07e50a9abc3814c)
+}
+
+var fileDescriptor_e07e50a9abc3814c = []byte{
+	// 1348 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x5d, 0x6f, 0xda, 0xd6,
+	0x1b, 0xe7, 0x24, 0xfe, 0x83, 0x39, 0x49, 0xc9, 0xa9, 0x0b, 0xe1, 0x25, 0xe0, 0x20, 0xfe, 0x17,
+	0xab, 0x36, 0x02, 0x81, 0xf4, 0x75, 0x93, 0xaa, 0x95, 0x6a, 0x7d, 0xb1, 0xba, 0xad, 0xa2, 0x9d,
+	0x2a, 0x4d, 0x5b, 0x99, 0x31, 0x07, 0xea, 0xd5, 0x70, 0x2c, 0xfb, 0x84, 0x94, 0x6a, 0x48, 0x95,
+	0x26, 0x4d, 0x9a, 0xd4, 0x49, 0x53, 0x6f, 0xf6, 0x15, 0xb6, 0x7c, 0x84, 0xf9, 0x26, 0xda, 0xd5,
+	0xb4, 0x2b, 0x2e, 0x73, 0xb9, 0x12, 0x69, 0xcd, 0x76, 0xd5, 0x8f, 0x30, 0x61, 0x4c, 0xb0, 0xc1,
+	0x4e, 0x69, 0x3b, 0xa9, 0x37, 0xdc, 0xd9, 0xe7, 0x79, 0xf9, 0x3d, 0xfe, 0x9d, 0xe7, 0xf9, 0x9d,
+	0x23, 0xc3, 0x77, 0xdb, 0x58, 0xcf, 0xc9, 0x24, 0xaf, 0x4b, 0xf7, 0x71, 0x53, 0xcc, 0xb7, 0x30,
+	0xdd, 0x21, 0xda, 0x83, 0x4a, 0x5d, 0xd6, 0xf0, 0x8e, 0xa8, 0x28, 0x79, 0xda, 0x51, 0xb1, 0x9e,
+	0x53, 0x35, 0x42, 0x09, 0xc7, 0x0f, 0x7d, 0x73, 0x43, 0xdf, 0xdc, 0xa4, 0x6f, 0x62, 0xa3, 0x21,
+	0xd3, 0xfb, 0xdb, 0xd5, 0x9c, 0x44, 0x9a, 0xf9, 0x06, 0x69, 0x90, 0xbc, 0x19, 0x56, 0xdd, 0xae,
+	0x9b, 0x6f, 0xe6, 0x8b, 0xf9, 0x34, 0x4c, 0x97, 0x58, 0x6f, 0x10, 0xd2, 0x50, 0xf0, 0xd8, 0x8b,
+	0xca, 0x4d, 0xac, 0x53, 0xb1, 0xa9, 0x5a, 0x0e, 0xd1, 0xa9, 0xda, 0x2c, 0xc3, 0x9a, 0xd3, 0x40,
+	0x54, 0x2a, 0x93, 0x96, 0x55, 0x65, 0x22, 0xe5, 0x34, 0xaa, 0x6d, 0x5a, 0xb1, 0x7d, 0x44, 0x22,
+	0xee, 0x34, 0xdb, 0x4d, 0x49, 0xa7, 0xa9, 0x2d, 0x2a, 0x72, 0x4d, 0xa4, 0xd8, 0xb2, 0xa6, 0x27,
+	0xac, 0x32, 0xde, 0xa9, 0x38, 0x91, 0xd7, 0xa7, 0x3d, 0x74, 0x3b, 0x40, 0xe6, 0x27, 0x00, 0xe3,
+	0x97, 0x25, 0x2a, 0xb7, 0xf1, 0x27, 0x43, 0xee, 0x6e, 0x11, 0x45, 0x96, 0x64, 0xac, 0xdf, 0xe9,
+	0xa8, 0x98, 0x7b, 0x04, 0xd1, 0x88, 0x52, 0xd5, 0x5a, 0x8f, 0x81, 0xf4, 0xe2, 0xe9, 0xa5, 0x62,
+	0x26, 0xe7, 0x64, 0xde, 0xcc, 0x9c, 0xfb, 0xb4, 0xfa, 0x35, 0x96, 0x68, 0x19, 0xd7, 0x07, 0xd1,
+	0xa5, 0xf7, 0x76, 0xbb, 0xa7, 0x1c, 0xe1, 0x9d, 0xca, 0xc0, 0xed, 0xd7, 0xbf, 0xf7, 0x16, 0xfd,
+	0x4f, 0xc1, 0x22, 0x7a, 0x0c, 0x06, 0x8f, 0xff, 0x7b, 0x0a, 0x16, 0x58, 0x50, 0x5e, 0x69, 0x39,
+	0xf1, 0x33, 0xbf, 0x00, 0xc8, 0x0f, 0x2b, 0xbb, 0x4a, 0xb4, 0x1d, 0x51, 0xab, 0xdd, 0xd2, 0xc8,
+	0xc3, 0x8e, 0xa3, 0xbc, 0xef, 0x00, 0x5c, 0xad, 0x0f, 0x8d, 0x15, 0x75, 0x60, 0x7d, 0x9d, 0x2a,
+	0xb3, 0xbb, 0xdd, 0xb0, 0x4b, 0x92, 0x8e, 0x7b, 0x99, 0x23, 0x57, 0x47, 0x31, 0x99, 0x1d, 0xc8,
+	0x59, 0xa5, 0x8a, 0x3a, 0xbd, 0x7c, 0xe5, 0xe6, 0xb0, 0x3c, 0x11, 0x06, 0xeb, 0xa2, 0x4e, 0x2b,
+	0xa2, 0xa4, 0xbc, 0x4a, 0x41, 0xe9, 0xdd, 0x2e, 0x3b, 0x8a, 0x73, 0x2f, 0xc2, 0x34, 0x5f, 0x96,
+	0x14, 0x3d, 0xf3, 0xcf, 0x32, 0x0c, 0x5d, 0x53, 0x48, 0x55, 0x54, 0x6e, 0xab, 0x58, 0x32, 0x51,
+	0x09, 0xe4, 0x26, 0x48, 0xd7, 0x31, 0xb5, 0xe0, 0x93, 0x13, 0xf0, 0x4e, 0xe0, 0xff, 0xef, 0x76,
+	0x5d, 0x42, 0x0f, 0x0d, 0x70, 0x84, 0x8d, 0x40, 0x19, 0xd9, 0xf7, 0xa9, 0x73, 0x1b, 0x53, 0xee,
+	0x11, 0x8c, 0xb9, 0xf1, 0x67, 0xc2, 0x2e, 0xcc, 0x08, 0xab, 0x63, 0xad, 0x2d, 0x4b, 0xd8, 0x1b,
+	0x36, 0x32, 0xc5, 0xbb, 0x89, 0xfd, 0x25, 0x5c, 0x1e, 0x51, 0x65, 0xe2, 0x31, 0x33, 0xe0, 0xa5,
+	0x76, 0xbb, 0x8e, 0xa0, 0x09, 0x24, 0x68, 0x91, 0x3b, 0x48, 0xff, 0x19, 0x5c, 0xad, 0xc9, 0xba,
+	0x58, 0x55, 0x70, 0xc5, 0x49, 0x4c, 0xcc, 0x9f, 0x06, 0xa7, 0x97, 0x8a, 0xe1, 0x09, 0xa0, 0x8f,
+	0x9a, 0x2a, 0xed, 0x94, 0x02, 0xfb, 0x5d, 0x30, 0x48, 0x7a, 0xdd, 0x57, 0x0e, 0x5b, 0xe1, 0xf6,
+	0xe1, 0xea, 0x70, 0xdf, 0xc0, 0xa8, 0x68, 0xb6, 0x4b, 0x65, 0x6a, 0xba, 0x02, 0x66, 0xde, 0x8b,
+	0xb9, 0xe3, 0x75, 0x2d, 0xe7, 0x39, 0xb2, 0x76, 0xf0, 0x88, 0xe8, 0xe6, 0xc5, 0x7d, 0x01, 0x13,
+	0x13, 0xbb, 0xac, 0xe0, 0x86, 0x28, 0x75, 0x2a, 0x4d, 0x52, 0xc3, 0xb1, 0xe5, 0xd9, 0x3e, 0x2c,
+	0xea, 0x68, 0x83, 0x9b, 0x66, 0x82, 0x8f, 0x49, 0x0d, 0x73, 0x5f, 0xc1, 0xe4, 0x88, 0x32, 0xb7,
+	0xae, 0x88, 0x05, 0x67, 0xc9, 0x0f, 0xca, 0x71, 0x2b, 0xc9, 0xd4, 0xec, 0x77, 0xb8, 0x27, 0x00,
+	0xa6, 0x2c, 0xfa, 0x3c, 0x86, 0x1f, 0x9a, 0x18, 0x97, 0x66, 0x23, 0xd1, 0x4b, 0x5d, 0xec, 0xd5,
+	0x24, 0x44, 0x4f, 0x57, 0xae, 0x01, 0xd3, 0xae, 0xed, 0x6f, 0x27, 0x35, 0x34, 0xdb, 0x47, 0x27,
+	0xa7, 0x9b, 0xdc, 0xc6, 0xec, 0x0d, 0x88, 0x8e, 0x98, 0xb5, 0xda, 0x37, 0x86, 0x66, 0x49, 0xbc,
+	0x50, 0x0e, 0x8d, 0xd8, 0x1c, 0xb6, 0x36, 0xd7, 0x80, 0x68, 0xc4, 0xe0, 0x91, 0x40, 0x9d, 0x34,
+	0x53, 0x15, 0x67, 0x24, 0xcd, 0xa6, 0x73, 0x0e, 0x20, 0x71, 0x6c, 0x96, 0x14, 0x9d, 0xbb, 0x05,
+	0xc3, 0x47, 0xa3, 0x66, 0x27, 0x84, 0x9b, 0xad, 0xee, 0x93, 0xd6, 0x2c, 0xda, 0x58, 0xb8, 0x07,
+	0x4f, 0x98, 0xe7, 0x9c, 0xdc, 0xa2, 0x58, 0x6b, 0x89, 0x4a, 0xec, 0x70, 0x38, 0x32, 0xb3, 0x28,
+	0x6b, 0x78, 0xb7, 0xeb, 0x0c, 0x1e, 0xc0, 0x94, 0x97, 0x07, 0x4b, 0x37, 0xac, 0x95, 0xd2, 0x99,
+	0xa9, 0xe9, 0x90, 0x48, 0xab, 0x2e, 0x37, 0xcc, 0xba, 0xb9, 0xd5, 0x3d, 0x03, 0xf8, 0x7b, 0x06,
+	0x58, 0xea, 0x1b, 0xc0, 0x7f, 0x2e, 0x7b, 0x3e, 0x5b, 0x28, 0xbe, 0x30, 0x00, 0x28, 0x7d, 0xe0,
+	0xd1, 0x04, 0xf6, 0xd8, 0xe8, 0x9e, 0x01, 0x82, 0x3d, 0x03, 0x9c, 0xe8, 0x1b, 0x20, 0x70, 0x31,
+	0x5b, 0xd8, 0xcc, 0x16, 0xce, 0x98, 0xc1, 0x9b, 0x36, 0x92, 0xec, 0x01, 0xb1, 0x3d, 0x03, 0xa0,
+	0x9e, 0x01, 0x56, 0xfa, 0x06, 0x60, 0x0b, 0xe7, 0xb2, 0x85, 0xf3, 0xd9, 0xc2, 0x85, 0x41, 0x84,
+	0xc0, 0xb0, 0x8b, 0x88, 0x11, 0x18, 0x76, 0x09, 0x2d, 0x0b, 0x0c, 0x7b, 0x02, 0x85, 0x04, 0x86,
+	0x5d, 0x41, 0x48, 0x60, 0xd8, 0x53, 0x28, 0x2c, 0x30, 0x6c, 0x18, 0x45, 0x04, 0x86, 0x8d, 0xa0,
+	0x55, 0x81, 0x61, 0x57, 0x51, 0x54, 0x60, 0xd8, 0x28, 0x8a, 0x09, 0x0c, 0x1b, 0x43, 0x71, 0x81,
+	0x61, 0xe3, 0x28, 0x21, 0x30, 0x6c, 0x02, 0xad, 0x09, 0x0c, 0xbb, 0x86, 0x92, 0x02, 0xc3, 0x26,
+	0x51, 0x4a, 0x60, 0xd8, 0x14, 0xe2, 0x05, 0x86, 0xe5, 0xd1, 0xba, 0xc0, 0xb0, 0xeb, 0x28, 0x2d,
+	0xf8, 0xd9, 0xbf, 0x02, 0xe8, 0x79, 0x40, 0xf0, 0xb3, 0xcf, 0x03, 0xe8, 0x30, 0x90, 0x79, 0x12,
+	0x84, 0xa1, 0x2b, 0x1a, 0x16, 0x29, 0x3e, 0x3a, 0x6c, 0x6e, 0x7a, 0x0a, 0x64, 0xc4, 0x7b, 0x87,
+	0x3d, 0x75, 0x51, 0xf7, 0xd6, 0xc5, 0xd5, 0x37, 0xd4, 0x45, 0x6f, 0x39, 0x94, 0x5d, 0xcf, 0xcb,
+	0xe8, 0xcc, 0x4d, 0x15, 0x71, 0x3d, 0x35, 0xaf, 0xfb, 0x5c, 0x4e, 0xca, 0xbb, 0x2f, 0xd1, 0xc6,
+	0xf8, 0x31, 0x9c, 0x1d, 0x2b, 0x89, 0xdf, 0xbe, 0x54, 0x12, 0x13, 0xff, 0x85, 0x24, 0xbe, 0x44,
+	0x09, 0xe9, 0x31, 0x17, 0x81, 0xb5, 0x57, 0xe2, 0x73, 0xfa, 0x3a, 0x70, 0xdd, 0xf3, 0x0a, 0xf0,
+	0xa1, 0x8b, 0x2c, 0xa6, 0x8e, 0x21, 0x72, 0x5a, 0x0d, 0xef, 0xb9, 0xa8, 0x21, 0xff, 0xba, 0x6a,
+	0xe8, 0x22, 0x82, 0x93, 0x97, 0x94, 0xf5, 0x37, 0xe5, 0x62, 0xc1, 0x7e, 0x49, 0x79, 0xff, 0xee,
+	0x1f, 0x97, 0x26, 0xee, 0x80, 0xbf, 0x19, 0xa0, 0x04, 0x13, 0x30, 0x6c, 0xed, 0x52, 0xda, 0x64,
+	0x2c, 0x6d, 0xf5, 0xca, 0x42, 0xf1, 0x0c, 0x0c, 0xc3, 0x90, 0x35, 0x06, 0xe3, 0xd5, 0x4d, 0x18,
+	0x82, 0xec, 0xa0, 0xe6, 0xf4, 0x80, 0x93, 0x85, 0xe2, 0x85, 0xd2, 0x06, 0x8c, 0x4c, 0x4a, 0xe1,
+	0x7d, 0x22, 0x4b, 0x98, 0x0b, 0xef, 0x19, 0x20, 0xd2, 0x33, 0x40, 0x78, 0x20, 0x4c, 0xc5, 0x42,
+	0xb6, 0x58, 0xcc, 0x16, 0xb7, 0x4a, 0x5b, 0x70, 0xcd, 0x5d, 0x03, 0xc7, 0x41, 0xf1, 0x9e, 0x01,
+	0x62, 0x66, 0xd0, 0xd9, 0x6c, 0xf1, 0x5c, 0xb6, 0x78, 0xbe, 0xf4, 0x0e, 0x5c, 0x19, 0x6b, 0xdf,
+	0xd8, 0x31, 0xd5, 0x33, 0x40, 0xd2, 0x74, 0xbc, 0x98, 0xdd, 0xda, 0xcc, 0x6e, 0x15, 0x8e, 0x44,
+	0x6d, 0x28, 0x61, 0x49, 0x94, 0xca, 0xfc, 0x10, 0x84, 0x2b, 0x65, 0xac, 0x2a, 0xa2, 0x34, 0xd7,
+	0xa3, 0xb9, 0x1e, 0xcd, 0xf5, 0x68, 0xae, 0x47, 0x6f, 0x57, 0x8f, 0xbe, 0x0f, 0xc2, 0xa5, 0x6b,
+	0x98, 0xce, 0xb5, 0x68, 0xae, 0x45, 0x73, 0x2d, 0x9a, 0x6b, 0xd1, 0x5b, 0xd5, 0xa2, 0xb3, 0x30,
+	0x62, 0x7d, 0xc4, 0x55, 0x6b, 0x3b, 0x6e, 0x53, 0x91, 0x6e, 0xeb, 0x5c, 0x12, 0x06, 0xe5, 0x96,
+	0x4e, 0x45, 0x45, 0xc1, 0xb5, 0x18, 0x48, 0x83, 0xd3, 0x6c, 0x79, 0xbc, 0x50, 0x7a, 0x0a, 0x7a,
+	0xcf, 0x78, 0xdf, 0xfe, 0x33, 0xde, 0xf7, 0xe2, 0x19, 0x0f, 0x1e, 0xf7, 0x79, 0xf0, 0x73, 0x9f,
+	0x07, 0xbf, 0xf7, 0x79, 0xd0, 0xeb, 0xf3, 0x60, 0xbf, 0xcf, 0x83, 0x3f, 0xfb, 0x3c, 0x38, 0xec,
+	0xf3, 0xbe, 0x17, 0x7d, 0x1e, 0xfc, 0x78, 0xc0, 0xfb, 0xf6, 0x0e, 0x78, 0xd0, 0x3b, 0xe0, 0x7d,
+	0xfb, 0x07, 0xbc, 0xef, 0xf3, 0x3b, 0x0d, 0xa2, 0x3e, 0x68, 0xe4, 0xda, 0x44, 0xa1, 0x58, 0xd3,
+	0xc4, 0xdc, 0xb6, 0x9e, 0x37, 0x1f, 0xea, 0x44, 0x6b, 0x6e, 0xa8, 0x1a, 0x69, 0xcb, 0x35, 0xac,
+	0x6d, 0x8c, 0xcc, 0x79, 0xb5, 0xda, 0x20, 0x79, 0xfc, 0x90, 0x5a, 0x3f, 0xa7, 0x3d, 0xfe, 0xf7,
+	0x57, 0xfd, 0xe6, 0x9f, 0xea, 0xad, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x8c, 0xd7, 0xea, 0xd6,
+	0x18, 0x18, 0x00, 0x00,
+}
+
 func (this *ActiveNetworkPoliciesType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3471,7 +2896,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *ActiveNetworkPoliciesType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3479,29 +2904,36 @@ func (m *ActiveNetworkPoliciesType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ActiveNetworkPoliciesType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ActiveNetworkPoliciesType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.NetworkPolicies) > 0 {
-		for _, msg := range m.NetworkPolicies {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.NetworkPolicies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkPolicies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ActiveForwardProxyPoliciesType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3509,29 +2941,36 @@ func (m *ActiveForwardProxyPoliciesType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ActiveForwardProxyPoliciesType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ActiveForwardProxyPoliciesType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ForwardProxyPolicies) > 0 {
-		for _, msg := range m.ForwardProxyPolicies {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.ForwardProxyPolicies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ForwardProxyPolicies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ActiveFastACLsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3539,29 +2978,36 @@ func (m *ActiveFastACLsType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ActiveFastACLsType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ActiveFastACLsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.FastAcls) > 0 {
-		for _, msg := range m.FastAcls {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.FastAcls) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FastAcls[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3569,218 +3015,300 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.NetworkPolicySet) > 0 {
-		for _, msg := range m.NetworkPolicySet {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.FastAclConfigMode != nil {
+		{
+			size := m.FastAclConfigMode.Size()
+			i -= size
+			if _, err := m.FastAclConfigMode.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
-	if len(m.ForwardProxyPolicySet) > 0 {
-		for _, msg := range m.ForwardProxyPolicySet {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.ForwardProxyPolicyConfigMode != nil {
+		{
+			size := m.ForwardProxyPolicyConfigMode.Size()
+			i -= size
+			if _, err := m.ForwardProxyPolicyConfigMode.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
-		}
-	}
-	if len(m.FastAclSet) > 0 {
-		for _, msg := range m.FastAclSet {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
 	if m.NetworkPolicyConfigMode != nil {
-		nn1, err := m.NetworkPolicyConfigMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.NetworkPolicyConfigMode.Size()
+			i -= size
+			if _, err := m.NetworkPolicyConfigMode.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	if m.ForwardProxyPolicyConfigMode != nil {
-		nn2, err := m.ForwardProxyPolicyConfigMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.FastAclSet) > 0 {
+		for iNdEx := len(m.FastAclSet) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FastAclSet[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
 		}
-		i += nn2
 	}
-	if m.FastAclConfigMode != nil {
-		nn3, err := m.FastAclConfigMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.ForwardProxyPolicySet) > 0 {
+		for iNdEx := len(m.ForwardProxyPolicySet) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ForwardProxyPolicySet[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += nn3
 	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n4, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.NetworkPolicySet) > 0 {
+		for iNdEx := len(m.NetworkPolicySet) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NetworkPolicySet[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += n4
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_DisableNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableNetworkPolicy != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableNetworkPolicy.Size()))
-		n5, err := m.DisableNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n6, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DisableForwardProxyPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableForwardProxyPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxyPolicy != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxyPolicy.Size()))
-		n7, err := m.DisableForwardProxyPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxyPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n8, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NetworkPolicyLegacyMode) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NetworkPolicyLegacyMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetworkPolicyLegacyMode != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetworkPolicyLegacyMode.Size()))
-		n9, err := m.NetworkPolicyLegacyMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetworkPolicyLegacyMode.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ForwardProxyPolicyLegacyMode) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ForwardProxyPolicyLegacyMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyPolicyLegacyMode != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyPolicyLegacyMode.Size()))
-		n10, err := m.ForwardProxyPolicyLegacyMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyPolicyLegacyMode.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DisableFastAcl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableFastAcl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableFastAcl != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableFastAcl.Size()))
-		n11, err := m.DisableFastAcl.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableFastAcl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ActiveFastAcls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveFastAcls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveFastAcls != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveFastAcls.Size()))
-		n12, err := m.ActiveFastAcls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveFastAcls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_FastAclLegacyMode) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_FastAclLegacyMode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FastAclLegacyMode != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FastAclLegacyMode.Size()))
-		n13, err := m.FastAclLegacyMode.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FastAclLegacyMode.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3788,182 +3316,256 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkPolicyChoice != nil {
-		nn14, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.FastAclChoice != nil {
+		{
+			size := m.FastAclChoice.Size()
+			i -= size
+			if _, err := m.FastAclChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn14
 	}
 	if m.ForwardProxyPolicyChoice != nil {
-		nn15, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyPolicyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn15
 	}
-	if m.FastAclChoice != nil {
-		nn16, err := m.FastAclChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn16
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_DisableNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableNetworkPolicy != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableNetworkPolicy.Size()))
-		n17, err := m.DisableNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n18, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NetworkPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NetworkPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetworkPolicySet != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetworkPolicySet.Size()))
-		n19, err := m.NetworkPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetworkPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DisableForwardProxyPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableForwardProxyPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxyPolicy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxyPolicy.Size()))
-		n20, err := m.DisableForwardProxyPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxyPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n21, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ForwardProxyPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ForwardProxyPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyPolicySet != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyPolicySet.Size()))
-		n22, err := m.ForwardProxyPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DisableFastAcl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableFastAcl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableFastAcl != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableFastAcl.Size()))
-		n23, err := m.DisableFastAcl.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableFastAcl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ActiveFastAcls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ActiveFastAcls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveFastAcls != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveFastAcls.Size()))
-		n24, err := m.ActiveFastAcls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveFastAcls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_FastAclSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FastAclSet != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FastAclSet.Size()))
-		n25, err := m.FastAclSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FastAclSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3971,182 +3573,256 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkPolicyChoice != nil {
-		nn26, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.FastAclChoice != nil {
+		{
+			size := m.FastAclChoice.Size()
+			i -= size
+			if _, err := m.FastAclChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn26
 	}
 	if m.ForwardProxyPolicyChoice != nil {
-		nn27, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyPolicyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn27
 	}
-	if m.FastAclChoice != nil {
-		nn28, err := m.FastAclChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn28
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_DisableNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableNetworkPolicy != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableNetworkPolicy.Size()))
-		n29, err := m.DisableNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n29
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n30, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n30
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NetworkPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NetworkPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetworkPolicySet != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetworkPolicySet.Size()))
-		n31, err := m.NetworkPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetworkPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n31
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DisableForwardProxyPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableForwardProxyPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxyPolicy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxyPolicy.Size()))
-		n32, err := m.DisableForwardProxyPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxyPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n32
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n33, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n33
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ForwardProxyPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ForwardProxyPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyPolicySet != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyPolicySet.Size()))
-		n34, err := m.ForwardProxyPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DisableFastAcl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableFastAcl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableFastAcl != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableFastAcl.Size()))
-		n35, err := m.DisableFastAcl.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableFastAcl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ActiveFastAcls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ActiveFastAcls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveFastAcls != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveFastAcls.Size()))
-		n36, err := m.ActiveFastAcls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveFastAcls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_FastAclSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FastAclSet != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FastAclSet.Size()))
-		n37, err := m.FastAclSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FastAclSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4154,182 +3830,256 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkPolicyChoice != nil {
-		nn38, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.FastAclChoice != nil {
+		{
+			size := m.FastAclChoice.Size()
+			i -= size
+			if _, err := m.FastAclChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn38
 	}
 	if m.ForwardProxyPolicyChoice != nil {
-		nn39, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyPolicyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn39
 	}
-	if m.FastAclChoice != nil {
-		nn40, err := m.FastAclChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn40
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_DisableNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableNetworkPolicy != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableNetworkPolicy.Size()))
-		n41, err := m.DisableNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n41
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n42, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n42
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NetworkPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NetworkPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NetworkPolicySet != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NetworkPolicySet.Size()))
-		n43, err := m.NetworkPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NetworkPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n43
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DisableForwardProxyPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableForwardProxyPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxyPolicy != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxyPolicy.Size()))
-		n44, err := m.DisableForwardProxyPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxyPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n44
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n45, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n45
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ForwardProxyPolicySet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ForwardProxyPolicySet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyPolicySet != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyPolicySet.Size()))
-		n46, err := m.ForwardProxyPolicySet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyPolicySet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n46
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DisableFastAcl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableFastAcl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableFastAcl != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableFastAcl.Size()))
-		n47, err := m.DisableFastAcl.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableFastAcl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n47
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ActiveFastAcls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ActiveFastAcls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveFastAcls != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveFastAcls.Size()))
-		n48, err := m.ActiveFastAcls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveFastAcls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n48
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_FastAclSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.FastAclSet != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FastAclSet.Size()))
-		n49, err := m.FastAclSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.FastAclSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n49
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *NetworkFirewallStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4337,33 +4087,43 @@ func (m *NetworkFirewallStatus) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NetworkFirewallStatus) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NetworkFirewallStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Installed {
-		dAtA[i] = 0x8
-		i++
+		i--
 		if m.Installed {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *ActiveNetworkPoliciesType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.NetworkPolicies) > 0 {
@@ -4376,6 +4136,9 @@ func (m *ActiveNetworkPoliciesType) Size() (n int) {
 }
 
 func (m *ActiveForwardProxyPoliciesType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.ForwardProxyPolicies) > 0 {
@@ -4388,6 +4151,9 @@ func (m *ActiveForwardProxyPoliciesType) Size() (n int) {
 }
 
 func (m *ActiveFastACLsType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.FastAcls) > 0 {
@@ -4400,6 +4166,9 @@ func (m *ActiveFastACLsType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.NetworkPolicySet) > 0 {
@@ -4437,6 +4206,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_DisableNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableNetworkPolicy != nil {
@@ -4446,6 +4218,9 @@ func (m *GlobalSpecType_DisableNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -4455,6 +4230,9 @@ func (m *GlobalSpecType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DisableForwardProxyPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxyPolicy != nil {
@@ -4464,6 +4242,9 @@ func (m *GlobalSpecType_DisableForwardProxyPolicy) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -4473,6 +4254,9 @@ func (m *GlobalSpecType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NetworkPolicyLegacyMode) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyLegacyMode != nil {
@@ -4482,6 +4266,9 @@ func (m *GlobalSpecType_NetworkPolicyLegacyMode) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ForwardProxyPolicyLegacyMode) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyPolicyLegacyMode != nil {
@@ -4491,6 +4278,9 @@ func (m *GlobalSpecType_ForwardProxyPolicyLegacyMode) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DisableFastAcl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableFastAcl != nil {
@@ -4500,6 +4290,9 @@ func (m *GlobalSpecType_DisableFastAcl) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ActiveFastAcls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveFastAcls != nil {
@@ -4509,6 +4302,9 @@ func (m *GlobalSpecType_ActiveFastAcls) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_FastAclLegacyMode) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FastAclLegacyMode != nil {
@@ -4518,6 +4314,9 @@ func (m *GlobalSpecType_FastAclLegacyMode) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyChoice != nil {
@@ -4533,6 +4332,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_DisableNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableNetworkPolicy != nil {
@@ -4542,6 +4344,9 @@ func (m *CreateSpecType_DisableNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -4551,6 +4356,9 @@ func (m *CreateSpecType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NetworkPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicySet != nil {
@@ -4560,6 +4368,9 @@ func (m *CreateSpecType_NetworkPolicySet) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DisableForwardProxyPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxyPolicy != nil {
@@ -4569,6 +4380,9 @@ func (m *CreateSpecType_DisableForwardProxyPolicy) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -4578,6 +4392,9 @@ func (m *CreateSpecType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ForwardProxyPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyPolicySet != nil {
@@ -4587,6 +4404,9 @@ func (m *CreateSpecType_ForwardProxyPolicySet) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DisableFastAcl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableFastAcl != nil {
@@ -4596,6 +4416,9 @@ func (m *CreateSpecType_DisableFastAcl) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ActiveFastAcls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveFastAcls != nil {
@@ -4605,6 +4428,9 @@ func (m *CreateSpecType_ActiveFastAcls) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_FastAclSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FastAclSet != nil {
@@ -4614,6 +4440,9 @@ func (m *CreateSpecType_FastAclSet) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyChoice != nil {
@@ -4629,6 +4458,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_DisableNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableNetworkPolicy != nil {
@@ -4638,6 +4470,9 @@ func (m *ReplaceSpecType_DisableNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -4647,6 +4482,9 @@ func (m *ReplaceSpecType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NetworkPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicySet != nil {
@@ -4656,6 +4494,9 @@ func (m *ReplaceSpecType_NetworkPolicySet) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DisableForwardProxyPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxyPolicy != nil {
@@ -4665,6 +4506,9 @@ func (m *ReplaceSpecType_DisableForwardProxyPolicy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -4674,6 +4518,9 @@ func (m *ReplaceSpecType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ForwardProxyPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyPolicySet != nil {
@@ -4683,6 +4530,9 @@ func (m *ReplaceSpecType_ForwardProxyPolicySet) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DisableFastAcl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableFastAcl != nil {
@@ -4692,6 +4542,9 @@ func (m *ReplaceSpecType_DisableFastAcl) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ActiveFastAcls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveFastAcls != nil {
@@ -4701,6 +4554,9 @@ func (m *ReplaceSpecType_ActiveFastAcls) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_FastAclSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FastAclSet != nil {
@@ -4710,6 +4566,9 @@ func (m *ReplaceSpecType_FastAclSet) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyChoice != nil {
@@ -4725,6 +4584,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_DisableNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableNetworkPolicy != nil {
@@ -4734,6 +4596,9 @@ func (m *GetSpecType_DisableNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -4743,6 +4608,9 @@ func (m *GetSpecType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NetworkPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicySet != nil {
@@ -4752,6 +4620,9 @@ func (m *GetSpecType_NetworkPolicySet) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DisableForwardProxyPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxyPolicy != nil {
@@ -4761,6 +4632,9 @@ func (m *GetSpecType_DisableForwardProxyPolicy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -4770,6 +4644,9 @@ func (m *GetSpecType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ForwardProxyPolicySet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyPolicySet != nil {
@@ -4779,6 +4656,9 @@ func (m *GetSpecType_ForwardProxyPolicySet) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DisableFastAcl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableFastAcl != nil {
@@ -4788,6 +4668,9 @@ func (m *GetSpecType_DisableFastAcl) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ActiveFastAcls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveFastAcls != nil {
@@ -4797,6 +4680,9 @@ func (m *GetSpecType_ActiveFastAcls) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_FastAclSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.FastAclSet != nil {
@@ -4806,6 +4692,9 @@ func (m *GetSpecType_FastAclSet) Size() (n int) {
 	return n
 }
 func (m *NetworkFirewallStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Installed {
@@ -4815,14 +4704,7 @@ func (m *NetworkFirewallStatus) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -4831,8 +4713,13 @@ func (this *ActiveNetworkPoliciesType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForNetworkPolicies := "[]*ObjectRefType{"
+	for _, f := range this.NetworkPolicies {
+		repeatedStringForNetworkPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkPolicies += "}"
 	s := strings.Join([]string{`&ActiveNetworkPoliciesType{`,
-		`NetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`NetworkPolicies:` + repeatedStringForNetworkPolicies + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4841,8 +4728,13 @@ func (this *ActiveForwardProxyPoliciesType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForForwardProxyPolicies := "[]*ObjectRefType{"
+	for _, f := range this.ForwardProxyPolicies {
+		repeatedStringForForwardProxyPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForForwardProxyPolicies += "}"
 	s := strings.Join([]string{`&ActiveForwardProxyPoliciesType{`,
-		`ForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ForwardProxyPolicies:` + repeatedStringForForwardProxyPolicies + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4851,8 +4743,13 @@ func (this *ActiveFastACLsType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForFastAcls := "[]*ObjectRefType{"
+	for _, f := range this.FastAcls {
+		repeatedStringForFastAcls += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForFastAcls += "}"
 	s := strings.Join([]string{`&ActiveFastACLsType{`,
-		`FastAcls:` + strings.Replace(fmt.Sprintf("%v", this.FastAcls), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`FastAcls:` + repeatedStringForFastAcls + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4861,14 +4758,29 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForNetworkPolicySet := "[]*ObjectRefType{"
+	for _, f := range this.NetworkPolicySet {
+		repeatedStringForNetworkPolicySet += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForNetworkPolicySet += "}"
+	repeatedStringForForwardProxyPolicySet := "[]*ObjectRefType{"
+	for _, f := range this.ForwardProxyPolicySet {
+		repeatedStringForForwardProxyPolicySet += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForForwardProxyPolicySet += "}"
+	repeatedStringForFastAclSet := "[]*ObjectRefType{"
+	for _, f := range this.FastAclSet {
+		repeatedStringForFastAclSet += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForFastAclSet += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`NetworkPolicySet:` + repeatedStringForNetworkPolicySet + `,`,
+		`ForwardProxyPolicySet:` + repeatedStringForForwardProxyPolicySet + `,`,
+		`FastAclSet:` + repeatedStringForFastAclSet + `,`,
 		`NetworkPolicyConfigMode:` + fmt.Sprintf("%v", this.NetworkPolicyConfigMode) + `,`,
 		`ForwardProxyPolicyConfigMode:` + fmt.Sprintf("%v", this.ForwardProxyPolicyConfigMode) + `,`,
 		`FastAclConfigMode:` + fmt.Sprintf("%v", this.FastAclConfigMode) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4878,7 +4790,7 @@ func (this *GlobalSpecType_DisableNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableNetworkPolicy{`,
-		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4898,7 +4810,7 @@ func (this *GlobalSpecType_DisableForwardProxyPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableForwardProxyPolicy{`,
-		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4918,7 +4830,7 @@ func (this *GlobalSpecType_NetworkPolicyLegacyMode) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NetworkPolicyLegacyMode{`,
-		`NetworkPolicyLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicyLegacyMode), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NetworkPolicyLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicyLegacyMode), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4928,7 +4840,7 @@ func (this *GlobalSpecType_ForwardProxyPolicyLegacyMode) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ForwardProxyPolicyLegacyMode{`,
-		`ForwardProxyPolicyLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicyLegacyMode), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyPolicyLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicyLegacyMode), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4938,7 +4850,7 @@ func (this *GlobalSpecType_DisableFastAcl) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableFastAcl{`,
-		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4958,7 +4870,7 @@ func (this *GlobalSpecType_FastAclLegacyMode) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_FastAclLegacyMode{`,
-		`FastAclLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.FastAclLegacyMode), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`FastAclLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.FastAclLegacyMode), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4980,7 +4892,7 @@ func (this *CreateSpecType_DisableNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableNetworkPolicy{`,
-		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5000,7 +4912,7 @@ func (this *CreateSpecType_NetworkPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NetworkPolicySet{`,
-		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5010,7 +4922,7 @@ func (this *CreateSpecType_DisableForwardProxyPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableForwardProxyPolicy{`,
-		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5030,7 +4942,7 @@ func (this *CreateSpecType_ForwardProxyPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ForwardProxyPolicySet{`,
-		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5040,7 +4952,7 @@ func (this *CreateSpecType_DisableFastAcl) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableFastAcl{`,
-		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5060,7 +4972,7 @@ func (this *CreateSpecType_FastAclSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_FastAclSet{`,
-		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5082,7 +4994,7 @@ func (this *ReplaceSpecType_DisableNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableNetworkPolicy{`,
-		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5102,7 +5014,7 @@ func (this *ReplaceSpecType_NetworkPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NetworkPolicySet{`,
-		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5112,7 +5024,7 @@ func (this *ReplaceSpecType_DisableForwardProxyPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableForwardProxyPolicy{`,
-		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5132,7 +5044,7 @@ func (this *ReplaceSpecType_ForwardProxyPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ForwardProxyPolicySet{`,
-		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5142,7 +5054,7 @@ func (this *ReplaceSpecType_DisableFastAcl) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableFastAcl{`,
-		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5162,7 +5074,7 @@ func (this *ReplaceSpecType_FastAclSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_FastAclSet{`,
-		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5184,7 +5096,7 @@ func (this *GetSpecType_DisableNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableNetworkPolicy{`,
-		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5204,7 +5116,7 @@ func (this *GetSpecType_NetworkPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NetworkPolicySet{`,
-		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`NetworkPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5214,7 +5126,7 @@ func (this *GetSpecType_DisableForwardProxyPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableForwardProxyPolicy{`,
-		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxyPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxyPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5234,7 +5146,7 @@ func (this *GetSpecType_ForwardProxyPolicySet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ForwardProxyPolicySet{`,
-		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ForwardProxyPolicySet:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyPolicySet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5244,7 +5156,7 @@ func (this *GetSpecType_DisableFastAcl) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableFastAcl{`,
-		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableFastAcl:` + strings.Replace(fmt.Sprintf("%v", this.DisableFastAcl), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5264,7 +5176,7 @@ func (this *GetSpecType_FastAclSet) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_FastAclSet{`,
-		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5302,7 +5214,7 @@ func (m *ActiveNetworkPoliciesType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5330,7 +5242,7 @@ func (m *ActiveNetworkPoliciesType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5339,10 +5251,13 @@ func (m *ActiveNetworkPoliciesType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkPolicies = append(m.NetworkPolicies, &ves_io_schema_views.ObjectRefType{})
+			m.NetworkPolicies = append(m.NetworkPolicies, &views.ObjectRefType{})
 			if err := m.NetworkPolicies[len(m.NetworkPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5354,6 +5269,9 @@ func (m *ActiveNetworkPoliciesType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5383,7 +5301,7 @@ func (m *ActiveForwardProxyPoliciesType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5411,7 +5329,7 @@ func (m *ActiveForwardProxyPoliciesType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5420,10 +5338,13 @@ func (m *ActiveForwardProxyPoliciesType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ForwardProxyPolicies = append(m.ForwardProxyPolicies, &ves_io_schema_views.ObjectRefType{})
+			m.ForwardProxyPolicies = append(m.ForwardProxyPolicies, &views.ObjectRefType{})
 			if err := m.ForwardProxyPolicies[len(m.ForwardProxyPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5435,6 +5356,9 @@ func (m *ActiveForwardProxyPoliciesType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5464,7 +5388,7 @@ func (m *ActiveFastACLsType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5492,7 +5416,7 @@ func (m *ActiveFastACLsType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5501,10 +5425,13 @@ func (m *ActiveFastACLsType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.FastAcls = append(m.FastAcls, &ves_io_schema_views.ObjectRefType{})
+			m.FastAcls = append(m.FastAcls, &views.ObjectRefType{})
 			if err := m.FastAcls[len(m.FastAcls)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5516,6 +5443,9 @@ func (m *ActiveFastACLsType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5545,7 +5475,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5573,7 +5503,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5582,10 +5512,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NetworkPolicySet = append(m.NetworkPolicySet, &ves_io_schema4.ObjectRefType{})
+			m.NetworkPolicySet = append(m.NetworkPolicySet, &schema.ObjectRefType{})
 			if err := m.NetworkPolicySet[len(m.NetworkPolicySet)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5604,7 +5537,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5613,10 +5546,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ForwardProxyPolicySet = append(m.ForwardProxyPolicySet, &ves_io_schema4.ObjectRefType{})
+			m.ForwardProxyPolicySet = append(m.ForwardProxyPolicySet, &schema.ObjectRefType{})
 			if err := m.ForwardProxyPolicySet[len(m.ForwardProxyPolicySet)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5635,7 +5571,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5644,10 +5580,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.FastAclSet = append(m.FastAclSet, &ves_io_schema4.ObjectRefType{})
+			m.FastAclSet = append(m.FastAclSet, &schema.ObjectRefType{})
 			if err := m.FastAclSet[len(m.FastAclSet)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5666,7 +5605,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5675,10 +5614,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5698,7 +5640,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5707,6 +5649,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5730,7 +5675,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5739,10 +5684,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5762,7 +5710,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5771,6 +5719,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5794,7 +5745,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5803,10 +5754,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5826,7 +5780,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5835,10 +5789,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5858,7 +5815,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5867,10 +5824,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5890,7 +5850,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5899,6 +5859,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5922,7 +5885,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5931,10 +5894,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5954,7 +5920,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5963,11 +5929,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5980,6 +5949,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6009,7 +5981,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6037,7 +6009,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6046,10 +6018,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6069,7 +6044,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6078,6 +6053,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6101,7 +6079,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6110,10 +6088,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6133,7 +6114,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6142,10 +6123,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6165,7 +6149,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6174,6 +6158,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6197,7 +6184,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6206,10 +6193,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6229,7 +6219,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6238,10 +6228,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6261,7 +6254,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6270,6 +6263,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6293,7 +6289,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6302,10 +6298,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6318,6 +6317,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6347,7 +6349,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6375,7 +6377,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6384,10 +6386,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6407,7 +6412,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6416,6 +6421,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6439,7 +6447,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6448,10 +6456,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6471,7 +6482,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6480,10 +6491,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6503,7 +6517,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6512,6 +6526,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6535,7 +6552,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6544,10 +6561,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6567,7 +6587,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6576,10 +6596,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6599,7 +6622,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6608,6 +6631,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6631,7 +6657,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6640,10 +6666,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6656,6 +6685,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6685,7 +6717,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6713,7 +6745,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6722,10 +6754,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6745,7 +6780,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6754,6 +6789,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6777,7 +6815,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6786,10 +6824,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6809,7 +6850,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6818,10 +6859,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6841,7 +6885,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6850,6 +6894,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6873,7 +6920,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6882,10 +6929,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6905,7 +6955,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6914,10 +6964,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6937,7 +6990,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6946,6 +6999,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6969,7 +7025,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6978,10 +7034,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6994,6 +7053,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7023,7 +7085,7 @@ func (m *NetworkFirewallStatus) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7051,7 +7113,7 @@ func (m *NetworkFirewallStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7064,6 +7126,9 @@ func (m *NetworkFirewallStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7081,6 +7146,7 @@ func (m *NetworkFirewallStatus) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -7112,10 +7178,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -7132,146 +7196,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/network_firewall/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/network_firewall/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1343 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4d, 0x8f, 0xda, 0x56,
-	0x17, 0x9e, 0x3b, 0xe3, 0x17, 0xcc, 0x9d, 0x09, 0x73, 0xe3, 0xc0, 0xf0, 0x31, 0xe0, 0x41, 0xbc,
-	0x8b, 0x37, 0x7a, 0xeb, 0x81, 0x81, 0xc9, 0x67, 0x2b, 0x45, 0x0d, 0x51, 0xf3, 0x61, 0xa5, 0x6d,
-	0x44, 0x52, 0x45, 0xaa, 0xda, 0x50, 0x63, 0x2e, 0xc4, 0x8d, 0xe1, 0x5a, 0xf6, 0x1d, 0x26, 0x44,
-	0x45, 0x8a, 0x54, 0xa9, 0x52, 0xab, 0x54, 0xaa, 0xb2, 0xe9, 0x5f, 0x68, 0xe7, 0x27, 0xd4, 0x9b,
-	0x51, 0x57, 0x55, 0x57, 0x2c, 0xb3, 0x6c, 0x88, 0xd4, 0x4c, 0xbb, 0xca, 0x4f, 0xa8, 0x30, 0x66,
-	0xb0, 0xc1, 0x9e, 0x90, 0xa4, 0x52, 0x36, 0xec, 0xc0, 0xe7, 0xe3, 0x39, 0xf7, 0x39, 0xe7, 0x3c,
-	0xbe, 0x32, 0xfc, 0x7f, 0x1b, 0x1b, 0x39, 0x85, 0xe4, 0x0d, 0xf9, 0x2e, 0x6e, 0x4a, 0xf9, 0x16,
-	0xa6, 0xbb, 0x44, 0xbf, 0x57, 0xa9, 0x2b, 0x3a, 0xde, 0x95, 0x54, 0x35, 0x4f, 0x3b, 0x1a, 0x36,
-	0x72, 0x9a, 0x4e, 0x28, 0xe1, 0xf8, 0xa1, 0x6f, 0x6e, 0xe8, 0x9b, 0x9b, 0xf4, 0x4d, 0x6e, 0x36,
-	0x14, 0x7a, 0x77, 0xa7, 0x9a, 0x93, 0x49, 0x33, 0xdf, 0x20, 0x0d, 0x92, 0xb7, 0xc2, 0xaa, 0x3b,
-	0x75, 0xeb, 0x9f, 0xf5, 0xc7, 0xfa, 0x35, 0x4c, 0x97, 0xdc, 0x68, 0x10, 0xd2, 0x50, 0xf1, 0xd8,
-	0x8b, 0x2a, 0x4d, 0x6c, 0x50, 0xa9, 0xa9, 0xd9, 0x0e, 0xb1, 0xa9, 0xda, 0x6c, 0xc3, 0xba, 0xdb,
-	0x40, 0x34, 0xaa, 0x90, 0x96, 0x5d, 0x65, 0x32, 0xed, 0x36, 0x6a, 0x6d, 0x5a, 0x71, 0x1c, 0x22,
-	0x99, 0x70, 0x9b, 0x9d, 0xa6, 0x94, 0xdb, 0xd4, 0x96, 0x54, 0xa5, 0x26, 0x51, 0x6c, 0x5b, 0x33,
-	0x13, 0x56, 0x05, 0xef, 0x56, 0xdc, 0xc8, 0x1b, 0xd3, 0x1e, 0x86, 0x13, 0x20, 0xfb, 0x23, 0x80,
-	0x89, 0x8b, 0x32, 0x55, 0xda, 0xf8, 0xa3, 0x21, 0x77, 0x37, 0x88, 0xaa, 0xc8, 0x0a, 0x36, 0x6e,
-	0x75, 0x34, 0xcc, 0x3d, 0x80, 0x68, 0x44, 0xa9, 0x66, 0x3f, 0x8f, 0x83, 0xcc, 0xd2, 0xc9, 0xe5,
-	0x62, 0x36, 0xe7, 0x66, 0xde, 0xca, 0x9c, 0xfb, 0xb8, 0xfa, 0x25, 0x96, 0x69, 0x19, 0xd7, 0x07,
-	0xd1, 0xa5, 0x77, 0xf6, 0xba, 0x27, 0x5c, 0xe1, 0x9d, 0xca, 0xc0, 0xed, 0x97, 0xbf, 0xf6, 0x97,
-	0x02, 0x8f, 0xc1, 0x12, 0x7a, 0x08, 0x06, 0x3f, 0xff, 0xf3, 0x18, 0x2c, 0xb2, 0xa0, 0xbc, 0xda,
-	0x72, 0xe3, 0x67, 0x7f, 0x06, 0x90, 0x1f, 0x56, 0x76, 0x99, 0xe8, 0xbb, 0x92, 0x5e, 0xbb, 0xa1,
-	0x93, 0xfb, 0x1d, 0x57, 0x79, 0xdf, 0x00, 0xb8, 0x56, 0x1f, 0x1a, 0x2b, 0xda, 0xc0, 0xfa, 0x3a,
-	0x55, 0x0a, 0x7b, 0xdd, 0x88, 0x47, 0x92, 0x8e, 0x77, 0x99, 0x23, 0x57, 0x57, 0x31, 0xd9, 0x5d,
-	0xc8, 0xd9, 0xa5, 0x4a, 0x06, 0xbd, 0x78, 0xe9, 0xfa, 0xb0, 0x3c, 0x09, 0x86, 0xea, 0x92, 0x41,
-	0x2b, 0x92, 0xac, 0xbe, 0x4a, 0x41, 0x99, 0xbd, 0x2e, 0x3b, 0x8a, 0xf3, 0x2e, 0xc2, 0x32, 0x5f,
-	0x94, 0x55, 0x23, 0xfb, 0xf7, 0x0a, 0x0c, 0x5f, 0x51, 0x49, 0x55, 0x52, 0x6f, 0x6a, 0x58, 0xb6,
-	0x50, 0x09, 0xe4, 0x26, 0x48, 0x37, 0x30, 0xb5, 0xe1, 0x53, 0x13, 0xf0, 0x6e, 0xe0, 0xff, 0xee,
-	0x75, 0x3d, 0x42, 0x0f, 0x4c, 0x70, 0x88, 0x8d, 0x40, 0x19, 0x39, 0xfb, 0xd4, 0xb9, 0x89, 0x29,
-	0xf7, 0x00, 0xc6, 0xbd, 0xf8, 0xb3, 0x60, 0x17, 0x67, 0x84, 0x35, 0xb0, 0xde, 0x56, 0x64, 0xec,
-	0x0f, 0x1b, 0x9d, 0xe2, 0xdd, 0xc2, 0xfe, 0x1c, 0xae, 0x8c, 0xa8, 0xb2, 0xf0, 0x98, 0x19, 0xf0,
-	0xd2, 0x7b, 0x5d, 0x57, 0xd0, 0x04, 0x12, 0xb4, 0xc9, 0x1d, 0xa4, 0xff, 0x04, 0xae, 0xd5, 0x14,
-	0x43, 0xaa, 0xaa, 0xb8, 0xe2, 0x26, 0x26, 0x1e, 0xc8, 0x80, 0x93, 0xcb, 0xc5, 0xc8, 0x04, 0xd0,
-	0x07, 0x4d, 0x8d, 0x76, 0x4a, 0xc1, 0x27, 0x5d, 0x30, 0x48, 0x7a, 0x75, 0xa1, 0x1c, 0xb1, 0xc3,
-	0x9d, 0xcb, 0xd5, 0xe1, 0xbe, 0x82, 0x31, 0xc9, 0x1a, 0x97, 0xca, 0xd4, 0x76, 0x05, 0xad, 0xbc,
-	0xe7, 0x73, 0x47, 0xeb, 0x5a, 0xce, 0x77, 0x65, 0x9d, 0xe0, 0x51, 0xc9, 0xcb, 0x8b, 0xfb, 0x02,
-	0xa6, 0x46, 0x87, 0xf2, 0xea, 0x5b, 0x3c, 0x34, 0xcb, 0xd1, 0x40, 0x39, 0x61, 0x27, 0x99, 0xda,
-	0xce, 0x0e, 0xf7, 0x08, 0xc0, 0xb4, 0x7d, 0x40, 0x9f, 0xf5, 0x84, 0x16, 0xc6, 0x85, 0xd9, 0x8e,
-	0xe9, 0xb7, 0xff, 0xce, 0x6a, 0x92, 0x92, 0xaf, 0x2b, 0xf7, 0x19, 0x4c, 0x4e, 0x8c, 0xb5, 0x8a,
-	0x1b, 0x92, 0xdc, 0xa9, 0x34, 0x49, 0x0d, 0xc7, 0x57, 0x66, 0xeb, 0x64, 0xcc, 0x35, 0xf7, 0xd7,
-	0xad, 0x04, 0x1f, 0x92, 0x1a, 0xe6, 0x1a, 0x30, 0xe3, 0x39, 0xfe, 0x4e, 0x8c, 0xf0, 0x6c, 0x94,
-	0xa6, 0xa6, 0x87, 0xdc, 0x01, 0x74, 0x0d, 0xa2, 0xc3, 0xbe, 0xd9, 0xe3, 0x1b, 0x47, 0xb3, 0x24,
-	0x5e, 0x2c, 0x87, 0x47, 0xbd, 0x1a, 0x8e, 0x36, 0xd7, 0x80, 0x68, 0xd4, 0x9f, 0x43, 0x81, 0x3a,
-	0x6e, 0xa5, 0x2a, 0xce, 0xd8, 0x12, 0x87, 0xce, 0xb9, 0x80, 0xa4, 0xb1, 0x59, 0x56, 0x0d, 0xee,
-	0x06, 0x8c, 0x1c, 0xae, 0x9a, 0x93, 0x10, 0x6e, 0xb6, 0xba, 0x8f, 0xdb, 0xbb, 0xe8, 0x60, 0xe1,
-	0x0e, 0x3c, 0x66, 0xbd, 0xe7, 0x94, 0x16, 0xc5, 0x7a, 0x4b, 0x52, 0xe3, 0x07, 0xc3, 0x95, 0x99,
-	0x45, 0x59, 0x23, 0x7b, 0x5d, 0x77, 0xf0, 0x00, 0xa6, 0xbc, 0x32, 0x78, 0x74, 0xcd, 0x7e, 0x52,
-	0x3a, 0x35, 0x35, 0x2c, 0x32, 0x69, 0xd5, 0x95, 0x86, 0x55, 0x37, 0xb7, 0xb6, 0x6f, 0x82, 0x40,
-	0xcf, 0x04, 0xcb, 0x7d, 0x13, 0x04, 0xce, 0x08, 0x67, 0x85, 0x42, 0xf1, 0x85, 0x09, 0x40, 0xe9,
-	0x3d, 0x9f, 0x21, 0x70, 0xc6, 0xc6, 0xf6, 0x4d, 0x10, 0xea, 0x99, 0xe0, 0x58, 0xdf, 0x04, 0xc1,
-	0xf3, 0x42, 0x61, 0x4b, 0x28, 0x9c, 0xb2, 0x82, 0xb7, 0x1c, 0x24, 0x39, 0x03, 0xe2, 0xfb, 0x26,
-	0x40, 0x3d, 0x13, 0xac, 0xf6, 0x4d, 0xc0, 0x16, 0xce, 0x08, 0x85, 0xb3, 0x42, 0xe1, 0xdc, 0x20,
-	0x42, 0x64, 0xd8, 0x25, 0xc4, 0x88, 0x0c, 0xbb, 0x8c, 0x56, 0x44, 0x86, 0x3d, 0x86, 0xc2, 0x22,
-	0xc3, 0xae, 0x22, 0x24, 0x32, 0xec, 0x09, 0x14, 0x11, 0x19, 0x36, 0x82, 0xa2, 0x22, 0xc3, 0x46,
-	0xd1, 0x9a, 0xc8, 0xb0, 0x6b, 0x28, 0x26, 0x32, 0x6c, 0x0c, 0xc5, 0x45, 0x86, 0x8d, 0xa3, 0x84,
-	0xc8, 0xb0, 0x09, 0x94, 0x14, 0x19, 0x36, 0x89, 0xd6, 0x45, 0x86, 0x5d, 0x47, 0x29, 0x91, 0x61,
-	0x53, 0x28, 0x2d, 0x32, 0x6c, 0x1a, 0xf1, 0x22, 0xc3, 0xf2, 0x68, 0x43, 0x64, 0xd8, 0x0d, 0x94,
-	0x11, 0x03, 0xec, 0x9f, 0x41, 0xf4, 0x3c, 0x28, 0x06, 0xd8, 0xe7, 0x41, 0x74, 0x10, 0xcc, 0x3e,
-	0x0a, 0xc1, 0xf0, 0x25, 0x1d, 0x4b, 0x14, 0x1f, 0xbe, 0x6c, 0xae, 0xfb, 0x0a, 0x64, 0xd4, 0xbf,
-	0xc3, 0xbe, 0xba, 0x68, 0xf8, 0xeb, 0xe2, 0xda, 0x1b, 0xea, 0xa2, 0xbf, 0x1c, 0x2a, 0x9e, 0xef,
-	0xcb, 0xd8, 0xcc, 0x43, 0x15, 0xf5, 0x7c, 0x6b, 0x5e, 0x5d, 0xf0, 0x78, 0x53, 0xde, 0x7e, 0x89,
-	0xf2, 0x26, 0x8e, 0xe0, 0xec, 0x48, 0xc1, 0xfd, 0xfa, 0xa5, 0x82, 0x9b, 0xfc, 0x37, 0x04, 0xf7,
-	0x25, 0x3a, 0x4b, 0x8f, 0xb8, 0x08, 0xac, 0xbf, 0x12, 0x9f, 0xd3, 0xd7, 0x81, 0xab, 0xbe, 0x57,
-	0x80, 0xf7, 0x3d, 0x64, 0x31, 0x7d, 0x04, 0x91, 0xd3, 0x6a, 0x78, 0xc7, 0x43, 0x0d, 0xf9, 0xd7,
-	0x55, 0x43, 0x0f, 0x11, 0x9c, 0xbc, 0xa4, 0x6c, 0xbc, 0x29, 0x17, 0x8b, 0xce, 0x4b, 0xca, 0xbb,
-	0xb7, 0x7f, 0xbf, 0x30, 0x71, 0x07, 0xfc, 0xd5, 0x04, 0x25, 0x98, 0x84, 0x11, 0xbb, 0x4b, 0x19,
-	0x8b, 0xb1, 0x8c, 0x3d, 0x2b, 0x8b, 0xc5, 0x53, 0x30, 0x02, 0xc3, 0xf6, 0x1a, 0x8c, 0x9f, 0x6e,
-	0xc1, 0x30, 0x64, 0x07, 0x35, 0x67, 0x06, 0x9c, 0x2c, 0x16, 0xcf, 0x95, 0x36, 0x61, 0x74, 0x52,
-	0x0a, 0xef, 0x12, 0x45, 0xc6, 0x5c, 0x64, 0xdf, 0x04, 0xd1, 0x9e, 0x09, 0x22, 0x03, 0x61, 0x2a,
-	0x16, 0x84, 0x62, 0x51, 0x28, 0x6e, 0x97, 0xb6, 0xe1, 0xba, 0xb7, 0x06, 0x8e, 0x83, 0x12, 0x3d,
-	0x13, 0xc4, 0xad, 0xa0, 0xd3, 0x42, 0xf1, 0x8c, 0x50, 0x3c, 0x5b, 0xfa, 0x1f, 0x5c, 0x1d, 0x6b,
-	0xdf, 0xd8, 0x31, 0xdd, 0x33, 0x41, 0xca, 0x72, 0x3c, 0x2f, 0x6c, 0x6f, 0x09, 0xdb, 0x85, 0x43,
-	0x51, 0x1b, 0x4a, 0x58, 0x0a, 0xa5, 0xb3, 0xdf, 0x87, 0xe0, 0x6a, 0x19, 0x6b, 0xaa, 0x24, 0xcf,
-	0xf5, 0x68, 0xae, 0x47, 0x73, 0x3d, 0x9a, 0xeb, 0xd1, 0xdb, 0xd5, 0xa3, 0x6f, 0x43, 0x70, 0xf9,
-	0x0a, 0xa6, 0x73, 0x2d, 0x9a, 0x6b, 0xd1, 0x5c, 0x8b, 0xe6, 0x5a, 0xf4, 0x56, 0xb5, 0xe8, 0x34,
-	0x8c, 0xda, 0x87, 0xb8, 0x6c, 0xb7, 0xe3, 0x26, 0x95, 0xe8, 0x8e, 0xc1, 0xa5, 0x60, 0x48, 0x69,
-	0x19, 0x54, 0x52, 0x55, 0x5c, 0x8b, 0x83, 0x0c, 0x38, 0xc9, 0x96, 0xc7, 0x0f, 0x4a, 0xdf, 0x81,
-	0xde, 0x53, 0x7e, 0xe1, 0xc9, 0x53, 0x7e, 0xe1, 0xc5, 0x53, 0x1e, 0x3c, 0xec, 0xf3, 0xe0, 0xa7,
-	0x3e, 0x0f, 0x7e, 0xeb, 0xf3, 0xa0, 0xd7, 0xe7, 0xc1, 0x93, 0x3e, 0x0f, 0xfe, 0xe8, 0xf3, 0xe0,
-	0xa0, 0xcf, 0x2f, 0xbc, 0xe8, 0xf3, 0xe0, 0x87, 0x67, 0xfc, 0xc2, 0xfe, 0x33, 0x1e, 0x7c, 0x7a,
-	0xab, 0x41, 0xb4, 0x7b, 0x8d, 0x5c, 0x9b, 0xa8, 0x14, 0xeb, 0xba, 0x94, 0xdb, 0x31, 0xf2, 0xd6,
-	0x8f, 0x3a, 0xd1, 0x9b, 0x9b, 0x9a, 0x4e, 0xda, 0x4a, 0x0d, 0xeb, 0x9b, 0x23, 0x73, 0x5e, 0xab,
-	0x36, 0x48, 0x1e, 0xdf, 0xa7, 0xf6, 0x47, 0x69, 0x9f, 0xef, 0xfc, 0xd5, 0x80, 0xf5, 0x85, 0x7a,
-	0xfb, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xb8, 0xee, 0xa8, 0xd3, 0x10, 0x18, 0x00, 0x00,
-}

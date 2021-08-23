@@ -3,25 +3,29 @@
 
 package secret_policy_rule
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Secret Policy Rule Specifications
 //
@@ -39,7 +43,7 @@ type GlobalSpecType struct {
 	// x-displayName: "Action"
 	// x-required
 	// Action to be enforced if all the predicates evaluates to true.
-	Action ves_io_schema_policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
+	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// client choice
 	//
 	// x-displayName: "Client Selection"
@@ -59,12 +63,36 @@ type GlobalSpecType struct {
 	// This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.
 	// The predicate evaluates to true if the values of the client and secret labels for all the keys specified in the label matcher are equal.
 	// The values of any other labels do not matter.
-	LabelMatcher *ves_io_schema4.LabelMatcherType `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
+	LabelMatcher *schema.LabelMatcherType `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c93d305f6203b0f, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_ClientChoice interface {
 	isGlobalSpecType_ClientChoice()
@@ -74,13 +102,13 @@ type isGlobalSpecType_ClientChoice interface {
 }
 
 type GlobalSpecType_ClientName struct {
-	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof"`
+	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
 type GlobalSpecType_ClientSelector struct {
-	ClientSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,oneof"`
+	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
 type GlobalSpecType_ClientNameMatcher struct {
-	ClientNameMatcher *ves_io_schema_policy.MatcherType `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,oneof"`
+	ClientNameMatcher *policy.MatcherType `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,proto3,oneof" json:"client_name_matcher,omitempty"`
 }
 
 func (*GlobalSpecType_ClientName) isGlobalSpecType_ClientChoice()        {}
@@ -94,11 +122,11 @@ func (m *GlobalSpecType) GetClientChoice() isGlobalSpecType_ClientChoice {
 	return nil
 }
 
-func (m *GlobalSpecType) GetAction() ves_io_schema_policy.RuleAction {
+func (m *GlobalSpecType) GetAction() policy.RuleAction {
 	if m != nil {
 		return m.Action
 	}
-	return ves_io_schema_policy.DENY
+	return policy.DENY
 }
 
 func (m *GlobalSpecType) GetClientName() string {
@@ -108,114 +136,34 @@ func (m *GlobalSpecType) GetClientName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetClientSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GlobalSpecType) GetClientSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetClientChoice().(*GlobalSpecType_ClientSelector); ok {
 		return x.ClientSelector
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetClientNameMatcher() *ves_io_schema_policy.MatcherType {
+func (m *GlobalSpecType) GetClientNameMatcher() *policy.MatcherType {
 	if x, ok := m.GetClientChoice().(*GlobalSpecType_ClientNameMatcher); ok {
 		return x.ClientNameMatcher
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *GlobalSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_ClientName)(nil),
 		(*GlobalSpecType_ClientSelector)(nil),
 		(*GlobalSpecType_ClientNameMatcher)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *GlobalSpecType_ClientName:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ClientName)
-	case *GlobalSpecType_ClientSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientSelector); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ClientNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientNameMatcher); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ClientChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 2: // client_choice.client_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ClientChoice = &GlobalSpecType_ClientName{x}
-		return true, err
-	case 3: // client_choice.client_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &GlobalSpecType_ClientSelector{msg}
-		return true, err
-	case 4: // client_choice.client_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherType)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &GlobalSpecType_ClientNameMatcher{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *GlobalSpecType_ClientName:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ClientName)))
-		n += len(x.ClientName)
-	case *GlobalSpecType_ClientSelector:
-		s := proto.Size(x.ClientSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ClientNameMatcher:
-		s := proto.Size(x.ClientNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create Secret Policy Rule
@@ -223,18 +171,42 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Create Secret Policy Rule"
 // Create secret_policy_rule creates a new object in storage backend for metadata.namespace.
 type CreateSpecType struct {
-	Action ves_io_schema_policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
+	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
 	//	*CreateSpecType_ClientName
 	//	*CreateSpecType_ClientSelector
 	//	*CreateSpecType_ClientNameMatcher
-	ClientChoice isCreateSpecType_ClientChoice    `protobuf_oneof:"client_choice"`
-	LabelMatcher *ves_io_schema4.LabelMatcherType `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
+	ClientChoice isCreateSpecType_ClientChoice `protobuf_oneof:"client_choice"`
+	LabelMatcher *schema.LabelMatcherType      `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c93d305f6203b0f, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_ClientChoice interface {
 	isCreateSpecType_ClientChoice()
@@ -244,13 +216,13 @@ type isCreateSpecType_ClientChoice interface {
 }
 
 type CreateSpecType_ClientName struct {
-	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof"`
+	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
 type CreateSpecType_ClientSelector struct {
-	ClientSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,oneof"`
+	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
 type CreateSpecType_ClientNameMatcher struct {
-	ClientNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,oneof"`
+	ClientNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,proto3,oneof" json:"client_name_matcher,omitempty"`
 }
 
 func (*CreateSpecType_ClientName) isCreateSpecType_ClientChoice()        {}
@@ -264,11 +236,11 @@ func (m *CreateSpecType) GetClientChoice() isCreateSpecType_ClientChoice {
 	return nil
 }
 
-func (m *CreateSpecType) GetAction() ves_io_schema_policy.RuleAction {
+func (m *CreateSpecType) GetAction() policy.RuleAction {
 	if m != nil {
 		return m.Action
 	}
-	return ves_io_schema_policy.DENY
+	return policy.DENY
 }
 
 func (m *CreateSpecType) GetClientName() string {
@@ -278,114 +250,34 @@ func (m *CreateSpecType) GetClientName() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetClientSelector() *ves_io_schema4.LabelSelectorType {
+func (m *CreateSpecType) GetClientSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetClientChoice().(*CreateSpecType_ClientSelector); ok {
 		return x.ClientSelector
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetClientNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *CreateSpecType) GetClientNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetClientChoice().(*CreateSpecType_ClientNameMatcher); ok {
 		return x.ClientNameMatcher
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *CreateSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_ClientName)(nil),
 		(*CreateSpecType_ClientSelector)(nil),
 		(*CreateSpecType_ClientNameMatcher)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *CreateSpecType_ClientName:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ClientName)
-	case *CreateSpecType_ClientSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientSelector); err != nil {
-			return err
-		}
-	case *CreateSpecType_ClientNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientNameMatcher); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ClientChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 2: // client_choice.client_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ClientChoice = &CreateSpecType_ClientName{x}
-		return true, err
-	case 3: // client_choice.client_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &CreateSpecType_ClientSelector{msg}
-		return true, err
-	case 4: // client_choice.client_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &CreateSpecType_ClientNameMatcher{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *CreateSpecType_ClientName:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ClientName)))
-		n += len(x.ClientName)
-	case *CreateSpecType_ClientSelector:
-		s := proto.Size(x.ClientSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ClientNameMatcher:
-		s := proto.Size(x.ClientNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Secret Policy Rule
@@ -393,18 +285,42 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Replace Secret Policy Rule"
 // Replace secret_policy_rule creates a new object in storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	Action ves_io_schema_policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
+	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
 	//	*ReplaceSpecType_ClientName
 	//	*ReplaceSpecType_ClientSelector
 	//	*ReplaceSpecType_ClientNameMatcher
-	ClientChoice isReplaceSpecType_ClientChoice   `protobuf_oneof:"client_choice"`
-	LabelMatcher *ves_io_schema4.LabelMatcherType `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
+	ClientChoice isReplaceSpecType_ClientChoice `protobuf_oneof:"client_choice"`
+	LabelMatcher *schema.LabelMatcherType       `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c93d305f6203b0f, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_ClientChoice interface {
 	isReplaceSpecType_ClientChoice()
@@ -414,13 +330,13 @@ type isReplaceSpecType_ClientChoice interface {
 }
 
 type ReplaceSpecType_ClientName struct {
-	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof"`
+	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
 type ReplaceSpecType_ClientSelector struct {
-	ClientSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,oneof"`
+	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
 type ReplaceSpecType_ClientNameMatcher struct {
-	ClientNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,oneof"`
+	ClientNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,proto3,oneof" json:"client_name_matcher,omitempty"`
 }
 
 func (*ReplaceSpecType_ClientName) isReplaceSpecType_ClientChoice()        {}
@@ -434,11 +350,11 @@ func (m *ReplaceSpecType) GetClientChoice() isReplaceSpecType_ClientChoice {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAction() ves_io_schema_policy.RuleAction {
+func (m *ReplaceSpecType) GetAction() policy.RuleAction {
 	if m != nil {
 		return m.Action
 	}
-	return ves_io_schema_policy.DENY
+	return policy.DENY
 }
 
 func (m *ReplaceSpecType) GetClientName() string {
@@ -448,114 +364,34 @@ func (m *ReplaceSpecType) GetClientName() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetClientSelector() *ves_io_schema4.LabelSelectorType {
+func (m *ReplaceSpecType) GetClientSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetClientChoice().(*ReplaceSpecType_ClientSelector); ok {
 		return x.ClientSelector
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetClientNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *ReplaceSpecType) GetClientNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetClientChoice().(*ReplaceSpecType_ClientNameMatcher); ok {
 		return x.ClientNameMatcher
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *ReplaceSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_ClientName)(nil),
 		(*ReplaceSpecType_ClientSelector)(nil),
 		(*ReplaceSpecType_ClientNameMatcher)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *ReplaceSpecType_ClientName:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ClientName)
-	case *ReplaceSpecType_ClientSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientSelector); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ClientNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientNameMatcher); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ClientChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 2: // client_choice.client_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ClientChoice = &ReplaceSpecType_ClientName{x}
-		return true, err
-	case 3: // client_choice.client_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &ReplaceSpecType_ClientSelector{msg}
-		return true, err
-	case 4: // client_choice.client_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &ReplaceSpecType_ClientNameMatcher{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *ReplaceSpecType_ClientName:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ClientName)))
-		n += len(x.ClientName)
-	case *ReplaceSpecType_ClientSelector:
-		s := proto.Size(x.ClientSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ClientNameMatcher:
-		s := proto.Size(x.ClientNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Secret Policy Rule
@@ -563,18 +399,42 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Get Secret Policy Rule"
 // Get secret_policy_rule reads a given object from storage backend for metadata.namespace
 type GetSpecType struct {
-	Action ves_io_schema_policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
+	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
 	//	*GetSpecType_ClientName
 	//	*GetSpecType_ClientSelector
 	//	*GetSpecType_ClientNameMatcher
-	ClientChoice isGetSpecType_ClientChoice       `protobuf_oneof:"client_choice"`
-	LabelMatcher *ves_io_schema4.LabelMatcherType `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher" json:"label_matcher,omitempty"`
+	ClientChoice isGetSpecType_ClientChoice `protobuf_oneof:"client_choice"`
+	LabelMatcher *schema.LabelMatcherType   `protobuf:"bytes,5,opt,name=label_matcher,json=labelMatcher,proto3" json:"label_matcher,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c93d305f6203b0f, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_ClientChoice interface {
 	isGetSpecType_ClientChoice()
@@ -584,13 +444,13 @@ type isGetSpecType_ClientChoice interface {
 }
 
 type GetSpecType_ClientName struct {
-	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof"`
+	ClientName string `protobuf:"bytes,2,opt,name=client_name,json=clientName,proto3,oneof" json:"client_name,omitempty"`
 }
 type GetSpecType_ClientSelector struct {
-	ClientSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,oneof"`
+	ClientSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=client_selector,json=clientSelector,proto3,oneof" json:"client_selector,omitempty"`
 }
 type GetSpecType_ClientNameMatcher struct {
-	ClientNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,oneof"`
+	ClientNameMatcher *policy.MatcherTypeBasic `protobuf:"bytes,4,opt,name=client_name_matcher,json=clientNameMatcher,proto3,oneof" json:"client_name_matcher,omitempty"`
 }
 
 func (*GetSpecType_ClientName) isGetSpecType_ClientChoice()        {}
@@ -604,11 +464,11 @@ func (m *GetSpecType) GetClientChoice() isGetSpecType_ClientChoice {
 	return nil
 }
 
-func (m *GetSpecType) GetAction() ves_io_schema_policy.RuleAction {
+func (m *GetSpecType) GetAction() policy.RuleAction {
 	if m != nil {
 		return m.Action
 	}
-	return ves_io_schema_policy.DENY
+	return policy.DENY
 }
 
 func (m *GetSpecType) GetClientName() string {
@@ -618,114 +478,34 @@ func (m *GetSpecType) GetClientName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetClientSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GetSpecType) GetClientSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetClientChoice().(*GetSpecType_ClientSelector); ok {
 		return x.ClientSelector
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetClientNameMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+func (m *GetSpecType) GetClientNameMatcher() *policy.MatcherTypeBasic {
 	if x, ok := m.GetClientChoice().(*GetSpecType_ClientNameMatcher); ok {
 		return x.ClientNameMatcher
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLabelMatcher() *ves_io_schema4.LabelMatcherType {
+func (m *GetSpecType) GetLabelMatcher() *schema.LabelMatcherType {
 	if m != nil {
 		return m.LabelMatcher
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_ClientName)(nil),
 		(*GetSpecType_ClientSelector)(nil),
 		(*GetSpecType_ClientNameMatcher)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *GetSpecType_ClientName:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.ClientName)
-	case *GetSpecType_ClientSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientSelector); err != nil {
-			return err
-		}
-	case *GetSpecType_ClientNameMatcher:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ClientNameMatcher); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ClientChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 2: // client_choice.client_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.ClientChoice = &GetSpecType_ClientName{x}
-		return true, err
-	case 3: // client_choice.client_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &GetSpecType_ClientSelector{msg}
-		return true, err
-	case 4: // client_choice.client_name_matcher
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_policy.MatcherTypeBasic)
-		err := b.DecodeMessage(msg)
-		m.ClientChoice = &GetSpecType_ClientNameMatcher{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// client_choice
-	switch x := m.ClientChoice.(type) {
-	case *GetSpecType_ClientName:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.ClientName)))
-		n += len(x.ClientName)
-	case *GetSpecType_ClientSelector:
-		s := proto.Size(x.ClientSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ClientNameMatcher:
-		s := proto.Size(x.ClientNameMatcher)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -734,6 +514,54 @@ func init() {
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.secret_policy_rule.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.secret_policy_rule.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/secret_policy_rule/types.proto", fileDescriptor_4c93d305f6203b0f)
+}
+
+var fileDescriptor_4c93d305f6203b0f = []byte{
+	// 621 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0x31, 0x6f, 0xd3, 0x4e,
+	0x18, 0xc6, 0xfd, 0xc6, 0x69, 0xda, 0xff, 0xf5, 0xdf, 0x94, 0x1a, 0x86, 0x10, 0xd0, 0x91, 0x66,
+	0x40, 0x19, 0x1a, 0x5b, 0x6a, 0x19, 0x10, 0x03, 0x12, 0x06, 0xd4, 0x0a, 0x68, 0x07, 0x17, 0x10,
+	0xb0, 0x44, 0x97, 0xeb, 0xdb, 0xc4, 0xe2, 0xd2, 0xb3, 0xec, 0x4b, 0xa0, 0x03, 0x52, 0xd5, 0x4f,
+	0xd0, 0x0d, 0xa9, 0x7c, 0x01, 0x3e, 0x00, 0x13, 0x61, 0xe8, 0x88, 0x98, 0x32, 0x46, 0x4c, 0xd4,
+	0x5d, 0xca, 0xd6, 0x99, 0x09, 0xc5, 0x4e, 0x4b, 0xdc, 0x06, 0x10, 0x0c, 0xa8, 0x43, 0xb7, 0x3b,
+	0x3f, 0x8f, 0x9f, 0xf7, 0xb1, 0x7f, 0xb2, 0x7c, 0x64, 0xa6, 0x85, 0x81, 0xe9, 0x4a, 0x2b, 0xe0,
+	0x75, 0x6c, 0x30, 0x2b, 0x40, 0xee, 0xa3, 0xaa, 0x78, 0x52, 0xb8, 0x7c, 0xbd, 0xe2, 0x37, 0x05,
+	0x5a, 0x6a, 0xdd, 0xc3, 0xc0, 0xf4, 0x7c, 0xa9, 0xa4, 0x51, 0x88, 0xdd, 0x66, 0xec, 0x36, 0x4f,
+	0xba, 0xf3, 0xe5, 0x9a, 0xab, 0xea, 0xcd, 0xaa, 0xc9, 0x65, 0xc3, 0xaa, 0xc9, 0x9a, 0xb4, 0xa2,
+	0x1b, 0xab, 0xcd, 0xd5, 0x68, 0x17, 0x6d, 0xa2, 0x55, 0x1c, 0x98, 0xbf, 0x94, 0x1c, 0x2f, 0x3d,
+	0xe5, 0xca, 0xb5, 0xfe, 0xb4, 0x7c, 0x21, 0x29, 0xc6, 0x63, 0x06, 0xfb, 0xe4, 0x2f, 0x26, 0x1d,
+	0x83, 0xd2, 0xe5, 0xa4, 0xd4, 0x62, 0xc2, 0x5d, 0x61, 0x0a, 0x87, 0x47, 0xb7, 0x5c, 0x7c, 0x51,
+	0x49, 0x0c, 0x2f, 0xbe, 0xd3, 0x49, 0x76, 0x5e, 0xc8, 0x2a, 0x13, 0xcb, 0x1e, 0xf2, 0x87, 0xeb,
+	0x1e, 0x1a, 0x4b, 0x24, 0xc3, 0x78, 0xcf, 0x93, 0x83, 0x02, 0x94, 0xb2, 0xb3, 0x05, 0x33, 0xf9,
+	0x3a, 0xe2, 0x82, 0xa6, 0xd3, 0x14, 0x78, 0x2b, 0xf2, 0xd9, 0x17, 0x3e, 0xb7, 0x21, 0x7d, 0xe7,
+	0xee, 0xd2, 0xd3, 0xf7, 0x5f, 0x77, 0xf4, 0xd1, 0x4d, 0x48, 0xe7, 0x53, 0x1a, 0x38, 0xfd, 0x14,
+	0xa3, 0x4c, 0xc6, 0xb9, 0x70, 0x71, 0x4d, 0x55, 0xd6, 0x58, 0x03, 0x73, 0xa9, 0x02, 0x94, 0xfe,
+	0xb3, 0x49, 0xcf, 0x3a, 0xe2, 0xeb, 0xa5, 0x8d, 0xd4, 0x82, 0xe6, 0x90, 0xd8, 0xb0, 0xc4, 0x1a,
+	0x68, 0x3c, 0x22, 0x93, 0x7d, 0x7b, 0x80, 0x02, 0xb9, 0x92, 0x7e, 0x4e, 0x2f, 0x40, 0x69, 0xfc,
+	0x44, 0x8f, 0x07, 0xac, 0x8a, 0x62, 0xb9, 0xef, 0xe9, 0x35, 0xb7, 0xc7, 0xb6, 0x3f, 0x40, 0x9a,
+	0xa4, 0x34, 0x58, 0xd0, 0x9c, 0x6c, 0x1c, 0x72, 0xa8, 0x1b, 0xcb, 0xe4, 0xfc, 0x40, 0x8b, 0x4a,
+	0x83, 0x29, 0x5e, 0x47, 0x3f, 0x97, 0x8e, 0xa2, 0xa7, 0x87, 0x3f, 0xe2, 0x62, 0x6c, 0xea, 0x65,
+	0x2f, 0x68, 0xce, 0xd4, 0x8f, 0x92, 0x7d, 0xc1, 0x58, 0x24, 0x13, 0xa2, 0xd7, 0xe2, 0x28, 0x6e,
+	0x24, 0x8a, 0xbb, 0x32, 0xac, 0xe9, 0x40, 0x98, 0x3d, 0xda, 0x7d, 0x05, 0xfb, 0x6d, 0x00, 0xe7,
+	0x7f, 0x31, 0x20, 0xd9, 0x45, 0x32, 0xd1, 0xef, 0xc8, 0xeb, 0xd2, 0xe5, 0x68, 0x4c, 0xed, 0xb4,
+	0x21, 0xdd, 0x69, 0x43, 0x26, 0x6c, 0xc3, 0xc8, 0xb5, 0x99, 0xb9, 0x99, 0xd9, 0x7b, 0xe9, 0xb1,
+	0xcc, 0xb9, 0xd1, 0xe2, 0xb6, 0x4e, 0xb2, 0xb7, 0x7d, 0x64, 0x0a, 0x8f, 0xb0, 0x5d, 0xff, 0x53,
+	0x6c, 0x47, 0x80, 0xa6, 0x87, 0x00, 0x3a, 0x06, 0xe5, 0xfe, 0x5f, 0x43, 0x19, 0x82, 0xe2, 0xc9,
+	0xaf, 0x50, 0x5c, 0xfd, 0x2d, 0x0a, 0x9b, 0x05, 0x2e, 0xff, 0x17, 0x3c, 0x6e, 0x4c, 0x7d, 0xba,
+	0x79, 0xec, 0xe3, 0x18, 0x82, 0x68, 0xf3, 0x1b, 0x24, 0x2f, 0x15, 0xdf, 0xe8, 0x64, 0xd2, 0x41,
+	0x4f, 0x30, 0x7e, 0x46, 0xe7, 0xf4, 0xd1, 0x79, 0xad, 0x93, 0xf1, 0x79, 0x54, 0x67, 0x64, 0x4e,
+	0x1b, 0x19, 0x7b, 0x0b, 0x3a, 0xbb, 0x54, 0xeb, 0xee, 0x52, 0xed, 0x60, 0x97, 0xc2, 0x46, 0x48,
+	0xe1, 0x6d, 0x48, 0xe1, 0x63, 0x48, 0xa1, 0x13, 0x52, 0xe8, 0x86, 0x14, 0xbe, 0x84, 0x14, 0xf6,
+	0x43, 0xaa, 0x1d, 0x84, 0x14, 0xb6, 0xf6, 0xa8, 0xd6, 0xd9, 0xa3, 0x5a, 0x77, 0x8f, 0x6a, 0xcf,
+	0x1e, 0xd7, 0xa4, 0xf7, 0xbc, 0x66, 0xb6, 0xa4, 0x50, 0xe8, 0xfb, 0xcc, 0x6c, 0x06, 0x56, 0xb4,
+	0x58, 0x95, 0x7e, 0xa3, 0xec, 0xf9, 0xb2, 0xe5, 0xae, 0xa0, 0x5f, 0x3e, 0x94, 0x2d, 0xaf, 0x5a,
+	0x93, 0x16, 0xbe, 0x54, 0x87, 0xc7, 0x81, 0x9f, 0x9d, 0x0a, 0xaa, 0x99, 0xe8, 0x2f, 0x39, 0xf7,
+	0x3d, 0x00, 0x00, 0xff, 0xff, 0xbc, 0xe3, 0xaa, 0xd3, 0x40, 0x08, 0x00, 0x00,
+}
+
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1337,7 +1165,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1345,75 +1173,104 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ClientChoice != nil {
-		nn1, err := m.ClientChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	if m.LabelMatcher != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n2, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_ClientName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ClientName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ClientName)
+	copy(dAtA[i:], m.ClientName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientName)))
-	i += copy(dAtA[i:], m.ClientName)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ClientSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ClientSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSelector.Size()))
-		n3, err := m.ClientSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_ClientNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ClientNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientNameMatcher.Size()))
-		n4, err := m.ClientNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1421,75 +1278,104 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ClientChoice != nil {
-		nn5, err := m.ClientChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn5
 	}
-	if m.LabelMatcher != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n6, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_ClientName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ClientName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ClientName)
+	copy(dAtA[i:], m.ClientName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientName)))
-	i += copy(dAtA[i:], m.ClientName)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ClientSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ClientSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSelector.Size()))
-		n7, err := m.ClientSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_ClientNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ClientNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientNameMatcher.Size()))
-		n8, err := m.ClientNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1497,75 +1383,104 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ClientChoice != nil {
-		nn9, err := m.ClientChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn9
 	}
-	if m.LabelMatcher != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n10, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_ClientName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ClientName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ClientName)
+	copy(dAtA[i:], m.ClientName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientName)))
-	i += copy(dAtA[i:], m.ClientName)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ClientSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ClientSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSelector.Size()))
-		n11, err := m.ClientSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_ClientNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ClientNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientNameMatcher.Size()))
-		n12, err := m.ClientNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1573,81 +1488,115 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+	if m.LabelMatcher != nil {
+		{
+			size, err := m.LabelMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if m.ClientChoice != nil {
-		nn13, err := m.ClientChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ClientChoice.Size()
+			i -= size
+			if _, err := m.ClientChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn13
 	}
-	if m.LabelMatcher != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelMatcher.Size()))
-		n14, err := m.LabelMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
+	if m.Action != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_ClientName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ClientName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ClientName)
+	copy(dAtA[i:], m.ClientName)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientName)))
-	i += copy(dAtA[i:], m.ClientName)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ClientSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ClientSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSelector.Size()))
-		n15, err := m.ClientSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_ClientNameMatcher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ClientNameMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ClientNameMatcher != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientNameMatcher.Size()))
-		n16, err := m.ClientNameMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ClientNameMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -1664,6 +1613,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_ClientName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientName)
@@ -1671,6 +1623,9 @@ func (m *GlobalSpecType_ClientName) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ClientSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientSelector != nil {
@@ -1680,6 +1635,9 @@ func (m *GlobalSpecType_ClientSelector) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_ClientNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientNameMatcher != nil {
@@ -1689,6 +1647,9 @@ func (m *GlobalSpecType_ClientNameMatcher) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -1705,6 +1666,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_ClientName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientName)
@@ -1712,6 +1676,9 @@ func (m *CreateSpecType_ClientName) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ClientSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientSelector != nil {
@@ -1721,6 +1688,9 @@ func (m *CreateSpecType_ClientSelector) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_ClientNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientNameMatcher != nil {
@@ -1730,6 +1700,9 @@ func (m *CreateSpecType_ClientNameMatcher) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -1746,6 +1719,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_ClientName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientName)
@@ -1753,6 +1729,9 @@ func (m *ReplaceSpecType_ClientName) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ClientSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientSelector != nil {
@@ -1762,6 +1741,9 @@ func (m *ReplaceSpecType_ClientSelector) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_ClientNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientNameMatcher != nil {
@@ -1771,6 +1753,9 @@ func (m *ReplaceSpecType_ClientNameMatcher) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Action != 0 {
@@ -1787,6 +1772,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_ClientName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientName)
@@ -1794,6 +1782,9 @@ func (m *GetSpecType_ClientName) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ClientSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientSelector != nil {
@@ -1803,6 +1794,9 @@ func (m *GetSpecType_ClientSelector) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_ClientNameMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ClientNameMatcher != nil {
@@ -1813,14 +1807,7 @@ func (m *GetSpecType_ClientNameMatcher) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1832,7 +1819,7 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
 		`ClientChoice:` + fmt.Sprintf("%v", this.ClientChoice) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1852,7 +1839,7 @@ func (this *GlobalSpecType_ClientSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ClientSelector{`,
-		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1862,7 +1849,7 @@ func (this *GlobalSpecType_ClientNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ClientNameMatcher{`,
-		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherType", "ves_io_schema_policy.MatcherType", 1) + `,`,
+		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherType", "policy.MatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1874,7 +1861,7 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
 		`ClientChoice:` + fmt.Sprintf("%v", this.ClientChoice) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1894,7 +1881,7 @@ func (this *CreateSpecType_ClientSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ClientSelector{`,
-		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1904,7 +1891,7 @@ func (this *CreateSpecType_ClientNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ClientNameMatcher{`,
-		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1916,7 +1903,7 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
 		`ClientChoice:` + fmt.Sprintf("%v", this.ClientChoice) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1936,7 +1923,7 @@ func (this *ReplaceSpecType_ClientSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ClientSelector{`,
-		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1946,7 +1933,7 @@ func (this *ReplaceSpecType_ClientNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ClientNameMatcher{`,
-		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1958,7 +1945,7 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
 		`ClientChoice:` + fmt.Sprintf("%v", this.ClientChoice) + `,`,
-		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "ves_io_schema4.LabelMatcherType", 1) + `,`,
+		`LabelMatcher:` + strings.Replace(fmt.Sprintf("%v", this.LabelMatcher), "LabelMatcherType", "schema.LabelMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1978,7 +1965,7 @@ func (this *GetSpecType_ClientSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ClientSelector{`,
-		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1988,7 +1975,7 @@ func (this *GetSpecType_ClientNameMatcher) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ClientNameMatcher{`,
-		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2016,7 +2003,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2044,7 +2031,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (ves_io_schema_policy.RuleAction(b) & 0x7F) << shift
+				m.Action |= policy.RuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2063,7 +2050,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2073,6 +2060,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2092,7 +2082,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2101,10 +2091,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2124,7 +2117,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2133,10 +2126,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherType{}
+			v := &policy.MatcherType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2156,7 +2152,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2165,11 +2161,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2182,6 +2181,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2211,7 +2213,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2239,7 +2241,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (ves_io_schema_policy.RuleAction(b) & 0x7F) << shift
+				m.Action |= policy.RuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2258,7 +2260,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2268,6 +2270,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2287,7 +2292,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2296,10 +2301,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2319,7 +2327,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2328,10 +2336,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2351,7 +2362,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2360,11 +2371,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2377,6 +2391,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2406,7 +2423,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2434,7 +2451,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (ves_io_schema_policy.RuleAction(b) & 0x7F) << shift
+				m.Action |= policy.RuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2453,7 +2470,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2463,6 +2480,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2482,7 +2502,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2491,10 +2511,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2514,7 +2537,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2523,10 +2546,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2546,7 +2572,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2555,11 +2581,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2572,6 +2601,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2601,7 +2633,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2629,7 +2661,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Action |= (ves_io_schema_policy.RuleAction(b) & 0x7F) << shift
+				m.Action |= policy.RuleAction(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2648,7 +2680,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2658,6 +2690,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2677,7 +2712,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2686,10 +2721,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2709,7 +2747,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2718,10 +2756,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_policy.MatcherTypeBasic{}
+			v := &policy.MatcherTypeBasic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2741,7 +2782,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2750,11 +2791,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LabelMatcher == nil {
-				m.LabelMatcher = &ves_io_schema4.LabelMatcherType{}
+				m.LabelMatcher = &schema.LabelMatcherType{}
 			}
 			if err := m.LabelMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2767,6 +2811,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2784,6 +2831,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2815,10 +2863,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2835,98 +2881,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/secret_policy_rule/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 613 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xb1, 0x6f, 0xd3, 0x40,
-	0x18, 0xc5, 0xfd, 0xc5, 0x69, 0x5a, 0xae, 0x34, 0xa5, 0x86, 0x21, 0x04, 0x64, 0xd2, 0x0c, 0x28,
-	0x43, 0x63, 0x4b, 0x2d, 0x03, 0x62, 0x40, 0xc2, 0x80, 0x5a, 0x01, 0xed, 0xe0, 0x02, 0x02, 0x96,
-	0xe8, 0x72, 0xfd, 0x9a, 0x58, 0x5c, 0x7a, 0xd6, 0xf9, 0x12, 0xe8, 0x80, 0x54, 0x75, 0x62, 0x64,
-	0x43, 0x2a, 0xff, 0x00, 0x7f, 0x00, 0x13, 0x61, 0xe8, 0x88, 0x98, 0x3a, 0x56, 0x4c, 0xd4, 0x2c,
-	0x65, 0xeb, 0xcc, 0x84, 0x62, 0xa7, 0x25, 0x6e, 0x0d, 0x08, 0x06, 0xd4, 0xa1, 0xdb, 0x9d, 0xdf,
-	0xf3, 0xfb, 0x9e, 0xfd, 0x93, 0xe5, 0x23, 0x53, 0x1d, 0x0c, 0x2c, 0x4f, 0xd8, 0x01, 0x6b, 0x62,
-	0x8b, 0xda, 0x01, 0x32, 0x89, 0xaa, 0xe6, 0x0b, 0xee, 0xb1, 0xd5, 0x9a, 0x6c, 0x73, 0xb4, 0xd5,
-	0xaa, 0x8f, 0x81, 0xe5, 0x4b, 0xa1, 0x84, 0x51, 0x8a, 0xdd, 0x56, 0xec, 0xb6, 0x8e, 0xba, 0x8b,
-	0xd5, 0x86, 0xa7, 0x9a, 0xed, 0xba, 0xc5, 0x44, 0xcb, 0x6e, 0x88, 0x86, 0xb0, 0xa3, 0x1b, 0xeb,
-	0xed, 0xe5, 0x68, 0x17, 0x6d, 0xa2, 0x55, 0x1c, 0x58, 0xbc, 0x90, 0x1c, 0x2f, 0x7c, 0xe5, 0x89,
-	0x95, 0xfe, 0xb4, 0x62, 0x29, 0x29, 0xc6, 0x63, 0x06, 0xfb, 0x14, 0xcf, 0x27, 0x1d, 0x83, 0xd2,
-	0xc5, 0xa4, 0xd4, 0xa1, 0xdc, 0x5b, 0xa2, 0x0a, 0xd3, 0xa3, 0x3b, 0x1e, 0x3e, 0xab, 0x25, 0x86,
-	0x97, 0xdf, 0xe9, 0x24, 0x3f, 0xcb, 0x45, 0x9d, 0xf2, 0x45, 0x1f, 0xd9, 0xfd, 0x55, 0x1f, 0x8d,
-	0x05, 0x92, 0xa3, 0xac, 0xe7, 0x29, 0x40, 0x09, 0x2a, 0xf9, 0xe9, 0x92, 0x95, 0x7c, 0x1d, 0x71,
-	0x41, 0xcb, 0x6d, 0x73, 0xbc, 0x11, 0xf9, 0x9c, 0x73, 0x9f, 0xbb, 0x90, 0xbd, 0x75, 0x7b, 0xe1,
-	0xf1, 0xfb, 0x6f, 0x9b, 0xfa, 0xf0, 0x3a, 0x64, 0x8b, 0x19, 0x0d, 0xdc, 0x7e, 0x8a, 0x51, 0x25,
-	0xa3, 0x8c, 0x7b, 0xb8, 0xa2, 0x6a, 0x2b, 0xb4, 0x85, 0x85, 0x4c, 0x09, 0x2a, 0xa7, 0x1c, 0xd2,
-	0xb3, 0x0e, 0x49, 0xbd, 0xb2, 0x96, 0x99, 0xd3, 0x5c, 0x12, 0x1b, 0x16, 0x68, 0x0b, 0x8d, 0x07,
-	0x64, 0xbc, 0x6f, 0x0f, 0x90, 0x23, 0x53, 0x42, 0x16, 0xf4, 0x12, 0x54, 0x46, 0x8f, 0xf4, 0xb8,
-	0x47, 0xeb, 0xc8, 0x17, 0xfb, 0x9e, 0x5e, 0x73, 0x67, 0x64, 0xe3, 0x03, 0x64, 0x49, 0x46, 0x83,
-	0x39, 0xcd, 0xcd, 0xc7, 0x21, 0xfb, 0xba, 0xb1, 0x48, 0xce, 0x0e, 0xb4, 0xa8, 0xb5, 0xa8, 0x62,
-	0x4d, 0x94, 0x85, 0x6c, 0x14, 0x3d, 0x99, 0xfe, 0x88, 0xf3, 0xb1, 0xa9, 0x97, 0x3d, 0xa7, 0xb9,
-	0x13, 0x3f, 0x4b, 0xf6, 0x05, 0x63, 0x9e, 0x8c, 0xf1, 0x5e, 0x8b, 0x83, 0xb8, 0xa1, 0x28, 0xee,
-	0x52, 0x5a, 0xd3, 0x81, 0x30, 0x67, 0x78, 0xfb, 0x05, 0xec, 0x76, 0x01, 0xdc, 0xd3, 0x7c, 0x40,
-	0x72, 0xca, 0x64, 0xac, 0xdf, 0x91, 0x35, 0x85, 0xc7, 0xd0, 0x98, 0xd8, 0xec, 0x42, 0x76, 0xab,
-	0x0b, 0xb9, 0xb0, 0x0b, 0x43, 0x57, 0xa6, 0x66, 0xa6, 0xa6, 0xef, 0x64, 0x47, 0x72, 0x67, 0x86,
-	0xcb, 0x1b, 0x3a, 0xc9, 0xdf, 0x94, 0x48, 0x15, 0x1e, 0x60, 0xbb, 0xfa, 0xb7, 0xd8, 0x0e, 0x00,
-	0x4d, 0xa6, 0x00, 0x3a, 0x04, 0xe5, 0xee, 0x3f, 0x43, 0x49, 0x41, 0xf1, 0xe8, 0x77, 0x28, 0x2e,
-	0xff, 0x11, 0x85, 0x43, 0x03, 0x8f, 0xfd, 0x0f, 0x1e, 0xd7, 0x26, 0x3e, 0x5d, 0x3f, 0xf4, 0x71,
-	0xa4, 0x20, 0x5a, 0xff, 0x0e, 0xc9, 0x4b, 0xe5, 0x37, 0x3a, 0x19, 0x77, 0xd1, 0xe7, 0x94, 0x9d,
-	0xd0, 0x39, 0x7e, 0x74, 0x5e, 0xeb, 0x64, 0x74, 0x16, 0xd5, 0x09, 0x99, 0xe3, 0x46, 0xc6, 0x79,
-	0x09, 0x5b, 0x3b, 0xa6, 0xb6, 0xbd, 0x63, 0x6a, 0x7b, 0x3b, 0x26, 0xac, 0x85, 0x26, 0xbc, 0x0d,
-	0x4d, 0xf8, 0x18, 0x9a, 0xb0, 0x15, 0x9a, 0xb0, 0x1d, 0x9a, 0xf0, 0x25, 0x34, 0x61, 0x37, 0x34,
-	0xb5, 0xbd, 0xd0, 0x84, 0x57, 0x5f, 0x4d, 0xed, 0xc9, 0xc3, 0x86, 0xf0, 0x9f, 0x36, 0xac, 0x8e,
-	0xe0, 0x0a, 0xa5, 0xa4, 0x56, 0x3b, 0xb0, 0xa3, 0xc5, 0xb2, 0x90, 0xad, 0xaa, 0x2f, 0x45, 0xc7,
-	0x5b, 0x42, 0x59, 0xdd, 0x97, 0x6d, 0xbf, 0xde, 0x10, 0x36, 0x3e, 0x57, 0xfb, 0xc7, 0x80, 0x5f,
-	0x9d, 0x06, 0xea, 0xb9, 0xe8, 0xef, 0x38, 0xf3, 0x23, 0x00, 0x00, 0xff, 0xff, 0xaa, 0x8b, 0xc5,
-	0xb2, 0x38, 0x08, 0x00, 0x00,
-}

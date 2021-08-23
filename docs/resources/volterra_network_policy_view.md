@@ -21,12 +21,10 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "outside_endpoints inside_endpoints interface namespace label_selector prefix_list any" must be set
+    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
 
-    interface {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+    prefix_list {
+      prefixes = ["192.168.20.0/24"]
     }
   }
 }

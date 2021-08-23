@@ -3037,7 +3037,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AccessLogQueryV2",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3094,9 +3094,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch access logs for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3127,7 +3129,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AccessLogAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -3184,9 +3186,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3217,7 +3221,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3274,9 +3278,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -3307,7 +3313,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AuditLogQueryV2",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3364,9 +3370,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch audit logs for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3397,7 +3405,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -3454,9 +3462,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3487,7 +3497,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3544,9 +3554,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -3577,7 +3589,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.FirewallLogQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3634,9 +3646,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch Firewall logs for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3667,7 +3681,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -3724,9 +3738,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -3757,7 +3773,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3814,9 +3830,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -3847,7 +3865,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3904,9 +3922,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -3937,7 +3957,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -3994,9 +4014,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -4027,7 +4049,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4084,15 +4106,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch K8s audit logs for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"ce-1\"\nSite where the K8s Cluster is running",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",
@@ -4123,7 +4149,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -4180,15 +4206,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"ce-1\"\nSite where the K8s Cluster is running",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",
@@ -4219,7 +4249,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SEventsQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4276,15 +4306,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch K8s events for the given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"ce-1\"\nSite where the K8s Cluster is running",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",
@@ -4315,7 +4349,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -4372,15 +4406,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"ce-1\"\nSite where the K8s Cluster is running",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "body",
@@ -4411,7 +4449,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4468,9 +4506,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch vK8s audit logs for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -4501,7 +4541,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -4558,9 +4598,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -4591,7 +4633,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4648,9 +4690,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",
@@ -4681,7 +4725,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SEventsQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4738,9 +4782,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch vK8s events for the given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -4771,7 +4817,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogAggregationResponse"
                         }
@@ -4828,9 +4874,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nget aggregation data for a given namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -4861,7 +4909,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/logLogResponse"
                         }
@@ -4918,9 +4966,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch the log messages scoped by namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "scroll_id",

@@ -782,11 +782,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -807,11 +809,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -832,11 +836,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -934,11 +940,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -959,11 +967,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -984,11 +994,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1024,11 +1036,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1049,11 +1063,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1074,11 +1090,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1140,11 +1158,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1165,11 +1185,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1190,11 +1212,13 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1233,6 +1257,7 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+
 					}
 
 				}
@@ -1242,6 +1267,7 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 			if v, ok := cs["remote_sid_stats_plen"]; ok && !isIntfNil(v) {
 
 				networkChoiceInt.Srv6Network.RemoteSidStatsPlen = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["slice"]; ok && !isIntfNil(v) {
@@ -1421,16 +1447,19 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Tenant = v.(string)
+
 					}
 
 				}
@@ -1647,11 +1676,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1672,11 +1703,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1697,11 +1730,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1799,11 +1834,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1824,11 +1861,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1849,11 +1888,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1889,11 +1930,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1914,11 +1957,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -1939,11 +1984,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -2005,11 +2052,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -2030,11 +2079,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -2055,11 +2106,13 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 							if v, ok := cs["address"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+
 							}
 
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+
 							}
 
 						}
@@ -2098,6 +2151,7 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+
 					}
 
 				}
@@ -2107,6 +2161,7 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 			if v, ok := cs["remote_sid_stats_plen"]; ok && !isIntfNil(v) {
 
 				networkChoiceInt.Srv6Network.RemoteSidStatsPlen = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["slice"]; ok && !isIntfNil(v) {
@@ -2285,16 +2340,19 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						nextHopChoiceInt.Interface.Tenant = v.(string)
+
 					}
 
 				}

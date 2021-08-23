@@ -833,7 +833,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.registration.CustomAPI.ListRegistrationsByState",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/registrationListResponse"
                         }
@@ -890,9 +890,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nRegistration namespace, only \"system\" namespaces is accepted",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -923,7 +925,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationApprove",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/registrationObjectChangeResp"
                         }
@@ -980,15 +982,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nRegistration namespace, only \"system\" namespaces is accepted",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"r-e9030963-639e-41cd-aba6-261504f4a6be\"\nRegistration name (= \"r-\" + uid) to approve. Registration name is taken from listing pending registrations.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -1019,7 +1025,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.registration.CustomAPI.ListRegistrationsBySite",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/registrationListResponse"
                         }
@@ -1076,15 +1082,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nRegistration namespace, only \"system\" namespaces is accepted",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "site_name",
+                        "description": "SiteName\n\nx-required\nx-example: \"ce02\"\nSite name to be used for registration filtering",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site name"
                     }
                 ],
                 "tags": [
@@ -1107,7 +1117,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationCreate",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/registrationObject"
                         }
@@ -1191,7 +1201,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/registrationConfigResp"
                         }

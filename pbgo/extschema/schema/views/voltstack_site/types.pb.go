@@ -3,34 +3,37 @@
 
 package voltstack_site
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
-import ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
-import ves_io_schema_network_interface "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-import ves_io_schema_virtual_network "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
+	network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	network_interface "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	virtual_network "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Interface
 //
@@ -46,7 +49,7 @@ type Interface struct {
 	//
 	// x-displayName: "Interface Labels"
 	// Add Labels for this Interface, these labels can be used in network policy
-	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Interface Config Type
 	//
 	// x-displayName: "Interface Config Type"
@@ -61,9 +64,33 @@ type Interface struct {
 	InterfaceChoice isInterface_InterfaceChoice `protobuf_oneof:"interface_choice"`
 }
 
-func (m *Interface) Reset()                    { *m = Interface{} }
-func (*Interface) ProtoMessage()               {}
-func (*Interface) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *Interface) Reset()      { *m = Interface{} }
+func (*Interface) ProtoMessage() {}
+func (*Interface) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{0}
+}
+func (m *Interface) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Interface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Interface) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Interface.Merge(m, src)
+}
+func (m *Interface) XXX_Size() int {
+	return m.Size()
+}
+func (m *Interface) XXX_DiscardUnknown() {
+	xxx_messageInfo_Interface.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Interface proto.InternalMessageInfo
 
 type isInterface_InterfaceChoice interface {
 	isInterface_InterfaceChoice()
@@ -73,16 +100,16 @@ type isInterface_InterfaceChoice interface {
 }
 
 type Interface_EthernetInterface struct {
-	EthernetInterface *ves_io_schema_network_interface.EthernetInterfaceType `protobuf:"bytes,5,opt,name=ethernet_interface,json=ethernetInterface,oneof"`
+	EthernetInterface *network_interface.EthernetInterfaceType `protobuf:"bytes,5,opt,name=ethernet_interface,json=ethernetInterface,proto3,oneof" json:"ethernet_interface,omitempty"`
 }
 type Interface_DedicatedInterface struct {
-	DedicatedInterface *ves_io_schema_network_interface.DedicatedInterfaceType `protobuf:"bytes,6,opt,name=dedicated_interface,json=dedicatedInterface,oneof"`
+	DedicatedInterface *network_interface.DedicatedInterfaceType `protobuf:"bytes,6,opt,name=dedicated_interface,json=dedicatedInterface,proto3,oneof" json:"dedicated_interface,omitempty"`
 }
 type Interface_DedicatedManagementInterface struct {
-	DedicatedManagementInterface *ves_io_schema_network_interface.DedicatedManagementInterfaceType `protobuf:"bytes,7,opt,name=dedicated_management_interface,json=dedicatedManagementInterface,oneof"`
+	DedicatedManagementInterface *network_interface.DedicatedManagementInterfaceType `protobuf:"bytes,7,opt,name=dedicated_management_interface,json=dedicatedManagementInterface,proto3,oneof" json:"dedicated_management_interface,omitempty"`
 }
 type Interface_TunnelInterface struct {
-	TunnelInterface *ves_io_schema_network_interface.TunnelInterfaceType `protobuf:"bytes,8,opt,name=tunnel_interface,json=tunnelInterface,oneof"`
+	TunnelInterface *network_interface.TunnelInterfaceType `protobuf:"bytes,8,opt,name=tunnel_interface,json=tunnelInterface,proto3,oneof" json:"tunnel_interface,omitempty"`
 }
 
 func (*Interface_EthernetInterface) isInterface_InterfaceChoice()            {}
@@ -111,144 +138,42 @@ func (m *Interface) GetLabels() map[string]string {
 	return nil
 }
 
-func (m *Interface) GetEthernetInterface() *ves_io_schema_network_interface.EthernetInterfaceType {
+func (m *Interface) GetEthernetInterface() *network_interface.EthernetInterfaceType {
 	if x, ok := m.GetInterfaceChoice().(*Interface_EthernetInterface); ok {
 		return x.EthernetInterface
 	}
 	return nil
 }
 
-func (m *Interface) GetDedicatedInterface() *ves_io_schema_network_interface.DedicatedInterfaceType {
+func (m *Interface) GetDedicatedInterface() *network_interface.DedicatedInterfaceType {
 	if x, ok := m.GetInterfaceChoice().(*Interface_DedicatedInterface); ok {
 		return x.DedicatedInterface
 	}
 	return nil
 }
 
-func (m *Interface) GetDedicatedManagementInterface() *ves_io_schema_network_interface.DedicatedManagementInterfaceType {
+func (m *Interface) GetDedicatedManagementInterface() *network_interface.DedicatedManagementInterfaceType {
 	if x, ok := m.GetInterfaceChoice().(*Interface_DedicatedManagementInterface); ok {
 		return x.DedicatedManagementInterface
 	}
 	return nil
 }
 
-func (m *Interface) GetTunnelInterface() *ves_io_schema_network_interface.TunnelInterfaceType {
+func (m *Interface) GetTunnelInterface() *network_interface.TunnelInterfaceType {
 	if x, ok := m.GetInterfaceChoice().(*Interface_TunnelInterface); ok {
 		return x.TunnelInterface
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Interface) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Interface_OneofMarshaler, _Interface_OneofUnmarshaler, _Interface_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Interface) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Interface_EthernetInterface)(nil),
 		(*Interface_DedicatedInterface)(nil),
 		(*Interface_DedicatedManagementInterface)(nil),
 		(*Interface_TunnelInterface)(nil),
 	}
-}
-
-func _Interface_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Interface)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *Interface_EthernetInterface:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EthernetInterface); err != nil {
-			return err
-		}
-	case *Interface_DedicatedInterface:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DedicatedInterface); err != nil {
-			return err
-		}
-	case *Interface_DedicatedManagementInterface:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DedicatedManagementInterface); err != nil {
-			return err
-		}
-	case *Interface_TunnelInterface:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TunnelInterface); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Interface.InterfaceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Interface_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Interface)
-	switch tag {
-	case 5: // interface_choice.ethernet_interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_interface.EthernetInterfaceType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &Interface_EthernetInterface{msg}
-		return true, err
-	case 6: // interface_choice.dedicated_interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_interface.DedicatedInterfaceType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &Interface_DedicatedInterface{msg}
-		return true, err
-	case 7: // interface_choice.dedicated_management_interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_interface.DedicatedManagementInterfaceType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &Interface_DedicatedManagementInterface{msg}
-		return true, err
-	case 8: // interface_choice.tunnel_interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_interface.TunnelInterfaceType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &Interface_TunnelInterface{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Interface_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Interface)
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *Interface_EthernetInterface:
-		s := proto.Size(x.EthernetInterface)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Interface_DedicatedInterface:
-		s := proto.Size(x.DedicatedInterface)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Interface_DedicatedManagementInterface:
-		s := proto.Size(x.DedicatedManagementInterface)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Interface_TunnelInterface:
-		s := proto.Size(x.TunnelInterface)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // List of Interfaces
@@ -261,12 +186,36 @@ type InterfaceListType struct {
 	// x-displayName: "List of Interface"
 	// x-required
 	// Configure network interfaces for this voltstack
-	Interfaces []*Interface `protobuf:"bytes,1,rep,name=interfaces" json:"interfaces,omitempty"`
+	Interfaces []*Interface `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 }
 
-func (m *InterfaceListType) Reset()                    { *m = InterfaceListType{} }
-func (*InterfaceListType) ProtoMessage()               {}
-func (*InterfaceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *InterfaceListType) Reset()      { *m = InterfaceListType{} }
+func (*InterfaceListType) ProtoMessage() {}
+func (*InterfaceListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{1}
+}
+func (m *InterfaceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InterfaceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InterfaceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InterfaceListType.Merge(m, src)
+}
+func (m *InterfaceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *InterfaceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_InterfaceListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InterfaceListType proto.InternalMessageInfo
 
 func (m *InterfaceListType) GetInterfaces() []*Interface {
 	if m != nil {
@@ -289,18 +238,42 @@ type StorageInterfaceType struct {
 	//
 	// x-displayName: "Interface Labels"
 	// Add Labels for this Interface, these labels can be used in network policy
-	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	//  Interface
 	//
 	// x-displayName: "Interface"
 	// x-required
 	// Configure storage interface for this voltstack
-	StorageInterface *ves_io_schema_network_interface.EthernetInterfaceType `protobuf:"bytes,3,opt,name=storage_interface,json=storageInterface" json:"storage_interface,omitempty"`
+	StorageInterface *network_interface.EthernetInterfaceType `protobuf:"bytes,3,opt,name=storage_interface,json=storageInterface,proto3" json:"storage_interface,omitempty"`
 }
 
-func (m *StorageInterfaceType) Reset()                    { *m = StorageInterfaceType{} }
-func (*StorageInterfaceType) ProtoMessage()               {}
-func (*StorageInterfaceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *StorageInterfaceType) Reset()      { *m = StorageInterfaceType{} }
+func (*StorageInterfaceType) ProtoMessage() {}
+func (*StorageInterfaceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{2}
+}
+func (m *StorageInterfaceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageInterfaceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageInterfaceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageInterfaceType.Merge(m, src)
+}
+func (m *StorageInterfaceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageInterfaceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageInterfaceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageInterfaceType proto.InternalMessageInfo
 
 func (m *StorageInterfaceType) GetDescription() string {
 	if m != nil {
@@ -316,7 +289,7 @@ func (m *StorageInterfaceType) GetLabels() map[string]string {
 	return nil
 }
 
-func (m *StorageInterfaceType) GetStorageInterface() *ves_io_schema_network_interface.EthernetInterfaceType {
+func (m *StorageInterfaceType) GetStorageInterface() *network_interface.EthernetInterfaceType {
 	if m != nil {
 		return m.StorageInterface
 	}
@@ -333,12 +306,36 @@ type StorageInterfaceListType struct {
 	// x-displayName: "List of Interface"
 	// x-required
 	// Configure storage interfaces for this voltstack
-	StorageInterfaces []*StorageInterfaceType `protobuf:"bytes,1,rep,name=storage_interfaces,json=storageInterfaces" json:"storage_interfaces,omitempty"`
+	StorageInterfaces []*StorageInterfaceType `protobuf:"bytes,1,rep,name=storage_interfaces,json=storageInterfaces,proto3" json:"storage_interfaces,omitempty"`
 }
 
-func (m *StorageInterfaceListType) Reset()                    { *m = StorageInterfaceListType{} }
-func (*StorageInterfaceListType) ProtoMessage()               {}
-func (*StorageInterfaceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *StorageInterfaceListType) Reset()      { *m = StorageInterfaceListType{} }
+func (*StorageInterfaceListType) ProtoMessage() {}
+func (*StorageInterfaceListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{3}
+}
+func (m *StorageInterfaceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StorageInterfaceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StorageInterfaceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageInterfaceListType.Merge(m, src)
+}
+func (m *StorageInterfaceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StorageInterfaceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageInterfaceListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageInterfaceListType proto.InternalMessageInfo
 
 func (m *StorageInterfaceListType) GetStorageInterfaces() []*StorageInterfaceType {
 	if m != nil {
@@ -357,14 +354,38 @@ type StaticRoutesListType struct {
 	// x-displayName: "Static Routes"
 	// x-required
 	// List of static routes
-	StaticRoutes []*ves_io_schema_virtual_network.StaticRouteViewType `protobuf:"bytes,1,rep,name=static_routes,json=staticRoutes" json:"static_routes,omitempty"`
+	StaticRoutes []*virtual_network.StaticRouteViewType `protobuf:"bytes,1,rep,name=static_routes,json=staticRoutes,proto3" json:"static_routes,omitempty"`
 }
 
-func (m *StaticRoutesListType) Reset()                    { *m = StaticRoutesListType{} }
-func (*StaticRoutesListType) ProtoMessage()               {}
-func (*StaticRoutesListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *StaticRoutesListType) Reset()      { *m = StaticRoutesListType{} }
+func (*StaticRoutesListType) ProtoMessage() {}
+func (*StaticRoutesListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{4}
+}
+func (m *StaticRoutesListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *StaticRoutesListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *StaticRoutesListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StaticRoutesListType.Merge(m, src)
+}
+func (m *StaticRoutesListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *StaticRoutesListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StaticRoutesListType.DiscardUnknown(m)
+}
 
-func (m *StaticRoutesListType) GetStaticRoutes() []*ves_io_schema_virtual_network.StaticRouteViewType {
+var xxx_messageInfo_StaticRoutesListType proto.InternalMessageInfo
+
+func (m *StaticRoutesListType) GetStaticRoutes() []*virtual_network.StaticRouteViewType {
 	if m != nil {
 		return m.StaticRoutes
 	}
@@ -380,7 +401,7 @@ type VnConfiguration struct {
 	//
 	// x-displayName: "Network Labels"
 	// Add Labels for this network, these labels can be used in network policy
-	Labels map[string]string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Manage Static Routes
 	//
 	// x-displayName: "Manage Static Routes"
@@ -403,9 +424,33 @@ type VnConfiguration struct {
 	DcClusterGroupChoice isVnConfiguration_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 }
 
-func (m *VnConfiguration) Reset()                    { *m = VnConfiguration{} }
-func (*VnConfiguration) ProtoMessage()               {}
-func (*VnConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *VnConfiguration) Reset()      { *m = VnConfiguration{} }
+func (*VnConfiguration) ProtoMessage() {}
+func (*VnConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{5}
+}
+func (m *VnConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VnConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VnConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VnConfiguration.Merge(m, src)
+}
+func (m *VnConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *VnConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_VnConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VnConfiguration proto.InternalMessageInfo
 
 type isVnConfiguration_StaticRouteChoice interface {
 	isVnConfiguration_StaticRouteChoice()
@@ -421,16 +466,16 @@ type isVnConfiguration_DcClusterGroupChoice interface {
 }
 
 type VnConfiguration_NoStaticRoutes struct {
-	NoStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=no_static_routes,json=noStaticRoutes,oneof"`
+	NoStaticRoutes *schema.Empty `protobuf:"bytes,3,opt,name=no_static_routes,json=noStaticRoutes,proto3,oneof" json:"no_static_routes,omitempty"`
 }
 type VnConfiguration_StaticRoutes struct {
-	StaticRoutes *StaticRoutesListType `protobuf:"bytes,4,opt,name=static_routes,json=staticRoutes,oneof"`
+	StaticRoutes *StaticRoutesListType `protobuf:"bytes,4,opt,name=static_routes,json=staticRoutes,proto3,oneof" json:"static_routes,omitempty"`
 }
 type VnConfiguration_NoDcClusterGroup struct {
-	NoDcClusterGroup *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=no_dc_cluster_group,json=noDcClusterGroup,oneof"`
+	NoDcClusterGroup *schema.Empty `protobuf:"bytes,6,opt,name=no_dc_cluster_group,json=noDcClusterGroup,proto3,oneof" json:"no_dc_cluster_group,omitempty"`
 }
 type VnConfiguration_DcClusterGroup struct {
-	DcClusterGroup *ves_io_schema_views.ObjectRefType `protobuf:"bytes,7,opt,name=dc_cluster_group,json=dcClusterGroup,oneof"`
+	DcClusterGroup *views.ObjectRefType `protobuf:"bytes,7,opt,name=dc_cluster_group,json=dcClusterGroup,proto3,oneof" json:"dc_cluster_group,omitempty"`
 }
 
 func (*VnConfiguration_NoStaticRoutes) isVnConfiguration_StaticRouteChoice()      {}
@@ -458,7 +503,7 @@ func (m *VnConfiguration) GetLabels() map[string]string {
 	return nil
 }
 
-func (m *VnConfiguration) GetNoStaticRoutes() *ves_io_schema4.Empty {
+func (m *VnConfiguration) GetNoStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStaticRouteChoice().(*VnConfiguration_NoStaticRoutes); ok {
 		return x.NoStaticRoutes
 	}
@@ -472,142 +517,28 @@ func (m *VnConfiguration) GetStaticRoutes() *StaticRoutesListType {
 	return nil
 }
 
-func (m *VnConfiguration) GetNoDcClusterGroup() *ves_io_schema4.Empty {
+func (m *VnConfiguration) GetNoDcClusterGroup() *schema.Empty {
 	if x, ok := m.GetDcClusterGroupChoice().(*VnConfiguration_NoDcClusterGroup); ok {
 		return x.NoDcClusterGroup
 	}
 	return nil
 }
 
-func (m *VnConfiguration) GetDcClusterGroup() *ves_io_schema_views.ObjectRefType {
+func (m *VnConfiguration) GetDcClusterGroup() *views.ObjectRefType {
 	if x, ok := m.GetDcClusterGroupChoice().(*VnConfiguration_DcClusterGroup); ok {
 		return x.DcClusterGroup
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*VnConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _VnConfiguration_OneofMarshaler, _VnConfiguration_OneofUnmarshaler, _VnConfiguration_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*VnConfiguration) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*VnConfiguration_NoStaticRoutes)(nil),
 		(*VnConfiguration_StaticRoutes)(nil),
 		(*VnConfiguration_NoDcClusterGroup)(nil),
 		(*VnConfiguration_DcClusterGroup)(nil),
 	}
-}
-
-func _VnConfiguration_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*VnConfiguration)
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *VnConfiguration_NoStaticRoutes:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStaticRoutes); err != nil {
-			return err
-		}
-	case *VnConfiguration_StaticRoutes:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VnConfiguration.StaticRouteChoice has unexpected type %T", x)
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *VnConfiguration_NoDcClusterGroup:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoDcClusterGroup); err != nil {
-			return err
-		}
-	case *VnConfiguration_DcClusterGroup:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DcClusterGroup); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VnConfiguration.DcClusterGroupChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _VnConfiguration_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*VnConfiguration)
-	switch tag {
-	case 3: // static_route_choice.no_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &VnConfiguration_NoStaticRoutes{msg}
-		return true, err
-	case 4: // static_route_choice.static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &VnConfiguration_StaticRoutes{msg}
-		return true, err
-	case 6: // dc_cluster_group_choice.no_dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &VnConfiguration_NoDcClusterGroup{msg}
-		return true, err
-	case 7: // dc_cluster_group_choice.dc_cluster_group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.DcClusterGroupChoice = &VnConfiguration_DcClusterGroup{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _VnConfiguration_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*VnConfiguration)
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *VnConfiguration_NoStaticRoutes:
-		s := proto.Size(x.NoStaticRoutes)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VnConfiguration_StaticRoutes:
-		s := proto.Size(x.StaticRoutes)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// dc_cluster_group_choice
-	switch x := m.DcClusterGroupChoice.(type) {
-	case *VnConfiguration_NoDcClusterGroup:
-		s := proto.Size(x.NoDcClusterGroup)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VnConfiguration_DcClusterGroup:
-		s := proto.Size(x.DcClusterGroup)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // SLI Virtual Network Configuration
@@ -627,9 +558,33 @@ type SliVnConfiguration struct {
 	StaticRouteChoice isSliVnConfiguration_StaticRouteChoice `protobuf_oneof:"static_route_choice"`
 }
 
-func (m *SliVnConfiguration) Reset()                    { *m = SliVnConfiguration{} }
-func (*SliVnConfiguration) ProtoMessage()               {}
-func (*SliVnConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *SliVnConfiguration) Reset()      { *m = SliVnConfiguration{} }
+func (*SliVnConfiguration) ProtoMessage() {}
+func (*SliVnConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{6}
+}
+func (m *SliVnConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SliVnConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SliVnConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SliVnConfiguration.Merge(m, src)
+}
+func (m *SliVnConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *SliVnConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_SliVnConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SliVnConfiguration proto.InternalMessageInfo
 
 type isSliVnConfiguration_StaticRouteChoice interface {
 	isSliVnConfiguration_StaticRouteChoice()
@@ -639,10 +594,10 @@ type isSliVnConfiguration_StaticRouteChoice interface {
 }
 
 type SliVnConfiguration_NoStaticRoutes struct {
-	NoStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=no_static_routes,json=noStaticRoutes,oneof"`
+	NoStaticRoutes *schema.Empty `protobuf:"bytes,3,opt,name=no_static_routes,json=noStaticRoutes,proto3,oneof" json:"no_static_routes,omitempty"`
 }
 type SliVnConfiguration_StaticRoutes struct {
-	StaticRoutes *StaticRoutesListType `protobuf:"bytes,4,opt,name=static_routes,json=staticRoutes,oneof"`
+	StaticRoutes *StaticRoutesListType `protobuf:"bytes,4,opt,name=static_routes,json=staticRoutes,proto3,oneof" json:"static_routes,omitempty"`
 }
 
 func (*SliVnConfiguration_NoStaticRoutes) isSliVnConfiguration_StaticRouteChoice() {}
@@ -655,7 +610,7 @@ func (m *SliVnConfiguration) GetStaticRouteChoice() isSliVnConfiguration_StaticR
 	return nil
 }
 
-func (m *SliVnConfiguration) GetNoStaticRoutes() *ves_io_schema4.Empty {
+func (m *SliVnConfiguration) GetNoStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStaticRouteChoice().(*SliVnConfiguration_NoStaticRoutes); ok {
 		return x.NoStaticRoutes
 	}
@@ -669,78 +624,12 @@ func (m *SliVnConfiguration) GetStaticRoutes() *StaticRoutesListType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*SliVnConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SliVnConfiguration_OneofMarshaler, _SliVnConfiguration_OneofUnmarshaler, _SliVnConfiguration_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SliVnConfiguration) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*SliVnConfiguration_NoStaticRoutes)(nil),
 		(*SliVnConfiguration_StaticRoutes)(nil),
 	}
-}
-
-func _SliVnConfiguration_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SliVnConfiguration)
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *SliVnConfiguration_NoStaticRoutes:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStaticRoutes); err != nil {
-			return err
-		}
-	case *SliVnConfiguration_StaticRoutes:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("SliVnConfiguration.StaticRouteChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _SliVnConfiguration_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SliVnConfiguration)
-	switch tag {
-	case 3: // static_route_choice.no_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &SliVnConfiguration_NoStaticRoutes{msg}
-		return true, err
-	case 4: // static_route_choice.static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &SliVnConfiguration_StaticRoutes{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _SliVnConfiguration_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SliVnConfiguration)
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *SliVnConfiguration_NoStaticRoutes:
-		s := proto.Size(x.NoStaticRoutes)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SliVnConfiguration_StaticRoutes:
-		s := proto.Size(x.StaticRoutes)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Global Network Connection
@@ -772,8 +661,30 @@ type GlobalNetworkConnectionType struct {
 func (m *GlobalNetworkConnectionType) Reset()      { *m = GlobalNetworkConnectionType{} }
 func (*GlobalNetworkConnectionType) ProtoMessage() {}
 func (*GlobalNetworkConnectionType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{7}
+	return fileDescriptor_d141cd889edd2b08, []int{7}
 }
+func (m *GlobalNetworkConnectionType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalNetworkConnectionType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalNetworkConnectionType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalNetworkConnectionType.Merge(m, src)
+}
+func (m *GlobalNetworkConnectionType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalNetworkConnectionType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalNetworkConnectionType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalNetworkConnectionType proto.InternalMessageInfo
 
 type isGlobalNetworkConnectionType_ConnectionChoice interface {
 	isGlobalNetworkConnectionType_ConnectionChoice()
@@ -789,13 +700,13 @@ type isGlobalNetworkConnectionType_ForwardProxyChoice interface {
 }
 
 type GlobalNetworkConnectionType_SloToGlobalDr struct {
-	SloToGlobalDr *ves_io_schema_views.GlobalConnectorType `protobuf:"bytes,3,opt,name=slo_to_global_dr,json=sloToGlobalDr,oneof"`
+	SloToGlobalDr *views.GlobalConnectorType `protobuf:"bytes,3,opt,name=slo_to_global_dr,json=sloToGlobalDr,proto3,oneof" json:"slo_to_global_dr,omitempty"`
 }
 type GlobalNetworkConnectionType_DisableForwardProxy struct {
-	DisableForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=disable_forward_proxy,json=disableForwardProxy,oneof"`
+	DisableForwardProxy *schema.Empty `protobuf:"bytes,5,opt,name=disable_forward_proxy,json=disableForwardProxy,proto3,oneof" json:"disable_forward_proxy,omitempty"`
 }
 type GlobalNetworkConnectionType_EnableForwardProxy struct {
-	EnableForwardProxy *ves_io_schema4.ForwardProxyConfigType `protobuf:"bytes,6,opt,name=enable_forward_proxy,json=enableForwardProxy,oneof"`
+	EnableForwardProxy *schema.ForwardProxyConfigType `protobuf:"bytes,6,opt,name=enable_forward_proxy,json=enableForwardProxy,proto3,oneof" json:"enable_forward_proxy,omitempty"`
 }
 
 func (*GlobalNetworkConnectionType_SloToGlobalDr) isGlobalNetworkConnectionType_ConnectionChoice() {}
@@ -817,130 +728,34 @@ func (m *GlobalNetworkConnectionType) GetForwardProxyChoice() isGlobalNetworkCon
 	return nil
 }
 
-func (m *GlobalNetworkConnectionType) GetSloToGlobalDr() *ves_io_schema_views.GlobalConnectorType {
+func (m *GlobalNetworkConnectionType) GetSloToGlobalDr() *views.GlobalConnectorType {
 	if x, ok := m.GetConnectionChoice().(*GlobalNetworkConnectionType_SloToGlobalDr); ok {
 		return x.SloToGlobalDr
 	}
 	return nil
 }
 
-func (m *GlobalNetworkConnectionType) GetDisableForwardProxy() *ves_io_schema4.Empty {
+func (m *GlobalNetworkConnectionType) GetDisableForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GlobalNetworkConnectionType_DisableForwardProxy); ok {
 		return x.DisableForwardProxy
 	}
 	return nil
 }
 
-func (m *GlobalNetworkConnectionType) GetEnableForwardProxy() *ves_io_schema4.ForwardProxyConfigType {
+func (m *GlobalNetworkConnectionType) GetEnableForwardProxy() *schema.ForwardProxyConfigType {
 	if x, ok := m.GetForwardProxyChoice().(*GlobalNetworkConnectionType_EnableForwardProxy); ok {
 		return x.EnableForwardProxy
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalNetworkConnectionType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalNetworkConnectionType_OneofMarshaler, _GlobalNetworkConnectionType_OneofUnmarshaler, _GlobalNetworkConnectionType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalNetworkConnectionType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalNetworkConnectionType_SloToGlobalDr)(nil),
 		(*GlobalNetworkConnectionType_DisableForwardProxy)(nil),
 		(*GlobalNetworkConnectionType_EnableForwardProxy)(nil),
 	}
-}
-
-func _GlobalNetworkConnectionType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalNetworkConnectionType)
-	// connection_choice
-	switch x := m.ConnectionChoice.(type) {
-	case *GlobalNetworkConnectionType_SloToGlobalDr:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloToGlobalDr); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalNetworkConnectionType.ConnectionChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GlobalNetworkConnectionType_DisableForwardProxy:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableForwardProxy); err != nil {
-			return err
-		}
-	case *GlobalNetworkConnectionType_EnableForwardProxy:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableForwardProxy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalNetworkConnectionType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalNetworkConnectionType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalNetworkConnectionType)
-	switch tag {
-	case 3: // connection_choice.slo_to_global_dr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.GlobalConnectorType)
-		err := b.DecodeMessage(msg)
-		m.ConnectionChoice = &GlobalNetworkConnectionType_SloToGlobalDr{msg}
-		return true, err
-	case 5: // forward_proxy_choice.disable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GlobalNetworkConnectionType_DisableForwardProxy{msg}
-		return true, err
-	case 6: // forward_proxy_choice.enable_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.ForwardProxyConfigType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GlobalNetworkConnectionType_EnableForwardProxy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalNetworkConnectionType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalNetworkConnectionType)
-	// connection_choice
-	switch x := m.ConnectionChoice.(type) {
-	case *GlobalNetworkConnectionType_SloToGlobalDr:
-		s := proto.Size(x.SloToGlobalDr)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GlobalNetworkConnectionType_DisableForwardProxy:
-		s := proto.Size(x.DisableForwardProxy)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalNetworkConnectionType_EnableForwardProxy:
-		s := proto.Size(x.EnableForwardProxy)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Global Network Connection List
@@ -953,14 +768,36 @@ type GlobalNetworkConnectionListType struct {
 	// x-displayName: "Global Network Connections"
 	// x-required
 	// Global network connections
-	GlobalNetworkConnections []*GlobalNetworkConnectionType `protobuf:"bytes,1,rep,name=global_network_connections,json=globalNetworkConnections" json:"global_network_connections,omitempty"`
+	GlobalNetworkConnections []*GlobalNetworkConnectionType `protobuf:"bytes,1,rep,name=global_network_connections,json=globalNetworkConnections,proto3" json:"global_network_connections,omitempty"`
 }
 
 func (m *GlobalNetworkConnectionListType) Reset()      { *m = GlobalNetworkConnectionListType{} }
 func (*GlobalNetworkConnectionListType) ProtoMessage() {}
 func (*GlobalNetworkConnectionListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{8}
+	return fileDescriptor_d141cd889edd2b08, []int{8}
 }
+func (m *GlobalNetworkConnectionListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalNetworkConnectionListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalNetworkConnectionListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalNetworkConnectionListType.Merge(m, src)
+}
+func (m *GlobalNetworkConnectionListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalNetworkConnectionListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalNetworkConnectionListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalNetworkConnectionListType proto.InternalMessageInfo
 
 func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnections() []*GlobalNetworkConnectionType {
 	if m != nil {
@@ -1067,7 +904,7 @@ type VssNetworkConfiguration struct {
 	// irrespective of the vrrp mode.
 	//
 	// When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.
-	VipVrrpMode ves_io_schema4.VipVrrpType `protobuf:"varint,20,opt,name=vip_vrrp_mode,json=vipVrrpMode,proto3,enum=ves.io.schema.VipVrrpType" json:"vip_vrrp_mode,omitempty"`
+	VipVrrpMode schema.VipVrrpType `protobuf:"varint,20,opt,name=vip_vrrp_mode,json=vipVrrpMode,proto3,enum=ves.io.schema.VipVrrpType" json:"vip_vrrp_mode,omitempty"`
 	// site_to_site_tunnel_ip
 	//
 	// x-displayName: "Site To Site Tunnel IP"
@@ -1083,9 +920,33 @@ type VssNetworkConfiguration struct {
 	TunnelDeadTimeout uint32 `protobuf:"varint,22,opt,name=tunnel_dead_timeout,json=tunnelDeadTimeout,proto3" json:"tunnel_dead_timeout,omitempty"`
 }
 
-func (m *VssNetworkConfiguration) Reset()                    { *m = VssNetworkConfiguration{} }
-func (*VssNetworkConfiguration) ProtoMessage()               {}
-func (*VssNetworkConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *VssNetworkConfiguration) Reset()      { *m = VssNetworkConfiguration{} }
+func (*VssNetworkConfiguration) ProtoMessage() {}
+func (*VssNetworkConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{9}
+}
+func (m *VssNetworkConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VssNetworkConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VssNetworkConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VssNetworkConfiguration.Merge(m, src)
+}
+func (m *VssNetworkConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *VssNetworkConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_VssNetworkConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VssNetworkConfiguration proto.InternalMessageInfo
 
 type isVssNetworkConfiguration_SloChoice interface {
 	isVssNetworkConfiguration_SloChoice()
@@ -1125,43 +986,43 @@ type isVssNetworkConfiguration_GlobalNetworkChoice interface {
 }
 
 type VssNetworkConfiguration_DefaultConfig struct {
-	DefaultConfig *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=default_config,json=defaultConfig,oneof"`
+	DefaultConfig *schema.Empty `protobuf:"bytes,2,opt,name=default_config,json=defaultConfig,proto3,oneof" json:"default_config,omitempty"`
 }
 type VssNetworkConfiguration_SloConfig struct {
-	SloConfig *VnConfiguration `protobuf:"bytes,3,opt,name=slo_config,json=sloConfig,oneof"`
+	SloConfig *VnConfiguration `protobuf:"bytes,3,opt,name=slo_config,json=sloConfig,proto3,oneof" json:"slo_config,omitempty"`
 }
 type VssNetworkConfiguration_DefaultSliConfig struct {
-	DefaultSliConfig *ves_io_schema4.Empty `protobuf:"bytes,25,opt,name=default_sli_config,json=defaultSliConfig,oneof"`
+	DefaultSliConfig *schema.Empty `protobuf:"bytes,25,opt,name=default_sli_config,json=defaultSliConfig,proto3,oneof" json:"default_sli_config,omitempty"`
 }
 type VssNetworkConfiguration_SliConfig struct {
-	SliConfig *SliVnConfiguration `protobuf:"bytes,26,opt,name=sli_config,json=sliConfig,oneof"`
+	SliConfig *SliVnConfiguration `protobuf:"bytes,26,opt,name=sli_config,json=sliConfig,proto3,oneof" json:"sli_config,omitempty"`
 }
 type VssNetworkConfiguration_DefaultInterfaceConfig struct {
-	DefaultInterfaceConfig *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=default_interface_config,json=defaultInterfaceConfig,oneof"`
+	DefaultInterfaceConfig *schema.Empty `protobuf:"bytes,5,opt,name=default_interface_config,json=defaultInterfaceConfig,proto3,oneof" json:"default_interface_config,omitempty"`
 }
 type VssNetworkConfiguration_InterfaceList struct {
-	InterfaceList *InterfaceListType `protobuf:"bytes,6,opt,name=interface_list,json=interfaceList,oneof"`
+	InterfaceList *InterfaceListType `protobuf:"bytes,6,opt,name=interface_list,json=interfaceList,proto3,oneof" json:"interface_list,omitempty"`
 }
 type VssNetworkConfiguration_NoNetworkPolicy struct {
-	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
+	NoNetworkPolicy *schema.Empty `protobuf:"bytes,8,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
 }
 type VssNetworkConfiguration_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ves_io_schema_network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,9,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,9,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type VssNetworkConfiguration_NoForwardProxy struct {
-	NoForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=no_forward_proxy,json=noForwardProxy,oneof"`
+	NoForwardProxy *schema.Empty `protobuf:"bytes,11,opt,name=no_forward_proxy,json=noForwardProxy,proto3,oneof" json:"no_forward_proxy,omitempty"`
 }
 type VssNetworkConfiguration_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,12,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,12,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type VssNetworkConfiguration_ForwardProxyAllowAll struct {
-	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,23,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
+	ForwardProxyAllowAll *schema.Empty `protobuf:"bytes,23,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,proto3,oneof" json:"forward_proxy_allow_all,omitempty"`
 }
 type VssNetworkConfiguration_NoGlobalNetwork struct {
-	NoGlobalNetwork *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=no_global_network,json=noGlobalNetwork,oneof"`
+	NoGlobalNetwork *schema.Empty `protobuf:"bytes,14,opt,name=no_global_network,json=noGlobalNetwork,proto3,oneof" json:"no_global_network,omitempty"`
 }
 type VssNetworkConfiguration_GlobalNetworkList struct {
-	GlobalNetworkList *ves_io_schema_views1.GlobalNetworkConnectionListType `protobuf:"bytes,15,opt,name=global_network_list,json=globalNetworkList,oneof"`
+	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,15,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
 
 func (*VssNetworkConfiguration_DefaultConfig) isVssNetworkConfiguration_SloChoice()                {}
@@ -1217,7 +1078,7 @@ func (m *VssNetworkConfiguration) GetGlobalNetworkChoice() isVssNetworkConfigura
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetDefaultConfig() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetDefaultConfig() *schema.Empty {
 	if x, ok := m.GetSloChoice().(*VssNetworkConfiguration_DefaultConfig); ok {
 		return x.DefaultConfig
 	}
@@ -1231,7 +1092,7 @@ func (m *VssNetworkConfiguration) GetSloConfig() *VnConfiguration {
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetDefaultSliConfig() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetDefaultSliConfig() *schema.Empty {
 	if x, ok := m.GetSliChoice().(*VssNetworkConfiguration_DefaultSliConfig); ok {
 		return x.DefaultSliConfig
 	}
@@ -1245,7 +1106,7 @@ func (m *VssNetworkConfiguration) GetSliConfig() *SliVnConfiguration {
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetDefaultInterfaceConfig() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetDefaultInterfaceConfig() *schema.Empty {
 	if x, ok := m.GetInterfaceChoice().(*VssNetworkConfiguration_DefaultInterfaceConfig); ok {
 		return x.DefaultInterfaceConfig
 	}
@@ -1259,49 +1120,49 @@ func (m *VssNetworkConfiguration) GetInterfaceList() *InterfaceListType {
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetNoNetworkPolicy() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetNoNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*VssNetworkConfiguration_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetActiveNetworkPolicies() *ves_io_schema_network_firewall.ActiveNetworkPoliciesType {
+func (m *VssNetworkConfiguration) GetActiveNetworkPolicies() *network_firewall.ActiveNetworkPoliciesType {
 	if x, ok := m.GetNetworkPolicyChoice().(*VssNetworkConfiguration_ActiveNetworkPolicies); ok {
 		return x.ActiveNetworkPolicies
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetNoForwardProxy() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetNoForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*VssNetworkConfiguration_NoForwardProxy); ok {
 		return x.NoForwardProxy
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetActiveForwardProxyPolicies() *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType {
+func (m *VssNetworkConfiguration) GetActiveForwardProxyPolicies() *network_firewall.ActiveForwardProxyPoliciesType {
 	if x, ok := m.GetForwardProxyChoice().(*VssNetworkConfiguration_ActiveForwardProxyPolicies); ok {
 		return x.ActiveForwardProxyPolicies
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetForwardProxyAllowAll() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*VssNetworkConfiguration_ForwardProxyAllowAll); ok {
 		return x.ForwardProxyAllowAll
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetNoGlobalNetwork() *ves_io_schema4.Empty {
+func (m *VssNetworkConfiguration) GetNoGlobalNetwork() *schema.Empty {
 	if x, ok := m.GetGlobalNetworkChoice().(*VssNetworkConfiguration_NoGlobalNetwork); ok {
 		return x.NoGlobalNetwork
 	}
 	return nil
 }
 
-func (m *VssNetworkConfiguration) GetGlobalNetworkList() *ves_io_schema_views1.GlobalNetworkConnectionListType {
+func (m *VssNetworkConfiguration) GetGlobalNetworkList() *views.GlobalNetworkConnectionListType {
 	if x, ok := m.GetGlobalNetworkChoice().(*VssNetworkConfiguration_GlobalNetworkList); ok {
 		return x.GlobalNetworkList
 	}
@@ -1336,11 +1197,11 @@ func (m *VssNetworkConfiguration) GetBgpPeerAddress() string {
 	return ""
 }
 
-func (m *VssNetworkConfiguration) GetVipVrrpMode() ves_io_schema4.VipVrrpType {
+func (m *VssNetworkConfiguration) GetVipVrrpMode() schema.VipVrrpType {
 	if m != nil {
 		return m.VipVrrpMode
 	}
-	return ves_io_schema4.VIP_VRRP_INVALID
+	return schema.VIP_VRRP_INVALID
 }
 
 func (m *VssNetworkConfiguration) GetSiteToSiteTunnelIp() string {
@@ -1357,9 +1218,9 @@ func (m *VssNetworkConfiguration) GetTunnelDeadTimeout() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*VssNetworkConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _VssNetworkConfiguration_OneofMarshaler, _VssNetworkConfiguration_OneofUnmarshaler, _VssNetworkConfiguration_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*VssNetworkConfiguration) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*VssNetworkConfiguration_DefaultConfig)(nil),
 		(*VssNetworkConfiguration_SloConfig)(nil),
 		(*VssNetworkConfiguration_DefaultSliConfig)(nil),
@@ -1374,330 +1235,6 @@ func (*VssNetworkConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *pro
 		(*VssNetworkConfiguration_NoGlobalNetwork)(nil),
 		(*VssNetworkConfiguration_GlobalNetworkList)(nil),
 	}
-}
-
-func _VssNetworkConfiguration_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*VssNetworkConfiguration)
-	// slo_choice
-	switch x := m.SloChoice.(type) {
-	case *VssNetworkConfiguration_DefaultConfig:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultConfig); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_SloConfig:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SloConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.SloChoice has unexpected type %T", x)
-	}
-	// sli_choice
-	switch x := m.SliChoice.(type) {
-	case *VssNetworkConfiguration_DefaultSliConfig:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultSliConfig); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_SliConfig:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SliConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.SliChoice has unexpected type %T", x)
-	}
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *VssNetworkConfiguration_DefaultInterfaceConfig:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultInterfaceConfig); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_InterfaceList:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.InterfaceChoice has unexpected type %T", x)
-	}
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *VssNetworkConfiguration_NoNetworkPolicy:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoNetworkPolicy); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *VssNetworkConfiguration_NoForwardProxy:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoForwardProxy); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_ForwardProxyAllowAll:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyAllowAll); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.ForwardProxyChoice has unexpected type %T", x)
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *VssNetworkConfiguration_NoGlobalNetwork:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoGlobalNetwork); err != nil {
-			return err
-		}
-	case *VssNetworkConfiguration_GlobalNetworkList:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GlobalNetworkList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssNetworkConfiguration.GlobalNetworkChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _VssNetworkConfiguration_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*VssNetworkConfiguration)
-	switch tag {
-	case 2: // slo_choice.default_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SloChoice = &VssNetworkConfiguration_DefaultConfig{msg}
-		return true, err
-	case 3: // slo_choice.slo_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VnConfiguration)
-		err := b.DecodeMessage(msg)
-		m.SloChoice = &VssNetworkConfiguration_SloConfig{msg}
-		return true, err
-	case 25: // sli_choice.default_sli_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SliChoice = &VssNetworkConfiguration_DefaultSliConfig{msg}
-		return true, err
-	case 26: // sli_choice.sli_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SliVnConfiguration)
-		err := b.DecodeMessage(msg)
-		m.SliChoice = &VssNetworkConfiguration_SliConfig{msg}
-		return true, err
-	case 5: // interface_choice.default_interface_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &VssNetworkConfiguration_DefaultInterfaceConfig{msg}
-		return true, err
-	case 6: // interface_choice.interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(InterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.InterfaceChoice = &VssNetworkConfiguration_InterfaceList{msg}
-		return true, err
-	case 8: // network_policy_choice.no_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &VssNetworkConfiguration_NoNetworkPolicy{msg}
-		return true, err
-	case 9: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &VssNetworkConfiguration_ActiveNetworkPolicies{msg}
-		return true, err
-	case 11: // forward_proxy_choice.no_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &VssNetworkConfiguration_NoForwardProxy{msg}
-		return true, err
-	case 12: // forward_proxy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &VssNetworkConfiguration_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 23: // forward_proxy_choice.forward_proxy_allow_all
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &VssNetworkConfiguration_ForwardProxyAllowAll{msg}
-		return true, err
-	case 14: // global_network_choice.no_global_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &VssNetworkConfiguration_NoGlobalNetwork{msg}
-		return true, err
-	case 15: // global_network_choice.global_network_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.GlobalNetworkConnectionListType)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &VssNetworkConfiguration_GlobalNetworkList{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _VssNetworkConfiguration_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*VssNetworkConfiguration)
-	// slo_choice
-	switch x := m.SloChoice.(type) {
-	case *VssNetworkConfiguration_DefaultConfig:
-		s := proto.Size(x.DefaultConfig)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_SloConfig:
-		s := proto.Size(x.SloConfig)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// sli_choice
-	switch x := m.SliChoice.(type) {
-	case *VssNetworkConfiguration_DefaultSliConfig:
-		s := proto.Size(x.DefaultSliConfig)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_SliConfig:
-		s := proto.Size(x.SliConfig)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// interface_choice
-	switch x := m.InterfaceChoice.(type) {
-	case *VssNetworkConfiguration_DefaultInterfaceConfig:
-		s := proto.Size(x.DefaultInterfaceConfig)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_InterfaceList:
-		s := proto.Size(x.InterfaceList)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *VssNetworkConfiguration_NoNetworkPolicy:
-		s := proto.Size(x.NoNetworkPolicy)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *VssNetworkConfiguration_NoForwardProxy:
-		s := proto.Size(x.NoForwardProxy)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_ForwardProxyAllowAll:
-		s := proto.Size(x.ForwardProxyAllowAll)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *VssNetworkConfiguration_NoGlobalNetwork:
-		s := proto.Size(x.NoGlobalNetwork)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssNetworkConfiguration_GlobalNetworkList:
-		s := proto.Size(x.GlobalNetworkList)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type VssStorageConfiguration struct {
@@ -1743,9 +1280,33 @@ type VssStorageConfiguration struct {
 	StaticRouteChoice isVssStorageConfiguration_StaticRouteChoice `protobuf_oneof:"static_route_choice"`
 }
 
-func (m *VssStorageConfiguration) Reset()                    { *m = VssStorageConfiguration{} }
-func (*VssStorageConfiguration) ProtoMessage()               {}
-func (*VssStorageConfiguration) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (m *VssStorageConfiguration) Reset()      { *m = VssStorageConfiguration{} }
+func (*VssStorageConfiguration) ProtoMessage() {}
+func (*VssStorageConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{10}
+}
+func (m *VssStorageConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VssStorageConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VssStorageConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VssStorageConfiguration.Merge(m, src)
+}
+func (m *VssStorageConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *VssStorageConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_VssStorageConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VssStorageConfiguration proto.InternalMessageInfo
 
 type isVssStorageConfiguration_StorageInterfaceChoice interface {
 	isVssStorageConfiguration_StorageInterfaceChoice()
@@ -1773,28 +1334,28 @@ type isVssStorageConfiguration_StaticRouteChoice interface {
 }
 
 type VssStorageConfiguration_NoStorageInterfaces struct {
-	NoStorageInterfaces *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=no_storage_interfaces,json=noStorageInterfaces,oneof"`
+	NoStorageInterfaces *schema.Empty `protobuf:"bytes,2,opt,name=no_storage_interfaces,json=noStorageInterfaces,proto3,oneof" json:"no_storage_interfaces,omitempty"`
 }
 type VssStorageConfiguration_StorageInterfaceList struct {
-	StorageInterfaceList *StorageInterfaceListType `protobuf:"bytes,3,opt,name=storage_interface_list,json=storageInterfaceList,oneof"`
+	StorageInterfaceList *StorageInterfaceListType `protobuf:"bytes,3,opt,name=storage_interface_list,json=storageInterfaceList,proto3,oneof" json:"storage_interface_list,omitempty"`
 }
 type VssStorageConfiguration_NoStorageDevice struct {
-	NoStorageDevice *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=no_storage_device,json=noStorageDevice,oneof"`
+	NoStorageDevice *schema.Empty `protobuf:"bytes,5,opt,name=no_storage_device,json=noStorageDevice,proto3,oneof" json:"no_storage_device,omitempty"`
 }
 type VssStorageConfiguration_StorageDeviceList struct {
-	StorageDeviceList *ves_io_schema_fleet.FleetStorageDeviceListType `protobuf:"bytes,6,opt,name=storage_device_list,json=storageDeviceList,oneof"`
+	StorageDeviceList *fleet.FleetStorageDeviceListType `protobuf:"bytes,6,opt,name=storage_device_list,json=storageDeviceList,proto3,oneof" json:"storage_device_list,omitempty"`
 }
 type VssStorageConfiguration_DefaultStorageClass struct {
-	DefaultStorageClass *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=default_storage_class,json=defaultStorageClass,oneof"`
+	DefaultStorageClass *schema.Empty `protobuf:"bytes,8,opt,name=default_storage_class,json=defaultStorageClass,proto3,oneof" json:"default_storage_class,omitempty"`
 }
 type VssStorageConfiguration_StorageClassList struct {
-	StorageClassList *ves_io_schema_fleet.FleetStorageClassListType `protobuf:"bytes,9,opt,name=storage_class_list,json=storageClassList,oneof"`
+	StorageClassList *fleet.FleetStorageClassListType `protobuf:"bytes,9,opt,name=storage_class_list,json=storageClassList,proto3,oneof" json:"storage_class_list,omitempty"`
 }
 type VssStorageConfiguration_NoStaticRoutes struct {
-	NoStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=no_static_routes,json=noStaticRoutes,oneof"`
+	NoStaticRoutes *schema.Empty `protobuf:"bytes,11,opt,name=no_static_routes,json=noStaticRoutes,proto3,oneof" json:"no_static_routes,omitempty"`
 }
 type VssStorageConfiguration_StaticRoutes struct {
-	StaticRoutes *StaticRoutesListType `protobuf:"bytes,12,opt,name=static_routes,json=staticRoutes,oneof"`
+	StaticRoutes *StaticRoutesListType `protobuf:"bytes,12,opt,name=static_routes,json=staticRoutes,proto3,oneof" json:"static_routes,omitempty"`
 }
 
 func (*VssStorageConfiguration_NoStorageInterfaces) isVssStorageConfiguration_StorageInterfaceChoice() {
@@ -1833,7 +1394,7 @@ func (m *VssStorageConfiguration) GetStaticRouteChoice() isVssStorageConfigurati
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetNoStorageInterfaces() *ves_io_schema4.Empty {
+func (m *VssStorageConfiguration) GetNoStorageInterfaces() *schema.Empty {
 	if x, ok := m.GetStorageInterfaceChoice().(*VssStorageConfiguration_NoStorageInterfaces); ok {
 		return x.NoStorageInterfaces
 	}
@@ -1847,35 +1408,35 @@ func (m *VssStorageConfiguration) GetStorageInterfaceList() *StorageInterfaceLis
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetNoStorageDevice() *ves_io_schema4.Empty {
+func (m *VssStorageConfiguration) GetNoStorageDevice() *schema.Empty {
 	if x, ok := m.GetStorageDeviceChoice().(*VssStorageConfiguration_NoStorageDevice); ok {
 		return x.NoStorageDevice
 	}
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetStorageDeviceList() *ves_io_schema_fleet.FleetStorageDeviceListType {
+func (m *VssStorageConfiguration) GetStorageDeviceList() *fleet.FleetStorageDeviceListType {
 	if x, ok := m.GetStorageDeviceChoice().(*VssStorageConfiguration_StorageDeviceList); ok {
 		return x.StorageDeviceList
 	}
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetDefaultStorageClass() *ves_io_schema4.Empty {
+func (m *VssStorageConfiguration) GetDefaultStorageClass() *schema.Empty {
 	if x, ok := m.GetStorageClassChoice().(*VssStorageConfiguration_DefaultStorageClass); ok {
 		return x.DefaultStorageClass
 	}
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetStorageClassList() *ves_io_schema_fleet.FleetStorageClassListType {
+func (m *VssStorageConfiguration) GetStorageClassList() *fleet.FleetStorageClassListType {
 	if x, ok := m.GetStorageClassChoice().(*VssStorageConfiguration_StorageClassList); ok {
 		return x.StorageClassList
 	}
 	return nil
 }
 
-func (m *VssStorageConfiguration) GetNoStaticRoutes() *ves_io_schema4.Empty {
+func (m *VssStorageConfiguration) GetNoStaticRoutes() *schema.Empty {
 	if x, ok := m.GetStaticRouteChoice().(*VssStorageConfiguration_NoStaticRoutes); ok {
 		return x.NoStaticRoutes
 	}
@@ -1889,9 +1450,9 @@ func (m *VssStorageConfiguration) GetStaticRoutes() *StaticRoutesListType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*VssStorageConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _VssStorageConfiguration_OneofMarshaler, _VssStorageConfiguration_OneofUnmarshaler, _VssStorageConfiguration_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*VssStorageConfiguration) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*VssStorageConfiguration_NoStorageInterfaces)(nil),
 		(*VssStorageConfiguration_StorageInterfaceList)(nil),
 		(*VssStorageConfiguration_NoStorageDevice)(nil),
@@ -1901,216 +1462,6 @@ func (*VssStorageConfiguration) XXX_OneofFuncs() (func(msg proto.Message, b *pro
 		(*VssStorageConfiguration_NoStaticRoutes)(nil),
 		(*VssStorageConfiguration_StaticRoutes)(nil),
 	}
-}
-
-func _VssStorageConfiguration_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*VssStorageConfiguration)
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *VssStorageConfiguration_NoStorageInterfaces:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageInterfaces); err != nil {
-			return err
-		}
-	case *VssStorageConfiguration_StorageInterfaceList:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageInterfaceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssStorageConfiguration.StorageInterfaceChoice has unexpected type %T", x)
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *VssStorageConfiguration_NoStorageDevice:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStorageDevice); err != nil {
-			return err
-		}
-	case *VssStorageConfiguration_StorageDeviceList:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssStorageConfiguration.StorageDeviceChoice has unexpected type %T", x)
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *VssStorageConfiguration_DefaultStorageClass:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageClass); err != nil {
-			return err
-		}
-	case *VssStorageConfiguration_StorageClassList:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StorageClassList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssStorageConfiguration.StorageClassChoice has unexpected type %T", x)
-	}
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *VssStorageConfiguration_NoStaticRoutes:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoStaticRoutes); err != nil {
-			return err
-		}
-	case *VssStorageConfiguration_StaticRoutes:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("VssStorageConfiguration.StaticRouteChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _VssStorageConfiguration_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*VssStorageConfiguration)
-	switch tag {
-	case 2: // storage_interface_choice.no_storage_interfaces
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &VssStorageConfiguration_NoStorageInterfaces{msg}
-		return true, err
-	case 3: // storage_interface_choice.storage_interface_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StorageInterfaceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageInterfaceChoice = &VssStorageConfiguration_StorageInterfaceList{msg}
-		return true, err
-	case 5: // storage_device_choice.no_storage_device
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &VssStorageConfiguration_NoStorageDevice{msg}
-		return true, err
-	case 6: // storage_device_choice.storage_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetStorageDeviceListType)
-		err := b.DecodeMessage(msg)
-		m.StorageDeviceChoice = &VssStorageConfiguration_StorageDeviceList{msg}
-		return true, err
-	case 8: // storage_class_choice.default_storage_class
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &VssStorageConfiguration_DefaultStorageClass{msg}
-		return true, err
-	case 9: // storage_class_choice.storage_class_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetStorageClassListType)
-		err := b.DecodeMessage(msg)
-		m.StorageClassChoice = &VssStorageConfiguration_StorageClassList{msg}
-		return true, err
-	case 11: // static_route_choice.no_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &VssStorageConfiguration_NoStaticRoutes{msg}
-		return true, err
-	case 12: // static_route_choice.static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.StaticRouteChoice = &VssStorageConfiguration_StaticRoutes{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _VssStorageConfiguration_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*VssStorageConfiguration)
-	// storage_interface_choice
-	switch x := m.StorageInterfaceChoice.(type) {
-	case *VssStorageConfiguration_NoStorageInterfaces:
-		s := proto.Size(x.NoStorageInterfaces)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssStorageConfiguration_StorageInterfaceList:
-		s := proto.Size(x.StorageInterfaceList)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_device_choice
-	switch x := m.StorageDeviceChoice.(type) {
-	case *VssStorageConfiguration_NoStorageDevice:
-		s := proto.Size(x.NoStorageDevice)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssStorageConfiguration_StorageDeviceList:
-		s := proto.Size(x.StorageDeviceList)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_class_choice
-	switch x := m.StorageClassChoice.(type) {
-	case *VssStorageConfiguration_DefaultStorageClass:
-		s := proto.Size(x.DefaultStorageClass)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssStorageConfiguration_StorageClassList:
-		s := proto.Size(x.StorageClassList)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// static_route_choice
-	switch x := m.StaticRouteChoice.(type) {
-	case *VssStorageConfiguration_NoStaticRoutes:
-		s := proto.Size(x.NoStaticRoutes)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *VssStorageConfiguration_StaticRoutes:
-		s := proto.Size(x.StaticRoutes)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GlobalSpecType
@@ -2131,13 +1482,13 @@ type GlobalSpecType struct {
 	// x-required
 	// x-example: "master-0"
 	// Names of master nodes
-	MasterNodes []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
+	MasterNodes []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
 	// Worker Nodes
 	//
 	// x-displayName: "Worker Nodes"
 	// x-example: "worker-0"
 	// Names of worker nodes
-	WorkerNodes []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes" json:"worker_nodes,omitempty"`
+	WorkerNodes []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes,proto3" json:"worker_nodes,omitempty"`
 	// Software Version
 	//
 	// x-displayName: "Software Version"
@@ -2201,7 +1552,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Coordinates"
 	// Coordinates of the site, longitude and latitude
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,19,opt,name=coordinates" json:"coordinates,omitempty"`
+	Coordinates *site.Coordinates `protobuf:"bytes,19,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Site Local K8s API access
 	//
 	// x-displayName: "Site Local K8s API access"
@@ -2246,22 +1597,46 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Volterra Software"
 	// Volterra Software Details
-	Sw *ves_io_schema_views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw" json:"sw,omitempty"`
+	Sw *views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//
 	// x-displayName: "Operating System"
 	// Operating System Details
-	Os *ves_io_schema_views.OperatingSystemType `protobuf:"bytes,35,opt,name=os" json:"os,omitempty"`
+	Os *views.OperatingSystemType `protobuf:"bytes,35,opt,name=os,proto3" json:"os,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{11}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_BondChoice interface {
 	isGlobalSpecType_BondChoice()
@@ -2313,58 +1688,58 @@ type isGlobalSpecType_LocalControlPlaneChoice interface {
 }
 
 type GlobalSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type GlobalSpecType_BondDeviceList struct {
-	BondDeviceList *ves_io_schema_fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type GlobalSpecType_DefaultNetworkConfig struct {
-	DefaultNetworkConfig *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,oneof"`
+	DefaultNetworkConfig *schema.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,proto3,oneof" json:"default_network_config,omitempty"`
 }
 type GlobalSpecType_CustomNetworkConfig struct {
-	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,oneof"`
+	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,proto3,oneof" json:"custom_network_config,omitempty"`
 }
 type GlobalSpecType_DefaultStorageConfig struct {
-	DefaultStorageConfig *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,oneof"`
+	DefaultStorageConfig *schema.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,proto3,oneof" json:"default_storage_config,omitempty"`
 }
 type GlobalSpecType_CustomStorageConfig struct {
-	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,oneof"`
+	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,proto3,oneof" json:"custom_storage_config,omitempty"`
 }
 type GlobalSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type GlobalSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type GlobalSpecType_EnableVgpu struct {
-	EnableVgpu *ves_io_schema_fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type GlobalSpecType_NoK8SCluster struct {
-	NoK8SCluster *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,oneof"`
+	NoK8SCluster *schema.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
 type GlobalSpecType_K8SCluster struct {
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,oneof"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,proto3,oneof" json:"k8s_cluster,omitempty"`
 }
 type GlobalSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GlobalSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type GlobalSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type GlobalSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type GlobalSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 type GlobalSpecType_NoLocalControlPlane struct {
-	NoLocalControlPlane *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,oneof"`
+	NoLocalControlPlane *schema.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,proto3,oneof" json:"no_local_control_plane,omitempty"`
 }
 type GlobalSpecType_LocalControlPlane struct {
-	LocalControlPlane *ves_io_schema_fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,oneof"`
+	LocalControlPlane *fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,proto3,oneof" json:"local_control_plane,omitempty"`
 }
 
 func (*GlobalSpecType_NoBondDevices) isGlobalSpecType_BondChoice()                    {}
@@ -2470,21 +1845,21 @@ func (m *GlobalSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*GlobalSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetBondDeviceList() *ves_io_schema_fleet.FleetBondDevicesListType {
+func (m *GlobalSpecType) GetBondDeviceList() *fleet.FleetBondDevicesListType {
 	if x, ok := m.GetBondChoice().(*GlobalSpecType_BondDeviceList); ok {
 		return x.BondDeviceList
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultNetworkConfig() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDefaultNetworkConfig() *schema.Empty {
 	if x, ok := m.GetNetworkCfgChoice().(*GlobalSpecType_DefaultNetworkConfig); ok {
 		return x.DefaultNetworkConfig
 	}
@@ -2498,7 +1873,7 @@ func (m *GlobalSpecType) GetCustomNetworkConfig() *VssNetworkConfiguration {
 	return nil
 }
 
-func (m *GlobalSpecType) GetDefaultStorageConfig() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDefaultStorageConfig() *schema.Empty {
 	if x, ok := m.GetStorageCfgChoice().(*GlobalSpecType_DefaultStorageConfig); ok {
 		return x.DefaultStorageConfig
 	}
@@ -2512,21 +1887,21 @@ func (m *GlobalSpecType) GetCustomStorageConfig() *VssStorageConfiguration {
 	return nil
 }
 
-func (m *GlobalSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GlobalSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GlobalSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetEnableVgpu() *ves_io_schema_fleet.VGPUConfiguration {
+func (m *GlobalSpecType) GetEnableVgpu() *fleet.VGPUConfiguration {
 	if x, ok := m.GetGpuChoice().(*GlobalSpecType_EnableVgpu); ok {
 		return x.EnableVgpu
 	}
@@ -2540,100 +1915,100 @@ func (m *GlobalSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *GlobalSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoK8SCluster() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*GlobalSpecType_NoK8SCluster); ok {
 		return x.NoK8SCluster
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetK8SCluster() *views.ObjectRefType {
 	if x, ok := m.GetK8SClusterChoice().(*GlobalSpecType_K8SCluster); ok {
 		return x.K8SCluster
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*GlobalSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoLocalControlPlane() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoLocalControlPlane() *schema.Empty {
 	if x, ok := m.GetLocalControlPlaneChoice().(*GlobalSpecType_NoLocalControlPlane); ok {
 		return x.NoLocalControlPlane
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLocalControlPlane() *ves_io_schema_fleet.LocalControlPlaneType {
+func (m *GlobalSpecType) GetLocalControlPlane() *fleet.LocalControlPlaneType {
 	if x, ok := m.GetLocalControlPlaneChoice().(*GlobalSpecType_LocalControlPlane); ok {
 		return x.LocalControlPlane
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSw() *ves_io_schema_views.VolterraSoftwareType {
+func (m *GlobalSpecType) GetSw() *views.VolterraSoftwareType {
 	if m != nil {
 		return m.Sw
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetOs() *ves_io_schema_views.OperatingSystemType {
+func (m *GlobalSpecType) GetOs() *views.OperatingSystemType {
 	if m != nil {
 		return m.Os
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_NoBondDevices)(nil),
 		(*GlobalSpecType_BondDeviceList)(nil),
 		(*GlobalSpecType_DefaultNetworkConfig)(nil),
@@ -2655,452 +2030,14 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GlobalSpecType_NoBondDevices:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *GlobalSpecType_BondDeviceList:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.BondChoice has unexpected type %T", x)
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *GlobalSpecType_DefaultNetworkConfig:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultNetworkConfig); err != nil {
-			return err
-		}
-	case *GlobalSpecType_CustomNetworkConfig:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomNetworkConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.NetworkCfgChoice has unexpected type %T", x)
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *GlobalSpecType_DefaultStorageConfig:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageConfig); err != nil {
-			return err
-		}
-	case *GlobalSpecType_CustomStorageConfig:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorageConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.StorageCfgChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GlobalSpecType_DisableGpu:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *GlobalSpecType_EnableGpu:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *GlobalSpecType_EnableVgpu:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GlobalSpecType_NoK8SCluster:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoK8SCluster); err != nil {
-			return err
-		}
-	case *GlobalSpecType_K8SCluster:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.K8SClusterChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LogReceiver:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GlobalSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *GlobalSpecType_UsbPolicy:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *GlobalSpecType_NoLocalControlPlane:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoLocalControlPlane); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LocalControlPlane:
-		_ = b.EncodeVarint(33<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalControlPlane); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.LocalControlPlaneChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 7: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GlobalSpecType_NoBondDevices{msg}
-		return true, err
-	case 8: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GlobalSpecType_BondDeviceList{msg}
-		return true, err
-	case 10: // network_cfg_choice.default_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &GlobalSpecType_DefaultNetworkConfig{msg}
-		return true, err
-	case 11: // network_cfg_choice.custom_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssNetworkConfiguration)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &GlobalSpecType_CustomNetworkConfig{msg}
-		return true, err
-	case 13: // storage_cfg_choice.default_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &GlobalSpecType_DefaultStorageConfig{msg}
-		return true, err
-	case 14: // storage_cfg_choice.custom_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssStorageConfiguration)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &GlobalSpecType_CustomStorageConfig{msg}
-		return true, err
-	case 16: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_DisableGpu{msg}
-		return true, err
-	case 17: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_EnableGpu{msg}
-		return true, err
-	case 36: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GlobalSpecType_EnableVgpu{msg}
-		return true, err
-	case 21: // k8s_cluster_choice.no_k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GlobalSpecType_NoK8SCluster{msg}
-		return true, err
-	case 22: // k8s_cluster_choice.k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GlobalSpecType_K8SCluster{msg}
-		return true, err
-	case 24: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 25: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogReceiver{msg}
-		return true, err
-	case 27: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_DenyAllUsb{msg}
-		return true, err
-	case 28: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_AllowAllUsb{msg}
-		return true, err
-	case 29: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GlobalSpecType_UsbPolicy{msg}
-		return true, err
-	case 32: // local_control_plane_choice.no_local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &GlobalSpecType_NoLocalControlPlane{msg}
-		return true, err
-	case 33: // local_control_plane_choice.local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.LocalControlPlaneType)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &GlobalSpecType_LocalControlPlane{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GlobalSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *GlobalSpecType_DefaultNetworkConfig:
-		s := proto.Size(x.DefaultNetworkConfig)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_CustomNetworkConfig:
-		s := proto.Size(x.CustomNetworkConfig)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *GlobalSpecType_DefaultStorageConfig:
-		s := proto.Size(x.DefaultStorageConfig)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_CustomStorageConfig:
-		s := proto.Size(x.CustomStorageConfig)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GlobalSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GlobalSpecType_NoK8SCluster:
-		s := proto.Size(x.NoK8SCluster)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_K8SCluster:
-		s := proto.Size(x.K8SCluster)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GlobalSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *GlobalSpecType_NoLocalControlPlane:
-		s := proto.Size(x.NoLocalControlPlane)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LocalControlPlane:
-		s := proto.Size(x.LocalControlPlane)
-		n += proto.SizeVarint(33<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // CreateSpecType
 //
 // x-displayName: "Create voltstack site VPC site"
 // Shape of the voltstack site VPC site specification
 type CreateSpecType struct {
 	VolterraCertifiedHw string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
-	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
-	WorkerNodes         []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes" json:"worker_nodes,omitempty"`
+	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
+	WorkerNodes         []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes,proto3" json:"worker_nodes,omitempty"`
 	// Types that are valid to be assigned to BondChoice:
 	//	*CreateSpecType_NoBondDevices
 	//	*CreateSpecType_BondDeviceList
@@ -3117,9 +2054,9 @@ type CreateSpecType struct {
 	//	*CreateSpecType_DisableGpu
 	//	*CreateSpecType_EnableGpu
 	//	*CreateSpecType_EnableVgpu
-	GpuChoice   isCreateSpecType_GpuChoice      `protobuf_oneof:"gpu_choice"`
-	Address     string                          `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,19,opt,name=coordinates" json:"coordinates,omitempty"`
+	GpuChoice   isCreateSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
+	Address     string                     `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates *site.Coordinates          `protobuf:"bytes,19,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to K8SClusterChoice:
 	//	*CreateSpecType_NoK8SCluster
 	//	*CreateSpecType_K8SCluster
@@ -3141,17 +2078,41 @@ type CreateSpecType struct {
 	//
 	// x-displayName: "Volterra Software"
 	// Volterra Software Details
-	Sw *ves_io_schema_views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw" json:"sw,omitempty"`
+	Sw *views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//
 	// x-displayName: "Operating System"
 	// Operating System Details
-	Os *ves_io_schema_views.OperatingSystemType `protobuf:"bytes,35,opt,name=os" json:"os,omitempty"`
+	Os *views.OperatingSystemType `protobuf:"bytes,35,opt,name=os,proto3" json:"os,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{12}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_BondChoice interface {
 	isCreateSpecType_BondChoice()
@@ -3203,58 +2164,58 @@ type isCreateSpecType_LocalControlPlaneChoice interface {
 }
 
 type CreateSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type CreateSpecType_BondDeviceList struct {
-	BondDeviceList *ves_io_schema_fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type CreateSpecType_DefaultNetworkConfig struct {
-	DefaultNetworkConfig *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,oneof"`
+	DefaultNetworkConfig *schema.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,proto3,oneof" json:"default_network_config,omitempty"`
 }
 type CreateSpecType_CustomNetworkConfig struct {
-	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,oneof"`
+	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,proto3,oneof" json:"custom_network_config,omitempty"`
 }
 type CreateSpecType_DefaultStorageConfig struct {
-	DefaultStorageConfig *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,oneof"`
+	DefaultStorageConfig *schema.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,proto3,oneof" json:"default_storage_config,omitempty"`
 }
 type CreateSpecType_CustomStorageConfig struct {
-	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,oneof"`
+	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,proto3,oneof" json:"custom_storage_config,omitempty"`
 }
 type CreateSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type CreateSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type CreateSpecType_EnableVgpu struct {
-	EnableVgpu *ves_io_schema_fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type CreateSpecType_NoK8SCluster struct {
-	NoK8SCluster *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,oneof"`
+	NoK8SCluster *schema.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
 type CreateSpecType_K8SCluster struct {
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,oneof"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,proto3,oneof" json:"k8s_cluster,omitempty"`
 }
 type CreateSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type CreateSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type CreateSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type CreateSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type CreateSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 type CreateSpecType_NoLocalControlPlane struct {
-	NoLocalControlPlane *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,oneof"`
+	NoLocalControlPlane *schema.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,proto3,oneof" json:"no_local_control_plane,omitempty"`
 }
 type CreateSpecType_LocalControlPlane struct {
-	LocalControlPlane *ves_io_schema_fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,oneof"`
+	LocalControlPlane *fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,proto3,oneof" json:"local_control_plane,omitempty"`
 }
 
 func (*CreateSpecType_NoBondDevices) isCreateSpecType_BondChoice()                    {}
@@ -3346,21 +2307,21 @@ func (m *CreateSpecType) GetWorkerNodes() []string {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*CreateSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetBondDeviceList() *ves_io_schema_fleet.FleetBondDevicesListType {
+func (m *CreateSpecType) GetBondDeviceList() *fleet.FleetBondDevicesListType {
 	if x, ok := m.GetBondChoice().(*CreateSpecType_BondDeviceList); ok {
 		return x.BondDeviceList
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultNetworkConfig() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDefaultNetworkConfig() *schema.Empty {
 	if x, ok := m.GetNetworkCfgChoice().(*CreateSpecType_DefaultNetworkConfig); ok {
 		return x.DefaultNetworkConfig
 	}
@@ -3374,7 +2335,7 @@ func (m *CreateSpecType) GetCustomNetworkConfig() *VssNetworkConfiguration {
 	return nil
 }
 
-func (m *CreateSpecType) GetDefaultStorageConfig() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDefaultStorageConfig() *schema.Empty {
 	if x, ok := m.GetStorageCfgChoice().(*CreateSpecType_DefaultStorageConfig); ok {
 		return x.DefaultStorageConfig
 	}
@@ -3388,21 +2349,21 @@ func (m *CreateSpecType) GetCustomStorageConfig() *VssStorageConfiguration {
 	return nil
 }
 
-func (m *CreateSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*CreateSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*CreateSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetEnableVgpu() *ves_io_schema_fleet.VGPUConfiguration {
+func (m *CreateSpecType) GetEnableVgpu() *fleet.VGPUConfiguration {
 	if x, ok := m.GetGpuChoice().(*CreateSpecType_EnableVgpu); ok {
 		return x.EnableVgpu
 	}
@@ -3416,93 +2377,93 @@ func (m *CreateSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *CreateSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetNoK8SCluster() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*CreateSpecType_NoK8SCluster); ok {
 		return x.NoK8SCluster
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetK8SCluster() *views.ObjectRefType {
 	if x, ok := m.GetK8SClusterChoice().(*CreateSpecType_K8SCluster); ok {
 		return x.K8SCluster
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*CreateSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetNoLocalControlPlane() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoLocalControlPlane() *schema.Empty {
 	if x, ok := m.GetLocalControlPlaneChoice().(*CreateSpecType_NoLocalControlPlane); ok {
 		return x.NoLocalControlPlane
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLocalControlPlane() *ves_io_schema_fleet.LocalControlPlaneType {
+func (m *CreateSpecType) GetLocalControlPlane() *fleet.LocalControlPlaneType {
 	if x, ok := m.GetLocalControlPlaneChoice().(*CreateSpecType_LocalControlPlane); ok {
 		return x.LocalControlPlane
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetSw() *ves_io_schema_views.VolterraSoftwareType {
+func (m *CreateSpecType) GetSw() *views.VolterraSoftwareType {
 	if m != nil {
 		return m.Sw
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetOs() *ves_io_schema_views.OperatingSystemType {
+func (m *CreateSpecType) GetOs() *views.OperatingSystemType {
 	if m != nil {
 		return m.Os
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_NoBondDevices)(nil),
 		(*CreateSpecType_BondDeviceList)(nil),
 		(*CreateSpecType_DefaultNetworkConfig)(nil),
@@ -3524,452 +2485,14 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *CreateSpecType_NoBondDevices:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *CreateSpecType_BondDeviceList:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.BondChoice has unexpected type %T", x)
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *CreateSpecType_DefaultNetworkConfig:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultNetworkConfig); err != nil {
-			return err
-		}
-	case *CreateSpecType_CustomNetworkConfig:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomNetworkConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.NetworkCfgChoice has unexpected type %T", x)
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *CreateSpecType_DefaultStorageConfig:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageConfig); err != nil {
-			return err
-		}
-	case *CreateSpecType_CustomStorageConfig:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorageConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.StorageCfgChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *CreateSpecType_DisableGpu:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *CreateSpecType_EnableGpu:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *CreateSpecType_EnableVgpu:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *CreateSpecType_NoK8SCluster:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoK8SCluster); err != nil {
-			return err
-		}
-	case *CreateSpecType_K8SCluster:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.K8SClusterChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *CreateSpecType_LogReceiver:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *CreateSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *CreateSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *CreateSpecType_UsbPolicy:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *CreateSpecType_NoLocalControlPlane:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoLocalControlPlane); err != nil {
-			return err
-		}
-	case *CreateSpecType_LocalControlPlane:
-		_ = b.EncodeVarint(33<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalControlPlane); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.LocalControlPlaneChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 7: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &CreateSpecType_NoBondDevices{msg}
-		return true, err
-	case 8: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &CreateSpecType_BondDeviceList{msg}
-		return true, err
-	case 10: // network_cfg_choice.default_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &CreateSpecType_DefaultNetworkConfig{msg}
-		return true, err
-	case 11: // network_cfg_choice.custom_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssNetworkConfiguration)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &CreateSpecType_CustomNetworkConfig{msg}
-		return true, err
-	case 13: // storage_cfg_choice.default_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &CreateSpecType_DefaultStorageConfig{msg}
-		return true, err
-	case 14: // storage_cfg_choice.custom_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssStorageConfiguration)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &CreateSpecType_CustomStorageConfig{msg}
-		return true, err
-	case 16: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_DisableGpu{msg}
-		return true, err
-	case 17: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_EnableGpu{msg}
-		return true, err
-	case 36: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &CreateSpecType_EnableVgpu{msg}
-		return true, err
-	case 21: // k8s_cluster_choice.no_k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &CreateSpecType_NoK8SCluster{msg}
-		return true, err
-	case 22: // k8s_cluster_choice.k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &CreateSpecType_K8SCluster{msg}
-		return true, err
-	case 24: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 25: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogReceiver{msg}
-		return true, err
-	case 27: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_DenyAllUsb{msg}
-		return true, err
-	case 28: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_AllowAllUsb{msg}
-		return true, err
-	case 29: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &CreateSpecType_UsbPolicy{msg}
-		return true, err
-	case 32: // local_control_plane_choice.no_local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &CreateSpecType_NoLocalControlPlane{msg}
-		return true, err
-	case 33: // local_control_plane_choice.local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.LocalControlPlaneType)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &CreateSpecType_LocalControlPlane{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *CreateSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *CreateSpecType_DefaultNetworkConfig:
-		s := proto.Size(x.DefaultNetworkConfig)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_CustomNetworkConfig:
-		s := proto.Size(x.CustomNetworkConfig)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *CreateSpecType_DefaultStorageConfig:
-		s := proto.Size(x.DefaultStorageConfig)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_CustomStorageConfig:
-		s := proto.Size(x.CustomStorageConfig)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *CreateSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *CreateSpecType_NoK8SCluster:
-		s := proto.Size(x.NoK8SCluster)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_K8SCluster:
-		s := proto.Size(x.K8SCluster)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *CreateSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *CreateSpecType_NoLocalControlPlane:
-		s := proto.Size(x.NoLocalControlPlane)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_LocalControlPlane:
-		s := proto.Size(x.LocalControlPlane)
-		n += proto.SizeVarint(33<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // ReplaceSpecType
 //
 // x-displayName: "Replace voltstack site VPC site"
 // Shape of the voltstack site VPC site replace specification
 type ReplaceSpecType struct {
 	VolterraCertifiedHw string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
-	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
-	WorkerNodes         []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes" json:"worker_nodes,omitempty"`
+	MasterNodes         []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
+	WorkerNodes         []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes,proto3" json:"worker_nodes,omitempty"`
 	// Types that are valid to be assigned to BondChoice:
 	//	*ReplaceSpecType_NoBondDevices
 	//	*ReplaceSpecType_BondDeviceList
@@ -3986,9 +2509,9 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_DisableGpu
 	//	*ReplaceSpecType_EnableGpu
 	//	*ReplaceSpecType_EnableVgpu
-	GpuChoice   isReplaceSpecType_GpuChoice     `protobuf_oneof:"gpu_choice"`
-	Address     string                          `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,19,opt,name=coordinates" json:"coordinates,omitempty"`
+	GpuChoice   isReplaceSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
+	Address     string                      `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates *site.Coordinates           `protobuf:"bytes,19,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to K8SClusterChoice:
 	//	*ReplaceSpecType_NoK8SCluster
 	//	*ReplaceSpecType_K8SCluster
@@ -4008,9 +2531,33 @@ type ReplaceSpecType struct {
 	LocalControlPlaneChoice isReplaceSpecType_LocalControlPlaneChoice `protobuf_oneof:"local_control_plane_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{13}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_BondChoice interface {
 	isReplaceSpecType_BondChoice()
@@ -4062,58 +2609,58 @@ type isReplaceSpecType_LocalControlPlaneChoice interface {
 }
 
 type ReplaceSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type ReplaceSpecType_BondDeviceList struct {
-	BondDeviceList *ves_io_schema_fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type ReplaceSpecType_DefaultNetworkConfig struct {
-	DefaultNetworkConfig *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,oneof"`
+	DefaultNetworkConfig *schema.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,proto3,oneof" json:"default_network_config,omitempty"`
 }
 type ReplaceSpecType_CustomNetworkConfig struct {
-	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,oneof"`
+	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,proto3,oneof" json:"custom_network_config,omitempty"`
 }
 type ReplaceSpecType_DefaultStorageConfig struct {
-	DefaultStorageConfig *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,oneof"`
+	DefaultStorageConfig *schema.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,proto3,oneof" json:"default_storage_config,omitempty"`
 }
 type ReplaceSpecType_CustomStorageConfig struct {
-	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,oneof"`
+	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,proto3,oneof" json:"custom_storage_config,omitempty"`
 }
 type ReplaceSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type ReplaceSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type ReplaceSpecType_EnableVgpu struct {
-	EnableVgpu *ves_io_schema_fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type ReplaceSpecType_NoK8SCluster struct {
-	NoK8SCluster *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,oneof"`
+	NoK8SCluster *schema.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
 type ReplaceSpecType_K8SCluster struct {
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,oneof"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,proto3,oneof" json:"k8s_cluster,omitempty"`
 }
 type ReplaceSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type ReplaceSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type ReplaceSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type ReplaceSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type ReplaceSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 type ReplaceSpecType_NoLocalControlPlane struct {
-	NoLocalControlPlane *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,oneof"`
+	NoLocalControlPlane *schema.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,proto3,oneof" json:"no_local_control_plane,omitempty"`
 }
 type ReplaceSpecType_LocalControlPlane struct {
-	LocalControlPlane *ves_io_schema_fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,oneof"`
+	LocalControlPlane *fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,proto3,oneof" json:"local_control_plane,omitempty"`
 }
 
 func (*ReplaceSpecType_NoBondDevices) isReplaceSpecType_BondChoice()                    {}
@@ -4205,21 +2752,21 @@ func (m *ReplaceSpecType) GetWorkerNodes() []string {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*ReplaceSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetBondDeviceList() *ves_io_schema_fleet.FleetBondDevicesListType {
+func (m *ReplaceSpecType) GetBondDeviceList() *fleet.FleetBondDevicesListType {
 	if x, ok := m.GetBondChoice().(*ReplaceSpecType_BondDeviceList); ok {
 		return x.BondDeviceList
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultNetworkConfig() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDefaultNetworkConfig() *schema.Empty {
 	if x, ok := m.GetNetworkCfgChoice().(*ReplaceSpecType_DefaultNetworkConfig); ok {
 		return x.DefaultNetworkConfig
 	}
@@ -4233,7 +2780,7 @@ func (m *ReplaceSpecType) GetCustomNetworkConfig() *VssNetworkConfiguration {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDefaultStorageConfig() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDefaultStorageConfig() *schema.Empty {
 	if x, ok := m.GetStorageCfgChoice().(*ReplaceSpecType_DefaultStorageConfig); ok {
 		return x.DefaultStorageConfig
 	}
@@ -4247,21 +2794,21 @@ func (m *ReplaceSpecType) GetCustomStorageConfig() *VssStorageConfiguration {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*ReplaceSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*ReplaceSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEnableVgpu() *ves_io_schema_fleet.VGPUConfiguration {
+func (m *ReplaceSpecType) GetEnableVgpu() *fleet.VGPUConfiguration {
 	if x, ok := m.GetGpuChoice().(*ReplaceSpecType_EnableVgpu); ok {
 		return x.EnableVgpu
 	}
@@ -4275,79 +2822,79 @@ func (m *ReplaceSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *ReplaceSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoK8SCluster() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*ReplaceSpecType_NoK8SCluster); ok {
 		return x.NoK8SCluster
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetK8SCluster() *views.ObjectRefType {
 	if x, ok := m.GetK8SClusterChoice().(*ReplaceSpecType_K8SCluster); ok {
 		return x.K8SCluster
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*ReplaceSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoLocalControlPlane() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoLocalControlPlane() *schema.Empty {
 	if x, ok := m.GetLocalControlPlaneChoice().(*ReplaceSpecType_NoLocalControlPlane); ok {
 		return x.NoLocalControlPlane
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLocalControlPlane() *ves_io_schema_fleet.LocalControlPlaneType {
+func (m *ReplaceSpecType) GetLocalControlPlane() *fleet.LocalControlPlaneType {
 	if x, ok := m.GetLocalControlPlaneChoice().(*ReplaceSpecType_LocalControlPlane); ok {
 		return x.LocalControlPlane
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_NoBondDevices)(nil),
 		(*ReplaceSpecType_BondDeviceList)(nil),
 		(*ReplaceSpecType_DefaultNetworkConfig)(nil),
@@ -4369,452 +2916,14 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 	}
 }
 
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *ReplaceSpecType_NoBondDevices:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_BondDeviceList:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.BondChoice has unexpected type %T", x)
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *ReplaceSpecType_DefaultNetworkConfig:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultNetworkConfig); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_CustomNetworkConfig:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomNetworkConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.NetworkCfgChoice has unexpected type %T", x)
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *ReplaceSpecType_DefaultStorageConfig:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageConfig); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_CustomStorageConfig:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorageConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.StorageCfgChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *ReplaceSpecType_DisableGpu:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_EnableGpu:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_EnableVgpu:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *ReplaceSpecType_NoK8SCluster:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoK8SCluster); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_K8SCluster:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.K8SClusterChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_LogReceiver:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *ReplaceSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_UsbPolicy:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *ReplaceSpecType_NoLocalControlPlane:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoLocalControlPlane); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_LocalControlPlane:
-		_ = b.EncodeVarint(33<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalControlPlane); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.LocalControlPlaneChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 7: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &ReplaceSpecType_NoBondDevices{msg}
-		return true, err
-	case 8: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &ReplaceSpecType_BondDeviceList{msg}
-		return true, err
-	case 10: // network_cfg_choice.default_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &ReplaceSpecType_DefaultNetworkConfig{msg}
-		return true, err
-	case 11: // network_cfg_choice.custom_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssNetworkConfiguration)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &ReplaceSpecType_CustomNetworkConfig{msg}
-		return true, err
-	case 13: // storage_cfg_choice.default_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &ReplaceSpecType_DefaultStorageConfig{msg}
-		return true, err
-	case 14: // storage_cfg_choice.custom_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssStorageConfiguration)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &ReplaceSpecType_CustomStorageConfig{msg}
-		return true, err
-	case 16: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_DisableGpu{msg}
-		return true, err
-	case 17: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_EnableGpu{msg}
-		return true, err
-	case 36: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &ReplaceSpecType_EnableVgpu{msg}
-		return true, err
-	case 21: // k8s_cluster_choice.no_k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &ReplaceSpecType_NoK8SCluster{msg}
-		return true, err
-	case 22: // k8s_cluster_choice.k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &ReplaceSpecType_K8SCluster{msg}
-		return true, err
-	case 24: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 25: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{msg}
-		return true, err
-	case 27: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_DenyAllUsb{msg}
-		return true, err
-	case 28: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_AllowAllUsb{msg}
-		return true, err
-	case 29: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &ReplaceSpecType_UsbPolicy{msg}
-		return true, err
-	case 32: // local_control_plane_choice.no_local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &ReplaceSpecType_NoLocalControlPlane{msg}
-		return true, err
-	case 33: // local_control_plane_choice.local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.LocalControlPlaneType)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &ReplaceSpecType_LocalControlPlane{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *ReplaceSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *ReplaceSpecType_DefaultNetworkConfig:
-		s := proto.Size(x.DefaultNetworkConfig)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_CustomNetworkConfig:
-		s := proto.Size(x.CustomNetworkConfig)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *ReplaceSpecType_DefaultStorageConfig:
-		s := proto.Size(x.DefaultStorageConfig)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_CustomStorageConfig:
-		s := proto.Size(x.CustomStorageConfig)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *ReplaceSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *ReplaceSpecType_NoK8SCluster:
-		s := proto.Size(x.NoK8SCluster)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_K8SCluster:
-		s := proto.Size(x.K8SCluster)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *ReplaceSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *ReplaceSpecType_NoLocalControlPlane:
-		s := proto.Size(x.NoLocalControlPlane)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_LocalControlPlane:
-		s := proto.Size(x.LocalControlPlane)
-		n += proto.SizeVarint(33<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // GetSpecType
 //
 // x-displayName: "Get voltstack site VPC site"
 // Shape of the voltstack site VPC site specification
 type GetSpecType struct {
 	VolterraCertifiedHw     string   `protobuf:"bytes,1,opt,name=volterra_certified_hw,json=volterraCertifiedHw,proto3" json:"volterra_certified_hw,omitempty"`
-	MasterNodes             []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
-	WorkerNodes             []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes" json:"worker_nodes,omitempty"`
+	MasterNodes             []string `protobuf:"bytes,2,rep,name=master_nodes,json=masterNodes,proto3" json:"master_nodes,omitempty"`
+	WorkerNodes             []string `protobuf:"bytes,3,rep,name=worker_nodes,json=workerNodes,proto3" json:"worker_nodes,omitempty"`
 	VolterraSoftwareVersion string   `protobuf:"bytes,4,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
 	OperatingSystemVersion  string   `protobuf:"bytes,5,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
 	// Types that are valid to be assigned to BondChoice:
@@ -4833,9 +2942,9 @@ type GetSpecType struct {
 	//	*GetSpecType_DisableGpu
 	//	*GetSpecType_EnableGpu
 	//	*GetSpecType_EnableVgpu
-	GpuChoice   isGetSpecType_GpuChoice         `protobuf_oneof:"gpu_choice"`
-	Address     string                          `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,19,opt,name=coordinates" json:"coordinates,omitempty"`
+	GpuChoice   isGetSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
+	Address     string                  `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates *site.Coordinates       `protobuf:"bytes,19,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to K8SClusterChoice:
 	//	*GetSpecType_NoK8SCluster
 	//	*GetSpecType_K8SCluster
@@ -4849,16 +2958,40 @@ type GetSpecType struct {
 	//	*GetSpecType_AllowAllUsb
 	//	*GetSpecType_UsbPolicy
 	UsbPolicyChoice isGetSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
-	SiteState       ves_io_schema_site.SiteState  `protobuf:"varint,30,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
+	SiteState       site.SiteState                `protobuf:"varint,30,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
 	// Types that are valid to be assigned to LocalControlPlaneChoice:
 	//	*GetSpecType_NoLocalControlPlane
 	//	*GetSpecType_LocalControlPlane
 	LocalControlPlaneChoice isGetSpecType_LocalControlPlaneChoice `protobuf_oneof:"local_control_plane_choice"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d141cd889edd2b08, []int{14}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_BondChoice interface {
 	isGetSpecType_BondChoice()
@@ -4910,58 +3043,58 @@ type isGetSpecType_LocalControlPlaneChoice interface {
 }
 
 type GetSpecType_NoBondDevices struct {
-	NoBondDevices *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,oneof"`
+	NoBondDevices *schema.Empty `protobuf:"bytes,7,opt,name=no_bond_devices,json=noBondDevices,proto3,oneof" json:"no_bond_devices,omitempty"`
 }
 type GetSpecType_BondDeviceList struct {
-	BondDeviceList *ves_io_schema_fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,oneof"`
+	BondDeviceList *fleet.FleetBondDevicesListType `protobuf:"bytes,8,opt,name=bond_device_list,json=bondDeviceList,proto3,oneof" json:"bond_device_list,omitempty"`
 }
 type GetSpecType_DefaultNetworkConfig struct {
-	DefaultNetworkConfig *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,oneof"`
+	DefaultNetworkConfig *schema.Empty `protobuf:"bytes,10,opt,name=default_network_config,json=defaultNetworkConfig,proto3,oneof" json:"default_network_config,omitempty"`
 }
 type GetSpecType_CustomNetworkConfig struct {
-	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,oneof"`
+	CustomNetworkConfig *VssNetworkConfiguration `protobuf:"bytes,11,opt,name=custom_network_config,json=customNetworkConfig,proto3,oneof" json:"custom_network_config,omitempty"`
 }
 type GetSpecType_DefaultStorageConfig struct {
-	DefaultStorageConfig *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,oneof"`
+	DefaultStorageConfig *schema.Empty `protobuf:"bytes,13,opt,name=default_storage_config,json=defaultStorageConfig,proto3,oneof" json:"default_storage_config,omitempty"`
 }
 type GetSpecType_CustomStorageConfig struct {
-	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,oneof"`
+	CustomStorageConfig *VssStorageConfiguration `protobuf:"bytes,14,opt,name=custom_storage_config,json=customStorageConfig,proto3,oneof" json:"custom_storage_config,omitempty"`
 }
 type GetSpecType_DisableGpu struct {
-	DisableGpu *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,oneof"`
+	DisableGpu *schema.Empty `protobuf:"bytes,16,opt,name=disable_gpu,json=disableGpu,proto3,oneof" json:"disable_gpu,omitempty"`
 }
 type GetSpecType_EnableGpu struct {
-	EnableGpu *ves_io_schema4.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,oneof"`
+	EnableGpu *schema.Empty `protobuf:"bytes,17,opt,name=enable_gpu,json=enableGpu,proto3,oneof" json:"enable_gpu,omitempty"`
 }
 type GetSpecType_EnableVgpu struct {
-	EnableVgpu *ves_io_schema_fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,oneof"`
+	EnableVgpu *fleet.VGPUConfiguration `protobuf:"bytes,36,opt,name=enable_vgpu,json=enableVgpu,proto3,oneof" json:"enable_vgpu,omitempty"`
 }
 type GetSpecType_NoK8SCluster struct {
-	NoK8SCluster *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,oneof"`
+	NoK8SCluster *schema.Empty `protobuf:"bytes,21,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
 type GetSpecType_K8SCluster struct {
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,oneof"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,22,opt,name=k8s_cluster,json=k8sCluster,proto3,oneof" json:"k8s_cluster,omitempty"`
 }
 type GetSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,24,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GetSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,25,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 type GetSpecType_DenyAllUsb struct {
-	DenyAllUsb *ves_io_schema4.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,oneof"`
+	DenyAllUsb *schema.Empty `protobuf:"bytes,27,opt,name=deny_all_usb,json=denyAllUsb,proto3,oneof" json:"deny_all_usb,omitempty"`
 }
 type GetSpecType_AllowAllUsb struct {
-	AllowAllUsb *ves_io_schema4.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,oneof"`
+	AllowAllUsb *schema.Empty `protobuf:"bytes,28,opt,name=allow_all_usb,json=allowAllUsb,proto3,oneof" json:"allow_all_usb,omitempty"`
 }
 type GetSpecType_UsbPolicy struct {
-	UsbPolicy *ves_io_schema_views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,oneof"`
+	UsbPolicy *views.ObjectRefType `protobuf:"bytes,29,opt,name=usb_policy,json=usbPolicy,proto3,oneof" json:"usb_policy,omitempty"`
 }
 type GetSpecType_NoLocalControlPlane struct {
-	NoLocalControlPlane *ves_io_schema4.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,oneof"`
+	NoLocalControlPlane *schema.Empty `protobuf:"bytes,32,opt,name=no_local_control_plane,json=noLocalControlPlane,proto3,oneof" json:"no_local_control_plane,omitempty"`
 }
 type GetSpecType_LocalControlPlane struct {
-	LocalControlPlane *ves_io_schema_fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,oneof"`
+	LocalControlPlane *fleet.LocalControlPlaneType `protobuf:"bytes,33,opt,name=local_control_plane,json=localControlPlane,proto3,oneof" json:"local_control_plane,omitempty"`
 }
 
 func (*GetSpecType_NoBondDevices) isGetSpecType_BondChoice()                    {}
@@ -5067,21 +3200,21 @@ func (m *GetSpecType) GetOperatingSystemVersion() string {
 	return ""
 }
 
-func (m *GetSpecType) GetNoBondDevices() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoBondDevices() *schema.Empty {
 	if x, ok := m.GetBondChoice().(*GetSpecType_NoBondDevices); ok {
 		return x.NoBondDevices
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetBondDeviceList() *ves_io_schema_fleet.FleetBondDevicesListType {
+func (m *GetSpecType) GetBondDeviceList() *fleet.FleetBondDevicesListType {
 	if x, ok := m.GetBondChoice().(*GetSpecType_BondDeviceList); ok {
 		return x.BondDeviceList
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultNetworkConfig() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDefaultNetworkConfig() *schema.Empty {
 	if x, ok := m.GetNetworkCfgChoice().(*GetSpecType_DefaultNetworkConfig); ok {
 		return x.DefaultNetworkConfig
 	}
@@ -5095,7 +3228,7 @@ func (m *GetSpecType) GetCustomNetworkConfig() *VssNetworkConfiguration {
 	return nil
 }
 
-func (m *GetSpecType) GetDefaultStorageConfig() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDefaultStorageConfig() *schema.Empty {
 	if x, ok := m.GetStorageCfgChoice().(*GetSpecType_DefaultStorageConfig); ok {
 		return x.DefaultStorageConfig
 	}
@@ -5109,21 +3242,21 @@ func (m *GetSpecType) GetCustomStorageConfig() *VssStorageConfiguration {
 	return nil
 }
 
-func (m *GetSpecType) GetDisableGpu() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDisableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GetSpecType_DisableGpu); ok {
 		return x.DisableGpu
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetEnableGpu() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetEnableGpu() *schema.Empty {
 	if x, ok := m.GetGpuChoice().(*GetSpecType_EnableGpu); ok {
 		return x.EnableGpu
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetEnableVgpu() *ves_io_schema_fleet.VGPUConfiguration {
+func (m *GetSpecType) GetEnableVgpu() *fleet.VGPUConfiguration {
 	if x, ok := m.GetGpuChoice().(*GetSpecType_EnableVgpu); ok {
 		return x.EnableVgpu
 	}
@@ -5137,86 +3270,86 @@ func (m *GetSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *GetSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *GetSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetNoK8SCluster() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*GetSpecType_NoK8SCluster); ok {
 		return x.NoK8SCluster
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetK8SCluster() *views.ObjectRefType {
 	if x, ok := m.GetK8SClusterChoice().(*GetSpecType_K8SCluster); ok {
 		return x.K8SCluster
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDenyAllUsb() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDenyAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_DenyAllUsb); ok {
 		return x.DenyAllUsb
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAllowAllUsb() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetAllowAllUsb() *schema.Empty {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_AllowAllUsb); ok {
 		return x.AllowAllUsb
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetUsbPolicy() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetUsbPolicy() *views.ObjectRefType {
 	if x, ok := m.GetUsbPolicyChoice().(*GetSpecType_UsbPolicy); ok {
 		return x.UsbPolicy
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetSiteState() ves_io_schema_site.SiteState {
+func (m *GetSpecType) GetSiteState() site.SiteState {
 	if m != nil {
 		return m.SiteState
 	}
-	return ves_io_schema_site.ONLINE
+	return site.ONLINE
 }
 
-func (m *GetSpecType) GetNoLocalControlPlane() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoLocalControlPlane() *schema.Empty {
 	if x, ok := m.GetLocalControlPlaneChoice().(*GetSpecType_NoLocalControlPlane); ok {
 		return x.NoLocalControlPlane
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLocalControlPlane() *ves_io_schema_fleet.LocalControlPlaneType {
+func (m *GetSpecType) GetLocalControlPlane() *fleet.LocalControlPlaneType {
 	if x, ok := m.GetLocalControlPlaneChoice().(*GetSpecType_LocalControlPlane); ok {
 		return x.LocalControlPlane
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_NoBondDevices)(nil),
 		(*GetSpecType_BondDeviceList)(nil),
 		(*GetSpecType_DefaultNetworkConfig)(nil),
@@ -5238,457 +3371,25 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GetSpecType_NoBondDevices:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoBondDevices); err != nil {
-			return err
-		}
-	case *GetSpecType_BondDeviceList:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BondDeviceList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.BondChoice has unexpected type %T", x)
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *GetSpecType_DefaultNetworkConfig:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultNetworkConfig); err != nil {
-			return err
-		}
-	case *GetSpecType_CustomNetworkConfig:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomNetworkConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.NetworkCfgChoice has unexpected type %T", x)
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *GetSpecType_DefaultStorageConfig:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultStorageConfig); err != nil {
-			return err
-		}
-	case *GetSpecType_CustomStorageConfig:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CustomStorageConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.StorageCfgChoice has unexpected type %T", x)
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GetSpecType_DisableGpu:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableGpu); err != nil {
-			return err
-		}
-	case *GetSpecType_EnableGpu:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableGpu); err != nil {
-			return err
-		}
-	case *GetSpecType_EnableVgpu:
-		_ = b.EncodeVarint(36<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableVgpu); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.GpuChoice has unexpected type %T", x)
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GetSpecType_NoK8SCluster:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoK8SCluster); err != nil {
-			return err
-		}
-	case *GetSpecType_K8SCluster:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.K8SClusterChoice has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GetSpecType_LogReceiver:
-		_ = b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GetSpecType_DenyAllUsb:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyAllUsb); err != nil {
-			return err
-		}
-	case *GetSpecType_AllowAllUsb:
-		_ = b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowAllUsb); err != nil {
-			return err
-		}
-	case *GetSpecType_UsbPolicy:
-		_ = b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UsbPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.UsbPolicyChoice has unexpected type %T", x)
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *GetSpecType_NoLocalControlPlane:
-		_ = b.EncodeVarint(32<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoLocalControlPlane); err != nil {
-			return err
-		}
-	case *GetSpecType_LocalControlPlane:
-		_ = b.EncodeVarint(33<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalControlPlane); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.LocalControlPlaneChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 7: // bond_choice.no_bond_devices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GetSpecType_NoBondDevices{msg}
-		return true, err
-	case 8: // bond_choice.bond_device_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.FleetBondDevicesListType)
-		err := b.DecodeMessage(msg)
-		m.BondChoice = &GetSpecType_BondDeviceList{msg}
-		return true, err
-	case 10: // network_cfg_choice.default_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &GetSpecType_DefaultNetworkConfig{msg}
-		return true, err
-	case 11: // network_cfg_choice.custom_network_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssNetworkConfiguration)
-		err := b.DecodeMessage(msg)
-		m.NetworkCfgChoice = &GetSpecType_CustomNetworkConfig{msg}
-		return true, err
-	case 13: // storage_cfg_choice.default_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &GetSpecType_DefaultStorageConfig{msg}
-		return true, err
-	case 14: // storage_cfg_choice.custom_storage_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(VssStorageConfiguration)
-		err := b.DecodeMessage(msg)
-		m.StorageCfgChoice = &GetSpecType_CustomStorageConfig{msg}
-		return true, err
-	case 16: // gpu_choice.disable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_DisableGpu{msg}
-		return true, err
-	case 17: // gpu_choice.enable_gpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_EnableGpu{msg}
-		return true, err
-	case 36: // gpu_choice.enable_vgpu
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.VGPUConfiguration)
-		err := b.DecodeMessage(msg)
-		m.GpuChoice = &GetSpecType_EnableVgpu{msg}
-		return true, err
-	case 21: // k8s_cluster_choice.no_k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GetSpecType_NoK8SCluster{msg}
-		return true, err
-	case 22: // k8s_cluster_choice.k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GetSpecType_K8SCluster{msg}
-		return true, err
-	case 24: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 25: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogReceiver{msg}
-		return true, err
-	case 27: // usb_policy_choice.deny_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_DenyAllUsb{msg}
-		return true, err
-	case 28: // usb_policy_choice.allow_all_usb
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_AllowAllUsb{msg}
-		return true, err
-	case 29: // usb_policy_choice.usb_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.UsbPolicyChoice = &GetSpecType_UsbPolicy{msg}
-		return true, err
-	case 32: // local_control_plane_choice.no_local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &GetSpecType_NoLocalControlPlane{msg}
-		return true, err
-	case 33: // local_control_plane_choice.local_control_plane
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_fleet.LocalControlPlaneType)
-		err := b.DecodeMessage(msg)
-		m.LocalControlPlaneChoice = &GetSpecType_LocalControlPlane{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// bond_choice
-	switch x := m.BondChoice.(type) {
-	case *GetSpecType_NoBondDevices:
-		s := proto.Size(x.NoBondDevices)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_BondDeviceList:
-		s := proto.Size(x.BondDeviceList)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// network_cfg_choice
-	switch x := m.NetworkCfgChoice.(type) {
-	case *GetSpecType_DefaultNetworkConfig:
-		s := proto.Size(x.DefaultNetworkConfig)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_CustomNetworkConfig:
-		s := proto.Size(x.CustomNetworkConfig)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// storage_cfg_choice
-	switch x := m.StorageCfgChoice.(type) {
-	case *GetSpecType_DefaultStorageConfig:
-		s := proto.Size(x.DefaultStorageConfig)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_CustomStorageConfig:
-		s := proto.Size(x.CustomStorageConfig)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// gpu_choice
-	switch x := m.GpuChoice.(type) {
-	case *GetSpecType_DisableGpu:
-		s := proto.Size(x.DisableGpu)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_EnableGpu:
-		s := proto.Size(x.EnableGpu)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_EnableVgpu:
-		s := proto.Size(x.EnableVgpu)
-		n += proto.SizeVarint(36<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GetSpecType_NoK8SCluster:
-		s := proto.Size(x.NoK8SCluster)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_K8SCluster:
-		s := proto.Size(x.K8SCluster)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(25<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// usb_policy_choice
-	switch x := m.UsbPolicyChoice.(type) {
-	case *GetSpecType_DenyAllUsb:
-		s := proto.Size(x.DenyAllUsb)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AllowAllUsb:
-		s := proto.Size(x.AllowAllUsb)
-		n += proto.SizeVarint(28<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_UsbPolicy:
-		s := proto.Size(x.UsbPolicy)
-		n += proto.SizeVarint(29<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// local_control_plane_choice
-	switch x := m.LocalControlPlaneChoice.(type) {
-	case *GetSpecType_NoLocalControlPlane:
-		s := proto.Size(x.NoLocalControlPlane)
-		n += proto.SizeVarint(32<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_LocalControlPlane:
-		s := proto.Size(x.LocalControlPlane)
-		n += proto.SizeVarint(33<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*Interface)(nil), "ves.io.schema.views.voltstack_site.Interface")
 	golang_proto.RegisterType((*Interface)(nil), "ves.io.schema.views.voltstack_site.Interface")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.Interface.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.Interface.LabelsEntry")
 	proto.RegisterType((*InterfaceListType)(nil), "ves.io.schema.views.voltstack_site.InterfaceListType")
 	golang_proto.RegisterType((*InterfaceListType)(nil), "ves.io.schema.views.voltstack_site.InterfaceListType")
 	proto.RegisterType((*StorageInterfaceType)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceType")
 	golang_proto.RegisterType((*StorageInterfaceType)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceType.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceType.LabelsEntry")
 	proto.RegisterType((*StorageInterfaceListType)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceListType")
 	golang_proto.RegisterType((*StorageInterfaceListType)(nil), "ves.io.schema.views.voltstack_site.StorageInterfaceListType")
 	proto.RegisterType((*StaticRoutesListType)(nil), "ves.io.schema.views.voltstack_site.StaticRoutesListType")
 	golang_proto.RegisterType((*StaticRoutesListType)(nil), "ves.io.schema.views.voltstack_site.StaticRoutesListType")
 	proto.RegisterType((*VnConfiguration)(nil), "ves.io.schema.views.voltstack_site.VnConfiguration")
 	golang_proto.RegisterType((*VnConfiguration)(nil), "ves.io.schema.views.voltstack_site.VnConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.VnConfiguration.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.voltstack_site.VnConfiguration.LabelsEntry")
 	proto.RegisterType((*SliVnConfiguration)(nil), "ves.io.schema.views.voltstack_site.SliVnConfiguration")
 	golang_proto.RegisterType((*SliVnConfiguration)(nil), "ves.io.schema.views.voltstack_site.SliVnConfiguration")
 	proto.RegisterType((*GlobalNetworkConnectionType)(nil), "ves.io.schema.views.voltstack_site.GlobalNetworkConnectionType")
@@ -5708,6 +3409,256 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.voltstack_site.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.voltstack_site.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/voltstack_site/types.proto", fileDescriptor_d141cd889edd2b08)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/voltstack_site/types.proto", fileDescriptor_d141cd889edd2b08)
+}
+
+var fileDescriptor_d141cd889edd2b08 = []byte{
+	// 3802 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4d, 0x6c, 0x1b, 0x49,
+	0x76, 0x56, 0x91, 0x94, 0x44, 0x3d, 0x4a, 0x54, 0xb3, 0xf5, 0xd7, 0x96, 0x6d, 0x4a, 0xe6, 0xcc,
+	0xee, 0x78, 0xed, 0x16, 0x65, 0x92, 0xfa, 0xb3, 0x77, 0xd6, 0xb3, 0x6e, 0x6b, 0xc6, 0xb2, 0xe6,
+	0xcf, 0xa1, 0x3c, 0xc2, 0xee, 0x62, 0x13, 0xa2, 0xc9, 0x2e, 0xd1, 0xbd, 0x6e, 0x75, 0x73, 0xbb,
+	0x9b, 0xd4, 0x3a, 0x81, 0x81, 0x81, 0x03, 0x24, 0x40, 0x72, 0x09, 0x66, 0x81, 0x04, 0xc8, 0x69,
+	0x81, 0xec, 0x61, 0x62, 0x20, 0xc8, 0x21, 0xa7, 0x84, 0x7b, 0x10, 0x0c, 0x04, 0x59, 0xe4, 0xa4,
+	0x43, 0x0e, 0x83, 0x9c, 0x76, 0x34, 0x17, 0x6f, 0x4e, 0x73, 0x5c, 0xf8, 0x10, 0x04, 0x55, 0x5d,
+	0xdd, 0xec, 0x6e, 0x36, 0x29, 0x5a, 0x9e, 0x59, 0xec, 0x66, 0x75, 0xd1, 0x50, 0x55, 0xef, 0x7d,
+	0xef, 0x55, 0xd5, 0xab, 0xf7, 0xbe, 0x57, 0x94, 0x07, 0xf2, 0x2d, 0x6c, 0xe5, 0x55, 0x63, 0xd9,
+	0xaa, 0x3d, 0xc0, 0xfb, 0xf2, 0x72, 0x4b, 0xc5, 0x07, 0xd6, 0x72, 0xcb, 0xd0, 0x6c, 0xcb, 0x96,
+	0x6b, 0x0f, 0x2b, 0x96, 0x6a, 0xe3, 0x65, 0xfb, 0x51, 0x03, 0x5b, 0xf9, 0x86, 0x69, 0xd8, 0x06,
+	0x9f, 0x73, 0xe4, 0xf3, 0x8e, 0x7c, 0x9e, 0xca, 0xe7, 0x83, 0xf2, 0xf3, 0x4b, 0x75, 0xd5, 0x7e,
+	0xd0, 0xac, 0xe6, 0x6b, 0xc6, 0xfe, 0x72, 0xdd, 0xa8, 0x1b, 0xcb, 0x54, 0xb5, 0xda, 0xdc, 0xa3,
+	0xbf, 0xd1, 0x5f, 0xe8, 0x27, 0x07, 0x72, 0x7e, 0x21, 0xe8, 0xc2, 0x9e, 0x86, 0xb1, 0xed, 0xb7,
+	0x39, 0x7f, 0x25, 0x28, 0xa0, 0x63, 0xfb, 0xc0, 0x30, 0x1f, 0x56, 0xf6, 0x54, 0x13, 0x1f, 0xc8,
+	0x9a, 0x16, 0x90, 0xbd, 0x1a, 0x2d, 0xab, 0xea, 0x36, 0x36, 0xf7, 0xe4, 0x5a, 0x60, 0x31, 0xf3,
+	0xe7, 0x83, 0xc2, 0x46, 0xc3, 0x56, 0x0d, 0xdd, 0x9d, 0xcc, 0x06, 0x27, 0xc3, 0x3b, 0x31, 0x7f,
+	0x2e, 0x38, 0xef, 0x9f, 0xba, 0x10, 0xda, 0x54, 0x59, 0x53, 0x15, 0xd9, 0xc6, 0x6c, 0x76, 0xb1,
+	0x7b, 0xcb, 0x2b, 0x41, 0xd3, 0xaf, 0x47, 0x1d, 0x0a, 0x71, 0xa0, 0xe2, 0xb7, 0xb2, 0x10, 0x25,
+	0xe5, 0x17, 0xf8, 0x56, 0x58, 0xc0, 0xb4, 0x9b, 0xb2, 0x56, 0x61, 0x7b, 0xe2, 0x17, 0xcd, 0xfd,
+	0x7c, 0x04, 0xc6, 0xee, 0xba, 0x7b, 0xc4, 0x8b, 0x90, 0x52, 0xb0, 0x55, 0x33, 0x55, 0xea, 0x95,
+	0x80, 0x16, 0xd1, 0xe5, 0x31, 0x09, 0xfe, 0xed, 0xd7, 0x87, 0xf1, 0x61, 0x33, 0x2e, 0x7c, 0x1c,
+	0x2b, 0xfb, 0xa7, 0x79, 0x0c, 0x23, 0x9a, 0x5c, 0xc5, 0x9a, 0x25, 0xc4, 0x16, 0xe3, 0x97, 0x53,
+	0xc5, 0xeb, 0xf9, 0x93, 0x63, 0x24, 0xef, 0x19, 0xcb, 0xbf, 0x47, 0x75, 0xdf, 0xd6, 0x6d, 0xf3,
+	0x91, 0xc4, 0xff, 0xfd, 0x2f, 0x50, 0x1c, 0x10, 0x3a, 0xfe, 0xd5, 0xbf, 0xc7, 0x47, 0xfe, 0xea,
+	0x17, 0x28, 0x96, 0x1c, 0x2a, 0x33, 0x70, 0x7e, 0x1f, 0x78, 0x6c, 0x3f, 0xc0, 0xa6, 0x8e, 0xed,
+	0xce, 0x71, 0x0a, 0xc3, 0x8b, 0xe8, 0x72, 0xaa, 0xb8, 0x16, 0x32, 0xd9, 0x75, 0xec, 0xf9, 0xb7,
+	0x99, 0xaa, 0x67, 0xf7, 0xfe, 0xa3, 0x06, 0x96, 0x12, 0x47, 0x6d, 0x84, 0xb6, 0x86, 0xca, 0x19,
+	0x1c, 0x9e, 0xe6, 0x7f, 0x04, 0x53, 0x0a, 0x56, 0xd4, 0x9a, 0x6c, 0x63, 0xc5, 0x67, 0x6f, 0x84,
+	0xda, 0x5b, 0x3f, 0xd1, 0xde, 0xa6, 0xab, 0x1b, 0x30, 0xb8, 0x35, 0x54, 0xe6, 0x95, 0xae, 0x19,
+	0xfe, 0xa7, 0x08, 0xb2, 0x1d, 0x63, 0xfb, 0xb2, 0x2e, 0xd7, 0xf1, 0x3e, 0xd6, 0xfd, 0xeb, 0x1c,
+	0xa5, 0x76, 0x6f, 0x0d, 0x6e, 0xf7, 0x7d, 0x0f, 0x25, 0xb8, 0xe4, 0xe4, 0x61, 0x1b, 0x21, 0xb6,
+	0xec, 0x0b, 0x4a, 0x1f, 0x69, 0xfe, 0x21, 0x70, 0x76, 0x53, 0xd7, 0xb1, 0xe6, 0x73, 0x23, 0x49,
+	0xdd, 0x58, 0x39, 0xd1, 0x8d, 0xfb, 0x54, 0xb1, 0xb7, 0xe5, 0x49, 0x3b, 0x28, 0x30, 0x7f, 0x1d,
+	0x52, 0xbe, 0x40, 0xe0, 0x39, 0x88, 0x3f, 0xc4, 0x8f, 0x9c, 0xc8, 0x2b, 0x93, 0x8f, 0xfc, 0x34,
+	0x0c, 0xb7, 0x64, 0xad, 0x89, 0x85, 0x18, 0x1d, 0x73, 0x7e, 0xb9, 0x11, 0xdb, 0x40, 0x37, 0x56,
+	0x9e, 0xb5, 0xd1, 0x35, 0x38, 0x07, 0xbc, 0x87, 0xb6, 0xf8, 0x3e, 0xb6, 0x65, 0x45, 0xb6, 0x65,
+	0x3e, 0x5e, 0x10, 0x8b, 0x30, 0x05, 0xe9, 0xce, 0x14, 0x71, 0x85, 0x47, 0x25, 0xe9, 0x0d, 0xe0,
+	0x3c, 0x77, 0x2b, 0xb5, 0x07, 0x86, 0x5a, 0xc3, 0xfc, 0xd4, 0x61, 0x1b, 0x0d, 0x1f, 0xb5, 0x51,
+	0xfc, 0xb8, 0x8d, 0x46, 0x57, 0xc5, 0x35, 0x71, 0x5d, 0xdc, 0xd8, 0x4e, 0x24, 0xe3, 0x5c, 0x62,
+	0x3b, 0x91, 0x4c, 0x70, 0xc3, 0xb9, 0xbf, 0x40, 0x90, 0xf1, 0xa0, 0xde, 0x53, 0x2d, 0x9b, 0xa2,
+	0xfd, 0x18, 0xc0, 0x83, 0xb2, 0x04, 0x44, 0x2f, 0xc1, 0xd2, 0x4b, 0x5d, 0x02, 0x29, 0x47, 0xf6,
+	0x85, 0x5e, 0xb0, 0x4f, 0x50, 0x8c, 0x5b, 0x74, 0x3f, 0x25, 0xbd, 0x31, 0x01, 0x95, 0x7d, 0x46,
+	0x72, 0x7f, 0x19, 0x87, 0xe9, 0x1d, 0xdb, 0x30, 0xe5, 0x3a, 0x0e, 0x6c, 0xf2, 0x4b, 0x5e, 0xdd,
+	0x46, 0xe8, 0xea, 0x6e, 0x0e, 0xe2, 0x75, 0x94, 0xdd, 0x81, 0x6f, 0x71, 0x0d, 0x32, 0x96, 0xa3,
+	0xef, 0x8b, 0xaa, 0xf8, 0xab, 0x5c, 0xe2, 0x32, 0x67, 0x85, 0x1c, 0x7a, 0x95, 0x60, 0x5a, 0x7e,
+	0xd6, 0x46, 0x57, 0xfb, 0x05, 0x53, 0xda, 0x9f, 0x28, 0x51, 0x29, 0xf7, 0x29, 0x02, 0x21, 0xbc,
+	0x23, 0x5e, 0x64, 0xfc, 0x35, 0x02, 0xbe, 0x6b, 0xb9, 0x6e, 0x88, 0x6c, 0x9c, 0x76, 0xb3, 0x07,
+	0x8a, 0x96, 0x4c, 0x78, 0x57, 0xac, 0xdc, 0x4f, 0x11, 0x09, 0x1a, 0xd9, 0x56, 0x6b, 0x65, 0xa3,
+	0x69, 0x63, 0xcb, 0x73, 0xf3, 0xcf, 0x60, 0xc2, 0xa2, 0xe3, 0x15, 0x93, 0x4e, 0x30, 0x07, 0x8b,
+	0x5d, 0x0e, 0x06, 0x0a, 0x48, 0xde, 0x87, 0xb5, 0xab, 0xe2, 0x83, 0x08, 0xd7, 0xb8, 0x48, 0xd7,
+	0xc6, 0x2d, 0x9f, 0x13, 0xb9, 0x67, 0xc3, 0x30, 0xb9, 0xab, 0xdf, 0x36, 0xf4, 0x3d, 0xb5, 0xde,
+	0x34, 0x65, 0x1a, 0x97, 0x0f, 0xbd, 0xb8, 0x74, 0x3c, 0x79, 0x6b, 0x90, 0xad, 0x0a, 0x81, 0x0c,
+	0x1c, 0x92, 0xdf, 0x05, 0x4e, 0x37, 0x2a, 0xc1, 0x0d, 0x70, 0x22, 0x72, 0x3a, 0x64, 0xf6, 0xed,
+	0xfd, 0x86, 0xfd, 0x68, 0x6b, 0xa8, 0x9c, 0xd6, 0x0d, 0xff, 0x3e, 0xf2, 0x95, 0xf0, 0xfe, 0x25,
+	0xa8, 0xfa, 0x80, 0x07, 0xdc, 0x7d, 0x20, 0x5b, 0x43, 0xc1, 0x3d, 0xe2, 0xdf, 0x85, 0x29, 0xdd,
+	0xa8, 0x28, 0xb5, 0x4a, 0x4d, 0x6b, 0x5a, 0x36, 0x36, 0x2b, 0x75, 0xd3, 0x68, 0x36, 0x58, 0x31,
+	0x8a, 0xf4, 0x52, 0x4a, 0x90, 0x6c, 0xbb, 0x85, 0xca, 0x9c, 0x6e, 0x6c, 0xd6, 0x6e, 0x3b, 0x6a,
+	0x77, 0x88, 0x16, 0x5f, 0x07, 0xae, 0x0b, 0xc9, 0x29, 0x2f, 0xb9, 0x48, 0x87, 0x3f, 0xac, 0xfe,
+	0x08, 0xd7, 0xec, 0x32, 0xde, 0xa3, 0x07, 0x3c, 0xf7, 0xf4, 0x71, 0x97, 0x3a, 0x33, 0x95, 0x56,
+	0x02, 0x86, 0x5e, 0xe5, 0x1a, 0xbe, 0xf3, 0xac, 0x8d, 0x24, 0x98, 0x01, 0xee, 0x03, 0x27, 0xd6,
+	0x3a, 0x97, 0x10, 0x15, 0x80, 0x87, 0x09, 0x67, 0xd7, 0x16, 0xd9, 0xf6, 0xa0, 0x22, 0x11, 0xdd,
+	0xac, 0x2d, 0x32, 0xf3, 0x8b, 0xce, 0x42, 0xd1, 0xaa, 0x74, 0x05, 0xa6, 0xfc, 0x27, 0xe3, 0x4f,
+	0xf4, 0xf1, 0x5f, 0x3a, 0xe5, 0x28, 0x76, 0xdc, 0x46, 0xf1, 0x92, 0xb8, 0x22, 0xe5, 0x61, 0x2e,
+	0xbc, 0x30, 0xbf, 0xfc, 0x08, 0x93, 0x1f, 0x26, 0xf2, 0x6b, 0xe2, 0xfa, 0x76, 0x22, 0x19, 0xe3,
+	0xe2, 0xdb, 0x89, 0xe4, 0x30, 0x37, 0x92, 0xfb, 0x35, 0x02, 0x7e, 0x47, 0x53, 0xc3, 0x71, 0xfc,
+	0xbb, 0x1f, 0x5a, 0x2f, 0xb3, 0x43, 0xce, 0x8a, 0x73, 0xff, 0x1c, 0x87, 0xf3, 0x77, 0x34, 0xa3,
+	0x2a, 0x6b, 0xec, 0x70, 0x6e, 0x1b, 0xba, 0x8e, 0x6b, 0x64, 0xc1, 0x34, 0x9b, 0xec, 0x00, 0x67,
+	0x69, 0x46, 0xc5, 0x36, 0x2a, 0x75, 0x2a, 0x55, 0x51, 0x4c, 0xb6, 0xe8, 0xcb, 0x91, 0x5e, 0x3b,
+	0x58, 0x0c, 0xc4, 0x30, 0x99, 0x97, 0x13, 0x96, 0x66, 0xdc, 0x37, 0x9c, 0xb9, 0x4d, 0x93, 0xbf,
+	0x07, 0x33, 0x8a, 0x6a, 0xc9, 0x55, 0x0d, 0x57, 0xf6, 0x0c, 0xf3, 0x40, 0x36, 0x95, 0x4a, 0xc3,
+	0x34, 0x7e, 0xf2, 0x88, 0x11, 0xc0, 0x1e, 0x77, 0xe0, 0xb9, 0x13, 0x98, 0x53, 0x4c, 0xf5, 0x1d,
+	0x47, 0xf3, 0x1e, 0x51, 0xe4, 0x2b, 0x30, 0x8d, 0xf5, 0x08, 0x40, 0xe7, 0x52, 0x7d, 0x23, 0x04,
+	0xe8, 0x57, 0x75, 0xce, 0xd8, 0x21, 0x90, 0xcc, 0x02, 0xef, 0x40, 0xf9, 0xa5, 0x6e, 0xbc, 0xf1,
+	0xac, 0x8d, 0x5e, 0x83, 0x4b, 0x30, 0xef, 0x2c, 0x62, 0xd1, 0x0d, 0xe5, 0xce, 0x76, 0x59, 0xa4,
+	0xa4, 0xac, 0x48, 0x39, 0xc8, 0xd4, 0xbc, 0x31, 0xf7, 0x00, 0x26, 0x0e, 0xdb, 0x28, 0x46, 0x92,
+	0xe9, 0x71, 0x1b, 0xa1, 0x92, 0xb4, 0x0c, 0xd3, 0x01, 0x37, 0x5d, 0xb1, 0x39, 0x42, 0x59, 0xd8,
+	0x39, 0x25, 0xc8, 0x39, 0xad, 0x8a, 0x6b, 0x5f, 0xb6, 0x11, 0xda, 0x4e, 0x24, 0x11, 0x17, 0x63,
+	0xb4, 0xa5, 0x8d, 0x60, 0xa1, 0xc7, 0x89, 0x79, 0x35, 0xe0, 0xef, 0x10, 0xcc, 0xb3, 0xf3, 0x72,
+	0x0b, 0x6f, 0xc7, 0xa9, 0x97, 0xca, 0xc3, 0x7d, 0x62, 0x43, 0x12, 0x02, 0xe5, 0x21, 0xd9, 0x29,
+	0x0f, 0x65, 0xa1, 0x1e, 0xad, 0x66, 0xe5, 0xfe, 0x67, 0x12, 0xe6, 0x76, 0x2d, 0xab, 0x33, 0xe3,
+	0xbb, 0x60, 0xdf, 0x81, 0xb4, 0x82, 0xf7, 0xe4, 0xa6, 0x66, 0x13, 0x6f, 0xf7, 0xd4, 0x3a, 0x4d,
+	0x25, 0xbd, 0xaf, 0xd7, 0x04, 0x93, 0x76, 0x50, 0xf8, 0x1f, 0x00, 0x90, 0x50, 0x65, 0xaa, 0x4e,
+	0x90, 0x96, 0x4e, 0x51, 0x6b, 0xbc, 0x46, 0x62, 0xcc, 0xd2, 0x0c, 0x86, 0xbd, 0x09, 0xbc, 0xeb,
+	0x9a, 0xa5, 0xa9, 0xae, 0x8d, 0x73, 0x7d, 0xdc, 0x43, 0x65, 0x8e, 0x69, 0xec, 0x68, 0x2a, 0x43,
+	0xf9, 0x63, 0xe2, 0xa1, 0xa7, 0x3d, 0x1f, 0x49, 0x94, 0xa2, 0x2f, 0x7f, 0x57, 0x36, 0x62, 0x4e,
+	0x22, 0xe2, 0xa4, 0x0b, 0x7f, 0x0f, 0x04, 0xd7, 0x49, 0x1f, 0x1b, 0x76, 0x8c, 0xf5, 0xb9, 0x59,
+	0x5b, 0xb1, 0xf2, 0x2c, 0xd3, 0xf3, 0xf8, 0x05, 0x43, 0x54, 0x20, 0xdd, 0x41, 0xd2, 0x54, 0xcb,
+	0x66, 0x17, 0x6a, 0xf5, 0xa5, 0x08, 0xb1, 0x1b, 0x96, 0xcc, 0xe7, 0x58, 0x79, 0x42, 0xf5, 0x4f,
+	0xf1, 0x12, 0x64, 0x74, 0xc3, 0x0b, 0xd4, 0x86, 0xa1, 0xa9, 0xb5, 0x47, 0xac, 0x39, 0x89, 0x76,
+	0x38, 0x5e, 0x9e, 0xd4, 0x0d, 0x16, 0x42, 0xf7, 0xa8, 0x38, 0x6f, 0xc1, 0x9c, 0x5c, 0xb3, 0xd5,
+	0x16, 0x0e, 0xe2, 0xa8, 0xd8, 0x12, 0xc6, 0x28, 0xd2, 0xf5, 0x1e, 0x84, 0xd4, 0x7d, 0x78, 0xc8,
+	0xdf, 0xa2, 0xea, 0x7e, 0x54, 0x15, 0x5b, 0x34, 0x7f, 0xc5, 0xcb, 0x33, 0x72, 0xd4, 0x24, 0xab,
+	0x08, 0xc1, 0x8c, 0x93, 0xea, 0xe3, 0x77, 0x82, 0x54, 0x84, 0x40, 0xde, 0xfa, 0x73, 0x04, 0x17,
+	0x99, 0xdf, 0xc1, 0x8c, 0xe0, 0x79, 0x3f, 0x4e, 0xf1, 0x6e, 0x0e, 0xe6, 0xbd, 0x1f, 0x3b, 0xb0,
+	0x84, 0x44, 0x79, 0x5e, 0xee, 0x29, 0xc1, 0xbf, 0x0f, 0x73, 0x41, 0xeb, 0xb2, 0xa6, 0x19, 0x07,
+	0xe4, 0xa7, 0x30, 0xd7, 0x77, 0x39, 0x6e, 0x1a, 0xa3, 0x70, 0xb7, 0x88, 0xd2, 0x2d, 0x4d, 0x63,
+	0xe7, 0x19, 0xcc, 0x3f, 0x42, 0xba, 0x0f, 0xd0, 0x30, 0x39, 0xcf, 0x40, 0xa6, 0xe1, 0xf7, 0x60,
+	0x2a, 0x94, 0xc0, 0x68, 0xf8, 0x4d, 0x46, 0xb6, 0xac, 0xfe, 0xd2, 0xd3, 0x33, 0x29, 0x6e, 0x0d,
+	0x97, 0x33, 0x81, 0xb4, 0x44, 0x63, 0xef, 0x0a, 0xa4, 0x8c, 0xa6, 0x6d, 0xa9, 0x0a, 0xae, 0xb4,
+	0xd4, 0x86, 0xc0, 0xd1, 0x16, 0x6b, 0x8c, 0xa4, 0xb2, 0x84, 0x19, 0x6b, 0xa0, 0x32, 0xb0, 0xd9,
+	0x5d, 0xb5, 0xc1, 0x6f, 0x00, 0xef, 0xca, 0xea, 0xf2, 0x3e, 0xb6, 0xb0, 0xd9, 0xc2, 0xa6, 0x90,
+	0x09, 0xab, 0x64, 0x98, 0xd0, 0x07, 0x9e, 0x0c, 0x5f, 0x80, 0x89, 0x6a, 0xbd, 0xe1, 0x14, 0x65,
+	0xb3, 0xa2, 0x2a, 0x02, 0x4f, 0x95, 0x48, 0x59, 0x40, 0x1d, 0xc5, 0x54, 0xb5, 0xde, 0xa0, 0x85,
+	0xdc, 0xbc, 0xab, 0xf0, 0xeb, 0xc0, 0x11, 0x95, 0x06, 0xc6, 0x66, 0x45, 0x56, 0x14, 0x13, 0x5b,
+	0x96, 0x30, 0x15, 0xa5, 0x95, 0xae, 0xd6, 0x1b, 0xf7, 0x30, 0x36, 0x6f, 0x39, 0x42, 0xfc, 0x26,
+	0x4c, 0xb4, 0xd4, 0x46, 0xa5, 0x65, 0x9a, 0x8d, 0xca, 0xbe, 0xa1, 0x60, 0x61, 0x7a, 0x11, 0x5d,
+	0x4e, 0x17, 0xe7, 0x43, 0x7b, 0xb6, 0xab, 0x36, 0x76, 0x4d, 0xb3, 0xe1, 0xdc, 0x4b, 0x82, 0x58,
+	0x4e, 0xb5, 0x9c, 0xa1, 0xf7, 0x0d, 0x05, 0xf3, 0xb7, 0x60, 0xd6, 0x79, 0xa3, 0x32, 0x2a, 0xce,
+	0x7f, 0xd9, 0xe3, 0x41, 0x43, 0x98, 0x89, 0x72, 0x82, 0x27, 0x42, 0xf7, 0x8d, 0x1d, 0xf2, 0xd3,
+	0x79, 0x0c, 0x68, 0xf0, 0x6f, 0xc1, 0x14, 0xd3, 0x52, 0xb0, 0xac, 0x54, 0x6c, 0x75, 0x1f, 0x1b,
+	0x4d, 0x5b, 0x98, 0x5d, 0x44, 0x97, 0x27, 0xa4, 0x49, 0x57, 0x7f, 0xe4, 0x4a, 0x42, 0xf8, 0xd9,
+	0xff, 0x42, 0x39, 0xe3, 0xc8, 0x6e, 0x62, 0x59, 0xb9, 0xef, 0x48, 0xde, 0xf8, 0x47, 0xf4, 0xac,
+	0x8d, 0x7e, 0x8e, 0x60, 0x11, 0x66, 0x7c, 0xe5, 0xd6, 0x57, 0x30, 0x46, 0x0b, 0x62, 0x61, 0x4d,
+	0x2c, 0xac, 0xc3, 0x05, 0x98, 0xeb, 0xb4, 0x78, 0x41, 0x19, 0xb4, 0x02, 0x59, 0x98, 0xdd, 0xc1,
+	0xb5, 0xa6, 0xa9, 0xda, 0x8f, 0x42, 0x93, 0x89, 0x75, 0xb1, 0x70, 0x0d, 0x04, 0xe0, 0x59, 0x55,
+	0xf7, 0x57, 0xf3, 0x58, 0xa1, 0x04, 0x97, 0x61, 0xf6, 0x96, 0xd2, 0x92, 0xf5, 0x1a, 0x56, 0x42,
+	0x9a, 0xe9, 0xc2, 0x86, 0x58, 0xb8, 0x2e, 0x16, 0xaf, 0x89, 0xc5, 0x82, 0x58, 0x2c, 0x4a, 0x17,
+	0x59, 0xf1, 0x71, 0x0a, 0xf9, 0xa4, 0xaf, 0xde, 0xc7, 0x8b, 0x62, 0x49, 0x7a, 0x8d, 0x65, 0x7e,
+	0x67, 0x7a, 0xe6, 0xb0, 0x8d, 0xce, 0x1d, 0xb5, 0x91, 0x70, 0xdc, 0x46, 0xc3, 0xc5, 0x55, 0xb1,
+	0x48, 0xab, 0xbc, 0xf4, 0x5a, 0xc4, 0x2b, 0xc6, 0x24, 0x7b, 0xc5, 0x70, 0xe9, 0x80, 0x74, 0x19,
+	0x66, 0x82, 0x99, 0xd2, 0x2f, 0x99, 0x3c, 0x6a, 0xa3, 0x51, 0x22, 0xb9, 0x21, 0x5e, 0x97, 0xc4,
+	0x1e, 0x2c, 0x63, 0xfa, 0xb0, 0x8d, 0x52, 0x47, 0x6d, 0x04, 0xc7, 0x6d, 0x94, 0x2c, 0x14, 0xc4,
+	0x62, 0x49, 0x2c, 0x14, 0xa5, 0x3c, 0xcc, 0x84, 0x19, 0x43, 0xc7, 0xd9, 0x34, 0x23, 0x25, 0x13,
+	0xc4, 0xe1, 0xc2, 0x8a, 0x58, 0x58, 0xf5, 0x28, 0x89, 0xc0, 0x9d, 0x73, 0x88, 0xc9, 0x76, 0x22,
+	0x39, 0xca, 0x25, 0xb7, 0x13, 0x49, 0xe0, 0x52, 0xdb, 0x89, 0xe4, 0x04, 0x97, 0xce, 0x3d, 0x1f,
+	0xa5, 0xc5, 0x9e, 0xb5, 0xbd, 0xc1, 0x0d, 0xdc, 0x86, 0x19, 0xca, 0xa6, 0xbb, 0xfa, 0xe9, 0xfe,
+	0x35, 0x7f, 0x8a, 0x50, 0xea, 0x50, 0x2f, 0xcc, 0xff, 0x29, 0xcc, 0x76, 0x01, 0x39, 0xf9, 0xc2,
+	0x61, 0x01, 0x6f, 0x9e, 0xa6, 0x39, 0x0f, 0x55, 0xad, 0xa1, 0xf2, 0xb4, 0x15, 0x21, 0xc1, 0x92,
+	0x9d, 0x6b, 0x5e, 0xc1, 0x2d, 0xd5, 0x7b, 0xc8, 0xec, 0x45, 0x0c, 0x26, 0xbd, 0x35, 0x6c, 0x52,
+	0x71, 0x5e, 0x26, 0xb4, 0xdd, 0x0f, 0xe0, 0xaf, 0xb5, 0xcb, 0x21, 0x14, 0xfa, 0xa4, 0x9e, 0x7f,
+	0x87, 0xfc, 0x0c, 0xa0, 0x78, 0x79, 0xae, 0xf3, 0x5c, 0xd0, 0x99, 0x20, 0xdb, 0xed, 0x11, 0x18,
+	0x66, 0xaa, 0xa6, 0xc9, 0x96, 0xd5, 0xb7, 0xce, 0xc6, 0xca, 0x53, 0x2e, 0x87, 0x61, 0x47, 0x48,
+	0x54, 0xf8, 0x3f, 0xe9, 0xbc, 0x83, 0x50, 0x0c, 0xc7, 0x5b, 0xa7, 0xcc, 0xe6, 0x4f, 0xf4, 0x96,
+	0x62, 0x78, 0xce, 0xc6, 0xbc, 0x17, 0x1f, 0x6f, 0x3c, 0xb2, 0xd1, 0x4a, 0xf5, 0xa5, 0x03, 0x27,
+	0x36, 0x5a, 0xe3, 0xaf, 0xd8, 0x68, 0xc5, 0x83, 0x8d, 0xd6, 0x8d, 0xbb, 0xcf, 0xda, 0xe8, 0x6d,
+	0xf8, 0x06, 0x5c, 0x64, 0x8b, 0x5a, 0x8c, 0x4e, 0x50, 0x89, 0x02, 0xc9, 0x2f, 0x17, 0x60, 0xc6,
+	0x15, 0x0b, 0x4e, 0xc7, 0x57, 0xc4, 0x75, 0xe9, 0x2a, 0x08, 0xdd, 0xc1, 0xdb, 0x2b, 0x8f, 0x5c,
+	0x86, 0x99, 0x50, 0xa4, 0xf4, 0xca, 0x13, 0x6f, 0xc0, 0x74, 0xf0, 0x90, 0x7a, 0xa7, 0x89, 0xc8,
+	0x9e, 0x91, 0x5c, 0xfb, 0x14, 0xbb, 0xf6, 0x40, 0xaf, 0x7d, 0x41, 0x2c, 0x14, 0xfd, 0x9d, 0x88,
+	0xff, 0xc2, 0xe7, 0xfe, 0x63, 0x0e, 0xd2, 0x4e, 0x12, 0xdd, 0x69, 0xe0, 0x1a, 0x6d, 0x42, 0xfe,
+	0x29, 0x06, 0x33, 0x64, 0x6f, 0xb1, 0x69, 0xca, 0x95, 0x1a, 0x36, 0x6d, 0x75, 0x4f, 0xc5, 0x4a,
+	0xe5, 0xc1, 0x01, 0x7b, 0xc8, 0xfc, 0x0d, 0xfa, 0xef, 0x36, 0x5a, 0x50, 0xad, 0xd6, 0xd2, 0xc6,
+	0xb5, 0x6b, 0xd7, 0x96, 0x2c, 0x6c, 0xaa, 0xd8, 0x5a, 0xf2, 0x4e, 0x63, 0xa9, 0x66, 0xec, 0x57,
+	0x8d, 0xe3, 0x36, 0xfa, 0x57, 0x04, 0xaf, 0x2b, 0x58, 0xd3, 0x96, 0xb0, 0x52, 0xc7, 0xe6, 0xda,
+	0x4a, 0x2f, 0x51, 0x58, 0x50, 0xeb, 0x07, 0x4b, 0xab, 0xbd, 0xb1, 0xe0, 0x24, 0x63, 0x30, 0xdb,
+	0xda, 0x3f, 0x90, 0x4d, 0xdc, 0x35, 0x3e, 0xf5, 0xb0, 0xb5, 0xdf, 0x35, 0x98, 0xab, 0x63, 0x1d,
+	0x9b, 0x6a, 0x6d, 0xc9, 0x52, 0xf5, 0xba, 0x86, 0x97, 0x74, 0xb5, 0x16, 0x96, 0xf9, 0x4d, 0x1b,
+	0x0d, 0xb1, 0x22, 0xc9, 0x21, 0xf6, 0x6e, 0xfb, 0xb3, 0x18, 0x2a, 0x4f, 0xb9, 0xfb, 0x72, 0xdb,
+	0xdd, 0x96, 0xad, 0x03, 0x7e, 0x13, 0xc6, 0xf7, 0x65, 0xfa, 0x5c, 0xa1, 0x1b, 0x0a, 0x76, 0x5e,
+	0x71, 0xc7, 0xa4, 0x4b, 0x5e, 0x83, 0x15, 0x27, 0x9f, 0x92, 0x9f, 0xa0, 0xe1, 0x2b, 0xf1, 0x82,
+	0x58, 0xf2, 0x3d, 0xc1, 0xa5, 0x1c, 0xb5, 0x0f, 0x88, 0x16, 0xbf, 0x01, 0xe3, 0x24, 0x10, 0x3d,
+	0x94, 0x38, 0x45, 0x99, 0xa1, 0xa5, 0xf6, 0x13, 0x14, 0xe7, 0x3e, 0xf6, 0x3f, 0xde, 0xa5, 0x1c,
+	0x51, 0x47, 0x73, 0x1b, 0xce, 0x79, 0xc7, 0x65, 0x19, 0x7b, 0x36, 0xd9, 0x89, 0x4a, 0x0b, 0x9b,
+	0x96, 0x6a, 0xe8, 0xf4, 0xa5, 0x62, 0x4c, 0x4a, 0xbb, 0x0b, 0x62, 0xef, 0xcf, 0x73, 0xae, 0xc2,
+	0x0e, 0x93, 0xdf, 0x75, 0xc4, 0xf9, 0x2d, 0x10, 0x8c, 0x06, 0x26, 0x61, 0xae, 0xd7, 0x2b, 0xd6,
+	0x23, 0xcb, 0xc6, 0xfb, 0x1e, 0xd4, 0x70, 0x24, 0xd4, 0xac, 0x27, 0xbf, 0x43, 0xc5, 0x5d, 0xa4,
+	0x9b, 0x30, 0xa9, 0x1b, 0x95, 0xaa, 0xa1, 0x2b, 0x2c, 0xe2, 0x2d, 0xf6, 0xbe, 0xd5, 0xb3, 0x2b,
+	0xd4, 0x0d, 0xc9, 0xd0, 0x15, 0x27, 0xf7, 0x91, 0x54, 0xc0, 0xf9, 0x94, 0x9d, 0x54, 0xe5, 0xe4,
+	0xbc, 0xa5, 0xde, 0xa9, 0xca, 0x07, 0xd0, 0x55, 0x06, 0xd2, 0x55, 0x6f, 0x92, 0x66, 0xab, 0xf7,
+	0xc0, 0xed, 0x9e, 0xfc, 0xbd, 0x36, 0xe9, 0xb9, 0xa0, 0x6f, 0x15, 0x98, 0x66, 0x5a, 0x81, 0x56,
+	0x98, 0x3f, 0x80, 0x99, 0x5a, 0xd3, 0xb2, 0x8d, 0xfd, 0x30, 0x98, 0x93, 0x00, 0xbf, 0x3d, 0x50,
+	0x3f, 0x1b, 0xdd, 0x5f, 0x7b, 0x2d, 0xe3, 0x94, 0x63, 0x21, 0x68, 0xd8, 0xb7, 0x0c, 0x2f, 0x6f,
+	0x38, 0x96, 0x27, 0xfa, 0x56, 0x88, 0xe9, 0x50, 0x85, 0x08, 0x2f, 0x23, 0x04, 0x96, 0x7e, 0xa9,
+	0x65, 0x44, 0x31, 0x07, 0xaf, 0x8b, 0x64, 0xcb, 0x08, 0x1a, 0xfe, 0x0e, 0xa4, 0xdc, 0xa7, 0xa5,
+	0x7a, 0xa3, 0x49, 0xf9, 0x7c, 0xff, 0x47, 0xd5, 0x78, 0x19, 0x98, 0xc2, 0x9d, 0x46, 0x93, 0xff,
+	0x36, 0x00, 0x7b, 0x47, 0x22, 0xda, 0x99, 0x01, 0xb4, 0xc7, 0x1c, 0x79, 0xa2, 0xfc, 0x21, 0xa4,
+	0x98, 0x72, 0x8b, 0x68, 0xbf, 0x4e, 0xb5, 0xbf, 0x19, 0x19, 0x65, 0xbb, 0x77, 0xee, 0x7d, 0x14,
+	0x5a, 0x95, 0xeb, 0x8d, 0x03, 0xb1, 0x5b, 0x6f, 0x34, 0xf9, 0xd7, 0x61, 0xd4, 0xa5, 0xfe, 0x7c,
+	0xd7, 0x77, 0x3f, 0xee, 0x14, 0x7f, 0x0b, 0x52, 0x35, 0xc3, 0x30, 0x15, 0x55, 0x97, 0x49, 0xa9,
+	0x9b, 0xa2, 0x66, 0x17, 0x42, 0x66, 0xe9, 0x8e, 0xde, 0xee, 0x88, 0x95, 0xfd, 0x3a, 0xbc, 0x04,
+	0x69, 0xdd, 0xa8, 0x3c, 0xdc, 0xb0, 0xdc, 0x17, 0x53, 0xca, 0xf2, 0xfb, 0x2f, 0x3d, 0x51, 0x1e,
+	0xd7, 0x8d, 0x77, 0x37, 0x2c, 0xf6, 0x4c, 0xcb, 0x7f, 0x1f, 0x52, 0x7e, 0x80, 0xd9, 0x81, 0x1f,
+	0xa1, 0xf9, 0xa7, 0x8f, 0xfd, 0x9a, 0x0c, 0x1c, 0x1e, 0x76, 0xa0, 0xef, 0xc3, 0x9c, 0x66, 0xd4,
+	0xad, 0x8a, 0x65, 0x9b, 0x58, 0xde, 0x27, 0x29, 0x85, 0x1d, 0x99, 0x22, 0x08, 0x27, 0xfa, 0x39,
+	0x5c, 0x9e, 0x21, 0xca, 0x3b, 0xae, 0xee, 0x26, 0x53, 0xe5, 0x7f, 0x08, 0xe3, 0x9a, 0x51, 0xaf,
+	0x98, 0xb8, 0x86, 0x55, 0xd2, 0xc8, 0x9d, 0x1b, 0xd8, 0xe3, 0xa9, 0xa7, 0x8f, 0x03, 0xaa, 0xcc,
+	0x4e, 0x4a, 0x33, 0xea, 0x65, 0x36, 0xc4, 0xdf, 0x84, 0x71, 0x05, 0xeb, 0xb4, 0x95, 0xae, 0x34,
+	0xad, 0xaa, 0x70, 0xfe, 0x44, 0x47, 0x47, 0xca, 0x40, 0x34, 0x6e, 0x69, 0xda, 0x47, 0x56, 0x95,
+	0xff, 0x2e, 0x4c, 0x78, 0x5d, 0x38, 0x05, 0xb8, 0x30, 0x00, 0x40, 0x4a, 0x66, 0x3d, 0x38, 0x41,
+	0xd8, 0x05, 0x68, 0x5a, 0x55, 0xf7, 0x3d, 0xe5, 0xe2, 0xc0, 0xab, 0xcb, 0x3c, 0x7d, 0xec, 0x53,
+	0x64, 0xc8, 0x63, 0x4d, 0xab, 0xca, 0x9e, 0x5a, 0xfe, 0x08, 0x66, 0x75, 0xa3, 0xa2, 0x19, 0x35,
+	0x59, 0x23, 0xb7, 0xda, 0x36, 0x0d, 0xad, 0xd2, 0xd0, 0x64, 0x1d, 0x0b, 0x8b, 0x27, 0xba, 0x38,
+	0x4a, 0x08, 0xfc, 0x7b, 0x44, 0xf5, 0xb6, 0xa3, 0x79, 0x8f, 0x28, 0xf2, 0x55, 0x98, 0x8a, 0xc2,
+	0xbb, 0x44, 0xf1, 0xae, 0x44, 0xde, 0xa0, 0x2e, 0x90, 0x4e, 0x27, 0xbb, 0x35, 0x5a, 0xce, 0x68,
+	0x5d, 0x36, 0x6e, 0x43, 0xcc, 0x3a, 0x10, 0x72, 0x14, 0xf2, 0x5b, 0x91, 0xdb, 0xb0, 0x1b, 0x2a,
+	0x66, 0x9d, 0x2f, 0xba, 0x49, 0x7b, 0x56, 0x8e, 0x59, 0x07, 0xbc, 0x04, 0x31, 0xc3, 0x12, 0x5e,
+	0xeb, 0xf3, 0x00, 0xfe, 0x61, 0xb0, 0x8c, 0x85, 0x31, 0x0c, 0x42, 0x9f, 0x27, 0xe8, 0x9f, 0x89,
+	0x50, 0xb6, 0xa7, 0xcb, 0x9a, 0xf0, 0x7c, 0xf0, 0x2f, 0x6c, 0xa6, 0x9f, 0x3e, 0x0e, 0x2a, 0x3f,
+	0x27, 0xa8, 0xe3, 0x64, 0xe8, 0x2e, 0x1b, 0xb9, 0xf1, 0x29, 0x69, 0x9b, 0xff, 0x01, 0x41, 0x0e,
+	0xa6, 0x24, 0xd9, 0x52, 0x6b, 0x21, 0xd2, 0x99, 0x2a, 0x88, 0x45, 0xb1, 0x24, 0xd2, 0xfe, 0x15,
+	0xe6, 0x80, 0x27, 0xb5, 0x2e, 0xdc, 0x33, 0xaf, 0xc1, 0x7c, 0xaf, 0x9e, 0x1b, 0x5d, 0x87, 0xf3,
+	0xbd, 0xf8, 0x6c, 0xac, 0x50, 0x84, 0xab, 0x3d, 0x5b, 0xe6, 0x4c, 0x61, 0x95, 0xf6, 0xcb, 0x25,
+	0xb1, 0xb8, 0x26, 0x96, 0x56, 0xc4, 0xd2, 0xaa, 0x94, 0x85, 0x14, 0x2d, 0xce, 0x3e, 0x6e, 0x3a,
+	0x7a, 0xd4, 0x46, 0x23, 0x84, 0x9b, 0xae, 0x8b, 0x1b, 0xd2, 0x1b, 0xc0, 0x7b, 0x65, 0x70, 0xaf,
+	0xee, 0x8a, 0x65, 0x0e, 0xdb, 0x08, 0x8e, 0xda, 0x68, 0x8c, 0xd2, 0xd2, 0x6b, 0x62, 0xa1, 0x40,
+	0x04, 0xbd, 0x42, 0x13, 0x14, 0x9c, 0x38, 0x6a, 0xa3, 0x71, 0x2a, 0x58, 0x12, 0x0b, 0x2b, 0xd2,
+	0x37, 0x01, 0xea, 0x8d, 0xa6, 0x2b, 0x20, 0x1c, 0xb6, 0x11, 0xc7, 0x48, 0xee, 0x24, 0x6d, 0x87,
+	0xd7, 0xc4, 0xc2, 0xba, 0x58, 0x5a, 0x93, 0xae, 0x02, 0xef, 0xcb, 0x49, 0x7e, 0x52, 0x3c, 0xc3,
+	0xe4, 0xa7, 0x69, 0xf3, 0x4e, 0x9b, 0xff, 0x25, 0x98, 0xa6, 0xf9, 0xc9, 0xcd, 0x07, 0x7e, 0x71,
+	0x81, 0x89, 0xcf, 0x51, 0xf1, 0x15, 0xb1, 0xb8, 0x2a, 0x2d, 0x41, 0xa6, 0x73, 0xbf, 0xfc, 0xae,
+	0x9c, 0x67, 0xb2, 0xf3, 0xc4, 0x95, 0xe2, 0xba, 0x58, 0xdc, 0x10, 0x8b, 0xd7, 0xa5, 0x75, 0x98,
+	0x8f, 0xb8, 0x1c, 0xae, 0xde, 0xb9, 0xc3, 0x36, 0x5a, 0x64, 0x7a, 0x0b, 0xc4, 0x46, 0xa9, 0x28,
+	0x96, 0x4a, 0xec, 0x5b, 0x83, 0x11, 0x6e, 0x74, 0x3b, 0x91, 0x1c, 0xe3, 0x60, 0x3b, 0x91, 0x1c,
+	0xe7, 0x26, 0xb6, 0x13, 0xc9, 0x49, 0x8e, 0xdb, 0x4e, 0x24, 0xa7, 0xb9, 0x99, 0xed, 0x44, 0x72,
+	0x8e, 0x13, 0xb6, 0x13, 0xc9, 0x79, 0xee, 0xfc, 0x76, 0x22, 0x99, 0xe5, 0x16, 0xb6, 0x13, 0xc9,
+	0x05, 0x6e, 0x31, 0xf7, 0x2f, 0x19, 0x48, 0xdf, 0x36, 0xb1, 0x6c, 0x63, 0x8f, 0xc9, 0x17, 0xfb,
+	0x12, 0xf9, 0x68, 0x36, 0x7b, 0x29, 0x8a, 0xcd, 0x06, 0xa9, 0xea, 0xa5, 0x28, 0xaa, 0x1a, 0xe4,
+	0xa4, 0xaf, 0xca, 0xfe, 0xbe, 0xff, 0x15, 0xb1, 0xbf, 0xaf, 0x9d, 0xf7, 0xfd, 0xf8, 0xeb, 0xe3,
+	0x7d, 0xff, 0xcf, 0x19, 0xdf, 0xfa, 0xc0, 0x8c, 0x2f, 0xc4, 0xf5, 0x56, 0x07, 0xe5, 0x7a, 0x41,
+	0x96, 0x77, 0xf7, 0x15, 0x58, 0x5e, 0x88, 0xdf, 0x09, 0x21, 0x7e, 0xf7, 0x95, 0x72, 0xba, 0x37,
+	0x5f, 0x86, 0xd3, 0x75, 0xb1, 0xb9, 0x8f, 0x4e, 0xcb, 0xe6, 0xd2, 0x41, 0x36, 0x17, 0x62, 0x72,
+	0x1f, 0x9c, 0x8a, 0xc9, 0xf5, 0xe6, 0x70, 0xdf, 0x3b, 0x35, 0x87, 0x9b, 0x0c, 0x71, 0xb8, 0x30,
+	0x7f, 0xdb, 0x18, 0x9c, 0xbf, 0x85, 0x98, 0xdb, 0x8d, 0x97, 0x60, 0x6e, 0x61, 0xce, 0x56, 0x3e,
+	0x25, 0x67, 0x9b, 0x08, 0x70, 0xb6, 0x20, 0x5f, 0x7b, 0xf7, 0x34, 0x7c, 0xad, 0x17, 0x53, 0xfb,
+	0xe1, 0x57, 0xc4, 0xd4, 0xa2, 0x39, 0xda, 0x5b, 0xa7, 0xe3, 0x68, 0x09, 0x8f, 0x9f, 0xdd, 0x3c,
+	0x15, 0x3f, 0x4b, 0xb8, 0xdc, 0xec, 0x46, 0xe6, 0x3f, 0x6f, 0x86, 0x9e, 0xb1, 0xba, 0x38, 0xca,
+	0x93, 0x17, 0xc8, 0x3f, 0x20, 0x89, 0x91, 0x1c, 0x65, 0xf6, 0xc9, 0x0b, 0x14, 0x31, 0x4e, 0xa4,
+	0x23, 0x88, 0x0a, 0x95, 0xee, 0x1e, 0x97, 0x2e, 0x04, 0xd8, 0x4a, 0xfa, 0xc9, 0x0b, 0xe4, 0xfb,
+	0x9d, 0x60, 0x45, 0x70, 0x14, 0x8a, 0xd5, 0x3d, 0x2e, 0x5d, 0xeb, 0x41, 0x52, 0x84, 0x27, 0x2f,
+	0x50, 0xe4, 0x8c, 0x74, 0x25, 0x8a, 0xa7, 0xcc, 0x3c, 0x79, 0x81, 0xba, 0x87, 0xa5, 0x37, 0xfb,
+	0x92, 0x94, 0xec, 0x93, 0x17, 0xa8, 0xcf, 0xbc, 0xf7, 0x9e, 0x38, 0xcc, 0x8d, 0x9c, 0x96, 0xb5,
+	0x70, 0x30, 0x59, 0xc6, 0x0d, 0x4d, 0xae, 0x9d, 0xd1, 0x96, 0x33, 0xda, 0x72, 0x46, 0x5b, 0xce,
+	0x68, 0xcb, 0x19, 0x6d, 0x39, 0xa3, 0x2d, 0xbf, 0x1d, 0xda, 0x72, 0xc6, 0x1a, 0x7e, 0x5f, 0x59,
+	0xc3, 0x7f, 0x65, 0x20, 0x75, 0x07, 0xdb, 0xbf, 0x03, 0x8c, 0xe1, 0xc6, 0x89, 0x5f, 0xbe, 0xf5,
+	0xfe, 0xb2, 0x6d, 0xe3, 0xa4, 0x2f, 0xdb, 0xbe, 0xb6, 0x2f, 0xd7, 0xce, 0x78, 0xca, 0x19, 0x4f,
+	0x39, 0xe3, 0x29, 0x67, 0x3c, 0xe5, 0x0f, 0x99, 0xa7, 0xbc, 0x09, 0x40, 0xff, 0x42, 0xd2, 0xb2,
+	0x65, 0x1b, 0x0b, 0x59, 0xfa, 0xc7, 0x96, 0x17, 0xa3, 0x42, 0x69, 0x47, 0xb5, 0xf1, 0x0e, 0x11,
+	0x2a, 0x8f, 0x59, 0xee, 0xc7, 0xdf, 0x27, 0x96, 0x33, 0xdd, 0xc5, 0x72, 0x9e, 0xdf, 0x44, 0x67,
+	0x44, 0xe7, 0xb7, 0x42, 0x74, 0x06, 0x27, 0x37, 0x0b, 0xdc, 0xa2, 0xf4, 0xb7, 0xe8, 0xe8, 0xf3,
+	0xec, 0xd0, 0x67, 0x9f, 0x67, 0x87, 0xbe, 0xfc, 0x3c, 0x8b, 0x3e, 0x3e, 0xce, 0xa2, 0x4f, 0x8f,
+	0xb3, 0xe8, 0x97, 0xc7, 0x59, 0x74, 0x74, 0x9c, 0x45, 0x9f, 0x1d, 0x67, 0xd1, 0xaf, 0x8e, 0xb3,
+	0xe8, 0xf9, 0x71, 0x76, 0xe8, 0xcb, 0xe3, 0x2c, 0xfa, 0x9b, 0x2f, 0xb2, 0x43, 0x87, 0x5f, 0x64,
+	0xd1, 0xd1, 0x17, 0xd9, 0xa1, 0xcf, 0xbe, 0xc8, 0x0e, 0xfd, 0xe0, 0x7b, 0x75, 0xa3, 0xf1, 0xb0,
+	0x9e, 0x77, 0xe9, 0x46, 0xbe, 0x69, 0x2d, 0xd3, 0x0f, 0x7b, 0x86, 0xb9, 0xbf, 0xd4, 0x30, 0x8d,
+	0x96, 0xaa, 0x60, 0x73, 0xc9, 0x9d, 0x5e, 0x6e, 0x54, 0xeb, 0xc6, 0x32, 0xfe, 0x89, 0xed, 0xfe,
+	0xdb, 0xfa, 0xde, 0xff, 0xf3, 0x81, 0xea, 0x08, 0xfd, 0x07, 0xea, 0xa5, 0xff, 0x0b, 0x00, 0x00,
+	0xff, 0xff, 0x06, 0x2f, 0x83, 0xa3, 0xa9, 0x40, 0x00, 0x00,
+}
+
 func (this *Interface) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9226,7 +7177,7 @@ func (this *Interface) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -9296,7 +7247,7 @@ func (this *StorageInterfaceType) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -9345,7 +7296,7 @@ func (this *VnConfiguration) GoString() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
@@ -10464,7 +8415,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *Interface) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10472,108 +8423,146 @@ func (m *Interface) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Interface) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Interface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Description) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
+	if m.InterfaceChoice != nil {
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if len(m.Labels) > 0 {
 		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
+		for k := range m.Labels {
 			keysForLabels = append(keysForLabels, string(k))
 		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0x12
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.InterfaceChoice != nil {
-		nn1, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Interface_EthernetInterface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Interface_EthernetInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EthernetInterface != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EthernetInterface.Size()))
-		n2, err := m.EthernetInterface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EthernetInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Interface_DedicatedInterface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Interface_DedicatedInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DedicatedInterface != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DedicatedInterface.Size()))
-		n3, err := m.DedicatedInterface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DedicatedInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Interface_DedicatedManagementInterface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Interface_DedicatedManagementInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DedicatedManagementInterface != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DedicatedManagementInterface.Size()))
-		n4, err := m.DedicatedManagementInterface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DedicatedManagementInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *Interface_TunnelInterface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Interface_TunnelInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TunnelInterface != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelInterface.Size()))
-		n5, err := m.TunnelInterface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.TunnelInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *InterfaceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10581,29 +8570,36 @@ func (m *InterfaceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *InterfaceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InterfaceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
-		for _, msg := range m.Interfaces {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Interfaces) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Interfaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageInterfaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10611,55 +8607,65 @@ func (m *StorageInterfaceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageInterfaceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageInterfaceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Description) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
+	if m.StorageInterface != nil {
+		{
+			size, err := m.StorageInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Labels) > 0 {
 		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
+		for k := range m.Labels {
 			keysForLabels = append(keysForLabels, string(k))
 		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0x12
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.StorageInterface != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterface.Size()))
-		n6, err := m.StorageInterface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StorageInterfaceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10667,29 +8673,36 @@ func (m *StorageInterfaceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StorageInterfaceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StorageInterfaceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StorageInterfaces) > 0 {
-		for _, msg := range m.StorageInterfaces {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StorageInterfaces) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StorageInterfaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *StaticRoutesListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10697,29 +8710,36 @@ func (m *StaticRoutesListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StaticRoutesListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StaticRoutesListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.StaticRoutes) > 0 {
-		for _, msg := range m.StaticRoutes {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.StaticRoutes) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StaticRoutes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *VnConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10727,109 +8747,148 @@ func (m *VnConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *VnConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Labels) > 0 {
-		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
-			keysForLabels = append(keysForLabels, string(k))
-		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0xa
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+	if m.DcClusterGroupChoice != nil {
+		{
+			size := m.DcClusterGroupChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if m.StaticRouteChoice != nil {
-		nn7, err := m.StaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.StaticRouteChoice.Size()
+			i -= size
+			if _, err := m.StaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn7
 	}
-	if m.DcClusterGroupChoice != nil {
-		nn8, err := m.DcClusterGroupChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
 		}
-		i += nn8
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *VnConfiguration_NoStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_NoStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStaticRoutes != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStaticRoutes.Size()))
-		n9, err := m.NoStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VnConfiguration_StaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_StaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StaticRoutes != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StaticRoutes.Size()))
-		n10, err := m.StaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VnConfiguration_NoDcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_NoDcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoDcClusterGroup != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoDcClusterGroup.Size()))
-		n11, err := m.NoDcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoDcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VnConfiguration_DcClusterGroup) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VnConfiguration_DcClusterGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DcClusterGroup != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DcClusterGroup.Size()))
-		n12, err := m.DcClusterGroup.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DcClusterGroup.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SliVnConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10837,52 +8896,73 @@ func (m *SliVnConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SliVnConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SliVnConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.StaticRouteChoice != nil {
-		nn13, err := m.StaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.StaticRouteChoice.Size()
+			i -= size
+			if _, err := m.StaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn13
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *SliVnConfiguration_NoStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SliVnConfiguration_NoStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStaticRoutes != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStaticRoutes.Size()))
-		n14, err := m.NoStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SliVnConfiguration_StaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SliVnConfiguration_StaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StaticRoutes != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StaticRoutes.Size()))
-		n15, err := m.StaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalNetworkConnectionType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10890,73 +8970,103 @@ func (m *GlobalNetworkConnectionType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalNetworkConnectionType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalNetworkConnectionType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ConnectionChoice != nil {
-		nn16, err := m.ConnectionChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn16
-	}
 	if m.ForwardProxyChoice != nil {
-		nn17, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn17
 	}
-	return i, nil
+	if m.ConnectionChoice != nil {
+		{
+			size := m.ConnectionChoice.Size()
+			i -= size
+			if _, err := m.ConnectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalNetworkConnectionType_SloToGlobalDr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalNetworkConnectionType_SloToGlobalDr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloToGlobalDr != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloToGlobalDr.Size()))
-		n18, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloToGlobalDr.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalNetworkConnectionType_DisableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalNetworkConnectionType_DisableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableForwardProxy != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableForwardProxy.Size()))
-		n19, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalNetworkConnectionType_EnableForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalNetworkConnectionType_EnableForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableForwardProxy != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableForwardProxy.Size()))
-		n20, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalNetworkConnectionListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10964,29 +9074,36 @@ func (m *GlobalNetworkConnectionListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalNetworkConnectionListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalNetworkConnectionListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.GlobalNetworkConnections) > 0 {
-		for _, msg := range m.GlobalNetworkConnections {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.GlobalNetworkConnections) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.GlobalNetworkConnections[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *VssNetworkConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -10994,301 +9111,414 @@ func (m *VssNetworkConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *VssNetworkConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SloChoice != nil {
-		nn21, err := m.SloChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.SliChoice != nil {
+		{
+			size := m.SliChoice.Size()
+			i -= size
+			if _, err := m.SliChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn21
-	}
-	if m.InterfaceChoice != nil {
-		nn22, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn22
-	}
-	if m.NetworkPolicyChoice != nil {
-		nn23, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn23
 	}
 	if m.ForwardProxyChoice != nil {
-		nn24, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn24
-	}
-	if m.GlobalNetworkChoice != nil {
-		nn25, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn25
-	}
-	if len(m.OutsideVip) > 0 {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OutsideVip)))
-		i += copy(dAtA[i:], m.OutsideVip)
-	}
-	if len(m.OutsideNameserver) > 0 {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OutsideNameserver)))
-		i += copy(dAtA[i:], m.OutsideNameserver)
-	}
-	if len(m.BgpRouterId) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpRouterId)))
-		i += copy(dAtA[i:], m.BgpRouterId)
-	}
-	if len(m.BgpPeerAddress) > 0 {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpPeerAddress)))
-		i += copy(dAtA[i:], m.BgpPeerAddress)
-	}
-	if m.VipVrrpMode != 0 {
-		dAtA[i] = 0xa0
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VipVrrpMode))
-	}
-	if len(m.SiteToSiteTunnelIp) > 0 {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
-		i += copy(dAtA[i:], m.SiteToSiteTunnelIp)
 	}
 	if m.TunnelDeadTimeout != 0 {
-		dAtA[i] = 0xb0
-		i++
-		dAtA[i] = 0x1
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelDeadTimeout))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb0
 	}
-	if m.SliChoice != nil {
-		nn26, err := m.SliChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.SiteToSiteTunnelIp) > 0 {
+		i -= len(m.SiteToSiteTunnelIp)
+		copy(dAtA[i:], m.SiteToSiteTunnelIp)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteToSiteTunnelIp)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	if m.VipVrrpMode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.VipVrrpMode))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa0
+	}
+	if len(m.BgpPeerAddress) > 0 {
+		i -= len(m.BgpPeerAddress)
+		copy(dAtA[i:], m.BgpPeerAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpPeerAddress)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.BgpRouterId) > 0 {
+		i -= len(m.BgpRouterId)
+		copy(dAtA[i:], m.BgpRouterId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpRouterId)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if len(m.OutsideNameserver) > 0 {
+		i -= len(m.OutsideNameserver)
+		copy(dAtA[i:], m.OutsideNameserver)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OutsideNameserver)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if len(m.OutsideVip) > 0 {
+		i -= len(m.OutsideVip)
+		copy(dAtA[i:], m.OutsideVip)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OutsideVip)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	if m.GlobalNetworkChoice != nil {
+		{
+			size := m.GlobalNetworkChoice.Size()
+			i -= size
+			if _, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn26
 	}
-	return i, nil
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.InterfaceChoice != nil {
+		{
+			size := m.InterfaceChoice.Size()
+			i -= size
+			if _, err := m.InterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SloChoice != nil {
+		{
+			size := m.SloChoice.Size()
+			i -= size
+			if _, err := m.SloChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *VssNetworkConfiguration_DefaultConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_DefaultConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultConfig != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultConfig.Size()))
-		n27, err := m.DefaultConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_SloConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_SloConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SloConfig != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SloConfig.Size()))
-		n28, err := m.SloConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SloConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n28
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_DefaultInterfaceConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_DefaultInterfaceConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultInterfaceConfig != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultInterfaceConfig.Size()))
-		n29, err := m.DefaultInterfaceConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultInterfaceConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n29
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_InterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InterfaceList != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
-		n30, err := m.InterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n30
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_NoNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoNetworkPolicy != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n31, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n31
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n32, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n32
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_NoForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoForwardProxy != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n33, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n33
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n34, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_NoGlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_NoGlobalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoGlobalNetwork != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoGlobalNetwork.Size()))
-		n35, err := m.NoGlobalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoGlobalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_GlobalNetworkList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_GlobalNetworkList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GlobalNetworkList != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetworkList.Size()))
-		n36, err := m.GlobalNetworkList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GlobalNetworkList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_ForwardProxyAllowAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyAllowAll != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n37, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyAllowAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_DefaultSliConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_DefaultSliConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultSliConfig != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultSliConfig.Size()))
-		n38, err := m.DefaultSliConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultSliConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n38
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssNetworkConfiguration_SliConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssNetworkConfiguration_SliConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.SliConfig != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SliConfig.Size()))
-		n39, err := m.SliConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SliConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n39
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -11296,157 +9526,226 @@ func (m *VssStorageConfiguration) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *VssStorageConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.StorageInterfaceChoice != nil {
-		nn40, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StaticRouteChoice != nil {
+		{
+			size := m.StaticRouteChoice.Size()
+			i -= size
+			if _, err := m.StaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn40
-	}
-	if m.StorageDeviceChoice != nil {
-		nn41, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn41
 	}
 	if m.StorageClassChoice != nil {
-		nn42, err := m.StorageClassChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.StorageClassChoice.Size()
+			i -= size
+			if _, err := m.StorageClassChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn42
 	}
-	if m.StaticRouteChoice != nil {
-		nn43, err := m.StaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.StorageDeviceChoice != nil {
+		{
+			size := m.StorageDeviceChoice.Size()
+			i -= size
+			if _, err := m.StorageDeviceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn43
 	}
-	return i, nil
+	if m.StorageInterfaceChoice != nil {
+		{
+			size := m.StorageInterfaceChoice.Size()
+			i -= size
+			if _, err := m.StorageInterfaceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *VssStorageConfiguration_NoStorageInterfaces) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_NoStorageInterfaces) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageInterfaces != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageInterfaces.Size()))
-		n44, err := m.NoStorageInterfaces.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageInterfaces.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n44
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_StorageInterfaceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_StorageInterfaceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageInterfaceList != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageInterfaceList.Size()))
-		n45, err := m.StorageInterfaceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageInterfaceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n45
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_NoStorageDevice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_NoStorageDevice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStorageDevice != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStorageDevice.Size()))
-		n46, err := m.NoStorageDevice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStorageDevice.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n46
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_StorageDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_StorageDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageDeviceList != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageDeviceList.Size()))
-		n47, err := m.StorageDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n47
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_DefaultStorageClass) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_DefaultStorageClass) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageClass != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageClass.Size()))
-		n48, err := m.DefaultStorageClass.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageClass.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n48
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_StorageClassList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_StorageClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StorageClassList != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StorageClassList.Size()))
-		n49, err := m.StorageClassList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StorageClassList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n49
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_NoStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_NoStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoStaticRoutes != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoStaticRoutes.Size()))
-		n50, err := m.NoStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n50
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *VssStorageConfiguration_StaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VssStorageConfiguration_StaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.StaticRoutes != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.StaticRoutes.Size()))
-		n51, err := m.StaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.StaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n51
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -11454,453 +9753,600 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VolterraCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
-		i += copy(dAtA[i:], m.VolterraCertifiedHw)
-	}
-	if len(m.MasterNodes) > 0 {
-		for _, s := range m.MasterNodes {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.WorkerNodes) > 0 {
-		for _, s := range m.WorkerNodes {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if m.BondChoice != nil {
-		nn52, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn52
-	}
-	if m.NetworkCfgChoice != nil {
-		nn53, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn53
-	}
-	if m.StorageCfgChoice != nil {
-		nn54, err := m.StorageCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn54
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
 	}
 	if m.GpuChoice != nil {
-		nn55, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn55
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n56, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n56
-	}
-	if m.K8SClusterChoice != nil {
-		nn57, err := m.K8SClusterChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn57
-	}
-	if m.LogsReceiverChoice != nil {
-		nn58, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn58
-	}
-	if m.UsbPolicyChoice != nil {
-		nn59, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn59
-	}
-	if m.LocalControlPlaneChoice != nil {
-		nn60, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn60
-	}
-	if m.Sw != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sw.Size()))
-		n61, err := m.Sw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n61
 	}
 	if m.Os != nil {
-		dAtA[i] = 0x9a
-		i++
+		{
+			size, err := m.Os.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Os.Size()))
-		n62, err := m.Os.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n62
+		i--
+		dAtA[i] = 0x9a
 	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n63, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Sw != nil {
+		{
+			size, err := m.Sw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n63
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	if m.LocalControlPlaneChoice != nil {
+		{
+			size := m.LocalControlPlaneChoice.Size()
+			i -= size
+			if _, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.K8SClusterChoice != nil {
+		{
+			size := m.K8SClusterChoice.Size()
+			i -= size
+			if _, err := m.K8SClusterChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.StorageCfgChoice != nil {
+		{
+			size := m.StorageCfgChoice.Size()
+			i -= size
+			if _, err := m.StorageCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkCfgChoice != nil {
+		{
+			size := m.NetworkCfgChoice.Size()
+			i -= size
+			if _, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.WorkerNodes) > 0 {
+		for iNdEx := len(m.WorkerNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerNodes[iNdEx])
+			copy(dAtA[i:], m.WorkerNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.WorkerNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.MasterNodes) > 0 {
+		for iNdEx := len(m.MasterNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.MasterNodes[iNdEx])
+			copy(dAtA[i:], m.MasterNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.MasterNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.VolterraCertifiedHw) > 0 {
+		i -= len(m.VolterraCertifiedHw)
+		copy(dAtA[i:], m.VolterraCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n64, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n64
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n65, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n65
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DefaultNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultNetworkConfig != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultNetworkConfig.Size()))
-		n66, err := m.DefaultNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n66
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_CustomNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_CustomNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomNetworkConfig != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomNetworkConfig.Size()))
-		n67, err := m.CustomNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n67
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DefaultStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageConfig != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageConfig.Size()))
-		n68, err := m.DefaultStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n68
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_CustomStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_CustomStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorageConfig != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorageConfig.Size()))
-		n69, err := m.CustomStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n69
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n70, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n70
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n71, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n71
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoK8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoK8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoK8SCluster != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoK8SCluster.Size()))
-		n72, err := m.NoK8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoK8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n72
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_K8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_K8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SCluster != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n73, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n73
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n74, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n74
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n75, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n75
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n76, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n76
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n77, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n77
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n78, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n78
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_NoLocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoLocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoLocalControlPlane != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoLocalControlPlane.Size()))
-		n79, err := m.NoLocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoLocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n79
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LocalControlPlane != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalControlPlane.Size()))
-		n80, err := m.LocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n80
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n81, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n81
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -11908,429 +10354,572 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VolterraCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
-		i += copy(dAtA[i:], m.VolterraCertifiedHw)
-	}
-	if len(m.MasterNodes) > 0 {
-		for _, s := range m.MasterNodes {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.GpuChoice != nil {
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.WorkerNodes) > 0 {
-		for _, s := range m.WorkerNodes {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.Os != nil {
+		{
+			size, err := m.Os.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x9a
+	}
+	if m.Sw != nil {
+		{
+			size, err := m.Sw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.LocalControlPlaneChoice != nil {
+		{
+			size := m.LocalControlPlaneChoice.Size()
+			i -= size
+			if _, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.K8SClusterChoice != nil {
+		{
+			size := m.K8SClusterChoice.Size()
+			i -= size
+			if _, err := m.K8SClusterChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.StorageCfgChoice != nil {
+		{
+			size := m.StorageCfgChoice.Size()
+			i -= size
+			if _, err := m.StorageCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkCfgChoice != nil {
+		{
+			size := m.NetworkCfgChoice.Size()
+			i -= size
+			if _, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if m.BondChoice != nil {
-		nn82, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn82
 	}
-	if m.NetworkCfgChoice != nil {
-		nn83, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.WorkerNodes) > 0 {
+		for iNdEx := len(m.WorkerNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerNodes[iNdEx])
+			copy(dAtA[i:], m.WorkerNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.WorkerNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
 		}
-		i += nn83
 	}
-	if m.StorageCfgChoice != nil {
-		nn84, err := m.StorageCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.MasterNodes) > 0 {
+		for iNdEx := len(m.MasterNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.MasterNodes[iNdEx])
+			copy(dAtA[i:], m.MasterNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.MasterNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x12
 		}
-		i += nn84
 	}
-	if m.GpuChoice != nil {
-		nn85, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn85
+	if len(m.VolterraCertifiedHw) > 0 {
+		i -= len(m.VolterraCertifiedHw)
+		copy(dAtA[i:], m.VolterraCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
 	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n86, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n86
-	}
-	if m.K8SClusterChoice != nil {
-		nn87, err := m.K8SClusterChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn87
-	}
-	if m.LogsReceiverChoice != nil {
-		nn88, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn88
-	}
-	if m.UsbPolicyChoice != nil {
-		nn89, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn89
-	}
-	if m.LocalControlPlaneChoice != nil {
-		nn90, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn90
-	}
-	if m.Sw != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sw.Size()))
-		n91, err := m.Sw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n91
-	}
-	if m.Os != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Os.Size()))
-		n92, err := m.Os.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n92
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n93, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n93
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n94, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n94
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DefaultNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultNetworkConfig != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultNetworkConfig.Size()))
-		n95, err := m.DefaultNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n95
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_CustomNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_CustomNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomNetworkConfig != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomNetworkConfig.Size()))
-		n96, err := m.CustomNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n96
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DefaultStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageConfig != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageConfig.Size()))
-		n97, err := m.DefaultStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n97
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_CustomStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_CustomStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorageConfig != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorageConfig.Size()))
-		n98, err := m.CustomStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n98
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n99, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n99
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n100, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n100
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoK8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoK8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoK8SCluster != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoK8SCluster.Size()))
-		n101, err := m.NoK8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoK8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n101
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_K8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_K8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SCluster != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n102, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n102
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n103, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n103
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n104, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n104
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n105, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n105
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n106, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n106
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n107, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n107
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_NoLocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoLocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoLocalControlPlane != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoLocalControlPlane.Size()))
-		n108, err := m.NoLocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoLocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n108
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LocalControlPlane != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalControlPlane.Size()))
-		n109, err := m.LocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n109
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n110, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n110
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -12338,405 +10927,544 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VolterraCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
-		i += copy(dAtA[i:], m.VolterraCertifiedHw)
-	}
-	if len(m.MasterNodes) > 0 {
-		for _, s := range m.MasterNodes {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.GpuChoice != nil {
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.WorkerNodes) > 0 {
-		for _, s := range m.WorkerNodes {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.LocalControlPlaneChoice != nil {
+		{
+			size := m.LocalControlPlaneChoice.Size()
+			i -= size
+			if _, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.K8SClusterChoice != nil {
+		{
+			size := m.K8SClusterChoice.Size()
+			i -= size
+			if _, err := m.K8SClusterChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.StorageCfgChoice != nil {
+		{
+			size := m.StorageCfgChoice.Size()
+			i -= size
+			if _, err := m.StorageCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkCfgChoice != nil {
+		{
+			size := m.NetworkCfgChoice.Size()
+			i -= size
+			if _, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if m.BondChoice != nil {
-		nn111, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn111
 	}
-	if m.NetworkCfgChoice != nil {
-		nn112, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.WorkerNodes) > 0 {
+		for iNdEx := len(m.WorkerNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerNodes[iNdEx])
+			copy(dAtA[i:], m.WorkerNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.WorkerNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
 		}
-		i += nn112
 	}
-	if m.StorageCfgChoice != nil {
-		nn113, err := m.StorageCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.MasterNodes) > 0 {
+		for iNdEx := len(m.MasterNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.MasterNodes[iNdEx])
+			copy(dAtA[i:], m.MasterNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.MasterNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x12
 		}
-		i += nn113
 	}
-	if m.GpuChoice != nil {
-		nn114, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn114
+	if len(m.VolterraCertifiedHw) > 0 {
+		i -= len(m.VolterraCertifiedHw)
+		copy(dAtA[i:], m.VolterraCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
 	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n115, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n115
-	}
-	if m.K8SClusterChoice != nil {
-		nn116, err := m.K8SClusterChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn116
-	}
-	if m.LogsReceiverChoice != nil {
-		nn117, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn117
-	}
-	if m.UsbPolicyChoice != nil {
-		nn118, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn118
-	}
-	if m.LocalControlPlaneChoice != nil {
-		nn119, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn119
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n120, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n120
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n121, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n121
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DefaultNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultNetworkConfig != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultNetworkConfig.Size()))
-		n122, err := m.DefaultNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n122
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_CustomNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_CustomNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomNetworkConfig != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomNetworkConfig.Size()))
-		n123, err := m.CustomNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n123
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DefaultStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageConfig != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageConfig.Size()))
-		n124, err := m.DefaultStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n124
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_CustomStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_CustomStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorageConfig != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorageConfig.Size()))
-		n125, err := m.CustomStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n125
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n126, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n126
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n127, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n127
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoK8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoK8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoK8SCluster != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoK8SCluster.Size()))
-		n128, err := m.NoK8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoK8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n128
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_K8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_K8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SCluster != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n129, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n129
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n130, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n130
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n131, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n131
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n132, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n132
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n133, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n133
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n134, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n134
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_NoLocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoLocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoLocalControlPlane != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoLocalControlPlane.Size()))
-		n135, err := m.NoLocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoLocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n135
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LocalControlPlane != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalControlPlane.Size()))
-		n136, err := m.LocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n136
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n137, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n137
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -12744,430 +11472,576 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.VolterraCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
-		i += copy(dAtA[i:], m.VolterraCertifiedHw)
-	}
-	if len(m.MasterNodes) > 0 {
-		for _, s := range m.MasterNodes {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.WorkerNodes) > 0 {
-		for _, s := range m.WorkerNodes {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if m.BondChoice != nil {
-		nn138, err := m.BondChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn138
-	}
-	if m.NetworkCfgChoice != nil {
-		nn139, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn139
-	}
-	if m.StorageCfgChoice != nil {
-		nn140, err := m.StorageCfgChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn140
-	}
 	if m.GpuChoice != nil {
-		nn141, err := m.GpuChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.GpuChoice.Size()
+			i -= size
+			if _, err := m.GpuChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn141
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n142, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n142
-	}
-	if m.K8SClusterChoice != nil {
-		nn143, err := m.K8SClusterChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn143
-	}
-	if m.LogsReceiverChoice != nil {
-		nn144, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn144
-	}
-	if m.UsbPolicyChoice != nil {
-		nn145, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn145
-	}
-	if m.SiteState != 0 {
-		dAtA[i] = 0xf0
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
 	}
 	if m.LocalControlPlaneChoice != nil {
-		nn146, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.LocalControlPlaneChoice.Size()
+			i -= size
+			if _, err := m.LocalControlPlaneChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn146
 	}
-	return i, nil
+	if m.SiteState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf0
+	}
+	if m.UsbPolicyChoice != nil {
+		{
+			size := m.UsbPolicyChoice.Size()
+			i -= size
+			if _, err := m.UsbPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.K8SClusterChoice != nil {
+		{
+			size := m.K8SClusterChoice.Size()
+			i -= size
+			if _, err := m.K8SClusterChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.StorageCfgChoice != nil {
+		{
+			size := m.StorageCfgChoice.Size()
+			i -= size
+			if _, err := m.StorageCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkCfgChoice != nil {
+		{
+			size := m.NetworkCfgChoice.Size()
+			i -= size
+			if _, err := m.NetworkCfgChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BondChoice != nil {
+		{
+			size := m.BondChoice.Size()
+			i -= size
+			if _, err := m.BondChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.WorkerNodes) > 0 {
+		for iNdEx := len(m.WorkerNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.WorkerNodes[iNdEx])
+			copy(dAtA[i:], m.WorkerNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.WorkerNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.MasterNodes) > 0 {
+		for iNdEx := len(m.MasterNodes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.MasterNodes[iNdEx])
+			copy(dAtA[i:], m.MasterNodes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.MasterNodes[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.VolterraCertifiedHw) > 0 {
+		i -= len(m.VolterraCertifiedHw)
+		copy(dAtA[i:], m.VolterraCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_NoBondDevices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoBondDevices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoBondDevices != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoBondDevices.Size()))
-		n147, err := m.NoBondDevices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoBondDevices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n147
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_BondDeviceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_BondDeviceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BondDeviceList != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BondDeviceList.Size()))
-		n148, err := m.BondDeviceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BondDeviceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n148
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DefaultNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultNetworkConfig != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultNetworkConfig.Size()))
-		n149, err := m.DefaultNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n149
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_CustomNetworkConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_CustomNetworkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomNetworkConfig != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomNetworkConfig.Size()))
-		n150, err := m.CustomNetworkConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomNetworkConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n150
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DefaultStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DefaultStorageConfig != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultStorageConfig.Size()))
-		n151, err := m.DefaultStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DefaultStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n151
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_CustomStorageConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_CustomStorageConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CustomStorageConfig != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CustomStorageConfig.Size()))
-		n152, err := m.CustomStorageConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CustomStorageConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n152
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DisableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DisableGpu != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableGpu.Size()))
-		n153, err := m.DisableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DisableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n153
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_EnableGpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableGpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableGpu != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableGpu.Size()))
-		n154, err := m.EnableGpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableGpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n154
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoK8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoK8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoK8SCluster != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoK8SCluster.Size()))
-		n155, err := m.NoK8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoK8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n155
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_K8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_K8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SCluster != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n156, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n156
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n157, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n157
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n158, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n158
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DenyAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DenyAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DenyAllUsb != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyAllUsb.Size()))
-		n159, err := m.DenyAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DenyAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n159
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AllowAllUsb) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AllowAllUsb) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AllowAllUsb != nil {
-		dAtA[i] = 0xe2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowAllUsb.Size()))
-		n160, err := m.AllowAllUsb.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AllowAllUsb.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n160
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_UsbPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_UsbPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UsbPolicy != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UsbPolicy.Size()))
-		n161, err := m.UsbPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UsbPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n161
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_NoLocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoLocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoLocalControlPlane != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoLocalControlPlane.Size()))
-		n162, err := m.NoLocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoLocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n162
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LocalControlPlane) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LocalControlPlane) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LocalControlPlane != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalControlPlane.Size()))
-		n163, err := m.LocalControlPlane.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalControlPlane.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n163
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_EnableVgpu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableVgpu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.EnableVgpu != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableVgpu.Size()))
-		n164, err := m.EnableVgpu.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.EnableVgpu.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n164
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *Interface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Description)
@@ -13189,6 +12063,9 @@ func (m *Interface) Size() (n int) {
 }
 
 func (m *Interface_EthernetInterface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EthernetInterface != nil {
@@ -13198,6 +12075,9 @@ func (m *Interface_EthernetInterface) Size() (n int) {
 	return n
 }
 func (m *Interface_DedicatedInterface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DedicatedInterface != nil {
@@ -13207,6 +12087,9 @@ func (m *Interface_DedicatedInterface) Size() (n int) {
 	return n
 }
 func (m *Interface_DedicatedManagementInterface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DedicatedManagementInterface != nil {
@@ -13216,6 +12099,9 @@ func (m *Interface_DedicatedManagementInterface) Size() (n int) {
 	return n
 }
 func (m *Interface_TunnelInterface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TunnelInterface != nil {
@@ -13225,6 +12111,9 @@ func (m *Interface_TunnelInterface) Size() (n int) {
 	return n
 }
 func (m *InterfaceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Interfaces) > 0 {
@@ -13237,6 +12126,9 @@ func (m *InterfaceListType) Size() (n int) {
 }
 
 func (m *StorageInterfaceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Description)
@@ -13259,6 +12151,9 @@ func (m *StorageInterfaceType) Size() (n int) {
 }
 
 func (m *StorageInterfaceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StorageInterfaces) > 0 {
@@ -13271,6 +12166,9 @@ func (m *StorageInterfaceListType) Size() (n int) {
 }
 
 func (m *StaticRoutesListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.StaticRoutes) > 0 {
@@ -13283,6 +12181,9 @@ func (m *StaticRoutesListType) Size() (n int) {
 }
 
 func (m *VnConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Labels) > 0 {
@@ -13303,6 +12204,9 @@ func (m *VnConfiguration) Size() (n int) {
 }
 
 func (m *VnConfiguration_NoStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStaticRoutes != nil {
@@ -13312,6 +12216,9 @@ func (m *VnConfiguration_NoStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *VnConfiguration_StaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StaticRoutes != nil {
@@ -13321,6 +12228,9 @@ func (m *VnConfiguration_StaticRoutes) Size() (n int) {
 	return n
 }
 func (m *VnConfiguration_NoDcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoDcClusterGroup != nil {
@@ -13330,6 +12240,9 @@ func (m *VnConfiguration_NoDcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *VnConfiguration_DcClusterGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DcClusterGroup != nil {
@@ -13339,6 +12252,9 @@ func (m *VnConfiguration_DcClusterGroup) Size() (n int) {
 	return n
 }
 func (m *SliVnConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StaticRouteChoice != nil {
@@ -13348,6 +12264,9 @@ func (m *SliVnConfiguration) Size() (n int) {
 }
 
 func (m *SliVnConfiguration_NoStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStaticRoutes != nil {
@@ -13357,6 +12276,9 @@ func (m *SliVnConfiguration_NoStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *SliVnConfiguration_StaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StaticRoutes != nil {
@@ -13366,6 +12288,9 @@ func (m *SliVnConfiguration_StaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GlobalNetworkConnectionType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ConnectionChoice != nil {
@@ -13378,6 +12303,9 @@ func (m *GlobalNetworkConnectionType) Size() (n int) {
 }
 
 func (m *GlobalNetworkConnectionType_SloToGlobalDr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloToGlobalDr != nil {
@@ -13387,6 +12315,9 @@ func (m *GlobalNetworkConnectionType_SloToGlobalDr) Size() (n int) {
 	return n
 }
 func (m *GlobalNetworkConnectionType_DisableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableForwardProxy != nil {
@@ -13396,6 +12327,9 @@ func (m *GlobalNetworkConnectionType_DisableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GlobalNetworkConnectionType_EnableForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableForwardProxy != nil {
@@ -13405,6 +12339,9 @@ func (m *GlobalNetworkConnectionType_EnableForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GlobalNetworkConnectionListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.GlobalNetworkConnections) > 0 {
@@ -13417,6 +12354,9 @@ func (m *GlobalNetworkConnectionListType) Size() (n int) {
 }
 
 func (m *VssNetworkConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloChoice != nil {
@@ -13467,6 +12407,9 @@ func (m *VssNetworkConfiguration) Size() (n int) {
 }
 
 func (m *VssNetworkConfiguration_DefaultConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultConfig != nil {
@@ -13476,6 +12419,9 @@ func (m *VssNetworkConfiguration_DefaultConfig) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_SloConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SloConfig != nil {
@@ -13485,6 +12431,9 @@ func (m *VssNetworkConfiguration_SloConfig) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_DefaultInterfaceConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultInterfaceConfig != nil {
@@ -13494,6 +12443,9 @@ func (m *VssNetworkConfiguration_DefaultInterfaceConfig) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_InterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InterfaceList != nil {
@@ -13503,6 +12455,9 @@ func (m *VssNetworkConfiguration_InterfaceList) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_NoNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoNetworkPolicy != nil {
@@ -13512,6 +12467,9 @@ func (m *VssNetworkConfiguration_NoNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -13521,6 +12479,9 @@ func (m *VssNetworkConfiguration_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_NoForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoForwardProxy != nil {
@@ -13530,6 +12491,9 @@ func (m *VssNetworkConfiguration_NoForwardProxy) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -13539,6 +12503,9 @@ func (m *VssNetworkConfiguration_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_NoGlobalNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoGlobalNetwork != nil {
@@ -13548,6 +12515,9 @@ func (m *VssNetworkConfiguration_NoGlobalNetwork) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_GlobalNetworkList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalNetworkList != nil {
@@ -13557,6 +12527,9 @@ func (m *VssNetworkConfiguration_GlobalNetworkList) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_ForwardProxyAllowAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
@@ -13566,6 +12539,9 @@ func (m *VssNetworkConfiguration_ForwardProxyAllowAll) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_DefaultSliConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultSliConfig != nil {
@@ -13575,6 +12551,9 @@ func (m *VssNetworkConfiguration_DefaultSliConfig) Size() (n int) {
 	return n
 }
 func (m *VssNetworkConfiguration_SliConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SliConfig != nil {
@@ -13584,6 +12563,9 @@ func (m *VssNetworkConfiguration_SliConfig) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceChoice != nil {
@@ -13602,6 +12584,9 @@ func (m *VssStorageConfiguration) Size() (n int) {
 }
 
 func (m *VssStorageConfiguration_NoStorageInterfaces) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageInterfaces != nil {
@@ -13611,6 +12596,9 @@ func (m *VssStorageConfiguration_NoStorageInterfaces) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_StorageInterfaceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageInterfaceList != nil {
@@ -13620,6 +12608,9 @@ func (m *VssStorageConfiguration_StorageInterfaceList) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_NoStorageDevice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStorageDevice != nil {
@@ -13629,6 +12620,9 @@ func (m *VssStorageConfiguration_NoStorageDevice) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_StorageDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageDeviceList != nil {
@@ -13638,6 +12632,9 @@ func (m *VssStorageConfiguration_StorageDeviceList) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_DefaultStorageClass) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageClass != nil {
@@ -13647,6 +12644,9 @@ func (m *VssStorageConfiguration_DefaultStorageClass) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_StorageClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StorageClassList != nil {
@@ -13656,6 +12656,9 @@ func (m *VssStorageConfiguration_StorageClassList) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_NoStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoStaticRoutes != nil {
@@ -13665,6 +12668,9 @@ func (m *VssStorageConfiguration_NoStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *VssStorageConfiguration_StaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.StaticRoutes != nil {
@@ -13674,6 +12680,9 @@ func (m *VssStorageConfiguration_StaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VolterraCertifiedHw)
@@ -13748,6 +12757,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -13757,6 +12769,9 @@ func (m *GlobalSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -13766,6 +12781,9 @@ func (m *GlobalSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DefaultNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultNetworkConfig != nil {
@@ -13775,6 +12793,9 @@ func (m *GlobalSpecType_DefaultNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_CustomNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomNetworkConfig != nil {
@@ -13784,6 +12805,9 @@ func (m *GlobalSpecType_CustomNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DefaultStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageConfig != nil {
@@ -13793,6 +12817,9 @@ func (m *GlobalSpecType_DefaultStorageConfig) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_CustomStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorageConfig != nil {
@@ -13802,6 +12829,9 @@ func (m *GlobalSpecType_CustomStorageConfig) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -13811,6 +12841,9 @@ func (m *GlobalSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -13820,6 +12853,9 @@ func (m *GlobalSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoK8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoK8SCluster != nil {
@@ -13829,6 +12865,9 @@ func (m *GlobalSpecType_NoK8SCluster) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_K8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SCluster != nil {
@@ -13838,6 +12877,9 @@ func (m *GlobalSpecType_K8SCluster) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -13847,6 +12889,9 @@ func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -13856,6 +12901,9 @@ func (m *GlobalSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -13865,6 +12913,9 @@ func (m *GlobalSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -13874,6 +12925,9 @@ func (m *GlobalSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -13883,6 +12937,9 @@ func (m *GlobalSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_NoLocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoLocalControlPlane != nil {
@@ -13892,6 +12949,9 @@ func (m *GlobalSpecType_NoLocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LocalControlPlane != nil {
@@ -13901,6 +12961,9 @@ func (m *GlobalSpecType_LocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -13910,6 +12973,9 @@ func (m *GlobalSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VolterraCertifiedHw)
@@ -13972,6 +13038,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -13981,6 +13050,9 @@ func (m *CreateSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -13990,6 +13062,9 @@ func (m *CreateSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DefaultNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultNetworkConfig != nil {
@@ -13999,6 +13074,9 @@ func (m *CreateSpecType_DefaultNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_CustomNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomNetworkConfig != nil {
@@ -14008,6 +13086,9 @@ func (m *CreateSpecType_CustomNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DefaultStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageConfig != nil {
@@ -14017,6 +13098,9 @@ func (m *CreateSpecType_DefaultStorageConfig) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_CustomStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorageConfig != nil {
@@ -14026,6 +13110,9 @@ func (m *CreateSpecType_CustomStorageConfig) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -14035,6 +13122,9 @@ func (m *CreateSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -14044,6 +13134,9 @@ func (m *CreateSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoK8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoK8SCluster != nil {
@@ -14053,6 +13146,9 @@ func (m *CreateSpecType_NoK8SCluster) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_K8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SCluster != nil {
@@ -14062,6 +13158,9 @@ func (m *CreateSpecType_K8SCluster) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -14071,6 +13170,9 @@ func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -14080,6 +13182,9 @@ func (m *CreateSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -14089,6 +13194,9 @@ func (m *CreateSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -14098,6 +13206,9 @@ func (m *CreateSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -14107,6 +13218,9 @@ func (m *CreateSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_NoLocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoLocalControlPlane != nil {
@@ -14116,6 +13230,9 @@ func (m *CreateSpecType_NoLocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LocalControlPlane != nil {
@@ -14125,6 +13242,9 @@ func (m *CreateSpecType_LocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -14134,6 +13254,9 @@ func (m *CreateSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VolterraCertifiedHw)
@@ -14188,6 +13311,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -14197,6 +13323,9 @@ func (m *ReplaceSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -14206,6 +13335,9 @@ func (m *ReplaceSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DefaultNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultNetworkConfig != nil {
@@ -14215,6 +13347,9 @@ func (m *ReplaceSpecType_DefaultNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_CustomNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomNetworkConfig != nil {
@@ -14224,6 +13359,9 @@ func (m *ReplaceSpecType_CustomNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DefaultStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageConfig != nil {
@@ -14233,6 +13371,9 @@ func (m *ReplaceSpecType_DefaultStorageConfig) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_CustomStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorageConfig != nil {
@@ -14242,6 +13383,9 @@ func (m *ReplaceSpecType_CustomStorageConfig) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -14251,6 +13395,9 @@ func (m *ReplaceSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -14260,6 +13407,9 @@ func (m *ReplaceSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoK8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoK8SCluster != nil {
@@ -14269,6 +13419,9 @@ func (m *ReplaceSpecType_NoK8SCluster) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_K8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SCluster != nil {
@@ -14278,6 +13431,9 @@ func (m *ReplaceSpecType_K8SCluster) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -14287,6 +13443,9 @@ func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -14296,6 +13455,9 @@ func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -14305,6 +13467,9 @@ func (m *ReplaceSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -14314,6 +13479,9 @@ func (m *ReplaceSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -14323,6 +13491,9 @@ func (m *ReplaceSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_NoLocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoLocalControlPlane != nil {
@@ -14332,6 +13503,9 @@ func (m *ReplaceSpecType_NoLocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LocalControlPlane != nil {
@@ -14341,6 +13515,9 @@ func (m *ReplaceSpecType_LocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -14350,6 +13527,9 @@ func (m *ReplaceSpecType_EnableVgpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.VolterraCertifiedHw)
@@ -14415,6 +13595,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_NoBondDevices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoBondDevices != nil {
@@ -14424,6 +13607,9 @@ func (m *GetSpecType_NoBondDevices) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_BondDeviceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BondDeviceList != nil {
@@ -14433,6 +13619,9 @@ func (m *GetSpecType_BondDeviceList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DefaultNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultNetworkConfig != nil {
@@ -14442,6 +13631,9 @@ func (m *GetSpecType_DefaultNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_CustomNetworkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomNetworkConfig != nil {
@@ -14451,6 +13643,9 @@ func (m *GetSpecType_CustomNetworkConfig) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DefaultStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DefaultStorageConfig != nil {
@@ -14460,6 +13655,9 @@ func (m *GetSpecType_DefaultStorageConfig) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_CustomStorageConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CustomStorageConfig != nil {
@@ -14469,6 +13667,9 @@ func (m *GetSpecType_CustomStorageConfig) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DisableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DisableGpu != nil {
@@ -14478,6 +13679,9 @@ func (m *GetSpecType_DisableGpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_EnableGpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableGpu != nil {
@@ -14487,6 +13691,9 @@ func (m *GetSpecType_EnableGpu) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoK8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoK8SCluster != nil {
@@ -14496,6 +13703,9 @@ func (m *GetSpecType_NoK8SCluster) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_K8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SCluster != nil {
@@ -14505,6 +13715,9 @@ func (m *GetSpecType_K8SCluster) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -14514,6 +13727,9 @@ func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -14523,6 +13739,9 @@ func (m *GetSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DenyAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DenyAllUsb != nil {
@@ -14532,6 +13751,9 @@ func (m *GetSpecType_DenyAllUsb) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AllowAllUsb) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AllowAllUsb != nil {
@@ -14541,6 +13763,9 @@ func (m *GetSpecType_AllowAllUsb) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_UsbPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UsbPolicy != nil {
@@ -14550,6 +13775,9 @@ func (m *GetSpecType_UsbPolicy) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_NoLocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoLocalControlPlane != nil {
@@ -14559,6 +13787,9 @@ func (m *GetSpecType_NoLocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LocalControlPlane) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LocalControlPlane != nil {
@@ -14568,6 +13799,9 @@ func (m *GetSpecType_LocalControlPlane) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_EnableVgpu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.EnableVgpu != nil {
@@ -14578,14 +13812,7 @@ func (m *GetSpecType_EnableVgpu) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -14598,7 +13825,7 @@ func (this *Interface) String() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -14617,7 +13844,7 @@ func (this *Interface_EthernetInterface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Interface_EthernetInterface{`,
-		`EthernetInterface:` + strings.Replace(fmt.Sprintf("%v", this.EthernetInterface), "EthernetInterfaceType", "ves_io_schema_network_interface.EthernetInterfaceType", 1) + `,`,
+		`EthernetInterface:` + strings.Replace(fmt.Sprintf("%v", this.EthernetInterface), "EthernetInterfaceType", "network_interface.EthernetInterfaceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14627,7 +13854,7 @@ func (this *Interface_DedicatedInterface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Interface_DedicatedInterface{`,
-		`DedicatedInterface:` + strings.Replace(fmt.Sprintf("%v", this.DedicatedInterface), "DedicatedInterfaceType", "ves_io_schema_network_interface.DedicatedInterfaceType", 1) + `,`,
+		`DedicatedInterface:` + strings.Replace(fmt.Sprintf("%v", this.DedicatedInterface), "DedicatedInterfaceType", "network_interface.DedicatedInterfaceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14637,7 +13864,7 @@ func (this *Interface_DedicatedManagementInterface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Interface_DedicatedManagementInterface{`,
-		`DedicatedManagementInterface:` + strings.Replace(fmt.Sprintf("%v", this.DedicatedManagementInterface), "DedicatedManagementInterfaceType", "ves_io_schema_network_interface.DedicatedManagementInterfaceType", 1) + `,`,
+		`DedicatedManagementInterface:` + strings.Replace(fmt.Sprintf("%v", this.DedicatedManagementInterface), "DedicatedManagementInterfaceType", "network_interface.DedicatedManagementInterfaceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14647,7 +13874,7 @@ func (this *Interface_TunnelInterface) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Interface_TunnelInterface{`,
-		`TunnelInterface:` + strings.Replace(fmt.Sprintf("%v", this.TunnelInterface), "TunnelInterfaceType", "ves_io_schema_network_interface.TunnelInterfaceType", 1) + `,`,
+		`TunnelInterface:` + strings.Replace(fmt.Sprintf("%v", this.TunnelInterface), "TunnelInterfaceType", "network_interface.TunnelInterfaceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14656,8 +13883,13 @@ func (this *InterfaceListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForInterfaces := "[]*Interface{"
+	for _, f := range this.Interfaces {
+		repeatedStringForInterfaces += strings.Replace(f.String(), "Interface", "Interface", 1) + ","
+	}
+	repeatedStringForInterfaces += "}"
 	s := strings.Join([]string{`&InterfaceListType{`,
-		`Interfaces:` + strings.Replace(fmt.Sprintf("%v", this.Interfaces), "Interface", "Interface", 1) + `,`,
+		`Interfaces:` + repeatedStringForInterfaces + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14670,7 +13902,7 @@ func (this *StorageInterfaceType) String() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -14679,7 +13911,7 @@ func (this *StorageInterfaceType) String() string {
 	s := strings.Join([]string{`&StorageInterfaceType{`,
 		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
 		`Labels:` + mapStringForLabels + `,`,
-		`StorageInterface:` + strings.Replace(fmt.Sprintf("%v", this.StorageInterface), "EthernetInterfaceType", "ves_io_schema_network_interface.EthernetInterfaceType", 1) + `,`,
+		`StorageInterface:` + strings.Replace(fmt.Sprintf("%v", this.StorageInterface), "EthernetInterfaceType", "network_interface.EthernetInterfaceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14688,8 +13920,13 @@ func (this *StorageInterfaceListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStorageInterfaces := "[]*StorageInterfaceType{"
+	for _, f := range this.StorageInterfaces {
+		repeatedStringForStorageInterfaces += strings.Replace(f.String(), "StorageInterfaceType", "StorageInterfaceType", 1) + ","
+	}
+	repeatedStringForStorageInterfaces += "}"
 	s := strings.Join([]string{`&StorageInterfaceListType{`,
-		`StorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.StorageInterfaces), "StorageInterfaceType", "StorageInterfaceType", 1) + `,`,
+		`StorageInterfaces:` + repeatedStringForStorageInterfaces + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14698,8 +13935,13 @@ func (this *StaticRoutesListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForStaticRoutes := "[]*StaticRouteViewType{"
+	for _, f := range this.StaticRoutes {
+		repeatedStringForStaticRoutes += strings.Replace(fmt.Sprintf("%v", f), "StaticRouteViewType", "virtual_network.StaticRouteViewType", 1) + ","
+	}
+	repeatedStringForStaticRoutes += "}"
 	s := strings.Join([]string{`&StaticRoutesListType{`,
-		`StaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.StaticRoutes), "StaticRouteViewType", "ves_io_schema_virtual_network.StaticRouteViewType", 1) + `,`,
+		`StaticRoutes:` + repeatedStringForStaticRoutes + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14712,7 +13954,7 @@ func (this *VnConfiguration) String() string {
 	for k, _ := range this.Labels {
 		keysForLabels = append(keysForLabels, k)
 	}
-	sortkeys.Strings(keysForLabels)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
 	mapStringForLabels := "map[string]string{"
 	for _, k := range keysForLabels {
 		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
@@ -14731,7 +13973,7 @@ func (this *VnConfiguration_NoStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VnConfiguration_NoStaticRoutes{`,
-		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14751,7 +13993,7 @@ func (this *VnConfiguration_NoDcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VnConfiguration_NoDcClusterGroup{`,
-		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoDcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.NoDcClusterGroup), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14761,7 +14003,7 @@ func (this *VnConfiguration_DcClusterGroup) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VnConfiguration_DcClusterGroup{`,
-		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`DcClusterGroup:` + strings.Replace(fmt.Sprintf("%v", this.DcClusterGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14781,7 +14023,7 @@ func (this *SliVnConfiguration_NoStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&SliVnConfiguration_NoStaticRoutes{`,
-		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14812,7 +14054,7 @@ func (this *GlobalNetworkConnectionType_SloToGlobalDr) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalNetworkConnectionType_SloToGlobalDr{`,
-		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "ves_io_schema_views.GlobalConnectorType", 1) + `,`,
+		`SloToGlobalDr:` + strings.Replace(fmt.Sprintf("%v", this.SloToGlobalDr), "GlobalConnectorType", "views.GlobalConnectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14822,7 +14064,7 @@ func (this *GlobalNetworkConnectionType_DisableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalNetworkConnectionType_DisableForwardProxy{`,
-		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.DisableForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14832,7 +14074,7 @@ func (this *GlobalNetworkConnectionType_EnableForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalNetworkConnectionType_EnableForwardProxy{`,
-		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "ves_io_schema4.ForwardProxyConfigType", 1) + `,`,
+		`EnableForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.EnableForwardProxy), "ForwardProxyConfigType", "schema.ForwardProxyConfigType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14841,8 +14083,13 @@ func (this *GlobalNetworkConnectionListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForGlobalNetworkConnections := "[]*GlobalNetworkConnectionType{"
+	for _, f := range this.GlobalNetworkConnections {
+		repeatedStringForGlobalNetworkConnections += strings.Replace(f.String(), "GlobalNetworkConnectionType", "GlobalNetworkConnectionType", 1) + ","
+	}
+	repeatedStringForGlobalNetworkConnections += "}"
 	s := strings.Join([]string{`&GlobalNetworkConnectionListType{`,
-		`GlobalNetworkConnections:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkConnections), "GlobalNetworkConnectionType", "GlobalNetworkConnectionType", 1) + `,`,
+		`GlobalNetworkConnections:` + repeatedStringForGlobalNetworkConnections + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14874,7 +14121,7 @@ func (this *VssNetworkConfiguration_DefaultConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_DefaultConfig{`,
-		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14894,7 +14141,7 @@ func (this *VssNetworkConfiguration_DefaultInterfaceConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_DefaultInterfaceConfig{`,
-		`DefaultInterfaceConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultInterfaceConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultInterfaceConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultInterfaceConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14914,7 +14161,7 @@ func (this *VssNetworkConfiguration_NoNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_NoNetworkPolicy{`,
-		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14924,7 +14171,7 @@ func (this *VssNetworkConfiguration_ActiveNetworkPolicies) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_ActiveNetworkPolicies{`,
-		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "ves_io_schema_network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
+		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14934,7 +14181,7 @@ func (this *VssNetworkConfiguration_NoForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_NoForwardProxy{`,
-		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14944,7 +14191,7 @@ func (this *VssNetworkConfiguration_ActiveForwardProxyPolicies) String() string 
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_ActiveForwardProxyPolicies{`,
-		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
+		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14954,7 +14201,7 @@ func (this *VssNetworkConfiguration_NoGlobalNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_NoGlobalNetwork{`,
-		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14964,7 +14211,7 @@ func (this *VssNetworkConfiguration_GlobalNetworkList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_GlobalNetworkList{`,
-		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "ves_io_schema_views1.GlobalNetworkConnectionListType", 1) + `,`,
+		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "views.GlobalNetworkConnectionListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14974,7 +14221,7 @@ func (this *VssNetworkConfiguration_ForwardProxyAllowAll) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_ForwardProxyAllowAll{`,
-		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14984,7 +14231,7 @@ func (this *VssNetworkConfiguration_DefaultSliConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssNetworkConfiguration_DefaultSliConfig{`,
-		`DefaultSliConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSliConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultSliConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSliConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15017,7 +14264,7 @@ func (this *VssStorageConfiguration_NoStorageInterfaces) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_NoStorageInterfaces{`,
-		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageInterfaces), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15037,7 +14284,7 @@ func (this *VssStorageConfiguration_NoStorageDevice) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_NoStorageDevice{`,
-		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStorageDevice:` + strings.Replace(fmt.Sprintf("%v", this.NoStorageDevice), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15047,7 +14294,7 @@ func (this *VssStorageConfiguration_StorageDeviceList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_StorageDeviceList{`,
-		`StorageDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.StorageDeviceList), "FleetStorageDeviceListType", "ves_io_schema_fleet.FleetStorageDeviceListType", 1) + `,`,
+		`StorageDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.StorageDeviceList), "FleetStorageDeviceListType", "fleet.FleetStorageDeviceListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15057,7 +14304,7 @@ func (this *VssStorageConfiguration_DefaultStorageClass) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_DefaultStorageClass{`,
-		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageClass:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageClass), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15067,7 +14314,7 @@ func (this *VssStorageConfiguration_StorageClassList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_StorageClassList{`,
-		`StorageClassList:` + strings.Replace(fmt.Sprintf("%v", this.StorageClassList), "FleetStorageClassListType", "ves_io_schema_fleet.FleetStorageClassListType", 1) + `,`,
+		`StorageClassList:` + strings.Replace(fmt.Sprintf("%v", this.StorageClassList), "FleetStorageClassListType", "fleet.FleetStorageClassListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15077,7 +14324,7 @@ func (this *VssStorageConfiguration_NoStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&VssStorageConfiguration_NoStaticRoutes{`,
-		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15107,14 +14354,14 @@ func (this *GlobalSpecType) String() string {
 		`StorageCfgChoice:` + fmt.Sprintf("%v", this.StorageCfgChoice) + `,`,
 		`GpuChoice:` + fmt.Sprintf("%v", this.GpuChoice) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`UsbPolicyChoice:` + fmt.Sprintf("%v", this.UsbPolicyChoice) + `,`,
 		`LocalControlPlaneChoice:` + fmt.Sprintf("%v", this.LocalControlPlaneChoice) + `,`,
-		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "ves_io_schema_views.VolterraSoftwareType", 1) + `,`,
-		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "ves_io_schema_views.OperatingSystemType", 1) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
+		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15124,7 +14371,7 @@ func (this *GlobalSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15134,7 +14381,7 @@ func (this *GlobalSpecType_BondDeviceList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_BondDeviceList{`,
-		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "ves_io_schema_fleet.FleetBondDevicesListType", 1) + `,`,
+		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "fleet.FleetBondDevicesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15144,7 +14391,7 @@ func (this *GlobalSpecType_DefaultNetworkConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DefaultNetworkConfig{`,
-		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15164,7 +14411,7 @@ func (this *GlobalSpecType_DefaultStorageConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DefaultStorageConfig{`,
-		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15184,7 +14431,7 @@ func (this *GlobalSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15194,7 +14441,7 @@ func (this *GlobalSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15204,7 +14451,7 @@ func (this *GlobalSpecType_NoK8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoK8SCluster{`,
-		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15214,7 +14461,7 @@ func (this *GlobalSpecType_K8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_K8SCluster{`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15224,7 +14471,7 @@ func (this *GlobalSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15234,7 +14481,7 @@ func (this *GlobalSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15244,7 +14491,7 @@ func (this *GlobalSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15254,7 +14501,7 @@ func (this *GlobalSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15264,7 +14511,7 @@ func (this *GlobalSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15274,7 +14521,7 @@ func (this *GlobalSpecType_NoLocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoLocalControlPlane{`,
-		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15284,7 +14531,7 @@ func (this *GlobalSpecType_LocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LocalControlPlane{`,
-		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "ves_io_schema_fleet.LocalControlPlaneType", 1) + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "fleet.LocalControlPlaneType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15294,7 +14541,7 @@ func (this *GlobalSpecType_EnableVgpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_EnableVgpu{`,
-		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "ves_io_schema_fleet.VGPUConfiguration", 1) + `,`,
+		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "fleet.VGPUConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15312,13 +14559,13 @@ func (this *CreateSpecType) String() string {
 		`StorageCfgChoice:` + fmt.Sprintf("%v", this.StorageCfgChoice) + `,`,
 		`GpuChoice:` + fmt.Sprintf("%v", this.GpuChoice) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`UsbPolicyChoice:` + fmt.Sprintf("%v", this.UsbPolicyChoice) + `,`,
 		`LocalControlPlaneChoice:` + fmt.Sprintf("%v", this.LocalControlPlaneChoice) + `,`,
-		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "ves_io_schema_views.VolterraSoftwareType", 1) + `,`,
-		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "ves_io_schema_views.OperatingSystemType", 1) + `,`,
+		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
+		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15328,7 +14575,7 @@ func (this *CreateSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15338,7 +14585,7 @@ func (this *CreateSpecType_BondDeviceList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_BondDeviceList{`,
-		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "ves_io_schema_fleet.FleetBondDevicesListType", 1) + `,`,
+		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "fleet.FleetBondDevicesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15348,7 +14595,7 @@ func (this *CreateSpecType_DefaultNetworkConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DefaultNetworkConfig{`,
-		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15368,7 +14615,7 @@ func (this *CreateSpecType_DefaultStorageConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DefaultStorageConfig{`,
-		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15388,7 +14635,7 @@ func (this *CreateSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15398,7 +14645,7 @@ func (this *CreateSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15408,7 +14655,7 @@ func (this *CreateSpecType_NoK8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoK8SCluster{`,
-		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15418,7 +14665,7 @@ func (this *CreateSpecType_K8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_K8SCluster{`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15428,7 +14675,7 @@ func (this *CreateSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15438,7 +14685,7 @@ func (this *CreateSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15448,7 +14695,7 @@ func (this *CreateSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15458,7 +14705,7 @@ func (this *CreateSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15468,7 +14715,7 @@ func (this *CreateSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15478,7 +14725,7 @@ func (this *CreateSpecType_NoLocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoLocalControlPlane{`,
-		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15488,7 +14735,7 @@ func (this *CreateSpecType_LocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LocalControlPlane{`,
-		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "ves_io_schema_fleet.LocalControlPlaneType", 1) + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "fleet.LocalControlPlaneType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15498,7 +14745,7 @@ func (this *CreateSpecType_EnableVgpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_EnableVgpu{`,
-		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "ves_io_schema_fleet.VGPUConfiguration", 1) + `,`,
+		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "fleet.VGPUConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15516,7 +14763,7 @@ func (this *ReplaceSpecType) String() string {
 		`StorageCfgChoice:` + fmt.Sprintf("%v", this.StorageCfgChoice) + `,`,
 		`GpuChoice:` + fmt.Sprintf("%v", this.GpuChoice) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`UsbPolicyChoice:` + fmt.Sprintf("%v", this.UsbPolicyChoice) + `,`,
@@ -15530,7 +14777,7 @@ func (this *ReplaceSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15540,7 +14787,7 @@ func (this *ReplaceSpecType_BondDeviceList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_BondDeviceList{`,
-		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "ves_io_schema_fleet.FleetBondDevicesListType", 1) + `,`,
+		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "fleet.FleetBondDevicesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15550,7 +14797,7 @@ func (this *ReplaceSpecType_DefaultNetworkConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DefaultNetworkConfig{`,
-		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15570,7 +14817,7 @@ func (this *ReplaceSpecType_DefaultStorageConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DefaultStorageConfig{`,
-		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15590,7 +14837,7 @@ func (this *ReplaceSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15600,7 +14847,7 @@ func (this *ReplaceSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15610,7 +14857,7 @@ func (this *ReplaceSpecType_NoK8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoK8SCluster{`,
-		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15620,7 +14867,7 @@ func (this *ReplaceSpecType_K8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_K8SCluster{`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15630,7 +14877,7 @@ func (this *ReplaceSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15640,7 +14887,7 @@ func (this *ReplaceSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15650,7 +14897,7 @@ func (this *ReplaceSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15660,7 +14907,7 @@ func (this *ReplaceSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15670,7 +14917,7 @@ func (this *ReplaceSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15680,7 +14927,7 @@ func (this *ReplaceSpecType_NoLocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoLocalControlPlane{`,
-		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15690,7 +14937,7 @@ func (this *ReplaceSpecType_LocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LocalControlPlane{`,
-		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "ves_io_schema_fleet.LocalControlPlaneType", 1) + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "fleet.LocalControlPlaneType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15700,7 +14947,7 @@ func (this *ReplaceSpecType_EnableVgpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_EnableVgpu{`,
-		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "ves_io_schema_fleet.VGPUConfiguration", 1) + `,`,
+		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "fleet.VGPUConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15720,7 +14967,7 @@ func (this *GetSpecType) String() string {
 		`StorageCfgChoice:` + fmt.Sprintf("%v", this.StorageCfgChoice) + `,`,
 		`GpuChoice:` + fmt.Sprintf("%v", this.GpuChoice) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`UsbPolicyChoice:` + fmt.Sprintf("%v", this.UsbPolicyChoice) + `,`,
@@ -15735,7 +14982,7 @@ func (this *GetSpecType_NoBondDevices) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoBondDevices{`,
-		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoBondDevices:` + strings.Replace(fmt.Sprintf("%v", this.NoBondDevices), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15745,7 +14992,7 @@ func (this *GetSpecType_BondDeviceList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_BondDeviceList{`,
-		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "ves_io_schema_fleet.FleetBondDevicesListType", 1) + `,`,
+		`BondDeviceList:` + strings.Replace(fmt.Sprintf("%v", this.BondDeviceList), "FleetBondDevicesListType", "fleet.FleetBondDevicesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15755,7 +15002,7 @@ func (this *GetSpecType_DefaultNetworkConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DefaultNetworkConfig{`,
-		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultNetworkConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultNetworkConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15775,7 +15022,7 @@ func (this *GetSpecType_DefaultStorageConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DefaultStorageConfig{`,
-		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DefaultStorageConfig:` + strings.Replace(fmt.Sprintf("%v", this.DefaultStorageConfig), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15795,7 +15042,7 @@ func (this *GetSpecType_DisableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableGpu{`,
-		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DisableGpu:` + strings.Replace(fmt.Sprintf("%v", this.DisableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15805,7 +15052,7 @@ func (this *GetSpecType_EnableGpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_EnableGpu{`,
-		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`EnableGpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableGpu), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15815,7 +15062,7 @@ func (this *GetSpecType_NoK8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoK8SCluster{`,
-		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15825,7 +15072,7 @@ func (this *GetSpecType_K8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_K8SCluster{`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15835,7 +15082,7 @@ func (this *GetSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15845,7 +15092,7 @@ func (this *GetSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15855,7 +15102,7 @@ func (this *GetSpecType_DenyAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DenyAllUsb{`,
-		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DenyAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.DenyAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15865,7 +15112,7 @@ func (this *GetSpecType_AllowAllUsb) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AllowAllUsb{`,
-		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AllowAllUsb:` + strings.Replace(fmt.Sprintf("%v", this.AllowAllUsb), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15875,7 +15122,7 @@ func (this *GetSpecType_UsbPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_UsbPolicy{`,
-		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`UsbPolicy:` + strings.Replace(fmt.Sprintf("%v", this.UsbPolicy), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15885,7 +15132,7 @@ func (this *GetSpecType_NoLocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoLocalControlPlane{`,
-		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoLocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.NoLocalControlPlane), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15895,7 +15142,7 @@ func (this *GetSpecType_LocalControlPlane) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LocalControlPlane{`,
-		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "ves_io_schema_fleet.LocalControlPlaneType", 1) + `,`,
+		`LocalControlPlane:` + strings.Replace(fmt.Sprintf("%v", this.LocalControlPlane), "LocalControlPlaneType", "fleet.LocalControlPlaneType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15905,7 +15152,7 @@ func (this *GetSpecType_EnableVgpu) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_EnableVgpu{`,
-		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "ves_io_schema_fleet.VGPUConfiguration", 1) + `,`,
+		`EnableVgpu:` + strings.Replace(fmt.Sprintf("%v", this.EnableVgpu), "VGPUConfiguration", "fleet.VGPUConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15933,7 +15180,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -15961,7 +15208,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15971,6 +15218,9 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -15990,7 +15240,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -15999,6 +15249,9 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16019,7 +15272,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -16036,7 +15289,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16046,6 +15299,9 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16062,7 +15318,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16072,6 +15328,9 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16108,7 +15367,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16117,10 +15376,13 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_interface.EthernetInterfaceType{}
+			v := &network_interface.EthernetInterfaceType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16140,7 +15402,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16149,10 +15411,13 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_interface.DedicatedInterfaceType{}
+			v := &network_interface.DedicatedInterfaceType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16172,7 +15437,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16181,10 +15446,13 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_interface.DedicatedManagementInterfaceType{}
+			v := &network_interface.DedicatedManagementInterfaceType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16204,7 +15472,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16213,10 +15481,13 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_interface.TunnelInterfaceType{}
+			v := &network_interface.TunnelInterfaceType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16229,6 +15500,9 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -16258,7 +15532,7 @@ func (m *InterfaceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16286,7 +15560,7 @@ func (m *InterfaceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16295,6 +15569,9 @@ func (m *InterfaceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16310,6 +15587,9 @@ func (m *InterfaceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -16339,7 +15619,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16367,7 +15647,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16377,6 +15657,9 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16396,7 +15679,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16405,6 +15688,9 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16425,7 +15711,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -16442,7 +15728,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16452,6 +15738,9 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16468,7 +15757,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16478,6 +15767,9 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16514,7 +15806,7 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16523,11 +15815,14 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.StorageInterface == nil {
-				m.StorageInterface = &ves_io_schema_network_interface.EthernetInterfaceType{}
+				m.StorageInterface = &network_interface.EthernetInterfaceType{}
 			}
 			if err := m.StorageInterface.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -16540,6 +15835,9 @@ func (m *StorageInterfaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -16569,7 +15867,7 @@ func (m *StorageInterfaceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16597,7 +15895,7 @@ func (m *StorageInterfaceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16606,6 +15904,9 @@ func (m *StorageInterfaceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16621,6 +15922,9 @@ func (m *StorageInterfaceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -16650,7 +15954,7 @@ func (m *StaticRoutesListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16678,7 +15982,7 @@ func (m *StaticRoutesListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16687,10 +15991,13 @@ func (m *StaticRoutesListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.StaticRoutes = append(m.StaticRoutes, &ves_io_schema_virtual_network.StaticRouteViewType{})
+			m.StaticRoutes = append(m.StaticRoutes, &virtual_network.StaticRouteViewType{})
 			if err := m.StaticRoutes[len(m.StaticRoutes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16702,6 +16009,9 @@ func (m *StaticRoutesListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -16731,7 +16041,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -16759,7 +16069,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16768,6 +16078,9 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16788,7 +16101,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -16805,7 +16118,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16815,6 +16128,9 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16831,7 +16147,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -16841,6 +16157,9 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -16877,7 +16196,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16886,10 +16205,13 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16909,7 +16231,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16918,6 +16240,9 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -16941,7 +16266,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16950,10 +16275,13 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16973,7 +16301,7 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -16982,10 +16310,13 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -16998,6 +16329,9 @@ func (m *VnConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -17027,7 +16361,7 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17055,7 +16389,7 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17064,10 +16398,13 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17087,7 +16424,7 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17096,6 +16433,9 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17112,6 +16452,9 @@ func (m *SliVnConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -17141,7 +16484,7 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17169,7 +16512,7 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17178,10 +16521,13 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.GlobalConnectorType{}
+			v := &views.GlobalConnectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17201,7 +16547,7 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17210,10 +16556,13 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17233,7 +16582,7 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17242,10 +16591,13 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.ForwardProxyConfigType{}
+			v := &schema.ForwardProxyConfigType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17258,6 +16610,9 @@ func (m *GlobalNetworkConnectionType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -17287,7 +16642,7 @@ func (m *GlobalNetworkConnectionListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17315,7 +16670,7 @@ func (m *GlobalNetworkConnectionListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17324,6 +16679,9 @@ func (m *GlobalNetworkConnectionListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17339,6 +16697,9 @@ func (m *GlobalNetworkConnectionListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -17368,7 +16729,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -17396,7 +16757,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17405,10 +16766,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17428,7 +16792,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17437,6 +16801,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17460,7 +16827,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17469,10 +16836,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17492,7 +16862,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17501,6 +16871,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17524,7 +16897,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17533,10 +16906,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17556,7 +16932,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17565,10 +16941,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+			v := &network_firewall.ActiveNetworkPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17588,7 +16967,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17597,10 +16976,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17620,7 +17002,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17629,10 +17011,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
+			v := &network_firewall.ActiveForwardProxyPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17652,7 +17037,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17661,10 +17046,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17684,7 +17072,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17693,10 +17081,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.GlobalNetworkConnectionListType{}
+			v := &views.GlobalNetworkConnectionListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17716,7 +17107,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17726,6 +17117,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17745,7 +17139,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17755,6 +17149,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17774,7 +17171,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17784,6 +17181,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17803,7 +17203,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17813,6 +17213,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17832,7 +17235,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.VipVrrpMode |= (ves_io_schema4.VipVrrpType(b) & 0x7F) << shift
+				m.VipVrrpMode |= schema.VipVrrpType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17851,7 +17254,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17861,6 +17264,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17880,7 +17286,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelDeadTimeout |= (uint32(b) & 0x7F) << shift
+				m.TunnelDeadTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17899,7 +17305,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17908,10 +17314,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17931,7 +17340,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17940,10 +17349,13 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -17963,7 +17375,7 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -17972,6 +17384,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -17988,6 +17403,9 @@ func (m *VssNetworkConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -18017,7 +17435,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18045,7 +17463,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18054,10 +17472,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18077,7 +17498,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18086,6 +17507,9 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18109,7 +17533,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18118,10 +17542,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18141,7 +17568,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18150,10 +17577,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetStorageDeviceListType{}
+			v := &fleet.FleetStorageDeviceListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18173,7 +17603,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18182,10 +17612,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18205,7 +17638,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18214,10 +17647,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetStorageClassListType{}
+			v := &fleet.FleetStorageClassListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18237,7 +17673,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18246,10 +17682,13 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18269,7 +17708,7 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18278,6 +17717,9 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18294,6 +17736,9 @@ func (m *VssStorageConfiguration) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -18323,7 +17768,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -18351,7 +17796,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18361,6 +17806,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18380,7 +17828,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18390,6 +17838,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18409,7 +17860,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18419,6 +17870,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18438,7 +17892,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18448,6 +17902,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18467,7 +17924,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18477,6 +17934,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18496,7 +17956,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18505,10 +17965,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18528,7 +17991,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18537,10 +18000,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetBondDevicesListType{}
+			v := &fleet.FleetBondDevicesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18560,7 +18026,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18569,10 +18035,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18592,7 +18061,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18601,6 +18070,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18624,7 +18096,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18633,10 +18105,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18656,7 +18131,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18665,6 +18140,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18688,7 +18166,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18697,10 +18175,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18720,7 +18201,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18729,10 +18210,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18752,7 +18236,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18762,6 +18246,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -18781,7 +18268,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18790,11 +18277,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -18814,7 +18304,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18823,10 +18313,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18846,7 +18339,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18855,10 +18348,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18878,7 +18374,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18887,10 +18383,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18910,7 +18409,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18919,10 +18418,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18942,7 +18444,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18951,10 +18453,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -18974,7 +18479,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -18983,10 +18488,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19006,7 +18514,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19015,10 +18523,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19038,7 +18549,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19047,10 +18558,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19070,7 +18584,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19079,10 +18593,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.LocalControlPlaneType{}
+			v := &fleet.LocalControlPlaneType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19102,7 +18619,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19111,11 +18628,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sw == nil {
-				m.Sw = &ves_io_schema_views.VolterraSoftwareType{}
+				m.Sw = &views.VolterraSoftwareType{}
 			}
 			if err := m.Sw.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -19135,7 +18655,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19144,11 +18664,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Os == nil {
-				m.Os = &ves_io_schema_views.OperatingSystemType{}
+				m.Os = &views.OperatingSystemType{}
 			}
 			if err := m.Os.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -19168,7 +18691,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19177,10 +18700,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.VGPUConfiguration{}
+			v := &fleet.VGPUConfiguration{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19200,7 +18726,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19209,11 +18735,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -19226,6 +18755,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -19255,7 +18787,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -19283,7 +18815,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19293,6 +18825,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19312,7 +18847,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19322,6 +18857,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19341,7 +18879,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19351,6 +18889,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19370,7 +18911,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19379,10 +18920,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19402,7 +18946,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19411,10 +18955,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetBondDevicesListType{}
+			v := &fleet.FleetBondDevicesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19434,7 +18981,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19443,10 +18990,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19466,7 +19016,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19475,6 +19025,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19498,7 +19051,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19507,10 +19060,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19530,7 +19086,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19539,6 +19095,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19562,7 +19121,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19571,10 +19130,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19594,7 +19156,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19603,10 +19165,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19626,7 +19191,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19636,6 +19201,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -19655,7 +19223,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19664,11 +19232,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -19688,7 +19259,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19697,10 +19268,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19720,7 +19294,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19729,10 +19303,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19752,7 +19329,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19761,10 +19338,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19784,7 +19364,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19793,10 +19373,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19816,7 +19399,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19825,10 +19408,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19848,7 +19434,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19857,10 +19443,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19880,7 +19469,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19889,10 +19478,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19912,7 +19504,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19921,10 +19513,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19944,7 +19539,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19953,10 +19548,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.LocalControlPlaneType{}
+			v := &fleet.LocalControlPlaneType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19976,7 +19574,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -19985,11 +19583,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sw == nil {
-				m.Sw = &ves_io_schema_views.VolterraSoftwareType{}
+				m.Sw = &views.VolterraSoftwareType{}
 			}
 			if err := m.Sw.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -20009,7 +19610,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20018,11 +19619,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Os == nil {
-				m.Os = &ves_io_schema_views.OperatingSystemType{}
+				m.Os = &views.OperatingSystemType{}
 			}
 			if err := m.Os.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -20042,7 +19646,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20051,10 +19655,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.VGPUConfiguration{}
+			v := &fleet.VGPUConfiguration{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20067,6 +19674,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -20096,7 +19706,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -20124,7 +19734,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20134,6 +19744,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20153,7 +19766,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20163,6 +19776,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20182,7 +19798,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20192,6 +19808,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20211,7 +19830,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20220,10 +19839,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20243,7 +19865,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20252,10 +19874,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetBondDevicesListType{}
+			v := &fleet.FleetBondDevicesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20275,7 +19900,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20284,10 +19909,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20307,7 +19935,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20316,6 +19944,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20339,7 +19970,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20348,10 +19979,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20371,7 +20005,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20380,6 +20014,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20403,7 +20040,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20412,10 +20049,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20435,7 +20075,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20444,10 +20084,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20467,7 +20110,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20477,6 +20120,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20496,7 +20142,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20505,11 +20151,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -20529,7 +20178,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20538,10 +20187,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20561,7 +20213,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20570,10 +20222,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20593,7 +20248,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20602,10 +20257,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20625,7 +20283,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20634,10 +20292,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20657,7 +20318,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20666,10 +20327,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20689,7 +20353,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20698,10 +20362,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20721,7 +20388,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20730,10 +20397,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20753,7 +20423,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20762,10 +20432,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20785,7 +20458,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20794,10 +20467,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.LocalControlPlaneType{}
+			v := &fleet.LocalControlPlaneType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20817,7 +20493,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20826,10 +20502,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.VGPUConfiguration{}
+			v := &fleet.VGPUConfiguration{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -20842,6 +20521,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -20871,7 +20553,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -20899,7 +20581,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20909,6 +20591,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20928,7 +20613,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20938,6 +20623,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20957,7 +20645,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20967,6 +20655,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -20986,7 +20677,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -20996,6 +20687,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -21015,7 +20709,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21025,6 +20719,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -21044,7 +20741,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21053,10 +20750,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21076,7 +20776,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21085,10 +20785,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.FleetBondDevicesListType{}
+			v := &fleet.FleetBondDevicesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21108,7 +20811,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21117,10 +20820,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21140,7 +20846,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21149,6 +20855,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -21172,7 +20881,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21181,10 +20890,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21204,7 +20916,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21213,6 +20925,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -21236,7 +20951,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21245,10 +20960,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21268,7 +20986,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21277,10 +20995,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21300,7 +21021,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21310,6 +21031,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -21329,7 +21053,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21338,11 +21062,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -21362,7 +21089,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21371,10 +21098,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21394,7 +21124,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21403,10 +21133,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21426,7 +21159,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21435,10 +21168,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21458,7 +21194,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21467,10 +21203,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21490,7 +21229,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21499,10 +21238,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21522,7 +21264,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21531,10 +21273,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21554,7 +21299,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21563,10 +21308,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21586,7 +21334,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SiteState |= (ves_io_schema_site.SiteState(b) & 0x7F) << shift
+				m.SiteState |= site.SiteState(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21605,7 +21353,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21614,10 +21362,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21637,7 +21388,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21646,10 +21397,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.LocalControlPlaneType{}
+			v := &fleet.LocalControlPlaneType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21669,7 +21423,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -21678,10 +21432,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_fleet.VGPUConfiguration{}
+			v := &fleet.VGPUConfiguration{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -21694,6 +21451,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -21711,6 +21471,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -21742,10 +21503,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -21762,302 +21521,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/views/voltstack_site/types.proto", fileDescriptorTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/voltstack_site/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 3795 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4d, 0x6c, 0x1b, 0xd9,
-	0x7d, 0xd7, 0x23, 0x29, 0x89, 0xfa, 0x53, 0xa2, 0x86, 0xa3, 0xaf, 0xb1, 0x6c, 0x53, 0x32, 0x77,
-	0x93, 0x75, 0xec, 0x11, 0x65, 0x92, 0xfa, 0xb2, 0xb3, 0x71, 0xe2, 0xb1, 0x76, 0x2d, 0x6b, 0xbf,
-	0xdc, 0x91, 0x57, 0x48, 0x82, 0x34, 0x83, 0x21, 0xe7, 0x89, 0x9e, 0x78, 0x34, 0xc3, 0xcc, 0x0c,
-	0xa9, 0xa8, 0x85, 0x81, 0x85, 0x0b, 0xb4, 0x40, 0x0b, 0x14, 0xc5, 0xe6, 0x50, 0xa0, 0xa7, 0x00,
-	0xcd, 0x61, 0x6b, 0xa0, 0xe8, 0xa1, 0xa7, 0x96, 0x39, 0x08, 0x06, 0x8a, 0x06, 0x3d, 0xe9, 0xd0,
-	0x43, 0xd0, 0x53, 0x56, 0xb9, 0x38, 0x3d, 0xed, 0x31, 0xf0, 0xa1, 0x28, 0xe6, 0xcd, 0x9b, 0xe1,
-	0xcc, 0x70, 0x48, 0xd1, 0xf2, 0x6e, 0x91, 0xb6, 0xba, 0x68, 0xa9, 0xf7, 0xfe, 0x5f, 0xef, 0xff,
-	0xfe, 0x1f, 0xbf, 0xff, 0xa3, 0xbc, 0x50, 0x6c, 0x61, 0xab, 0xa8, 0x1a, 0xcb, 0x56, 0xed, 0x11,
-	0xde, 0x97, 0x97, 0x5b, 0x2a, 0x3e, 0xb0, 0x96, 0x5b, 0x86, 0x66, 0x5b, 0xb6, 0x5c, 0x7b, 0x2c,
-	0x59, 0xaa, 0x8d, 0x97, 0xed, 0xc3, 0x06, 0xb6, 0x8a, 0x0d, 0xd3, 0xb0, 0x0d, 0xb6, 0xe0, 0xd2,
-	0x17, 0x5d, 0xfa, 0x22, 0xa1, 0x2f, 0x86, 0xe9, 0xe7, 0x97, 0xea, 0xaa, 0xfd, 0xa8, 0x59, 0x2d,
-	0xd6, 0x8c, 0xfd, 0xe5, 0xba, 0x51, 0x37, 0x96, 0x09, 0x6b, 0xb5, 0xb9, 0x47, 0x7e, 0x23, 0xbf,
-	0x90, 0x4f, 0xae, 0xc8, 0xf9, 0x85, 0xb0, 0x09, 0x7b, 0x1a, 0xc6, 0x76, 0x50, 0xe7, 0xfc, 0xb5,
-	0x30, 0x81, 0x8e, 0xed, 0x03, 0xc3, 0x7c, 0x2c, 0xed, 0xa9, 0x26, 0x3e, 0x90, 0x35, 0x2d, 0x44,
-	0x7b, 0x3d, 0x9e, 0x56, 0xd5, 0x6d, 0x6c, 0xee, 0xc9, 0xb5, 0xd0, 0x61, 0xe6, 0x2f, 0x86, 0x89,
-	0x8d, 0x86, 0xad, 0x1a, 0xba, 0xb7, 0x99, 0x0f, 0x6f, 0x46, 0x3d, 0x31, 0x7f, 0x21, 0xbc, 0x1f,
-	0xdc, 0xba, 0x14, 0x71, 0xaa, 0xac, 0xa9, 0x8a, 0x6c, 0x63, 0xba, 0xbb, 0xd8, 0xed, 0x72, 0x29,
-	0xac, 0xfa, 0xcd, 0xb8, 0x4b, 0x71, 0x0c, 0x90, 0x82, 0x5a, 0x16, 0xe2, 0xa8, 0x82, 0x04, 0xdf,
-	0x88, 0x12, 0x98, 0x76, 0x53, 0xd6, 0x24, 0xea, 0x93, 0x20, 0x69, 0xe1, 0xe7, 0x23, 0x30, 0x76,
-	0xdf, 0xf3, 0x11, 0xcb, 0x43, 0x46, 0xc1, 0x56, 0xcd, 0x54, 0x89, 0x55, 0x1c, 0x5a, 0x44, 0x57,
-	0xc7, 0x04, 0xf8, 0xe7, 0xdf, 0x1e, 0x25, 0x87, 0xcd, 0x24, 0xf7, 0x49, 0x42, 0x0c, 0x6e, 0xb3,
-	0x18, 0x46, 0x34, 0xb9, 0x8a, 0x35, 0x8b, 0x4b, 0x2c, 0x26, 0xaf, 0x66, 0xca, 0x37, 0x8b, 0xa7,
-	0xc7, 0x48, 0xd1, 0x57, 0x56, 0x7c, 0x9f, 0xf0, 0xbe, 0xa3, 0xdb, 0xe6, 0xa1, 0xc0, 0xfe, 0xcd,
-	0x2f, 0x50, 0x12, 0x10, 0x3a, 0xf9, 0xf5, 0xbf, 0x24, 0x47, 0xfe, 0xfc, 0x17, 0x28, 0x91, 0x1e,
-	0x12, 0xa9, 0x70, 0x76, 0x1f, 0x58, 0x6c, 0x3f, 0xc2, 0xa6, 0x8e, 0xed, 0xce, 0x75, 0x72, 0xc3,
-	0x8b, 0xe8, 0x6a, 0xa6, 0xbc, 0x16, 0x51, 0xd9, 0x75, 0xed, 0xc5, 0x77, 0x28, 0xab, 0xaf, 0xf7,
-	0xe1, 0x61, 0x03, 0x0b, 0xa9, 0xe3, 0x36, 0x42, 0x5b, 0x43, 0x62, 0x0e, 0x47, 0xb7, 0xd9, 0x1f,
-	0xc1, 0x94, 0x82, 0x15, 0xb5, 0x26, 0xdb, 0x58, 0x09, 0xe8, 0x1b, 0x21, 0xfa, 0xd6, 0x4f, 0xd5,
-	0xb7, 0xe9, 0xf1, 0x86, 0x14, 0x6e, 0x0d, 0x89, 0xac, 0xd2, 0xb5, 0xc3, 0xfe, 0x14, 0x41, 0xbe,
-	0xa3, 0x6c, 0x5f, 0xd6, 0xe5, 0x3a, 0xde, 0xc7, 0x7a, 0xf0, 0x9c, 0xa3, 0x44, 0xef, 0x9d, 0xc1,
-	0xf5, 0x7e, 0xe0, 0x4b, 0x09, 0x1f, 0x39, 0x7d, 0xd4, 0x46, 0x88, 0x1e, 0xfb, 0x92, 0xd2, 0x87,
-	0x9a, 0x7d, 0x0c, 0x8c, 0xdd, 0xd4, 0x75, 0xac, 0x05, 0xcc, 0x48, 0x13, 0x33, 0x56, 0x4e, 0x35,
-	0xe3, 0x21, 0x61, 0xec, 0xad, 0x79, 0xd2, 0x0e, 0x13, 0xcc, 0xdf, 0x84, 0x4c, 0x20, 0x10, 0x58,
-	0x06, 0x92, 0x8f, 0xf1, 0xa1, 0x1b, 0x79, 0xa2, 0xf3, 0x91, 0x9d, 0x86, 0xe1, 0x96, 0xac, 0x35,
-	0x31, 0x97, 0x20, 0x6b, 0xee, 0x2f, 0xb7, 0x12, 0x1b, 0xe8, 0xd6, 0xca, 0xf3, 0x36, 0xba, 0x01,
-	0x17, 0x80, 0xf5, 0xa5, 0x2d, 0x7e, 0x80, 0x6d, 0x59, 0x91, 0x6d, 0x99, 0x4d, 0x96, 0xf8, 0x32,
-	0x4c, 0x41, 0xb6, 0xb3, 0xe5, 0x98, 0xc2, 0xa2, 0x8a, 0xf0, 0x16, 0x30, 0xbe, 0xb9, 0x52, 0xed,
-	0x91, 0xa1, 0xd6, 0x30, 0x3b, 0x75, 0xd4, 0x46, 0xc3, 0xc7, 0x6d, 0x94, 0x3c, 0x69, 0xa3, 0xd1,
-	0x55, 0x7e, 0x8d, 0x5f, 0xe7, 0x37, 0xb6, 0x53, 0xe9, 0x24, 0x93, 0xda, 0x4e, 0xa5, 0x53, 0xcc,
-	0x70, 0xe1, 0x4f, 0x11, 0xe4, 0x7c, 0x51, 0xef, 0xab, 0x96, 0x4d, 0xa4, 0xfd, 0x18, 0xc0, 0x17,
-	0x65, 0x71, 0x88, 0x24, 0xc1, 0xd2, 0x2b, 0x25, 0x81, 0x50, 0x70, 0xfc, 0x42, 0x12, 0xec, 0x53,
-	0x94, 0x60, 0x16, 0xbd, 0x4f, 0x69, 0x7f, 0x8d, 0x43, 0x62, 0x40, 0x49, 0xe1, 0xcf, 0x92, 0x30,
-	0xbd, 0x63, 0x1b, 0xa6, 0x5c, 0xc7, 0x21, 0x27, 0xbf, 0x62, 0xea, 0x36, 0x22, 0xa9, 0xbb, 0x39,
-	0x88, 0xd5, 0x71, 0x7a, 0x07, 0xce, 0xe2, 0x1a, 0xe4, 0x2c, 0x97, 0x3f, 0x10, 0x55, 0xc9, 0xd7,
-	0x49, 0x62, 0x91, 0xb1, 0x22, 0x06, 0xbd, 0x4e, 0x30, 0x2d, 0x3f, 0x6f, 0xa3, 0xeb, 0xfd, 0x82,
-	0x29, 0x1b, 0x2c, 0x94, 0xa8, 0x52, 0xf8, 0x0c, 0x01, 0x17, 0xf5, 0x88, 0x1f, 0x19, 0x7f, 0x81,
-	0x80, 0xed, 0x3a, 0xae, 0x17, 0x22, 0x1b, 0x67, 0x75, 0xf6, 0x40, 0xd1, 0x92, 0x8b, 0x7a, 0xc5,
-	0x2a, 0xfc, 0x14, 0x39, 0x41, 0x23, 0xdb, 0x6a, 0x4d, 0x34, 0x9a, 0x36, 0xb6, 0x7c, 0x33, 0xff,
-	0x18, 0x26, 0x2c, 0xb2, 0x2e, 0x99, 0x64, 0x83, 0x1a, 0x58, 0xee, 0x32, 0x30, 0xd4, 0x40, 0x8a,
-	0x01, 0x59, 0xbb, 0x2a, 0x3e, 0x88, 0x31, 0x8d, 0x89, 0x35, 0x6d, 0xdc, 0x0a, 0x18, 0x51, 0x78,
-	0x3e, 0x0c, 0x93, 0xbb, 0xfa, 0x5d, 0x43, 0xdf, 0x53, 0xeb, 0x4d, 0x53, 0x26, 0x71, 0xf9, 0xd8,
-	0x8f, 0x4b, 0xd7, 0x92, 0x6f, 0x0f, 0xe2, 0xaa, 0x88, 0x90, 0x81, 0x43, 0xf2, 0x3b, 0xc0, 0xe8,
-	0x86, 0x14, 0x76, 0x80, 0x1b, 0x91, 0xd3, 0x11, 0xb5, 0xef, 0xec, 0x37, 0xec, 0xc3, 0xad, 0x21,
-	0x31, 0xab, 0x1b, 0x41, 0x3f, 0xb2, 0x52, 0xd4, 0x7f, 0x29, 0xc2, 0x3e, 0xe0, 0x05, 0x77, 0x5f,
-	0xc8, 0xd6, 0x50, 0xd8, 0x47, 0xec, 0x7b, 0x30, 0xa5, 0x1b, 0x92, 0x52, 0x93, 0x6a, 0x5a, 0xd3,
-	0xb2, 0xb1, 0x29, 0xd5, 0x4d, 0xa3, 0xd9, 0xa0, 0xcd, 0x28, 0xd6, 0x4a, 0x21, 0xe5, 0x54, 0xdb,
-	0x2d, 0x24, 0x32, 0xba, 0xb1, 0x59, 0xbb, 0xeb, 0xb2, 0xdd, 0x73, 0xb8, 0xd8, 0x3a, 0x30, 0x5d,
-	0x92, 0xdc, 0xf6, 0x52, 0x88, 0x35, 0xf8, 0xa3, 0xea, 0x8f, 0x70, 0xcd, 0x16, 0xf1, 0x1e, 0xb9,
-	0xe0, 0xb9, 0x67, 0x4f, 0xba, 0xd8, 0xa9, 0xaa, 0xac, 0x12, 0x52, 0xf4, 0x3a, 0x69, 0xf8, 0xee,
-	0xf3, 0x36, 0x12, 0x60, 0x06, 0x98, 0x0f, 0xdd, 0x58, 0xeb, 0x24, 0x21, 0x2a, 0x01, 0x0b, 0x13,
-	0xae, 0xd7, 0x16, 0xa9, 0x7b, 0x50, 0xd9, 0x21, 0xdd, 0xac, 0x2d, 0x52, 0xf5, 0x8b, 0xee, 0x41,
-	0xd1, 0xaa, 0x70, 0x0d, 0xa6, 0x82, 0x37, 0x13, 0x2c, 0xf4, 0xc9, 0x5f, 0xba, 0xed, 0x28, 0x71,
-	0xd2, 0x46, 0xc9, 0x0a, 0xbf, 0x22, 0x14, 0x61, 0x2e, 0x7a, 0xb0, 0x20, 0xfd, 0x08, 0xa5, 0x1f,
-	0x76, 0xe8, 0xd7, 0xf8, 0xf5, 0xed, 0x54, 0x3a, 0xc1, 0x24, 0xb7, 0x53, 0xe9, 0x61, 0x66, 0xa4,
-	0xf0, 0x5b, 0x04, 0xec, 0x8e, 0xa6, 0x46, 0xe3, 0xf8, 0xf7, 0x3f, 0xb4, 0x5e, 0xc5, 0x43, 0xee,
-	0x89, 0x0b, 0xff, 0x90, 0x84, 0x8b, 0xf7, 0x34, 0xa3, 0x2a, 0x6b, 0xf4, 0x72, 0xee, 0x1a, 0xba,
-	0x8e, 0x6b, 0xce, 0x81, 0x49, 0x35, 0xd9, 0x01, 0xc6, 0xd2, 0x0c, 0xc9, 0x36, 0xa4, 0x3a, 0xa1,
-	0x92, 0x14, 0x93, 0x1e, 0xfa, 0x6a, 0xac, 0xd5, 0xae, 0x2c, 0x2a, 0xc4, 0x30, 0xa9, 0x95, 0x13,
-	0x96, 0x66, 0x3c, 0x34, 0xdc, 0xbd, 0x4d, 0x93, 0x7d, 0x00, 0x33, 0x8a, 0x6a, 0xc9, 0x55, 0x0d,
-	0x4b, 0x7b, 0x86, 0x79, 0x20, 0x9b, 0x8a, 0xd4, 0x30, 0x8d, 0x9f, 0x1c, 0x52, 0x00, 0xd8, 0x23,
-	0x07, 0x5e, 0xb8, 0x81, 0x39, 0x45, 0x59, 0xdf, 0x75, 0x39, 0x1f, 0x38, 0x8c, 0xac, 0x04, 0xd3,
-	0x58, 0x8f, 0x11, 0xe8, 0x26, 0xd5, 0xd7, 0x22, 0x02, 0x83, 0xac, 0xee, 0x1d, 0xbb, 0x00, 0x92,
-	0x6a, 0x60, 0x5d, 0x51, 0x41, 0xaa, 0x5b, 0x6f, 0x3d, 0x6f, 0xa3, 0x37, 0xe0, 0x0a, 0xcc, 0xbb,
-	0x87, 0x58, 0xf4, 0x42, 0xb9, 0xe3, 0x2e, 0xcb, 0x69, 0x29, 0x2b, 0x42, 0x01, 0x72, 0x35, 0x7f,
-	0xcd, 0xbb, 0x80, 0x89, 0xa3, 0x36, 0x4a, 0x38, 0xc5, 0xf4, 0xa4, 0x8d, 0x50, 0x45, 0x58, 0x86,
-	0xe9, 0x90, 0x99, 0x1e, 0xd9, 0x9c, 0x03, 0x59, 0xe8, 0x3d, 0xa5, 0x9c, 0x7b, 0x5a, 0xe5, 0xd7,
-	0xbe, 0x68, 0x23, 0xb4, 0x9d, 0x4a, 0x23, 0x26, 0x41, 0x61, 0x4b, 0x1b, 0xc1, 0x42, 0x8f, 0x1b,
-	0xf3, 0x7b, 0xc0, 0x5f, 0x23, 0x98, 0xa7, 0xf7, 0xe5, 0x35, 0xde, 0x8e, 0x51, 0xaf, 0x54, 0x87,
-	0xfb, 0xc4, 0x86, 0xc0, 0x85, 0xda, 0x43, 0xba, 0xd3, 0x1e, 0x44, 0xae, 0x1e, 0xcf, 0x66, 0x15,
-	0xfe, 0x73, 0x12, 0xe6, 0x76, 0x2d, 0xab, 0xb3, 0x13, 0x48, 0xb0, 0x6f, 0x41, 0x56, 0xc1, 0x7b,
-	0x72, 0x53, 0xb3, 0x1d, 0x6b, 0xf7, 0xd4, 0x3a, 0x29, 0x25, 0xbd, 0xd3, 0x6b, 0x82, 0x52, 0xbb,
-	0x52, 0xd8, 0xef, 0x03, 0x38, 0xa1, 0x4a, 0x59, 0xdd, 0x20, 0xad, 0x9c, 0xa1, 0xd7, 0xf8, 0x83,
-	0xc4, 0x98, 0xa5, 0x19, 0x54, 0xf6, 0x03, 0xe0, 0x3c, 0xd3, 0x02, 0x40, 0xd3, 0xd5, 0xd4, 0x27,
-	0x68, 0xb7, 0x12, 0xe2, 0x2c, 0xe5, 0xf3, 0x5b, 0x37, 0x95, 0xa8, 0x40, 0xb6, 0x23, 0x49, 0x53,
-	0x2d, 0x9b, 0xc6, 0xea, 0xea, 0x2b, 0x61, 0x4d, 0xef, 0xc6, 0xa9, 0xcd, 0x09, 0x71, 0x42, 0x0d,
-	0x6e, 0xb1, 0x02, 0xe4, 0x74, 0xc3, 0x8f, 0x81, 0x86, 0xa1, 0xa9, 0xb5, 0x43, 0x8a, 0xfb, 0xe3,
-	0x0d, 0x4e, 0x8a, 0x93, 0xba, 0x41, 0x6f, 0xe7, 0x01, 0x21, 0x67, 0x2d, 0x98, 0x93, 0x6b, 0xb6,
-	0xda, 0xc2, 0x61, 0x39, 0x2a, 0xb6, 0xb8, 0x31, 0x22, 0xe9, 0x66, 0x0f, 0xac, 0xe7, 0xcd, 0xf4,
-	0xc5, 0x3b, 0x84, 0x3d, 0x28, 0x55, 0xc5, 0x16, 0x29, 0x0d, 0x49, 0x71, 0x46, 0x8e, 0xdb, 0xa4,
-	0xc5, 0x36, 0x9c, 0xcc, 0x99, 0x3e, 0x76, 0xa7, 0x9c, 0x62, 0x1b, 0x2a, 0x09, 0x7f, 0x82, 0xe0,
-	0x32, 0xb5, 0x3b, 0x9c, 0x6c, 0xbe, 0xf5, 0xe3, 0x44, 0xde, 0xed, 0xc1, 0xac, 0x0f, 0xca, 0x0e,
-	0x1d, 0x21, 0x25, 0xce, 0xcb, 0x3d, 0x29, 0xe8, 0x05, 0x84, 0x73, 0x91, 0xcb, 0xf6, 0x39, 0xc8,
-	0xb0, 0x73, 0x01, 0xa1, 0xac, 0x63, 0xf7, 0x60, 0x2a, 0x92, 0xcc, 0x24, 0x5e, 0x26, 0x63, 0xc7,
-	0xb7, 0x60, 0x19, 0xee, 0x59, 0x20, 0xb6, 0x86, 0xc5, 0x5c, 0x28, 0x45, 0x49, 0xb0, 0x5c, 0x83,
-	0x8c, 0xd1, 0xb4, 0x2d, 0x55, 0xc1, 0x52, 0x4b, 0x6d, 0x70, 0x0c, 0x19, 0x37, 0xc6, 0x9c, 0xb4,
-	0x4e, 0x99, 0x89, 0x06, 0x12, 0x81, 0xee, 0xee, 0xaa, 0x0d, 0x76, 0x03, 0x58, 0x8f, 0x56, 0x97,
-	0xf7, 0xb1, 0x85, 0xcd, 0x16, 0x36, 0xb9, 0x5c, 0x94, 0x25, 0x47, 0x89, 0x3e, 0xf4, 0x69, 0xd8,
-	0x12, 0x4c, 0x54, 0xeb, 0x0d, 0xb7, 0x41, 0x99, 0x92, 0xaa, 0x70, 0x2c, 0x61, 0x72, 0x4a, 0x24,
-	0xea, 0x30, 0x66, 0xaa, 0xf5, 0x06, 0x69, 0x6a, 0xe6, 0x7d, 0x85, 0x5d, 0x07, 0xc6, 0x61, 0x69,
-	0x60, 0x6c, 0x4a, 0xb2, 0xa2, 0x98, 0xd8, 0xb2, 0xb8, 0xa9, 0x38, 0xae, 0x6c, 0xb5, 0xde, 0x78,
-	0x80, 0xb1, 0x79, 0xc7, 0x25, 0x62, 0x37, 0x61, 0xa2, 0xa5, 0x36, 0xa4, 0x96, 0x69, 0x36, 0xa4,
-	0x7d, 0x43, 0xc1, 0xdc, 0xf4, 0x22, 0xba, 0x9a, 0x2d, 0xcf, 0x47, 0x7c, 0xb6, 0xab, 0x36, 0x76,
-	0x4d, 0xb3, 0xe1, 0x26, 0x92, 0x23, 0x51, 0xcc, 0xb4, 0xdc, 0xa5, 0x0f, 0x0c, 0x05, 0xb3, 0x77,
-	0x60, 0xd6, 0x7d, 0xaf, 0x31, 0x24, 0xf7, 0xbf, 0x74, 0x90, 0x6e, 0x70, 0x33, 0x71, 0x46, 0xb0,
-	0x0e, 0xd1, 0x43, 0x63, 0xc7, 0xf9, 0xe9, 0x0e, 0xc6, 0x0d, 0xf6, 0xdb, 0x30, 0x45, 0xb9, 0x14,
-	0x2c, 0x2b, 0x92, 0xad, 0xee, 0x63, 0xa3, 0x69, 0x73, 0xb3, 0x8b, 0xe8, 0xea, 0x84, 0x30, 0xe9,
-	0xf1, 0x8f, 0x5c, 0x4b, 0x71, 0x3f, 0xfb, 0x2f, 0x10, 0x73, 0x2e, 0xed, 0x26, 0x96, 0x95, 0x87,
-	0x2e, 0x25, 0xfb, 0x01, 0xcc, 0x85, 0xa3, 0x58, 0xd6, 0x34, 0xe3, 0xc0, 0xf9, 0xc9, 0xcd, 0xf5,
-	0x4d, 0x0b, 0xaf, 0xd3, 0x90, 0xb0, 0xbc, 0xe3, 0x30, 0xdd, 0xd1, 0x34, 0x76, 0x13, 0x58, 0xaf,
-	0x9e, 0x59, 0x9a, 0xea, 0x55, 0xb2, 0x0b, 0x7d, 0x24, 0x21, 0x91, 0xa1, 0x1c, 0x3b, 0x9a, 0x4a,
-	0x6b, 0xd8, 0x1f, 0x3a, 0x15, 0xd7, 0xe7, 0x9e, 0x8f, 0x1d, 0xfc, 0xe2, 0xc1, 0x4c, 0x17, 0xba,
-	0xa2, 0x05, 0x0c, 0x39, 0x45, 0x97, 0x8a, 0xbf, 0xf5, 0x77, 0xe8, 0x79, 0x1b, 0xfd, 0x1c, 0xc1,
-	0x22, 0xcc, 0x04, 0xda, 0x6d, 0xa0, 0x61, 0x8c, 0x96, 0xf8, 0xd2, 0x1a, 0x5f, 0x5a, 0x87, 0x4b,
-	0x30, 0xd7, 0x19, 0xf1, 0xc2, 0x34, 0x68, 0x05, 0xf2, 0x30, 0xbb, 0x83, 0x6b, 0x4d, 0x53, 0xb5,
-	0x0f, 0x23, 0x9b, 0xa9, 0x75, 0xbe, 0x74, 0x03, 0x38, 0x60, 0x69, 0x57, 0x0f, 0x76, 0xf3, 0x44,
-	0xa9, 0x02, 0x57, 0x61, 0xf6, 0x8e, 0xd2, 0x92, 0xf5, 0x1a, 0x56, 0x22, 0x9c, 0xd9, 0xd2, 0x06,
-	0x5f, 0xba, 0xc9, 0x97, 0x6f, 0xf0, 0xe5, 0x12, 0x5f, 0x2e, 0x0b, 0x97, 0x69, 0xf3, 0x71, 0x1b,
-	0xf9, 0x64, 0xa0, 0xdf, 0x27, 0xcb, 0x7c, 0x45, 0x78, 0x83, 0x7a, 0xca, 0xdd, 0x9e, 0x39, 0x6a,
-	0xa3, 0x0b, 0xc7, 0x6d, 0xc4, 0x9d, 0xb4, 0xd1, 0x70, 0x79, 0x95, 0x2f, 0x93, 0x2e, 0x2f, 0xbc,
-	0x11, 0xf3, 0x8a, 0x31, 0x49, 0x5f, 0x31, 0x3c, 0x38, 0x20, 0x5c, 0x85, 0x99, 0x70, 0x39, 0x0f,
-	0x52, 0xa6, 0x8f, 0xdb, 0x68, 0xd4, 0xa1, 0xdc, 0xe0, 0x6f, 0x0a, 0x7c, 0x0f, 0x94, 0x31, 0x7d,
-	0xd4, 0x46, 0x99, 0xe3, 0x36, 0x82, 0x93, 0x36, 0x4a, 0x97, 0x4a, 0x7c, 0xb9, 0xc2, 0x97, 0xca,
-	0x42, 0x11, 0x66, 0xa2, 0x88, 0xa1, 0x63, 0x6c, 0x96, 0x82, 0x92, 0x09, 0xc7, 0xe0, 0xd2, 0x0a,
-	0x5f, 0x5a, 0xf5, 0x21, 0x09, 0xc7, 0x5c, 0x70, 0x81, 0xc9, 0x76, 0x2a, 0x3d, 0xca, 0xa4, 0xb7,
-	0x53, 0x69, 0x60, 0x32, 0xdb, 0xa9, 0xf4, 0x04, 0x93, 0x2d, 0xbc, 0x18, 0x25, 0xcd, 0x9e, 0x8e,
-	0xbd, 0x61, 0x07, 0x6e, 0xc3, 0x0c, 0x41, 0xd3, 0x5d, 0xf3, 0x74, 0xff, 0x9e, 0x3f, 0xe5, 0x40,
-	0xea, 0xc8, 0x2c, 0xcc, 0xfe, 0x11, 0xcc, 0x76, 0x09, 0x72, 0x6b, 0xa4, 0x8b, 0x02, 0xde, 0x3e,
-	0xcb, 0x70, 0x1e, 0x69, 0xad, 0x43, 0xe2, 0xb4, 0x15, 0x43, 0x41, 0x0b, 0xbc, 0xa7, 0x5e, 0xc1,
-	0x2d, 0xd5, 0x7f, 0xc8, 0xec, 0x95, 0x48, 0x93, 0xfe, 0x19, 0x36, 0x09, 0x39, 0x2b, 0x3b, 0xb0,
-	0x3d, 0x28, 0x20, 0x08, 0x08, 0x96, 0x23, 0x52, 0xc8, 0x93, 0x7a, 0xf1, 0x5d, 0xe7, 0x67, 0x48,
-	0x8a, 0x5f, 0xdb, 0x3b, 0xcf, 0x05, 0x9d, 0x0d, 0xc7, 0xdd, 0x7e, 0xc2, 0x53, 0x55, 0x35, 0x4d,
-	0xb6, 0xac, 0xbe, 0x60, 0x20, 0x21, 0x4e, 0x79, 0x39, 0x4f, 0xaf, 0xd0, 0x61, 0x61, 0x7f, 0xd8,
-	0x79, 0x07, 0x21, 0x32, 0x5c, 0x6b, 0x5d, 0x2c, 0x50, 0x3c, 0xd5, 0x5a, 0x22, 0xc3, 0x37, 0x36,
-	0xe1, 0xbf, 0xf8, 0xf8, 0xeb, 0xb1, 0x83, 0x56, 0xa6, 0x2f, 0x66, 0x39, 0x75, 0xd0, 0x1a, 0x7f,
-	0xcd, 0x41, 0x2b, 0x19, 0x1e, 0xb4, 0x6e, 0xdd, 0x7f, 0xde, 0x46, 0xef, 0xc0, 0xd7, 0xe0, 0x32,
-	0x3d, 0xd4, 0x62, 0x7c, 0x81, 0x4a, 0x95, 0x9c, 0xfa, 0x72, 0x09, 0x66, 0x3c, 0xb2, 0xf0, 0x76,
-	0x72, 0x85, 0x5f, 0x17, 0xae, 0x03, 0xd7, 0x1d, 0xbc, 0xbd, 0xea, 0xc8, 0x55, 0x98, 0x89, 0x44,
-	0x4a, 0xaf, 0x3a, 0xf1, 0x16, 0x4c, 0x87, 0x2f, 0xa9, 0x77, 0x99, 0x88, 0x9d, 0x19, 0x9d, 0xb4,
-	0xcf, 0xd0, 0xb4, 0x07, 0x92, 0xf6, 0x25, 0xbe, 0x54, 0x0e, 0x4e, 0x22, 0xc1, 0x84, 0x2f, 0xfc,
-	0xeb, 0x1c, 0x64, 0xdd, 0x22, 0xba, 0xd3, 0xc0, 0x35, 0x32, 0x84, 0xfc, 0x7d, 0x02, 0x66, 0x1c,
-	0xdf, 0x62, 0xd3, 0x94, 0xa5, 0x1a, 0x36, 0x6d, 0x75, 0x4f, 0xc5, 0x8a, 0xf4, 0xe8, 0x80, 0x3e,
-	0x64, 0xfe, 0x0e, 0xfd, 0x47, 0x1b, 0x2d, 0xa8, 0x56, 0x6b, 0x69, 0xe3, 0xc6, 0x8d, 0x1b, 0x4b,
-	0x16, 0x36, 0x55, 0x6c, 0x2d, 0xf9, 0xb7, 0xb1, 0x54, 0x33, 0xf6, 0xab, 0xc6, 0x49, 0x1b, 0xfd,
-	0x13, 0x82, 0x37, 0x15, 0xac, 0x69, 0x4b, 0x58, 0xa9, 0x63, 0x73, 0x6d, 0xa5, 0x17, 0x29, 0x2c,
-	0xa8, 0xf5, 0x83, 0xa5, 0xd5, 0xde, 0xb2, 0xe0, 0x34, 0x65, 0x30, 0xdb, 0xda, 0x3f, 0x90, 0x4d,
-	0xdc, 0xb5, 0x3e, 0xf5, 0xb8, 0xb5, 0xdf, 0xb5, 0x58, 0xa8, 0x63, 0x1d, 0x9b, 0x6a, 0x6d, 0xc9,
-	0x52, 0xf5, 0xba, 0x86, 0x97, 0x74, 0xb5, 0x16, 0xa5, 0xf9, 0x5d, 0x1b, 0x0d, 0x51, 0x60, 0xc0,
-	0x20, 0xfa, 0x6e, 0xfb, 0xb3, 0x04, 0x12, 0xa7, 0x3c, 0xbf, 0xdc, 0xf5, 0xdc, 0xb2, 0x75, 0xc0,
-	0x6e, 0xc2, 0xf8, 0xbe, 0x4c, 0x9e, 0x2b, 0x74, 0x43, 0xc1, 0xee, 0x2b, 0xee, 0x98, 0x70, 0xc5,
-	0x1f, 0xb0, 0x92, 0xce, 0xa7, 0xf4, 0xa7, 0x68, 0xf8, 0x5a, 0xb2, 0xc4, 0x57, 0x02, 0x4f, 0x70,
-	0x19, 0x97, 0xed, 0x43, 0x87, 0x8b, 0xdd, 0x80, 0x71, 0x27, 0x10, 0x7d, 0x29, 0x49, 0x22, 0x65,
-	0x86, 0xc0, 0x8b, 0x4f, 0x51, 0x92, 0xf9, 0x24, 0xf8, 0x78, 0x97, 0x71, 0x49, 0x5d, 0xce, 0x6d,
-	0xb8, 0xe0, 0x5f, 0x97, 0x65, 0xec, 0xd9, 0x8e, 0x27, 0xa4, 0x16, 0x36, 0x2d, 0xd5, 0xd0, 0xc9,
-	0x4b, 0xc5, 0x98, 0x90, 0xf5, 0x0e, 0x44, 0xdf, 0x9f, 0xe7, 0x3c, 0x86, 0x1d, 0x4a, 0xbf, 0xeb,
-	0x92, 0xb3, 0x5b, 0xc0, 0x19, 0x0d, 0xec, 0x84, 0xb9, 0x5e, 0x97, 0xac, 0x43, 0xcb, 0xc6, 0xfb,
-	0xbe, 0xa8, 0xe1, 0x58, 0x51, 0xb3, 0x3e, 0xfd, 0x0e, 0x21, 0xf7, 0x24, 0xdd, 0x86, 0x49, 0xdd,
-	0x90, 0xaa, 0x86, 0xae, 0xd0, 0x88, 0xb7, 0xe8, 0xfb, 0x56, 0xcf, 0xa9, 0x50, 0x37, 0x04, 0x43,
-	0x57, 0xdc, 0xda, 0xe7, 0x94, 0x02, 0x26, 0xc0, 0xec, 0x96, 0x2a, 0xb7, 0xe6, 0x2d, 0xf5, 0x2e,
-	0x55, 0x01, 0x01, 0x5d, 0x6d, 0x20, 0x5b, 0xf5, 0x37, 0x49, 0xb5, 0x7a, 0x1f, 0xbc, 0x11, 0x2f,
-	0x38, 0x6b, 0x3b, 0x80, 0x08, 0xfa, 0x76, 0x81, 0x69, 0xca, 0x15, 0x1a, 0x85, 0xd9, 0x03, 0x98,
-	0xa9, 0x35, 0x2d, 0xdb, 0xd8, 0x8f, 0x0a, 0x73, 0x0b, 0xe0, 0x37, 0x07, 0x9a, 0x67, 0xe3, 0xe7,
-	0x6b, 0x1f, 0x62, 0x4d, 0xb9, 0x1a, 0xc2, 0x8a, 0x03, 0xc7, 0xf0, 0xeb, 0x86, 0xab, 0x79, 0xa2,
-	0x6f, 0x87, 0x98, 0x8e, 0x74, 0x88, 0xe8, 0x31, 0x22, 0xc2, 0xb2, 0xaf, 0x74, 0x8c, 0x38, 0xe4,
-	0xe0, 0x8f, 0xba, 0xf4, 0x18, 0x61, 0xc5, 0xdf, 0x82, 0x8c, 0xf7, 0xb4, 0x54, 0x6f, 0x34, 0xc9,
-	0x0c, 0xd3, 0xff, 0x51, 0x35, 0x29, 0x02, 0x65, 0xb8, 0xd7, 0x68, 0xb2, 0xdf, 0x04, 0xa0, 0xef,
-	0x48, 0x0e, 0x77, 0x6e, 0x00, 0xee, 0x31, 0x97, 0xde, 0x61, 0x7e, 0x13, 0x46, 0xbd, 0xe9, 0x84,
-	0xed, 0xfa, 0xaa, 0xc6, 0xdb, 0x62, 0xef, 0x40, 0xa6, 0x66, 0x18, 0xa6, 0xa2, 0xea, 0xb2, 0xd3,
-	0x99, 0xa6, 0x88, 0x8e, 0x85, 0x88, 0x0e, 0xe2, 0x80, 0xbb, 0x1d, 0x32, 0x31, 0xc8, 0xc3, 0x0a,
-	0x90, 0xd5, 0x0d, 0xe9, 0xf1, 0x86, 0xe5, 0x3d, 0x70, 0x92, 0x41, 0xa4, 0xbf, 0xa5, 0x29, 0x71,
-	0x5c, 0x37, 0xde, 0xdb, 0xb0, 0xe8, 0xab, 0x2a, 0xfb, 0x3d, 0xc8, 0x04, 0x05, 0xcc, 0x0e, 0xfc,
-	0x66, 0xcc, 0x3e, 0x7b, 0x12, 0xe4, 0xa4, 0xc2, 0xe1, 0x71, 0x47, 0xf4, 0x43, 0x98, 0xd3, 0x8c,
-	0xba, 0x25, 0x59, 0xb6, 0x89, 0xe5, 0x7d, 0xa7, 0x02, 0x50, 0x0f, 0x2b, 0x1c, 0x77, 0xaa, 0x9d,
-	0xc3, 0xe2, 0x8c, 0xc3, 0xbc, 0xe3, 0xf1, 0x6e, 0x52, 0x56, 0xf6, 0x07, 0x30, 0xae, 0x19, 0x75,
-	0xc9, 0xc4, 0x35, 0xac, 0x3a, 0xb3, 0xe6, 0x85, 0x81, 0x2d, 0x9e, 0x7a, 0xf6, 0x24, 0xc4, 0x4a,
-	0xf5, 0x64, 0x34, 0xa3, 0x2e, 0xd2, 0x25, 0xf6, 0x36, 0x8c, 0x2b, 0x58, 0x27, 0x63, 0x95, 0xd4,
-	0xb4, 0xaa, 0xdc, 0xc5, 0x53, 0x0d, 0x1d, 0x11, 0xc1, 0xe1, 0xb8, 0xa3, 0x69, 0x1f, 0x5b, 0x55,
-	0xf6, 0x3b, 0x30, 0xe1, 0x4f, 0x64, 0x44, 0xc0, 0xa5, 0x01, 0x04, 0x64, 0x64, 0x3a, 0x8f, 0x39,
-	0x12, 0x76, 0x01, 0x9a, 0x56, 0xd5, 0x7b, 0xa3, 0xb9, 0x3c, 0xf0, 0xe9, 0x72, 0xcf, 0x9e, 0x04,
-	0x18, 0xa9, 0xe4, 0xb1, 0xa6, 0x55, 0xa5, 0xcf, 0x37, 0x7f, 0x00, 0xb3, 0xba, 0x21, 0x69, 0x46,
-	0x4d, 0xd6, 0x9c, 0x24, 0xb4, 0x4d, 0x43, 0x93, 0x1a, 0x9a, 0xac, 0x63, 0x6e, 0xf1, 0x54, 0x13,
-	0x47, 0x1d, 0xbc, 0xfd, 0xbe, 0xc3, 0x7a, 0xd7, 0xe5, 0x7c, 0xe0, 0x30, 0xb2, 0x55, 0x98, 0x8a,
-	0x93, 0x77, 0x85, 0xc8, 0xbb, 0x16, 0x5b, 0x56, 0xbb, 0x84, 0x74, 0x86, 0xed, 0xad, 0x51, 0x31,
-	0xa7, 0x75, 0xe9, 0xb8, 0x0b, 0x09, 0xeb, 0x80, 0x2b, 0x10, 0x91, 0xdf, 0x88, 0x75, 0xc3, 0x6e,
-	0xa4, 0xf7, 0x74, 0xbe, 0x97, 0x76, 0xa6, 0x29, 0x31, 0x61, 0x1d, 0xb0, 0x02, 0x24, 0x0c, 0x8b,
-	0x7b, 0xa3, 0xcf, 0x7b, 0xf5, 0x47, 0xe1, 0xae, 0x13, 0x95, 0x61, 0x58, 0xec, 0x47, 0x90, 0xa1,
-	0x25, 0xa1, 0xe5, 0xd4, 0x84, 0x37, 0x89, 0xb0, 0xaf, 0xc7, 0x1e, 0x72, 0xf7, 0xde, 0x83, 0x8f,
-	0x23, 0xb5, 0xca, 0xab, 0x31, 0xae, 0x88, 0xdd, 0x7a, 0xa3, 0xc9, 0xfe, 0x10, 0x26, 0xc8, 0x9f,
-	0x89, 0x10, 0xb4, 0xa7, 0xcb, 0x1a, 0xf7, 0x62, 0xf0, 0x2f, 0x6c, 0xa6, 0x9f, 0x3d, 0x09, 0x33,
-	0xbf, 0x70, 0xcc, 0x1c, 0x77, 0x96, 0xee, 0xd3, 0x95, 0x5b, 0x9f, 0x39, 0x63, 0xf3, 0xdf, 0x22,
-	0x28, 0xc0, 0x94, 0x20, 0x5b, 0x6a, 0x2d, 0x02, 0x3a, 0x33, 0x25, 0xbe, 0xcc, 0x57, 0x78, 0x32,
-	0xbf, 0xc2, 0x1c, 0xb0, 0x4e, 0xaf, 0x8b, 0xce, 0xcc, 0x6b, 0x30, 0xdf, 0x6b, 0xe6, 0x46, 0x37,
-	0xe1, 0x62, 0x2f, 0x3c, 0x9b, 0x28, 0x95, 0xe1, 0x7a, 0xcf, 0x91, 0x39, 0x57, 0x5a, 0x25, 0xf3,
-	0x72, 0x85, 0x2f, 0xaf, 0xf1, 0x95, 0x15, 0xbe, 0xb2, 0x2a, 0xe4, 0x21, 0x43, 0x9a, 0x73, 0x00,
-	0x9b, 0x8e, 0x1e, 0xb7, 0xd1, 0x88, 0x83, 0x4d, 0xd7, 0xf9, 0x0d, 0xe1, 0x2d, 0x60, 0xfd, 0x36,
-	0xb8, 0x57, 0xf7, 0xc8, 0x72, 0x47, 0x6d, 0x04, 0xc7, 0x6d, 0x34, 0x46, 0x60, 0xe9, 0x0d, 0xbe,
-	0x54, 0x72, 0x08, 0xfd, 0x46, 0x13, 0x26, 0x9c, 0x38, 0x6e, 0xa3, 0x71, 0x42, 0x58, 0xe1, 0x4b,
-	0x2b, 0xc2, 0xd7, 0x01, 0xea, 0x8d, 0xa6, 0x47, 0xc0, 0x1d, 0xb5, 0x11, 0x43, 0x41, 0xee, 0x24,
-	0x19, 0x87, 0xd7, 0xf8, 0xd2, 0x3a, 0x5f, 0x59, 0x13, 0xae, 0x03, 0x1b, 0x28, 0x72, 0x41, 0x50,
-	0x3c, 0x43, 0xe9, 0xa7, 0xc9, 0xf0, 0x4e, 0x86, 0xff, 0x25, 0x98, 0x26, 0x05, 0xcf, 0x2b, 0x30,
-	0x41, 0x72, 0x8e, 0x92, 0xcf, 0x11, 0xf2, 0x15, 0xbe, 0xbc, 0x2a, 0x2c, 0x41, 0xae, 0x93, 0xb0,
-	0x41, 0x53, 0x2e, 0x52, 0xda, 0x79, 0xc7, 0x94, 0xf2, 0x3a, 0x5f, 0xde, 0xe0, 0xcb, 0x37, 0x85,
-	0x75, 0x98, 0x8f, 0xc9, 0x36, 0x8f, 0xef, 0xc2, 0x51, 0x1b, 0x2d, 0x52, 0xbe, 0x05, 0x47, 0x47,
-	0xa5, 0xcc, 0x57, 0x2a, 0xf4, 0x5b, 0x83, 0x11, 0x66, 0x74, 0x3b, 0x95, 0x1e, 0x63, 0x60, 0x3b,
-	0x95, 0x1e, 0x67, 0x26, 0xb6, 0x53, 0xe9, 0x49, 0x86, 0xd9, 0x4e, 0xa5, 0xa7, 0x99, 0x99, 0xed,
-	0x54, 0x7a, 0x8e, 0xe1, 0xb6, 0x53, 0xe9, 0x79, 0xe6, 0xe2, 0x76, 0x2a, 0x9d, 0x67, 0x16, 0xb6,
-	0x53, 0xe9, 0x05, 0x66, 0xb1, 0xf0, 0x8f, 0x39, 0xc8, 0xde, 0x35, 0xb1, 0x6c, 0x63, 0x1f, 0xc9,
-	0x97, 0xfb, 0x02, 0xf9, 0x78, 0x34, 0x7b, 0x25, 0x0e, 0xcd, 0x86, 0xa1, 0xea, 0x95, 0x38, 0xa8,
-	0x1a, 0xc6, 0xa4, 0xaf, 0x8b, 0xfe, 0xbe, 0xf7, 0x25, 0xa1, 0xbf, 0xaf, 0x1c, 0xf7, 0xfd, 0xf8,
-	0xab, 0xc3, 0x7d, 0xff, 0xc7, 0x11, 0xdf, 0xfa, 0xc0, 0x88, 0x2f, 0x82, 0xf5, 0x56, 0x07, 0xc5,
-	0x7a, 0x61, 0x94, 0xc7, 0x45, 0x50, 0xde, 0x97, 0x8a, 0xec, 0xde, 0x7e, 0x15, 0x64, 0xd7, 0x85,
-	0xe9, 0x3e, 0x3e, 0x2b, 0xa6, 0xcb, 0x86, 0x31, 0x5d, 0x04, 0xcf, 0x7d, 0x78, 0x26, 0x3c, 0xd7,
-	0x1b, 0xc9, 0x7d, 0xf7, 0xcc, 0x48, 0x6e, 0x32, 0x82, 0xe4, 0xa2, 0x28, 0x6e, 0x63, 0x70, 0x14,
-	0x17, 0xc1, 0x6f, 0xb7, 0x5e, 0x01, 0xbf, 0x45, 0x91, 0x9b, 0x78, 0x46, 0xe4, 0x36, 0x11, 0x42,
-	0x6e, 0x61, 0xd4, 0xf6, 0xde, 0x59, 0x50, 0x5b, 0x2f, 0xbc, 0xf6, 0x83, 0x2f, 0x09, 0xaf, 0xc5,
-	0x23, 0xb5, 0x6f, 0x9f, 0x0d, 0xa9, 0xa5, 0x7c, 0x94, 0x76, 0xfb, 0x4c, 0x28, 0x2d, 0xe5, 0x23,
-	0xb4, 0xfb, 0xaf, 0x81, 0xd0, 0xc2, 0xd8, 0xec, 0x56, 0xee, 0xdf, 0x6e, 0x47, 0x9e, 0xb1, 0xba,
-	0x30, 0xca, 0xd3, 0x97, 0x28, 0xb8, 0x20, 0xf0, 0xb1, 0x18, 0x65, 0xf6, 0xe9, 0x4b, 0x14, 0xb3,
-	0xee, 0x50, 0xc7, 0x00, 0x15, 0x42, 0xdd, 0xbd, 0x2e, 0x5c, 0x0a, 0xa1, 0x95, 0xec, 0xd3, 0x97,
-	0x28, 0xf0, 0xbb, 0x23, 0x2b, 0x06, 0xa3, 0x10, 0x59, 0xdd, 0xeb, 0xc2, 0x8d, 0x1e, 0x20, 0x85,
-	0x7b, 0xfa, 0x12, 0xc5, 0xee, 0x08, 0xd7, 0xe2, 0x70, 0xca, 0xcc, 0xd3, 0x97, 0xa8, 0x7b, 0x59,
-	0x78, 0xbb, 0x2f, 0x48, 0xc9, 0x3f, 0x7d, 0x89, 0xfa, 0xec, 0xfb, 0xef, 0x89, 0xc3, 0xcc, 0xc8,
-	0x59, 0x51, 0x0b, 0x03, 0x93, 0x22, 0x6e, 0x68, 0x72, 0xed, 0x1c, 0xb6, 0x9c, 0xc3, 0x96, 0x73,
-	0xd8, 0x72, 0x0e, 0x5b, 0xce, 0x61, 0xcb, 0x39, 0x6c, 0xe9, 0x07, 0x5b, 0xce, 0x51, 0xc3, 0x39,
-	0x6a, 0xf8, 0xf7, 0x1c, 0x64, 0xee, 0x61, 0xfb, 0xf7, 0x00, 0x31, 0xdc, 0x3a, 0xf5, 0xcb, 0xb7,
-	0xde, 0x5f, 0xb6, 0x6d, 0x9c, 0xf6, 0x65, 0xdb, 0x57, 0xf6, 0xe5, 0xda, 0x39, 0x4e, 0x39, 0xc7,
-	0x29, 0xe7, 0x38, 0xe5, 0x1c, 0xa7, 0xfc, 0xaf, 0xc3, 0x29, 0x6f, 0x03, 0x90, 0x3f, 0xe5, 0xb4,
-	0x6c, 0xd9, 0xc6, 0x5c, 0x9e, 0xfc, 0x55, 0xe8, 0xe5, 0xb8, 0x50, 0xda, 0x51, 0x6d, 0xbc, 0xe3,
-	0x10, 0x89, 0x63, 0x96, 0xf7, 0xf1, 0xff, 0x29, 0xca, 0x99, 0xee, 0x42, 0x39, 0x2f, 0x6e, 0xa3,
-	0x73, 0xa0, 0xf3, 0x3f, 0x02, 0x74, 0x06, 0x07, 0x37, 0x0b, 0xcc, 0xa2, 0xf0, 0x97, 0xe8, 0xf8,
-	0xf3, 0xfc, 0xd0, 0xaf, 0x3e, 0xcf, 0x0f, 0x7d, 0xf1, 0x79, 0x1e, 0x7d, 0x72, 0x92, 0x47, 0x9f,
-	0x9d, 0xe4, 0xd1, 0x2f, 0x4f, 0xf2, 0xe8, 0xf8, 0x24, 0x8f, 0x7e, 0x75, 0x92, 0x47, 0xbf, 0x3e,
-	0xc9, 0xa3, 0x17, 0x27, 0xf9, 0xa1, 0x2f, 0x4e, 0xf2, 0xe8, 0xaf, 0x7e, 0x93, 0x1f, 0x3a, 0xfa,
-	0x4d, 0x1e, 0x7d, 0xff, 0xbb, 0x75, 0xa3, 0xf1, 0xb8, 0x5e, 0xf4, 0x60, 0x46, 0xb1, 0x69, 0x2d,
-	0x93, 0x0f, 0x7b, 0x86, 0xb9, 0xbf, 0xd4, 0x30, 0x8d, 0x96, 0xaa, 0x60, 0x73, 0xc9, 0xdb, 0x5e,
-	0x6e, 0x54, 0xeb, 0xc6, 0x32, 0xfe, 0x89, 0xed, 0xfd, 0x9b, 0xfa, 0xde, 0xff, 0xd3, 0x81, 0xea,
-	0x08, 0xf9, 0x87, 0xe9, 0x95, 0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x9b, 0x5d, 0x39, 0x18, 0xa1,
-	0x40, 0x00, 0x00,
-}

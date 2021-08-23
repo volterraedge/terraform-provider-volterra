@@ -3,29 +3,32 @@
 
 package authentication
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf1 "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type OIDCAuthParams struct {
 	// Authorization Endpoint
@@ -48,9 +51,33 @@ type OIDCAuthParams struct {
 	EndSessionEndpointUrl string `protobuf:"bytes,3,opt,name=end_session_endpoint_url,json=endSessionEndpointUrl,proto3" json:"end_session_endpoint_url,omitempty"`
 }
 
-func (m *OIDCAuthParams) Reset()                    { *m = OIDCAuthParams{} }
-func (*OIDCAuthParams) ProtoMessage()               {}
-func (*OIDCAuthParams) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *OIDCAuthParams) Reset()      { *m = OIDCAuthParams{} }
+func (*OIDCAuthParams) ProtoMessage() {}
+func (*OIDCAuthParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{0}
+}
+func (m *OIDCAuthParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OIDCAuthParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OIDCAuthParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OIDCAuthParams.Merge(m, src)
+}
+func (m *OIDCAuthParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *OIDCAuthParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_OIDCAuthParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OIDCAuthParams proto.InternalMessageInfo
 
 func (m *OIDCAuthParams) GetAuthEndpointUrl() string {
 	if m != nil {
@@ -95,12 +122,36 @@ type OIDCAuthType struct {
 	// x-displayName: "OIDC Client Secret"
 	// x-required
 	// Client secret used while sending token verification request to OIDC server
-	ClientSecret *ves_io_schema4.SecretType `protobuf:"bytes,5,opt,name=client_secret,json=clientSecret" json:"client_secret,omitempty"`
+	ClientSecret *schema.SecretType `protobuf:"bytes,5,opt,name=client_secret,json=clientSecret,proto3" json:"client_secret,omitempty"`
 }
 
-func (m *OIDCAuthType) Reset()                    { *m = OIDCAuthType{} }
-func (*OIDCAuthType) ProtoMessage()               {}
-func (*OIDCAuthType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *OIDCAuthType) Reset()      { *m = OIDCAuthType{} }
+func (*OIDCAuthType) ProtoMessage() {}
+func (*OIDCAuthType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{1}
+}
+func (m *OIDCAuthType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OIDCAuthType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OIDCAuthType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OIDCAuthType.Merge(m, src)
+}
+func (m *OIDCAuthType) XXX_Size() int {
+	return m.Size()
+}
+func (m *OIDCAuthType) XXX_DiscardUnknown() {
+	xxx_messageInfo_OIDCAuthType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OIDCAuthType proto.InternalMessageInfo
 
 type isOIDCAuthType_AuthParamsChoice interface {
 	isOIDCAuthType_AuthParamsChoice()
@@ -110,10 +161,10 @@ type isOIDCAuthType_AuthParamsChoice interface {
 }
 
 type OIDCAuthType_OidcWellKnownConfigUrl struct {
-	OidcWellKnownConfigUrl string `protobuf:"bytes,2,opt,name=oidc_well_known_config_url,json=oidcWellKnownConfigUrl,proto3,oneof"`
+	OidcWellKnownConfigUrl string `protobuf:"bytes,2,opt,name=oidc_well_known_config_url,json=oidcWellKnownConfigUrl,proto3,oneof" json:"oidc_well_known_config_url,omitempty"`
 }
 type OIDCAuthType_OidcAuthParams struct {
-	OidcAuthParams *OIDCAuthParams `protobuf:"bytes,3,opt,name=oidc_auth_params,json=oidcAuthParams,oneof"`
+	OidcAuthParams *OIDCAuthParams `protobuf:"bytes,3,opt,name=oidc_auth_params,json=oidcAuthParams,proto3,oneof" json:"oidc_auth_params,omitempty"`
 }
 
 func (*OIDCAuthType_OidcWellKnownConfigUrl) isOIDCAuthType_AuthParamsChoice() {}
@@ -147,81 +198,19 @@ func (m *OIDCAuthType) GetOidcClientId() string {
 	return ""
 }
 
-func (m *OIDCAuthType) GetClientSecret() *ves_io_schema4.SecretType {
+func (m *OIDCAuthType) GetClientSecret() *schema.SecretType {
 	if m != nil {
 		return m.ClientSecret
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*OIDCAuthType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _OIDCAuthType_OneofMarshaler, _OIDCAuthType_OneofUnmarshaler, _OIDCAuthType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*OIDCAuthType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*OIDCAuthType_OidcWellKnownConfigUrl)(nil),
 		(*OIDCAuthType_OidcAuthParams)(nil),
 	}
-}
-
-func _OIDCAuthType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*OIDCAuthType)
-	// auth_params_choice
-	switch x := m.AuthParamsChoice.(type) {
-	case *OIDCAuthType_OidcWellKnownConfigUrl:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.OidcWellKnownConfigUrl)
-	case *OIDCAuthType_OidcAuthParams:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OidcAuthParams); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("OIDCAuthType.AuthParamsChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _OIDCAuthType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*OIDCAuthType)
-	switch tag {
-	case 2: // auth_params_choice.oidc_well_known_config_url
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.AuthParamsChoice = &OIDCAuthType_OidcWellKnownConfigUrl{x}
-		return true, err
-	case 3: // auth_params_choice.oidc_auth_params
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OIDCAuthParams)
-		err := b.DecodeMessage(msg)
-		m.AuthParamsChoice = &OIDCAuthType_OidcAuthParams{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _OIDCAuthType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*OIDCAuthType)
-	// auth_params_choice
-	switch x := m.AuthParamsChoice.(type) {
-	case *OIDCAuthType_OidcWellKnownConfigUrl:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.OidcWellKnownConfigUrl)))
-		n += len(x.OidcWellKnownConfigUrl)
-	case *OIDCAuthType_OidcAuthParams:
-		s := proto.Size(x.OidcAuthParams)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // HMAC Key Pair
@@ -235,53 +224,77 @@ type HMACKeyPair struct {
 	// x-displayName: "HMAC Primary Key"
 	// x-required
 	// Primary HMAC Key
-	PrimKey *ves_io_schema4.SecretType `protobuf:"bytes,1,opt,name=prim_key,json=primKey" json:"prim_key,omitempty"`
+	PrimKey *schema.SecretType `protobuf:"bytes,1,opt,name=prim_key,json=primKey,proto3" json:"prim_key,omitempty"`
 	// HMAC Primary Key Expiry Time
 	//
 	// x-displayName: "HMAC Primary Key Expiry"
 	// x-required
 	// Primary HMAC Key Expiry time
-	PrimKeyExpiry *google_protobuf1.Timestamp `protobuf:"bytes,2,opt,name=prim_key_expiry,json=primKeyExpiry" json:"prim_key_expiry,omitempty"`
-	// HMAC Secondary Key
+	PrimKeyExpiry *types.Timestamp `protobuf:"bytes,2,opt,name=prim_key_expiry,json=primKeyExpiry,proto3" json:"prim_key_expiry,omitempty"`
+	//HMAC Secondary Key
 	//
 	// x-displayName: "HMAC Secondary Key"
 	// x-required
 	// Secondary HMAC Key
-	SecKey *ves_io_schema4.SecretType `protobuf:"bytes,3,opt,name=sec_key,json=secKey" json:"sec_key,omitempty"`
+	SecKey *schema.SecretType `protobuf:"bytes,3,opt,name=sec_key,json=secKey,proto3" json:"sec_key,omitempty"`
 	// HMAC Secondary Key Expiry Time
 	//
 	// x-displayName: "HMAC Secondary Key Expiry"
 	// x-required
 	// Secondary HMAC Key Expiry time
-	SecKeyExpiry *google_protobuf1.Timestamp `protobuf:"bytes,4,opt,name=sec_key_expiry,json=secKeyExpiry" json:"sec_key_expiry,omitempty"`
+	SecKeyExpiry *types.Timestamp `protobuf:"bytes,4,opt,name=sec_key_expiry,json=secKeyExpiry,proto3" json:"sec_key_expiry,omitempty"`
 }
 
-func (m *HMACKeyPair) Reset()                    { *m = HMACKeyPair{} }
-func (*HMACKeyPair) ProtoMessage()               {}
-func (*HMACKeyPair) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *HMACKeyPair) Reset()      { *m = HMACKeyPair{} }
+func (*HMACKeyPair) ProtoMessage() {}
+func (*HMACKeyPair) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{2}
+}
+func (m *HMACKeyPair) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HMACKeyPair) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HMACKeyPair) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HMACKeyPair.Merge(m, src)
+}
+func (m *HMACKeyPair) XXX_Size() int {
+	return m.Size()
+}
+func (m *HMACKeyPair) XXX_DiscardUnknown() {
+	xxx_messageInfo_HMACKeyPair.DiscardUnknown(m)
+}
 
-func (m *HMACKeyPair) GetPrimKey() *ves_io_schema4.SecretType {
+var xxx_messageInfo_HMACKeyPair proto.InternalMessageInfo
+
+func (m *HMACKeyPair) GetPrimKey() *schema.SecretType {
 	if m != nil {
 		return m.PrimKey
 	}
 	return nil
 }
 
-func (m *HMACKeyPair) GetPrimKeyExpiry() *google_protobuf1.Timestamp {
+func (m *HMACKeyPair) GetPrimKeyExpiry() *types.Timestamp {
 	if m != nil {
 		return m.PrimKeyExpiry
 	}
 	return nil
 }
 
-func (m *HMACKeyPair) GetSecKey() *ves_io_schema4.SecretType {
+func (m *HMACKeyPair) GetSecKey() *schema.SecretType {
 	if m != nil {
 		return m.SecKey
 	}
 	return nil
 }
 
-func (m *HMACKeyPair) GetSecKeyExpiry() *google_protobuf1.Timestamp {
+func (m *HMACKeyPair) GetSecKeyExpiry() *types.Timestamp {
 	if m != nil {
 		return m.SecKeyExpiry
 	}
@@ -297,14 +310,38 @@ type KMSKeyRefType struct {
 	//
 	// x-displayName: "HMAC kms key reference"
 	// HMAC configured using the KMS_KEY reference
-	AuthHmacKms *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=auth_hmac_kms,json=authHmacKms" json:"auth_hmac_kms,omitempty"`
+	AuthHmacKms *views.ObjectRefType `protobuf:"bytes,1,opt,name=auth_hmac_kms,json=authHmacKms,proto3" json:"auth_hmac_kms,omitempty"`
 }
 
-func (m *KMSKeyRefType) Reset()                    { *m = KMSKeyRefType{} }
-func (*KMSKeyRefType) ProtoMessage()               {}
-func (*KMSKeyRefType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *KMSKeyRefType) Reset()      { *m = KMSKeyRefType{} }
+func (*KMSKeyRefType) ProtoMessage() {}
+func (*KMSKeyRefType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{3}
+}
+func (m *KMSKeyRefType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *KMSKeyRefType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *KMSKeyRefType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KMSKeyRefType.Merge(m, src)
+}
+func (m *KMSKeyRefType) XXX_Size() int {
+	return m.Size()
+}
+func (m *KMSKeyRefType) XXX_DiscardUnknown() {
+	xxx_messageInfo_KMSKeyRefType.DiscardUnknown(m)
+}
 
-func (m *KMSKeyRefType) GetAuthHmacKms() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_KMSKeyRefType proto.InternalMessageInfo
+
+func (m *KMSKeyRefType) GetAuthHmacKms() *views.ObjectRefType {
 	if m != nil {
 		return m.AuthHmacKms
 	}
@@ -353,9 +390,33 @@ type CookieParams struct {
 	SecretChoice isCookieParams_SecretChoice `protobuf_oneof:"secret_choice"`
 }
 
-func (m *CookieParams) Reset()                    { *m = CookieParams{} }
-func (*CookieParams) ProtoMessage()               {}
-func (*CookieParams) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *CookieParams) Reset()      { *m = CookieParams{} }
+func (*CookieParams) ProtoMessage() {}
+func (*CookieParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{4}
+}
+func (m *CookieParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CookieParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CookieParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CookieParams.Merge(m, src)
+}
+func (m *CookieParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *CookieParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_CookieParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CookieParams proto.InternalMessageInfo
 
 type isCookieParams_SecretChoice interface {
 	isCookieParams_SecretChoice()
@@ -365,10 +426,10 @@ type isCookieParams_SecretChoice interface {
 }
 
 type CookieParams_AuthHmac struct {
-	AuthHmac *HMACKeyPair `protobuf:"bytes,5,opt,name=auth_hmac,json=authHmac,oneof"`
+	AuthHmac *HMACKeyPair `protobuf:"bytes,5,opt,name=auth_hmac,json=authHmac,proto3,oneof" json:"auth_hmac,omitempty"`
 }
 type CookieParams_KmsKeyHmac struct {
-	KmsKeyHmac *KMSKeyRefType `protobuf:"bytes,6,opt,name=kms_key_hmac,json=kmsKeyHmac,oneof"`
+	KmsKeyHmac *KMSKeyRefType `protobuf:"bytes,6,opt,name=kms_key_hmac,json=kmsKeyHmac,proto3,oneof" json:"kms_key_hmac,omitempty"`
 }
 
 func (*CookieParams_AuthHmac) isCookieParams_SecretChoice()   {}
@@ -416,78 +477,12 @@ func (m *CookieParams) GetKmsKeyHmac() *KMSKeyRefType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CookieParams) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CookieParams_OneofMarshaler, _CookieParams_OneofUnmarshaler, _CookieParams_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CookieParams) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CookieParams_AuthHmac)(nil),
 		(*CookieParams_KmsKeyHmac)(nil),
 	}
-}
-
-func _CookieParams_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CookieParams)
-	// secret_choice
-	switch x := m.SecretChoice.(type) {
-	case *CookieParams_AuthHmac:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AuthHmac); err != nil {
-			return err
-		}
-	case *CookieParams_KmsKeyHmac:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.KmsKeyHmac); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CookieParams.SecretChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CookieParams_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CookieParams)
-	switch tag {
-	case 5: // secret_choice.auth_hmac
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HMACKeyPair)
-		err := b.DecodeMessage(msg)
-		m.SecretChoice = &CookieParams_AuthHmac{msg}
-		return true, err
-	case 6: // secret_choice.kms_key_hmac
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(KMSKeyRefType)
-		err := b.DecodeMessage(msg)
-		m.SecretChoice = &CookieParams_KmsKeyHmac{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CookieParams_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CookieParams)
-	// secret_choice
-	switch x := m.SecretChoice.(type) {
-	case *CookieParams_AuthHmac:
-		s := proto.Size(x.AuthHmac)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CookieParams_KmsKeyHmac:
-		s := proto.Size(x.KmsKeyHmac)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GlobalSpecType
@@ -509,12 +504,36 @@ type GlobalSpecType struct {
 	// x-displayName: "Cookie Configuration"
 	// x-required
 	// Cookie configuration details for this Object
-	CookieParams *CookieParams `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams" json:"cookie_params,omitempty"`
+	CookieParams *CookieParams `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams,proto3" json:"cookie_params,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{5}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_AuthTypeChoice interface {
 	isGlobalSpecType_AuthTypeChoice()
@@ -524,7 +543,7 @@ type isGlobalSpecType_AuthTypeChoice interface {
 }
 
 type GlobalSpecType_OidcAuth struct {
-	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,oneof"`
+	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,proto3,oneof" json:"oidc_auth,omitempty"`
 }
 
 func (*GlobalSpecType_OidcAuth) isGlobalSpecType_AuthTypeChoice() {}
@@ -550,59 +569,11 @@ func (m *GlobalSpecType) GetCookieParams() *CookieParams {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_OidcAuth)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *GlobalSpecType_OidcAuth:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OidcAuth); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.AuthTypeChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 2: // auth_type_choice.oidc_auth
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OIDCAuthType)
-		err := b.DecodeMessage(msg)
-		m.AuthTypeChoice = &GlobalSpecType_OidcAuth{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *GlobalSpecType_OidcAuth:
-		s := proto.Size(x.OidcAuth)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create Authentication Object
@@ -612,12 +583,36 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*CreateSpecType_OidcAuth
 	AuthTypeChoice isCreateSpecType_AuthTypeChoice `protobuf_oneof:"auth_type_choice"`
-	CookieParams   *CookieParams                   `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams" json:"cookie_params,omitempty"`
+	CookieParams   *CookieParams                   `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams,proto3" json:"cookie_params,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{6}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_AuthTypeChoice interface {
 	isCreateSpecType_AuthTypeChoice()
@@ -627,7 +622,7 @@ type isCreateSpecType_AuthTypeChoice interface {
 }
 
 type CreateSpecType_OidcAuth struct {
-	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,oneof"`
+	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,proto3,oneof" json:"oidc_auth,omitempty"`
 }
 
 func (*CreateSpecType_OidcAuth) isCreateSpecType_AuthTypeChoice() {}
@@ -653,59 +648,11 @@ func (m *CreateSpecType) GetCookieParams() *CookieParams {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_OidcAuth)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *CreateSpecType_OidcAuth:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OidcAuth); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.AuthTypeChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 2: // auth_type_choice.oidc_auth
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OIDCAuthType)
-		err := b.DecodeMessage(msg)
-		m.AuthTypeChoice = &CreateSpecType_OidcAuth{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *CreateSpecType_OidcAuth:
-		s := proto.Size(x.OidcAuth)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace Authentication
@@ -715,12 +662,36 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*ReplaceSpecType_OidcAuth
 	AuthTypeChoice isReplaceSpecType_AuthTypeChoice `protobuf_oneof:"auth_type_choice"`
-	CookieParams   *CookieParams                    `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams" json:"cookie_params,omitempty"`
+	CookieParams   *CookieParams                    `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams,proto3" json:"cookie_params,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{7}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_AuthTypeChoice interface {
 	isReplaceSpecType_AuthTypeChoice()
@@ -730,7 +701,7 @@ type isReplaceSpecType_AuthTypeChoice interface {
 }
 
 type ReplaceSpecType_OidcAuth struct {
-	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,oneof"`
+	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,proto3,oneof" json:"oidc_auth,omitempty"`
 }
 
 func (*ReplaceSpecType_OidcAuth) isReplaceSpecType_AuthTypeChoice() {}
@@ -756,59 +727,11 @@ func (m *ReplaceSpecType) GetCookieParams() *CookieParams {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_OidcAuth)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *ReplaceSpecType_OidcAuth:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OidcAuth); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.AuthTypeChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 2: // auth_type_choice.oidc_auth
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OIDCAuthType)
-		err := b.DecodeMessage(msg)
-		m.AuthTypeChoice = &ReplaceSpecType_OidcAuth{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *ReplaceSpecType_OidcAuth:
-		s := proto.Size(x.OidcAuth)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get Authentication
@@ -818,12 +741,36 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*GetSpecType_OidcAuth
 	AuthTypeChoice isGetSpecType_AuthTypeChoice `protobuf_oneof:"auth_type_choice"`
-	CookieParams   *CookieParams                `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams" json:"cookie_params,omitempty"`
+	CookieParams   *CookieParams                `protobuf:"bytes,3,opt,name=cookie_params,json=cookieParams,proto3" json:"cookie_params,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6383c56e4d3ec1bb, []int{8}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_AuthTypeChoice interface {
 	isGetSpecType_AuthTypeChoice()
@@ -833,7 +780,7 @@ type isGetSpecType_AuthTypeChoice interface {
 }
 
 type GetSpecType_OidcAuth struct {
-	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,oneof"`
+	OidcAuth *OIDCAuthType `protobuf:"bytes,2,opt,name=oidc_auth,json=oidcAuth,proto3,oneof" json:"oidc_auth,omitempty"`
 }
 
 func (*GetSpecType_OidcAuth) isGetSpecType_AuthTypeChoice() {}
@@ -859,59 +806,11 @@ func (m *GetSpecType) GetCookieParams() *CookieParams {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_OidcAuth)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *GetSpecType_OidcAuth:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OidcAuth); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.AuthTypeChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 2: // auth_type_choice.oidc_auth
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OIDCAuthType)
-		err := b.DecodeMessage(msg)
-		m.AuthTypeChoice = &GetSpecType_OidcAuth{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// auth_type_choice
-	switch x := m.AuthTypeChoice.(type) {
-	case *GetSpecType_OidcAuth:
-		s := proto.Size(x.OidcAuth)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -934,6 +833,86 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.authentication.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.authentication.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/authentication/types.proto", fileDescriptor_6383c56e4d3ec1bb)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/authentication/types.proto", fileDescriptor_6383c56e4d3ec1bb)
+}
+
+var fileDescriptor_6383c56e4d3ec1bb = []byte{
+	// 1078 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0xdb, 0x6f, 0xdb, 0x54,
+	0x18, 0xf7, 0xc9, 0xa5, 0x97, 0x93, 0x4b, 0x33, 0xc3, 0x68, 0x16, 0x26, 0xaf, 0x8b, 0x04, 0x2a,
+	0xa3, 0x75, 0x4a, 0x3b, 0x2a, 0x84, 0x60, 0xd0, 0x84, 0x69, 0xe9, 0xa2, 0x2a, 0x93, 0x3b, 0x2e,
+	0xda, 0x8b, 0xe5, 0x38, 0x5f, 0x13, 0x13, 0xdb, 0xc7, 0xb2, 0x4f, 0xda, 0xe5, 0x01, 0xa9, 0xe2,
+	0x19, 0xa4, 0xfe, 0x0b, 0x88, 0x17, 0xc4, 0x9f, 0x40, 0x5e, 0x2a, 0x9e, 0x10, 0x4f, 0x7d, 0xac,
+	0xf6, 0x44, 0xd3, 0x97, 0x21, 0x21, 0xd1, 0x17, 0xa4, 0x09, 0x09, 0x09, 0xf9, 0xf8, 0xb8, 0xd8,
+	0xe9, 0xd4, 0x96, 0xc7, 0x69, 0x6f, 0xe7, 0x9c, 0xef, 0xfb, 0xfd, 0xbe, 0xfb, 0x67, 0xe3, 0xf9,
+	0x6d, 0xf0, 0x64, 0x83, 0x54, 0x3c, 0xbd, 0x0b, 0x96, 0x56, 0xd1, 0xfa, 0xb4, 0x0b, 0x36, 0x35,
+	0x74, 0x8d, 0x1a, 0xc4, 0xae, 0xd0, 0x81, 0x03, 0x9e, 0xec, 0xb8, 0x84, 0x12, 0xf1, 0x7a, 0xa0,
+	0x29, 0x07, 0x9a, 0x72, 0x5c, 0xb3, 0xb4, 0xd8, 0x31, 0x68, 0xb7, 0xdf, 0x92, 0x75, 0x62, 0x55,
+	0x3a, 0xa4, 0x43, 0x2a, 0x0c, 0xd4, 0xea, 0x6f, 0xb1, 0x1b, 0xbb, 0xb0, 0x53, 0x40, 0x56, 0xba,
+	0xd1, 0x21, 0xa4, 0x63, 0xc2, 0x7f, 0x5a, 0xd4, 0xb0, 0xc0, 0xa3, 0x9a, 0xe5, 0x70, 0x85, 0xd9,
+	0xb8, 0x5f, 0x36, 0x50, 0x2e, 0x78, 0x3d, 0x2e, 0x20, 0x8e, 0x6f, 0x9e, 0xfb, 0x58, 0xba, 0x16,
+	0x17, 0x46, 0xdc, 0x2f, 0x5d, 0x8f, 0x8b, 0xb6, 0x35, 0xd3, 0x68, 0x6b, 0x14, 0xb8, 0x74, 0x6e,
+	0x4c, 0x6a, 0xc0, 0x8e, 0x1a, 0xa7, 0xbe, 0x71, 0x56, 0xc3, 0x8b, 0x1a, 0x28, 0x7f, 0x93, 0xc0,
+	0xf9, 0xe6, 0xfa, 0x27, 0xb5, 0xb5, 0x3e, 0xed, 0x3e, 0xd0, 0x5c, 0xcd, 0xf2, 0xc4, 0x0d, 0x7c,
+	0xc5, 0x4f, 0x93, 0x0a, 0x76, 0xdb, 0x21, 0x86, 0x4d, 0xd5, 0xbe, 0x6b, 0x16, 0xd1, 0x1c, 0x9a,
+	0x9f, 0xae, 0xde, 0x7c, 0x36, 0x44, 0x89, 0x9f, 0x7e, 0xdf, 0x4f, 0xa6, 0xdd, 0x64, 0x71, 0x17,
+	0xf9, 0xa7, 0x94, 0x9b, 0x28, 0x20, 0xfe, 0xb4, 0x87, 0x90, 0x32, 0xe3, 0x63, 0xef, 0x72, 0xe8,
+	0xa7, 0xae, 0x29, 0x36, 0xb1, 0x48, 0x49, 0x0f, 0xec, 0x38, 0x5f, 0xe2, 0xb2, 0x7c, 0x05, 0x06,
+	0x8e, 0x12, 0x3e, 0xc2, 0x45, 0xb0, 0xdb, 0xaa, 0x07, 0x9e, 0x67, 0x90, 0x31, 0xda, 0xe4, 0x65,
+	0x69, 0xaf, 0x82, 0xdd, 0xde, 0x0c, 0x18, 0x22, 0xdc, 0xe5, 0xbf, 0x12, 0x38, 0x1b, 0xa6, 0xe3,
+	0xe1, 0xc0, 0x01, 0x51, 0xc5, 0x25, 0x62, 0xb4, 0x75, 0x75, 0x07, 0x4c, 0x53, 0xed, 0xd9, 0x64,
+	0xc7, 0x56, 0x75, 0x62, 0x6f, 0x19, 0x9d, 0xff, 0x15, 0x45, 0x5d, 0x50, 0x5e, 0xf3, 0x69, 0x3e,
+	0x07, 0xd3, 0x6c, 0xf8, 0x24, 0x35, 0xc6, 0xe1, 0x47, 0xf3, 0x05, 0x2e, 0x30, 0x03, 0x2c, 0xe5,
+	0x0e, 0xab, 0x00, 0x8b, 0x22, 0xb3, 0xbc, 0x20, 0x9f, 0xd7, 0xbb, 0x72, 0xbc, 0x6a, 0x75, 0x41,
+	0xc9, 0xfb, 0x3c, 0x91, 0x3a, 0x7e, 0x88, 0xd9, 0x8b, 0xaa, 0x9b, 0x06, 0xd8, 0x54, 0x35, 0xda,
+	0xc5, 0x14, 0x73, 0x77, 0x36, 0xe6, 0x6e, 0xe2, 0xd4, 0x5d, 0x25, 0xeb, 0xab, 0xd7, 0x98, 0xf6,
+	0x7a, 0x5b, 0xbc, 0x83, 0x73, 0x1c, 0xe9, 0x81, 0xee, 0x02, 0x2d, 0xa6, 0x99, 0x57, 0xd7, 0xc6,
+	0xbc, 0xda, 0x64, 0x42, 0x3f, 0x57, 0x4a, 0x36, 0xd0, 0x0f, 0x5e, 0xaa, 0x6f, 0x60, 0x31, 0x12,
+	0x93, 0xaa, 0x77, 0x89, 0xa1, 0x83, 0x38, 0xb3, 0x3f, 0x44, 0x89, 0x83, 0x21, 0x42, 0xa3, 0x21,
+	0x4a, 0x2e, 0x2f, 0xac, 0xdc, 0x4f, 0x4d, 0xa1, 0x42, 0xa2, 0xfc, 0x0f, 0xc2, 0x99, 0xfa, 0xc6,
+	0x5a, 0xad, 0x01, 0x83, 0x07, 0x9a, 0xe1, 0x8a, 0xb7, 0xf1, 0x94, 0xe3, 0x1a, 0x96, 0xda, 0x83,
+	0x01, 0x6b, 0xbd, 0x73, 0xed, 0x4e, 0xfa, 0xaa, 0x0d, 0x18, 0x88, 0x55, 0x3c, 0x13, 0xa2, 0x54,
+	0x78, 0xec, 0x18, 0xee, 0x80, 0x55, 0x28, 0xb3, 0x5c, 0x92, 0x83, 0xc9, 0x95, 0xc3, 0xc9, 0x95,
+	0x1f, 0x86, 0x93, 0xab, 0xe4, 0x38, 0xfa, 0x2e, 0x03, 0x88, 0xcb, 0x78, 0xd2, 0x03, 0x9d, 0x19,
+	0x4e, 0x5e, 0x64, 0x78, 0xc2, 0x03, 0xdd, 0xb7, 0xfb, 0x31, 0xce, 0x73, 0x4c, 0x68, 0x36, 0x75,
+	0xa1, 0xd9, 0x6c, 0x80, 0x0d, 0xac, 0x96, 0x3b, 0x38, 0xd7, 0xd8, 0xd8, 0x6c, 0xc0, 0x40, 0x81,
+	0x2d, 0xd6, 0x77, 0x9f, 0xe1, 0x1c, 0xcb, 0x5e, 0xd7, 0xd2, 0x74, 0xb5, 0x67, 0x79, 0x3c, 0x0b,
+	0xe5, 0x31, 0x67, 0xd8, 0x40, 0xcb, 0xcd, 0xd6, 0x97, 0xa0, 0x53, 0x0e, 0xad, 0xe6, 0x7f, 0xfc,
+	0x6a, 0xb2, 0x67, 0x79, 0xbe, 0x3b, 0x4f, 0x87, 0x08, 0x29, 0x19, 0x9f, 0xa8, 0x6e, 0x69, 0x7a,
+	0xc3, 0xf2, 0xca, 0xdf, 0x25, 0x71, 0xb6, 0x46, 0x48, 0xcf, 0x00, 0xde, 0x25, 0x4d, 0x3c, 0xab,
+	0xb3, 0xbb, 0xea, 0xc2, 0x96, 0x0b, 0x5e, 0x57, 0x35, 0x6c, 0x0a, 0xee, 0xb6, 0x16, 0xcc, 0x7c,
+	0xae, 0x3a, 0xfb, 0x64, 0x88, 0x52, 0x2b, 0x4b, 0x4b, 0x4b, 0xcf, 0x86, 0x48, 0xf0, 0x9b, 0x65,
+	0xe2, 0x56, 0xaa, 0xb8, 0xfb, 0x7d, 0x5a, 0xb9, 0x1a, 0xe0, 0x94, 0x00, 0xb6, 0xce, 0x51, 0xe2,
+	0x07, 0x38, 0xc7, 0x09, 0x23, 0x25, 0x08, 0x69, 0x56, 0xcf, 0xd2, 0x64, 0x03, 0x6d, 0x9e, 0xfe,
+	0x8f, 0xfc, 0x54, 0xf2, 0xc1, 0x0e, 0xe0, 0x49, 0x06, 0x2f, 0x3e, 0x19, 0xa2, 0xf4, 0x7b, 0xab,
+	0xb7, 0xc7, 0xf0, 0xdf, 0x36, 0x95, 0x1c, 0xd7, 0xe7, 0x04, 0x75, 0x3c, 0x7d, 0x9a, 0x38, 0xde,
+	0xb2, 0x6f, 0x9d, 0x3f, 0x48, 0x91, 0xbe, 0xab, 0x0b, 0xca, 0x54, 0x98, 0x2d, 0xb1, 0x89, 0xb3,
+	0x3c, 0x8d, 0x01, 0xd9, 0x04, 0x23, 0x7b, 0xfb, 0x7c, 0xb2, 0x58, 0x15, 0xeb, 0x82, 0x82, 0x7b,
+	0x96, 0xd7, 0x80, 0x81, 0x4f, 0x58, 0x9d, 0xc3, 0xb9, 0x60, 0x94, 0xa2, 0xc3, 0x90, 0x3e, 0x18,
+	0xa2, 0x94, 0x3f, 0x0c, 0xef, 0x2e, 0xac, 0xde, 0x4f, 0x4d, 0xa5, 0x0a, 0x69, 0x7f, 0x18, 0xf2,
+	0xf7, 0x4c, 0xd2, 0xd2, 0xcc, 0x4d, 0x07, 0x74, 0xd6, 0x0e, 0xeb, 0x78, 0xfa, 0x74, 0x4b, 0xf0,
+	0x9e, 0xbe, 0x75, 0xb9, 0xf5, 0xc0, 0xfd, 0x98, 0x0a, 0x97, 0x83, 0xd8, 0x3c, 0xad, 0x4f, 0x6c,
+	0xdb, 0x5c, 0x40, 0x17, 0xed, 0x99, 0xb0, 0x64, 0xc1, 0xed, 0xfd, 0x37, 0x7f, 0x1e, 0xa2, 0x32,
+	0x7e, 0x05, 0xe7, 0xd7, 0x62, 0x10, 0x11, 0xbd, 0x83, 0x33, 0x78, 0x22, 0x00, 0x8a, 0x68, 0xa5,
+	0x7a, 0x13, 0x17, 0x58, 0x65, 0xfc, 0xcf, 0x4f, 0x98, 0x81, 0x5c, 0x64, 0x1d, 0xa0, 0x65, 0xbe,
+	0x0c, 0xfe, 0x44, 0x38, 0x5f, 0x73, 0x41, 0xa3, 0xf0, 0x42, 0xc4, 0x7f, 0xe5, 0xd7, 0x3b, 0x63,
+	0xe5, 0xaa, 0xce, 0x3f, 0x27, 0xd4, 0x57, 0xbf, 0xfe, 0x1b, 0x9d, 0x79, 0xe5, 0x11, 0x9f, 0x20,
+	0x3c, 0xa3, 0x80, 0x63, 0x6a, 0xfa, 0x4b, 0x13, 0xf2, 0x1f, 0x08, 0x67, 0xee, 0x01, 0x7d, 0x49,
+	0xc2, 0xad, 0xee, 0xa1, 0x83, 0x23, 0x49, 0x38, 0x3c, 0x92, 0x84, 0x93, 0x23, 0x09, 0xed, 0x8e,
+	0x24, 0xf4, 0xc3, 0x48, 0x42, 0xbf, 0x8c, 0x24, 0x74, 0x30, 0x92, 0xd0, 0xe1, 0x48, 0x42, 0xbf,
+	0x8d, 0x24, 0xf4, 0x74, 0x24, 0x09, 0x27, 0x23, 0x09, 0xed, 0x1d, 0x4b, 0xc2, 0xfe, 0xb1, 0x84,
+	0x0e, 0x8e, 0x25, 0xe1, 0xf0, 0x58, 0x12, 0x1e, 0x29, 0x1d, 0xe2, 0xf4, 0x3a, 0xf2, 0x36, 0x31,
+	0x29, 0xb8, 0xae, 0x26, 0xf7, 0xbd, 0x0a, 0x3b, 0x6c, 0x11, 0xd7, 0x5a, 0x74, 0x5c, 0xb2, 0x6d,
+	0xb4, 0xc1, 0x5d, 0x0c, 0xc5, 0x15, 0xa7, 0xd5, 0x21, 0x15, 0x78, 0x4c, 0xf9, 0x6f, 0xdf, 0x73,
+	0x7f, 0x93, 0x5b, 0x13, 0xec, 0xab, 0xb4, 0xf2, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xea, 0xe0,
+	0x38, 0x5b, 0x4d, 0x0b, 0x00, 0x00,
+}
+
 func (this *OIDCAuthParams) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1631,7 +1610,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *OIDCAuthParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1639,35 +1618,43 @@ func (m *OIDCAuthParams) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OIDCAuthParams) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OIDCAuthParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.AuthEndpointUrl) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AuthEndpointUrl)))
-		i += copy(dAtA[i:], m.AuthEndpointUrl)
+	if len(m.EndSessionEndpointUrl) > 0 {
+		i -= len(m.EndSessionEndpointUrl)
+		copy(dAtA[i:], m.EndSessionEndpointUrl)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.EndSessionEndpointUrl)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.TokenEndpointUrl) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.TokenEndpointUrl)
+		copy(dAtA[i:], m.TokenEndpointUrl)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.TokenEndpointUrl)))
-		i += copy(dAtA[i:], m.TokenEndpointUrl)
+		i--
+		dAtA[i] = 0x12
 	}
-	if len(m.EndSessionEndpointUrl) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.EndSessionEndpointUrl)))
-		i += copy(dAtA[i:], m.EndSessionEndpointUrl)
+	if len(m.AuthEndpointUrl) > 0 {
+		i -= len(m.AuthEndpointUrl)
+		copy(dAtA[i:], m.AuthEndpointUrl)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AuthEndpointUrl)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OIDCAuthType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1675,62 +1662,85 @@ func (m *OIDCAuthType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OIDCAuthType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OIDCAuthType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthParamsChoice != nil {
-		nn1, err := m.AuthParamsChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.ClientSecret != nil {
+		{
+			size, err := m.ClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn1
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.OidcClientId) > 0 {
-		dAtA[i] = 0x22
-		i++
+		i -= len(m.OidcClientId)
+		copy(dAtA[i:], m.OidcClientId)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.OidcClientId)))
-		i += copy(dAtA[i:], m.OidcClientId)
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.ClientSecret != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSecret.Size()))
-		n2, err := m.ClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.AuthParamsChoice != nil {
+		{
+			size := m.AuthParamsChoice.Size()
+			i -= size
+			if _, err := m.AuthParamsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OIDCAuthType_OidcWellKnownConfigUrl) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OIDCAuthType_OidcWellKnownConfigUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.OidcWellKnownConfigUrl)
+	copy(dAtA[i:], m.OidcWellKnownConfigUrl)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.OidcWellKnownConfigUrl)))
-	i += copy(dAtA[i:], m.OidcWellKnownConfigUrl)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *OIDCAuthType_OidcAuthParams) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OIDCAuthType_OidcAuthParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OidcAuthParams != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OidcAuthParams.Size()))
-		n3, err := m.OidcAuthParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OidcAuthParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *HMACKeyPair) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1738,57 +1748,70 @@ func (m *HMACKeyPair) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HMACKeyPair) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HMACKeyPair) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.PrimKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrimKey.Size()))
-		n4, err := m.PrimKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.SecKeyExpiry != nil {
+		{
+			size, err := m.SecKeyExpiry.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
-	}
-	if m.PrimKeyExpiry != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrimKeyExpiry.Size()))
-		n5, err := m.PrimKeyExpiry.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.SecKey != nil {
+		{
+			size, err := m.SecKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SecKey.Size()))
-		n6, err := m.SecKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
 	}
-	if m.SecKeyExpiry != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SecKeyExpiry.Size()))
-		n7, err := m.SecKeyExpiry.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.PrimKeyExpiry != nil {
+		{
+			size, err := m.PrimKeyExpiry.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.PrimKey != nil {
+		{
+			size, err := m.PrimKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *KMSKeyRefType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1796,27 +1819,34 @@ func (m *KMSKeyRefType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *KMSKeyRefType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *KMSKeyRefType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.AuthHmacKms != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AuthHmacKms.Size()))
-		n8, err := m.AuthHmacKms.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AuthHmacKms.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CookieParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1824,67 +1854,88 @@ func (m *CookieParams) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CookieParams) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.CookieRefreshInterval != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieRefreshInterval))
-	}
-	if m.CookieExpiry != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieExpiry))
+	if m.SecretChoice != nil {
+		{
+			size := m.SecretChoice.Size()
+			i -= size
+			if _, err := m.SecretChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.SessionExpiry != 0 {
-		dAtA[i] = 0x18
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SessionExpiry))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.SecretChoice != nil {
-		nn9, err := m.SecretChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn9
+	if m.CookieExpiry != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CookieExpiry))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.CookieRefreshInterval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.CookieRefreshInterval))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CookieParams_AuthHmac) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieParams_AuthHmac) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AuthHmac != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AuthHmac.Size()))
-		n10, err := m.AuthHmac.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AuthHmac.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CookieParams_KmsKeyHmac) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CookieParams_KmsKeyHmac) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.KmsKeyHmac != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.KmsKeyHmac.Size()))
-		n11, err := m.KmsKeyHmac.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.KmsKeyHmac.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1892,48 +1943,64 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthTypeChoice != nil {
-		nn12, err := m.AuthTypeChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn12
-	}
 	if m.CookieParams != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieParams.Size()))
-		n13, err := m.CookieParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CookieParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.AuthTypeChoice != nil {
+		{
+			size := m.AuthTypeChoice.Size()
+			i -= size
+			if _, err := m.AuthTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_OidcAuth) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_OidcAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OidcAuth != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OidcAuth.Size()))
-		n14, err := m.OidcAuth.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OidcAuth.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1941,48 +2008,64 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthTypeChoice != nil {
-		nn15, err := m.AuthTypeChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn15
-	}
 	if m.CookieParams != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieParams.Size()))
-		n16, err := m.CookieParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CookieParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.AuthTypeChoice != nil {
+		{
+			size := m.AuthTypeChoice.Size()
+			i -= size
+			if _, err := m.AuthTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_OidcAuth) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_OidcAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OidcAuth != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OidcAuth.Size()))
-		n17, err := m.OidcAuth.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OidcAuth.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1990,48 +2073,64 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthTypeChoice != nil {
-		nn18, err := m.AuthTypeChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn18
-	}
 	if m.CookieParams != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieParams.Size()))
-		n19, err := m.CookieParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CookieParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.AuthTypeChoice != nil {
+		{
+			size := m.AuthTypeChoice.Size()
+			i -= size
+			if _, err := m.AuthTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_OidcAuth) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_OidcAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OidcAuth != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OidcAuth.Size()))
-		n20, err := m.OidcAuth.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OidcAuth.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2039,54 +2138,75 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthTypeChoice != nil {
-		nn21, err := m.AuthTypeChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn21
-	}
 	if m.CookieParams != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieParams.Size()))
-		n22, err := m.CookieParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CookieParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if m.AuthTypeChoice != nil {
+		{
+			size := m.AuthTypeChoice.Size()
+			i -= size
+			if _, err := m.AuthTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_OidcAuth) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_OidcAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OidcAuth != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OidcAuth.Size()))
-		n23, err := m.OidcAuth.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OidcAuth.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *OIDCAuthParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AuthEndpointUrl)
@@ -2105,6 +2225,9 @@ func (m *OIDCAuthParams) Size() (n int) {
 }
 
 func (m *OIDCAuthType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthParamsChoice != nil {
@@ -2122,6 +2245,9 @@ func (m *OIDCAuthType) Size() (n int) {
 }
 
 func (m *OIDCAuthType_OidcWellKnownConfigUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.OidcWellKnownConfigUrl)
@@ -2129,6 +2255,9 @@ func (m *OIDCAuthType_OidcWellKnownConfigUrl) Size() (n int) {
 	return n
 }
 func (m *OIDCAuthType_OidcAuthParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OidcAuthParams != nil {
@@ -2138,6 +2267,9 @@ func (m *OIDCAuthType_OidcAuthParams) Size() (n int) {
 	return n
 }
 func (m *HMACKeyPair) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PrimKey != nil {
@@ -2160,6 +2292,9 @@ func (m *HMACKeyPair) Size() (n int) {
 }
 
 func (m *KMSKeyRefType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthHmacKms != nil {
@@ -2170,6 +2305,9 @@ func (m *KMSKeyRefType) Size() (n int) {
 }
 
 func (m *CookieParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CookieRefreshInterval != 0 {
@@ -2188,6 +2326,9 @@ func (m *CookieParams) Size() (n int) {
 }
 
 func (m *CookieParams_AuthHmac) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthHmac != nil {
@@ -2197,6 +2338,9 @@ func (m *CookieParams_AuthHmac) Size() (n int) {
 	return n
 }
 func (m *CookieParams_KmsKeyHmac) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.KmsKeyHmac != nil {
@@ -2206,6 +2350,9 @@ func (m *CookieParams_KmsKeyHmac) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthTypeChoice != nil {
@@ -2219,6 +2366,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_OidcAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OidcAuth != nil {
@@ -2228,6 +2378,9 @@ func (m *GlobalSpecType_OidcAuth) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthTypeChoice != nil {
@@ -2241,6 +2394,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_OidcAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OidcAuth != nil {
@@ -2250,6 +2406,9 @@ func (m *CreateSpecType_OidcAuth) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthTypeChoice != nil {
@@ -2263,6 +2422,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_OidcAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OidcAuth != nil {
@@ -2272,6 +2434,9 @@ func (m *ReplaceSpecType_OidcAuth) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AuthTypeChoice != nil {
@@ -2285,6 +2450,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_OidcAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OidcAuth != nil {
@@ -2295,14 +2463,7 @@ func (m *GetSpecType_OidcAuth) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2326,7 +2487,7 @@ func (this *OIDCAuthType) String() string {
 	s := strings.Join([]string{`&OIDCAuthType{`,
 		`AuthParamsChoice:` + fmt.Sprintf("%v", this.AuthParamsChoice) + `,`,
 		`OidcClientId:` + fmt.Sprintf("%v", this.OidcClientId) + `,`,
-		`ClientSecret:` + strings.Replace(fmt.Sprintf("%v", this.ClientSecret), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ClientSecret:` + strings.Replace(fmt.Sprintf("%v", this.ClientSecret), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2356,10 +2517,10 @@ func (this *HMACKeyPair) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&HMACKeyPair{`,
-		`PrimKey:` + strings.Replace(fmt.Sprintf("%v", this.PrimKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
-		`PrimKeyExpiry:` + strings.Replace(fmt.Sprintf("%v", this.PrimKeyExpiry), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
-		`SecKey:` + strings.Replace(fmt.Sprintf("%v", this.SecKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
-		`SecKeyExpiry:` + strings.Replace(fmt.Sprintf("%v", this.SecKeyExpiry), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
+		`PrimKey:` + strings.Replace(fmt.Sprintf("%v", this.PrimKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`PrimKeyExpiry:` + strings.Replace(fmt.Sprintf("%v", this.PrimKeyExpiry), "Timestamp", "types.Timestamp", 1) + `,`,
+		`SecKey:` + strings.Replace(fmt.Sprintf("%v", this.SecKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`SecKeyExpiry:` + strings.Replace(fmt.Sprintf("%v", this.SecKeyExpiry), "Timestamp", "types.Timestamp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2369,7 +2530,7 @@ func (this *KMSKeyRefType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&KMSKeyRefType{`,
-		`AuthHmacKms:` + strings.Replace(fmt.Sprintf("%v", this.AuthHmacKms), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`AuthHmacKms:` + strings.Replace(fmt.Sprintf("%v", this.AuthHmacKms), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2413,7 +2574,7 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`AuthTypeChoice:` + fmt.Sprintf("%v", this.AuthTypeChoice) + `,`,
-		`CookieParams:` + strings.Replace(fmt.Sprintf("%v", this.CookieParams), "CookieParams", "CookieParams", 1) + `,`,
+		`CookieParams:` + strings.Replace(this.CookieParams.String(), "CookieParams", "CookieParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2434,7 +2595,7 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`AuthTypeChoice:` + fmt.Sprintf("%v", this.AuthTypeChoice) + `,`,
-		`CookieParams:` + strings.Replace(fmt.Sprintf("%v", this.CookieParams), "CookieParams", "CookieParams", 1) + `,`,
+		`CookieParams:` + strings.Replace(this.CookieParams.String(), "CookieParams", "CookieParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2455,7 +2616,7 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`AuthTypeChoice:` + fmt.Sprintf("%v", this.AuthTypeChoice) + `,`,
-		`CookieParams:` + strings.Replace(fmt.Sprintf("%v", this.CookieParams), "CookieParams", "CookieParams", 1) + `,`,
+		`CookieParams:` + strings.Replace(this.CookieParams.String(), "CookieParams", "CookieParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2476,7 +2637,7 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`AuthTypeChoice:` + fmt.Sprintf("%v", this.AuthTypeChoice) + `,`,
-		`CookieParams:` + strings.Replace(fmt.Sprintf("%v", this.CookieParams), "CookieParams", "CookieParams", 1) + `,`,
+		`CookieParams:` + strings.Replace(this.CookieParams.String(), "CookieParams", "CookieParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2514,7 +2675,7 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2542,7 +2703,7 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2552,6 +2713,9 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2571,7 +2735,7 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2581,6 +2745,9 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2600,7 +2767,7 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2610,6 +2777,9 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2622,6 +2792,9 @@ func (m *OIDCAuthParams) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2651,7 +2824,7 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2679,7 +2852,7 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2689,6 +2862,9 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2708,7 +2884,7 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2717,6 +2893,9 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2740,7 +2919,7 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2750,6 +2929,9 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2769,7 +2951,7 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2778,11 +2960,14 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ClientSecret == nil {
-				m.ClientSecret = &ves_io_schema4.SecretType{}
+				m.ClientSecret = &schema.SecretType{}
 			}
 			if err := m.ClientSecret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2795,6 +2980,9 @@ func (m *OIDCAuthType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2824,7 +3012,7 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2852,7 +3040,7 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2861,11 +3049,14 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.PrimKey == nil {
-				m.PrimKey = &ves_io_schema4.SecretType{}
+				m.PrimKey = &schema.SecretType{}
 			}
 			if err := m.PrimKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2885,7 +3076,7 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2894,11 +3085,14 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.PrimKeyExpiry == nil {
-				m.PrimKeyExpiry = &google_protobuf1.Timestamp{}
+				m.PrimKeyExpiry = &types.Timestamp{}
 			}
 			if err := m.PrimKeyExpiry.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2918,7 +3112,7 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2927,11 +3121,14 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SecKey == nil {
-				m.SecKey = &ves_io_schema4.SecretType{}
+				m.SecKey = &schema.SecretType{}
 			}
 			if err := m.SecKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2951,7 +3148,7 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2960,11 +3157,14 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SecKeyExpiry == nil {
-				m.SecKeyExpiry = &google_protobuf1.Timestamp{}
+				m.SecKeyExpiry = &types.Timestamp{}
 			}
 			if err := m.SecKeyExpiry.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2977,6 +3177,9 @@ func (m *HMACKeyPair) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3006,7 +3209,7 @@ func (m *KMSKeyRefType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3034,7 +3237,7 @@ func (m *KMSKeyRefType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3043,11 +3246,14 @@ func (m *KMSKeyRefType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.AuthHmacKms == nil {
-				m.AuthHmacKms = &ves_io_schema_views.ObjectRefType{}
+				m.AuthHmacKms = &views.ObjectRefType{}
 			}
 			if err := m.AuthHmacKms.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3060,6 +3266,9 @@ func (m *KMSKeyRefType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3089,7 +3298,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3117,7 +3326,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CookieRefreshInterval |= (uint32(b) & 0x7F) << shift
+				m.CookieRefreshInterval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3136,7 +3345,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.CookieExpiry |= (uint32(b) & 0x7F) << shift
+				m.CookieExpiry |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3155,7 +3364,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SessionExpiry |= (uint32(b) & 0x7F) << shift
+				m.SessionExpiry |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3174,7 +3383,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3183,6 +3392,9 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3206,7 +3418,7 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3215,6 +3427,9 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3231,6 +3446,9 @@ func (m *CookieParams) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3260,7 +3478,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3288,7 +3506,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3297,6 +3515,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3320,7 +3541,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3329,6 +3550,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3346,6 +3570,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3375,7 +3602,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3403,7 +3630,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3412,6 +3639,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3435,7 +3665,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3444,6 +3674,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3461,6 +3694,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3490,7 +3726,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3518,7 +3754,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3527,6 +3763,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3550,7 +3789,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3559,6 +3798,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3576,6 +3818,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3605,7 +3850,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3633,7 +3878,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3642,6 +3887,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3665,7 +3913,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3674,6 +3922,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3693,6 +3944,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3708,6 +3962,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3739,10 +3994,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3759,129 +4012,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/authentication/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/authentication/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1072 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0xcd, 0x6f, 0x1b, 0x45,
-	0x14, 0xf7, 0xf8, 0x23, 0x4d, 0xc6, 0x1f, 0x71, 0x17, 0x4a, 0x5c, 0x53, 0x6d, 0x53, 0x4b, 0xa0,
-	0x50, 0x92, 0x75, 0x48, 0x4a, 0x84, 0x10, 0x14, 0x62, 0x53, 0xd5, 0xa9, 0x15, 0xb9, 0xda, 0x94,
-	0x0f, 0xf5, 0xb2, 0x5a, 0xaf, 0x5f, 0xec, 0xc5, 0xbb, 0x3b, 0xab, 0xdd, 0x71, 0x52, 0x1f, 0x90,
-	0x22, 0x4e, 0x1c, 0x40, 0xea, 0xbf, 0x80, 0xb8, 0x20, 0xfe, 0x04, 0x7c, 0x89, 0x38, 0x21, 0x4e,
-	0x39, 0x56, 0x3d, 0x11, 0xf7, 0x52, 0x24, 0x24, 0x72, 0x41, 0xaa, 0x90, 0x90, 0xd0, 0xcc, 0xce,
-	0x86, 0x5d, 0xa7, 0x4a, 0xc2, 0x11, 0xf5, 0x36, 0x33, 0xef, 0xfd, 0x7e, 0xef, 0xfb, 0xed, 0xe2,
-	0x85, 0x1d, 0xf0, 0x15, 0x93, 0x54, 0x7d, 0xa3, 0x07, 0xb6, 0x5e, 0xd5, 0x07, 0xb4, 0x07, 0x0e,
-	0x35, 0x0d, 0x9d, 0x9a, 0xc4, 0xa9, 0xd2, 0xa1, 0x0b, 0xbe, 0xe2, 0x7a, 0x84, 0x12, 0xe9, 0x4a,
-	0xa0, 0xa9, 0x04, 0x9a, 0x4a, 0x5c, 0xb3, 0xbc, 0xd4, 0x35, 0x69, 0x6f, 0xd0, 0x56, 0x0c, 0x62,
-	0x57, 0xbb, 0xa4, 0x4b, 0xaa, 0x1c, 0xd4, 0x1e, 0x6c, 0xf3, 0x1b, 0xbf, 0xf0, 0x53, 0x40, 0x56,
-	0xbe, 0xda, 0x25, 0xa4, 0x6b, 0xc1, 0xbf, 0x5a, 0xd4, 0xb4, 0xc1, 0xa7, 0xba, 0xed, 0x0a, 0x85,
-	0xb9, 0xb8, 0x5f, 0x0e, 0x50, 0x21, 0x78, 0x35, 0x2e, 0x20, 0x2e, 0x33, 0x2f, 0x7c, 0x2c, 0x5f,
-	0x8e, 0x0b, 0x23, 0xee, 0x97, 0xaf, 0xc4, 0x45, 0x3b, 0xba, 0x65, 0x76, 0x74, 0x0a, 0x42, 0x3a,
-	0x3f, 0x21, 0x35, 0x61, 0x57, 0x8b, 0x53, 0x5f, 0x3d, 0xa9, 0xe1, 0x47, 0x0d, 0x54, 0xbe, 0x4e,
-	0xe2, 0x42, 0x6b, 0xe3, 0xa3, 0xfa, 0xfa, 0x80, 0xf6, 0xee, 0xea, 0x9e, 0x6e, 0xfb, 0xd2, 0x26,
-	0xbe, 0xc8, 0xd2, 0xa4, 0x81, 0xd3, 0x71, 0x89, 0xe9, 0x50, 0x6d, 0xe0, 0x59, 0x25, 0x34, 0x8f,
-	0x16, 0x66, 0x6a, 0xd7, 0x9e, 0x8d, 0x50, 0xf2, 0xc7, 0xdf, 0xf6, 0x53, 0x19, 0x2f, 0x55, 0xda,
-	0x43, 0xec, 0x94, 0xf6, 0x92, 0x45, 0x24, 0x9e, 0x1e, 0x22, 0xa4, 0xce, 0x32, 0xec, 0x2d, 0x01,
-	0xfd, 0xd8, 0xb3, 0xa4, 0x16, 0x96, 0x28, 0xe9, 0x83, 0x13, 0xe7, 0x4b, 0x9e, 0x97, 0xaf, 0xc8,
-	0xc1, 0x51, 0xc2, 0xfb, 0xb8, 0x04, 0x4e, 0x47, 0xf3, 0xc1, 0xf7, 0x4d, 0x32, 0x41, 0x9b, 0x3a,
-	0x2f, 0xed, 0x25, 0x70, 0x3a, 0x5b, 0x01, 0x43, 0x84, 0xbb, 0xf2, 0x67, 0x12, 0xe7, 0xc2, 0x74,
-	0xdc, 0x1b, 0xba, 0x20, 0x69, 0xb8, 0x4c, 0xcc, 0x8e, 0xa1, 0xed, 0x82, 0x65, 0x69, 0x7d, 0x87,
-	0xec, 0x3a, 0x9a, 0x41, 0x9c, 0x6d, 0xb3, 0xfb, 0x9f, 0xa2, 0x68, 0x24, 0xd4, 0x57, 0x18, 0xcd,
-	0xa7, 0x60, 0x59, 0x4d, 0x46, 0x52, 0xe7, 0x1c, 0x2c, 0x9a, 0xcf, 0x70, 0x91, 0x1b, 0xe0, 0x29,
-	0x77, 0x79, 0x05, 0x78, 0x14, 0xd9, 0x95, 0x45, 0xe5, 0xb4, 0xde, 0x55, 0xe2, 0x55, 0x6b, 0x24,
-	0xd4, 0x02, 0xe3, 0x89, 0xd4, 0xf1, 0x7d, 0xcc, 0x5f, 0x34, 0xc3, 0x32, 0xc1, 0xa1, 0x9a, 0xd9,
-	0x29, 0xa5, 0xb9, 0xbb, 0x73, 0x31, 0x77, 0x93, 0xc7, 0xee, 0xaa, 0x39, 0xa6, 0x5e, 0xe7, 0xda,
-	0x1b, 0x1d, 0xe9, 0x26, 0xce, 0x0b, 0xa4, 0x0f, 0x86, 0x07, 0xb4, 0x94, 0xe1, 0x5e, 0x5d, 0x9e,
-	0xf0, 0x6a, 0x8b, 0x0b, 0x59, 0xae, 0xd4, 0x5c, 0xa0, 0x1f, 0xbc, 0xd4, 0x5e, 0xc3, 0x52, 0x24,
-	0x26, 0xcd, 0xe8, 0x11, 0xd3, 0x00, 0x69, 0x76, 0x7f, 0x84, 0x92, 0x07, 0x23, 0x84, 0xc6, 0x23,
-	0x94, 0x5a, 0x59, 0x5c, 0xbd, 0x93, 0x9e, 0x46, 0xc5, 0x64, 0xe5, 0x6f, 0x84, 0xb3, 0x8d, 0xcd,
-	0xf5, 0x7a, 0x13, 0x86, 0x77, 0x75, 0xd3, 0x93, 0x6e, 0xe0, 0x69, 0xd7, 0x33, 0x6d, 0xad, 0x0f,
-	0x43, 0xde, 0x7a, 0xa7, 0xda, 0xbd, 0xc0, 0x54, 0x9b, 0x30, 0x94, 0x6a, 0x78, 0x36, 0x44, 0x69,
-	0xf0, 0xc0, 0x35, 0xbd, 0x21, 0xaf, 0x50, 0x76, 0xa5, 0xac, 0x04, 0x93, 0xab, 0x84, 0x93, 0xab,
-	0xdc, 0x0b, 0x27, 0x57, 0xcd, 0x0b, 0xf4, 0x2d, 0x0e, 0x90, 0x56, 0xf0, 0x05, 0x1f, 0x0c, 0x6e,
-	0x38, 0x75, 0x96, 0xe1, 0x29, 0x1f, 0x0c, 0x66, 0xf7, 0x43, 0x5c, 0x10, 0x98, 0xd0, 0x6c, 0xfa,
-	0x4c, 0xb3, 0xb9, 0x00, 0x1b, 0x58, 0xad, 0x74, 0x71, 0xbe, 0xb9, 0xb9, 0xd5, 0x84, 0xa1, 0x0a,
-	0xdb, 0xbc, 0xef, 0x3e, 0xc1, 0x79, 0x9e, 0xbd, 0x9e, 0xad, 0x1b, 0x5a, 0xdf, 0xf6, 0x45, 0x16,
-	0x2a, 0x13, 0xce, 0xf0, 0x81, 0x56, 0x5a, 0xed, 0xcf, 0xc1, 0xa0, 0x02, 0x5a, 0x2b, 0xfc, 0xf0,
-	0xc5, 0x85, 0xbe, 0xed, 0x33, 0x77, 0x9e, 0x8e, 0x10, 0x52, 0xb3, 0x8c, 0xa8, 0x61, 0xeb, 0x46,
-	0xd3, 0xf6, 0x2b, 0xdf, 0xa6, 0x70, 0xae, 0x4e, 0x48, 0xdf, 0x04, 0xd1, 0x25, 0x2d, 0x3c, 0x67,
-	0xf0, 0xbb, 0xe6, 0xc1, 0xb6, 0x07, 0x7e, 0x4f, 0x33, 0x1d, 0x0a, 0xde, 0x8e, 0x1e, 0xcc, 0x7c,
-	0xbe, 0x36, 0xf7, 0x78, 0x84, 0xd2, 0xab, 0xcb, 0xcb, 0xcb, 0xcf, 0x46, 0x28, 0xc1, 0x9a, 0x65,
-	0xea, 0x7a, 0xba, 0xb4, 0xf7, 0x5d, 0x46, 0xbd, 0x14, 0xe0, 0xd4, 0x00, 0xb6, 0x21, 0x50, 0xd2,
-	0x7b, 0x38, 0x2f, 0x08, 0x23, 0x25, 0x08, 0x69, 0xd6, 0x4e, 0xd2, 0xe4, 0x02, 0x6d, 0x91, 0xfe,
-	0x0f, 0x58, 0x2a, 0xc5, 0x60, 0x07, 0xf0, 0x14, 0x87, 0x97, 0x1e, 0x8f, 0x50, 0xe6, 0x9d, 0xb5,
-	0x1b, 0x13, 0xf8, 0x6f, 0x5a, 0x6a, 0x5e, 0xe8, 0x0b, 0x82, 0x06, 0x9e, 0x39, 0x4e, 0x9c, 0x68,
-	0xd9, 0x37, 0x4e, 0x1f, 0xa4, 0x48, 0xdf, 0x35, 0x12, 0xea, 0x74, 0x98, 0x2d, 0xa9, 0x85, 0x73,
-	0x22, 0x8d, 0x01, 0xd9, 0x14, 0x27, 0x7b, 0xf3, 0x74, 0xb2, 0x58, 0x15, 0x1b, 0x09, 0x15, 0xf7,
-	0x6d, 0xbf, 0x09, 0x43, 0x46, 0x58, 0x9b, 0xc7, 0xf9, 0x60, 0x94, 0xa2, 0xc3, 0x90, 0x39, 0x18,
-	0xa1, 0x34, 0x1b, 0x86, 0xb7, 0x17, 0xd7, 0xee, 0xa4, 0xa7, 0xd3, 0xc5, 0x0c, 0x1b, 0x86, 0xc2,
-	0x6d, 0x8b, 0xb4, 0x75, 0x6b, 0xcb, 0x05, 0x83, 0xb7, 0xc3, 0x06, 0x9e, 0x39, 0xde, 0x12, 0xa2,
-	0xa7, 0xaf, 0x9f, 0x6f, 0x3d, 0x08, 0x3f, 0xa6, 0xc3, 0xe5, 0x20, 0xb5, 0x8e, 0xeb, 0x13, 0xdb,
-	0x36, 0x67, 0xd0, 0x45, 0x7b, 0x26, 0x2c, 0x59, 0x70, 0x7b, 0xf7, 0xf5, 0x9f, 0x46, 0xa8, 0x82,
-	0x5f, 0xc2, 0x85, 0xf5, 0x18, 0x44, 0x42, 0x6f, 0xe1, 0x2c, 0x9e, 0x0a, 0x80, 0x12, 0x5a, 0xad,
-	0x5d, 0xc3, 0x45, 0x5e, 0x19, 0xf6, 0xf9, 0x09, 0x33, 0x90, 0x8f, 0xac, 0x03, 0xb4, 0x22, 0x96,
-	0xc1, 0x1f, 0x08, 0x17, 0xea, 0x1e, 0xe8, 0x14, 0xfe, 0x17, 0xf1, 0x5f, 0xfc, 0xe5, 0xe6, 0x44,
-	0xb9, 0x6a, 0x0b, 0xcf, 0x09, 0xf5, 0xe5, 0x2f, 0xff, 0x42, 0x27, 0x5e, 0x45, 0xc4, 0x47, 0x08,
-	0xcf, 0xaa, 0xe0, 0x5a, 0xba, 0xf1, 0xc2, 0x84, 0xfc, 0x3b, 0xc2, 0xd9, 0xdb, 0x40, 0x5f, 0x90,
-	0x70, 0x6b, 0x5f, 0xa1, 0x83, 0x43, 0x39, 0xf1, 0xe8, 0x50, 0x4e, 0x1c, 0x1d, 0xca, 0x68, 0x6f,
-	0x2c, 0xa3, 0xef, 0xc7, 0x32, 0xfa, 0x79, 0x2c, 0xa3, 0x83, 0xb1, 0x8c, 0x1e, 0x8d, 0x65, 0xf4,
-	0xeb, 0x58, 0x46, 0x4f, 0xc7, 0x72, 0xe2, 0x68, 0x2c, 0xa3, 0x87, 0x4f, 0xe4, 0xc4, 0xfe, 0x13,
-	0x19, 0xdd, 0x57, 0xbb, 0xc4, 0xed, 0x77, 0x95, 0x1d, 0x62, 0x51, 0xf0, 0x3c, 0x5d, 0x19, 0xf8,
-	0x55, 0x7e, 0xd8, 0x26, 0x9e, 0xbd, 0xe4, 0x7a, 0x64, 0xc7, 0xec, 0x80, 0xb7, 0x14, 0x8a, 0xab,
-	0x6e, 0xbb, 0x4b, 0xaa, 0xf0, 0x80, 0x8a, 0xdf, 0xbd, 0xe7, 0xfe, 0x1e, 0xb7, 0xa7, 0xf8, 0xd7,
-	0x68, 0xf5, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x19, 0x5f, 0x74, 0xee, 0x45, 0x0b, 0x00, 0x00,
-}

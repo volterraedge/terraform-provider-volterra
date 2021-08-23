@@ -894,16 +894,19 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Tenant = v.(string)
+
 			}
 
 		}
@@ -1448,7 +1451,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 								ls := make([]uint32, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								destinationChoiceInt.DstAsnList.AsNumbers = ls
@@ -1473,16 +1475,19 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Tenant = v.(string)
+
 							}
 
 						}
@@ -1503,16 +1508,19 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
+
 							}
 
 						}
@@ -1770,6 +1778,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 								httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
+
 							}
 
 							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
@@ -1858,16 +1867,19 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Tenant = v.(string)
+
 							}
 
 						}
@@ -1888,16 +1900,19 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
+
 							}
 
 						}
@@ -2111,16 +2126,19 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				proxyChoiceInt.NetworkConnector.Tenant = v.(string)
+
 			}
 
 		}
@@ -2663,7 +2681,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 								ls := make([]uint32, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								destinationChoiceInt.DstAsnList.AsNumbers = ls
@@ -2688,16 +2705,19 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstAsnSet.Tenant = v.(string)
+
 							}
 
 						}
@@ -2718,16 +2738,19 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
+
 							}
 
 						}
@@ -2985,6 +3008,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 								httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
+
 							}
 
 							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
@@ -3073,16 +3097,19 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.Interface.Tenant = v.(string)
+
 							}
 
 						}
@@ -3103,16 +3130,19 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Name = v.(string)
+
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
+
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
+
 							}
 
 						}
