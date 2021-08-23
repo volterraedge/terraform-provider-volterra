@@ -578,6 +578,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+
 							}
 
 							if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
@@ -646,16 +647,19 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -676,11 +680,13 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -701,16 +707,19 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -722,6 +731,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -742,6 +752,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -773,8 +784,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 
 										localDomain.PortChoice = portChoiceInt
 
-										portChoiceInt.Port =
-											uint32(v.(int))
+										portChoiceInt.Port = uint32(v.(int))
 
 									}
 
@@ -800,6 +810,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.Dashboard.GeneratedYaml = v.(string)
+
 							}
 
 						}
@@ -820,6 +831,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
 							}
 
 						}
@@ -1047,6 +1059,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
 
 				localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
+
 			}
 
 			portChoiceTypeFound := false
@@ -1070,8 +1083,7 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 
 				localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
 
-				portChoiceInt.Port =
-					uint32(v.(int))
+				portChoiceInt.Port = uint32(v.(int))
 
 			}
 
@@ -1284,6 +1296,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+
 							}
 
 							if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
@@ -1352,16 +1365,19 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -1382,11 +1398,13 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -1407,16 +1425,19 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1428,6 +1449,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -1448,6 +1470,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -1479,8 +1502,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 
 										localDomain.PortChoice = portChoiceInt
 
-										portChoiceInt.Port =
-											uint32(v.(int))
+										portChoiceInt.Port = uint32(v.(int))
 
 									}
 
@@ -1506,6 +1528,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.Dashboard.GeneratedYaml = v.(string)
+
 							}
 
 						}
@@ -1526,6 +1549,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
 							}
 
 						}
@@ -1743,6 +1767,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
 
 				localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
+
 			}
 
 			portChoiceTypeFound := false
@@ -1766,8 +1791,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 
 				localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
 
-				portChoiceInt.Port =
-					uint32(v.(int))
+				portChoiceInt.Port = uint32(v.(int))
 
 			}
 

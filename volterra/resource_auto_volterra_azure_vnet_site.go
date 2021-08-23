@@ -4185,6 +4185,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.Address =
 			v.(string)
+
 	}
 
 	//coordinates
@@ -4197,11 +4198,11 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = w.(float32)
+				coordinates.Latitude = float32(w.(float64))
 			}
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = w.(float32)
+				coordinates.Longitude = float32(w.(float64))
 			}
 
 		}
@@ -4238,16 +4239,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				deploymentInt.AzureCred.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				deploymentInt.AzureCred.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				deploymentInt.AzureCred.Tenant = v.(string)
+
 			}
 
 		}
@@ -4259,6 +4263,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.DiskSize =
 			uint32(v.(int))
+
 	}
 
 	//logs_receiver_choice
@@ -4279,16 +4284,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -4312,6 +4320,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.MachineType =
 			v.(string)
+
 	}
 
 	//os
@@ -4383,6 +4392,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.ResourceGroup =
 			v.(string)
+
 	}
 
 	//site_type
@@ -4466,6 +4476,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -4486,11 +4497,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -4550,6 +4563,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -4570,11 +4584,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -4592,6 +4608,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressEgressGw.AzureCertifiedHw = v.(string)
+
 			}
 
 			forwardProxyChoiceTypeFound := false
@@ -4791,11 +4808,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -4954,11 +4973,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -5015,16 +5036,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -5045,11 +5069,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -5070,16 +5096,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -5091,6 +5120,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -5111,6 +5141,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -5170,7 +5201,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -5329,6 +5359,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -5349,6 +5380,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -5394,11 +5426,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -5419,11 +5453,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -5654,6 +5690,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -5674,6 +5711,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -5719,11 +5757,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -5744,11 +5784,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -5800,6 +5842,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressEgressGwAr.AzureCertifiedHw = v.(string)
+
 			}
 
 			forwardProxyChoiceTypeFound := false
@@ -5999,11 +6042,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -6162,11 +6207,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -6223,16 +6270,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -6253,11 +6303,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -6278,16 +6330,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -6299,6 +6354,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -6319,6 +6375,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -6378,7 +6435,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -6537,6 +6593,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -6557,6 +6614,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -6602,11 +6660,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -6627,11 +6687,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -6793,6 +6855,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -6813,11 +6876,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -6881,6 +6946,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -6901,11 +6967,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -7054,6 +7122,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -7074,6 +7143,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -7119,11 +7189,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -7144,11 +7216,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -7263,6 +7337,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -7283,11 +7358,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -7305,6 +7382,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressGw.AzureCertifiedHw = v.(string)
+
 			}
 
 		}
@@ -7325,6 +7403,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.IngressGwAr.AzureCertifiedHw = v.(string)
+
 			}
 
 			if v, ok := cs["node"]; ok && !isIntfNil(v) {
@@ -7388,6 +7467,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -7408,11 +7488,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -7516,6 +7598,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -7536,11 +7619,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -7558,6 +7643,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.VoltstackCluster.AzureCertifiedHw = v.(string)
+
 			}
 
 			forwardProxyChoiceTypeFound := false
@@ -7757,11 +7843,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -7920,11 +8008,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -7981,16 +8071,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -8011,11 +8104,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -8036,16 +8131,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -8057,6 +8155,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -8077,6 +8176,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -8136,7 +8236,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -8193,16 +8292,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -8406,6 +8508,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -8426,6 +8529,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -8471,11 +8575,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -8496,11 +8602,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -8552,6 +8660,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
 				siteTypeInt.VoltstackClusterAr.AzureCertifiedHw = v.(string)
+
 			}
 
 			forwardProxyChoiceTypeFound := false
@@ -8751,11 +8860,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -8914,11 +9025,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -8975,16 +9088,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -9005,11 +9121,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -9030,16 +9148,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -9051,6 +9172,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -9071,6 +9193,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -9130,7 +9253,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -9187,16 +9309,19 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						k8SClusterChoiceInt.K8SCluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -9331,6 +9456,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
 
 										choiceInt.Subnet.SubnetName = v.(string)
+
 									}
 
 								}
@@ -9351,11 +9477,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -9508,6 +9636,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -9528,6 +9657,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -9573,11 +9703,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -9598,11 +9730,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -9645,6 +9779,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.SshKey =
 			v.(string)
+
 	}
 
 	//sw
@@ -9710,11 +9845,13 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
 
 						choiceInt.ExistingVnet.ResourceGroup = v.(string)
+
 					}
 
 					if v, ok := cs["vnet_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.ExistingVnet.VnetName = v.(string)
+
 					}
 
 				}
@@ -9760,6 +9897,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 					if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
 
 						choiceInt.NewVnet.PrimaryIpv4 = v.(string)
+
 					}
 
 				}
@@ -9793,8 +9931,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.WorkerNodes = workerNodesInt
 
-		workerNodesInt.NodesPerAz =
-			uint32(v.(int))
+		workerNodesInt.NodesPerAz = uint32(v.(int))
 
 	}
 
@@ -9805,8 +9942,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.WorkerNodes = workerNodesInt
 
-		workerNodesInt.TotalNodes =
-			uint32(v.(int))
+		workerNodesInt.TotalNodes = uint32(v.(int))
 
 	}
 
@@ -9912,6 +10048,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		updateSpec.Address =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
@@ -9923,11 +10060,11 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = w.(float32)
+				coordinates.Latitude = float32(w.(float64))
 			}
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = w.(float32)
+				coordinates.Longitude = float32(w.(float64))
 			}
 
 		}
@@ -9950,16 +10087,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -10188,11 +10328,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -10351,11 +10493,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -10412,16 +10556,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -10442,11 +10589,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -10467,16 +10616,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -10488,6 +10640,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -10508,6 +10661,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -10567,7 +10721,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -10726,6 +10879,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -10746,6 +10900,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -10791,11 +10946,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -10816,11 +10973,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -11051,6 +11210,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -11071,6 +11231,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -11116,11 +11277,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -11141,11 +11304,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -11391,11 +11556,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -11554,11 +11721,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -11615,16 +11784,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -11645,11 +11817,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -11670,16 +11844,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -11691,6 +11868,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -11711,6 +11889,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -11770,7 +11949,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -11929,6 +12107,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -11949,6 +12128,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -11994,11 +12174,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -12019,11 +12201,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -12254,6 +12438,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -12274,6 +12459,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -12319,11 +12505,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -12344,11 +12532,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -12606,11 +12796,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -12769,11 +12961,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -12830,16 +13024,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -12860,11 +13057,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -12885,16 +13084,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -12906,6 +13108,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -12926,6 +13129,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -12985,7 +13189,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -13211,6 +13414,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -13231,6 +13435,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -13276,11 +13481,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -13301,11 +13508,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -13551,11 +13760,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -13714,11 +13925,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -13775,16 +13988,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -13805,11 +14021,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -13830,16 +14048,19 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -13851,6 +14072,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -13871,6 +14093,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -13930,7 +14153,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -14156,6 +14378,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -14176,6 +14399,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -14221,11 +14445,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -14246,11 +14472,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -14309,8 +14537,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		updateSpec.WorkerNodes = workerNodesInt
 
-		workerNodesInt.NodesPerAz =
-			uint32(v.(int))
+		workerNodesInt.NodesPerAz = uint32(v.(int))
 
 	}
 
@@ -14321,8 +14548,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		updateSpec.WorkerNodes = workerNodesInt
 
-		workerNodesInt.TotalNodes =
-			uint32(v.(int))
+		workerNodesInt.TotalNodes = uint32(v.(int))
 
 	}
 

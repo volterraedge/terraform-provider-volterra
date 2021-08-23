@@ -22,9 +22,13 @@ resource "volterra_aws_vpc_site" "example" {
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "aws_cred assisted" must be set
-  assisted      = true
-  instance_type = ["a1.xlarge"]
 
+  aws_cred {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  instance_type = ["a1.xlarge"]
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
@@ -33,7 +37,7 @@ resource "volterra_aws_vpc_site" "example" {
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
-      use_http_port = true
+      use_https_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -52,7 +56,7 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
   }
-  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
   nodes_per_az = "2"
 }
 

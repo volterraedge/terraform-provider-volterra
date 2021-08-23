@@ -23,23 +23,19 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-
-  enable_vgpu {
-    feature_type   = "feature_type"
-    server_address = "gridlicense1.example.com"
-    server_port    = "server_port"
-  }
+  // One of the arguments from this list "enable_vgpu disable_gpu enable_gpu" must be set
+  disable_gpu = true
 
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+  no_k8s_cluster = true
 
-  k8s_cluster {
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
+  log_receiver {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
   master_nodes = ["master-0"]
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true

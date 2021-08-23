@@ -44,9 +44,9 @@ Argument Reference
 
 `address` - (Optional) If inside_vip/outside_vip is not configured in the site object, system use interface ip in the respected networks. (`String`).
 
-`port` - (Optional) Optional. port to advertise. If not specified, system will assume 80. (`Int`).
+`port` - (Optional) Port to advertise. (`Int`).
 
-`protocol` - (Optional) Remove Hidden when more protocols are supported (`String`).
+`protocol` - (Optional) Protocol to advertise. (`String`).
 
 `public_ip` - (Optional) This field is mutually exclusive with where and address fields.. See [ref](#ref) below for details.
 

@@ -754,6 +754,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["access_key"]; ok && !isIntfNil(v) {
 
 				cloudInt.AwsSecretKey.AccessKey = v.(string)
+
 			}
 
 			if v, ok := cs["secret_key"]; ok && !isIntfNil(v) {
@@ -810,16 +811,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -840,11 +844,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -865,16 +871,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -886,6 +895,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -906,6 +916,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -934,6 +945,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["client_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.ClientId = v.(string)
+
 			}
 
 			if v, ok := cs["client_secret"]; ok && !isIntfNil(v) {
@@ -990,16 +1002,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -1020,11 +1035,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -1045,16 +1062,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1066,6 +1086,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -1086,6 +1107,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -1099,11 +1121,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["subscription_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.SubscriptionId = v.(string)
+
 			}
 
 			if v, ok := cs["tenant_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.TenantId = v.(string)
+
 			}
 
 		}
@@ -1124,11 +1148,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.CertificateUrl = v.(string)
+
 			}
 
 			if v, ok := cs["client_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.ClientId = v.(string)
+
 			}
 
 			if v, ok := cs["password"]; ok && !isIntfNil(v) {
@@ -1185,16 +1211,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -1215,11 +1244,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -1240,16 +1271,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1261,6 +1295,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -1281,6 +1316,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -1294,11 +1330,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["subscription_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.SubscriptionId = v.(string)
+
 			}
 
 			if v, ok := cs["tenant_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.TenantId = v.(string)
+
 			}
 
 		}
@@ -1370,16 +1408,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -1400,11 +1441,13 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -1425,16 +1468,19 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1446,6 +1492,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -1466,6 +1513,7 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -1594,6 +1642,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["access_key"]; ok && !isIntfNil(v) {
 
 				cloudInt.AwsSecretKey.AccessKey = v.(string)
+
 			}
 
 			if v, ok := cs["secret_key"]; ok && !isIntfNil(v) {
@@ -1650,16 +1699,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -1680,11 +1732,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -1705,16 +1759,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1726,6 +1783,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -1746,6 +1804,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -1774,6 +1833,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["client_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.ClientId = v.(string)
+
 			}
 
 			if v, ok := cs["client_secret"]; ok && !isIntfNil(v) {
@@ -1830,16 +1890,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -1860,11 +1923,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -1885,16 +1950,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1906,6 +1974,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -1926,6 +1995,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -1939,11 +2009,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["subscription_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.SubscriptionId = v.(string)
+
 			}
 
 			if v, ok := cs["tenant_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzureClientSecret.TenantId = v.(string)
+
 			}
 
 		}
@@ -1964,11 +2036,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.CertificateUrl = v.(string)
+
 			}
 
 			if v, ok := cs["client_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.ClientId = v.(string)
+
 			}
 
 			if v, ok := cs["password"]; ok && !isIntfNil(v) {
@@ -2025,16 +2099,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -2055,11 +2132,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -2080,16 +2159,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2101,6 +2183,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -2121,6 +2204,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}
@@ -2134,11 +2218,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["subscription_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.SubscriptionId = v.(string)
+
 			}
 
 			if v, ok := cs["tenant_id"]; ok && !isIntfNil(v) {
 
 				cloudInt.AzurePfxCertificate.TenantId = v.(string)
+
 			}
 
 		}
@@ -2210,16 +2296,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 							}
 
 						}
@@ -2240,11 +2329,13 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 							}
 
 						}
@@ -2265,16 +2356,19 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 							}
 
 							if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 							}
 
 							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 							}
 
 							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2286,6 +2380,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 							}
 
 						}
@@ -2306,6 +2401,7 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 							}
 
 						}

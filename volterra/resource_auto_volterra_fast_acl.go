@@ -1001,6 +1001,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -1021,6 +1022,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -1073,8 +1075,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 										ports[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-										portValueTypeChoiceInt.UserDefined =
-											uint32(v.(int))
+										portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 									}
 
@@ -1085,6 +1086,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 								destinationTypeChoiceInt.DestinationIpAddress.Protocol = v.(string)
+
 							}
 
 						}
@@ -1139,6 +1141,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -1159,6 +1162,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -1490,8 +1494,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 								port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-								portValueTypeChoiceInt.UserDefined =
-									uint32(v.(int))
+								portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 							}
 
@@ -1617,6 +1620,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 					if v, ok := cs["default_tenant_vip"]; ok && !isIntfNil(v) {
 
 						vipChoiceInt.SelectedTenantVip.DefaultTenantVip = v.(bool)
+
 					}
 
 					if v, ok := cs["public_ip_refs"]; ok && !isIntfNil(v) {
@@ -1862,8 +1866,7 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 								port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-								portValueTypeChoiceInt.UserDefined =
-									uint32(v.(int))
+								portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 							}
 
@@ -2208,6 +2211,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -2228,6 +2232,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -2280,8 +2285,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 										ports[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-										portValueTypeChoiceInt.UserDefined =
-											uint32(v.(int))
+										portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 									}
 
@@ -2292,6 +2296,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 								destinationTypeChoiceInt.DestinationIpAddress.Protocol = v.(string)
+
 							}
 
 						}
@@ -2346,6 +2351,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -2366,6 +2372,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -2697,8 +2704,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 								port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-								portValueTypeChoiceInt.UserDefined =
-									uint32(v.(int))
+								portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 							}
 
@@ -2824,6 +2830,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 					if v, ok := cs["default_tenant_vip"]; ok && !isIntfNil(v) {
 
 						vipChoiceInt.SelectedTenantVip.DefaultTenantVip = v.(bool)
+
 					}
 
 					if v, ok := cs["public_ip_refs"]; ok && !isIntfNil(v) {
@@ -3069,8 +3076,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 								port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-								portValueTypeChoiceInt.UserDefined =
-									uint32(v.(int))
+								portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 							}
 

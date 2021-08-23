@@ -312,6 +312,7 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 		createSpec.Protocol =
 			v.(string)
+
 	}
 
 	//remote_endpoint
@@ -571,6 +572,7 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 		updateSpec.Protocol =
 			v.(string)
+
 	}
 
 	remoteEndpointTypeFound := false

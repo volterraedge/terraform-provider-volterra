@@ -2924,6 +2924,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["rate"]; ok && !isIntfNil(v) {
 
 								lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
 							}
 
 						}
@@ -2980,16 +2981,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
 			}
 
 		}
@@ -3010,16 +3014,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Tenant = v.(string)
+
 			}
 
 		}
@@ -3043,6 +3050,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 		createSpec.EnableDefaultFleetConfigDownload =
 			v.(bool)
+
 	}
 
 	//fleet_label
@@ -3050,6 +3058,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 		createSpec.FleetLabel =
 			v.(string)
+
 	}
 
 	//gpu_choice
@@ -3100,11 +3109,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["server_address"]; ok && !isIntfNil(v) {
 
 				gpuChoiceInt.EnableVgpu.ServerAddress = v.(string)
+
 			}
 
 			if v, ok := cs["server_port"]; ok && !isIntfNil(v) {
 
 				gpuChoiceInt.EnableVgpu.ServerPort = uint32(v.(int))
+
 			}
 
 		}
@@ -3312,16 +3323,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -3411,6 +3425,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 		createSpec.OperatingSystemVersion =
 			v.(string)
+
 	}
 
 	//outside_virtual_network
@@ -3518,6 +3533,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["yaml"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.CustomStorage.Yaml = v.(string)
+
 							}
 
 						}
@@ -3547,6 +3563,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.NetappTrident.StoragePools = v.(string)
+
 							}
 
 						}
@@ -3567,11 +3584,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.OpenebsEnterprise.Protocol = v.(string)
+
 							}
 
 							if v, ok := cs["replication"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
+
 							}
 
 						}
@@ -3592,16 +3611,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["backend"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.Backend = v.(string)
+
 							}
 
 							if v, ok := cs["bandwidth_limit"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.BandwidthLimit = v.(string)
+
 							}
 
 							if v, ok := cs["iops_limit"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.IopsLimit = uint32(v.(int))
+
 							}
 
 						}
@@ -3733,16 +3755,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["auto_export_policy"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.AutoExportPolicy = v.(bool)
+
 									}
 
 									if v, ok := cs["backend_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.BackendName = v.(string)
+
 									}
 
 									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.ClientCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
@@ -3799,16 +3824,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -3829,11 +3857,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -3854,16 +3884,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -3875,6 +3908,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -3895,6 +3929,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -3941,11 +3976,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["limit_aggregate_usage"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.LimitAggregateUsage = v.(string)
+
 									}
 
 									if v, ok := cs["limit_volume_size"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.LimitVolumeSize = v.(string)
+
 									}
 
 									managementLifTypeFound := false
@@ -3975,6 +4012,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["nfs_mount_options"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.NfsMountOptions = v.(string)
+
 									}
 
 									if v, ok := cs["password"]; ok && !isIntfNil(v) {
@@ -4031,16 +4069,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -4061,11 +4102,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -4086,16 +4129,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4107,6 +4153,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -4127,6 +4174,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4140,6 +4188,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["region"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Region = v.(string)
+
 									}
 
 									if v, ok := cs["storage"]; ok && !isIntfNil(v) {
@@ -4240,7 +4289,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													}
 
 													if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-														volumeDefaults.UnixPermissions = w.(int32)
+														volumeDefaults.UnixPermissions = int32(w.(int))
 													}
 
 												}
@@ -4258,26 +4307,31 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["storage_driver_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.StorageDriverName = v.(string)
+
 									}
 
 									if v, ok := cs["storage_prefix"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.StoragePrefix = v.(string)
+
 									}
 
 									if v, ok := cs["svm"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Svm = v.(string)
+
 									}
 
 									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.TrustedCaCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Username = v.(string)
+
 									}
 
 									if v, ok := cs["volume_defaults"]; ok && !isIntfNil(v) {
@@ -4361,7 +4415,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-												volumeDefaults.UnixPermissions = w.(int32)
+												volumeDefaults.UnixPermissions = int32(w.(int))
 											}
 
 										}
@@ -4462,16 +4516,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 															}
 
 														}
@@ -4492,11 +4549,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 															}
 
 														}
@@ -4517,16 +4576,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4538,6 +4600,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 															}
 
 														}
@@ -4558,6 +4621,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 															}
 
 														}
@@ -4622,16 +4686,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 															}
 
 														}
@@ -4652,11 +4719,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 															}
 
 														}
@@ -4677,16 +4746,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4698,6 +4770,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 															}
 
 														}
@@ -4718,6 +4791,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 															}
 
 														}
@@ -4731,11 +4805,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["chap_target_username"]; ok && !isIntfNil(v) {
 
 												chapChoiceInt.UseChap.ChapTargetUsername = v.(string)
+
 											}
 
 											if v, ok := cs["chap_username"]; ok && !isIntfNil(v) {
 
 												chapChoiceInt.UseChap.ChapUsername = v.(string)
+
 											}
 
 										}
@@ -4745,6 +4821,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.ClientCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
@@ -4801,16 +4878,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -4831,11 +4911,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -4856,16 +4938,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4877,6 +4962,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -4897,6 +4983,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -4934,6 +5021,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["igroup_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.IgroupName = v.(string)
+
 									}
 
 									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
@@ -4948,11 +5036,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["limit_aggregate_usage"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.LimitAggregateUsage = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["limit_volume_size"]; ok && !isIntfNil(v) {
 
-										backendChoiceInt.NetappBackendOntapSan.LimitVolumeSize = v.(int32)
+										backendChoiceInt.NetappBackendOntapSan.LimitVolumeSize = int32(v.(int))
+
 									}
 
 									managementLifTypeFound := false
@@ -5033,16 +5123,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -5063,11 +5156,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -5088,16 +5183,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -5109,6 +5207,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -5129,6 +5228,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -5142,6 +5242,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["region"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Region = v.(string)
+
 									}
 
 									if v, ok := cs["storage"]; ok && !isIntfNil(v) {
@@ -5242,7 +5343,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 													}
 
 													if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-														volumeDefaults.UnixPermissions = w.(int32)
+														volumeDefaults.UnixPermissions = int32(w.(int))
 													}
 
 												}
@@ -5260,26 +5361,31 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["storage_driver_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.StorageDriverName = v.(string)
+
 									}
 
 									if v, ok := cs["storage_prefix"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.StoragePrefix = v.(string)
+
 									}
 
 									if v, ok := cs["svm"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Svm = v.(string)
+
 									}
 
 									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.TrustedCaCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Username = v.(string)
+
 									}
 
 									if v, ok := cs["volume_defaults"]; ok && !isIntfNil(v) {
@@ -5363,7 +5469,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-												volumeDefaults.UnixPermissions = w.(int32)
+												volumeDefaults.UnixPermissions = int32(w.(int))
 											}
 
 										}
@@ -5532,16 +5638,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -5562,11 +5671,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -5587,16 +5698,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -5608,6 +5722,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -5628,6 +5743,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -5675,7 +5791,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := flashArrayMapStrToI["iscsi_login_timeout"]; ok && !isIntfNil(w) {
-												flashArray.IscsiLoginTimeout = w.(int32)
+												flashArray.IscsiLoginTimeout = int32(w.(int))
 											}
 
 											if w, ok := flashArrayMapStrToI["san_type"]; ok && !isIntfNil(w) {
@@ -5765,16 +5881,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -5795,11 +5914,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -5820,16 +5941,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -5841,6 +5965,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -5861,6 +5986,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -5942,16 +6068,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["cluster_id"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.ClusterId = v.(string)
+
 							}
 
 							if v, ok := cs["enable_storage_topology"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.EnableStorageTopology = v.(bool)
+
 							}
 
 							if v, ok := cs["enable_strict_topology"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.EnableStrictTopology = v.(bool)
+
 							}
 
 						}
@@ -6145,6 +6274,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -6165,6 +6295,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -6210,11 +6341,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv4.Plen = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv4.Prefix = v.(string)
+
 									}
 
 								}
@@ -6235,11 +6368,13 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv6.Plen = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv6.Prefix = v.(string)
+
 									}
 
 								}
@@ -6300,16 +6435,19 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Tenant = v.(string)
+
 			}
 
 		}
@@ -6321,6 +6459,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 		createSpec.VolterraSoftwareVersion =
 			v.(string)
+
 	}
 
 	log.Printf("[DEBUG] Creating Volterra Fleet object with struct: %+v", createReq)
@@ -6479,6 +6618,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["rate"]; ok && !isIntfNil(v) {
 
 								lacpChoiceInt.Lacp.Rate = uint32(v.(int))
+
 							}
 
 						}
@@ -6533,16 +6673,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroup.Tenant = v.(string)
+
 			}
 
 		}
@@ -6563,16 +6706,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				dcClusterGroupChoiceInt.DcClusterGroupInside.Tenant = v.(string)
+
 			}
 
 		}
@@ -6595,6 +6741,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 		updateSpec.EnableDefaultFleetConfigDownload =
 			v.(bool)
+
 	}
 
 	gpuChoiceTypeFound := false
@@ -6643,11 +6790,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["server_address"]; ok && !isIntfNil(v) {
 
 				gpuChoiceInt.EnableVgpu.ServerAddress = v.(string)
+
 			}
 
 			if v, ok := cs["server_port"]; ok && !isIntfNil(v) {
 
 				gpuChoiceInt.EnableVgpu.ServerPort = uint32(v.(int))
+
 			}
 
 		}
@@ -6850,16 +6999,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -6946,6 +7098,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 		updateSpec.OperatingSystemVersion =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("outside_virtual_network"); ok && !isIntfNil(v) {
@@ -7050,6 +7203,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["yaml"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.CustomStorage.Yaml = v.(string)
+
 							}
 
 						}
@@ -7079,6 +7233,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.NetappTrident.StoragePools = v.(string)
+
 							}
 
 						}
@@ -7099,11 +7254,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.OpenebsEnterprise.Protocol = v.(string)
+
 							}
 
 							if v, ok := cs["replication"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
+
 							}
 
 						}
@@ -7124,16 +7281,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["backend"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.Backend = v.(string)
+
 							}
 
 							if v, ok := cs["bandwidth_limit"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.BandwidthLimit = v.(string)
+
 							}
 
 							if v, ok := cs["iops_limit"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.IopsLimit = uint32(v.(int))
+
 							}
 
 						}
@@ -7263,16 +7423,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["auto_export_policy"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.AutoExportPolicy = v.(bool)
+
 									}
 
 									if v, ok := cs["backend_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.BackendName = v.(string)
+
 									}
 
 									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.ClientCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
@@ -7329,16 +7492,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -7359,11 +7525,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -7384,16 +7552,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -7405,6 +7576,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -7425,6 +7597,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -7471,11 +7644,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["limit_aggregate_usage"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.LimitAggregateUsage = v.(string)
+
 									}
 
 									if v, ok := cs["limit_volume_size"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.LimitVolumeSize = v.(string)
+
 									}
 
 									managementLifTypeFound := false
@@ -7505,6 +7680,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["nfs_mount_options"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.NfsMountOptions = v.(string)
+
 									}
 
 									if v, ok := cs["password"]; ok && !isIntfNil(v) {
@@ -7561,16 +7737,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -7591,11 +7770,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -7616,16 +7797,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -7637,6 +7821,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -7657,6 +7842,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -7670,6 +7856,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["region"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Region = v.(string)
+
 									}
 
 									if v, ok := cs["storage"]; ok && !isIntfNil(v) {
@@ -7770,7 +7957,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													}
 
 													if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-														volumeDefaults.UnixPermissions = w.(int32)
+														volumeDefaults.UnixPermissions = int32(w.(int))
 													}
 
 												}
@@ -7788,26 +7975,31 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["storage_driver_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.StorageDriverName = v.(string)
+
 									}
 
 									if v, ok := cs["storage_prefix"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.StoragePrefix = v.(string)
+
 									}
 
 									if v, ok := cs["svm"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Svm = v.(string)
+
 									}
 
 									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.TrustedCaCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Username = v.(string)
+
 									}
 
 									if v, ok := cs["volume_defaults"]; ok && !isIntfNil(v) {
@@ -7891,7 +8083,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-												volumeDefaults.UnixPermissions = w.(int32)
+												volumeDefaults.UnixPermissions = int32(w.(int))
 											}
 
 										}
@@ -7992,16 +8184,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 															}
 
 														}
@@ -8022,11 +8217,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 															}
 
 														}
@@ -8047,16 +8244,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -8068,6 +8268,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 															}
 
 														}
@@ -8088,6 +8289,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 															}
 
 														}
@@ -8152,16 +8354,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 															}
 
 														}
@@ -8182,11 +8387,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 															}
 
 														}
@@ -8207,16 +8414,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 															}
 
 															if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 															}
 
 															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 															}
 
 															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -8228,6 +8438,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 															}
 
 														}
@@ -8248,6 +8459,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 															if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 															}
 
 														}
@@ -8261,11 +8473,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["chap_target_username"]; ok && !isIntfNil(v) {
 
 												chapChoiceInt.UseChap.ChapTargetUsername = v.(string)
+
 											}
 
 											if v, ok := cs["chap_username"]; ok && !isIntfNil(v) {
 
 												chapChoiceInt.UseChap.ChapUsername = v.(string)
+
 											}
 
 										}
@@ -8275,6 +8489,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.ClientCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
@@ -8331,16 +8546,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -8361,11 +8579,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -8386,16 +8606,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -8407,6 +8630,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -8427,6 +8651,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -8464,6 +8689,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["igroup_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.IgroupName = v.(string)
+
 									}
 
 									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
@@ -8478,11 +8704,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["limit_aggregate_usage"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.LimitAggregateUsage = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["limit_volume_size"]; ok && !isIntfNil(v) {
 
-										backendChoiceInt.NetappBackendOntapSan.LimitVolumeSize = v.(int32)
+										backendChoiceInt.NetappBackendOntapSan.LimitVolumeSize = int32(v.(int))
+
 									}
 
 									managementLifTypeFound := false
@@ -8563,16 +8791,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 													}
 
 												}
@@ -8593,11 +8824,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 													}
 
 												}
@@ -8618,16 +8851,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 													}
 
 													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 													}
 
 													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -8639,6 +8875,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 													}
 
 												}
@@ -8659,6 +8896,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 													}
 
 												}
@@ -8672,6 +8910,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["region"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Region = v.(string)
+
 									}
 
 									if v, ok := cs["storage"]; ok && !isIntfNil(v) {
@@ -8772,7 +9011,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 													}
 
 													if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-														volumeDefaults.UnixPermissions = w.(int32)
+														volumeDefaults.UnixPermissions = int32(w.(int))
 													}
 
 												}
@@ -8790,26 +9029,31 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["storage_driver_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.StorageDriverName = v.(string)
+
 									}
 
 									if v, ok := cs["storage_prefix"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.StoragePrefix = v.(string)
+
 									}
 
 									if v, ok := cs["svm"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Svm = v.(string)
+
 									}
 
 									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.TrustedCaCertificate = v.(string)
+
 									}
 
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Username = v.(string)
+
 									}
 
 									if v, ok := cs["volume_defaults"]; ok && !isIntfNil(v) {
@@ -8893,7 +9137,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["unix_permissions"]; ok && !isIntfNil(w) {
-												volumeDefaults.UnixPermissions = w.(int32)
+												volumeDefaults.UnixPermissions = int32(w.(int))
 											}
 
 										}
@@ -9062,16 +9306,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -9092,11 +9339,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -9117,16 +9366,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -9138,6 +9390,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -9158,6 +9411,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -9205,7 +9459,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											}
 
 											if w, ok := flashArrayMapStrToI["iscsi_login_timeout"]; ok && !isIntfNil(w) {
-												flashArray.IscsiLoginTimeout = w.(int32)
+												flashArray.IscsiLoginTimeout = int32(w.(int))
 											}
 
 											if w, ok := flashArrayMapStrToI["san_type"]; ok && !isIntfNil(w) {
@@ -9295,16 +9549,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -9325,11 +9582,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -9350,16 +9609,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -9371,6 +9633,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -9391,6 +9654,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -9472,16 +9736,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 							if v, ok := cs["cluster_id"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.ClusterId = v.(string)
+
 							}
 
 							if v, ok := cs["enable_storage_topology"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.EnableStorageTopology = v.(bool)
+
 							}
 
 							if v, ok := cs["enable_strict_topology"]; ok && !isIntfNil(v) {
 
 								deviceChoiceInt.PureServiceOrchestrator.EnableStrictTopology = v.(bool)
+
 							}
 
 						}
@@ -9671,6 +9938,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv4.Addr = v.(string)
+
 											}
 
 										}
@@ -9691,6 +9959,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 											if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 												verInt.Ipv6.Addr = v.(string)
+
 											}
 
 										}
@@ -9736,11 +10005,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv4.Plen = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv4.Prefix = v.(string)
+
 									}
 
 								}
@@ -9761,11 +10032,13 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv6.Plen = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 										verInt.Ipv6.Prefix = v.(string)
+
 									}
 
 								}
@@ -9824,16 +10097,19 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				usbPolicyChoiceInt.UsbPolicy.Tenant = v.(string)
+
 			}
 
 		}
@@ -9844,6 +10120,7 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 		updateSpec.VolterraSoftwareVersion =
 			v.(string)
+
 	}
 
 	log.Printf("[DEBUG] Updating Volterra Fleet obj with struct: %+v", updateReq)

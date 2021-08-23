@@ -3819,6 +3819,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		createSpec.AddLocation =
 			v.(bool)
+
 	}
 
 	//advertise_choice
@@ -3861,6 +3862,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
 							}
 
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
@@ -4033,16 +4035,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -4063,16 +4068,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -4092,8 +4100,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 						advertiseWhere[i].PortChoice = portChoiceInt
 
-						portChoiceInt.Port =
-							uint32(v.(int))
+						portChoiceInt.Port = uint32(v.(int))
 
 					}
 
@@ -4199,8 +4206,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
-				clientSourceChoiceInt.AsNumber =
-					uint32(v.(int))
+				clientSourceChoiceInt.AsNumber = uint32(v.(int))
 
 			}
 
@@ -4269,11 +4275,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
+
 			}
 
 		}
@@ -4294,16 +4302,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
+
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.JsScriptDelay = uint32(v.(int))
+
 			}
 
 		}
@@ -4349,11 +4360,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CustomPage = v.(string)
+
 					}
 
 				}
@@ -4438,16 +4451,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CustomPage = v.(string)
+
 					}
 
 					if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.JsScriptDelay = uint32(v.(int))
+
 					}
 
 				}
@@ -4482,16 +4498,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Tenant = v.(string)
+
 					}
 
 				}
@@ -4638,8 +4657,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												argMatchers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -4680,7 +4698,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												ls := make([]uint32, len(v.([]interface{})))
 												for i, v := range v.([]interface{}) {
-
 													ls[i] = uint32(v.(int))
 												}
 												asnChoiceInt.AsnList.AsNumbers = ls
@@ -5000,8 +5017,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												cookieMatchers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -5140,8 +5156,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												headers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -5207,6 +5222,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 												ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 											}
 
 											if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -5259,6 +5275,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 												ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 											}
 
 											if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -5416,8 +5433,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												queryParams[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -5503,6 +5519,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						temporaryBlockingParametersChoiceInt.TemporaryUserBlocking.CustomPage = v.(string)
+
 					}
 
 				}
@@ -5563,7 +5580,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			}
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-				corsPolicy.MaximumAge = w.(int32)
+				corsPolicy.MaximumAge = int32(w.(int))
 			}
 
 		}
@@ -5650,7 +5667,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 								ls := make([]uint32, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								asnList.AsNumbers = ls
@@ -5726,6 +5742,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 						mitigationChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 					}
 
 					if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -5780,16 +5797,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -5810,16 +5830,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Tenant = v.(string)
+
 					}
 
 				}
@@ -5863,16 +5886,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Name = v.(string)
+
 			}
 
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Path = v.(string)
+
 			}
 
 			if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Ttl = uint32(v.(int))
+
 			}
 
 		}
@@ -5939,16 +5965,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Name = v.(string)
+
 							}
 
 							if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Path = v.(string)
+
 							}
 
 							if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 							}
 
 						}
@@ -5973,8 +6002,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 						hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-						policySpecifierInt.SourceIp =
-							v.(bool)
+						policySpecifierInt.SourceIp = v.(bool)
 
 					}
 
@@ -6032,6 +6060,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["dns_volterra_managed"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Http.DnsVolterraManaged = v.(bool)
+
 			}
 
 		}
@@ -6052,11 +6081,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.AddHsts = v.(bool)
+
 			}
 
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
+
 			}
 
 			serverHeaderChoiceTypeFound := false
@@ -6143,6 +6174,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
 							}
 
 						}
@@ -6220,16 +6252,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -6250,11 +6285,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -6275,16 +6312,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -6296,6 +6336,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -6316,6 +6357,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -6439,11 +6481,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.AddHsts = v.(bool)
+
 			}
 
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
+
 			}
 
 			mtlsChoiceTypeFound := false
@@ -6474,6 +6518,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
 					}
 
 				}
@@ -7278,8 +7323,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 								routeRedirect.QueryParams = queryParamsInt
 
-								queryParamsInt.AllParams =
-									v.(bool)
+								queryParamsInt.AllParams = v.(bool)
 
 							}
 
@@ -7379,16 +7423,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["disabled"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.Disabled = v.(bool)
+
 									}
 
 									if v, ok := cs["max_request_bytes"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.MaxRequestBytes = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_request_time"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.MaxRequestTime = uint32(v.(int))
+
 									}
 
 								}
@@ -7482,7 +7529,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									}
 
 									if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-										corsPolicy.MaximumAge = w.(int32)
+										corsPolicy.MaximumAge = int32(w.(int))
 									}
 
 								}
@@ -7551,16 +7598,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Name = v.(string)
+
 													}
 
 													if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Path = v.(string)
+
 													}
 
 													if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 													}
 
 												}
@@ -7585,8 +7635,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 												hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-												policySpecifierInt.SourceIp =
-													v.(bool)
+												policySpecifierInt.SourceIp = v.(bool)
 
 											}
 
@@ -7795,18 +7844,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["num_retries"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.NumRetries = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["per_try_timeout"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.PerTryTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["retriable_status_codes"]; ok && !isIntfNil(v) {
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										retryPolicyChoiceInt.RetryPolicy.RetriableStatusCodes = ls
@@ -7826,6 +7876,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["retry_on"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.RetryOn = v.(string)
+
 									}
 
 								}
@@ -7903,16 +7954,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Tenant = v.(string)
+
 									}
 
 								}
@@ -7945,16 +7999,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Tenant = v.(string)
+
 									}
 
 								}
@@ -7975,16 +8032,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Tenant = v.(string)
+
 									}
 
 								}
@@ -8019,16 +8079,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["idle_timeout"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.IdleTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["use_websocket"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.UseWebsocket = v.(bool)
+
 									}
 
 								}
@@ -8115,16 +8178,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Tenant = v.(string)
+
 									}
 
 								}
@@ -8145,16 +8211,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Tenant = v.(string)
+
 									}
 
 								}
@@ -8312,8 +8381,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
-				clientSourceChoiceInt.AsNumber =
-					uint32(v.(int))
+				clientSourceChoiceInt.AsNumber = uint32(v.(int))
 
 			}
 
@@ -8405,16 +8473,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Tenant = v.(string)
+
 			}
 
 		}
@@ -8447,16 +8518,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Tenant = v.(string)
+
 			}
 
 		}
@@ -8477,16 +8551,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Tenant = v.(string)
+
 			}
 
 		}
@@ -8690,6 +8767,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		updateSpec.AddLocation =
 			v.(bool)
+
 	}
 
 	advertiseChoiceTypeFound := false
@@ -8730,6 +8808,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
 							}
 
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
@@ -8902,16 +8981,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.Site.Tenant = v.(string)
+
 									}
 
 								}
@@ -8932,16 +9014,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.VirtualSite.Tenant = v.(string)
+
 									}
 
 								}
@@ -8961,8 +9046,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 						advertiseWhere[i].PortChoice = portChoiceInt
 
-						portChoiceInt.Port =
-							uint32(v.(int))
+						portChoiceInt.Port = uint32(v.(int))
 
 					}
 
@@ -9067,8 +9151,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
-				clientSourceChoiceInt.AsNumber =
-					uint32(v.(int))
+				clientSourceChoiceInt.AsNumber = uint32(v.(int))
 
 			}
 
@@ -9135,11 +9218,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
+
 			}
 
 		}
@@ -9160,16 +9245,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CookieExpiry = uint32(v.(int))
+
 			}
 
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
+
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.JsScriptDelay = uint32(v.(int))
+
 			}
 
 		}
@@ -9215,11 +9303,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CustomPage = v.(string)
+
 					}
 
 				}
@@ -9304,16 +9394,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CookieExpiry = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CustomPage = v.(string)
+
 					}
 
 					if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.JsScriptDelay = uint32(v.(int))
+
 					}
 
 				}
@@ -9348,16 +9441,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						maliciousUserMitigationChoiceInt.MaliciousUserMitigation.Tenant = v.(string)
+
 					}
 
 				}
@@ -9504,8 +9600,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												argMatchers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -9546,7 +9641,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												ls := make([]uint32, len(v.([]interface{})))
 												for i, v := range v.([]interface{}) {
-
 													ls[i] = uint32(v.(int))
 												}
 												asnChoiceInt.AsnList.AsNumbers = ls
@@ -9866,8 +9960,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												cookieMatchers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -10006,8 +10099,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												headers[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -10073,6 +10165,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 												ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 											}
 
 											if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -10125,6 +10218,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 												ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 											}
 
 											if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -10282,8 +10376,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												queryParams[i].Match = matchInt
 
-												matchInt.Presence =
-													v.(bool)
+												matchInt.Presence = v.(bool)
 
 											}
 
@@ -10369,6 +10462,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						temporaryBlockingParametersChoiceInt.TemporaryUserBlocking.CustomPage = v.(string)
+
 					}
 
 				}
@@ -10428,7 +10522,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			}
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-				corsPolicy.MaximumAge = w.(int32)
+				corsPolicy.MaximumAge = int32(w.(int))
 			}
 
 		}
@@ -10514,7 +10608,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
 								ls := make([]uint32, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								asnList.AsNumbers = ls
@@ -10590,6 +10683,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 						mitigationChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 					}
 
 					if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -10643,16 +10737,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Cluster.Tenant = v.(string)
+
 					}
 
 				}
@@ -10673,16 +10770,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						poolChoiceInt.Pool.Tenant = v.(string)
+
 					}
 
 				}
@@ -10723,16 +10823,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Name = v.(string)
+
 			}
 
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Path = v.(string)
+
 			}
 
 			if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Ttl = uint32(v.(int))
+
 			}
 
 		}
@@ -10799,16 +10902,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Name = v.(string)
+
 							}
 
 							if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Path = v.(string)
+
 							}
 
 							if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 							}
 
 						}
@@ -10833,8 +10939,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 						hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-						policySpecifierInt.SourceIp =
-							v.(bool)
+						policySpecifierInt.SourceIp = v.(bool)
 
 					}
 
@@ -10890,6 +10995,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["dns_volterra_managed"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Http.DnsVolterraManaged = v.(bool)
+
 			}
 
 		}
@@ -10910,11 +11016,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.AddHsts = v.(bool)
+
 			}
 
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
+
 			}
 
 			serverHeaderChoiceTypeFound := false
@@ -11001,6 +11109,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
 							}
 
 						}
@@ -11078,16 +11187,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -11108,11 +11220,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -11133,16 +11247,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -11154,6 +11271,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -11174,6 +11292,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -11297,11 +11416,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.AddHsts = v.(bool)
+
 			}
 
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
+
 			}
 
 			mtlsChoiceTypeFound := false
@@ -11332,6 +11453,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
 					}
 
 				}
@@ -12131,8 +12253,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 								routeRedirect.QueryParams = queryParamsInt
 
-								queryParamsInt.AllParams =
-									v.(bool)
+								queryParamsInt.AllParams = v.(bool)
 
 							}
 
@@ -12232,16 +12353,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["disabled"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.Disabled = v.(bool)
+
 									}
 
 									if v, ok := cs["max_request_bytes"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.MaxRequestBytes = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_request_time"]; ok && !isIntfNil(v) {
 
 										bufferChoiceInt.BufferPolicy.MaxRequestTime = uint32(v.(int))
+
 									}
 
 								}
@@ -12335,7 +12459,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									}
 
 									if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-										corsPolicy.MaximumAge = w.(int32)
+										corsPolicy.MaximumAge = int32(w.(int))
 									}
 
 								}
@@ -12404,16 +12528,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Name = v.(string)
+
 													}
 
 													if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Path = v.(string)
+
 													}
 
 													if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 													}
 
 												}
@@ -12438,8 +12565,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 												hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-												policySpecifierInt.SourceIp =
-													v.(bool)
+												policySpecifierInt.SourceIp = v.(bool)
 
 											}
 
@@ -12648,18 +12774,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["num_retries"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.NumRetries = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["per_try_timeout"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.PerTryTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["retriable_status_codes"]; ok && !isIntfNil(v) {
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										retryPolicyChoiceInt.RetryPolicy.RetriableStatusCodes = ls
@@ -12679,6 +12806,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["retry_on"]; ok && !isIntfNil(v) {
 
 										retryPolicyChoiceInt.RetryPolicy.RetryOn = v.(string)
+
 									}
 
 								}
@@ -12756,16 +12884,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.AppFirewall.Tenant = v.(string)
+
 									}
 
 								}
@@ -12798,16 +12929,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.Waf.Tenant = v.(string)
+
 									}
 
 								}
@@ -12828,16 +12962,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										wafChoiceInt.WafRule.Tenant = v.(string)
+
 									}
 
 								}
@@ -12872,16 +13009,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["idle_timeout"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.IdleTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["use_websocket"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.UseWebsocket = v.(bool)
+
 									}
 
 								}
@@ -12968,16 +13108,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Cluster.Tenant = v.(string)
+
 									}
 
 								}
@@ -12998,16 +13141,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Name = v.(string)
+
 									}
 
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Namespace = v.(string)
+
 									}
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 										poolChoiceInt.Pool.Tenant = v.(string)
+
 									}
 
 								}
@@ -13162,8 +13308,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
-				clientSourceChoiceInt.AsNumber =
-					uint32(v.(int))
+				clientSourceChoiceInt.AsNumber = uint32(v.(int))
 
 			}
 
@@ -13252,16 +13397,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.AppFirewall.Tenant = v.(string)
+
 			}
 
 		}
@@ -13294,16 +13442,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.Waf.Tenant = v.(string)
+
 			}
 
 		}
@@ -13324,16 +13475,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				wafChoiceInt.WafRule.Tenant = v.(string)
+
 			}
 
 		}

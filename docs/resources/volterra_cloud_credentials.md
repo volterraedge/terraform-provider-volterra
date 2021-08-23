@@ -20,7 +20,7 @@ resource "volterra_cloud_credentials" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "azure_pfx_certificate azure_client_secret gcp_cred_file aws_secret_key" must be set
+  // One of the arguments from this list "aws_secret_key azure_pfx_certificate azure_client_secret gcp_cred_file" must be set
 
   aws_secret_key {
     access_key = "access_key"
@@ -34,12 +34,14 @@ resource "volterra_cloud_credentials" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "decryption_provider"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "store_provider"
+      vault_secret_info {
+        key             = "key_pem"
+        location        = "v1/data/vhost_key"
+        provider        = "vault-vh-provider"
+        secret_encoding = "secret_encoding"
+        version         = "1"
       }
     }
   }

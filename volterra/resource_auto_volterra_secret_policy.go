@@ -167,6 +167,7 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 
 		createSpec.AllowVolterra =
 			v.(bool)
+
 	}
 
 	//rules
@@ -310,6 +311,7 @@ func resourceVolterraSecretPolicyUpdate(d *schema.ResourceData, meta interface{}
 
 		updateSpec.AllowVolterra =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("rules"); ok && !isIntfNil(v) {

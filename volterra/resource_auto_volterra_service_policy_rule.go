@@ -1489,8 +1489,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				argMatchers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -1533,7 +1532,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				asnChoiceInt.AsnList.AsNumbers = ls
@@ -1833,8 +1831,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				cookieMatchers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -1906,7 +1903,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				dstAsnChoiceInt.DstAsnList.AsNumbers = ls
@@ -1994,6 +1990,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 				dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
+
 			}
 
 			if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -2046,6 +2043,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 				dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
+
 			}
 
 			if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -2198,8 +2196,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				headers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -2268,6 +2265,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 				ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 			}
 
 			if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -2320,6 +2318,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 				ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 			}
 
 			if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -2576,8 +2575,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				queryParams[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -2866,6 +2864,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
+
 					}
 
 				}
@@ -2918,6 +2917,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
+
 					}
 
 				}
@@ -3159,8 +3159,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				argMatchers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -3201,7 +3200,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				asnChoiceInt.AsnList.AsNumbers = ls
@@ -3495,8 +3493,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				cookieMatchers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -3565,7 +3562,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				ls := make([]uint32, len(v.([]interface{})))
 				for i, v := range v.([]interface{}) {
-
 					ls[i] = uint32(v.(int))
 				}
 				dstAsnChoiceInt.DstAsnList.AsNumbers = ls
@@ -3651,6 +3647,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 				dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
+
 			}
 
 			if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -3703,6 +3700,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 				dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
+
 			}
 
 			if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -3852,8 +3850,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				headers[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -3919,6 +3916,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
 
 				ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
 			}
 
 			if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
@@ -3971,6 +3969,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
 
 				ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
 			}
 
 			if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
@@ -4221,8 +4220,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				queryParams[i].Match = matchInt
 
-				matchInt.Presence =
-					v.(bool)
+				matchInt.Presence = v.(bool)
 
 			}
 
@@ -4504,6 +4502,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
+
 					}
 
 				}
@@ -4556,6 +4555,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
 
 						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
+
 					}
 
 				}

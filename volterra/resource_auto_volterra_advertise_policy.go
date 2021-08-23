@@ -543,6 +543,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.Address =
 			v.(string)
+
 	}
 
 	//port
@@ -550,6 +551,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	//protocol
@@ -557,6 +559,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.Protocol =
 			v.(string)
+
 	}
 
 	//public_ip
@@ -597,6 +600,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 		createSpec.SkipXffAppend =
 			v.(bool)
+
 	}
 
 	//tls_parameters
@@ -707,16 +711,19 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -737,11 +744,13 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -762,16 +771,19 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -783,6 +795,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -803,6 +816,7 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -1135,18 +1149,21 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 		updateSpec.Address =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		updateSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("protocol"); ok && !isIntfNil(v) {
 
 		updateSpec.Protocol =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("public_ip"); ok && !isIntfNil(v) {
@@ -1185,6 +1202,7 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 		updateSpec.SkipXffAppend =
 			v.(bool)
+
 	}
 
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
@@ -1294,16 +1312,19 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -1324,11 +1345,13 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -1349,16 +1372,19 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1370,6 +1396,7 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1390,6 +1417,7 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}

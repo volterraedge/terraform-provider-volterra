@@ -50,7 +50,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "assisted aws_cred" must be set
+    // One of the arguments from this list "aws_cred assisted" must be set
 
     aws_cred {
       name      = "test1"
@@ -60,7 +60,7 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
 
-    // One of the arguments from this list "vpc_id new_vpc" must be set
+    // One of the arguments from this list "new_vpc vpc_id" must be set
 
     new_vpc {
       allocate_ipv6 = true
@@ -78,7 +78,7 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
-    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     nodes_per_az = "2"
   }
 

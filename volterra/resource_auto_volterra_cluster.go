@@ -612,6 +612,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 		createSpec.ConnectionTimeout =
 			uint32(v.(int))
+
 	}
 
 	//default_subset
@@ -748,6 +749,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 		createSpec.HttpIdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	//loadbalancer_algorithm
@@ -813,8 +815,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 		createSpec.PanicThresholdType = panicThresholdTypeInt
 
-		panicThresholdTypeInt.PanicThreshold =
-			uint32(v.(int))
+		panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
 
 	}
 
@@ -926,16 +927,19 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -956,11 +960,13 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -981,16 +987,19 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1002,6 +1011,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1022,6 +1032,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}
@@ -1253,6 +1264,7 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 		updateSpec.ConnectionTimeout =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("default_subset"); ok && !isIntfNil(v) {
@@ -1381,6 +1393,7 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 		updateSpec.HttpIdleTimeout =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("loadbalancer_algorithm"); ok && !isIntfNil(v) {
@@ -1442,8 +1455,7 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 		updateSpec.PanicThresholdType = panicThresholdTypeInt
 
-		panicThresholdTypeInt.PanicThreshold =
-			uint32(v.(int))
+		panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
 
 	}
 
@@ -1554,16 +1566,19 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 											}
 
 										}
@@ -1584,11 +1599,13 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 											}
 
 										}
@@ -1609,16 +1626,19 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 											}
 
 											if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 											}
 
 											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 											}
 
 											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -1630,6 +1650,7 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 											}
 
 										}
@@ -1650,6 +1671,7 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 											if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 											}
 
 										}

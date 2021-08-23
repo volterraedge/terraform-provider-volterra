@@ -152,6 +152,7 @@ func resourceVolterraWafRulesCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.AnomalyScoreThreshold =
 			uint32(v.(int))
+
 	}
 
 	//mode
@@ -166,6 +167,7 @@ func resourceVolterraWafRulesCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.ParanoiaLevel =
 			uint32(v.(int))
+
 	}
 
 	//rule_ids
@@ -288,6 +290,7 @@ func resourceVolterraWafRulesUpdate(d *schema.ResourceData, meta interface{}) er
 
 		updateSpec.AnomalyScoreThreshold =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("mode"); ok && !isIntfNil(v) {
@@ -300,6 +303,7 @@ func resourceVolterraWafRulesUpdate(d *schema.ResourceData, meta interface{}) er
 
 		updateSpec.ParanoiaLevel =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("rule_ids"); ok && !isIntfNil(v) {

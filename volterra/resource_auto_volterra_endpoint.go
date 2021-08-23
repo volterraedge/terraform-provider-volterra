@@ -374,6 +374,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
+
 			}
 
 			ttlChoiceTypeFound := false
@@ -385,8 +386,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
-				ttlChoiceInt.RefreshInterval =
-					uint32(v.(int))
+				ttlChoiceInt.RefreshInterval = uint32(v.(int))
 
 			}
 
@@ -481,6 +481,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.HealthCheckPort =
 			uint32(v.(int))
+
 	}
 
 	//port
@@ -488,6 +489,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	//protocol
@@ -495,6 +497,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.Protocol =
 			v.(string)
+
 	}
 
 	//where
@@ -790,6 +793,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
+
 			}
 
 			ttlChoiceTypeFound := false
@@ -801,8 +805,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
-				ttlChoiceInt.RefreshInterval =
-					uint32(v.(int))
+				ttlChoiceInt.RefreshInterval = uint32(v.(int))
 
 			}
 
@@ -896,18 +899,21 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 		updateSpec.HealthCheckPort =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		updateSpec.Port =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("protocol"); ok && !isIntfNil(v) {
 
 		updateSpec.Protocol =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {

@@ -457,8 +457,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 				port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-				portValueTypeChoiceInt.UserDefined =
-					uint32(v.(int))
+				portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 			}
 
@@ -801,8 +800,7 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 				port[i].PortValueTypeChoice = portValueTypeChoiceInt
 
-				portValueTypeChoiceInt.UserDefined =
-					uint32(v.(int))
+				portValueTypeChoiceInt.UserDefined = uint32(v.(int))
 
 			}
 

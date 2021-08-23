@@ -1012,8 +1012,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 								headers[i].ValueMatch = valueMatchInt
 
-								valueMatchInt.Presence =
-									v.(bool)
+								valueMatchInt.Presence = v.(bool)
 
 							}
 
@@ -1308,7 +1307,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaximumAge = w.(int32)
+								corsPolicy.MaximumAge = int32(w.(int))
 							}
 
 						}
@@ -1406,16 +1405,19 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Name = v.(string)
+
 									}
 
 									if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Path = v.(string)
+
 									}
 
 									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 									}
 
 								}
@@ -1440,8 +1442,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 								hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-								policySpecifierInt.SourceIp =
-									v.(bool)
+								policySpecifierInt.SourceIp = v.(bool)
 
 							}
 
@@ -1462,8 +1463,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
 
-						hostRewriteParamsInt.AutoHostRewrite =
-							v.(bool)
+						hostRewriteParamsInt.AutoHostRewrite = v.(bool)
 
 					}
 
@@ -1547,6 +1547,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
+
 					}
 
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
@@ -1594,7 +1595,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
 								ls := make([]uint32, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								retryPolicy.RetriableStatusCodes = ls
@@ -1635,6 +1635,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
@@ -1679,11 +1680,13 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
+
 					}
 
 					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
+
 					}
 
 				}
@@ -1704,16 +1707,19 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.HostRedirect = v.(string)
+
 					}
 
 					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.PathRedirect = v.(string)
+
 					}
 
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
+
 					}
 
 					queryParamsTypeFound := false
@@ -1725,8 +1731,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
 
-						queryParamsInt.AllParams =
-							v.(bool)
+						queryParamsInt.AllParams = v.(bool)
 
 					}
 
@@ -1782,6 +1787,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
+
 					}
 
 				}
@@ -2124,8 +2130,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 								headers[i].ValueMatch = valueMatchInt
 
-								valueMatchInt.Presence =
-									v.(bool)
+								valueMatchInt.Presence = v.(bool)
 
 							}
 
@@ -2420,7 +2425,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaximumAge = w.(int32)
+								corsPolicy.MaximumAge = int32(w.(int))
 							}
 
 						}
@@ -2518,16 +2523,19 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Name = v.(string)
+
 									}
 
 									if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Path = v.(string)
+
 									}
 
 									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+
 									}
 
 								}
@@ -2552,8 +2560,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 								hashPolicy[i].PolicySpecifier = policySpecifierInt
 
-								policySpecifierInt.SourceIp =
-									v.(bool)
+								policySpecifierInt.SourceIp = v.(bool)
 
 							}
 
@@ -2574,8 +2581,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
 
-						hostRewriteParamsInt.AutoHostRewrite =
-							v.(bool)
+						hostRewriteParamsInt.AutoHostRewrite = v.(bool)
 
 					}
 
@@ -2659,6 +2665,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
+
 					}
 
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
@@ -2706,7 +2713,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
 								ls := make([]uint32, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-
 									ls[i] = uint32(v.(int))
 								}
 								retryPolicy.RetriableStatusCodes = ls
@@ -2747,6 +2753,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
@@ -2791,11 +2798,13 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
+
 					}
 
 					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
+
 					}
 
 				}
@@ -2816,16 +2825,19 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.HostRedirect = v.(string)
+
 					}
 
 					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.PathRedirect = v.(string)
+
 					}
 
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
+
 					}
 
 					queryParamsTypeFound := false
@@ -2837,8 +2849,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
 
-						queryParamsInt.AllParams =
-							v.(bool)
+						queryParamsInt.AllParams = v.(bool)
 
 					}
 
@@ -2894,6 +2905,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
+
 					}
 
 				}

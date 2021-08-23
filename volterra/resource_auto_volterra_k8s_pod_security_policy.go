@@ -584,6 +584,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 			if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
+
 			}
 
 			allowedCapabilitiesChoiceTypeFound := false
@@ -689,6 +690,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 			if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
+
 			}
 
 			defaultCapabilitiesChoiceTypeFound := false
@@ -816,6 +818,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
+
 					}
 
 				}
@@ -883,6 +886,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						groupChoiceInt.RunAsGroup.Rule = v.(string)
+
 					}
 
 				}
@@ -892,31 +896,37 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 			if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
+
 			}
 
 			if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
+
 			}
 
 			if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostPid = v.(bool)
+
 			}
 
 			if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
+
 			}
 
 			if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.Privileged = v.(bool)
+
 			}
 
 			if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
+
 			}
 
 			runtimeClassChoiceTypeFound := false
@@ -957,6 +967,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
 
 						runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
+
 					}
 
 				}
@@ -991,26 +1002,31 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["level"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
+
 					}
 
 					if v, ok := cs["role"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
+
 					}
 
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
+
 					}
 
 					if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
+
 					}
 
 					if v, ok := cs["user"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
+
 					}
 
 				}
@@ -1066,6 +1082,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
+
 					}
 
 				}
@@ -1121,6 +1138,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						userChoiceInt.RunAsUser.Rule = v.(string)
+
 					}
 
 				}
@@ -1266,6 +1284,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 			if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
+
 			}
 
 			allowedCapabilitiesChoiceTypeFound := false
@@ -1371,6 +1390,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 			if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
+
 			}
 
 			defaultCapabilitiesChoiceTypeFound := false
@@ -1498,6 +1518,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
+
 					}
 
 				}
@@ -1565,6 +1586,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						groupChoiceInt.RunAsGroup.Rule = v.(string)
+
 					}
 
 				}
@@ -1574,31 +1596,37 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 			if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
+
 			}
 
 			if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
+
 			}
 
 			if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostPid = v.(bool)
+
 			}
 
 			if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
+
 			}
 
 			if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.Privileged = v.(bool)
+
 			}
 
 			if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
 
 				configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
+
 			}
 
 			runtimeClassChoiceTypeFound := false
@@ -1639,6 +1667,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
 
 						runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
+
 					}
 
 				}
@@ -1673,26 +1702,31 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["level"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
+
 					}
 
 					if v, ok := cs["role"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
+
 					}
 
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
+
 					}
 
 					if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
+
 					}
 
 					if v, ok := cs["user"]; ok && !isIntfNil(v) {
 
 						seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
+
 					}
 
 				}
@@ -1748,6 +1782,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
+
 					}
 
 				}
@@ -1803,6 +1838,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
 						userChoiceInt.RunAsUser.Rule = v.(string)
+
 					}
 
 				}

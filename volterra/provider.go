@@ -36,6 +36,9 @@ const (
 	setTGWInfo                = "volterra_tgw_info"
 	setSiteVipInfo            = "volterra_site_set_vip_info"
 	tfParamsAction            = "volterra_tf_params_action"
+	token                     = "volterra_token"
+	networkIntf               = "volterra_network_interface"
+	servicePolicy             = "volterra_service_policy"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -191,5 +194,8 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[setTGWInfo] = resourceVolterraSetTGWInfo()
 	resourceMap[setSiteVipInfo] = resourceVolterraSiteSetVIPInfo()
 	resourceMap[tfParamsAction] = resourceVolterraTFParamsRunAction()
+	resourceMap[token] = resourceVolterraToken()
+	resourceMap[networkIntf] = resourceVolterraNetworkInterface()
+	resourceMap[servicePolicy] = resourceVolterraServicePolicy()
 	return resourceMap
 }

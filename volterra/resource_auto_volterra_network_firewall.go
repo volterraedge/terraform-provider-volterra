@@ -374,16 +374,19 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Tenant = v.(string)
+
 			}
 
 		}
@@ -461,16 +464,19 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
+
 			}
 
 		}
@@ -548,16 +554,19 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
+
 			}
 
 		}
@@ -731,16 +740,19 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				fastAclChoiceInt.FastAclSet.Tenant = v.(string)
+
 			}
 
 		}
@@ -816,16 +828,19 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
+
 			}
 
 		}
@@ -901,16 +916,19 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
+
 			}
 
 		}

@@ -260,6 +260,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.HttpHealthCheck.Path = v.(string)
+
 			}
 
 			if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
@@ -275,6 +276,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
+
 			}
 
 		}
@@ -295,11 +297,13 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+
 			}
 
 			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
+
 			}
 
 		}
@@ -311,6 +315,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.HealthyThreshold =
 			uint32(v.(int))
+
 	}
 
 	//interval
@@ -318,6 +323,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.Interval =
 			uint32(v.(int))
+
 	}
 
 	//jitter_percent
@@ -325,6 +331,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.JitterPercent =
 			uint32(v.(int))
+
 	}
 
 	//timeout
@@ -332,6 +339,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.Timeout =
 			uint32(v.(int))
+
 	}
 
 	//unhealthy_threshold
@@ -339,6 +347,7 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.UnhealthyThreshold =
 			uint32(v.(int))
+
 	}
 
 	log.Printf("[DEBUG] Creating Volterra Healthcheck object with struct: %+v", createReq)
@@ -489,6 +498,7 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.HttpHealthCheck.Path = v.(string)
+
 			}
 
 			if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
@@ -504,6 +514,7 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
+
 			}
 
 		}
@@ -524,11 +535,13 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+
 			}
 
 			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
+
 			}
 
 		}
@@ -539,30 +552,35 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.HealthyThreshold =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("interval"); ok && !isIntfNil(v) {
 
 		updateSpec.Interval =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("jitter_percent"); ok && !isIntfNil(v) {
 
 		updateSpec.JitterPercent =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("timeout"); ok && !isIntfNil(v) {
 
 		updateSpec.Timeout =
 			uint32(v.(int))
+
 	}
 
 	if v, ok := d.GetOk("unhealthy_threshold"); ok && !isIntfNil(v) {
 
 		updateSpec.UnhealthyThreshold =
 			uint32(v.(int))
+
 	}
 
 	log.Printf("[DEBUG] Updating Volterra Healthcheck obj with struct: %+v", updateReq)

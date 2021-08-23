@@ -1542,6 +1542,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 		createSpec.Address =
 			v.(string)
+
 	}
 
 	//aws_parameters
@@ -1614,11 +1615,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceIntNew.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -1680,11 +1683,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -1730,11 +1735,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv4 = v.(string)
+
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
 										choiceInt.SubnetParam.Ipv6 = v.(string)
+
 									}
 
 								}
@@ -1777,16 +1784,19 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						deploymentInt.AwsCred.Name = v.(string)
+
 					}
 
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						deploymentInt.AwsCred.Namespace = v.(string)
+
 					}
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 						deploymentInt.AwsCred.Tenant = v.(string)
+
 					}
 
 				}
@@ -1817,6 +1827,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
 
 						serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
+
 					}
 
 					nameChoiceTypeFound := false
@@ -1847,6 +1858,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
 
 						serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
+
 					}
 
 				}
@@ -1884,16 +1896,19 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
 
 						tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
+
 					}
 
 					if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
 
 						tgwChoiceInt.ExistingTgw.TgwId = v.(string)
+
 					}
 
 					if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
 
 						tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
+
 					}
 
 				}
@@ -1939,11 +1954,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
 
 								asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+
 							}
 
 							if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
 
 								asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+
 							}
 
 						}
@@ -1975,8 +1992,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 				awsParameters.WorkerNodes = workerNodesInt
 
-				workerNodesInt.NodesPerAz =
-					uint32(v.(int))
+				workerNodesInt.NodesPerAz = uint32(v.(int))
 
 			}
 
@@ -1987,8 +2003,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 				awsParameters.WorkerNodes = workerNodesInt
 
-				workerNodesInt.TotalNodes =
-					uint32(v.(int))
+				workerNodesInt.TotalNodes = uint32(v.(int))
 
 			}
 
@@ -2006,11 +2021,11 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = w.(float32)
+				coordinates.Latitude = float32(w.(float64))
 			}
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = w.(float32)
+				coordinates.Longitude = float32(w.(float64))
 			}
 
 		}
@@ -2035,16 +2050,19 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -2374,6 +2392,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
 								portChoiceInt.CustomPorts.PortRanges = v.(string)
+
 							}
 
 						}
@@ -2550,11 +2569,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -2713,11 +2734,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -2774,16 +2797,19 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -2804,11 +2830,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -2829,16 +2857,19 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -2850,6 +2881,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -2870,6 +2902,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -2929,7 +2962,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -3088,6 +3120,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -3108,6 +3141,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -3153,11 +3187,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -3178,11 +3214,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -3358,6 +3396,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -3378,6 +3417,7 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -3423,11 +3463,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -3448,11 +3490,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -3630,6 +3674,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 		updateSpec.Address =
 			v.(string)
+
 	}
 
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
@@ -3641,11 +3686,11 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = w.(float32)
+				coordinates.Latitude = float32(w.(float64))
 			}
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = w.(float32)
+				coordinates.Longitude = float32(w.(float64))
 			}
 
 		}
@@ -3668,16 +3713,19 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
 			}
 
 			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
 			}
 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
 			}
 
 		}
@@ -3929,6 +3977,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
 								portChoiceInt.CustomPorts.PortRanges = v.(string)
+
 							}
 
 						}
@@ -4105,11 +4154,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
 									}
 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
 									}
 
 									tlsInterceptionChoiceTypeFound := false
@@ -4268,11 +4319,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
 													}
 
 													if v, ok := cs["description"]; ok && !isIntfNil(v) {
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -4329,16 +4382,19 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
 																	}
 
 																}
@@ -4359,11 +4415,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
 																	}
 
 																}
@@ -4384,16 +4442,19 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
 																	}
 
 																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
 																	}
 
 																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
 																	}
 
 																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
@@ -4405,6 +4466,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
 																	}
 
 																}
@@ -4425,6 +4487,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
 																	}
 
 																}
@@ -4484,7 +4547,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 										ls := make([]uint32, len(v.([]interface{})))
 										for i, v := range v.([]interface{}) {
-
 											ls[i] = uint32(v.(int))
 										}
 										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
@@ -4643,6 +4705,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -4663,6 +4726,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -4708,11 +4772,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -4733,11 +4799,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}
@@ -4913,6 +4981,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv4.Addr = v.(string)
+
 															}
 
 														}
@@ -4933,6 +5002,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
 																verInt.Ipv6.Addr = v.(string)
+
 															}
 
 														}
@@ -4978,11 +5048,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv4.Prefix = v.(string)
+
 													}
 
 												}
@@ -5003,11 +5075,13 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Plen = uint32(v.(int))
+
 													}
 
 													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 														verInt.Ipv6.Prefix = v.(string)
+
 													}
 
 												}

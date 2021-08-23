@@ -29,14 +29,14 @@ resource "volterra_route" "example" {
         invert_match = true
         name         = "Content-Type"
 
-        // One of the arguments from this list "exact regex presence" must be set
+        // One of the arguments from this list "presence exact regex" must be set
         exact = "application/json"
       }
 
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "path regex prefix" must be set
+        // One of the arguments from this list "regex prefix path" must be set
         prefix = "/register/"
       }
 
@@ -44,7 +44,7 @@ resource "volterra_route" "example" {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        exact = "exact"
+        regex = "regex"
       }
     }
 
@@ -66,106 +66,20 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_destination {
-      buffer_policy {
-        disabled          = true
-        max_request_bytes = "2048"
-        max_request_time  = "30"
-      }
+    route_redirect {
+      host_redirect  = "one.ves.io"
+      path_redirect  = "/api/register"
+      proto_redirect = "https"
 
-      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
-      retract_cluster = true
-
-      cors_policy {
-        allow_credentials = true
-        allow_headers     = "allow_headers"
-        allow_methods     = "allow_methods"
-
-        allow_origin = ["allow_origin"]
-
-        allow_origin_regex = ["allow_origin_regex"]
-        disabled           = true
-        expose_headers     = "expose_headers"
-        max_age            = "max_age"
-        maximum_age        = "maximum_age"
-      }
-
-      destinations {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        endpoint_subsets = {
-          "key1" = "value1"
-        }
-
-        weight = "weight"
-      }
-
-      endpoint_subsets = {
-        "key1" = "value1"
-      }
-
-      hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
-
-        terminal = true
-      }
-
-      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
-
-      mirror_policy {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        percent {
-          denominator = "denominator"
-          numerator   = "5"
-        }
-      }
-
-      prefix_rewrite = "/"
-      priority       = "priority"
-
-      retry_policy {
-        back_off {
-          base_interval = "base_interval"
-          max_interval  = "max_interval"
-        }
-
-        num_retries     = "num_retries"
-        per_try_timeout = "per_try_timeout"
-
-        retriable_status_codes = ["retriable_status_codes"]
-
-        retry_condition = ["5xx"]
-        retry_on        = "5xx"
-      }
-
-      spdy_config {
-        use_spdy = true
-      }
-
-      timeout = "timeout"
-
-      web_socket_config {
-        idle_timeout         = "idle_timeout"
-        max_connect_attempts = "max_connect_attempts"
-        use_websocket        = true
-      }
+      // One of the arguments from this list "retain_all_params remove_all_params strip_query_params all_params" must be set
+      retain_all_params = true
+      response_code     = "response_code"
     }
     service_policy {
       disable = true
     }
     waf_type {
-      // One of the arguments from this list "waf waf_rules app_firewall" must be set
+      // One of the arguments from this list "app_firewall waf waf_rules" must be set
 
       waf {
         waf {

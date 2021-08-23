@@ -53,30 +53,27 @@ resource "volterra_k8s_pod_security_policy" "example" {
     // One of the arguments from this list "no_fs_groups fs_group_strategy_options" must be set
     no_fs_groups = true
 
-    // One of the arguments from this list "run_as_group no_run_as_group" must be set
-
-    run_as_group {
-      id_ranges {
-        max_id = "3000"
-        min_id = "2000"
-      }
-
-      rule = "MustRunAs"
-    }
+    // One of the arguments from this list "no_run_as_group run_as_group" must be set
+    no_run_as_group           = true
     host_ipc                  = true
     host_network              = true
     host_pid                  = true
     host_port_ranges          = "80,443,8080-8191,9080"
     privileged                = true
     read_only_root_filesystem = true
+
     // One of the arguments from this list "no_runtime_class runtime_class" must be set
     no_runtime_class = true
+
     // One of the arguments from this list "no_se_linux_options se_linux_options" must be set
     no_se_linux_options = true
-    // One of the arguments from this list "no_supplemental_groups supplemental_groups" must be set
+
+    // One of the arguments from this list "supplemental_groups no_supplemental_groups" must be set
     no_supplemental_groups = true
+
     // One of the arguments from this list "no_run_as_user run_as_user" must be set
     no_run_as_user = true
+
     volumes = ["volumes"]
   }
 }
