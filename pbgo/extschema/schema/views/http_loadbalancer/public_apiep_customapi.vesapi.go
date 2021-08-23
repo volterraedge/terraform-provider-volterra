@@ -293,7 +293,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/apiHttpBody"
                         }
@@ -350,15 +350,19 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Http Loadbalancer for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app\"\nHttp LoadBalancer for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     }
                 ],
                 "tags": [

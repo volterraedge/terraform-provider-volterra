@@ -1376,7 +1376,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeAPIEndpointLearntSchemaRsp"
                         }
@@ -1433,15 +1433,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "body",
@@ -1472,7 +1476,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.APIEndpointPDF",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeAPIEndpointPDFRsp"
                         }
@@ -1529,15 +1533,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "collapsed_url",
@@ -1576,7 +1584,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.APIEndpoints",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeAPIEndpointsRsp"
                         }
@@ -1633,15 +1641,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "api_endpoint_info_request",
@@ -1656,6 +1668,7 @@ var CustomAPISwaggerJSON string = `{
                                 "API_ENDPOINT_INFO_PDF_SPARKLINES"
                             ]
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "API Endpoint Info PDF Sparklines"
                     }
                 ],
@@ -1675,7 +1688,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetSwaggerSpec",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/apiHttpBody"
                         }
@@ -1732,15 +1745,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     }
                 ],
                 "tags": [
@@ -1763,7 +1780,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.OverridePop",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeOverridePopRsp"
                         }
@@ -1820,15 +1837,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "body",
@@ -1859,7 +1880,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.OverridePush",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeOverridePushRsp"
                         }
@@ -1916,15 +1937,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "body",
@@ -1955,7 +1980,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.Overrides",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeOverridesRsp"
                         }
@@ -2012,15 +2037,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     }
                 ],
                 "tags": [
@@ -2043,7 +2072,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeAPIEndpointPDFRsp"
                         }
@@ -2100,21 +2129,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "service_name",
+                        "description": "Service\n\nx-example: \"N:public or S:productpage\"\nIdentifies the destination service",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Service Name"
                     },
                     {
                         "name": "body",
@@ -2145,7 +2180,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/app_typeAPIEndpointsRsp"
                         }
@@ -2202,21 +2237,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "app_type_name",
+                        "description": "App Type\n\nx-example: \"blogging-app\"\nApp Type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "App Type"
                     },
                     {
                         "name": "service_name",
+                        "description": "Service\n\nx-example: \"N:public or S:productpage\"\nIdentifies the destination service",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Service Name"
                     },
                     {
                         "name": "body",

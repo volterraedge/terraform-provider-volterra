@@ -3,27 +3,31 @@
 
 package healthcheck
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // HttpHealthCheck
 //
@@ -53,14 +57,14 @@ type HttpHealthCheck struct {
 	// x-displayName: "Request Headers to Add"
 	// Specifies a list of HTTP headers that should be added to each request that is sent to the
 	// health checked cluster. This is a list of key-value pairs.
-	Headers map[string]string `protobuf:"bytes,3,rep,name=headers" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Headers map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Headers to be removed from health check request
 	//
 	// x-displayName: "Request Headers to Remove"
 	// x-example: "user-agent"
 	// Specifies a list of HTTP headers that should be removed from each request that is sent to the
 	// health checked cluster. This is a list of keys of headers.
-	RequestHeadersToRemove []string `protobuf:"bytes,4,rep,name=request_headers_to_remove,json=requestHeadersToRemove" json:"request_headers_to_remove,omitempty"`
+	RequestHeadersToRemove []string `protobuf:"bytes,4,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
 	// Use HTTP2
 	//
 	// x-displayName: "Use HTTP2"
@@ -69,9 +73,33 @@ type HttpHealthCheck struct {
 	UseHttp2 bool `protobuf:"varint,5,opt,name=use_http2,json=useHttp2,proto3" json:"use_http2,omitempty"`
 }
 
-func (m *HttpHealthCheck) Reset()                    { *m = HttpHealthCheck{} }
-func (*HttpHealthCheck) ProtoMessage()               {}
-func (*HttpHealthCheck) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *HttpHealthCheck) Reset()      { *m = HttpHealthCheck{} }
+func (*HttpHealthCheck) ProtoMessage() {}
+func (*HttpHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{0}
+}
+func (m *HttpHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HttpHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HttpHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpHealthCheck.Merge(m, src)
+}
+func (m *HttpHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *HttpHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_HttpHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HttpHealthCheck proto.InternalMessageInfo
 
 type isHttpHealthCheck_HostHeaderChoice interface {
 	isHttpHealthCheck_HostHeaderChoice()
@@ -81,10 +109,10 @@ type isHttpHealthCheck_HostHeaderChoice interface {
 }
 
 type HttpHealthCheck_UseOriginServerName struct {
-	UseOriginServerName *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=use_origin_server_name,json=useOriginServerName,oneof"`
+	UseOriginServerName *schema.Empty `protobuf:"bytes,7,opt,name=use_origin_server_name,json=useOriginServerName,proto3,oneof" json:"use_origin_server_name,omitempty"`
 }
 type HttpHealthCheck_HostHeader struct {
-	HostHeader string `protobuf:"bytes,1,opt,name=host_header,json=hostHeader,proto3,oneof"`
+	HostHeader string `protobuf:"bytes,1,opt,name=host_header,json=hostHeader,proto3,oneof" json:"host_header,omitempty"`
 }
 
 func (*HttpHealthCheck_UseOriginServerName) isHttpHealthCheck_HostHeaderChoice() {}
@@ -97,7 +125,7 @@ func (m *HttpHealthCheck) GetHostHeaderChoice() isHttpHealthCheck_HostHeaderChoi
 	return nil
 }
 
-func (m *HttpHealthCheck) GetUseOriginServerName() *ves_io_schema4.Empty {
+func (m *HttpHealthCheck) GetUseOriginServerName() *schema.Empty {
 	if x, ok := m.GetHostHeaderChoice().(*HttpHealthCheck_UseOriginServerName); ok {
 		return x.UseOriginServerName
 	}
@@ -139,74 +167,12 @@ func (m *HttpHealthCheck) GetUseHttp2() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*HttpHealthCheck) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _HttpHealthCheck_OneofMarshaler, _HttpHealthCheck_OneofUnmarshaler, _HttpHealthCheck_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HttpHealthCheck) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*HttpHealthCheck_UseOriginServerName)(nil),
 		(*HttpHealthCheck_HostHeader)(nil),
 	}
-}
-
-func _HttpHealthCheck_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*HttpHealthCheck)
-	// host_header_choice
-	switch x := m.HostHeaderChoice.(type) {
-	case *HttpHealthCheck_UseOriginServerName:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UseOriginServerName); err != nil {
-			return err
-		}
-	case *HttpHealthCheck_HostHeader:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.HostHeader)
-	case nil:
-	default:
-		return fmt.Errorf("HttpHealthCheck.HostHeaderChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _HttpHealthCheck_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*HttpHealthCheck)
-	switch tag {
-	case 7: // host_header_choice.use_origin_server_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HostHeaderChoice = &HttpHealthCheck_UseOriginServerName{msg}
-		return true, err
-	case 1: // host_header_choice.host_header
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.HostHeaderChoice = &HttpHealthCheck_HostHeader{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _HttpHealthCheck_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*HttpHealthCheck)
-	// host_header_choice
-	switch x := m.HostHeaderChoice.(type) {
-	case *HttpHealthCheck_UseOriginServerName:
-		s := proto.Size(x.UseOriginServerName)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *HttpHealthCheck_HostHeader:
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.HostHeader)))
-		n += len(x.HostHeader)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // TcpHealthCheck
@@ -231,9 +197,33 @@ type TcpHealthCheck struct {
 	ExpectedResponse string `protobuf:"bytes,2,opt,name=expected_response,json=expectedResponse,proto3" json:"expected_response,omitempty"`
 }
 
-func (m *TcpHealthCheck) Reset()                    { *m = TcpHealthCheck{} }
-func (*TcpHealthCheck) ProtoMessage()               {}
-func (*TcpHealthCheck) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *TcpHealthCheck) Reset()      { *m = TcpHealthCheck{} }
+func (*TcpHealthCheck) ProtoMessage() {}
+func (*TcpHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{1}
+}
+func (m *TcpHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TcpHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TcpHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TcpHealthCheck.Merge(m, src)
+}
+func (m *TcpHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *TcpHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_TcpHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TcpHealthCheck proto.InternalMessageInfo
 
 func (m *TcpHealthCheck) GetSendPayload() string {
 	if m != nil {
@@ -316,9 +306,33 @@ type GlobalSpecType struct {
 	JitterPercent uint32 `protobuf:"varint,9,opt,name=jitter_percent,json=jitterPercent,proto3" json:"jitter_percent,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{2}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_HealthCheck interface {
 	isGlobalSpecType_HealthCheck()
@@ -328,10 +342,10 @@ type isGlobalSpecType_HealthCheck interface {
 }
 
 type GlobalSpecType_HttpHealthCheck struct {
-	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,oneof"`
+	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,proto3,oneof" json:"http_health_check,omitempty"`
 }
 type GlobalSpecType_TcpHealthCheck struct {
-	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,oneof"`
+	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
 
 func (*GlobalSpecType_HttpHealthCheck) isGlobalSpecType_HealthCheck() {}
@@ -400,78 +414,12 @@ func (m *GlobalSpecType) GetJitterPercent() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_HttpHealthCheck)(nil),
 		(*GlobalSpecType_TcpHealthCheck)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *GlobalSpecType_HttpHealthCheck:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HttpHealthCheck); err != nil {
-			return err
-		}
-	case *GlobalSpecType_TcpHealthCheck:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TcpHealthCheck); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.HealthCheck has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 1: // health_check.http_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HttpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &GlobalSpecType_HttpHealthCheck{msg}
-		return true, err
-	case 2: // health_check.tcp_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(TcpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &GlobalSpecType_TcpHealthCheck{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *GlobalSpecType_HttpHealthCheck:
-		s := proto.Size(x.HttpHealthCheck)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_TcpHealthCheck:
-		s := proto.Size(x.TcpHealthCheck)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create healthcheck
@@ -491,9 +439,33 @@ type CreateSpecType struct {
 	JitterPercent      uint32                       `protobuf:"varint,9,opt,name=jitter_percent,json=jitterPercent,proto3" json:"jitter_percent,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{3}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_HealthCheck interface {
 	isCreateSpecType_HealthCheck()
@@ -503,10 +475,10 @@ type isCreateSpecType_HealthCheck interface {
 }
 
 type CreateSpecType_HttpHealthCheck struct {
-	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,oneof"`
+	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,proto3,oneof" json:"http_health_check,omitempty"`
 }
 type CreateSpecType_TcpHealthCheck struct {
-	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,oneof"`
+	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
 
 func (*CreateSpecType_HttpHealthCheck) isCreateSpecType_HealthCheck() {}
@@ -568,78 +540,12 @@ func (m *CreateSpecType) GetJitterPercent() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_HttpHealthCheck)(nil),
 		(*CreateSpecType_TcpHealthCheck)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *CreateSpecType_HttpHealthCheck:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HttpHealthCheck); err != nil {
-			return err
-		}
-	case *CreateSpecType_TcpHealthCheck:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TcpHealthCheck); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.HealthCheck has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 1: // health_check.http_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HttpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &CreateSpecType_HttpHealthCheck{msg}
-		return true, err
-	case 2: // health_check.tcp_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(TcpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &CreateSpecType_TcpHealthCheck{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *CreateSpecType_HttpHealthCheck:
-		s := proto.Size(x.HttpHealthCheck)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_TcpHealthCheck:
-		s := proto.Size(x.TcpHealthCheck)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // replace healthcheck
@@ -659,9 +565,33 @@ type ReplaceSpecType struct {
 	JitterPercent      uint32                        `protobuf:"varint,9,opt,name=jitter_percent,json=jitterPercent,proto3" json:"jitter_percent,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{4}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_HealthCheck interface {
 	isReplaceSpecType_HealthCheck()
@@ -671,10 +601,10 @@ type isReplaceSpecType_HealthCheck interface {
 }
 
 type ReplaceSpecType_HttpHealthCheck struct {
-	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,oneof"`
+	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,proto3,oneof" json:"http_health_check,omitempty"`
 }
 type ReplaceSpecType_TcpHealthCheck struct {
-	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,oneof"`
+	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
 
 func (*ReplaceSpecType_HttpHealthCheck) isReplaceSpecType_HealthCheck() {}
@@ -736,78 +666,12 @@ func (m *ReplaceSpecType) GetJitterPercent() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_HttpHealthCheck)(nil),
 		(*ReplaceSpecType_TcpHealthCheck)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *ReplaceSpecType_HttpHealthCheck:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HttpHealthCheck); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_TcpHealthCheck:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TcpHealthCheck); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.HealthCheck has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 1: // health_check.http_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HttpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &ReplaceSpecType_HttpHealthCheck{msg}
-		return true, err
-	case 2: // health_check.tcp_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(TcpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &ReplaceSpecType_TcpHealthCheck{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *ReplaceSpecType_HttpHealthCheck:
-		s := proto.Size(x.HttpHealthCheck)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_TcpHealthCheck:
-		s := proto.Size(x.TcpHealthCheck)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get healthcheck
@@ -828,9 +692,33 @@ type GetSpecType struct {
 	JitterPercent      uint32                    `protobuf:"varint,9,opt,name=jitter_percent,json=jitterPercent,proto3" json:"jitter_percent,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{5}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_HealthCheck interface {
 	isGetSpecType_HealthCheck()
@@ -840,10 +728,10 @@ type isGetSpecType_HealthCheck interface {
 }
 
 type GetSpecType_HttpHealthCheck struct {
-	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,oneof"`
+	HttpHealthCheck *HttpHealthCheck `protobuf:"bytes,1,opt,name=http_health_check,json=httpHealthCheck,proto3,oneof" json:"http_health_check,omitempty"`
 }
 type GetSpecType_TcpHealthCheck struct {
-	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,oneof"`
+	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
 
 func (*GetSpecType_HttpHealthCheck) isGetSpecType_HealthCheck() {}
@@ -912,83 +800,19 @@ func (m *GetSpecType) GetJitterPercent() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_HttpHealthCheck)(nil),
 		(*GetSpecType_TcpHealthCheck)(nil),
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *GetSpecType_HttpHealthCheck:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HttpHealthCheck); err != nil {
-			return err
-		}
-	case *GetSpecType_TcpHealthCheck:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TcpHealthCheck); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.HealthCheck has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 1: // health_check.http_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HttpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &GetSpecType_HttpHealthCheck{msg}
-		return true, err
-	case 2: // health_check.tcp_health_check
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(TcpHealthCheck)
-		err := b.DecodeMessage(msg)
-		m.HealthCheck = &GetSpecType_TcpHealthCheck{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// health_check
-	switch x := m.HealthCheck.(type) {
-	case *GetSpecType_HttpHealthCheck:
-		s := proto.Size(x.HttpHealthCheck)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_TcpHealthCheck:
-		s := proto.Size(x.TcpHealthCheck)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*HttpHealthCheck)(nil), "ves.io.schema.healthcheck.HttpHealthCheck")
 	golang_proto.RegisterType((*HttpHealthCheck)(nil), "ves.io.schema.healthcheck.HttpHealthCheck")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.healthcheck.HttpHealthCheck.HeadersEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.healthcheck.HttpHealthCheck.HeadersEntry")
 	proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.healthcheck.TcpHealthCheck")
 	golang_proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.healthcheck.TcpHealthCheck")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.healthcheck.GlobalSpecType")
@@ -1000,6 +824,102 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.healthcheck.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.healthcheck.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/healthcheck/types.proto", fileDescriptor_1d9419355153b697)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/healthcheck/types.proto", fileDescriptor_1d9419355153b697)
+}
+
+var fileDescriptor_1d9419355153b697 = []byte{
+	// 1337 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6b, 0x1b, 0xc7,
+	0x17, 0xd7, 0xd3, 0xca, 0xfa, 0x31, 0x72, 0xec, 0xf5, 0x26, 0x71, 0xd6, 0x4a, 0xd8, 0xef, 0x46,
+	0x7c, 0x5d, 0x14, 0x57, 0x96, 0x2c, 0x29, 0x4e, 0x52, 0x07, 0x02, 0x95, 0x31, 0x31, 0x09, 0x34,
+	0x66, 0xa3, 0x96, 0xd2, 0x96, 0x2e, 0xeb, 0xd5, 0x44, 0xda, 0x5a, 0xd2, 0x6e, 0x77, 0x47, 0x6a,
+	0x14, 0x28, 0x98, 0x1e, 0x4a, 0x71, 0x69, 0x29, 0xa1, 0xa7, 0xfc, 0x05, 0xbd, 0xb6, 0xc7, 0xae,
+	0x0e, 0x26, 0xd0, 0x12, 0x7a, 0xf2, 0xd1, 0xe4, 0x94, 0xac, 0x2f, 0x69, 0x4e, 0xa1, 0xa7, 0xd2,
+	0x53, 0x99, 0xd9, 0x95, 0x2c, 0x29, 0x4e, 0xe8, 0x21, 0x97, 0xd0, 0xde, 0x66, 0xf6, 0xbd, 0xf7,
+	0x79, 0x3f, 0x3e, 0x9f, 0x37, 0xb0, 0x68, 0xbe, 0x83, 0x9d, 0x9c, 0x61, 0xe6, 0x1d, 0xbd, 0x8e,
+	0x9b, 0x5a, 0xbe, 0x8e, 0xb5, 0x06, 0xa9, 0xeb, 0x75, 0xac, 0x6f, 0xe5, 0x49, 0xd7, 0xc2, 0x4e,
+	0xce, 0xb2, 0x4d, 0x62, 0x0a, 0x73, 0xbe, 0x5b, 0xce, 0x77, 0xcb, 0x0d, 0xb9, 0xa5, 0x16, 0x6b,
+	0x06, 0xa9, 0xb7, 0x37, 0x73, 0xba, 0xd9, 0xcc, 0xd7, 0xcc, 0x9a, 0x99, 0x67, 0x11, 0x9b, 0xed,
+	0x5b, 0xec, 0xc6, 0x2e, 0xec, 0xe4, 0x23, 0xa5, 0x4e, 0x8f, 0x26, 0x34, 0x2d, 0x62, 0x98, 0xad,
+	0x20, 0x4d, 0x6a, 0x6e, 0xd4, 0x38, 0x54, 0x41, 0xea, 0xcc, 0xa8, 0xa9, 0xa3, 0x35, 0x8c, 0xaa,
+	0x46, 0x70, 0x60, 0x95, 0xc7, 0xac, 0x06, 0xfe, 0x4c, 0x1d, 0x81, 0x4e, 0x7f, 0x1f, 0x43, 0xd3,
+	0xeb, 0x84, 0x58, 0xeb, 0xac, 0xf4, 0x55, 0x5a, 0xba, 0x70, 0x1d, 0xcd, 0xb6, 0x1d, 0xac, 0x9a,
+	0xb6, 0x51, 0x33, 0x5a, 0xaa, 0x83, 0xed, 0x0e, 0xb6, 0xd5, 0x96, 0xd6, 0xc4, 0x62, 0x4c, 0x86,
+	0x4c, 0xb2, 0x78, 0x22, 0x37, 0xda, 0xf6, 0x5a, 0xd3, 0x22, 0xdd, 0xf5, 0x90, 0x72, 0xbc, 0xed,
+	0xe0, 0x1b, 0x2c, 0xe8, 0x26, 0x8b, 0x79, 0x47, 0x6b, 0x62, 0xe1, 0x32, 0x4a, 0xd6, 0x4d, 0x87,
+	0xa8, 0x75, 0xac, 0x55, 0xb1, 0x2d, 0x82, 0x0c, 0x99, 0x44, 0x59, 0xfc, 0xd3, 0x85, 0xd0, 0xcf,
+	0xbf, 0xef, 0x72, 0x13, 0x36, 0x27, 0x7e, 0x19, 0x0e, 0x4e, 0x8f, 0x00, 0xd6, 0x43, 0x0a, 0xa2,
+	0xee, 0xeb, 0xcc, 0x5b, 0xd0, 0x51, 0xc4, 0xd2, 0x48, 0x5d, 0x0c, 0xb3, 0xa8, 0x1b, 0x0f, 0x5d,
+	0x80, 0xbc, 0xe7, 0xc2, 0x32, 0x82, 0x3c, 0x8a, 0x05, 0xac, 0xa0, 0xc9, 0x61, 0x7a, 0x50, 0x3c,
+	0xb8, 0xdd, 0x41, 0xd1, 0x7c, 0xc3, 0xe8, 0xe0, 0x3b, 0x28, 0x96, 0xb7, 0xb1, 0x56, 0xed, 0xde,
+	0xe9, 0xe7, 0x8c, 0xdb, 0x51, 0x71, 0x9b, 0x7f, 0x12, 0x06, 0x85, 0x81, 0x0b, 0x5e, 0x18, 0xc5,
+	0xfc, 0xea, 0x1c, 0x91, 0x93, 0xb9, 0x4c, 0xb2, 0x78, 0x31, 0xf7, 0x42, 0x5e, 0x73, 0x63, 0xc3,
+	0xca, 0xf9, 0x95, 0x3a, 0x6b, 0x2d, 0x62, 0x77, 0xcb, 0xdf, 0x86, 0x77, 0x5d, 0x00, 0x9a, 0x64,
+	0xf2, 0x1e, 0x24, 0xd2, 0x31, 0x7b, 0x82, 0x07, 0x71, 0xdb, 0xef, 0xef, 0x1e, 0x84, 0x79, 0xbe,
+	0x6f, 0x5a, 0x08, 0x4c, 0xbc, 0xf7, 0xe8, 0x17, 0x4e, 0xde, 0xe9, 0xc1, 0x19, 0x21, 0xf5, 0xd4,
+	0x85, 0xd9, 0xf5, 0x4a, 0x65, 0x43, 0xf6, 0x8b, 0x91, 0xb7, 0x70, 0x57, 0x76, 0x88, 0x6d, 0xb4,
+	0x6a, 0xd4, 0x69, 0x6e, 0xa7, 0x07, 0x27, 0x85, 0xe3, 0x9e, 0x0b, 0xd3, 0xcc, 0xc9, 0xcf, 0x2b,
+	0x5f, 0xc7, 0x5d, 0x6a, 0x45, 0x3b, 0x3d, 0x88, 0x0a, 0x91, 0x07, 0x2e, 0x84, 0xe8, 0x35, 0xba,
+	0xd3, 0x83, 0x70, 0x1c, 0xe8, 0xf1, 0xca, 0x4e, 0x0f, 0x56, 0x52, 0x97, 0x9e, 0xba, 0x70, 0xfe,
+	0x26, 0x03, 0x93, 0xcd, 0x5b, 0xb2, 0x6e, 0x36, 0x9b, 0x9a, 0xec, 0x60, 0x4b, 0xb3, 0x35, 0x82,
+	0xab, 0x72, 0xc3, 0x70, 0x08, 0xfd, 0x3e, 0x9c, 0xbe, 0xa3, 0x35, 0xda, 0xd8, 0xa1, 0x10, 0xa7,
+	0x77, 0x7a, 0x70, 0x2a, 0x75, 0xd2, 0x73, 0x61, 0x66, 0x38, 0xf5, 0x7b, 0xd4, 0x61, 0x90, 0x3c,
+	0x45, 0x93, 0x73, 0x43, 0x57, 0x3a, 0x09, 0xa5, 0x3f, 0x58, 0xe1, 0x23, 0x34, 0x67, 0xe3, 0x4f,
+	0xdb, 0x78, 0xa0, 0x04, 0x47, 0x25, 0xa6, 0x6a, 0xe3, 0xa6, 0xd9, 0xc1, 0x62, 0x44, 0xe6, 0x32,
+	0x89, 0xf2, 0x59, 0x1a, 0xd1, 0x27, 0x09, 0xdd, 0x85, 0x58, 0x9a, 0xaa, 0x23, 0x98, 0xde, 0x5d,
+	0x3a, 0x3d, 0x65, 0x36, 0xc0, 0x08, 0x86, 0x5e, 0x31, 0x15, 0x06, 0x20, 0x9c, 0x45, 0x09, 0xaa,
+	0xd8, 0x3a, 0x21, 0x56, 0x51, 0x9c, 0x90, 0x21, 0x13, 0x2f, 0x47, 0x28, 0x92, 0x12, 0x6f, 0x3b,
+	0x98, 0x32, 0x56, 0x4c, 0xad, 0xa0, 0xc9, 0x61, 0xaa, 0x04, 0x1e, 0x71, 0x5b, 0xb8, 0xeb, 0xeb,
+	0x51, 0xa1, 0x47, 0xe1, 0x04, 0x9a, 0x60, 0x3d, 0xfb, 0x6a, 0x53, 0xfc, 0xcb, 0x4a, 0xf8, 0x12,
+	0xac, 0xac, 0xfe, 0x71, 0x25, 0x71, 0x21, 0x5b, 0xcc, 0x2e, 0x67, 0x4b, 0xd9, 0xf3, 0xf7, 0x5d,
+	0x28, 0xa1, 0x02, 0xfa, 0xbf, 0x2f, 0x02, 0x99, 0xa9, 0xc0, 0x1f, 0x9c, 0xe2, 0x17, 0x27, 0x6f,
+	0x68, 0xb6, 0xd6, 0xc4, 0x84, 0xb6, 0x7d, 0x18, 0x56, 0x9e, 0x47, 0xc2, 0xd0, 0x22, 0xa8, 0x7a,
+	0xdd, 0x34, 0x74, 0x2c, 0x4c, 0xef, 0xba, 0x10, 0xdb, 0x73, 0x21, 0xea, 0xb9, 0xc0, 0x5d, 0xcc,
+	0x16, 0xae, 0x45, 0xe2, 0x51, 0x3e, 0x96, 0x7e, 0x00, 0x68, 0xaa, 0xa2, 0x8f, 0x6c, 0xe5, 0x65,
+	0x34, 0xe9, 0xe0, 0x56, 0x55, 0xb5, 0xb4, 0x6e, 0xc3, 0xd4, 0xaa, 0x43, 0x9b, 0xc4, 0xf5, 0x37,
+	0x69, 0x9b, 0x0f, 0x4e, 0xcf, 0x00, 0x94, 0x24, 0xf5, 0xde, 0xf0, 0x9d, 0x85, 0x35, 0x34, 0x83,
+	0x6f, 0x5b, 0x58, 0x27, 0xb8, 0xaa, 0xda, 0xd8, 0xb1, 0xcc, 0x96, 0x13, 0xf4, 0xf9, 0x12, 0x04,
+	0xbe, 0x1f, 0xa2, 0x04, 0x11, 0x2b, 0xc5, 0xfb, 0x2e, 0xe4, 0x50, 0x16, 0xcd, 0x8f, 0x34, 0x5f,
+	0x59, 0x3d, 0xec, 0x5d, 0x6b, 0x55, 0xe5, 0xbe, 0xbb, 0xc0, 0x15, 0xb2, 0xc5, 0xf4, 0xd7, 0x13,
+	0x68, 0xea, 0x6a, 0xc3, 0xdc, 0xd4, 0x1a, 0x37, 0x2d, 0xac, 0x57, 0xba, 0x16, 0x16, 0x3e, 0x46,
+	0x33, 0x94, 0x2a, 0xd5, 0xdf, 0x2b, 0x95, 0x2d, 0x16, 0xeb, 0x27, 0x59, 0x5c, 0xf8, 0xe7, 0xab,
+	0x57, 0x8e, 0xec, 0xb9, 0xec, 0xc5, 0x98, 0xae, 0x8f, 0x3d, 0x60, 0x1f, 0x22, 0x9e, 0xe8, 0x63,
+	0xf0, 0x61, 0x06, 0x7f, 0xee, 0x25, 0xf0, 0xa3, 0xf3, 0x1e, 0xa0, 0x4f, 0x91, 0x51, 0x1e, 0x4a,
+	0x28, 0x46, 0x8c, 0x26, 0x36, 0xdb, 0x44, 0xe4, 0x64, 0xc8, 0x1c, 0x2b, 0xcf, 0xd1, 0x67, 0xa9,
+	0x44, 0xe5, 0xf6, 0x55, 0xcf, 0x5f, 0xfe, 0xd8, 0xc2, 0x84, 0xb8, 0x1f, 0xc9, 0x80, 0xd2, 0xf7,
+	0x14, 0x2e, 0xa0, 0xb8, 0xd1, 0x22, 0xd8, 0xee, 0x68, 0x0d, 0x31, 0xc2, 0xa2, 0x52, 0x0f, 0x5d,
+	0x08, 0x17, 0x96, 0x8f, 0x0c, 0x1b, 0xf8, 0x0a, 0xe7, 0x50, 0xf4, 0x13, 0x83, 0x10, 0x6c, 0x33,
+	0x55, 0x1f, 0x2b, 0xcf, 0xec, 0x7f, 0x0e, 0x4f, 0x82, 0x27, 0x66, 0x62, 0x81, 0x13, 0xf7, 0x23,
+	0x4a, 0xe0, 0x20, 0xac, 0xa1, 0xe3, 0xed, 0x96, 0xdf, 0x4f, 0x57, 0x25, 0x75, 0x1b, 0x3b, 0x75,
+	0xb3, 0x51, 0x15, 0xa3, 0x2c, 0xee, 0x04, 0xad, 0xb1, 0xd0, 0x5f, 0xae, 0xe8, 0x42, 0x44, 0xe4,
+	0x33, 0xa0, 0x08, 0x83, 0x80, 0x4a, 0xdf, 0x5f, 0x78, 0x1b, 0xcd, 0x3c, 0x0f, 0x12, 0x3b, 0x04,
+	0x29, 0x8d, 0x83, 0xf0, 0xcf, 0x41, 0xac, 0xa1, 0x29, 0xbf, 0x26, 0xd5, 0xc2, 0xb6, 0x8e, 0x5b,
+	0x44, 0x4c, 0xb0, 0x78, 0x89, 0x2e, 0x38, 0x6d, 0xbb, 0xb4, 0xd4, 0x07, 0x49, 0x2e, 0x24, 0xca,
+	0xb1, 0xa5, 0x6c, 0x61, 0x69, 0x71, 0x79, 0x49, 0x39, 0xe6, 0x47, 0x6d, 0xf8, 0x41, 0x2b, 0xd9,
+	0xfb, 0x2e, 0x64, 0xd0, 0x1b, 0xe8, 0xd4, 0x88, 0xd8, 0x86, 0x96, 0x2b, 0x79, 0x89, 0x2e, 0x56,
+	0xf6, 0x42, 0xf6, 0x62, 0xf6, 0xad, 0xf2, 0xff, 0xd0, 0xe4, 0x30, 0xdf, 0x6c, 0xb1, 0x60, 0xcf,
+	0x85, 0x38, 0x5d, 0xac, 0x42, 0xb6, 0x78, 0x2d, 0x12, 0x8f, 0xf3, 0x89, 0xf4, 0x8f, 0x1c, 0x9a,
+	0x5a, 0xb5, 0xb1, 0x46, 0xf0, 0x40, 0x8d, 0xef, 0xbf, 0x12, 0x35, 0x1e, 0xa5, 0xc3, 0x77, 0x5f,
+	0x81, 0x0e, 0x8f, 0x50, 0xa0, 0x38, 0xa6, 0xc0, 0x43, 0x99, 0xa5, 0xc6, 0x65, 0x36, 0x24, 0xa5,
+	0xfc, 0x4b, 0xf4, 0x71, 0xa4, 0x12, 0xde, 0x7c, 0xa1, 0x12, 0x8e, 0xe0, 0x7c, 0xfe, 0x68, 0xce,
+	0xc7, 0x39, 0x9d, 0xf9, 0xed, 0xca, 0xd8, 0x63, 0x50, 0x96, 0xc7, 0x88, 0xe3, 0xbf, 0xf8, 0x0b,
+	0x46, 0xbe, 0xa4, 0x7f, 0xe2, 0xd0, 0xb4, 0x82, 0xad, 0x86, 0xa6, 0xff, 0x47, 0xda, 0x6b, 0x43,
+	0xda, 0xaf, 0x1c, 0x4a, 0x5e, 0xc5, 0xe4, 0xdf, 0x46, 0xd8, 0xec, 0xe8, 0x83, 0x3d, 0x78, 0x9d,
+	0x5f, 0x5b, 0x22, 0xcb, 0xdf, 0xc0, 0xde, 0x63, 0x29, 0xb4, 0xff, 0x58, 0x0a, 0x3d, 0x7b, 0x2c,
+	0xc1, 0xb6, 0x27, 0xc1, 0x0f, 0x9e, 0x04, 0x0f, 0x3c, 0x09, 0xf6, 0x3c, 0x09, 0xf6, 0x3d, 0x09,
+	0x1e, 0x79, 0x12, 0x3c, 0xf1, 0xa4, 0xd0, 0x33, 0x4f, 0x82, 0xef, 0x0e, 0xa4, 0xd0, 0xee, 0x81,
+	0x04, 0x7b, 0x07, 0x52, 0x68, 0xff, 0x40, 0x0a, 0x7d, 0x70, 0xa3, 0x66, 0x5a, 0x5b, 0xb5, 0x5c,
+	0xc7, 0x6c, 0x10, 0x6c, 0xdb, 0x5a, 0xae, 0xed, 0xe4, 0xd9, 0xe1, 0x96, 0x69, 0x37, 0x17, 0x2d,
+	0xdb, 0xec, 0x18, 0x55, 0x6c, 0x2f, 0xf6, 0xcd, 0x79, 0x6b, 0xb3, 0x66, 0xe6, 0xf1, 0x6d, 0x12,
+	0xfc, 0xb1, 0x3c, 0xff, 0xff, 0xb5, 0x19, 0x65, 0x3f, 0x2e, 0xa5, 0xbf, 0x03, 0x00, 0x00, 0xff,
+	0xff, 0xb3, 0x24, 0x3e, 0xc5, 0xa3, 0x0d, 0x00, 0x00,
+}
+
 func (this *HttpHealthCheck) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1519,7 +1439,7 @@ func (this *HttpHealthCheck) GoString() string {
 	for k, _ := range this.Headers {
 		keysForHeaders = append(keysForHeaders, k)
 	}
-	sortkeys.Strings(keysForHeaders)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForHeaders)
 	mapStringForHeaders := "map[string]string{"
 	for _, k := range keysForHeaders {
 		mapStringForHeaders += fmt.Sprintf("%#v: %#v,", k, this.Headers[k])
@@ -1705,7 +1625,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *HttpHealthCheck) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1713,99 +1633,116 @@ func (m *HttpHealthCheck) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HttpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.HostHeaderChoice != nil {
-		nn1, err := m.HostHeaderChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
-	}
-	if len(m.Path) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Path)))
-		i += copy(dAtA[i:], m.Path)
-	}
-	if len(m.Headers) > 0 {
-		keysForHeaders := make([]string, 0, len(m.Headers))
-		for k, _ := range m.Headers {
-			keysForHeaders = append(keysForHeaders, string(k))
-		}
-		sortkeys.Strings(keysForHeaders)
-		for _, k := range keysForHeaders {
-			dAtA[i] = 0x1a
-			i++
-			v := m.Headers[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	if len(m.RequestHeadersToRemove) > 0 {
-		for _, s := range m.RequestHeadersToRemove {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+		{
+			size := m.HostHeaderChoice.Size()
+			i -= size
+			if _, err := m.HostHeaderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
 	if m.UseHttp2 {
-		dAtA[i] = 0x28
-		i++
+		i--
 		if m.UseHttp2 {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x28
 	}
-	return i, nil
+	if len(m.RequestHeadersToRemove) > 0 {
+		for iNdEx := len(m.RequestHeadersToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestHeadersToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestHeadersToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestHeadersToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Headers) > 0 {
+		keysForHeaders := make([]string, 0, len(m.Headers))
+		for k := range m.Headers {
+			keysForHeaders = append(keysForHeaders, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForHeaders)
+		for iNdEx := len(keysForHeaders) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Headers[string(keysForHeaders[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForHeaders[iNdEx])
+			copy(dAtA[i:], keysForHeaders[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForHeaders[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *HttpHealthCheck_HostHeader) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpHealthCheck_HostHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.HostHeader)
+	copy(dAtA[i:], m.HostHeader)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.HostHeader)))
-	i += copy(dAtA[i:], m.HostHeader)
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 func (m *HttpHealthCheck_UseOriginServerName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpHealthCheck_UseOriginServerName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.UseOriginServerName != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UseOriginServerName.Size()))
-		n2, err := m.UseOriginServerName.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.UseOriginServerName.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *TcpHealthCheck) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1813,29 +1750,36 @@ func (m *TcpHealthCheck) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SendPayload) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SendPayload)))
-		i += copy(dAtA[i:], m.SendPayload)
-	}
 	if len(m.ExpectedResponse) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.ExpectedResponse)
+		copy(dAtA[i:], m.ExpectedResponse)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExpectedResponse)))
-		i += copy(dAtA[i:], m.ExpectedResponse)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.SendPayload) > 0 {
+		i -= len(m.SendPayload)
+		copy(dAtA[i:], m.SendPayload)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SendPayload)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1843,82 +1787,103 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.HealthCheck != nil {
-		nn3, err := m.HealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn3
-	}
-	if m.Timeout != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-	}
-	if m.Interval != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
-	}
-	if m.Jitter != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Jitter))
-	}
-	if m.UnhealthyThreshold != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+	if m.JitterPercent != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+		i--
+		dAtA[i] = 0x48
 	}
 	if m.HealthyThreshold != 0 {
-		dAtA[i] = 0x38
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HealthyThreshold))
+		i--
+		dAtA[i] = 0x38
 	}
-	if m.JitterPercent != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+	if m.UnhealthyThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if m.Jitter != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Jitter))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.Interval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Timeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_HttpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HttpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HttpHealthCheck != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpHealthCheck.Size()))
-		n4, err := m.HttpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HttpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TcpHealthCheck != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TcpHealthCheck.Size()))
-		n5, err := m.TcpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.TcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1926,77 +1891,98 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.HealthCheck != nil {
-		nn6, err := m.HealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn6
-	}
-	if m.Timeout != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-	}
-	if m.Interval != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
-	}
-	if m.UnhealthyThreshold != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+	if m.JitterPercent != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+		i--
+		dAtA[i] = 0x48
 	}
 	if m.HealthyThreshold != 0 {
-		dAtA[i] = 0x38
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HealthyThreshold))
+		i--
+		dAtA[i] = 0x38
 	}
-	if m.JitterPercent != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+	if m.UnhealthyThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if m.Interval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Timeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_HttpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HttpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HttpHealthCheck != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpHealthCheck.Size()))
-		n7, err := m.HttpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HttpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TcpHealthCheck != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TcpHealthCheck.Size()))
-		n8, err := m.TcpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.TcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2004,77 +1990,98 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.HealthCheck != nil {
-		nn9, err := m.HealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn9
-	}
-	if m.Timeout != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-	}
-	if m.Interval != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
-	}
-	if m.UnhealthyThreshold != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+	if m.JitterPercent != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+		i--
+		dAtA[i] = 0x48
 	}
 	if m.HealthyThreshold != 0 {
-		dAtA[i] = 0x38
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HealthyThreshold))
+		i--
+		dAtA[i] = 0x38
 	}
-	if m.JitterPercent != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+	if m.UnhealthyThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if m.Interval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Timeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_HttpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HttpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HttpHealthCheck != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpHealthCheck.Size()))
-		n10, err := m.HttpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HttpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TcpHealthCheck != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TcpHealthCheck.Size()))
-		n11, err := m.TcpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.TcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2082,88 +2089,114 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.HealthCheck != nil {
-		nn12, err := m.HealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn12
-	}
-	if m.Timeout != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-	}
-	if m.Interval != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
-	}
-	if m.Jitter != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Jitter))
-	}
-	if m.UnhealthyThreshold != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+	if m.JitterPercent != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+		i--
+		dAtA[i] = 0x48
 	}
 	if m.HealthyThreshold != 0 {
-		dAtA[i] = 0x38
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HealthyThreshold))
+		i--
+		dAtA[i] = 0x38
 	}
-	if m.JitterPercent != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
+	if m.UnhealthyThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.UnhealthyThreshold))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if m.Jitter != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Jitter))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.Interval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Timeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_HttpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HttpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HttpHealthCheck != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpHealthCheck.Size()))
-		n13, err := m.HttpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HttpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TcpHealthCheck != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TcpHealthCheck.Size()))
-		n14, err := m.TcpHealthCheck.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.TcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *HttpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HostHeaderChoice != nil {
@@ -2194,6 +2227,9 @@ func (m *HttpHealthCheck) Size() (n int) {
 }
 
 func (m *HttpHealthCheck_HostHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.HostHeader)
@@ -2201,6 +2237,9 @@ func (m *HttpHealthCheck_HostHeader) Size() (n int) {
 	return n
 }
 func (m *HttpHealthCheck_UseOriginServerName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.UseOriginServerName != nil {
@@ -2210,6 +2249,9 @@ func (m *HttpHealthCheck_UseOriginServerName) Size() (n int) {
 	return n
 }
 func (m *TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.SendPayload)
@@ -2224,6 +2266,9 @@ func (m *TcpHealthCheck) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HealthCheck != nil {
@@ -2251,6 +2296,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_HttpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HttpHealthCheck != nil {
@@ -2260,6 +2308,9 @@ func (m *GlobalSpecType_HttpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TcpHealthCheck != nil {
@@ -2269,6 +2320,9 @@ func (m *GlobalSpecType_TcpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HealthCheck != nil {
@@ -2293,6 +2347,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_HttpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HttpHealthCheck != nil {
@@ -2302,6 +2359,9 @@ func (m *CreateSpecType_HttpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TcpHealthCheck != nil {
@@ -2311,6 +2371,9 @@ func (m *CreateSpecType_TcpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HealthCheck != nil {
@@ -2335,6 +2398,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_HttpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HttpHealthCheck != nil {
@@ -2344,6 +2410,9 @@ func (m *ReplaceSpecType_HttpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TcpHealthCheck != nil {
@@ -2353,6 +2422,9 @@ func (m *ReplaceSpecType_TcpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HealthCheck != nil {
@@ -2380,6 +2452,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_HttpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HttpHealthCheck != nil {
@@ -2389,6 +2464,9 @@ func (m *GetSpecType_HttpHealthCheck) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.TcpHealthCheck != nil {
@@ -2399,14 +2477,7 @@ func (m *GetSpecType_TcpHealthCheck) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2419,7 +2490,7 @@ func (this *HttpHealthCheck) String() string {
 	for k, _ := range this.Headers {
 		keysForHeaders = append(keysForHeaders, k)
 	}
-	sortkeys.Strings(keysForHeaders)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForHeaders)
 	mapStringForHeaders := "map[string]string{"
 	for _, k := range keysForHeaders {
 		mapStringForHeaders += fmt.Sprintf("%v: %v,", k, this.Headers[k])
@@ -2450,7 +2521,7 @@ func (this *HttpHealthCheck_UseOriginServerName) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&HttpHealthCheck_UseOriginServerName{`,
-		`UseOriginServerName:` + strings.Replace(fmt.Sprintf("%v", this.UseOriginServerName), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`UseOriginServerName:` + strings.Replace(fmt.Sprintf("%v", this.UseOriginServerName), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2631,7 +2702,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2659,7 +2730,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2669,6 +2740,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2688,7 +2762,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2698,6 +2772,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2717,7 +2794,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2726,6 +2803,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2746,7 +2826,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2763,7 +2843,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -2773,6 +2853,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -2789,7 +2872,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -2799,6 +2882,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -2835,7 +2921,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2845,6 +2931,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2864,7 +2953,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2884,7 +2973,7 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2893,10 +2982,13 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2909,6 +3001,9 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2938,7 +3033,7 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2966,7 +3061,7 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2976,6 +3071,9 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2995,7 +3093,7 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3005,6 +3103,9 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3017,6 +3118,9 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3046,7 +3150,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3074,7 +3178,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3083,6 +3187,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3106,7 +3213,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3115,6 +3222,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3138,7 +3248,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Timeout |= (uint32(b) & 0x7F) << shift
+				m.Timeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3157,7 +3267,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Interval |= (uint32(b) & 0x7F) << shift
+				m.Interval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3176,7 +3286,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Jitter |= (uint32(b) & 0x7F) << shift
+				m.Jitter |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3195,7 +3305,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnhealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.UnhealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3214,7 +3324,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.HealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3233,7 +3343,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.JitterPercent |= (uint32(b) & 0x7F) << shift
+				m.JitterPercent |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3245,6 +3355,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3274,7 +3387,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3302,7 +3415,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3311,6 +3424,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3334,7 +3450,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3343,6 +3459,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3366,7 +3485,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Timeout |= (uint32(b) & 0x7F) << shift
+				m.Timeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3385,7 +3504,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Interval |= (uint32(b) & 0x7F) << shift
+				m.Interval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3404,7 +3523,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnhealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.UnhealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3423,7 +3542,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.HealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3442,7 +3561,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.JitterPercent |= (uint32(b) & 0x7F) << shift
+				m.JitterPercent |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3454,6 +3573,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3483,7 +3605,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3511,7 +3633,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3520,6 +3642,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3543,7 +3668,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3552,6 +3677,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3575,7 +3703,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Timeout |= (uint32(b) & 0x7F) << shift
+				m.Timeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3594,7 +3722,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Interval |= (uint32(b) & 0x7F) << shift
+				m.Interval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3613,7 +3741,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnhealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.UnhealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3632,7 +3760,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.HealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3651,7 +3779,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.JitterPercent |= (uint32(b) & 0x7F) << shift
+				m.JitterPercent |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3663,6 +3791,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3692,7 +3823,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3720,7 +3851,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3729,6 +3860,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3752,7 +3886,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3761,6 +3895,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3784,7 +3921,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Timeout |= (uint32(b) & 0x7F) << shift
+				m.Timeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3803,7 +3940,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Interval |= (uint32(b) & 0x7F) << shift
+				m.Interval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3822,7 +3959,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Jitter |= (uint32(b) & 0x7F) << shift
+				m.Jitter |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3841,7 +3978,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UnhealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.UnhealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3860,7 +3997,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HealthyThreshold |= (uint32(b) & 0x7F) << shift
+				m.HealthyThreshold |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3879,7 +4016,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.JitterPercent |= (uint32(b) & 0x7F) << shift
+				m.JitterPercent |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3891,6 +4028,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3908,6 +4048,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3939,10 +4080,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3959,143 +4098,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/healthcheck/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/healthcheck/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 1327 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6b, 0x1b, 0xd7,
-	0x16, 0xd6, 0xd1, 0xe8, 0xe7, 0x95, 0x63, 0x8f, 0x27, 0x89, 0x33, 0x56, 0xc2, 0xbc, 0x89, 0x78,
-	0x7e, 0x28, 0x7e, 0xb2, 0x64, 0x49, 0x71, 0x92, 0xba, 0x10, 0xa8, 0x8c, 0x89, 0x49, 0xa0, 0x31,
-	0x13, 0xb5, 0x94, 0xb6, 0x74, 0x18, 0x8f, 0x6e, 0xa4, 0xa9, 0x25, 0xcd, 0x74, 0xe6, 0x4a, 0x8d,
-	0x02, 0x05, 0x53, 0x68, 0x29, 0x2e, 0x94, 0x12, 0xba, 0xca, 0x5f, 0xd0, 0x6d, 0xbb, 0xec, 0x68,
-	0x61, 0x02, 0x2d, 0xa1, 0x2b, 0x2f, 0x4d, 0x56, 0xc9, 0x64, 0x93, 0x66, 0x15, 0xba, 0x2a, 0x5d,
-	0x95, 0x7b, 0x67, 0x24, 0x4b, 0x8a, 0x13, 0xba, 0xc8, 0x26, 0xb4, 0xbb, 0x7b, 0xe7, 0x9e, 0xf3,
-	0x9d, 0x1f, 0xdf, 0x77, 0x0e, 0x0c, 0x5a, 0xe8, 0x62, 0x27, 0x6f, 0x98, 0x05, 0x47, 0x6f, 0xe0,
-	0x96, 0x56, 0x68, 0x60, 0xad, 0x49, 0x1a, 0x7a, 0x03, 0xeb, 0xdb, 0x05, 0xd2, 0xb3, 0xb0, 0x93,
-	0xb7, 0x6c, 0x93, 0x98, 0xc2, 0xbc, 0x6f, 0x96, 0xf7, 0xcd, 0xf2, 0x23, 0x66, 0xe9, 0xa5, 0xba,
-	0x41, 0x1a, 0x9d, 0xad, 0xbc, 0x6e, 0xb6, 0x0a, 0x75, 0xb3, 0x6e, 0x16, 0x98, 0xc7, 0x56, 0xe7,
-	0x26, 0xbb, 0xb1, 0x0b, 0x3b, 0xf9, 0x48, 0xe9, 0xd3, 0xe3, 0x01, 0x4d, 0x8b, 0x18, 0x66, 0x3b,
-	0x08, 0x93, 0x9e, 0x1f, 0x7f, 0x1c, 0xc9, 0x20, 0x7d, 0x66, 0xfc, 0xa9, 0xab, 0x35, 0x8d, 0x9a,
-	0x46, 0x70, 0xf0, 0x2a, 0x4f, 0xbc, 0x1a, 0xf8, 0x53, 0x75, 0x0c, 0x3a, 0xf3, 0x5d, 0x1c, 0xcd,
-	0x6c, 0x10, 0x62, 0x6d, 0xb0, 0xd4, 0xd7, 0x68, 0xea, 0xc2, 0x9b, 0x28, 0xd5, 0x30, 0x1d, 0xa2,
-	0x36, 0xb0, 0x56, 0xc3, 0xb6, 0x08, 0x32, 0x64, 0x93, 0x15, 0xf1, 0x0f, 0x17, 0x42, 0x3f, 0xfd,
-	0xb6, 0xc7, 0x45, 0x6d, 0x4e, 0xfc, 0x32, 0x1c, 0x9c, 0x1e, 0x02, 0x6c, 0x84, 0x14, 0x44, 0xcd,
-	0x37, 0x98, 0xb5, 0xa0, 0xa3, 0x88, 0xa5, 0x91, 0x86, 0x18, 0x66, 0x5e, 0xd7, 0x1f, 0xb8, 0x00,
-	0x05, 0xcf, 0x85, 0x15, 0x04, 0x05, 0x14, 0x0f, 0x1a, 0x89, 0xa6, 0x46, 0x3b, 0x8a, 0x12, 0xc1,
-	0xed, 0x36, 0x8a, 0x15, 0x9a, 0x46, 0x17, 0xdf, 0x46, 0xf1, 0x82, 0x8d, 0xb5, 0x5a, 0xef, 0xf6,
-	0x20, 0x66, 0xc2, 0x8e, 0x89, 0x3b, 0xfc, 0x93, 0x30, 0x28, 0x0c, 0x5c, 0xf0, 0xc2, 0x28, 0xee,
-	0x67, 0xe7, 0x88, 0x9c, 0xcc, 0x65, 0x53, 0xa5, 0x8b, 0xf9, 0x17, 0x52, 0x91, 0x9f, 0xa8, 0x2f,
-	0xef, 0x67, 0xea, 0xac, 0xb7, 0x89, 0xdd, 0xab, 0x7c, 0x13, 0xde, 0x73, 0x01, 0x68, 0x90, 0xa9,
-	0xbb, 0x90, 0xcc, 0xc4, 0xed, 0x28, 0x0f, 0xe2, 0x8e, 0x5f, 0xdf, 0x5d, 0x08, 0xf3, 0xfc, 0xe0,
-	0x69, 0x31, 0x78, 0xe2, 0xbd, 0x87, 0x3f, 0x73, 0xf2, 0x6e, 0x1f, 0xce, 0x08, 0xe9, 0xa7, 0x2e,
-	0xcc, 0x6d, 0x54, 0xab, 0x9b, 0xb2, 0x9f, 0x8c, 0xbc, 0x8d, 0x7b, 0xb2, 0x43, 0x6c, 0xa3, 0x5d,
-	0xa7, 0x46, 0xf3, 0xbb, 0x7d, 0x38, 0x29, 0x1c, 0xf7, 0x5c, 0x98, 0x61, 0x46, 0x7e, 0x5c, 0xf9,
-	0x1a, 0xee, 0xd1, 0x57, 0xb4, 0xdb, 0x87, 0x98, 0x10, 0xb9, 0xef, 0x42, 0x88, 0x5e, 0x63, 0xbb,
-	0x7d, 0x08, 0x27, 0x80, 0x1e, 0x2f, 0xef, 0xf6, 0x61, 0x35, 0x7d, 0xe9, 0xa9, 0x0b, 0xe7, 0x6f,
-	0x30, 0x30, 0xd9, 0xbc, 0x29, 0xeb, 0x66, 0xab, 0xa5, 0xc9, 0x0e, 0xb6, 0x34, 0x5b, 0x23, 0xb8,
-	0x26, 0x37, 0x0d, 0x87, 0xd0, 0xef, 0xa3, 0xe1, 0xbb, 0x5a, 0xb3, 0x83, 0x1d, 0x0a, 0x71, 0x7a,
-	0xb7, 0x0f, 0xa7, 0xd2, 0x27, 0x3d, 0x17, 0x66, 0x47, 0x43, 0xbf, 0x4b, 0x0d, 0x86, 0xc1, 0xd3,
-	0x34, 0x38, 0x37, 0x72, 0xa5, 0x9d, 0x50, 0x06, 0x8d, 0x15, 0x3e, 0x44, 0xf3, 0x36, 0xfe, 0xa4,
-	0x83, 0x87, 0x4a, 0x70, 0x54, 0x62, 0xaa, 0x36, 0x6e, 0x99, 0x5d, 0x2c, 0x46, 0x64, 0x2e, 0x9b,
-	0xac, 0x9c, 0xa5, 0x1e, 0x03, 0x92, 0xd0, 0x1d, 0x88, 0x67, 0xa8, 0x3a, 0x82, 0xee, 0xdd, 0xa1,
-	0xdd, 0x53, 0xe6, 0x02, 0x8c, 0xa0, 0xe9, 0x55, 0x53, 0x61, 0x00, 0xc2, 0x59, 0x94, 0xec, 0x38,
-	0x58, 0x6d, 0x10, 0x62, 0x95, 0xc4, 0xa8, 0x0c, 0xd9, 0x44, 0x25, 0x42, 0x91, 0x94, 0x44, 0xc7,
-	0xc1, 0x94, 0xb1, 0x92, 0x70, 0x0d, 0xcd, 0x51, 0x13, 0xd3, 0x36, 0xea, 0x46, 0x5b, 0x75, 0xb0,
-	0xdd, 0xc5, 0xb6, 0xda, 0xd6, 0x5a, 0x58, 0x8c, 0xcb, 0x90, 0x4d, 0x95, 0x4e, 0x4c, 0x70, 0xbe,
-	0xde, 0xb2, 0x48, 0x6f, 0x23, 0xa4, 0x1c, 0xef, 0x38, 0xf8, 0x3a, 0x73, 0xba, 0xc1, 0x7c, 0xde,
-	0xd6, 0x5a, 0x38, 0xbd, 0x8a, 0xa6, 0x46, 0x79, 0x17, 0x78, 0xc4, 0x6d, 0xe3, 0x9e, 0x2f, 0x6e,
-	0x85, 0x1e, 0x85, 0x13, 0x28, 0xca, 0x1a, 0xe8, 0x4b, 0x57, 0xf1, 0x2f, 0xab, 0xe1, 0x4b, 0xb0,
-	0xba, 0xf6, 0xfb, 0xe5, 0xe4, 0x85, 0x5c, 0x29, 0xb7, 0x92, 0x2b, 0xe7, 0xce, 0xdf, 0x73, 0xa1,
-	0x8c, 0x8a, 0xe8, 0xbf, 0xbe, 0xa2, 0x64, 0x26, 0x29, 0x9f, 0x05, 0xc5, 0xaf, 0x54, 0xde, 0xd4,
-	0x6c, 0xad, 0x85, 0x09, 0xed, 0xe1, 0xa1, 0x5b, 0x65, 0x01, 0x09, 0x23, 0x53, 0xa5, 0xea, 0x0d,
-	0xd3, 0xd0, 0xb1, 0x30, 0xb3, 0xe7, 0x42, 0x7c, 0xdf, 0x85, 0x98, 0xe7, 0x02, 0x77, 0x31, 0x57,
-	0xbc, 0x1a, 0x49, 0xc4, 0xf8, 0x78, 0xe6, 0x3e, 0xa0, 0xe9, 0xaa, 0x3e, 0x31, 0x95, 0x53, 0x0e,
-	0x6e, 0xd7, 0x54, 0x4b, 0xeb, 0x35, 0x4d, 0xad, 0x36, 0x32, 0x96, 0xdc, 0x60, 0x2c, 0x77, 0xf8,
-	0xe0, 0xf4, 0x0c, 0x40, 0x49, 0x51, 0xeb, 0x4d, 0xdf, 0x58, 0x58, 0x47, 0xb3, 0xf8, 0x96, 0x85,
-	0x75, 0x82, 0x6b, 0xaa, 0x8d, 0x1d, 0xcb, 0x6c, 0x3b, 0x41, 0x9d, 0x2f, 0x41, 0xe0, 0x07, 0x2e,
-	0x4a, 0xe0, 0xb1, 0x5a, 0xba, 0xe7, 0x42, 0x1e, 0xe5, 0xd0, 0xc2, 0x58, 0xf1, 0xd5, 0xb5, 0xc3,
-	0xda, 0xb5, 0x76, 0x4d, 0x1e, 0x98, 0x0b, 0x5c, 0x31, 0x57, 0xca, 0x7c, 0x1d, 0x45, 0xd3, 0x57,
-	0x9a, 0xe6, 0x96, 0xd6, 0xbc, 0x61, 0x61, 0xbd, 0xda, 0xb3, 0xb0, 0xf0, 0x11, 0x9a, 0xa5, 0xbc,
-	0xab, 0xfe, 0x90, 0xaa, 0x6c, 0x4a, 0x59, 0x3d, 0xa9, 0xd2, 0xe2, 0xdf, 0x9f, 0xe3, 0x4a, 0x64,
-	0xdf, 0x65, 0xeb, 0x67, 0xa6, 0x31, 0xb1, 0xc0, 0x3e, 0x40, 0x3c, 0xd1, 0x27, 0xe0, 0xc3, 0x0c,
-	0xfe, 0xdc, 0x4b, 0xe0, 0xc7, 0xfb, 0x3d, 0x44, 0x9f, 0x26, 0xe3, 0x3c, 0x94, 0x51, 0x9c, 0x18,
-	0x2d, 0x6c, 0x76, 0x88, 0xc8, 0xc9, 0x90, 0x3d, 0x56, 0x99, 0xa7, 0x3b, 0xae, 0x4c, 0xb5, 0xfb,
-	0x55, 0xdf, 0xdf, 0x24, 0xf1, 0xc5, 0xa8, 0x78, 0x10, 0xc9, 0x82, 0x32, 0xb0, 0x14, 0x2e, 0xa0,
-	0x84, 0xd1, 0x26, 0xd8, 0xee, 0x6a, 0x4d, 0x31, 0xc2, 0xbc, 0xd2, 0x0f, 0x5c, 0x08, 0x17, 0x57,
-	0x8e, 0x74, 0x1b, 0xda, 0x0a, 0xe7, 0x50, 0xec, 0x63, 0x83, 0x10, 0x6c, 0xb3, 0x11, 0x39, 0x56,
-	0x99, 0x3d, 0xf8, 0x0c, 0x9e, 0x04, 0xfb, 0x2a, 0xba, 0xc8, 0x89, 0x07, 0x11, 0x25, 0x30, 0x10,
-	0xd6, 0xd1, 0xf1, 0x4e, 0xdb, 0xaf, 0xa7, 0xa7, 0x92, 0x86, 0x8d, 0x9d, 0x86, 0xd9, 0xac, 0x89,
-	0x31, 0xe6, 0x77, 0x82, 0xe6, 0x58, 0x1c, 0x4c, 0x6a, 0x6c, 0x31, 0x22, 0xf2, 0x59, 0x50, 0x84,
-	0xa1, 0x43, 0x75, 0x60, 0x2f, 0xbc, 0x85, 0x66, 0x9f, 0x07, 0x89, 0x1f, 0x82, 0x94, 0x27, 0x41,
-	0xf8, 0xe7, 0x20, 0xd6, 0xd1, 0xb4, 0x9f, 0x93, 0x6a, 0x61, 0x5b, 0xc7, 0x6d, 0x22, 0x26, 0x99,
-	0xbf, 0x44, 0xb7, 0x05, 0x2d, 0xbb, 0xbc, 0x3c, 0x00, 0x49, 0x2d, 0x26, 0x2b, 0xf1, 0xe5, 0x5c,
-	0x71, 0x79, 0x69, 0x65, 0x59, 0x39, 0xe6, 0x7b, 0x6d, 0xfa, 0x4e, 0xab, 0xb9, 0x7b, 0x2e, 0x64,
-	0xd1, 0xff, 0xd0, 0xa9, 0x31, 0xb1, 0x8d, 0x0c, 0x57, 0xea, 0x12, 0x1d, 0xac, 0xdc, 0x85, 0xdc,
-	0xc5, 0xdc, 0x1b, 0x95, 0xff, 0xa0, 0xa9, 0x51, 0xbe, 0xd9, 0x60, 0xc1, 0xbe, 0x0b, 0x09, 0x3a,
-	0x58, 0xc5, 0x5c, 0xe9, 0x6a, 0x24, 0x91, 0xe0, 0x93, 0x99, 0x1f, 0x38, 0x34, 0xbd, 0x66, 0x63,
-	0x8d, 0xe0, 0xa1, 0x1a, 0xdf, 0x7b, 0x25, 0x6a, 0x3c, 0x4a, 0x87, 0xef, 0xbc, 0x02, 0x1d, 0x1e,
-	0xa1, 0x40, 0x71, 0x42, 0x81, 0x87, 0x32, 0x4b, 0x4f, 0xca, 0x6c, 0x44, 0x4a, 0x85, 0x97, 0xe8,
-	0xe3, 0x48, 0x25, 0xfc, 0xff, 0x85, 0x4a, 0x38, 0x82, 0xf3, 0x85, 0xa3, 0x39, 0x9f, 0xe4, 0x74,
-	0xf6, 0xd7, 0xcb, 0x13, 0xcb, 0xa0, 0x22, 0x4f, 0x10, 0xc7, 0x7f, 0xfe, 0x27, 0x8c, 0x7d, 0xc9,
-	0xfc, 0xc8, 0xa1, 0x19, 0x05, 0x5b, 0x4d, 0x4d, 0xff, 0x97, 0xb4, 0xd7, 0x86, 0xb4, 0x5f, 0x38,
-	0x94, 0xba, 0x82, 0xc9, 0x3f, 0x8d, 0xb0, 0xb9, 0xf1, 0x85, 0x3d, 0xdc, 0xce, 0xaf, 0x2d, 0x91,
-	0x95, 0x2f, 0x60, 0xff, 0x91, 0x14, 0x3a, 0x78, 0x24, 0x85, 0x9e, 0x3d, 0x92, 0x60, 0xc7, 0x93,
-	0xe0, 0x7b, 0x4f, 0x82, 0xfb, 0x9e, 0x04, 0xfb, 0x9e, 0x04, 0x07, 0x9e, 0x04, 0x0f, 0x3d, 0x09,
-	0x9e, 0x78, 0x52, 0xe8, 0x99, 0x27, 0xc1, 0xb7, 0x8f, 0xa5, 0xd0, 0xde, 0x63, 0x09, 0xde, 0xbf,
-	0x5e, 0x37, 0xad, 0xed, 0x7a, 0xbe, 0x6b, 0x36, 0x09, 0xb6, 0x6d, 0x2d, 0xdf, 0x71, 0x0a, 0xec,
-	0x70, 0xd3, 0xb4, 0x5b, 0x4b, 0x96, 0x6d, 0x76, 0x8d, 0x1a, 0xb6, 0x97, 0x06, 0xcf, 0x05, 0x6b,
-	0xab, 0x6e, 0x16, 0xf0, 0x2d, 0x12, 0xfc, 0xa9, 0x3c, 0xff, 0xdf, 0xb5, 0x15, 0x63, 0x3f, 0x2c,
-	0xe5, 0xbf, 0x02, 0x00, 0x00, 0xff, 0xff, 0x1d, 0xa4, 0x63, 0x75, 0x9b, 0x0d, 0x00, 0x00,
-}

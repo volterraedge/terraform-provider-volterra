@@ -3,29 +3,32 @@
 
 package cluster
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-import sortkeys "github.com/gogo/protobuf/sortkeys"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // LoadbalancerAlgorithm
 //
@@ -81,6 +84,7 @@ var LoadbalancerAlgorithm_name = map[int32]string{
 	3: "RANDOM",
 	4: "LB_OVERRIDE",
 }
+
 var LoadbalancerAlgorithm_value = map[string]int32{
 	"ROUND_ROBIN":   0,
 	"LEAST_REQUEST": 1,
@@ -89,7 +93,9 @@ var LoadbalancerAlgorithm_value = map[string]int32{
 	"LB_OVERRIDE":   4,
 }
 
-func (LoadbalancerAlgorithm) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (LoadbalancerAlgorithm) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{0}
+}
 
 // DnsDiscoveryType
 //
@@ -110,12 +116,15 @@ var DnsDiscoveryType_name = map[int32]string{
 	0: "STRICT_DNS",
 	1: "LOGICAL_DNS",
 }
+
 var DnsDiscoveryType_value = map[string]int32{
 	"STRICT_DNS":  0,
 	"LOGICAL_DNS": 1,
 }
 
-func (DnsDiscoveryType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (DnsDiscoveryType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{1}
+}
 
 // DnsLookupType
 //
@@ -141,13 +150,16 @@ var DnsLookupType_name = map[int32]string{
 	1: "V4_ONLY",
 	2: "V6_ONLY",
 }
+
 var DnsLookupType_value = map[string]int32{
 	"AUTO":    0,
 	"V4_ONLY": 1,
 	"V6_ONLY": 2,
 }
 
-func (DnsLookupType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (DnsLookupType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{2}
+}
 
 // SubsetFallbackPolicy
 //
@@ -173,13 +185,16 @@ var SubsetFallbackPolicy_name = map[int32]string{
 	1: "ANY_ENDPOINT",
 	2: "DEFAULT_SUBSET",
 }
+
 var SubsetFallbackPolicy_value = map[string]int32{
 	"NO_FALLBACK":    0,
 	"ANY_ENDPOINT":   1,
 	"DEFAULT_SUBSET": 2,
 }
 
-func (SubsetFallbackPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (SubsetFallbackPolicy) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{3}
+}
 
 // EndpointSelectionPolicy
 //
@@ -206,13 +221,16 @@ var EndpointSelectionPolicy_name = map[int32]string{
 	1: "LOCAL_ONLY",
 	2: "LOCAL_PREFERRED",
 }
+
 var EndpointSelectionPolicy_value = map[string]int32{
 	"DISTRIBUTED":     0,
 	"LOCAL_ONLY":      1,
 	"LOCAL_PREFERRED": 2,
 }
 
-func (EndpointSelectionPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (EndpointSelectionPolicy) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{4}
+}
 
 // OutlierDetectionType
 //
@@ -283,9 +301,33 @@ type OutlierDetectionType struct {
 	ConsecutiveGatewayFailure uint32 `protobuf:"varint,5,opt,name=consecutive_gateway_failure,json=consecutiveGatewayFailure,proto3" json:"consecutive_gateway_failure,omitempty"`
 }
 
-func (m *OutlierDetectionType) Reset()                    { *m = OutlierDetectionType{} }
-func (*OutlierDetectionType) ProtoMessage()               {}
-func (*OutlierDetectionType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *OutlierDetectionType) Reset()      { *m = OutlierDetectionType{} }
+func (*OutlierDetectionType) ProtoMessage() {}
+func (*OutlierDetectionType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{0}
+}
+func (m *OutlierDetectionType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OutlierDetectionType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OutlierDetectionType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OutlierDetectionType.Merge(m, src)
+}
+func (m *OutlierDetectionType) XXX_Size() int {
+	return m.Size()
+}
+func (m *OutlierDetectionType) XXX_DiscardUnknown() {
+	xxx_messageInfo_OutlierDetectionType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OutlierDetectionType proto.InternalMessageInfo
 
 func (m *OutlierDetectionType) GetConsecutive_5Xx() uint32 {
 	if m != nil {
@@ -338,12 +380,36 @@ type EndpointSubsetSelectorType struct {
 	// x-displayName: "Keys"
 	// x-example: "production"
 	// List of keys that define a cluster subset class.
-	Keys []string `protobuf:"bytes,1,rep,name=keys" json:"keys,omitempty"`
+	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
 }
 
-func (m *EndpointSubsetSelectorType) Reset()                    { *m = EndpointSubsetSelectorType{} }
-func (*EndpointSubsetSelectorType) ProtoMessage()               {}
-func (*EndpointSubsetSelectorType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *EndpointSubsetSelectorType) Reset()      { *m = EndpointSubsetSelectorType{} }
+func (*EndpointSubsetSelectorType) ProtoMessage() {}
+func (*EndpointSubsetSelectorType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{1}
+}
+func (m *EndpointSubsetSelectorType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EndpointSubsetSelectorType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EndpointSubsetSelectorType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EndpointSubsetSelectorType.Merge(m, src)
+}
+func (m *EndpointSubsetSelectorType) XXX_Size() int {
+	return m.Size()
+}
+func (m *EndpointSubsetSelectorType) XXX_DiscardUnknown() {
+	xxx_messageInfo_EndpointSubsetSelectorType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EndpointSubsetSelectorType proto.InternalMessageInfo
 
 func (m *EndpointSubsetSelectorType) GetKeys() []string {
 	if m != nil {
@@ -365,7 +431,7 @@ type CircuitBreaker struct {
 	// Priority for the CircuitBreaker which can be either DEFAULT or HIGH. This implies that
 	// we can have maximum of two CircuitBreakers per cluster. The priority of the route is
 	// matched with priority of CircuitBreaker to select the CircuitBreaker
-	Priority ves_io_schema4.RoutingPriority `protobuf:"varint,1,opt,name=priority,proto3,enum=ves.io.schema.RoutingPriority" json:"priority,omitempty"`
+	Priority schema.RoutingPriority `protobuf:"varint,1,opt,name=priority,proto3,enum=ves.io.schema.RoutingPriority" json:"priority,omitempty"`
 	// connection_limit
 	//
 	// x-displayName: "Connection Limit"
@@ -403,15 +469,39 @@ type CircuitBreaker struct {
 	MaxRequests uint32 `protobuf:"varint,5,opt,name=max_requests,json=maxRequests,proto3" json:"max_requests,omitempty"`
 }
 
-func (m *CircuitBreaker) Reset()                    { *m = CircuitBreaker{} }
-func (*CircuitBreaker) ProtoMessage()               {}
-func (*CircuitBreaker) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *CircuitBreaker) Reset()      { *m = CircuitBreaker{} }
+func (*CircuitBreaker) ProtoMessage() {}
+func (*CircuitBreaker) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{2}
+}
+func (m *CircuitBreaker) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CircuitBreaker) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CircuitBreaker) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CircuitBreaker.Merge(m, src)
+}
+func (m *CircuitBreaker) XXX_Size() int {
+	return m.Size()
+}
+func (m *CircuitBreaker) XXX_DiscardUnknown() {
+	xxx_messageInfo_CircuitBreaker.DiscardUnknown(m)
+}
 
-func (m *CircuitBreaker) GetPriority() ves_io_schema4.RoutingPriority {
+var xxx_messageInfo_CircuitBreaker proto.InternalMessageInfo
+
+func (m *CircuitBreaker) GetPriority() schema.RoutingPriority {
 	if m != nil {
 		return m.Priority
 	}
-	return ves_io_schema4.DEFAULT
+	return schema.DEFAULT
 }
 
 func (m *CircuitBreaker) GetConnectionLimit() uint32 {
@@ -454,9 +544,33 @@ type Http2ProtocolOptions struct {
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 }
 
-func (m *Http2ProtocolOptions) Reset()                    { *m = Http2ProtocolOptions{} }
-func (*Http2ProtocolOptions) ProtoMessage()               {}
-func (*Http2ProtocolOptions) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *Http2ProtocolOptions) Reset()      { *m = Http2ProtocolOptions{} }
+func (*Http2ProtocolOptions) ProtoMessage() {}
+func (*Http2ProtocolOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{3}
+}
+func (m *Http2ProtocolOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Http2ProtocolOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Http2ProtocolOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Http2ProtocolOptions.Merge(m, src)
+}
+func (m *Http2ProtocolOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *Http2ProtocolOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_Http2ProtocolOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Http2ProtocolOptions proto.InternalMessageInfo
 
 func (m *Http2ProtocolOptions) GetEnabled() bool {
 	if m != nil {
@@ -474,12 +588,12 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Endpoints"
 	// List of references to all endpoint objects that belong to this cluster.
-	Endpoints []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=endpoints" json:"endpoints,omitempty"`
+	Endpoints []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	// health_checks
 	//
 	// x-displayName: "Health Checks"
 	// List of references to healthcheck object for this cluster.
-	HealthChecks []*ves_io_schema4.ObjectRefType `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks" json:"health_checks,omitempty"`
+	HealthChecks []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks,proto3" json:"health_checks,omitempty"`
 	// loadbalancer_algorithm
 	//
 	// x-displayName: "LoadBalancer Algorithm"
@@ -492,7 +606,7 @@ type GlobalSpecType struct {
 	// CircuitBreaker provides a mechanism for watching failures in upstream connections or requests
 	// and if the failures reach a certain threshold, automatically fail subsequent requests which
 	// allows to apply back pressure on downstream quickly.
-	CircuitBreaker *CircuitBreaker `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker" json:"circuit_breaker,omitempty"`
+	CircuitBreaker *CircuitBreaker `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker,proto3" json:"circuit_breaker,omitempty"`
 	// endpoint_subsets
 	//
 	// x-displayName: "Endpoint Subsets"
@@ -573,14 +687,14 @@ type GlobalSpecType struct {
 	//  other: x                       ep1, ep3     Fallback: No subset selector for “other”
 	//  (none)                         ep1, ep3     Fallback: No subset requested
 	//
-	EndpointSubsets []*EndpointSubsetSelectorType `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty"`
+	EndpointSubsets []*EndpointSubsetSelectorType `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets,proto3" json:"endpoint_subsets,omitempty"`
 	// default_subset
 	//
 	// x-displayName: "Default Subset"
 	// x-example: "key:value"
 	// List of key-value pairs that define default subset. This subset can be referred in fallback_policy
 	// which gets used when route specifies no metadata or no subset matching the metadata exists.
-	DefaultSubset map[string]string `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	DefaultSubset map[string]string `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset,proto3" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// fallback_policy
 	//
 	// x-displayName: "Fallback Policy"
@@ -595,7 +709,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "TLS Parameters"
 	// TLS parameters to access upstream endpoints for this cluster
-	TlsParameters *ves_io_schema4.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters" json:"tls_parameters,omitempty"`
+	TlsParameters *schema.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
 	// connection_timeout
 	//
 	// x-displayName: "Connection Timeout"
@@ -618,7 +732,7 @@ type GlobalSpecType struct {
 	// Outlier detection and ejection is the process of dynamically determining whether some number
 	// of hosts in an upstream cluster are performing unlike the others and removing them from the
 	// healthy load balancing set. Outlier detection is a form of passive health checking.
-	OutlierDetection *OutlierDetectionType `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection" json:"outlier_detection,omitempty"`
+	OutlierDetection *OutlierDetectionType `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
 	// endpoint_selection
 	//
 	// x-displayName: "Endpoint Selection"
@@ -638,7 +752,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Http2 Protocol Configuration"
 	// Http2 Protocol options for upstream connections
-	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options" json:"http2_options,omitempty"`
+	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3" json:"http2_options,omitempty"`
 	// Panic threshold
 	//
 	// x-displayName: "Panic threshold"
@@ -653,9 +767,33 @@ type GlobalSpecType struct {
 	PanicThresholdType isGlobalSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{4}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_PanicThresholdType interface {
 	isGlobalSpecType_PanicThresholdType()
@@ -665,10 +803,10 @@ type isGlobalSpecType_PanicThresholdType interface {
 }
 
 type GlobalSpecType_NoPanicThreshold struct {
-	NoPanicThreshold *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,oneof"`
+	NoPanicThreshold *schema.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,proto3,oneof" json:"no_panic_threshold,omitempty"`
 }
 type GlobalSpecType_PanicThreshold struct {
-	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof"`
+	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
 
 func (*GlobalSpecType_NoPanicThreshold) isGlobalSpecType_PanicThresholdType() {}
@@ -681,14 +819,14 @@ func (m *GlobalSpecType) GetPanicThresholdType() isGlobalSpecType_PanicThreshold
 	return nil
 }
 
-func (m *GlobalSpecType) GetEndpoints() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetEndpoints() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Endpoints
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHealthChecks() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetHealthChecks() []*schema.ObjectRefType {
 	if m != nil {
 		return m.HealthChecks
 	}
@@ -730,7 +868,7 @@ func (m *GlobalSpecType) GetFallbackPolicy() SubsetFallbackPolicy {
 	return NO_FALLBACK
 }
 
-func (m *GlobalSpecType) GetTlsParameters() *ves_io_schema4.UpstreamTlsParamsType {
+func (m *GlobalSpecType) GetTlsParameters() *schema.UpstreamTlsParamsType {
 	if m != nil {
 		return m.TlsParameters
 	}
@@ -786,7 +924,7 @@ func (m *GlobalSpecType) GetHttp2Options() *Http2ProtocolOptions {
 	return nil
 }
 
-func (m *GlobalSpecType) GetNoPanicThreshold() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetNoPanicThreshold() *schema.Empty {
 	if x, ok := m.GetPanicThresholdType().(*GlobalSpecType_NoPanicThreshold); ok {
 		return x.NoPanicThreshold
 	}
@@ -800,73 +938,12 @@ func (m *GlobalSpecType) GetPanicThreshold() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_NoPanicThreshold)(nil),
 		(*GlobalSpecType_PanicThreshold)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *GlobalSpecType_NoPanicThreshold:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoPanicThreshold); err != nil {
-			return err
-		}
-	case *GlobalSpecType_PanicThreshold:
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.PanicThresholdType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 18: // panic_threshold_type.no_panic_threshold
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PanicThresholdType = &GlobalSpecType_NoPanicThreshold{msg}
-		return true, err
-	case 19: // panic_threshold_type.panic_threshold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.PanicThresholdType = &GlobalSpecType_PanicThreshold{uint32(x)}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *GlobalSpecType_NoPanicThreshold:
-		s := proto.Size(x.NoPanicThreshold)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_PanicThreshold:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create cluster
@@ -874,28 +951,52 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Create Cluster"
 // Create cluster will create the object in the storage backend for namespace metadata.namespace
 type CreateSpecType struct {
-	Endpoints             []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints" json:"endpoints,omitempty"`
-	HealthChecks          []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks" json:"health_checks,omitempty"`
-	LoadbalancerAlgorithm LoadbalancerAlgorithm                 `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
-	CircuitBreaker        *CircuitBreaker                       `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker" json:"circuit_breaker,omitempty"`
-	EndpointSubsets       []*EndpointSubsetSelectorType         `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty"`
-	DefaultSubset         map[string]string                     `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	FallbackPolicy        SubsetFallbackPolicy                  `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
-	TlsParameters         *ves_io_schema4.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters" json:"tls_parameters,omitempty"`
-	ConnectionTimeout     uint32                                `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
-	HttpIdleTimeout       uint32                                `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
-	OutlierDetection      *OutlierDetectionType                 `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection" json:"outlier_detection,omitempty"`
-	EndpointSelection     EndpointSelectionPolicy               `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	Http2Options          *Http2ProtocolOptions                 `protobuf:"bytes,16,opt,name=http2_options,json=http2Options" json:"http2_options,omitempty"`
+	Endpoints             []*schema.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	HealthChecks          []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks,proto3" json:"health_checks,omitempty"`
+	LoadbalancerAlgorithm LoadbalancerAlgorithm         `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
+	CircuitBreaker        *CircuitBreaker               `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker,proto3" json:"circuit_breaker,omitempty"`
+	EndpointSubsets       []*EndpointSubsetSelectorType `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets,proto3" json:"endpoint_subsets,omitempty"`
+	DefaultSubset         map[string]string             `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset,proto3" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	FallbackPolicy        SubsetFallbackPolicy          `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
+	TlsParameters         *schema.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
+	ConnectionTimeout     uint32                        `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
+	HttpIdleTimeout       uint32                        `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
+	OutlierDetection      *OutlierDetectionType         `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
+	EndpointSelection     EndpointSelectionPolicy       `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
+	Http2Options          *Http2ProtocolOptions         `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3" json:"http2_options,omitempty"`
 	// Types that are valid to be assigned to PanicThresholdType:
 	//	*CreateSpecType_NoPanicThreshold
 	//	*CreateSpecType_PanicThreshold
 	PanicThresholdType isCreateSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{5}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_PanicThresholdType interface {
 	isCreateSpecType_PanicThresholdType()
@@ -905,10 +1006,10 @@ type isCreateSpecType_PanicThresholdType interface {
 }
 
 type CreateSpecType_NoPanicThreshold struct {
-	NoPanicThreshold *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,oneof"`
+	NoPanicThreshold *schema.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,proto3,oneof" json:"no_panic_threshold,omitempty"`
 }
 type CreateSpecType_PanicThreshold struct {
-	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof"`
+	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
 
 func (*CreateSpecType_NoPanicThreshold) isCreateSpecType_PanicThresholdType() {}
@@ -921,14 +1022,14 @@ func (m *CreateSpecType) GetPanicThresholdType() isCreateSpecType_PanicThreshold
 	return nil
 }
 
-func (m *CreateSpecType) GetEndpoints() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetEndpoints() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Endpoints
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHealthChecks() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetHealthChecks() []*schema.ObjectRefType {
 	if m != nil {
 		return m.HealthChecks
 	}
@@ -970,7 +1071,7 @@ func (m *CreateSpecType) GetFallbackPolicy() SubsetFallbackPolicy {
 	return NO_FALLBACK
 }
 
-func (m *CreateSpecType) GetTlsParameters() *ves_io_schema4.UpstreamTlsParamsType {
+func (m *CreateSpecType) GetTlsParameters() *schema.UpstreamTlsParamsType {
 	if m != nil {
 		return m.TlsParameters
 	}
@@ -1012,7 +1113,7 @@ func (m *CreateSpecType) GetHttp2Options() *Http2ProtocolOptions {
 	return nil
 }
 
-func (m *CreateSpecType) GetNoPanicThreshold() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetNoPanicThreshold() *schema.Empty {
 	if x, ok := m.GetPanicThresholdType().(*CreateSpecType_NoPanicThreshold); ok {
 		return x.NoPanicThreshold
 	}
@@ -1026,73 +1127,12 @@ func (m *CreateSpecType) GetPanicThreshold() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_NoPanicThreshold)(nil),
 		(*CreateSpecType_PanicThreshold)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *CreateSpecType_NoPanicThreshold:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoPanicThreshold); err != nil {
-			return err
-		}
-	case *CreateSpecType_PanicThreshold:
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.PanicThresholdType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 18: // panic_threshold_type.no_panic_threshold
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PanicThresholdType = &CreateSpecType_NoPanicThreshold{msg}
-		return true, err
-	case 19: // panic_threshold_type.panic_threshold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.PanicThresholdType = &CreateSpecType_PanicThreshold{uint32(x)}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *CreateSpecType_NoPanicThreshold:
-		s := proto.Size(x.NoPanicThreshold)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_PanicThreshold:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace cluster
@@ -1101,28 +1141,52 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 // Replacing an cluster object will update the object by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write
 type ReplaceSpecType struct {
-	Endpoints             []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints" json:"endpoints,omitempty"`
-	HealthChecks          []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks" json:"health_checks,omitempty"`
-	LoadbalancerAlgorithm LoadbalancerAlgorithm                 `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
-	CircuitBreaker        *CircuitBreaker                       `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker" json:"circuit_breaker,omitempty"`
-	EndpointSubsets       []*EndpointSubsetSelectorType         `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty"`
-	DefaultSubset         map[string]string                     `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	FallbackPolicy        SubsetFallbackPolicy                  `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
-	TlsParameters         *ves_io_schema4.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters" json:"tls_parameters,omitempty"`
-	ConnectionTimeout     uint32                                `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
-	HttpIdleTimeout       uint32                                `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
-	OutlierDetection      *OutlierDetectionType                 `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection" json:"outlier_detection,omitempty"`
-	EndpointSelection     EndpointSelectionPolicy               `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	Http2Options          *Http2ProtocolOptions                 `protobuf:"bytes,16,opt,name=http2_options,json=http2Options" json:"http2_options,omitempty"`
+	Endpoints             []*schema.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	HealthChecks          []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks,proto3" json:"health_checks,omitempty"`
+	LoadbalancerAlgorithm LoadbalancerAlgorithm         `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
+	CircuitBreaker        *CircuitBreaker               `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker,proto3" json:"circuit_breaker,omitempty"`
+	EndpointSubsets       []*EndpointSubsetSelectorType `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets,proto3" json:"endpoint_subsets,omitempty"`
+	DefaultSubset         map[string]string             `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset,proto3" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	FallbackPolicy        SubsetFallbackPolicy          `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
+	TlsParameters         *schema.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
+	ConnectionTimeout     uint32                        `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
+	HttpIdleTimeout       uint32                        `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
+	OutlierDetection      *OutlierDetectionType         `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
+	EndpointSelection     EndpointSelectionPolicy       `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
+	Http2Options          *Http2ProtocolOptions         `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3" json:"http2_options,omitempty"`
 	// Types that are valid to be assigned to PanicThresholdType:
 	//	*ReplaceSpecType_NoPanicThreshold
 	//	*ReplaceSpecType_PanicThreshold
 	PanicThresholdType isReplaceSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{6}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_PanicThresholdType interface {
 	isReplaceSpecType_PanicThresholdType()
@@ -1132,10 +1196,10 @@ type isReplaceSpecType_PanicThresholdType interface {
 }
 
 type ReplaceSpecType_NoPanicThreshold struct {
-	NoPanicThreshold *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,oneof"`
+	NoPanicThreshold *schema.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,proto3,oneof" json:"no_panic_threshold,omitempty"`
 }
 type ReplaceSpecType_PanicThreshold struct {
-	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof"`
+	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
 
 func (*ReplaceSpecType_NoPanicThreshold) isReplaceSpecType_PanicThresholdType() {}
@@ -1148,14 +1212,14 @@ func (m *ReplaceSpecType) GetPanicThresholdType() isReplaceSpecType_PanicThresho
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEndpoints() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetEndpoints() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Endpoints
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHealthChecks() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetHealthChecks() []*schema.ObjectRefType {
 	if m != nil {
 		return m.HealthChecks
 	}
@@ -1197,7 +1261,7 @@ func (m *ReplaceSpecType) GetFallbackPolicy() SubsetFallbackPolicy {
 	return NO_FALLBACK
 }
 
-func (m *ReplaceSpecType) GetTlsParameters() *ves_io_schema4.UpstreamTlsParamsType {
+func (m *ReplaceSpecType) GetTlsParameters() *schema.UpstreamTlsParamsType {
 	if m != nil {
 		return m.TlsParameters
 	}
@@ -1239,7 +1303,7 @@ func (m *ReplaceSpecType) GetHttp2Options() *Http2ProtocolOptions {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNoPanicThreshold() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetNoPanicThreshold() *schema.Empty {
 	if x, ok := m.GetPanicThresholdType().(*ReplaceSpecType_NoPanicThreshold); ok {
 		return x.NoPanicThreshold
 	}
@@ -1253,73 +1317,12 @@ func (m *ReplaceSpecType) GetPanicThreshold() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_NoPanicThreshold)(nil),
 		(*ReplaceSpecType_PanicThreshold)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *ReplaceSpecType_NoPanicThreshold:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoPanicThreshold); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_PanicThreshold:
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.PanicThresholdType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 18: // panic_threshold_type.no_panic_threshold
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PanicThresholdType = &ReplaceSpecType_NoPanicThreshold{msg}
-		return true, err
-	case 19: // panic_threshold_type.panic_threshold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.PanicThresholdType = &ReplaceSpecType_PanicThreshold{uint32(x)}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *ReplaceSpecType_NoPanicThreshold:
-		s := proto.Size(x.NoPanicThreshold)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_PanicThreshold:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get cluster
@@ -1327,28 +1330,52 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 // x-displayName: "Get Cluster"
 // Get cluster will get the object from the storage backend for namespace metadata.namespace
 type GetSpecType struct {
-	Endpoints             []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints" json:"endpoints,omitempty"`
-	HealthChecks          []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks" json:"health_checks,omitempty"`
-	LoadbalancerAlgorithm LoadbalancerAlgorithm                 `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
-	CircuitBreaker        *CircuitBreaker                       `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker" json:"circuit_breaker,omitempty"`
-	EndpointSubsets       []*EndpointSubsetSelectorType         `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty"`
-	DefaultSubset         map[string]string                     `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	FallbackPolicy        SubsetFallbackPolicy                  `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
-	TlsParameters         *ves_io_schema4.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters" json:"tls_parameters,omitempty"`
-	ConnectionTimeout     uint32                                `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
-	HttpIdleTimeout       uint32                                `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
-	OutlierDetection      *OutlierDetectionType                 `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection" json:"outlier_detection,omitempty"`
-	EndpointSelection     EndpointSelectionPolicy               `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	Http2Options          *Http2ProtocolOptions                 `protobuf:"bytes,16,opt,name=http2_options,json=http2Options" json:"http2_options,omitempty"`
+	Endpoints             []*schema.ObjectRefType       `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	HealthChecks          []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=health_checks,json=healthChecks,proto3" json:"health_checks,omitempty"`
+	LoadbalancerAlgorithm LoadbalancerAlgorithm         `protobuf:"varint,3,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
+	CircuitBreaker        *CircuitBreaker               `protobuf:"bytes,4,opt,name=circuit_breaker,json=circuitBreaker,proto3" json:"circuit_breaker,omitempty"`
+	EndpointSubsets       []*EndpointSubsetSelectorType `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets,proto3" json:"endpoint_subsets,omitempty"`
+	DefaultSubset         map[string]string             `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset,proto3" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	FallbackPolicy        SubsetFallbackPolicy          `protobuf:"varint,7,opt,name=fallback_policy,json=fallbackPolicy,proto3,enum=ves.io.schema.cluster.SubsetFallbackPolicy" json:"fallback_policy,omitempty"`
+	TlsParameters         *schema.UpstreamTlsParamsType `protobuf:"bytes,8,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
+	ConnectionTimeout     uint32                        `protobuf:"varint,9,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
+	HttpIdleTimeout       uint32                        `protobuf:"varint,10,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
+	OutlierDetection      *OutlierDetectionType         `protobuf:"bytes,12,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
+	EndpointSelection     EndpointSelectionPolicy       `protobuf:"varint,13,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
+	Http2Options          *Http2ProtocolOptions         `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3" json:"http2_options,omitempty"`
 	// Types that are valid to be assigned to PanicThresholdType:
 	//	*GetSpecType_NoPanicThreshold
 	//	*GetSpecType_PanicThreshold
 	PanicThresholdType isGetSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{7}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_PanicThresholdType interface {
 	isGetSpecType_PanicThresholdType()
@@ -1358,10 +1385,10 @@ type isGetSpecType_PanicThresholdType interface {
 }
 
 type GetSpecType_NoPanicThreshold struct {
-	NoPanicThreshold *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,oneof"`
+	NoPanicThreshold *schema.Empty `protobuf:"bytes,18,opt,name=no_panic_threshold,json=noPanicThreshold,proto3,oneof" json:"no_panic_threshold,omitempty"`
 }
 type GetSpecType_PanicThreshold struct {
-	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof"`
+	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
 
 func (*GetSpecType_NoPanicThreshold) isGetSpecType_PanicThresholdType() {}
@@ -1374,14 +1401,14 @@ func (m *GetSpecType) GetPanicThresholdType() isGetSpecType_PanicThresholdType {
 	return nil
 }
 
-func (m *GetSpecType) GetEndpoints() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetEndpoints() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Endpoints
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHealthChecks() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetHealthChecks() []*schema.ObjectRefType {
 	if m != nil {
 		return m.HealthChecks
 	}
@@ -1423,7 +1450,7 @@ func (m *GetSpecType) GetFallbackPolicy() SubsetFallbackPolicy {
 	return NO_FALLBACK
 }
 
-func (m *GetSpecType) GetTlsParameters() *ves_io_schema4.UpstreamTlsParamsType {
+func (m *GetSpecType) GetTlsParameters() *schema.UpstreamTlsParamsType {
 	if m != nil {
 		return m.TlsParameters
 	}
@@ -1465,7 +1492,7 @@ func (m *GetSpecType) GetHttp2Options() *Http2ProtocolOptions {
 	return nil
 }
 
-func (m *GetSpecType) GetNoPanicThreshold() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetNoPanicThreshold() *schema.Empty {
 	if x, ok := m.GetPanicThresholdType().(*GetSpecType_NoPanicThreshold); ok {
 		return x.NoPanicThreshold
 	}
@@ -1479,92 +1506,15 @@ func (m *GetSpecType) GetPanicThreshold() uint32 {
 	return 0
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_NoPanicThreshold)(nil),
 		(*GetSpecType_PanicThreshold)(nil),
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *GetSpecType_NoPanicThreshold:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoPanicThreshold); err != nil {
-			return err
-		}
-	case *GetSpecType_PanicThreshold:
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.PanicThresholdType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 18: // panic_threshold_type.no_panic_threshold
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PanicThresholdType = &GetSpecType_NoPanicThreshold{msg}
-		return true, err
-	case 19: // panic_threshold_type.panic_threshold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.PanicThresholdType = &GetSpecType_PanicThreshold{uint32(x)}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *GetSpecType_NoPanicThreshold:
-		s := proto.Size(x.NoPanicThreshold)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_PanicThreshold:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
-	proto.RegisterType((*OutlierDetectionType)(nil), "ves.io.schema.cluster.OutlierDetectionType")
-	golang_proto.RegisterType((*OutlierDetectionType)(nil), "ves.io.schema.cluster.OutlierDetectionType")
-	proto.RegisterType((*EndpointSubsetSelectorType)(nil), "ves.io.schema.cluster.EndpointSubsetSelectorType")
-	golang_proto.RegisterType((*EndpointSubsetSelectorType)(nil), "ves.io.schema.cluster.EndpointSubsetSelectorType")
-	proto.RegisterType((*CircuitBreaker)(nil), "ves.io.schema.cluster.CircuitBreaker")
-	golang_proto.RegisterType((*CircuitBreaker)(nil), "ves.io.schema.cluster.CircuitBreaker")
-	proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
-	golang_proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
-	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
-	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
-	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
-	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
-	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.cluster.ReplaceSpecType")
-	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.cluster.ReplaceSpecType")
-	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cluster.GetSpecType")
-	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cluster.GetSpecType")
 	proto.RegisterEnum("ves.io.schema.cluster.LoadbalancerAlgorithm", LoadbalancerAlgorithm_name, LoadbalancerAlgorithm_value)
 	golang_proto.RegisterEnum("ves.io.schema.cluster.LoadbalancerAlgorithm", LoadbalancerAlgorithm_name, LoadbalancerAlgorithm_value)
 	proto.RegisterEnum("ves.io.schema.cluster.DnsDiscoveryType", DnsDiscoveryType_name, DnsDiscoveryType_value)
@@ -1575,7 +1525,165 @@ func init() {
 	golang_proto.RegisterEnum("ves.io.schema.cluster.SubsetFallbackPolicy", SubsetFallbackPolicy_name, SubsetFallbackPolicy_value)
 	proto.RegisterEnum("ves.io.schema.cluster.EndpointSelectionPolicy", EndpointSelectionPolicy_name, EndpointSelectionPolicy_value)
 	golang_proto.RegisterEnum("ves.io.schema.cluster.EndpointSelectionPolicy", EndpointSelectionPolicy_name, EndpointSelectionPolicy_value)
+	proto.RegisterType((*OutlierDetectionType)(nil), "ves.io.schema.cluster.OutlierDetectionType")
+	golang_proto.RegisterType((*OutlierDetectionType)(nil), "ves.io.schema.cluster.OutlierDetectionType")
+	proto.RegisterType((*EndpointSubsetSelectorType)(nil), "ves.io.schema.cluster.EndpointSubsetSelectorType")
+	golang_proto.RegisterType((*EndpointSubsetSelectorType)(nil), "ves.io.schema.cluster.EndpointSubsetSelectorType")
+	proto.RegisterType((*CircuitBreaker)(nil), "ves.io.schema.cluster.CircuitBreaker")
+	golang_proto.RegisterType((*CircuitBreaker)(nil), "ves.io.schema.cluster.CircuitBreaker")
+	proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
+	golang_proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
+	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
+	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GlobalSpecType.DefaultSubsetEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GlobalSpecType.DefaultSubsetEntry")
+	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
+	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cluster.CreateSpecType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.CreateSpecType.DefaultSubsetEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.CreateSpecType.DefaultSubsetEntry")
+	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.cluster.ReplaceSpecType")
+	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.cluster.ReplaceSpecType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.ReplaceSpecType.DefaultSubsetEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.ReplaceSpecType.DefaultSubsetEntry")
+	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cluster.GetSpecType")
+	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cluster.GetSpecType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GetSpecType.DefaultSubsetEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GetSpecType.DefaultSubsetEntry")
 }
+
+func init() { proto.RegisterFile("ves.io/schema/cluster/types.proto", fileDescriptor_f4ccbbce2db2b210) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/cluster/types.proto", fileDescriptor_f4ccbbce2db2b210)
+}
+
+var fileDescriptor_f4ccbbce2db2b210 = []byte{
+	// 1972 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcf, 0x6f, 0x1b, 0xc7,
+	0x15, 0xe6, 0x50, 0x94, 0x4d, 0x8d, 0x44, 0x72, 0x35, 0x96, 0xec, 0xb5, 0x62, 0x10, 0x8c, 0xe0,
+	0xa2, 0xb6, 0xb2, 0xa2, 0x4c, 0x4a, 0x72, 0x64, 0x01, 0x75, 0xc2, 0x15, 0xa9, 0x1f, 0x36, 0x43,
+	0xd2, 0x4b, 0x2a, 0x68, 0xd2, 0xd4, 0xdb, 0xe5, 0x72, 0x48, 0x6d, 0xb5, 0xdc, 0xdd, 0xee, 0x0e,
+	0x15, 0xe9, 0x10, 0xc0, 0xc8, 0xad, 0x3d, 0xb5, 0x3d, 0xf4, 0x90, 0xbf, 0xa0, 0xc8, 0xb1, 0xc7,
+	0x2a, 0x28, 0x84, 0xa0, 0x2d, 0x82, 0x5e, 0xea, 0x5b, 0x8d, 0x9c, 0x62, 0xfa, 0xd2, 0x5e, 0x0a,
+	0x23, 0xa7, 0xa2, 0xa7, 0x62, 0x66, 0x77, 0x25, 0x92, 0xe2, 0xa6, 0x75, 0xa5, 0x1c, 0x02, 0xe8,
+	0xc6, 0xdd, 0xf7, 0xbe, 0xef, 0xed, 0xcc, 0x7b, 0xf3, 0x7d, 0x4b, 0x12, 0xbe, 0xbe, 0x87, 0x9d,
+	0xb4, 0x66, 0x2e, 0x38, 0xea, 0x0e, 0x6e, 0x2b, 0x0b, 0xaa, 0xde, 0x71, 0x08, 0xb6, 0x17, 0xc8,
+	0x81, 0x85, 0x9d, 0xb4, 0x65, 0x9b, 0xc4, 0x44, 0xd3, 0x6e, 0x4a, 0xda, 0x4d, 0x49, 0x7b, 0x29,
+	0x33, 0xf3, 0x2d, 0x8d, 0xec, 0x74, 0xea, 0x69, 0xd5, 0x6c, 0x2f, 0xb4, 0xcc, 0x96, 0xb9, 0xc0,
+	0xb2, 0xeb, 0x9d, 0x26, 0xbb, 0x62, 0x17, 0xec, 0x93, 0xcb, 0x32, 0xf3, 0x5a, 0x7f, 0x21, 0xd3,
+	0x22, 0x9a, 0x69, 0x78, 0x25, 0x66, 0xae, 0xf7, 0x07, 0x7b, 0xaa, 0xcf, 0xdc, 0xe8, 0x0f, 0xed,
+	0x29, 0xba, 0xd6, 0x50, 0x08, 0xf6, 0xa2, 0xa9, 0x81, 0xa8, 0x86, 0x3f, 0x94, 0xfb, 0xa8, 0x67,
+	0xbf, 0x0c, 0xc3, 0xa9, 0x72, 0x87, 0xe8, 0x1a, 0xb6, 0xf3, 0x98, 0x60, 0x95, 0xc6, 0x6a, 0x07,
+	0x16, 0x46, 0x6f, 0xc2, 0x84, 0x6a, 0x1a, 0x0e, 0x56, 0x3b, 0x44, 0xdb, 0xc3, 0xf2, 0xf2, 0xfe,
+	0x3e, 0x0f, 0x52, 0xe0, 0x56, 0x4c, 0x8c, 0xff, 0xeb, 0x10, 0x84, 0x7e, 0xff, 0x8f, 0xa3, 0x91,
+	0xd1, 0xb9, 0x11, 0xfe, 0x49, 0x54, 0x8a, 0xf7, 0xa4, 0x2d, 0xef, 0xef, 0xa3, 0x37, 0x60, 0x54,
+	0x33, 0x08, 0xb6, 0xf7, 0x14, 0x9d, 0x0f, 0x33, 0x44, 0xc2, 0x47, 0x5c, 0x9a, 0x8b, 0xf0, 0x47,
+	0x7f, 0xbd, 0x29, 0x1d, 0x27, 0xa0, 0x1f, 0x40, 0x54, 0x57, 0x1c, 0x2c, 0xe3, 0x9f, 0xba, 0xa5,
+	0x65, 0xa2, 0xb5, 0x31, 0x3f, 0x32, 0x04, 0xf6, 0xcf, 0xb6, 0xc4, 0xd1, 0xd4, 0x82, 0x97, 0x59,
+	0xd3, 0xda, 0x18, 0xbd, 0x05, 0xa7, 0xda, 0xca, 0xfe, 0x09, 0xda, 0xc2, 0xb6, 0x8a, 0x0d, 0xc2,
+	0x47, 0x18, 0x41, 0xcc, 0x27, 0x88, 0xcc, 0x85, 0xf9, 0x86, 0x84, 0xda, 0xca, 0xbe, 0x8f, 0xae,
+	0xb8, 0x89, 0xa8, 0x04, 0x5f, 0xeb, 0x5d, 0x65, 0x4b, 0x21, 0xf8, 0x43, 0xe5, 0x40, 0x6e, 0x2a,
+	0x9a, 0xde, 0xb1, 0x31, 0x3f, 0x3a, 0x74, 0xc5, 0xd7, 0x7b, 0x20, 0x1b, 0x2e, 0x62, 0xdd, 0x05,
+	0xac, 0x4e, 0x7c, 0x7d, 0x7f, 0x2c, 0x23, 0x64, 0x85, 0x45, 0x61, 0x49, 0x58, 0x9e, 0x6d, 0xc0,
+	0x99, 0x82, 0xd1, 0xb0, 0x4c, 0xcd, 0x20, 0xd5, 0x4e, 0xdd, 0xc1, 0xa4, 0x8a, 0x75, 0xac, 0x12,
+	0xd3, 0x66, 0x3b, 0x3c, 0x0b, 0x23, 0xbb, 0xf8, 0xc0, 0xe1, 0x41, 0x6a, 0xe4, 0xd6, 0x58, 0x4f,
+	0x91, 0x5f, 0x83, 0x30, 0xc7, 0x49, 0x2c, 0xb6, 0x3a, 0xfb, 0xf9, 0x21, 0x48, 0xc2, 0x1b, 0xf0,
+	0x5a, 0x51, 0x73, 0x48, 0xca, 0x6c, 0xa6, 0xe8, 0xdd, 0x54, 0xd3, 0xb4, 0x53, 0x2e, 0x21, 0x02,
+	0x99, 0xd9, 0xbf, 0x85, 0x61, 0x7c, 0x4d, 0xb3, 0xd5, 0x8e, 0x46, 0x44, 0x1b, 0x2b, 0xbb, 0xd8,
+	0x46, 0x6f, 0xc3, 0xa8, 0x65, 0x6b, 0xa6, 0xad, 0x91, 0x03, 0xd6, 0xb5, 0x78, 0x36, 0x99, 0xee,
+	0x1f, 0x53, 0xc9, 0xec, 0x10, 0xcd, 0x68, 0x55, 0xbc, 0x2c, 0x31, 0x42, 0xcb, 0x4b, 0xc7, 0x28,
+	0x24, 0x42, 0x4e, 0x35, 0x0d, 0xc3, 0xdb, 0x57, 0x5d, 0x6b, 0x6b, 0xc4, 0xeb, 0xe6, 0xb5, 0x2f,
+	0x0f, 0x41, 0x24, 0x73, 0x27, 0xbb, 0xd4, 0xdb, 0x9e, 0x27, 0x4f, 0xc2, 0x52, 0xe2, 0x04, 0x50,
+	0xa4, 0xf9, 0x94, 0xc3, 0xc2, 0x46, 0x43, 0x33, 0x5a, 0xb2, 0x8d, 0x7f, 0xd6, 0xc1, 0x0e, 0x71,
+	0xbc, 0xd6, 0x06, 0x73, 0x78, 0x00, 0xc9, 0xcb, 0x47, 0x19, 0x78, 0xd9, 0xc6, 0xc4, 0xd6, 0xb0,
+	0xe3, 0x35, 0x35, 0x10, 0xea, 0xe7, 0xa1, 0x55, 0x38, 0x41, 0x87, 0xe2, 0xb8, 0xe4, 0xe8, 0x37,
+	0xe3, 0xc6, 0xdb, 0xca, 0xbe, 0x5f, 0x6e, 0xa0, 0x7f, 0x77, 0xe0, 0xd4, 0x26, 0x21, 0x56, 0xb6,
+	0x42, 0x8f, 0x8a, 0x6a, 0xea, 0x65, 0xf7, 0xe8, 0x20, 0x1e, 0x5e, 0xc6, 0x86, 0x52, 0xd7, 0x71,
+	0x83, 0xed, 0x6e, 0x54, 0xf2, 0x2f, 0x67, 0x7f, 0x17, 0x87, 0xf1, 0x0d, 0xdd, 0xac, 0x2b, 0x7a,
+	0xd5, 0xc2, 0x2a, 0x6b, 0xf3, 0x23, 0x38, 0x86, 0xbd, 0x21, 0x70, 0x7b, 0x3d, 0x9e, 0xbd, 0x31,
+	0xd0, 0x8c, 0x72, 0x9d, 0x8e, 0xa5, 0x84, 0x9b, 0x14, 0x20, 0x4e, 0x7f, 0xfa, 0x51, 0xd4, 0x47,
+	0x1c, 0x0f, 0x44, 0x4a, 0x3a, 0x61, 0x41, 0x3f, 0x82, 0xb1, 0x1d, 0xac, 0xe8, 0x64, 0x47, 0x56,
+	0x77, 0xb0, 0xba, 0xeb, 0xf0, 0xe1, 0xff, 0x81, 0x96, 0xff, 0xf4, 0xa3, 0x71, 0x17, 0xc5, 0x40,
+	0xc7, 0xcc, 0x11, 0x69, 0xc2, 0xbd, 0xbd, 0xc6, 0xb8, 0x90, 0x06, 0xaf, 0xea, 0xa6, 0xd2, 0xa8,
+	0x2b, 0xba, 0x62, 0xa8, 0xd8, 0x96, 0x15, 0xbd, 0x45, 0x47, 0x62, 0xa7, 0xcd, 0x7a, 0x17, 0xcf,
+	0x0a, 0xe9, 0xa1, 0x82, 0x97, 0x2e, 0xf6, 0x80, 0x72, 0x3e, 0xc6, 0x9b, 0xab, 0x69, 0x7d, 0x58,
+	0x10, 0xd5, 0x60, 0x42, 0x75, 0x07, 0x57, 0xae, 0xbb, 0x93, 0xcb, 0x9a, 0x3c, 0x9e, 0xfd, 0x5e,
+	0x40, 0x8d, 0xfe, 0x31, 0x17, 0x23, 0x47, 0x87, 0x00, 0x48, 0x71, 0xb5, 0x7f, 0xf8, 0x09, 0xe4,
+	0xfc, 0xad, 0x92, 0x1d, 0x76, 0x4a, 0xe8, 0x0c, 0xd0, 0x0d, 0xca, 0x04, 0xd0, 0x06, 0x1f, 0x52,
+	0xf1, 0x2a, 0x2d, 0xf1, 0xf4, 0x10, 0x80, 0xbe, 0xe3, 0x99, 0x92, 0x12, 0xb8, 0x0f, 0xe3, 0xa0,
+	0x8f, 0x01, 0x8c, 0x37, 0x70, 0x53, 0xe9, 0xe8, 0x7e, 0x55, 0xfe, 0x12, 0x2b, 0xba, 0x12, 0x50,
+	0xb4, 0x7f, 0x4c, 0xd2, 0x79, 0x17, 0xeb, 0xd2, 0x15, 0x0c, 0x62, 0x1f, 0x88, 0xaf, 0xd3, 0xda,
+	0x9f, 0x7c, 0x06, 0x22, 0x30, 0x1c, 0x02, 0xac, 0xf6, 0x27, 0xb4, 0x76, 0xf7, 0xab, 0x3f, 0x8d,
+	0x5c, 0xfa, 0xc5, 0x67, 0x20, 0x1c, 0x0d, 0x49, 0xb1, 0x46, 0x2f, 0x0c, 0x3d, 0x86, 0x89, 0xa6,
+	0xa2, 0xeb, 0x75, 0x45, 0xdd, 0x95, 0x2d, 0x53, 0xd7, 0xd4, 0x03, 0xfe, 0x32, 0x6b, 0xda, 0x1b,
+	0x01, 0x0f, 0xe1, 0xe2, 0xd6, 0x3d, 0x4c, 0x85, 0x41, 0xc4, 0xe8, 0x91, 0xb7, 0x5e, 0x29, 0xde,
+	0xec, 0x8b, 0xa0, 0x47, 0x30, 0x4e, 0x74, 0x47, 0xb6, 0x14, 0x5b, 0x69, 0x63, 0x82, 0x6d, 0x87,
+	0x8f, 0xb2, 0x7e, 0xdd, 0x1c, 0xa0, 0xdf, 0xb6, 0x1c, 0x62, 0x63, 0xa5, 0x5d, 0xd3, 0x9d, 0x0a,
+	0xcd, 0x75, 0xd8, 0x5e, 0x46, 0xe8, 0x3e, 0x4a, 0x31, 0xe2, 0xdd, 0x64, 0x04, 0x48, 0x84, 0xa8,
+	0x47, 0x68, 0xa8, 0xfc, 0x9b, 0x1d, 0xc2, 0x8f, 0xb1, 0x33, 0x7b, 0xe5, 0xa8, 0x67, 0xe3, 0x7d,
+	0xf3, 0x98, 0x3c, 0x49, 0xaf, 0xb9, 0xd9, 0xe8, 0x2d, 0x38, 0xb9, 0x43, 0x88, 0x25, 0x6b, 0x0d,
+	0x1d, 0x1f, 0x53, 0xc0, 0x60, 0x8a, 0x04, 0xcd, 0xde, 0x6a, 0xe8, 0xd8, 0x27, 0x78, 0x0c, 0x27,
+	0x4d, 0xd7, 0x04, 0xe5, 0x86, 0xef, 0x82, 0xfc, 0x04, 0x5b, 0x5a, 0xd0, 0xce, 0x0d, 0x33, 0x4d,
+	0x6f, 0x20, 0x39, 0x73, 0x20, 0x86, 0x54, 0x88, 0x4e, 0x46, 0x92, 0x8d, 0x17, 0x2d, 0x10, 0x63,
+	0xad, 0x49, 0xff, 0xb7, 0xa1, 0xf4, 0xf3, 0xbd, 0xee, 0xb8, 0x27, 0x6a, 0x12, 0x0f, 0x86, 0xd1,
+	0xfb, 0x70, 0xb2, 0x61, 0x38, 0xb2, 0x6e, 0x9a, 0xbb, 0x1d, 0x4b, 0x6e, 0x2a, 0x6d, 0x4d, 0x3f,
+	0xe0, 0xe3, 0xac, 0xc6, 0xcd, 0x80, 0x1a, 0x79, 0xc3, 0x29, 0xb2, 0x74, 0xf6, 0xf4, 0x27, 0x7d,
+	0x4f, 0x34, 0xfc, 0xc0, 0x3a, 0xa3, 0x41, 0x32, 0x44, 0x94, 0xbb, 0xa1, 0x39, 0xaa, 0xb9, 0x87,
+	0xed, 0x03, 0x99, 0xbe, 0x83, 0xf0, 0x09, 0x46, 0xfe, 0xfd, 0x60, 0xf2, 0xbc, 0x9f, 0x3f, 0xc0,
+	0xcf, 0x35, 0x06, 0x62, 0xe8, 0x31, 0x8c, 0xd1, 0xa6, 0x64, 0xfd, 0xd7, 0x13, 0x9e, 0xfb, 0xc6,
+	0xdd, 0x1f, 0x26, 0xcb, 0xe2, 0x04, 0xe5, 0x7f, 0xe9, 0xd7, 0x98, 0x60, 0x7c, 0xbe, 0x64, 0x3f,
+	0x80, 0xc8, 0x30, 0x65, 0x4b, 0x31, 0x34, 0x55, 0x26, 0x3b, 0x36, 0x76, 0x76, 0x4c, 0xbd, 0xc1,
+	0x23, 0x56, 0x64, 0x6a, 0xa0, 0x48, 0xa1, 0x6d, 0x51, 0x47, 0xa4, 0x6c, 0x9b, 0x21, 0x89, 0x33,
+	0xcc, 0x0a, 0x85, 0xd5, 0x7c, 0x14, 0x5a, 0x81, 0x89, 0x41, 0xa2, 0x2b, 0xee, 0x0b, 0x07, 0x85,
+	0x1c, 0xbf, 0x70, 0x6c, 0x86, 0xa4, 0xb8, 0xd5, 0x87, 0x9c, 0x79, 0x1b, 0xa2, 0xd3, 0xe7, 0x1c,
+	0x71, 0x70, 0x64, 0x17, 0xbb, 0x46, 0x3d, 0x26, 0xd1, 0x8f, 0x68, 0x0a, 0x8e, 0xee, 0x29, 0x7a,
+	0x07, 0x33, 0xcb, 0x1d, 0x93, 0xdc, 0x8b, 0xd5, 0xf0, 0x0a, 0x58, 0xfd, 0x0d, 0xf8, 0xfc, 0x10,
+	0xfc, 0x0a, 0xc0, 0x24, 0xbc, 0x5e, 0xb6, 0xb5, 0x96, 0x66, 0xa4, 0xaa, 0xd8, 0xde, 0xc3, 0xb6,
+	0x73, 0xcb, 0x9f, 0x17, 0xe7, 0x36, 0x02, 0x19, 0xb8, 0x0a, 0x53, 0x5e, 0xbc, 0x62, 0x9a, 0xfa,
+	0x2d, 0x6f, 0xdf, 0x6e, 0xa7, 0x4e, 0x4e, 0x5e, 0x0a, 0x5d, 0x5d, 0x14, 0xb2, 0x42, 0x66, 0x51,
+	0x58, 0x11, 0xee, 0x09, 0x99, 0x3b, 0x42, 0x66, 0x49, 0xc8, 0x2c, 0x0b, 0x99, 0xbb, 0x90, 0x87,
+	0x9c, 0x27, 0xb4, 0x29, 0x4f, 0x53, 0x1d, 0x14, 0x59, 0x12, 0x32, 0x59, 0x78, 0x1d, 0x72, 0x7e,
+	0x99, 0x94, 0x2f, 0x7c, 0xa3, 0xcb, 0xc2, 0x5d, 0xe1, 0x4d, 0x71, 0x1e, 0x4e, 0x0d, 0x6c, 0x0a,
+	0x9b, 0x11, 0x34, 0x7d, 0x74, 0x08, 0xd0, 0x17, 0xae, 0x88, 0x4e, 0x76, 0x0f, 0xc1, 0x68, 0x66,
+	0x45, 0xc8, 0xdc, 0x7b, 0x10, 0x89, 0x8e, 0x73, 0x13, 0x0f, 0x22, 0xd1, 0x49, 0x0e, 0xcd, 0xfe,
+	0x11, 0xc2, 0xf8, 0x9a, 0x8d, 0x15, 0x82, 0x8f, 0x4d, 0x73, 0xe3, 0x55, 0x4d, 0x73, 0xbc, 0xc7,
+	0x34, 0x7b, 0xad, 0xf2, 0xd1, 0xff, 0x63, 0x95, 0xf1, 0x7e, 0xab, 0x1c, 0x30, 0x48, 0xf5, 0x3c,
+	0x0d, 0x32, 0xc8, 0x1a, 0x4b, 0x67, 0xb3, 0xc6, 0x53, 0xa6, 0xf8, 0xc1, 0x39, 0x9a, 0xe2, 0x69,
+	0xf3, 0x93, 0x5f, 0xd1, 0xfb, 0xfa, 0xbb, 0x3d, 0xc4, 0xfb, 0x06, 0x8d, 0xad, 0x76, 0x1e, 0xc6,
+	0x76, 0xca, 0xce, 0x1e, 0x9e, 0xc5, 0xce, 0x06, 0x8d, 0x6c, 0x3e, 0xd8, 0xc8, 0x86, 0x79, 0xd6,
+	0x5c, 0xa0, 0x67, 0x9d, 0xb6, 0xa7, 0x1f, 0x9e, 0x8f, 0x3d, 0x0d, 0x31, 0xa6, 0x1f, 0x9f, 0x9f,
+	0x31, 0x0d, 0xb3, 0xa4, 0xca, 0xd9, 0x55, 0x7d, 0x40, 0xc7, 0xf3, 0xaf, 0xaa, 0xe3, 0x43, 0x15,
+	0xfc, 0x76, 0x80, 0x82, 0x7f, 0x2b, 0x92, 0x9d, 0xfe, 0xcb, 0xfd, 0x81, 0xef, 0x04, 0x5f, 0xdf,
+	0x9f, 0x71, 0xbf, 0x64, 0xac, 0x50, 0xf9, 0x65, 0xe2, 0xbb, 0x24, 0x30, 0x19, 0x15, 0x32, 0x59,
+	0xf1, 0x4e, 0x80, 0x92, 0xf2, 0x1f, 0xff, 0x1b, 0x0c, 0x8d, 0x78, 0x32, 0xfa, 0x67, 0x08, 0x13,
+	0x12, 0xb6, 0x74, 0x45, 0xbd, 0xd0, 0xd1, 0xef, 0xa8, 0x8e, 0xfe, 0x24, 0x40, 0x47, 0xef, 0x05,
+	0x70, 0x0f, 0xb4, 0xfb, 0x42, 0x48, 0x2f, 0x84, 0xf4, 0x42, 0x48, 0xcf, 0x2c, 0xa4, 0x7f, 0x80,
+	0x70, 0x7c, 0x03, 0x93, 0x0b, 0x11, 0xfd, 0x6e, 0x8a, 0xe8, 0x07, 0x01, 0x22, 0xba, 0x1c, 0xf4,
+	0x43, 0xcc, 0x49, 0xab, 0x2f, 0x04, 0xf4, 0x42, 0x40, 0x2f, 0x04, 0xf4, 0xac, 0x02, 0x3a, 0xd7,
+	0x86, 0xd3, 0x43, 0xf5, 0x05, 0x25, 0xe0, 0xb8, 0x54, 0xde, 0x2e, 0xe5, 0x65, 0xa9, 0x2c, 0x6e,
+	0x95, 0xb8, 0x10, 0x9a, 0x84, 0xb1, 0x62, 0x21, 0x57, 0xad, 0xc9, 0x52, 0xe1, 0xd1, 0x76, 0xa1,
+	0x5a, 0xe3, 0x00, 0x8a, 0xc1, 0x31, 0x69, 0xab, 0xb4, 0x21, 0x6f, 0xe6, 0xaa, 0x9b, 0x5c, 0x18,
+	0x41, 0x78, 0x49, 0xca, 0x95, 0xf2, 0xe5, 0x77, 0xb8, 0x11, 0x0a, 0x2f, 0x8a, 0x72, 0xf9, 0xdd,
+	0x82, 0x24, 0x6d, 0xe5, 0x0b, 0x5c, 0x64, 0x26, 0x72, 0x74, 0x08, 0x22, 0x73, 0x8b, 0x90, 0x1b,
+	0xfc, 0xad, 0x09, 0xc5, 0x21, 0xac, 0xd6, 0xa4, 0xad, 0xb5, 0x9a, 0x9c, 0x2f, 0x55, 0xb9, 0x10,
+	0x83, 0x96, 0x37, 0xb6, 0xd6, 0x72, 0x45, 0x76, 0x03, 0xcc, 0x2d, 0xc2, 0x58, 0xdf, 0xaf, 0x5f,
+	0x28, 0x0a, 0x23, 0xb9, 0xed, 0x5a, 0x99, 0x0b, 0xa1, 0x71, 0x78, 0xf9, 0xdd, 0x25, 0xb9, 0x5c,
+	0x2a, 0xbe, 0xc7, 0x01, 0x76, 0x71, 0xd7, 0xbd, 0x08, 0xcf, 0xbd, 0x03, 0xa7, 0x86, 0x1d, 0x67,
+	0xca, 0x5e, 0x2a, 0xcb, 0xeb, 0xb9, 0x62, 0x51, 0xcc, 0xad, 0x3d, 0xe4, 0x42, 0x88, 0x83, 0x13,
+	0xb9, 0xd2, 0x7b, 0x72, 0xa1, 0x94, 0xaf, 0x94, 0xb7, 0x4a, 0x74, 0x59, 0x08, 0xc6, 0xf3, 0x85,
+	0xf5, 0xdc, 0x76, 0xb1, 0x26, 0x57, 0xb7, 0xc5, 0x6a, 0xa1, 0xc6, 0x85, 0xe7, 0xb6, 0xe1, 0xb5,
+	0x80, 0x11, 0xa6, 0x8c, 0xf9, 0x2d, 0xba, 0x02, 0x71, 0xbb, 0x56, 0xc8, 0x73, 0x21, 0xba, 0xa0,
+	0x62, 0x99, 0x3e, 0xbe, 0xf7, 0x5c, 0x57, 0x60, 0xc2, 0xbd, 0xae, 0x48, 0x85, 0xf5, 0x82, 0x24,
+	0x15, 0xf2, 0x5c, 0x98, 0xed, 0x47, 0x58, 0xfc, 0x39, 0x78, 0xfa, 0x3c, 0x19, 0x7a, 0xf6, 0x3c,
+	0x19, 0x7a, 0xf9, 0x3c, 0x09, 0x9e, 0x74, 0x93, 0xe0, 0xb7, 0xdd, 0x24, 0xf8, 0xa2, 0x9b, 0x04,
+	0x4f, 0xbb, 0x49, 0xf0, 0xac, 0x9b, 0x04, 0x5f, 0x75, 0x93, 0xe0, 0xef, 0xdd, 0x64, 0xe8, 0x65,
+	0x37, 0x09, 0x7e, 0xf9, 0x22, 0x19, 0x3a, 0x7a, 0x91, 0x04, 0x4f, 0x5f, 0x24, 0x43, 0xcf, 0x5e,
+	0x24, 0x43, 0xef, 0x3f, 0x6c, 0x99, 0xd6, 0x6e, 0x2b, 0xbd, 0x67, 0xea, 0x04, 0xdb, 0xb6, 0x92,
+	0xee, 0x38, 0x0b, 0xec, 0x43, 0xd3, 0xb4, 0xdb, 0xf3, 0x96, 0x6d, 0xee, 0x69, 0x0d, 0x6c, 0xcf,
+	0xfb, 0xe1, 0x05, 0xab, 0xde, 0x32, 0x17, 0xf0, 0x3e, 0xf1, 0xfe, 0x63, 0xec, 0xff, 0xa7, 0xb4,
+	0x7e, 0x89, 0xfd, 0xcd, 0xb8, 0xf8, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x01, 0x8c, 0x4c, 0x34,
+	0x49, 0x1d, 0x00, 0x00,
+}
+
 func (x LoadbalancerAlgorithm) String() string {
 	s, ok := LoadbalancerAlgorithm_name[int32(x)]
 	if ok {
@@ -2361,7 +2469,7 @@ func (this *GlobalSpecType) GoString() string {
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%#v: %#v,", k, this.DefaultSubset[k])
@@ -2430,7 +2538,7 @@ func (this *CreateSpecType) GoString() string {
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%#v: %#v,", k, this.DefaultSubset[k])
@@ -2497,7 +2605,7 @@ func (this *ReplaceSpecType) GoString() string {
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%#v: %#v,", k, this.DefaultSubset[k])
@@ -2564,7 +2672,7 @@ func (this *GetSpecType) GoString() string {
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%#v: %#v,", k, this.DefaultSubset[k])
@@ -2619,7 +2727,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *OutlierDetectionType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2627,42 +2735,47 @@ func (m *OutlierDetectionType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OutlierDetectionType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OutlierDetectionType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Consecutive_5Xx != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Consecutive_5Xx))
-	}
-	if m.Interval != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
-	}
-	if m.BaseEjectionTime != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BaseEjectionTime))
+	if m.ConsecutiveGatewayFailure != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConsecutiveGatewayFailure))
+		i--
+		dAtA[i] = 0x28
 	}
 	if m.MaxEjectionPercent != 0 {
-		dAtA[i] = 0x20
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaxEjectionPercent))
+		i--
+		dAtA[i] = 0x20
 	}
-	if m.ConsecutiveGatewayFailure != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConsecutiveGatewayFailure))
+	if m.BaseEjectionTime != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BaseEjectionTime))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.Interval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interval))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Consecutive_5Xx != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Consecutive_5Xx))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *EndpointSubsetSelectorType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2670,32 +2783,31 @@ func (m *EndpointSubsetSelectorType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *EndpointSubsetSelectorType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EndpointSubsetSelectorType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Keys) > 0 {
-		for _, s := range m.Keys {
+		for iNdEx := len(m.Keys) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Keys[iNdEx])
+			copy(dAtA[i:], m.Keys[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Keys[iNdEx])))
+			i--
 			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CircuitBreaker) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2703,42 +2815,47 @@ func (m *CircuitBreaker) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CircuitBreaker) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CircuitBreaker) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Priority != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Priority))
-	}
-	if m.ConnectionLimit != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionLimit))
-	}
-	if m.PendingRequests != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PendingRequests))
+	if m.MaxRequests != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequests))
+		i--
+		dAtA[i] = 0x28
 	}
 	if m.Retries != 0 {
-		dAtA[i] = 0x20
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Retries))
+		i--
+		dAtA[i] = 0x20
 	}
-	if m.MaxRequests != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequests))
+	if m.PendingRequests != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PendingRequests))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.ConnectionLimit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionLimit))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Priority != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Priority))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Http2ProtocolOptions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2746,27 +2863,32 @@ func (m *Http2ProtocolOptions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Http2ProtocolOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Http2ProtocolOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Enabled {
-		dAtA[i] = 0x8
-		i++
+		i--
 		if m.Enabled {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2774,184 +2896,219 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Endpoints) > 0 {
-		for _, msg := range m.Endpoints {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.PanicThresholdType != nil {
+		{
+			size := m.PanicThresholdType.Size()
+			i -= size
+			if _, err := m.PanicThresholdType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Http2Options != nil {
+		{
+			size, err := m.Http2Options.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	if len(m.HealthChecks) > 0 {
-		for _, msg := range m.HealthChecks {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.DnsDiscoveryType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsDiscoveryType))
+		i--
+		dAtA[i] = 0x78
+	}
+	if m.DnsLookupFamily != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsLookupFamily))
+		i--
+		dAtA[i] = 0x70
+	}
+	if m.EndpointSelection != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+		i--
+		dAtA[i] = 0x68
+	}
+	if m.OutlierDetection != nil {
+		{
+			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x62
 	}
-	if m.LoadbalancerAlgorithm != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+	if m.HttpIdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.CircuitBreaker != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CircuitBreaker.Size()))
-		n1, err := m.CircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
+	if m.ConnectionTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.EndpointSubsets) > 0 {
-		for _, msg := range m.EndpointSubsets {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.TlsParameters != nil {
+		{
+			size, err := m.TlsParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.FallbackPolicy != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
+		i--
+		dAtA[i] = 0x38
 	}
 	if len(m.DefaultSubset) > 0 {
 		keysForDefaultSubset := make([]string, 0, len(m.DefaultSubset))
-		for k, _ := range m.DefaultSubset {
+		for k := range m.DefaultSubset {
 			keysForDefaultSubset = append(keysForDefaultSubset, string(k))
 		}
-		sortkeys.Strings(keysForDefaultSubset)
-		for _, k := range keysForDefaultSubset {
-			dAtA[i] = 0x32
-			i++
-			v := m.DefaultSubset[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
+		for iNdEx := len(keysForDefaultSubset) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.DefaultSubset[string(keysForDefaultSubset[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForDefaultSubset[iNdEx])
+			copy(dAtA[i:], keysForDefaultSubset[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForDefaultSubset[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x32
 		}
 	}
-	if m.FallbackPolicy != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
-	}
-	if m.TlsParameters != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TlsParameters.Size()))
-		n2, err := m.TlsParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.EndpointSubsets) > 0 {
+		for iNdEx := len(m.EndpointSubsets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EndpointSubsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n2
 	}
-	if m.ConnectionTimeout != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
-	}
-	if m.OutlierDetection != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutlierDetection.Size()))
-		n3, err := m.OutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.CircuitBreaker != nil {
+		{
+			size, err := m.CircuitBreaker.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.EndpointSelection != 0 {
-		dAtA[i] = 0x68
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+	if m.LoadbalancerAlgorithm != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.DnsLookupFamily != 0 {
-		dAtA[i] = 0x70
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsLookupFamily))
-	}
-	if m.DnsDiscoveryType != 0 {
-		dAtA[i] = 0x78
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsDiscoveryType))
-	}
-	if m.Http2Options != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Http2Options.Size()))
-		n4, err := m.Http2Options.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.HealthChecks) > 0 {
+		for iNdEx := len(m.HealthChecks) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.HealthChecks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n4
 	}
-	if m.PanicThresholdType != nil {
-		nn5, err := m.PanicThresholdType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Endpoints) > 0 {
+		for iNdEx := len(m.Endpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Endpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += nn5
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_NoPanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoPanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoPanicThreshold != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoPanicThreshold.Size()))
-		n6, err := m.NoPanicThreshold.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoPanicThreshold.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_PanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_PanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.PanicThreshold))
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2959,174 +3116,209 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Endpoints) > 0 {
-		for _, msg := range m.Endpoints {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.PanicThresholdType != nil {
+		{
+			size := m.PanicThresholdType.Size()
+			i -= size
+			if _, err := m.PanicThresholdType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Http2Options != nil {
+		{
+			size, err := m.Http2Options.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	if len(m.HealthChecks) > 0 {
-		for _, msg := range m.HealthChecks {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.EndpointSelection != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+		i--
+		dAtA[i] = 0x68
+	}
+	if m.OutlierDetection != nil {
+		{
+			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x62
 	}
-	if m.LoadbalancerAlgorithm != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+	if m.HttpIdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.CircuitBreaker != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CircuitBreaker.Size()))
-		n7, err := m.CircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
+	if m.ConnectionTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.EndpointSubsets) > 0 {
-		for _, msg := range m.EndpointSubsets {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.TlsParameters != nil {
+		{
+			size, err := m.TlsParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.FallbackPolicy != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
+		i--
+		dAtA[i] = 0x38
 	}
 	if len(m.DefaultSubset) > 0 {
 		keysForDefaultSubset := make([]string, 0, len(m.DefaultSubset))
-		for k, _ := range m.DefaultSubset {
+		for k := range m.DefaultSubset {
 			keysForDefaultSubset = append(keysForDefaultSubset, string(k))
 		}
-		sortkeys.Strings(keysForDefaultSubset)
-		for _, k := range keysForDefaultSubset {
-			dAtA[i] = 0x32
-			i++
-			v := m.DefaultSubset[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
+		for iNdEx := len(keysForDefaultSubset) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.DefaultSubset[string(keysForDefaultSubset[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForDefaultSubset[iNdEx])
+			copy(dAtA[i:], keysForDefaultSubset[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForDefaultSubset[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x32
 		}
 	}
-	if m.FallbackPolicy != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
-	}
-	if m.TlsParameters != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TlsParameters.Size()))
-		n8, err := m.TlsParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.EndpointSubsets) > 0 {
+		for iNdEx := len(m.EndpointSubsets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EndpointSubsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n8
 	}
-	if m.ConnectionTimeout != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
-	}
-	if m.OutlierDetection != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutlierDetection.Size()))
-		n9, err := m.OutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.CircuitBreaker != nil {
+		{
+			size, err := m.CircuitBreaker.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.EndpointSelection != 0 {
-		dAtA[i] = 0x68
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+	if m.LoadbalancerAlgorithm != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.Http2Options != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Http2Options.Size()))
-		n10, err := m.Http2Options.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.HealthChecks) > 0 {
+		for iNdEx := len(m.HealthChecks) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.HealthChecks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n10
 	}
-	if m.PanicThresholdType != nil {
-		nn11, err := m.PanicThresholdType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Endpoints) > 0 {
+		for iNdEx := len(m.Endpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Endpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += nn11
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_NoPanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoPanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoPanicThreshold != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoPanicThreshold.Size()))
-		n12, err := m.NoPanicThreshold.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoPanicThreshold.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_PanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_PanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.PanicThreshold))
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3134,174 +3326,209 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Endpoints) > 0 {
-		for _, msg := range m.Endpoints {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.PanicThresholdType != nil {
+		{
+			size := m.PanicThresholdType.Size()
+			i -= size
+			if _, err := m.PanicThresholdType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Http2Options != nil {
+		{
+			size, err := m.Http2Options.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	if len(m.HealthChecks) > 0 {
-		for _, msg := range m.HealthChecks {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.EndpointSelection != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+		i--
+		dAtA[i] = 0x68
+	}
+	if m.OutlierDetection != nil {
+		{
+			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x62
 	}
-	if m.LoadbalancerAlgorithm != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+	if m.HttpIdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.CircuitBreaker != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CircuitBreaker.Size()))
-		n13, err := m.CircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
+	if m.ConnectionTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.EndpointSubsets) > 0 {
-		for _, msg := range m.EndpointSubsets {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.TlsParameters != nil {
+		{
+			size, err := m.TlsParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.FallbackPolicy != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
+		i--
+		dAtA[i] = 0x38
 	}
 	if len(m.DefaultSubset) > 0 {
 		keysForDefaultSubset := make([]string, 0, len(m.DefaultSubset))
-		for k, _ := range m.DefaultSubset {
+		for k := range m.DefaultSubset {
 			keysForDefaultSubset = append(keysForDefaultSubset, string(k))
 		}
-		sortkeys.Strings(keysForDefaultSubset)
-		for _, k := range keysForDefaultSubset {
-			dAtA[i] = 0x32
-			i++
-			v := m.DefaultSubset[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
+		for iNdEx := len(keysForDefaultSubset) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.DefaultSubset[string(keysForDefaultSubset[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForDefaultSubset[iNdEx])
+			copy(dAtA[i:], keysForDefaultSubset[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForDefaultSubset[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x32
 		}
 	}
-	if m.FallbackPolicy != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
-	}
-	if m.TlsParameters != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TlsParameters.Size()))
-		n14, err := m.TlsParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.EndpointSubsets) > 0 {
+		for iNdEx := len(m.EndpointSubsets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EndpointSubsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n14
 	}
-	if m.ConnectionTimeout != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
-	}
-	if m.OutlierDetection != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutlierDetection.Size()))
-		n15, err := m.OutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.CircuitBreaker != nil {
+		{
+			size, err := m.CircuitBreaker.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.EndpointSelection != 0 {
-		dAtA[i] = 0x68
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+	if m.LoadbalancerAlgorithm != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.Http2Options != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Http2Options.Size()))
-		n16, err := m.Http2Options.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.HealthChecks) > 0 {
+		for iNdEx := len(m.HealthChecks) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.HealthChecks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n16
 	}
-	if m.PanicThresholdType != nil {
-		nn17, err := m.PanicThresholdType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Endpoints) > 0 {
+		for iNdEx := len(m.Endpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Endpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += nn17
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_NoPanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoPanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoPanicThreshold != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoPanicThreshold.Size()))
-		n18, err := m.NoPanicThreshold.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoPanicThreshold.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_PanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_PanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.PanicThreshold))
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3309,180 +3536,220 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Endpoints) > 0 {
-		for _, msg := range m.Endpoints {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.PanicThresholdType != nil {
+		{
+			size := m.PanicThresholdType.Size()
+			i -= size
+			if _, err := m.PanicThresholdType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Http2Options != nil {
+		{
+			size, err := m.Http2Options.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	if len(m.HealthChecks) > 0 {
-		for _, msg := range m.HealthChecks {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.EndpointSelection != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+		i--
+		dAtA[i] = 0x68
+	}
+	if m.OutlierDetection != nil {
+		{
+			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x62
 	}
-	if m.LoadbalancerAlgorithm != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+	if m.HttpIdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.CircuitBreaker != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CircuitBreaker.Size()))
-		n19, err := m.CircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
+	if m.ConnectionTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
+		i--
+		dAtA[i] = 0x48
 	}
-	if len(m.EndpointSubsets) > 0 {
-		for _, msg := range m.EndpointSubsets {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.TlsParameters != nil {
+		{
+			size, err := m.TlsParameters.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.FallbackPolicy != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
+		i--
+		dAtA[i] = 0x38
 	}
 	if len(m.DefaultSubset) > 0 {
 		keysForDefaultSubset := make([]string, 0, len(m.DefaultSubset))
-		for k, _ := range m.DefaultSubset {
+		for k := range m.DefaultSubset {
 			keysForDefaultSubset = append(keysForDefaultSubset, string(k))
 		}
-		sortkeys.Strings(keysForDefaultSubset)
-		for _, k := range keysForDefaultSubset {
-			dAtA[i] = 0x32
-			i++
-			v := m.DefaultSubset[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
+		github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
+		for iNdEx := len(keysForDefaultSubset) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.DefaultSubset[string(keysForDefaultSubset[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
 			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForDefaultSubset[iNdEx])
+			copy(dAtA[i:], keysForDefaultSubset[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForDefaultSubset[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x32
 		}
 	}
-	if m.FallbackPolicy != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FallbackPolicy))
-	}
-	if m.TlsParameters != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TlsParameters.Size()))
-		n20, err := m.TlsParameters.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.EndpointSubsets) > 0 {
+		for iNdEx := len(m.EndpointSubsets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EndpointSubsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
 		}
-		i += n20
 	}
-	if m.ConnectionTimeout != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		dAtA[i] = 0x50
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
-	}
-	if m.OutlierDetection != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutlierDetection.Size()))
-		n21, err := m.OutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.CircuitBreaker != nil {
+		{
+			size, err := m.CircuitBreaker.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.EndpointSelection != 0 {
-		dAtA[i] = 0x68
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
+	if m.LoadbalancerAlgorithm != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LoadbalancerAlgorithm))
+		i--
+		dAtA[i] = 0x18
 	}
-	if m.Http2Options != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Http2Options.Size()))
-		n22, err := m.Http2Options.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.HealthChecks) > 0 {
+		for iNdEx := len(m.HealthChecks) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.HealthChecks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
 		}
-		i += n22
 	}
-	if m.PanicThresholdType != nil {
-		nn23, err := m.PanicThresholdType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.Endpoints) > 0 {
+		for iNdEx := len(m.Endpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Endpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
 		}
-		i += nn23
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_NoPanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoPanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoPanicThreshold != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoPanicThreshold.Size()))
-		n24, err := m.NoPanicThreshold.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoPanicThreshold.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_PanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_PanicThreshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintTypes(dAtA, i, uint64(m.PanicThreshold))
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *OutlierDetectionType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Consecutive_5Xx != 0 {
@@ -3504,6 +3771,9 @@ func (m *OutlierDetectionType) Size() (n int) {
 }
 
 func (m *EndpointSubsetSelectorType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Keys) > 0 {
@@ -3516,6 +3786,9 @@ func (m *EndpointSubsetSelectorType) Size() (n int) {
 }
 
 func (m *CircuitBreaker) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Priority != 0 {
@@ -3537,6 +3810,9 @@ func (m *CircuitBreaker) Size() (n int) {
 }
 
 func (m *Http2ProtocolOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Enabled {
@@ -3546,6 +3822,9 @@ func (m *Http2ProtocolOptions) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -3618,6 +3897,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_NoPanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoPanicThreshold != nil {
@@ -3627,12 +3909,18 @@ func (m *GlobalSpecType_NoPanicThreshold) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_PanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2 + sovTypes(uint64(m.PanicThreshold))
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -3699,6 +3987,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_NoPanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoPanicThreshold != nil {
@@ -3708,12 +3999,18 @@ func (m *CreateSpecType_NoPanicThreshold) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_PanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2 + sovTypes(uint64(m.PanicThreshold))
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -3780,6 +4077,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_NoPanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoPanicThreshold != nil {
@@ -3789,12 +4089,18 @@ func (m *ReplaceSpecType_NoPanicThreshold) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_PanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2 + sovTypes(uint64(m.PanicThreshold))
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Endpoints) > 0 {
@@ -3861,6 +4167,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_NoPanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoPanicThreshold != nil {
@@ -3870,6 +4179,9 @@ func (m *GetSpecType_NoPanicThreshold) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_PanicThreshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2 + sovTypes(uint64(m.PanicThreshold))
@@ -3877,14 +4189,7 @@ func (m *GetSpecType_PanicThreshold) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -3941,32 +4246,47 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForEndpoints := "[]*ObjectRefType{"
+	for _, f := range this.Endpoints {
+		repeatedStringForEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEndpoints += "}"
+	repeatedStringForHealthChecks := "[]*ObjectRefType{"
+	for _, f := range this.HealthChecks {
+		repeatedStringForHealthChecks += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHealthChecks += "}"
+	repeatedStringForEndpointSubsets := "[]*EndpointSubsetSelectorType{"
+	for _, f := range this.EndpointSubsets {
+		repeatedStringForEndpointSubsets += strings.Replace(f.String(), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + ","
+	}
+	repeatedStringForEndpointSubsets += "}"
 	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%v: %v,", k, this.DefaultSubset[k])
 	}
 	mapStringForDefaultSubset += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Endpoints:` + strings.Replace(fmt.Sprintf("%v", this.Endpoints), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`HealthChecks:` + strings.Replace(fmt.Sprintf("%v", this.HealthChecks), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Endpoints:` + repeatedStringForEndpoints + `,`,
+		`HealthChecks:` + repeatedStringForHealthChecks + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
-		`CircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.CircuitBreaker), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
-		`EndpointSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EndpointSubsets), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + `,`,
+		`CircuitBreaker:` + strings.Replace(this.CircuitBreaker.String(), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
+		`EndpointSubsets:` + repeatedStringForEndpointSubsets + `,`,
 		`DefaultSubset:` + mapStringForDefaultSubset + `,`,
 		`FallbackPolicy:` + fmt.Sprintf("%v", this.FallbackPolicy) + `,`,
-		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "ves_io_schema4.UpstreamTlsParamsType", 1) + `,`,
+		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "schema.UpstreamTlsParamsType", 1) + `,`,
 		`ConnectionTimeout:` + fmt.Sprintf("%v", this.ConnectionTimeout) + `,`,
 		`HttpIdleTimeout:` + fmt.Sprintf("%v", this.HttpIdleTimeout) + `,`,
-		`OutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.OutlierDetection), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
+		`OutlierDetection:` + strings.Replace(this.OutlierDetection.String(), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
 		`DnsLookupFamily:` + fmt.Sprintf("%v", this.DnsLookupFamily) + `,`,
 		`DnsDiscoveryType:` + fmt.Sprintf("%v", this.DnsDiscoveryType) + `,`,
-		`Http2Options:` + strings.Replace(fmt.Sprintf("%v", this.Http2Options), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
+		`Http2Options:` + strings.Replace(this.Http2Options.String(), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`}`,
 	}, "")
@@ -3977,7 +4297,7 @@ func (this *GlobalSpecType_NoPanicThreshold) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_NoPanicThreshold{`,
-		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3996,30 +4316,45 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForEndpoints := "[]*ObjectRefType{"
+	for _, f := range this.Endpoints {
+		repeatedStringForEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEndpoints += "}"
+	repeatedStringForHealthChecks := "[]*ObjectRefType{"
+	for _, f := range this.HealthChecks {
+		repeatedStringForHealthChecks += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHealthChecks += "}"
+	repeatedStringForEndpointSubsets := "[]*EndpointSubsetSelectorType{"
+	for _, f := range this.EndpointSubsets {
+		repeatedStringForEndpointSubsets += strings.Replace(f.String(), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + ","
+	}
+	repeatedStringForEndpointSubsets += "}"
 	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%v: %v,", k, this.DefaultSubset[k])
 	}
 	mapStringForDefaultSubset += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Endpoints:` + strings.Replace(fmt.Sprintf("%v", this.Endpoints), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`HealthChecks:` + strings.Replace(fmt.Sprintf("%v", this.HealthChecks), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Endpoints:` + repeatedStringForEndpoints + `,`,
+		`HealthChecks:` + repeatedStringForHealthChecks + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
-		`CircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.CircuitBreaker), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
-		`EndpointSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EndpointSubsets), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + `,`,
+		`CircuitBreaker:` + strings.Replace(this.CircuitBreaker.String(), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
+		`EndpointSubsets:` + repeatedStringForEndpointSubsets + `,`,
 		`DefaultSubset:` + mapStringForDefaultSubset + `,`,
 		`FallbackPolicy:` + fmt.Sprintf("%v", this.FallbackPolicy) + `,`,
-		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "ves_io_schema4.UpstreamTlsParamsType", 1) + `,`,
+		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "schema.UpstreamTlsParamsType", 1) + `,`,
 		`ConnectionTimeout:` + fmt.Sprintf("%v", this.ConnectionTimeout) + `,`,
 		`HttpIdleTimeout:` + fmt.Sprintf("%v", this.HttpIdleTimeout) + `,`,
-		`OutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.OutlierDetection), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
+		`OutlierDetection:` + strings.Replace(this.OutlierDetection.String(), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`Http2Options:` + strings.Replace(fmt.Sprintf("%v", this.Http2Options), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
+		`Http2Options:` + strings.Replace(this.Http2Options.String(), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`}`,
 	}, "")
@@ -4030,7 +4365,7 @@ func (this *CreateSpecType_NoPanicThreshold) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_NoPanicThreshold{`,
-		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4049,30 +4384,45 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForEndpoints := "[]*ObjectRefType{"
+	for _, f := range this.Endpoints {
+		repeatedStringForEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEndpoints += "}"
+	repeatedStringForHealthChecks := "[]*ObjectRefType{"
+	for _, f := range this.HealthChecks {
+		repeatedStringForHealthChecks += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHealthChecks += "}"
+	repeatedStringForEndpointSubsets := "[]*EndpointSubsetSelectorType{"
+	for _, f := range this.EndpointSubsets {
+		repeatedStringForEndpointSubsets += strings.Replace(f.String(), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + ","
+	}
+	repeatedStringForEndpointSubsets += "}"
 	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%v: %v,", k, this.DefaultSubset[k])
 	}
 	mapStringForDefaultSubset += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Endpoints:` + strings.Replace(fmt.Sprintf("%v", this.Endpoints), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`HealthChecks:` + strings.Replace(fmt.Sprintf("%v", this.HealthChecks), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Endpoints:` + repeatedStringForEndpoints + `,`,
+		`HealthChecks:` + repeatedStringForHealthChecks + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
-		`CircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.CircuitBreaker), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
-		`EndpointSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EndpointSubsets), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + `,`,
+		`CircuitBreaker:` + strings.Replace(this.CircuitBreaker.String(), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
+		`EndpointSubsets:` + repeatedStringForEndpointSubsets + `,`,
 		`DefaultSubset:` + mapStringForDefaultSubset + `,`,
 		`FallbackPolicy:` + fmt.Sprintf("%v", this.FallbackPolicy) + `,`,
-		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "ves_io_schema4.UpstreamTlsParamsType", 1) + `,`,
+		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "schema.UpstreamTlsParamsType", 1) + `,`,
 		`ConnectionTimeout:` + fmt.Sprintf("%v", this.ConnectionTimeout) + `,`,
 		`HttpIdleTimeout:` + fmt.Sprintf("%v", this.HttpIdleTimeout) + `,`,
-		`OutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.OutlierDetection), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
+		`OutlierDetection:` + strings.Replace(this.OutlierDetection.String(), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`Http2Options:` + strings.Replace(fmt.Sprintf("%v", this.Http2Options), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
+		`Http2Options:` + strings.Replace(this.Http2Options.String(), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`}`,
 	}, "")
@@ -4083,7 +4433,7 @@ func (this *ReplaceSpecType_NoPanicThreshold) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_NoPanicThreshold{`,
-		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4102,30 +4452,45 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForEndpoints := "[]*ObjectRefType{"
+	for _, f := range this.Endpoints {
+		repeatedStringForEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEndpoints += "}"
+	repeatedStringForHealthChecks := "[]*ObjectRefType{"
+	for _, f := range this.HealthChecks {
+		repeatedStringForHealthChecks += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHealthChecks += "}"
+	repeatedStringForEndpointSubsets := "[]*EndpointSubsetSelectorType{"
+	for _, f := range this.EndpointSubsets {
+		repeatedStringForEndpointSubsets += strings.Replace(f.String(), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + ","
+	}
+	repeatedStringForEndpointSubsets += "}"
 	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
 	for k, _ := range this.DefaultSubset {
 		keysForDefaultSubset = append(keysForDefaultSubset, k)
 	}
-	sortkeys.Strings(keysForDefaultSubset)
+	github_com_gogo_protobuf_sortkeys.Strings(keysForDefaultSubset)
 	mapStringForDefaultSubset := "map[string]string{"
 	for _, k := range keysForDefaultSubset {
 		mapStringForDefaultSubset += fmt.Sprintf("%v: %v,", k, this.DefaultSubset[k])
 	}
 	mapStringForDefaultSubset += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Endpoints:` + strings.Replace(fmt.Sprintf("%v", this.Endpoints), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`HealthChecks:` + strings.Replace(fmt.Sprintf("%v", this.HealthChecks), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Endpoints:` + repeatedStringForEndpoints + `,`,
+		`HealthChecks:` + repeatedStringForHealthChecks + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
-		`CircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.CircuitBreaker), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
-		`EndpointSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EndpointSubsets), "EndpointSubsetSelectorType", "EndpointSubsetSelectorType", 1) + `,`,
+		`CircuitBreaker:` + strings.Replace(this.CircuitBreaker.String(), "CircuitBreaker", "CircuitBreaker", 1) + `,`,
+		`EndpointSubsets:` + repeatedStringForEndpointSubsets + `,`,
 		`DefaultSubset:` + mapStringForDefaultSubset + `,`,
 		`FallbackPolicy:` + fmt.Sprintf("%v", this.FallbackPolicy) + `,`,
-		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "ves_io_schema4.UpstreamTlsParamsType", 1) + `,`,
+		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "UpstreamTlsParamsType", "schema.UpstreamTlsParamsType", 1) + `,`,
 		`ConnectionTimeout:` + fmt.Sprintf("%v", this.ConnectionTimeout) + `,`,
 		`HttpIdleTimeout:` + fmt.Sprintf("%v", this.HttpIdleTimeout) + `,`,
-		`OutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.OutlierDetection), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
+		`OutlierDetection:` + strings.Replace(this.OutlierDetection.String(), "OutlierDetectionType", "OutlierDetectionType", 1) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`Http2Options:` + strings.Replace(fmt.Sprintf("%v", this.Http2Options), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
+		`Http2Options:` + strings.Replace(this.Http2Options.String(), "Http2ProtocolOptions", "Http2ProtocolOptions", 1) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`}`,
 	}, "")
@@ -4136,7 +4501,7 @@ func (this *GetSpecType_NoPanicThreshold) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_NoPanicThreshold{`,
-		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4174,7 +4539,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4202,7 +4567,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Consecutive_5Xx |= (uint32(b) & 0x7F) << shift
+				m.Consecutive_5Xx |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4221,7 +4586,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Interval |= (uint32(b) & 0x7F) << shift
+				m.Interval |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4240,7 +4605,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BaseEjectionTime |= (uint32(b) & 0x7F) << shift
+				m.BaseEjectionTime |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4259,7 +4624,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MaxEjectionPercent |= (uint32(b) & 0x7F) << shift
+				m.MaxEjectionPercent |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4278,7 +4643,7 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConsecutiveGatewayFailure |= (uint32(b) & 0x7F) << shift
+				m.ConsecutiveGatewayFailure |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4290,6 +4655,9 @@ func (m *OutlierDetectionType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4319,7 +4687,7 @@ func (m *EndpointSubsetSelectorType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4347,7 +4715,7 @@ func (m *EndpointSubsetSelectorType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4357,6 +4725,9 @@ func (m *EndpointSubsetSelectorType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4369,6 +4740,9 @@ func (m *EndpointSubsetSelectorType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4398,7 +4772,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4426,7 +4800,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Priority |= (ves_io_schema4.RoutingPriority(b) & 0x7F) << shift
+				m.Priority |= schema.RoutingPriority(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4445,7 +4819,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionLimit |= (uint32(b) & 0x7F) << shift
+				m.ConnectionLimit |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4464,7 +4838,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PendingRequests |= (uint32(b) & 0x7F) << shift
+				m.PendingRequests |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4483,7 +4857,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Retries |= (uint32(b) & 0x7F) << shift
+				m.Retries |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4502,7 +4876,7 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.MaxRequests |= (uint32(b) & 0x7F) << shift
+				m.MaxRequests |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4514,6 +4888,9 @@ func (m *CircuitBreaker) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4543,7 +4920,7 @@ func (m *Http2ProtocolOptions) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4571,7 +4948,7 @@ func (m *Http2ProtocolOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4584,6 +4961,9 @@ func (m *Http2ProtocolOptions) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -4613,7 +4993,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4641,7 +5021,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4650,10 +5030,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endpoints = append(m.Endpoints, &ves_io_schema4.ObjectRefType{})
+			m.Endpoints = append(m.Endpoints, &schema.ObjectRefType{})
 			if err := m.Endpoints[len(m.Endpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4672,7 +5055,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4681,10 +5064,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.HealthChecks = append(m.HealthChecks, &ves_io_schema4.ObjectRefType{})
+			m.HealthChecks = append(m.HealthChecks, &schema.ObjectRefType{})
 			if err := m.HealthChecks[len(m.HealthChecks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4703,7 +5089,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LoadbalancerAlgorithm |= (LoadbalancerAlgorithm(b) & 0x7F) << shift
+				m.LoadbalancerAlgorithm |= LoadbalancerAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4722,7 +5108,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4731,6 +5117,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4755,7 +5144,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4764,6 +5153,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4786,7 +5178,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4795,6 +5187,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4815,7 +5210,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -4832,7 +5227,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -4842,6 +5237,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -4858,7 +5256,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -4868,6 +5266,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -4904,7 +5305,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FallbackPolicy |= (SubsetFallbackPolicy(b) & 0x7F) << shift
+				m.FallbackPolicy |= SubsetFallbackPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4923,7 +5324,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4932,11 +5333,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.TlsParameters == nil {
-				m.TlsParameters = &ves_io_schema4.UpstreamTlsParamsType{}
+				m.TlsParameters = &schema.UpstreamTlsParamsType{}
 			}
 			if err := m.TlsParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4956,7 +5360,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionTimeout |= (uint32(b) & 0x7F) << shift
+				m.ConnectionTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4975,7 +5379,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HttpIdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.HttpIdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4994,7 +5398,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5003,6 +5407,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5027,7 +5434,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EndpointSelection |= (EndpointSelectionPolicy(b) & 0x7F) << shift
+				m.EndpointSelection |= EndpointSelectionPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5046,7 +5453,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DnsLookupFamily |= (DnsLookupType(b) & 0x7F) << shift
+				m.DnsLookupFamily |= DnsLookupType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5065,7 +5472,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DnsDiscoveryType |= (DnsDiscoveryType(b) & 0x7F) << shift
+				m.DnsDiscoveryType |= DnsDiscoveryType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5084,7 +5491,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5093,6 +5500,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5117,7 +5527,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5126,10 +5536,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5149,7 +5562,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5162,6 +5575,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5191,7 +5607,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5219,7 +5635,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5228,10 +5644,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endpoints = append(m.Endpoints, &ves_io_schema4.ObjectRefType{})
+			m.Endpoints = append(m.Endpoints, &schema.ObjectRefType{})
 			if err := m.Endpoints[len(m.Endpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5250,7 +5669,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5259,10 +5678,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.HealthChecks = append(m.HealthChecks, &ves_io_schema4.ObjectRefType{})
+			m.HealthChecks = append(m.HealthChecks, &schema.ObjectRefType{})
 			if err := m.HealthChecks[len(m.HealthChecks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5281,7 +5703,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LoadbalancerAlgorithm |= (LoadbalancerAlgorithm(b) & 0x7F) << shift
+				m.LoadbalancerAlgorithm |= LoadbalancerAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5300,7 +5722,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5309,6 +5731,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5333,7 +5758,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5342,6 +5767,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5364,7 +5792,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5373,6 +5801,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5393,7 +5824,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -5410,7 +5841,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -5420,6 +5851,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -5436,7 +5870,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -5446,6 +5880,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -5482,7 +5919,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FallbackPolicy |= (SubsetFallbackPolicy(b) & 0x7F) << shift
+				m.FallbackPolicy |= SubsetFallbackPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5501,7 +5938,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5510,11 +5947,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.TlsParameters == nil {
-				m.TlsParameters = &ves_io_schema4.UpstreamTlsParamsType{}
+				m.TlsParameters = &schema.UpstreamTlsParamsType{}
 			}
 			if err := m.TlsParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5534,7 +5974,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionTimeout |= (uint32(b) & 0x7F) << shift
+				m.ConnectionTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5553,7 +5993,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HttpIdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.HttpIdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5572,7 +6012,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5581,6 +6021,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5605,7 +6048,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EndpointSelection |= (EndpointSelectionPolicy(b) & 0x7F) << shift
+				m.EndpointSelection |= EndpointSelectionPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5624,7 +6067,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5633,6 +6076,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5657,7 +6103,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5666,10 +6112,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5689,7 +6138,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5702,6 +6151,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -5731,7 +6183,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -5759,7 +6211,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5768,10 +6220,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endpoints = append(m.Endpoints, &ves_io_schema4.ObjectRefType{})
+			m.Endpoints = append(m.Endpoints, &schema.ObjectRefType{})
 			if err := m.Endpoints[len(m.Endpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5790,7 +6245,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5799,10 +6254,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.HealthChecks = append(m.HealthChecks, &ves_io_schema4.ObjectRefType{})
+			m.HealthChecks = append(m.HealthChecks, &schema.ObjectRefType{})
 			if err := m.HealthChecks[len(m.HealthChecks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5821,7 +6279,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LoadbalancerAlgorithm |= (LoadbalancerAlgorithm(b) & 0x7F) << shift
+				m.LoadbalancerAlgorithm |= LoadbalancerAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5840,7 +6298,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5849,6 +6307,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5873,7 +6334,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5882,6 +6343,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5904,7 +6368,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5913,6 +6377,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -5933,7 +6400,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -5950,7 +6417,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -5960,6 +6427,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -5976,7 +6446,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -5986,6 +6456,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -6022,7 +6495,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FallbackPolicy |= (SubsetFallbackPolicy(b) & 0x7F) << shift
+				m.FallbackPolicy |= SubsetFallbackPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6041,7 +6514,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6050,11 +6523,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.TlsParameters == nil {
-				m.TlsParameters = &ves_io_schema4.UpstreamTlsParamsType{}
+				m.TlsParameters = &schema.UpstreamTlsParamsType{}
 			}
 			if err := m.TlsParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6074,7 +6550,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionTimeout |= (uint32(b) & 0x7F) << shift
+				m.ConnectionTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6093,7 +6569,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HttpIdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.HttpIdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6112,7 +6588,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6121,6 +6597,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6145,7 +6624,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EndpointSelection |= (EndpointSelectionPolicy(b) & 0x7F) << shift
+				m.EndpointSelection |= EndpointSelectionPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6164,7 +6643,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6173,6 +6652,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6197,7 +6679,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6206,10 +6688,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6229,7 +6714,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6242,6 +6727,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6271,7 +6759,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6299,7 +6787,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6308,10 +6796,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endpoints = append(m.Endpoints, &ves_io_schema4.ObjectRefType{})
+			m.Endpoints = append(m.Endpoints, &schema.ObjectRefType{})
 			if err := m.Endpoints[len(m.Endpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6330,7 +6821,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6339,10 +6830,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.HealthChecks = append(m.HealthChecks, &ves_io_schema4.ObjectRefType{})
+			m.HealthChecks = append(m.HealthChecks, &schema.ObjectRefType{})
 			if err := m.HealthChecks[len(m.HealthChecks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6361,7 +6855,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.LoadbalancerAlgorithm |= (LoadbalancerAlgorithm(b) & 0x7F) << shift
+				m.LoadbalancerAlgorithm |= LoadbalancerAlgorithm(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6380,7 +6874,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6389,6 +6883,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6413,7 +6910,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6422,6 +6919,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6444,7 +6944,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6453,6 +6953,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6473,7 +6976,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
+					wire |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -6490,7 +6993,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						stringLenmapkey |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -6500,6 +7003,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapkey > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -6516,7 +7022,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						stringLenmapvalue |= uint64(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -6526,6 +7032,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 						return ErrInvalidLengthTypes
 					}
 					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
 					if postStringIndexmapvalue > l {
 						return io.ErrUnexpectedEOF
 					}
@@ -6562,7 +7071,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.FallbackPolicy |= (SubsetFallbackPolicy(b) & 0x7F) << shift
+				m.FallbackPolicy |= SubsetFallbackPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6581,7 +7090,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6590,11 +7099,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.TlsParameters == nil {
-				m.TlsParameters = &ves_io_schema4.UpstreamTlsParamsType{}
+				m.TlsParameters = &schema.UpstreamTlsParamsType{}
 			}
 			if err := m.TlsParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6614,7 +7126,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ConnectionTimeout |= (uint32(b) & 0x7F) << shift
+				m.ConnectionTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6633,7 +7145,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.HttpIdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.HttpIdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6652,7 +7164,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6661,6 +7173,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6685,7 +7200,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.EndpointSelection |= (EndpointSelectionPolicy(b) & 0x7F) << shift
+				m.EndpointSelection |= EndpointSelectionPolicy(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6704,7 +7219,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6713,6 +7228,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6737,7 +7255,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6746,10 +7264,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6769,7 +7290,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6782,6 +7303,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6799,6 +7323,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -6830,10 +7355,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -6850,183 +7373,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/cluster/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/cluster/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 1963 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcf, 0x6f, 0xe3, 0xc6,
-	0x15, 0xd6, 0xc8, 0xb2, 0x57, 0x1e, 0x5b, 0x12, 0x3d, 0x6b, 0xef, 0x72, 0x9d, 0x85, 0xa0, 0x18,
-	0x5b, 0x74, 0xd7, 0xa1, 0xe5, 0x95, 0x6c, 0x6f, 0xbc, 0x06, 0xba, 0x89, 0x68, 0xc9, 0x3f, 0x76,
-	0x15, 0x49, 0x4b, 0xc9, 0x41, 0x93, 0xa6, 0xcb, 0x52, 0xd4, 0x48, 0x66, 0x4d, 0x91, 0x2c, 0x39,
-	0x72, 0xec, 0x43, 0x80, 0x6d, 0x8e, 0x3d, 0xb5, 0x3d, 0xf4, 0x90, 0xbf, 0xa0, 0xc8, 0xb1, 0xc7,
-	0x3a, 0x28, 0x8c, 0xa0, 0x2d, 0x82, 0x5e, 0xba, 0xb7, 0x06, 0x39, 0x65, 0x95, 0x4b, 0x7b, 0x29,
-	0x16, 0x39, 0x15, 0x3d, 0x15, 0x33, 0x24, 0x6d, 0x49, 0x16, 0xd3, 0x6e, 0xed, 0x1c, 0x02, 0xf8,
-	0x26, 0xf2, 0xbd, 0xef, 0x7b, 0x9c, 0x79, 0x6f, 0xbe, 0x8f, 0x92, 0xe0, 0xab, 0xfb, 0xd8, 0x49,
-	0x6b, 0xe6, 0xa2, 0xa3, 0xee, 0xe2, 0xb6, 0xb2, 0xa8, 0xea, 0x1d, 0x87, 0x60, 0x7b, 0x91, 0x1c,
-	0x5a, 0xd8, 0x49, 0x5b, 0xb6, 0x49, 0x4c, 0x34, 0xe3, 0xa6, 0xa4, 0xdd, 0x94, 0xb4, 0x97, 0x32,
-	0xbb, 0xd0, 0xd2, 0xc8, 0x6e, 0xa7, 0x9e, 0x56, 0xcd, 0xf6, 0x62, 0xcb, 0x6c, 0x99, 0x8b, 0x2c,
-	0xbb, 0xde, 0x69, 0xb2, 0x2b, 0x76, 0xc1, 0x3e, 0xb9, 0x2c, 0xb3, 0xaf, 0xf4, 0x17, 0x32, 0x2d,
-	0xa2, 0x99, 0x86, 0x57, 0x62, 0xf6, 0x46, 0x7f, 0xb0, 0xa7, 0xfa, 0xec, 0xcd, 0xfe, 0xd0, 0xbe,
-	0xa2, 0x6b, 0x0d, 0x85, 0x60, 0x2f, 0x9a, 0x1a, 0x88, 0x6a, 0xf8, 0x7d, 0xb9, 0x8f, 0x7a, 0xee,
-	0x8b, 0x30, 0x9c, 0x2e, 0x77, 0x88, 0xae, 0x61, 0x3b, 0x8f, 0x09, 0x56, 0x69, 0xac, 0x76, 0x68,
-	0x61, 0xf4, 0x3a, 0x4c, 0xa8, 0xa6, 0xe1, 0x60, 0xb5, 0x43, 0xb4, 0x7d, 0x2c, 0xaf, 0x1c, 0x1c,
-	0xf0, 0x20, 0x05, 0x6e, 0xc7, 0xc4, 0xf8, 0xbf, 0x8e, 0x40, 0xe8, 0xf7, 0xff, 0x38, 0x1e, 0x19,
-	0x9d, 0x1f, 0xe1, 0x9f, 0x46, 0xa5, 0x78, 0x4f, 0xda, 0xca, 0xc1, 0x01, 0x7a, 0x0d, 0x46, 0x35,
-	0x83, 0x60, 0x7b, 0x5f, 0xd1, 0xf9, 0x30, 0x43, 0x24, 0x7c, 0xc4, 0xd8, 0x7c, 0x84, 0x3f, 0xfe,
-	0xeb, 0x2d, 0xe9, 0x24, 0x01, 0xfd, 0x00, 0xa2, 0xba, 0xe2, 0x60, 0x19, 0xff, 0xd4, 0x2d, 0x2d,
-	0x13, 0xad, 0x8d, 0xf9, 0x91, 0x21, 0xb0, 0x7f, 0xb6, 0x25, 0x8e, 0xa6, 0x16, 0xbc, 0xcc, 0x9a,
-	0xd6, 0xc6, 0xe8, 0x0d, 0x38, 0xdd, 0x56, 0x0e, 0x4e, 0xd1, 0x16, 0xb6, 0x55, 0x6c, 0x10, 0x3e,
-	0xc2, 0x08, 0x62, 0x3e, 0x41, 0x64, 0x3e, 0xcc, 0x37, 0x24, 0xd4, 0x56, 0x0e, 0x7c, 0x74, 0xc5,
-	0x4d, 0x44, 0x25, 0xf8, 0x4a, 0xef, 0x2a, 0x5b, 0x0a, 0xc1, 0xef, 0x2b, 0x87, 0x72, 0x53, 0xd1,
-	0xf4, 0x8e, 0x8d, 0xf9, 0xd1, 0xa1, 0x2b, 0xbe, 0xd1, 0x03, 0xd9, 0x74, 0x11, 0x1b, 0x2e, 0x60,
-	0x6d, 0xf2, 0xeb, 0x07, 0xe3, 0x19, 0x21, 0x2b, 0x2c, 0x09, 0xcb, 0xc2, 0xca, 0x5c, 0x03, 0xce,
-	0x16, 0x8c, 0x86, 0x65, 0x6a, 0x06, 0xa9, 0x76, 0xea, 0x0e, 0x26, 0x55, 0xac, 0x63, 0x95, 0x98,
-	0x36, 0xdb, 0xe1, 0x39, 0x18, 0xd9, 0xc3, 0x87, 0x0e, 0x0f, 0x52, 0x23, 0xb7, 0xc7, 0x7b, 0x8a,
-	0xfc, 0x1a, 0x84, 0x39, 0x4e, 0x62, 0xb1, 0xb5, 0xb9, 0x4f, 0x8f, 0x40, 0x12, 0xde, 0x84, 0xd7,
-	0x8b, 0x9a, 0x43, 0x52, 0x66, 0x33, 0x45, 0xef, 0xa6, 0x9a, 0xa6, 0x9d, 0x72, 0x09, 0x11, 0xc8,
-	0xcc, 0xfd, 0x2d, 0x0c, 0xe3, 0xeb, 0x9a, 0xad, 0x76, 0x34, 0x22, 0xda, 0x58, 0xd9, 0xc3, 0x36,
-	0x7a, 0x13, 0x46, 0x2d, 0x5b, 0x33, 0x6d, 0x8d, 0x1c, 0xb2, 0xae, 0xc5, 0xb3, 0xc9, 0x74, 0xff,
-	0x98, 0x4a, 0x66, 0x87, 0x68, 0x46, 0xab, 0xe2, 0x65, 0x89, 0x11, 0x5a, 0x5e, 0x3a, 0x41, 0x21,
-	0x11, 0x72, 0xaa, 0x69, 0x18, 0xde, 0xbe, 0xea, 0x5a, 0x5b, 0x23, 0x5e, 0x37, 0xaf, 0x7f, 0x71,
-	0x04, 0x22, 0x99, 0xbb, 0xd9, 0xe5, 0xde, 0xf6, 0x3c, 0x7d, 0x1a, 0x96, 0x12, 0xa7, 0x80, 0x22,
-	0xcd, 0xa7, 0x1c, 0x16, 0x36, 0x1a, 0x9a, 0xd1, 0x92, 0x6d, 0xfc, 0xb3, 0x0e, 0x76, 0x88, 0xe3,
-	0xb5, 0x36, 0x98, 0xc3, 0x03, 0x48, 0x5e, 0x3e, 0xca, 0xc0, 0x2b, 0x36, 0x26, 0xb6, 0x86, 0x1d,
-	0xaf, 0xa9, 0x81, 0x50, 0x3f, 0x0f, 0xad, 0xc1, 0x49, 0x3a, 0x14, 0x27, 0x25, 0x47, 0xbf, 0x19,
-	0x37, 0xd1, 0x56, 0x0e, 0xfc, 0x72, 0x03, 0xfd, 0xbb, 0x0b, 0xa7, 0xb7, 0x08, 0xb1, 0xb2, 0x15,
-	0x7a, 0x54, 0x54, 0x53, 0x2f, 0xbb, 0x47, 0x07, 0xf1, 0xf0, 0x0a, 0x36, 0x94, 0xba, 0x8e, 0x1b,
-	0x6c, 0x77, 0xa3, 0x92, 0x7f, 0x39, 0xf7, 0xbb, 0x38, 0x8c, 0x6f, 0xea, 0x66, 0x5d, 0xd1, 0xab,
-	0x16, 0x56, 0x59, 0x9b, 0x1f, 0xc3, 0x71, 0xec, 0x0d, 0x81, 0xdb, 0xeb, 0x89, 0xec, 0xcd, 0x81,
-	0x66, 0x94, 0xeb, 0x74, 0x2c, 0x25, 0xdc, 0xa4, 0x00, 0x71, 0xe6, 0xe3, 0x0f, 0xa2, 0x3e, 0xe2,
-	0x64, 0x20, 0x52, 0xd2, 0x29, 0x0b, 0xfa, 0x11, 0x8c, 0xed, 0x62, 0x45, 0x27, 0xbb, 0xb2, 0xba,
-	0x8b, 0xd5, 0x3d, 0x87, 0x0f, 0xff, 0x0f, 0xb4, 0xfc, 0xc7, 0x1f, 0x4c, 0xb8, 0x28, 0x06, 0x3a,
-	0x61, 0x8e, 0x48, 0x93, 0xee, 0xed, 0x75, 0xc6, 0x85, 0x34, 0x78, 0x4d, 0x37, 0x95, 0x46, 0x5d,
-	0xd1, 0x15, 0x43, 0xc5, 0xb6, 0xac, 0xe8, 0x2d, 0x3a, 0x12, 0xbb, 0x6d, 0xd6, 0xbb, 0x78, 0x56,
-	0x48, 0x0f, 0x15, 0xbc, 0x74, 0xb1, 0x07, 0x94, 0xf3, 0x31, 0xde, 0x5c, 0xcd, 0xe8, 0xc3, 0x82,
-	0xa8, 0x06, 0x13, 0xaa, 0x3b, 0xb8, 0x72, 0xdd, 0x9d, 0x5c, 0xd6, 0xe4, 0x89, 0xec, 0xf7, 0x02,
-	0x6a, 0xf4, 0x8f, 0xb9, 0x18, 0x39, 0x3e, 0x02, 0x40, 0x8a, 0xab, 0xfd, 0xc3, 0x4f, 0x20, 0xe7,
-	0x6f, 0x95, 0xec, 0xb0, 0x53, 0x42, 0x67, 0x80, 0x6e, 0x50, 0x26, 0x80, 0x36, 0xf8, 0x90, 0x8a,
-	0xd7, 0x68, 0x89, 0x67, 0x47, 0x00, 0xf4, 0x1d, 0xcf, 0x94, 0x94, 0xc0, 0x7d, 0x18, 0x07, 0x7d,
-	0x08, 0x60, 0xbc, 0x81, 0x9b, 0x4a, 0x47, 0xf7, 0xab, 0xf2, 0x63, 0xac, 0xe8, 0x6a, 0x40, 0xd1,
-	0xfe, 0x31, 0x49, 0xe7, 0x5d, 0xac, 0x4b, 0x57, 0x30, 0x88, 0x7d, 0x28, 0xbe, 0x4a, 0x6b, 0x7f,
-	0xf4, 0x09, 0x88, 0xc0, 0x70, 0x08, 0xb0, 0xda, 0x1f, 0xd1, 0xda, 0xdd, 0x2f, 0xff, 0x34, 0x32,
-	0xf6, 0x8b, 0x4f, 0x40, 0x38, 0x1a, 0x92, 0x62, 0x8d, 0x5e, 0x18, 0x7a, 0x02, 0x13, 0x4d, 0x45,
-	0xd7, 0xeb, 0x8a, 0xba, 0x27, 0x5b, 0xa6, 0xae, 0xa9, 0x87, 0xfc, 0x15, 0xd6, 0xb4, 0xd7, 0x02,
-	0x1e, 0xc2, 0xc5, 0x6d, 0x78, 0x98, 0x0a, 0x83, 0x88, 0xd1, 0x63, 0x6f, 0xbd, 0x52, 0xbc, 0xd9,
-	0x17, 0x41, 0x8f, 0x61, 0x9c, 0xe8, 0x8e, 0x6c, 0x29, 0xb6, 0xd2, 0xc6, 0x04, 0xdb, 0x0e, 0x1f,
-	0x65, 0xfd, 0xba, 0x35, 0x40, 0xbf, 0x63, 0x39, 0xc4, 0xc6, 0x4a, 0xbb, 0xa6, 0x3b, 0x15, 0x9a,
-	0xeb, 0xb0, 0xbd, 0x8c, 0xd0, 0x7d, 0x94, 0x62, 0xc4, 0xbb, 0xc9, 0x08, 0x90, 0x08, 0x51, 0x8f,
-	0xd0, 0x50, 0xf9, 0x37, 0x3b, 0x84, 0x1f, 0x67, 0x67, 0xf6, 0xea, 0x71, 0xcf, 0xc6, 0xfb, 0xe6,
-	0x31, 0x75, 0x9a, 0x5e, 0x73, 0xb3, 0xd1, 0x1b, 0x70, 0x6a, 0x97, 0x10, 0x4b, 0xd6, 0x1a, 0x3a,
-	0x3e, 0xa1, 0x80, 0xc1, 0x14, 0x09, 0x9a, 0xbd, 0xdd, 0xd0, 0xb1, 0x4f, 0xf0, 0x04, 0x4e, 0x99,
-	0xae, 0x09, 0xca, 0x0d, 0xdf, 0x05, 0xf9, 0x49, 0xb6, 0xb4, 0xa0, 0x9d, 0x1b, 0x66, 0x9a, 0xde,
-	0x40, 0x72, 0xe6, 0x40, 0x0c, 0xa9, 0x10, 0x9d, 0x8e, 0x24, 0x1b, 0x2f, 0x5a, 0x20, 0xc6, 0x5a,
-	0x93, 0xfe, 0x6f, 0x43, 0xe9, 0xe7, 0x7b, 0xdd, 0x71, 0x4f, 0xd4, 0x14, 0x1e, 0x0c, 0xa3, 0x77,
-	0xe1, 0x54, 0xc3, 0x70, 0x64, 0xdd, 0x34, 0xf7, 0x3a, 0x96, 0xdc, 0x54, 0xda, 0x9a, 0x7e, 0xc8,
-	0xc7, 0x59, 0x8d, 0x5b, 0x01, 0x35, 0xf2, 0x86, 0x53, 0x64, 0xe9, 0xec, 0xe9, 0x4f, 0xfb, 0x9e,
-	0x68, 0xf8, 0x81, 0x0d, 0x46, 0x83, 0x64, 0x88, 0x28, 0x77, 0x43, 0x73, 0x54, 0x73, 0x1f, 0xdb,
-	0x87, 0x32, 0x7d, 0x07, 0xe1, 0x13, 0x8c, 0xfc, 0xfb, 0xc1, 0xe4, 0x79, 0x3f, 0x7f, 0x80, 0x9f,
-	0x6b, 0x0c, 0xc4, 0xd0, 0x13, 0x18, 0xa3, 0x4d, 0xc9, 0xfa, 0xaf, 0x27, 0x3c, 0xf7, 0x8d, 0xbb,
-	0x3f, 0x4c, 0x96, 0xc5, 0x49, 0xca, 0xff, 0xc2, 0xaf, 0x31, 0xc9, 0xf8, 0x7c, 0xc9, 0x7e, 0x08,
-	0x91, 0x61, 0xca, 0x96, 0x62, 0x68, 0xaa, 0x4c, 0x76, 0x6d, 0xec, 0xec, 0x9a, 0x7a, 0x83, 0x47,
-	0xac, 0xc8, 0xf4, 0x40, 0x91, 0x42, 0xdb, 0xa2, 0x8e, 0x48, 0xd9, 0xb6, 0x42, 0x12, 0x67, 0x98,
-	0x15, 0x0a, 0xab, 0xf9, 0x28, 0xb4, 0x0a, 0x13, 0x83, 0x44, 0x57, 0xdd, 0x17, 0x0e, 0x0a, 0x39,
-	0x79, 0xe1, 0xd8, 0x0a, 0x49, 0x71, 0xab, 0x0f, 0x39, 0xfb, 0x26, 0x44, 0x67, 0xcf, 0x39, 0xe2,
-	0xe0, 0xc8, 0x1e, 0x76, 0x8d, 0x7a, 0x5c, 0xa2, 0x1f, 0xd1, 0x34, 0x1c, 0xdd, 0x57, 0xf4, 0x0e,
-	0x66, 0x96, 0x3b, 0x2e, 0xb9, 0x17, 0x6b, 0xe1, 0x55, 0xb0, 0xf6, 0x1b, 0xf0, 0xe9, 0x11, 0xf8,
-	0x15, 0x80, 0x49, 0x78, 0xa3, 0x6c, 0x6b, 0x2d, 0xcd, 0x48, 0x55, 0xb1, 0xbd, 0x8f, 0x6d, 0xe7,
-	0xb6, 0x3f, 0x2f, 0xce, 0x1d, 0x04, 0x32, 0x70, 0x0d, 0xa6, 0xbc, 0x78, 0xc5, 0x34, 0xf5, 0xdb,
-	0xde, 0xbe, 0xdd, 0x49, 0x9d, 0x9e, 0xbc, 0x14, 0xba, 0xb6, 0x24, 0x64, 0x85, 0xcc, 0x92, 0xb0,
-	0x2a, 0xdc, 0x17, 0x32, 0x77, 0x85, 0xcc, 0xb2, 0x90, 0x59, 0x11, 0x32, 0xf7, 0x20, 0x0f, 0x39,
-	0x4f, 0x68, 0x53, 0x9e, 0xa6, 0x3a, 0x28, 0xb2, 0x2c, 0x64, 0xb2, 0xf0, 0x06, 0xe4, 0xfc, 0x32,
-	0x29, 0x5f, 0xf8, 0x46, 0x57, 0x84, 0x7b, 0xc2, 0xeb, 0xe2, 0x02, 0x9c, 0x1e, 0xd8, 0x14, 0x36,
-	0x23, 0x68, 0xe6, 0xf8, 0x08, 0xa0, 0xcf, 0x5c, 0x11, 0x9d, 0xea, 0x1e, 0x81, 0xd1, 0xcc, 0xaa,
-	0x90, 0xb9, 0xff, 0x30, 0x12, 0x9d, 0xe0, 0x26, 0x1f, 0x46, 0xa2, 0x53, 0x1c, 0x9a, 0xfb, 0x23,
-	0x84, 0xf1, 0x75, 0x1b, 0x2b, 0x04, 0x9f, 0x98, 0xe6, 0xe6, 0xcb, 0x9a, 0xe6, 0x44, 0x8f, 0x69,
-	0xf6, 0x5a, 0xe5, 0xe3, 0xff, 0xc7, 0x2a, 0xe3, 0xfd, 0x56, 0x39, 0x60, 0x90, 0xea, 0x45, 0x1a,
-	0x64, 0x90, 0x35, 0x96, 0xce, 0x67, 0x8d, 0x67, 0x4c, 0xf1, 0xbd, 0x0b, 0x34, 0xc5, 0xb3, 0xe6,
-	0x27, 0xbf, 0xa4, 0xf7, 0xf5, 0x77, 0x7b, 0x88, 0xf7, 0x0d, 0x1a, 0x5b, 0xed, 0x22, 0x8c, 0xed,
-	0x8c, 0x9d, 0x3d, 0x3a, 0x8f, 0x9d, 0x0d, 0x1a, 0xd9, 0x42, 0xb0, 0x91, 0x0d, 0xf3, 0xac, 0xf9,
-	0x40, 0xcf, 0x3a, 0x6b, 0x4f, 0x3f, 0xbc, 0x18, 0x7b, 0x1a, 0x62, 0x4c, 0x3f, 0xbe, 0x38, 0x63,
-	0x1a, 0x66, 0x49, 0x95, 0xf3, 0xab, 0xfa, 0x80, 0x8e, 0xe7, 0x5f, 0x56, 0xc7, 0x87, 0x2a, 0xf8,
-	0x9d, 0x00, 0x05, 0xff, 0x56, 0x24, 0x3b, 0xfd, 0x97, 0x07, 0x03, 0xdf, 0x09, 0xbe, 0x7e, 0x30,
-	0xeb, 0x7e, 0xc9, 0x58, 0xa5, 0xf2, 0xcb, 0xc4, 0x77, 0x59, 0x60, 0x32, 0x2a, 0x64, 0xb2, 0xe2,
-	0xdd, 0x00, 0x25, 0xe5, 0x3f, 0xfc, 0x37, 0x18, 0x1a, 0xf1, 0x64, 0xf4, 0xcf, 0x10, 0x26, 0x24,
-	0x6c, 0xe9, 0x8a, 0x7a, 0xa9, 0xa3, 0xdf, 0x51, 0x1d, 0xfd, 0x49, 0x80, 0x8e, 0xde, 0x0f, 0xe0,
-	0x1e, 0x68, 0xf7, 0xa5, 0x90, 0x5e, 0x0a, 0xe9, 0xa5, 0x90, 0x9e, 0x5b, 0x48, 0xff, 0x00, 0xe1,
-	0xc4, 0x26, 0x26, 0x97, 0x22, 0xfa, 0xdd, 0x14, 0xd1, 0xf7, 0x02, 0x44, 0x74, 0x25, 0xe8, 0x87,
-	0x98, 0xd3, 0x56, 0x5f, 0x0a, 0xe8, 0xa5, 0x80, 0x5e, 0x0a, 0xe8, 0x79, 0x05, 0x74, 0xbe, 0x0d,
-	0x67, 0x86, 0xea, 0x0b, 0x4a, 0xc0, 0x09, 0xa9, 0xbc, 0x53, 0xca, 0xcb, 0x52, 0x59, 0xdc, 0x2e,
-	0x71, 0x21, 0x34, 0x05, 0x63, 0xc5, 0x42, 0xae, 0x5a, 0x93, 0xa5, 0xc2, 0xe3, 0x9d, 0x42, 0xb5,
-	0xc6, 0x01, 0x14, 0x83, 0xe3, 0xd2, 0x76, 0x69, 0x53, 0xde, 0xca, 0x55, 0xb7, 0xb8, 0x30, 0x82,
-	0x70, 0x4c, 0xca, 0x95, 0xf2, 0xe5, 0xb7, 0xb8, 0x11, 0x0a, 0x2f, 0x8a, 0x72, 0xf9, 0xed, 0x82,
-	0x24, 0x6d, 0xe7, 0x0b, 0x5c, 0x64, 0x36, 0x72, 0x7c, 0x04, 0x22, 0xf3, 0x4b, 0x90, 0x1b, 0xfc,
-	0xad, 0x09, 0xc5, 0x21, 0xac, 0xd6, 0xa4, 0xed, 0xf5, 0x9a, 0x9c, 0x2f, 0x55, 0xb9, 0x10, 0x83,
-	0x96, 0x37, 0xb7, 0xd7, 0x73, 0x45, 0x76, 0x03, 0xcc, 0x2f, 0xc1, 0x58, 0xdf, 0xaf, 0x5f, 0x28,
-	0x0a, 0x23, 0xb9, 0x9d, 0x5a, 0x99, 0x0b, 0xa1, 0x09, 0x78, 0xe5, 0xed, 0x65, 0xb9, 0x5c, 0x2a,
-	0xbe, 0xc3, 0x01, 0x76, 0x71, 0xcf, 0xbd, 0x08, 0xcf, 0xbf, 0x05, 0xa7, 0x87, 0x1d, 0x67, 0xca,
-	0x5e, 0x2a, 0xcb, 0x1b, 0xb9, 0x62, 0x51, 0xcc, 0xad, 0x3f, 0xe2, 0x42, 0x88, 0x83, 0x93, 0xb9,
-	0xd2, 0x3b, 0x72, 0xa1, 0x94, 0xaf, 0x94, 0xb7, 0x4b, 0x74, 0x59, 0x08, 0xc6, 0xf3, 0x85, 0x8d,
-	0xdc, 0x4e, 0xb1, 0x26, 0x57, 0x77, 0xc4, 0x6a, 0xa1, 0xc6, 0x85, 0xe7, 0x77, 0xe0, 0xf5, 0x80,
-	0x11, 0xa6, 0x8c, 0xf9, 0x6d, 0xba, 0x02, 0x71, 0xa7, 0x56, 0xc8, 0x73, 0x21, 0xba, 0xa0, 0x62,
-	0x99, 0x3e, 0xbe, 0xf7, 0x5c, 0x57, 0x61, 0xc2, 0xbd, 0xae, 0x48, 0x85, 0x8d, 0x82, 0x24, 0x15,
-	0xf2, 0x5c, 0x98, 0xed, 0x47, 0x58, 0xfc, 0x39, 0x78, 0xf6, 0x3c, 0x19, 0xfa, 0xfc, 0x79, 0x32,
-	0xf4, 0xe2, 0x79, 0x12, 0x3c, 0xed, 0x26, 0xc1, 0x6f, 0xbb, 0x49, 0xf0, 0x59, 0x37, 0x09, 0x9e,
-	0x75, 0x93, 0xe0, 0xf3, 0x6e, 0x12, 0x7c, 0xd9, 0x4d, 0x82, 0xbf, 0x77, 0x93, 0xa1, 0x17, 0xdd,
-	0x24, 0xf8, 0xe5, 0x57, 0xc9, 0xd0, 0xf1, 0x57, 0x49, 0xf0, 0xee, 0xa3, 0x96, 0x69, 0xed, 0xb5,
-	0xd2, 0xfb, 0xa6, 0x4e, 0xb0, 0x6d, 0x2b, 0xe9, 0x8e, 0xb3, 0xc8, 0x3e, 0x34, 0x4d, 0xbb, 0xbd,
-	0x60, 0xd9, 0xe6, 0xbe, 0xd6, 0xc0, 0xf6, 0x82, 0x1f, 0x5e, 0xb4, 0xea, 0x2d, 0x73, 0x11, 0x1f,
-	0x10, 0xef, 0xbf, 0xc5, 0xfe, 0x7f, 0x48, 0xeb, 0x63, 0xec, 0xef, 0xc5, 0xa5, 0xff, 0x04, 0x00,
-	0x00, 0xff, 0xff, 0xeb, 0x04, 0x24, 0xf4, 0x41, 0x1d, 0x00, 0x00,
-}

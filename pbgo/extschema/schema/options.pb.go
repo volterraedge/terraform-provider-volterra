@@ -3,25 +3,30 @@
 
 package schema
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf "github.com/golang/protobuf/protoc-gen-go/descriptor"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import binary "encoding/binary"
-
-import io "io"
+import (
+	encoding_binary "encoding/binary"
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // ReferenceType
 //
@@ -42,12 +47,15 @@ var ReferenceType_name = map[int32]string{
 	0: "FORWARD_REF",
 	1: "BACK_REF",
 }
+
 var ReferenceType_value = map[string]int32{
 	"FORWARD_REF": 0,
 	"BACK_REF":    1,
 }
 
-func (ReferenceType) EnumDescriptor() ([]byte, []int) { return fileDescriptorOptions, []int{0} }
+func (ReferenceType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{0}
+}
 
 // KeyType
 //
@@ -72,13 +80,16 @@ var KeyType_name = map[int32]string{
 	1: "SECONDARY_KEY",
 	2: "SECONDARY_KEY_UNIQUE",
 }
+
 var KeyType_value = map[string]int32{
 	"PRIMARY_KEY":          0,
 	"SECONDARY_KEY":        1,
 	"SECONDARY_KEY_UNIQUE": 2,
 }
 
-func (KeyType) EnumDescriptor() ([]byte, []int) { return fileDescriptorOptions, []int{1} }
+func (KeyType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{1}
+}
 
 // MetricType
 //
@@ -111,6 +122,7 @@ var MetricType_name = map[int32]string{
 	3: "HISTOGRAM",
 	4: "SUMMARY",
 }
+
 var MetricType_value = map[string]int32{
 	"UNSPECIFIED": 0,
 	"GAUGE":       1,
@@ -119,7 +131,9 @@ var MetricType_value = map[string]int32{
 	"SUMMARY":     4,
 }
 
-func (MetricType) EnumDescriptor() ([]byte, []int) { return fileDescriptorOptions, []int{2} }
+func (MetricType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{2}
+}
 
 // ServiceType
 //
@@ -152,6 +166,7 @@ var ServiceType_name = map[int32]string{
 	3: "CUSTOM_PUBLIC",
 	4: "CUSTOM_PRIVATE",
 }
+
 var ServiceType_value = map[string]int32{
 	"CUSTOM":           0,
 	"AUTO_CRUD":        1,
@@ -160,7 +175,9 @@ var ServiceType_value = map[string]int32{
 	"CUSTOM_PRIVATE":   4,
 }
 
-func (ServiceType) EnumDescriptor() ([]byte, []int) { return fileDescriptorOptions, []int{3} }
+func (ServiceType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{3}
+}
 
 // Via
 //
@@ -188,9 +205,33 @@ type Via struct {
 	RefType ReferenceType `protobuf:"varint,3,opt,name=ref_type,json=refType,proto3,enum=ves.io.schema.ReferenceType" json:"ref_type,omitempty"`
 }
 
-func (m *Via) Reset()                    { *m = Via{} }
-func (*Via) ProtoMessage()               {}
-func (*Via) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{0} }
+func (m *Via) Reset()      { *m = Via{} }
+func (*Via) ProtoMessage() {}
+func (*Via) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{0}
+}
+func (m *Via) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Via) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Via) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Via.Merge(m, src)
+}
+func (m *Via) XXX_Size() int {
+	return m.Size()
+}
+func (m *Via) XXX_DiscardUnknown() {
+	xxx_messageInfo_Via.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Via proto.InternalMessageInfo
 
 func (m *Via) GetType() string {
 	if m != nil {
@@ -230,12 +271,36 @@ type On struct {
 	// x-displayName: "Via"
 	// This is the set of spans to walk to reach the dependent object type
 	// specified by type
-	Via []*Via `protobuf:"bytes,2,rep,name=via" json:"via,omitempty"`
+	Via []*Via `protobuf:"bytes,2,rep,name=via,proto3" json:"via,omitempty"`
 }
 
-func (m *On) Reset()                    { *m = On{} }
-func (*On) ProtoMessage()               {}
-func (*On) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{1} }
+func (m *On) Reset()      { *m = On{} }
+func (*On) ProtoMessage() {}
+func (*On) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{1}
+}
+func (m *On) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *On) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *On) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_On.Merge(m, src)
+}
+func (m *On) XXX_Size() int {
+	return m.Size()
+}
+func (m *On) XXX_DiscardUnknown() {
+	xxx_messageInfo_On.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_On proto.InternalMessageInfo
 
 func (m *On) GetType() string {
 	if m != nil {
@@ -266,12 +331,36 @@ type Dependencies struct {
 	//
 	// x-displayName: "On"
 	// This encodes the set of dependent object types and paths leading to them
-	On []*On `protobuf:"bytes,1,rep,name=on" json:"on,omitempty"`
+	On []*On `protobuf:"bytes,1,rep,name=on,proto3" json:"on,omitempty"`
 }
 
-func (m *Dependencies) Reset()                    { *m = Dependencies{} }
-func (*Dependencies) ProtoMessage()               {}
-func (*Dependencies) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{2} }
+func (m *Dependencies) Reset()      { *m = Dependencies{} }
+func (*Dependencies) ProtoMessage() {}
+func (*Dependencies) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{2}
+}
+func (m *Dependencies) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Dependencies) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Dependencies) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Dependencies.Merge(m, src)
+}
+func (m *Dependencies) XXX_Size() int {
+	return m.Size()
+}
+func (m *Dependencies) XXX_DiscardUnknown() {
+	xxx_messageInfo_Dependencies.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Dependencies proto.InternalMessageInfo
 
 func (m *Dependencies) GetOn() []*On {
 	if m != nil {
@@ -297,9 +386,33 @@ type Key struct {
 	Type KeyType `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.KeyType" json:"type,omitempty"`
 }
 
-func (m *Key) Reset()                    { *m = Key{} }
-func (*Key) ProtoMessage()               {}
-func (*Key) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{3} }
+func (m *Key) Reset()      { *m = Key{} }
+func (*Key) ProtoMessage() {}
+func (*Key) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{3}
+}
+func (m *Key) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Key) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Key) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Key.Merge(m, src)
+}
+func (m *Key) XXX_Size() int {
+	return m.Size()
+}
+func (m *Key) XXX_DiscardUnknown() {
+	xxx_messageInfo_Key.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Key proto.InternalMessageInfo
 
 func (m *Key) GetFieldPath() string {
 	if m != nil {
@@ -324,12 +437,36 @@ type Keys struct {
 	//
 	// x-displayName "Keys"
 	// Keys
-	Keys []*Key `protobuf:"bytes,1,rep,name=keys" json:"keys,omitempty"`
+	Keys []*Key `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
 }
 
-func (m *Keys) Reset()                    { *m = Keys{} }
-func (*Keys) ProtoMessage()               {}
-func (*Keys) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{4} }
+func (m *Keys) Reset()      { *m = Keys{} }
+func (*Keys) ProtoMessage() {}
+func (*Keys) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{4}
+}
+func (m *Keys) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Keys) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Keys) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Keys.Merge(m, src)
+}
+func (m *Keys) XXX_Size() int {
+	return m.Size()
+}
+func (m *Keys) XXX_DiscardUnknown() {
+	xxx_messageInfo_Keys.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Keys proto.InternalMessageInfo
 
 func (m *Keys) GetKeys() []*Key {
 	if m != nil {
@@ -366,18 +503,42 @@ type MetricDef struct {
 	// x-displayName "displayname"
 	// Only added so codegeneration does not break
 	// Label configuration to use
-	Labels []string `protobuf:"bytes,4,rep,name=labels" json:"labels,omitempty"`
+	Labels []string `protobuf:"bytes,4,rep,name=labels,proto3" json:"labels,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
 	// Only added so codegeneration does not break
 	// Buckets to use for histogram
-	Buckets []float64 `protobuf:"fixed64,5,rep,packed,name=buckets" json:"buckets,omitempty"`
+	Buckets []float64 `protobuf:"fixed64,5,rep,packed,name=buckets,proto3" json:"buckets,omitempty"`
 }
 
-func (m *MetricDef) Reset()                    { *m = MetricDef{} }
-func (*MetricDef) ProtoMessage()               {}
-func (*MetricDef) Descriptor() ([]byte, []int) { return fileDescriptorOptions, []int{5} }
+func (m *MetricDef) Reset()      { *m = MetricDef{} }
+func (*MetricDef) ProtoMessage() {}
+func (*MetricDef) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8562c0a0fb65343f, []int{5}
+}
+func (m *MetricDef) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MetricDef) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MetricDef) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricDef.Merge(m, src)
+}
+func (m *MetricDef) XXX_Size() int {
+	return m.Size()
+}
+func (m *MetricDef) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetricDef.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MetricDef proto.InternalMessageInfo
 
 func (m *MetricDef) GetName() string {
 	if m != nil {
@@ -415,7 +576,7 @@ func (m *MetricDef) GetBuckets() []float64 {
 }
 
 var E_Dependencies = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*Dependencies)(nil),
 	Field:         1000,
 	Name:          "ves.io.schema.dependencies",
@@ -424,25 +585,25 @@ var E_Dependencies = &proto.ExtensionDesc{
 }
 
 var E_MapsToMsg = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1001,
 	Name:          "ves.io.schema.maps_to_msg",
-	Tag:           "bytes,1001,opt,name=maps_to_msg,json=mapsToMsg",
+	Tag:           "bytes,1001,opt,name=maps_to_msg",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_MapsToSvc = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1003,
 	Name:          "ves.io.schema.maps_to_svc",
-	Tag:           "bytes,1003,opt,name=maps_to_svc,json=mapsToSvc",
+	Tag:           "bytes,1003,opt,name=maps_to_svc",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_Keys = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*Keys)(nil),
 	Field:         1002,
 	Name:          "ves.io.schema.keys",
@@ -451,115 +612,115 @@ var E_Keys = &proto.ExtensionDesc{
 }
 
 var E_IsMsgConfidential = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         1004,
 	Name:          "ves.io.schema.is_msg_confidential",
-	Tag:           "varint,1004,opt,name=is_msg_confidential,json=isMsgConfidential",
+	Tag:           "varint,1004,opt,name=is_msg_confidential",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_GetSpecNotCreateSpecSuperset = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         1005,
 	Name:          "ves.io.schema.get_spec_not_create_spec_superset",
-	Tag:           "varint,1005,opt,name=get_spec_not_create_spec_superset,json=getSpecNotCreateSpecSuperset",
+	Tag:           "varint,1005,opt,name=get_spec_not_create_spec_superset",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_DisplayOrder = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1006,
 	Name:          "ves.io.schema.display_order",
-	Tag:           "bytes,1006,opt,name=display_order,json=displayOrder",
+	Tag:           "bytes,1006,opt,name=display_order",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_GeneratePrivateApiMethods = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1007,
 	Name:          "ves.io.schema.generate_private_api_methods",
-	Tag:           "bytes,1007,opt,name=generate_private_api_methods,json=generatePrivateApiMethods",
+	Tag:           "bytes,1007,opt,name=generate_private_api_methods",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_InNamespaceTypes = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1008,
 	Name:          "ves.io.schema.in_namespace_types",
-	Tag:           "bytes,1008,opt,name=in_namespace_types,json=inNamespaceTypes",
+	Tag:           "bytes,1008,opt,name=in_namespace_types",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_NoUnsafeDelete = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         1009,
 	Name:          "ves.io.schema.no_unsafe_delete",
-	Tag:           "varint,1009,opt,name=no_unsafe_delete,json=noUnsafeDelete",
+	Tag:           "varint,1009,opt,name=no_unsafe_delete",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_GeneratePublicCrud = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FileOptions)(nil),
+	ExtendedType:  (*descriptor.FileOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         1000,
 	Name:          "ves.io.schema.generate_public_crud",
-	Tag:           "varint,1000,opt,name=generate_public_crud,json=generatePublicCrud",
+	Tag:           "varint,1000,opt,name=generate_public_crud",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_GeneratePublicApiMethods = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FileOptions)(nil),
+	ExtendedType:  (*descriptor.FileOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         1001,
 	Name:          "ves.io.schema.generate_public_api_methods",
-	Tag:           "bytes,1001,opt,name=generate_public_api_methods,json=generatePublicApiMethods",
+	Tag:           "bytes,1001,opt,name=generate_public_api_methods",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsPkey = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2000,
 	Name:          "ves.io.schema.is_pkey",
-	Tag:           "varint,2000,opt,name=is_pkey,json=isPkey",
+	Tag:           "varint,2000,opt,name=is_pkey",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsSkeyUniq = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2001,
 	Name:          "ves.io.schema.is_skey_uniq",
-	Tag:           "varint,2001,opt,name=is_skey_uniq,json=isSkeyUniq",
+	Tag:           "varint,2001,opt,name=is_skey_uniq",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsSkey = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2002,
 	Name:          "ves.io.schema.is_skey",
-	Tag:           "varint,2002,opt,name=is_skey,json=isSkey",
+	Tag:           "varint,2002,opt,name=is_skey",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_MapsToField = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         2003,
 	Name:          "ves.io.schema.maps_to_field",
-	Tag:           "bytes,2003,opt,name=maps_to_field,json=mapsToField",
+	Tag:           "bytes,2003,opt,name=maps_to_field",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_Metric = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*MetricDef)(nil),
 	Field:         2004,
 	Name:          "ves.io.schema.metric",
@@ -568,61 +729,61 @@ var E_Metric = &proto.ExtensionDesc{
 }
 
 var E_RefTo = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         2005,
 	Name:          "ves.io.schema.ref_to",
-	Tag:           "bytes,2005,opt,name=ref_to,json=refTo",
+	Tag:           "bytes,2005,opt,name=ref_to",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsRefSecondary = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2006,
 	Name:          "ves.io.schema.is_ref_secondary",
-	Tag:           "varint,2006,opt,name=is_ref_secondary,json=isRefSecondary",
+	Tag:           "varint,2006,opt,name=is_ref_secondary",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_LabelSelectorObjectKind = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         2007,
 	Name:          "ves.io.schema.label_selector_object_kind",
-	Tag:           "bytes,2007,opt,name=label_selector_object_kind,json=labelSelectorObjectKind",
+	Tag:           "bytes,2007,opt,name=label_selector_object_kind",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsObject = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2008,
 	Name:          "ves.io.schema.is_object",
-	Tag:           "varint,2008,opt,name=is_object,json=isObject",
+	Tag:           "varint,2008,opt,name=is_object",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsFieldConfidential = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2009,
 	Name:          "ves.io.schema.is_field_confidential",
-	Tag:           "varint,2009,opt,name=is_field_confidential,json=isFieldConfidential",
+	Tag:           "varint,2009,opt,name=is_field_confidential",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_GenerateSetter = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2010,
 	Name:          "ves.io.schema.generate_setter",
-	Tag:           "varint,2010,opt,name=generate_setter,json=generateSetter",
+	Tag:           "varint,2010,opt,name=generate_setter",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_Internal = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2011,
 	Name:          "ves.io.schema.internal",
@@ -631,88 +792,88 @@ var E_Internal = &proto.ExtensionDesc{
 }
 
 var E_ServiceType = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*ServiceType)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.service_type",
-	Tag:           "varint,3000,opt,name=service_type,json=serviceType,enum=ves.io.schema.ServiceType",
+	Tag:           "varint,3000,opt,name=service_type,enum=ves.io.schema.ServiceType",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsSdro = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3001,
 	Name:          "ves.io.schema.is_sdro",
-	Tag:           "varint,3001,opt,name=is_sdro,json=isSdro",
+	Tag:           "varint,3001,opt,name=is_sdro",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_ObjectType = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3002,
 	Name:          "ves.io.schema.object_type",
-	Tag:           "bytes,3002,opt,name=object_type,json=objectType",
+	Tag:           "bytes,3002,opt,name=object_type",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_HasStatus = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3003,
 	Name:          "ves.io.schema.has_status",
-	Tag:           "varint,3003,opt,name=has_status,json=hasStatus",
+	Tag:           "varint,3003,opt,name=has_status",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_ObjectStatusType = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.ServiceOptions)(nil),
+	ExtendedType:  (*descriptor.ServiceOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3004,
 	Name:          "ves.io.schema.object_status_type",
-	Tag:           "bytes,3004,opt,name=object_status_type,json=objectStatusType",
+	Tag:           "bytes,3004,opt,name=object_status_type",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_MapsToOneofField = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         4000,
 	Name:          "ves.io.schema.maps_to_oneof_field",
-	Tag:           "bytes,4000,opt,name=maps_to_oneof_field,json=mapsToOneofField",
+	Tag:           "bytes,4000,opt,name=maps_to_oneof_field",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_InternalEnum = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.EnumValueOptions)(nil),
+	ExtendedType:  (*descriptor.EnumValueOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         2000,
 	Name:          "ves.io.schema.internal_enum",
-	Tag:           "varint,2000,opt,name=internal_enum,json=internalEnum",
+	Tag:           "varint,2000,opt,name=internal_enum",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 var E_IsImmutable = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MethodOptions)(nil),
+	ExtendedType:  (*descriptor.MethodOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         5001,
 	Name:          "ves.io.schema.is_immutable",
-	Tag:           "varint,5001,opt,name=is_immutable,json=isImmutable",
+	Tag:           "varint,5001,opt,name=is_immutable",
 	Filename:      "ves.io/schema/options.proto",
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.ReferenceType", ReferenceType_name, ReferenceType_value)
+	proto.RegisterEnum("ves.io.schema.KeyType", KeyType_name, KeyType_value)
+	proto.RegisterEnum("ves.io.schema.MetricType", MetricType_name, MetricType_value)
+	proto.RegisterEnum("ves.io.schema.ServiceType", ServiceType_name, ServiceType_value)
 	proto.RegisterType((*Via)(nil), "ves.io.schema.Via")
 	proto.RegisterType((*On)(nil), "ves.io.schema.On")
 	proto.RegisterType((*Dependencies)(nil), "ves.io.schema.Dependencies")
 	proto.RegisterType((*Key)(nil), "ves.io.schema.Key")
 	proto.RegisterType((*Keys)(nil), "ves.io.schema.Keys")
 	proto.RegisterType((*MetricDef)(nil), "ves.io.schema.MetricDef")
-	proto.RegisterEnum("ves.io.schema.ReferenceType", ReferenceType_name, ReferenceType_value)
-	proto.RegisterEnum("ves.io.schema.KeyType", KeyType_name, KeyType_value)
-	proto.RegisterEnum("ves.io.schema.MetricType", MetricType_name, MetricType_value)
-	proto.RegisterEnum("ves.io.schema.ServiceType", ServiceType_name, ServiceType_value)
 	proto.RegisterExtension(E_Dependencies)
 	proto.RegisterExtension(E_MapsToMsg)
 	proto.RegisterExtension(E_MapsToSvc)
@@ -746,6 +907,106 @@ func init() {
 	proto.RegisterExtension(E_InternalEnum)
 	proto.RegisterExtension(E_IsImmutable)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/options.proto", fileDescriptor_8562c0a0fb65343f) }
+
+var fileDescriptor_8562c0a0fb65343f = []byte{
+	// 1483 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x97, 0x5b, 0x6f, 0xdb, 0xc8,
+	0x15, 0xc7, 0x45, 0xc9, 0xb1, 0xad, 0x23, 0x5f, 0x18, 0x3a, 0x8d, 0x15, 0xc7, 0x55, 0x14, 0xa3,
+	0x68, 0x0d, 0x03, 0x96, 0xd1, 0x14, 0x45, 0x50, 0x16, 0x68, 0x23, 0x4b, 0xb2, 0xa3, 0xba, 0xb2,
+	0x14, 0xca, 0x72, 0x91, 0xb6, 0x00, 0x41, 0x91, 0x47, 0xf2, 0x54, 0x12, 0x87, 0xe1, 0x50, 0x42,
+	0xf5, 0x50, 0xa0, 0xaf, 0x7d, 0xeb, 0x47, 0x28, 0xfa, 0xb4, 0x1f, 0x61, 0x6f, 0x1f, 0x60, 0x1f,
+	0xbd, 0x77, 0xef, 0xee, 0xcb, 0x46, 0x79, 0xc9, 0xde, 0xb3, 0xdf, 0x60, 0xc1, 0x19, 0xd2, 0x96,
+	0x64, 0xef, 0xd2, 0x4f, 0x9a, 0xdb, 0xff, 0x37, 0xe7, 0x9c, 0x99, 0x73, 0x86, 0x82, 0xbb, 0x03,
+	0x64, 0x39, 0x42, 0x77, 0x98, 0x79, 0x82, 0x3d, 0x63, 0x87, 0x3a, 0x1e, 0xa1, 0x36, 0xcb, 0x39,
+	0x2e, 0xf5, 0xa8, 0xb2, 0x28, 0x26, 0x73, 0x62, 0x72, 0x6d, 0xbb, 0x4d, 0xbc, 0x93, 0x7e, 0x33,
+	0x67, 0xd2, 0xde, 0x4e, 0x9b, 0xb6, 0xe9, 0x0e, 0x5f, 0xd5, 0xec, 0xb7, 0x78, 0x8f, 0x77, 0x78,
+	0x4b, 0xa8, 0xd7, 0xb2, 0x6d, 0x4a, 0xdb, 0x5d, 0xbc, 0x58, 0x65, 0x21, 0x33, 0x5d, 0xe2, 0x78,
+	0xd4, 0x15, 0x2b, 0x36, 0x9e, 0x41, 0xe2, 0x98, 0x18, 0x8a, 0x02, 0x33, 0xde, 0xd0, 0xc1, 0xb4,
+	0x94, 0x95, 0x36, 0x93, 0x1a, 0x6f, 0x2b, 0x3f, 0x07, 0x68, 0x11, 0xec, 0x5a, 0xba, 0x63, 0x78,
+	0x27, 0xe9, 0x38, 0x9f, 0x49, 0xf2, 0x91, 0x9a, 0xe1, 0x9d, 0x28, 0x0f, 0x61, 0xde, 0xc5, 0x96,
+	0xce, 0x65, 0x89, 0xac, 0xb4, 0xb9, 0xf4, 0x60, 0x3d, 0x37, 0x61, 0x6c, 0x4e, 0xc3, 0x16, 0xba,
+	0x68, 0x9b, 0x78, 0x34, 0x74, 0x50, 0x9b, 0x73, 0xb1, 0xe5, 0x37, 0x36, 0xfe, 0x00, 0xf1, 0xaa,
+	0x7d, 0xe5, 0x8e, 0xbf, 0x80, 0xc4, 0x80, 0x18, 0xe9, 0x78, 0x36, 0xb1, 0x99, 0x7a, 0xa0, 0x4c,
+	0xd1, 0x8e, 0x89, 0xa1, 0xf9, 0xd3, 0x1b, 0xbf, 0x86, 0x85, 0x22, 0x3a, 0x68, 0x5b, 0x68, 0x9b,
+	0x04, 0x99, 0x72, 0x1f, 0xe2, 0xd4, 0x4e, 0x4b, 0x5c, 0x74, 0x73, 0x4a, 0x54, 0xb5, 0xb5, 0x38,
+	0xb5, 0x37, 0x6a, 0x90, 0x38, 0xc0, 0xe1, 0x94, 0x47, 0xd2, 0xb4, 0x47, 0x5b, 0x81, 0x49, 0x71,
+	0xee, 0xcd, 0xed, 0x29, 0xd4, 0x01, 0x0e, 0xb9, 0x1f, 0x7c, 0xcd, 0x46, 0x0e, 0x66, 0x0e, 0x70,
+	0xc8, 0x94, 0x5f, 0xc2, 0x4c, 0x07, 0x87, 0x2c, 0xd8, 0x5e, 0xb9, 0xac, 0xd1, 0xf8, 0xfc, 0xc6,
+	0xff, 0x25, 0x48, 0x56, 0xd0, 0x73, 0x89, 0x59, 0xc4, 0x96, 0xef, 0xbc, 0x6d, 0xf4, 0xce, 0x9d,
+	0xf7, 0xdb, 0x4a, 0x16, 0x52, 0xe1, 0xe9, 0x10, 0x6a, 0x07, 0xf1, 0x1e, 0x1f, 0x52, 0xb6, 0x03,
+	0xfb, 0x44, 0xb4, 0xef, 0x4c, 0xed, 0x25, 0xe8, 0x17, 0x26, 0x2a, 0xb7, 0x61, 0xb6, 0x6b, 0x34,
+	0xb1, 0xcb, 0xd2, 0x33, 0xd9, 0xc4, 0x66, 0x52, 0x0b, 0x7a, 0x4a, 0x1a, 0xe6, 0x9a, 0x7d, 0xb3,
+	0x83, 0x1e, 0x4b, 0xdf, 0xc8, 0x26, 0x36, 0x25, 0x2d, 0xec, 0x6e, 0xe5, 0x60, 0x71, 0xe2, 0xcc,
+	0x94, 0x65, 0x48, 0xed, 0x55, 0xb5, 0xbf, 0xe4, 0xb5, 0xa2, 0xae, 0x95, 0xf6, 0xe4, 0x98, 0xb2,
+	0x00, 0xf3, 0xbb, 0xf9, 0xc2, 0x01, 0xef, 0x49, 0x5b, 0xfb, 0x30, 0x17, 0x44, 0xc5, 0x5f, 0x59,
+	0xd3, 0xca, 0x95, 0xbc, 0xf6, 0x54, 0x3f, 0x28, 0x3d, 0x95, 0x63, 0xca, 0x4d, 0x58, 0xac, 0x97,
+	0x0a, 0xd5, 0xc3, 0x62, 0x38, 0x24, 0x29, 0x69, 0xb8, 0x35, 0x31, 0xa4, 0x37, 0x0e, 0xcb, 0x4f,
+	0x1a, 0x25, 0x39, 0xbe, 0xf5, 0x04, 0xe0, 0xc2, 0x7c, 0x9f, 0xd5, 0x38, 0xac, 0xd7, 0x4a, 0x85,
+	0xf2, 0x5e, 0xb9, 0x54, 0x94, 0x63, 0x4a, 0x12, 0x6e, 0xec, 0xe7, 0x1b, 0xfb, 0x25, 0x59, 0x52,
+	0x52, 0x30, 0x57, 0xa8, 0x36, 0x0e, 0x8f, 0x4a, 0x9a, 0x1c, 0x57, 0x16, 0x21, 0xf9, 0xb8, 0x5c,
+	0x3f, 0xaa, 0xee, 0x6b, 0xf9, 0x8a, 0x9c, 0xf0, 0xe7, 0xea, 0x8d, 0x8a, 0x6f, 0x83, 0x3c, 0xb3,
+	0x85, 0x90, 0xaa, 0xa3, 0x3b, 0x20, 0x81, 0x27, 0x00, 0xb3, 0x85, 0x46, 0xfd, 0xa8, 0x5a, 0x91,
+	0x63, 0xbe, 0x2c, 0xdf, 0x38, 0xaa, 0xea, 0x05, 0xad, 0x51, 0x94, 0x25, 0xe5, 0x16, 0xc8, 0xe7,
+	0x5d, 0xbd, 0xd6, 0xd8, 0xfd, 0x73, 0xb9, 0x20, 0xc7, 0x7d, 0xfb, 0x85, 0x20, 0x1c, 0x4a, 0x28,
+	0x0a, 0x2c, 0x85, 0x43, 0x5a, 0xf9, 0x38, 0x7f, 0x54, 0x92, 0x67, 0x54, 0x03, 0x16, 0xac, 0xf1,
+	0xcb, 0x78, 0x2f, 0x27, 0x52, 0x2e, 0x17, 0xa6, 0x5c, 0xae, 0x82, 0x8c, 0x19, 0x6d, 0xac, 0x8a,
+	0xb4, 0x4e, 0xbf, 0x9c, 0xcb, 0x4a, 0x9b, 0xa9, 0x07, 0x77, 0xa7, 0x4e, 0x6f, 0xfc, 0x46, 0x6b,
+	0x13, 0x48, 0xf5, 0x11, 0xa4, 0x7a, 0x86, 0xc3, 0x74, 0x8f, 0xea, 0x3d, 0xd6, 0x8e, 0xde, 0xe1,
+	0x8b, 0x39, 0x71, 0xb1, 0x7d, 0xd1, 0x11, 0xad, 0xb0, 0xf6, 0x38, 0x81, 0x0d, 0xcc, 0x68, 0xc2,
+	0x57, 0x13, 0x84, 0xfa, 0xc0, 0x54, 0xcb, 0xe2, 0x9a, 0x47, 0x4b, 0xbf, 0x14, 0xee, 0xad, 0x5c,
+	0x4e, 0x04, 0x26, 0x32, 0x41, 0xad, 0xc1, 0x0a, 0x61, 0xbe, 0x27, 0xba, 0x49, 0xed, 0x16, 0xb1,
+	0xd0, 0xf6, 0x88, 0xd1, 0x8d, 0x26, 0x7f, 0xed, 0x93, 0xe7, 0xb5, 0x9b, 0x84, 0x55, 0x58, 0xbb,
+	0x30, 0x26, 0x55, 0x09, 0xdc, 0x6f, 0xa3, 0xa7, 0x33, 0x07, 0x4d, 0xdd, 0xa6, 0x9e, 0x6e, 0xba,
+	0x68, 0x78, 0x28, 0xfa, 0xac, 0xef, 0xa0, 0xcb, 0xd0, 0x8b, 0xe6, 0x7f, 0x23, 0xf8, 0xeb, 0x6d,
+	0xf4, 0xea, 0x0e, 0x9a, 0x87, 0xd4, 0x2b, 0x70, 0x8e, 0xdf, 0xa9, 0x07, 0x14, 0xb5, 0x04, 0x8b,
+	0x16, 0x61, 0x4e, 0xd7, 0x18, 0xea, 0xd4, 0xb5, 0xd0, 0x8d, 0xc6, 0x7e, 0x2b, 0x62, 0xb9, 0x10,
+	0xc8, 0xaa, 0xbe, 0x4a, 0x35, 0x60, 0xbd, 0x8d, 0x36, 0xba, 0xbe, 0x99, 0x8e, 0x4b, 0x06, 0xfe,
+	0xaf, 0xe1, 0x10, 0xbd, 0x87, 0xde, 0x09, 0xb5, 0xae, 0x11, 0xe6, 0xef, 0x04, 0xf5, 0x4e, 0x48,
+	0xa9, 0x09, 0x48, 0xde, 0x21, 0x15, 0x81, 0x50, 0x0f, 0x41, 0x21, 0xb6, 0xee, 0x57, 0x16, 0xe6,
+	0x18, 0x26, 0xf2, 0x3a, 0x7d, 0x0d, 0xf0, 0x2b, 0x01, 0x96, 0x89, 0x7d, 0x18, 0x4a, 0xfd, 0xfc,
+	0x61, 0xea, 0x9f, 0x40, 0xb6, 0xa9, 0xde, 0xb7, 0x99, 0xd1, 0x42, 0xdd, 0xc2, 0x2e, 0x7a, 0x18,
+	0x4d, 0xfb, 0x5e, 0xc4, 0x74, 0xc9, 0xa6, 0x0d, 0x2e, 0x2c, 0x72, 0x9d, 0x5a, 0x85, 0x5b, 0x17,
+	0xee, 0xf7, 0x9b, 0x5d, 0x62, 0xea, 0xa6, 0xdb, 0xb7, 0x94, 0xf5, 0x4b, 0xbc, 0x3d, 0xd2, 0x9d,
+	0xcc, 0x9c, 0x79, 0x4d, 0x39, 0xf7, 0x99, 0x2b, 0x0b, 0x6e, 0xdf, 0x52, 0xff, 0x0e, 0x77, 0xa7,
+	0x81, 0xe3, 0xe1, 0xfc, 0x69, 0x6e, 0x90, 0x2f, 0xe9, 0x49, 0xee, 0x58, 0x28, 0x1f, 0xc2, 0x1c,
+	0x61, 0xba, 0xd3, 0xf1, 0x5f, 0x90, 0x2b, 0x48, 0xd8, 0xb5, 0x42, 0xd4, 0xe9, 0x32, 0x37, 0x71,
+	0x96, 0xb0, 0x5a, 0x07, 0x87, 0xea, 0x23, 0x58, 0x20, 0x4c, 0x67, 0x1d, 0x1c, 0xea, 0x7d, 0x9b,
+	0x3c, 0x8b, 0x52, 0xbf, 0x2b, 0xd4, 0x40, 0x58, 0xbd, 0x83, 0xc3, 0x86, 0x4d, 0x9e, 0x05, 0x5b,
+	0xb3, 0x6b, 0x6c, 0xfd, 0xde, 0xf9, 0xd6, 0xbe, 0x58, 0xdd, 0x85, 0xc5, 0x30, 0xe5, 0xf9, 0x03,
+	0x17, 0x25, 0x7f, 0x7f, 0x59, 0xbc, 0x37, 0x22, 0xe5, 0xf9, 0x94, 0x5a, 0x83, 0xd9, 0x1e, 0xaf,
+	0xca, 0x51, 0xe2, 0x0f, 0x96, 0x79, 0xd2, 0xa7, 0xaf, 0x7c, 0x91, 0x8a, 0xd8, 0xd2, 0x02, 0x8e,
+	0xfa, 0x5b, 0x98, 0xe5, 0xdf, 0x0c, 0x34, 0x8a, 0xf8, 0xa1, 0x30, 0xe7, 0x86, 0xff, 0xcd, 0x40,
+	0xd5, 0xc7, 0x20, 0x13, 0xa6, 0xfb, 0x4a, 0x86, 0x26, 0xb5, 0x2d, 0xc3, 0x8d, 0x0c, 0xc7, 0x47,
+	0x22, 0x1c, 0x4b, 0x84, 0x69, 0xd8, 0xaa, 0x87, 0x2a, 0xf5, 0x6f, 0xb0, 0xc6, 0x5f, 0x41, 0x9d,
+	0x61, 0x17, 0x4d, 0x8f, 0xba, 0x3a, 0x6d, 0xfe, 0x03, 0x4d, 0x4f, 0xef, 0x10, 0x3b, 0x32, 0x46,
+	0x1f, 0x0b, 0xa3, 0x56, 0x39, 0xa1, 0x1e, 0x00, 0xaa, 0x5c, 0x7f, 0x40, 0x6c, 0x4b, 0xfd, 0x3d,
+	0x24, 0x09, 0x0b, 0x80, 0x51, 0xac, 0x33, 0x61, 0xdf, 0x3c, 0x61, 0x02, 0xa0, 0x6a, 0xf0, 0x33,
+	0xc2, 0xc4, 0x59, 0x4d, 0x16, 0xc6, 0x08, 0xd0, 0x27, 0x02, 0xb4, 0x42, 0x18, 0x1f, 0x9e, 0x28,
+	0x8c, 0xfb, 0xb0, 0x7c, 0x9e, 0x16, 0x0c, 0x3d, 0x0f, 0xdd, 0x28, 0xda, 0xa7, 0x41, 0xd8, 0x42,
+	0x59, 0x9d, 0xab, 0x54, 0x15, 0xe6, 0x89, 0xed, 0xa1, 0x6b, 0x47, 0xdb, 0xf3, 0x59, 0xe8, 0x58,
+	0xb0, 0x5e, 0xd5, 0x61, 0x81, 0x89, 0x87, 0x98, 0xd7, 0xa0, 0x2b, 0x8a, 0x46, 0xf0, 0x4e, 0x87,
+	0x84, 0xd7, 0x57, 0xf9, 0xf7, 0xcd, 0xda, 0xd4, 0x6d, 0x1a, 0x7b, 0xcd, 0xb5, 0x14, 0xbb, 0xe8,
+	0xa8, 0xbf, 0x13, 0x39, 0x62, 0xb9, 0x34, 0x9a, 0xfd, 0xc6, 0xea, 0x79, 0x96, 0x58, 0x2e, 0x55,
+	0xf3, 0x90, 0x0a, 0xce, 0xff, 0x7a, 0xa6, 0xbd, 0xb9, 0xca, 0x6f, 0x00, 0x08, 0x11, 0xdf, 0xfd,
+	0x8f, 0x00, 0x27, 0x06, 0xd3, 0x99, 0x67, 0x78, 0x7d, 0x16, 0x4d, 0x78, 0x4b, 0x18, 0x90, 0x3c,
+	0x31, 0x58, 0x9d, 0x4b, 0xfc, 0x42, 0x1d, 0xd8, 0x20, 0x18, 0xd7, 0x34, 0xe5, 0x6d, 0x61, 0x8a,
+	0x2c, 0xb4, 0x82, 0xc5, 0x0d, 0xaa, 0xc0, 0x4a, 0x98, 0xf9, 0xd4, 0x46, 0xda, 0xfa, 0xd1, 0xfc,
+	0xaf, 0xfa, 0xb3, 0x21, 0xee, 0x7f, 0xf7, 0x04, 0x4e, 0xe4, 0x3f, 0x9f, 0x12, 0x45, 0x60, 0x1f,
+	0x16, 0xc3, 0xa3, 0xd4, 0xd1, 0xee, 0xf7, 0x94, 0xfb, 0x97, 0x40, 0x25, 0xbb, 0xdf, 0x3b, 0x36,
+	0xba, 0x7d, 0x9c, 0x2a, 0x83, 0x0b, 0xa1, 0xd0, 0x5f, 0xa0, 0xee, 0xf2, 0x62, 0x48, 0x7a, 0xbd,
+	0xbe, 0x67, 0x34, 0xbb, 0xa8, 0x64, 0xae, 0x78, 0x3c, 0xfc, 0x7a, 0x1b, 0x42, 0xfe, 0xf3, 0x2b,
+	0x0e, 0x49, 0x11, 0x56, 0x0e, 0x35, 0xbb, 0xff, 0x3a, 0x7d, 0x9e, 0x89, 0x9d, 0x3d, 0xcf, 0xc4,
+	0x5e, 0x3d, 0xcf, 0x48, 0xff, 0x1e, 0x65, 0xa4, 0xd7, 0x46, 0x19, 0xe9, 0x9d, 0x51, 0x46, 0x3a,
+	0x1d, 0x65, 0xa4, 0xb3, 0x51, 0x46, 0xfa, 0x7c, 0x94, 0x91, 0x5e, 0x8e, 0x32, 0xb1, 0x57, 0xa3,
+	0x8c, 0xf4, 0xdf, 0x17, 0x99, 0xd8, 0xe9, 0x8b, 0x4c, 0xec, 0xec, 0x45, 0x26, 0xf6, 0xd7, 0x42,
+	0x9b, 0x3a, 0x9d, 0x76, 0x6e, 0x40, 0xbb, 0x1e, 0xba, 0xae, 0x91, 0xeb, 0xb3, 0x1d, 0xde, 0x68,
+	0x51, 0xb7, 0xb7, 0xed, 0xb8, 0x74, 0x40, 0x2c, 0x74, 0xb7, 0xc3, 0xe9, 0x1d, 0xa7, 0xd9, 0xa6,
+	0x3b, 0xf8, 0x4f, 0x2f, 0xf8, 0x4f, 0x26, 0x7e, 0x9a, 0xb3, 0xdc, 0xd4, 0xdf, 0xfc, 0x10, 0x00,
+	0x00, 0xff, 0xff, 0x1e, 0x2a, 0xda, 0xb4, 0xb2, 0x0d, 0x00, 0x00,
+}
+
 func (x ReferenceType) String() string {
 	s, ok := ReferenceType_name[int32(x)]
 	if ok {
@@ -1052,7 +1313,7 @@ func valueToGoStringOptions(v interface{}, typ string) string {
 func (m *Via) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1060,34 +1321,41 @@ func (m *Via) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Via) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Via) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Type) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Type)))
-		i += copy(dAtA[i:], m.Type)
+	if m.RefType != 0 {
+		i = encodeVarintOptions(dAtA, i, uint64(m.RefType))
+		i--
+		dAtA[i] = 0x18
 	}
 	if len(m.FieldPath) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.FieldPath)
+		copy(dAtA[i:], m.FieldPath)
 		i = encodeVarintOptions(dAtA, i, uint64(len(m.FieldPath)))
-		i += copy(dAtA[i:], m.FieldPath)
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.RefType != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(m.RefType))
+	if len(m.Type) > 0 {
+		i -= len(m.Type)
+		copy(dAtA[i:], m.Type)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Type)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *On) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1095,35 +1363,43 @@ func (m *On) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *On) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *On) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Type) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Type)))
-		i += copy(dAtA[i:], m.Type)
-	}
 	if len(m.Via) > 0 {
-		for _, msg := range m.Via {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Via) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Via[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Type) > 0 {
+		i -= len(m.Type)
+		copy(dAtA[i:], m.Type)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Type)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Dependencies) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1131,29 +1407,36 @@ func (m *Dependencies) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Dependencies) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Dependencies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.On) > 0 {
-		for _, msg := range m.On {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.On) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.On[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Key) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1161,28 +1444,34 @@ func (m *Key) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Key) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Key) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.FieldPath) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.FieldPath)))
-		i += copy(dAtA[i:], m.FieldPath)
-	}
 	if m.Type != 0 {
-		dAtA[i] = 0x10
-		i++
 		i = encodeVarintOptions(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.FieldPath) > 0 {
+		i -= len(m.FieldPath)
+		copy(dAtA[i:], m.FieldPath)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.FieldPath)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Keys) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1190,29 +1479,36 @@ func (m *Keys) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Keys) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Keys) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Keys) > 0 {
-		for _, msg := range m.Keys {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Keys) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Keys[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *MetricDef) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1220,65 +1516,71 @@ func (m *MetricDef) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MetricDef) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MetricDef) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if len(m.Description) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
-	}
-	if m.Type != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(m.Type))
+	if len(m.Buckets) > 0 {
+		for iNdEx := len(m.Buckets) - 1; iNdEx >= 0; iNdEx-- {
+			f1 := math.Float64bits(float64(m.Buckets[iNdEx]))
+			i -= 8
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f1))
+		}
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Buckets)*8))
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.Labels) > 0 {
-		for _, s := range m.Labels {
+		for iNdEx := len(m.Labels) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Labels[iNdEx])
+			copy(dAtA[i:], m.Labels[iNdEx])
+			i = encodeVarintOptions(dAtA, i, uint64(len(m.Labels[iNdEx])))
+			i--
 			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.Buckets) > 0 {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintOptions(dAtA, i, uint64(len(m.Buckets)*8))
-		for _, num := range m.Buckets {
-			f1 := math.Float64bits(float64(num))
-			binary.LittleEndian.PutUint64(dAtA[i:], uint64(f1))
-			i += 8
-		}
+	if m.Type != 0 {
+		i = encodeVarintOptions(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintOptions(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintOptions(dAtA []byte, offset int, v uint64) int {
+	offset -= sovOptions(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *Via) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Type)
@@ -1296,6 +1598,9 @@ func (m *Via) Size() (n int) {
 }
 
 func (m *On) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Type)
@@ -1312,6 +1617,9 @@ func (m *On) Size() (n int) {
 }
 
 func (m *Dependencies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.On) > 0 {
@@ -1324,6 +1632,9 @@ func (m *Dependencies) Size() (n int) {
 }
 
 func (m *Key) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.FieldPath)
@@ -1337,6 +1648,9 @@ func (m *Key) Size() (n int) {
 }
 
 func (m *Keys) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Keys) > 0 {
@@ -1349,6 +1663,9 @@ func (m *Keys) Size() (n int) {
 }
 
 func (m *MetricDef) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -1375,14 +1692,7 @@ func (m *MetricDef) Size() (n int) {
 }
 
 func sovOptions(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozOptions(x uint64) (n int) {
 	return sovOptions(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1403,9 +1713,14 @@ func (this *On) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVia := "[]*Via{"
+	for _, f := range this.Via {
+		repeatedStringForVia += strings.Replace(f.String(), "Via", "Via", 1) + ","
+	}
+	repeatedStringForVia += "}"
 	s := strings.Join([]string{`&On{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Via:` + strings.Replace(fmt.Sprintf("%v", this.Via), "Via", "Via", 1) + `,`,
+		`Via:` + repeatedStringForVia + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1414,8 +1729,13 @@ func (this *Dependencies) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOn := "[]*On{"
+	for _, f := range this.On {
+		repeatedStringForOn += strings.Replace(f.String(), "On", "On", 1) + ","
+	}
+	repeatedStringForOn += "}"
 	s := strings.Join([]string{`&Dependencies{`,
-		`On:` + strings.Replace(fmt.Sprintf("%v", this.On), "On", "On", 1) + `,`,
+		`On:` + repeatedStringForOn + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1435,8 +1755,13 @@ func (this *Keys) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForKeys := "[]*Key{"
+	for _, f := range this.Keys {
+		repeatedStringForKeys += strings.Replace(f.String(), "Key", "Key", 1) + ","
+	}
+	repeatedStringForKeys += "}"
 	s := strings.Join([]string{`&Keys{`,
-		`Keys:` + strings.Replace(fmt.Sprintf("%v", this.Keys), "Key", "Key", 1) + `,`,
+		`Keys:` + repeatedStringForKeys + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1478,7 +1803,7 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1506,7 +1831,7 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1516,6 +1841,9 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1535,7 +1863,7 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1545,6 +1873,9 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1564,7 +1895,7 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.RefType |= (ReferenceType(b) & 0x7F) << shift
+				m.RefType |= ReferenceType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1576,6 +1907,9 @@ func (m *Via) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -1605,7 +1939,7 @@ func (m *On) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1633,7 +1967,7 @@ func (m *On) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1643,6 +1977,9 @@ func (m *On) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1662,7 +1999,7 @@ func (m *On) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1671,6 +2008,9 @@ func (m *On) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1686,6 +2026,9 @@ func (m *On) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -1715,7 +2058,7 @@ func (m *Dependencies) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1743,7 +2086,7 @@ func (m *Dependencies) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1752,6 +2095,9 @@ func (m *Dependencies) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1767,6 +2113,9 @@ func (m *Dependencies) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -1796,7 +2145,7 @@ func (m *Key) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1824,7 +2173,7 @@ func (m *Key) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1834,6 +2183,9 @@ func (m *Key) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1853,7 +2205,7 @@ func (m *Key) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (KeyType(b) & 0x7F) << shift
+				m.Type |= KeyType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1865,6 +2217,9 @@ func (m *Key) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -1894,7 +2249,7 @@ func (m *Keys) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1922,7 +2277,7 @@ func (m *Keys) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1931,6 +2286,9 @@ func (m *Keys) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1946,6 +2304,9 @@ func (m *Keys) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -1975,7 +2336,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2003,7 +2364,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2013,6 +2374,9 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2032,7 +2396,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2042,6 +2406,9 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2061,7 +2428,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (MetricType(b) & 0x7F) << shift
+				m.Type |= MetricType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2080,7 +2447,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2090,6 +2457,9 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2101,7 +2471,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				if (iNdEx + 8) > l {
 					return io.ErrUnexpectedEOF
 				}
-				v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+				v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 				iNdEx += 8
 				v2 := float64(math.Float64frombits(v))
 				m.Buckets = append(m.Buckets, v2)
@@ -2116,7 +2486,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2125,15 +2495,23 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthOptions
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthOptions
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				elementCount = packedLen / 8
+				if elementCount != 0 && len(m.Buckets) == 0 {
+					m.Buckets = make([]float64, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v uint64
 					if (iNdEx + 8) > l {
 						return io.ErrUnexpectedEOF
 					}
-					v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+					v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 					iNdEx += 8
 					v2 := float64(math.Float64frombits(v))
 					m.Buckets = append(m.Buckets, v2)
@@ -2148,6 +2526,9 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -2165,6 +2546,7 @@ func (m *MetricDef) Unmarshal(dAtA []byte) error {
 func skipOptions(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2196,10 +2578,8 @@ func skipOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2216,152 +2596,34 @@ func skipOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthOptions
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowOptions
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipOptions(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupOptions
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthOptions
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthOptions = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowOptions   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthOptions        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowOptions          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupOptions = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/options.proto", fileDescriptorOptions) }
-
-var fileDescriptorOptions = []byte{
-	// 1474 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x97, 0x5b, 0x6f, 0xdb, 0xc8,
-	0x15, 0xc7, 0x45, 0xc9, 0xb1, 0xad, 0x23, 0x5f, 0x18, 0x3a, 0x8d, 0x15, 0xc7, 0x55, 0x14, 0xa3,
-	0x68, 0x0d, 0x03, 0x96, 0xd1, 0x14, 0x45, 0x50, 0x16, 0x68, 0x23, 0x4b, 0xb2, 0xa3, 0xba, 0xb2,
-	0x14, 0xca, 0x72, 0x91, 0xb6, 0x00, 0x41, 0x91, 0x47, 0xf2, 0x54, 0x12, 0x87, 0xe1, 0x90, 0x42,
-	0xf5, 0xd6, 0xd7, 0xbe, 0xf5, 0x23, 0x14, 0x7d, 0xea, 0x47, 0xe8, 0x65, 0x3f, 0xc0, 0x3e, 0x66,
-	0xef, 0xd9, 0xdd, 0x97, 0x8d, 0xf6, 0x25, 0x7b, 0xcf, 0x7e, 0x83, 0x05, 0x67, 0x48, 0x5b, 0x92,
-	0xbd, 0x4b, 0x3f, 0x69, 0x6e, 0xff, 0xdf, 0x9c, 0x73, 0x66, 0xce, 0x19, 0x0a, 0xee, 0x0e, 0x91,
-	0x15, 0x08, 0xdd, 0x63, 0xe6, 0x19, 0x0e, 0x8c, 0x3d, 0xea, 0x78, 0x84, 0xda, 0xac, 0xe0, 0xb8,
-	0xd4, 0xa3, 0xca, 0xb2, 0x98, 0x2c, 0x88, 0xc9, 0x8d, 0xdd, 0x2e, 0xf1, 0xce, 0xfc, 0x76, 0xc1,
-	0xa4, 0x83, 0xbd, 0x2e, 0xed, 0xd2, 0x3d, 0xbe, 0xaa, 0xed, 0x77, 0x78, 0x8f, 0x77, 0x78, 0x4b,
-	0xa8, 0x37, 0xf2, 0x5d, 0x4a, 0xbb, 0x7d, 0xbc, 0x58, 0x65, 0x21, 0x33, 0x5d, 0xe2, 0x78, 0xd4,
-	0x15, 0x2b, 0xb6, 0x9e, 0x41, 0xea, 0x94, 0x18, 0x8a, 0x02, 0x73, 0xde, 0xc8, 0xc1, 0xac, 0x94,
-	0x97, 0xb6, 0xd3, 0x1a, 0x6f, 0x2b, 0x3f, 0x06, 0xe8, 0x10, 0xec, 0x5b, 0xba, 0x63, 0x78, 0x67,
-	0xd9, 0x24, 0x9f, 0x49, 0xf3, 0x91, 0x86, 0xe1, 0x9d, 0x29, 0x0f, 0x61, 0xd1, 0xc5, 0x8e, 0xce,
-	0x65, 0xa9, 0xbc, 0xb4, 0xbd, 0xf2, 0x60, 0xb3, 0x30, 0x65, 0x6c, 0x41, 0xc3, 0x0e, 0xba, 0x68,
-	0x9b, 0x78, 0x32, 0x72, 0x50, 0x5b, 0x70, 0xb1, 0x13, 0x34, 0xb6, 0x7e, 0x03, 0xc9, 0xba, 0x7d,
-	0xe5, 0x8e, 0x3f, 0x81, 0xd4, 0x90, 0x18, 0xd9, 0x64, 0x3e, 0xb5, 0x9d, 0x79, 0xa0, 0xcc, 0xd0,
-	0x4e, 0x89, 0xa1, 0x05, 0xd3, 0x5b, 0x3f, 0x87, 0xa5, 0x32, 0x3a, 0x68, 0x5b, 0x68, 0x9b, 0x04,
-	0x99, 0x72, 0x1f, 0x92, 0xd4, 0xce, 0x4a, 0x5c, 0x74, 0x73, 0x46, 0x54, 0xb7, 0xb5, 0x24, 0xb5,
-	0xb7, 0x1a, 0x90, 0x3a, 0xc2, 0xd1, 0x8c, 0x47, 0xd2, 0xac, 0x47, 0x3b, 0xa1, 0x49, 0x49, 0xee,
-	0xcd, 0xed, 0x19, 0xd4, 0x11, 0x8e, 0xb8, 0x1f, 0x7c, 0xcd, 0x56, 0x01, 0xe6, 0x8e, 0x70, 0xc4,
-	0x94, 0x9f, 0xc2, 0x5c, 0x0f, 0x47, 0x2c, 0xdc, 0x5e, 0xb9, 0xac, 0xd1, 0xf8, 0xfc, 0xd6, 0xbf,
-	0x24, 0x48, 0xd7, 0xd0, 0x73, 0x89, 0x59, 0xc6, 0x4e, 0xe0, 0xbc, 0x6d, 0x0c, 0xce, 0x9d, 0x0f,
-	0xda, 0x4a, 0x1e, 0x32, 0xd1, 0xe9, 0x10, 0x6a, 0x87, 0xf1, 0x9e, 0x1c, 0x52, 0x76, 0x43, 0xfb,
-	0x44, 0xb4, 0xef, 0xcc, 0xec, 0x25, 0xe8, 0x17, 0x26, 0x2a, 0xb7, 0x61, 0xbe, 0x6f, 0xb4, 0xb1,
-	0xcf, 0xb2, 0x73, 0xf9, 0xd4, 0x76, 0x5a, 0x0b, 0x7b, 0x4a, 0x16, 0x16, 0xda, 0xbe, 0xd9, 0x43,
-	0x8f, 0x65, 0x6f, 0xe4, 0x53, 0xdb, 0x92, 0x16, 0x75, 0x77, 0x0a, 0xb0, 0x3c, 0x75, 0x66, 0xca,
-	0x2a, 0x64, 0x0e, 0xea, 0xda, 0x1f, 0x8a, 0x5a, 0x59, 0xd7, 0x2a, 0x07, 0x72, 0x42, 0x59, 0x82,
-	0xc5, 0xfd, 0x62, 0xe9, 0x88, 0xf7, 0xa4, 0x9d, 0x43, 0x58, 0x08, 0xa3, 0x12, 0xac, 0x6c, 0x68,
-	0xd5, 0x5a, 0x51, 0x7b, 0xaa, 0x1f, 0x55, 0x9e, 0xca, 0x09, 0xe5, 0x26, 0x2c, 0x37, 0x2b, 0xa5,
-	0xfa, 0x71, 0x39, 0x1a, 0x92, 0x94, 0x2c, 0xdc, 0x9a, 0x1a, 0xd2, 0x5b, 0xc7, 0xd5, 0x27, 0xad,
-	0x8a, 0x9c, 0xdc, 0x79, 0x02, 0x70, 0x61, 0x7e, 0xc0, 0x6a, 0x1d, 0x37, 0x1b, 0x95, 0x52, 0xf5,
-	0xa0, 0x5a, 0x29, 0xcb, 0x09, 0x25, 0x0d, 0x37, 0x0e, 0x8b, 0xad, 0xc3, 0x8a, 0x2c, 0x29, 0x19,
-	0x58, 0x28, 0xd5, 0x5b, 0xc7, 0x27, 0x15, 0x4d, 0x4e, 0x2a, 0xcb, 0x90, 0x7e, 0x5c, 0x6d, 0x9e,
-	0xd4, 0x0f, 0xb5, 0x62, 0x4d, 0x4e, 0x05, 0x73, 0xcd, 0x56, 0x2d, 0xb0, 0x41, 0x9e, 0xdb, 0x41,
-	0xc8, 0x34, 0xd1, 0x1d, 0x92, 0xd0, 0x13, 0x80, 0xf9, 0x52, 0xab, 0x79, 0x52, 0xaf, 0xc9, 0x89,
-	0x40, 0x56, 0x6c, 0x9d, 0xd4, 0xf5, 0x92, 0xd6, 0x2a, 0xcb, 0x92, 0x72, 0x0b, 0xe4, 0xf3, 0xae,
-	0xde, 0x68, 0xed, 0xff, 0xbe, 0x5a, 0x92, 0x93, 0x81, 0xfd, 0x42, 0x10, 0x0d, 0xa5, 0x14, 0x05,
-	0x56, 0xa2, 0x21, 0xad, 0x7a, 0x5a, 0x3c, 0xa9, 0xc8, 0x73, 0xaa, 0x01, 0x4b, 0xd6, 0xe4, 0x65,
-	0xbc, 0x57, 0x10, 0x29, 0x57, 0x88, 0x52, 0xae, 0x50, 0x43, 0xc6, 0x8c, 0x2e, 0xd6, 0x45, 0x5a,
-	0x67, 0x5f, 0x2d, 0xe4, 0xa5, 0xed, 0xcc, 0x83, 0xbb, 0x33, 0xa7, 0x37, 0x79, 0xa3, 0xb5, 0x29,
-	0xa4, 0xfa, 0x08, 0x32, 0x03, 0xc3, 0x61, 0xba, 0x47, 0xf5, 0x01, 0xeb, 0xc6, 0xef, 0xf0, 0xd9,
-	0x82, 0xb8, 0xd8, 0x81, 0xe8, 0x84, 0xd6, 0x58, 0x77, 0x92, 0xc0, 0x86, 0x66, 0x3c, 0xe1, 0x8b,
-	0x29, 0x42, 0x73, 0x68, 0xaa, 0x55, 0x71, 0xcd, 0xe3, 0xa5, 0x9f, 0x0b, 0xf7, 0xd6, 0x2e, 0x27,
-	0x02, 0x13, 0x99, 0xa0, 0x36, 0x60, 0x8d, 0xb0, 0xc0, 0x13, 0xdd, 0xa4, 0x76, 0x87, 0x58, 0x68,
-	0x7b, 0xc4, 0xe8, 0xc7, 0x93, 0xbf, 0x0c, 0xc8, 0x8b, 0xda, 0x4d, 0xc2, 0x6a, 0xac, 0x5b, 0x9a,
-	0x90, 0xaa, 0x04, 0xee, 0x77, 0xd1, 0xd3, 0x99, 0x83, 0xa6, 0x6e, 0x53, 0x4f, 0x37, 0x5d, 0x34,
-	0x3c, 0x14, 0x7d, 0xe6, 0x3b, 0xe8, 0x32, 0xf4, 0xe2, 0xf9, 0x5f, 0x09, 0xfe, 0x66, 0x17, 0xbd,
-	0xa6, 0x83, 0xe6, 0x31, 0xf5, 0x4a, 0x9c, 0x13, 0x74, 0x9a, 0x21, 0x45, 0xad, 0xc0, 0xb2, 0x45,
-	0x98, 0xd3, 0x37, 0x46, 0x3a, 0x75, 0x2d, 0x74, 0xe3, 0xb1, 0x5f, 0x8b, 0x58, 0x2e, 0x85, 0xb2,
-	0x7a, 0xa0, 0x52, 0x0d, 0xd8, 0xec, 0xa2, 0x8d, 0x6e, 0x60, 0xa6, 0xe3, 0x92, 0x61, 0xf0, 0x6b,
-	0x38, 0x44, 0x1f, 0xa0, 0x77, 0x46, 0xad, 0x6b, 0x84, 0xf9, 0x1b, 0x41, 0xbd, 0x13, 0x51, 0x1a,
-	0x02, 0x52, 0x74, 0x48, 0x4d, 0x20, 0xd4, 0x63, 0x50, 0x88, 0xad, 0x07, 0x95, 0x85, 0x39, 0x86,
-	0x89, 0xbc, 0x4e, 0x5f, 0x03, 0xfc, 0x5a, 0x80, 0x65, 0x62, 0x1f, 0x47, 0xd2, 0x20, 0x7f, 0x98,
-	0xfa, 0x3b, 0x90, 0x6d, 0xaa, 0xfb, 0x36, 0x33, 0x3a, 0xa8, 0x5b, 0xd8, 0x47, 0x0f, 0xe3, 0x69,
-	0xdf, 0x8a, 0x98, 0xae, 0xd8, 0xb4, 0xc5, 0x85, 0x65, 0xae, 0x53, 0xeb, 0x70, 0xeb, 0xc2, 0x7d,
-	0xbf, 0xdd, 0x27, 0xa6, 0x6e, 0xba, 0xbe, 0xa5, 0x6c, 0x5e, 0xe2, 0x1d, 0x90, 0xfe, 0x74, 0xe6,
-	0x2c, 0x6a, 0xca, 0xb9, 0xcf, 0x5c, 0x59, 0x72, 0x7d, 0x4b, 0xfd, 0x33, 0xdc, 0x9d, 0x05, 0x4e,
-	0x86, 0xf3, 0x87, 0xb9, 0x61, 0xbe, 0x64, 0xa7, 0xb9, 0x13, 0xa1, 0x7c, 0x08, 0x0b, 0x84, 0xe9,
-	0x4e, 0x2f, 0x78, 0x41, 0xae, 0x20, 0x61, 0xdf, 0x8a, 0x50, 0xcf, 0x57, 0xb9, 0x89, 0xf3, 0x84,
-	0x35, 0x7a, 0x38, 0x52, 0x1f, 0xc1, 0x12, 0x61, 0x3a, 0xeb, 0xe1, 0x48, 0xf7, 0x6d, 0xf2, 0x2c,
-	0x4e, 0xfd, 0x96, 0x50, 0x03, 0x61, 0xcd, 0x1e, 0x8e, 0x5a, 0x36, 0x79, 0x16, 0x6e, 0xcd, 0xae,
-	0xb1, 0xf5, 0xdb, 0xe7, 0x5b, 0x07, 0x62, 0x75, 0x1f, 0x96, 0xa3, 0x94, 0xe7, 0x0f, 0x5c, 0x9c,
-	0xfc, 0x9d, 0x55, 0xf1, 0xde, 0x88, 0x94, 0xe7, 0x53, 0x6a, 0x03, 0xe6, 0x07, 0xbc, 0x2a, 0xc7,
-	0x89, 0xdf, 0x5d, 0xe5, 0x49, 0x9f, 0xbd, 0xf2, 0x45, 0x2a, 0x63, 0x47, 0x0b, 0x39, 0xea, 0x2f,
-	0x61, 0x9e, 0x7f, 0x33, 0xd0, 0x38, 0xe2, 0x7b, 0xc2, 0x9c, 0x1b, 0xc1, 0x37, 0x03, 0x55, 0x1f,
-	0x83, 0x4c, 0x98, 0x1e, 0x28, 0x19, 0x9a, 0xd4, 0xb6, 0x0c, 0x37, 0x36, 0x1c, 0xef, 0x8b, 0x70,
-	0xac, 0x10, 0xa6, 0x61, 0xa7, 0x19, 0xa9, 0xd4, 0x3f, 0xc1, 0x06, 0x7f, 0x05, 0x75, 0x86, 0x7d,
-	0x34, 0x3d, 0xea, 0xea, 0xb4, 0xfd, 0x17, 0x34, 0x3d, 0xbd, 0x47, 0xec, 0xd8, 0x18, 0x7d, 0x20,
-	0x8c, 0x5a, 0xe7, 0x84, 0x66, 0x08, 0xa8, 0x73, 0xfd, 0x11, 0xb1, 0x2d, 0xf5, 0xd7, 0x90, 0x26,
-	0x2c, 0x04, 0xc6, 0xb1, 0x5e, 0x08, 0xfb, 0x16, 0x09, 0x13, 0x00, 0x55, 0x83, 0x1f, 0x11, 0x26,
-	0xce, 0x6a, 0xba, 0x30, 0xc6, 0x80, 0x3e, 0x14, 0xa0, 0x35, 0xc2, 0xf8, 0xf0, 0x54, 0x61, 0x3c,
-	0x84, 0xd5, 0xf3, 0xb4, 0x60, 0xe8, 0x79, 0xe8, 0xc6, 0xd1, 0x3e, 0x0a, 0xc3, 0x16, 0xc9, 0x9a,
-	0x5c, 0xa5, 0xaa, 0xb0, 0x48, 0x6c, 0x0f, 0x5d, 0x3b, 0xde, 0x9e, 0x8f, 0x23, 0xc7, 0xc2, 0xf5,
-	0xaa, 0x0e, 0x4b, 0x4c, 0x3c, 0xc4, 0xbc, 0x06, 0x5d, 0x51, 0x34, 0xc2, 0x77, 0x3a, 0x22, 0xfc,
-	0x67, 0x9d, 0x7f, 0xdf, 0x6c, 0xcc, 0xdc, 0xa6, 0x89, 0xd7, 0x5c, 0xcb, 0xb0, 0x8b, 0x8e, 0xfa,
-	0x2b, 0x91, 0x23, 0x96, 0x4b, 0xe3, 0xd9, 0xff, 0x5d, 0x3f, 0xcf, 0x12, 0xcb, 0xa5, 0x6a, 0x11,
-	0x32, 0xe1, 0xf9, 0x5f, 0xcf, 0xb4, 0xff, 0xad, 0xf3, 0x1b, 0x00, 0x42, 0xc4, 0x77, 0xff, 0x2d,
-	0xc0, 0x99, 0xc1, 0x74, 0xe6, 0x19, 0x9e, 0xcf, 0xe2, 0x09, 0xff, 0x17, 0x06, 0xa4, 0xcf, 0x0c,
-	0xd6, 0xe4, 0x92, 0xa0, 0x50, 0x87, 0x36, 0x08, 0xc6, 0x35, 0x4d, 0x79, 0x43, 0x98, 0x22, 0x0b,
-	0xad, 0x60, 0x71, 0x83, 0x6a, 0xb0, 0x16, 0x65, 0x3e, 0xb5, 0x91, 0x76, 0xbe, 0x37, 0xff, 0xeb,
-	0xc1, 0x6c, 0x84, 0xfb, 0xe7, 0x3d, 0x81, 0x13, 0xf9, 0xcf, 0xa7, 0x44, 0x11, 0x38, 0x84, 0xe5,
-	0xe8, 0x28, 0x75, 0xb4, 0xfd, 0x81, 0x72, 0xff, 0x12, 0xa8, 0x62, 0xfb, 0x83, 0x53, 0xa3, 0xef,
-	0xe3, 0x4c, 0x19, 0x5c, 0x8a, 0x84, 0xc1, 0x02, 0x75, 0x9f, 0x17, 0x43, 0x32, 0x18, 0xf8, 0x9e,
-	0xd1, 0xee, 0xa3, 0x92, 0xbb, 0xe2, 0xf1, 0x08, 0xea, 0x6d, 0x04, 0xf9, 0xfb, 0xcf, 0x38, 0x24,
-	0x43, 0x58, 0x35, 0xd2, 0xec, 0xfb, 0xcf, 0x5f, 0xe6, 0x12, 0x2f, 0x5e, 0xe6, 0x12, 0xaf, 0x5f,
-	0xe6, 0xa4, 0xbf, 0x8d, 0x73, 0xd2, 0xbf, 0xc7, 0x39, 0xe9, 0xcd, 0x71, 0x4e, 0x7a, 0x3e, 0xce,
-	0x49, 0x2f, 0xc6, 0x39, 0xe9, 0x93, 0x71, 0x4e, 0x7a, 0x35, 0xce, 0x25, 0x5e, 0x8f, 0x73, 0xd2,
-	0x3f, 0x3e, 0xcd, 0x25, 0xfe, 0x58, 0xea, 0x52, 0xa7, 0xd7, 0x2d, 0x0c, 0x69, 0xdf, 0x43, 0xd7,
-	0x35, 0x0a, 0x3e, 0xdb, 0xe3, 0x8d, 0x0e, 0x75, 0x07, 0xbb, 0x8e, 0x4b, 0x87, 0xc4, 0x42, 0x77,
-	0x37, 0x9a, 0xde, 0x73, 0xda, 0x5d, 0xba, 0x87, 0x7f, 0xf5, 0xc2, 0xff, 0x62, 0xe2, 0xa7, 0x3d,
-	0xcf, 0x4d, 0xfc, 0xc5, 0x77, 0x01, 0x00, 0x00, 0xff, 0xff, 0x5b, 0x00, 0x0a, 0xf8, 0xaa, 0x0d,
-	0x00, 0x00,
-}

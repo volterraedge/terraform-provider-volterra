@@ -557,7 +557,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf_rules.CustomAPI.Rules",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/waf_rulesRulesRsp"
                         }
@@ -614,9 +614,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"blogging-app-namespace-1\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -639,7 +641,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf_rules.CustomAPI.WafRulesStatus",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/waf_rulesWafRulesStatusRsp"
                         }
@@ -696,15 +698,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"blogging-app-namespace-1\"\nNamespace of the waf rule object",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"greatblogs-waf-rules\"\nName of the waf rule object",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     }
                 ],
                 "tags": [
@@ -727,7 +733,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/waf_rulesVirtualHostWafRulesStatusRsp"
                         }
@@ -784,15 +790,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app-namespace-1\"\nNamespace of the virtual host",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"greatblogs-vhost\"\nName of the virtual host for which waf_rules status is requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     }
                 ],
                 "tags": [

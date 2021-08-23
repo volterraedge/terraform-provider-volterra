@@ -3,26 +3,30 @@
 
 package cloud_credentials
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // AWS Programmatic Access Credentials type
 //
@@ -40,12 +44,36 @@ type AWSSecretType struct {
 	// x-displayName: "Secret Access Key"
 	// x-required
 	// Secret Access Key for your AWS account
-	SecretKey *ves_io_schema4.SecretType `protobuf:"bytes,2,opt,name=secret_key,json=secretKey" json:"secret_key,omitempty"`
+	SecretKey *schema.SecretType `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
 }
 
-func (m *AWSSecretType) Reset()                    { *m = AWSSecretType{} }
-func (*AWSSecretType) ProtoMessage()               {}
-func (*AWSSecretType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *AWSSecretType) Reset()      { *m = AWSSecretType{} }
+func (*AWSSecretType) ProtoMessage() {}
+func (*AWSSecretType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{0}
+}
+func (m *AWSSecretType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSSecretType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSSecretType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSSecretType.Merge(m, src)
+}
+func (m *AWSSecretType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSSecretType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSSecretType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSSecretType proto.InternalMessageInfo
 
 func (m *AWSSecretType) GetAccessKey() string {
 	if m != nil {
@@ -54,7 +82,7 @@ func (m *AWSSecretType) GetAccessKey() string {
 	return ""
 }
 
-func (m *AWSSecretType) GetSecretKey() *ves_io_schema4.SecretType {
+func (m *AWSSecretType) GetSecretKey() *schema.SecretType {
 	if m != nil {
 		return m.SecretKey
 	}
@@ -97,12 +125,36 @@ type AzurePfxType struct {
 	// x-displayName: "Certificate Password"
 	// x-required
 	// Password for your '.p12' or '.pfx' file whose certificate is linked to service principal object
-	Password *ves_io_schema4.SecretType `protobuf:"bytes,5,opt,name=password" json:"password,omitempty"`
+	Password *schema.SecretType `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
 }
 
-func (m *AzurePfxType) Reset()                    { *m = AzurePfxType{} }
-func (*AzurePfxType) ProtoMessage()               {}
-func (*AzurePfxType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *AzurePfxType) Reset()      { *m = AzurePfxType{} }
+func (*AzurePfxType) ProtoMessage() {}
+func (*AzurePfxType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{1}
+}
+func (m *AzurePfxType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzurePfxType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzurePfxType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzurePfxType.Merge(m, src)
+}
+func (m *AzurePfxType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzurePfxType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzurePfxType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzurePfxType proto.InternalMessageInfo
 
 func (m *AzurePfxType) GetClientId() string {
 	if m != nil {
@@ -132,7 +184,7 @@ func (m *AzurePfxType) GetCertificateUrl() string {
 	return ""
 }
 
-func (m *AzurePfxType) GetPassword() *ves_io_schema4.SecretType {
+func (m *AzurePfxType) GetPassword() *schema.SecretType {
 	if m != nil {
 		return m.Password
 	}
@@ -167,12 +219,36 @@ type AzureSecretType struct {
 	// x-displayName: "Azure Client Secret"
 	// x-required
 	// Client Secret (alias password) for your Azure service principal
-	ClientSecret *ves_io_schema4.SecretType `protobuf:"bytes,4,opt,name=client_secret,json=clientSecret" json:"client_secret,omitempty"`
+	ClientSecret *schema.SecretType `protobuf:"bytes,4,opt,name=client_secret,json=clientSecret,proto3" json:"client_secret,omitempty"`
 }
 
-func (m *AzureSecretType) Reset()                    { *m = AzureSecretType{} }
-func (*AzureSecretType) ProtoMessage()               {}
-func (*AzureSecretType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *AzureSecretType) Reset()      { *m = AzureSecretType{} }
+func (*AzureSecretType) ProtoMessage() {}
+func (*AzureSecretType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{2}
+}
+func (m *AzureSecretType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureSecretType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureSecretType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureSecretType.Merge(m, src)
+}
+func (m *AzureSecretType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureSecretType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureSecretType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureSecretType proto.InternalMessageInfo
 
 func (m *AzureSecretType) GetClientId() string {
 	if m != nil {
@@ -195,7 +271,7 @@ func (m *AzureSecretType) GetTenantId() string {
 	return ""
 }
 
-func (m *AzureSecretType) GetClientSecret() *ves_io_schema4.SecretType {
+func (m *AzureSecretType) GetClientSecret() *schema.SecretType {
 	if m != nil {
 		return m.ClientSecret
 	}
@@ -212,14 +288,38 @@ type GCPCredFileType struct {
 	// x-displayName: "GCP Credentials"
 	// x-required
 	// Content of Credential File for your GCP account
-	CredentialFile *ves_io_schema4.SecretType `protobuf:"bytes,2,opt,name=credential_file,json=credentialFile" json:"credential_file,omitempty"`
+	CredentialFile *schema.SecretType `protobuf:"bytes,2,opt,name=credential_file,json=credentialFile,proto3" json:"credential_file,omitempty"`
 }
 
-func (m *GCPCredFileType) Reset()                    { *m = GCPCredFileType{} }
-func (*GCPCredFileType) ProtoMessage()               {}
-func (*GCPCredFileType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GCPCredFileType) Reset()      { *m = GCPCredFileType{} }
+func (*GCPCredFileType) ProtoMessage() {}
+func (*GCPCredFileType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{3}
+}
+func (m *GCPCredFileType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPCredFileType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPCredFileType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPCredFileType.Merge(m, src)
+}
+func (m *GCPCredFileType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPCredFileType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPCredFileType.DiscardUnknown(m)
+}
 
-func (m *GCPCredFileType) GetCredentialFile() *ves_io_schema4.SecretType {
+var xxx_messageInfo_GCPCredFileType proto.InternalMessageInfo
+
+func (m *GCPCredFileType) GetCredentialFile() *schema.SecretType {
 	if m != nil {
 		return m.CredentialFile
 	}
@@ -245,9 +345,33 @@ type GlobalSpecType struct {
 	Cloud isGlobalSpecType_Cloud `protobuf_oneof:"cloud"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{4}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_Cloud interface {
 	isGlobalSpecType_Cloud()
@@ -257,16 +381,16 @@ type isGlobalSpecType_Cloud interface {
 }
 
 type GlobalSpecType_AwsSecretKey struct {
-	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,oneof"`
+	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
 type GlobalSpecType_AzurePfxCertificate struct {
-	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,oneof"`
+	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
 type GlobalSpecType_AzureClientSecret struct {
-	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,oneof"`
+	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,proto3,oneof" json:"azure_client_secret,omitempty"`
 }
 type GlobalSpecType_GcpCredFile struct {
-	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,oneof"`
+	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,proto3,oneof" json:"gcp_cred_file,omitempty"`
 }
 
 func (*GlobalSpecType_AwsSecretKey) isGlobalSpecType_Cloud()        {}
@@ -309,116 +433,14 @@ func (m *GlobalSpecType) GetGcpCredFile() *GCPCredFileType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_AwsSecretKey)(nil),
 		(*GlobalSpecType_AzurePfxCertificate)(nil),
 		(*GlobalSpecType_AzureClientSecret)(nil),
 		(*GlobalSpecType_GcpCredFile)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *GlobalSpecType_AwsSecretKey:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AwsSecretKey); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AzurePfxCertificate:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzurePfxCertificate); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AzureClientSecret:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzureClientSecret); err != nil {
-			return err
-		}
-	case *GlobalSpecType_GcpCredFile:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GcpCredFile); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.Cloud has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 1: // cloud.aws_secret_key
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AWSSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GlobalSpecType_AwsSecretKey{msg}
-		return true, err
-	case 2: // cloud.azure_pfx_certificate
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzurePfxType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GlobalSpecType_AzurePfxCertificate{msg}
-		return true, err
-	case 3: // cloud.azure_client_secret
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzureSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GlobalSpecType_AzureClientSecret{msg}
-		return true, err
-	case 4: // cloud.gcp_cred_file
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPCredFileType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GlobalSpecType_GcpCredFile{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *GlobalSpecType_AwsSecretKey:
-		s := proto.Size(x.AwsSecretKey)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AzurePfxCertificate:
-		s := proto.Size(x.AzurePfxCertificate)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AzureClientSecret:
-		s := proto.Size(x.AzureClientSecret)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_GcpCredFile:
-		s := proto.Size(x.GcpCredFile)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create cloud_credentials
@@ -434,9 +456,33 @@ type CreateSpecType struct {
 	Cloud isCreateSpecType_Cloud `protobuf_oneof:"cloud"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{5}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_Cloud interface {
 	isCreateSpecType_Cloud()
@@ -446,16 +492,16 @@ type isCreateSpecType_Cloud interface {
 }
 
 type CreateSpecType_AwsSecretKey struct {
-	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,oneof"`
+	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
 type CreateSpecType_AzurePfxCertificate struct {
-	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,oneof"`
+	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
 type CreateSpecType_AzureClientSecret struct {
-	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,oneof"`
+	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,proto3,oneof" json:"azure_client_secret,omitempty"`
 }
 type CreateSpecType_GcpCredFile struct {
-	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,oneof"`
+	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,proto3,oneof" json:"gcp_cred_file,omitempty"`
 }
 
 func (*CreateSpecType_AwsSecretKey) isCreateSpecType_Cloud()        {}
@@ -498,116 +544,14 @@ func (m *CreateSpecType) GetGcpCredFile() *GCPCredFileType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_AwsSecretKey)(nil),
 		(*CreateSpecType_AzurePfxCertificate)(nil),
 		(*CreateSpecType_AzureClientSecret)(nil),
 		(*CreateSpecType_GcpCredFile)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *CreateSpecType_AwsSecretKey:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AwsSecretKey); err != nil {
-			return err
-		}
-	case *CreateSpecType_AzurePfxCertificate:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzurePfxCertificate); err != nil {
-			return err
-		}
-	case *CreateSpecType_AzureClientSecret:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzureClientSecret); err != nil {
-			return err
-		}
-	case *CreateSpecType_GcpCredFile:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GcpCredFile); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.Cloud has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 1: // cloud.aws_secret_key
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AWSSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &CreateSpecType_AwsSecretKey{msg}
-		return true, err
-	case 2: // cloud.azure_pfx_certificate
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzurePfxType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &CreateSpecType_AzurePfxCertificate{msg}
-		return true, err
-	case 3: // cloud.azure_client_secret
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzureSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &CreateSpecType_AzureClientSecret{msg}
-		return true, err
-	case 4: // cloud.gcp_cred_file
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPCredFileType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &CreateSpecType_GcpCredFile{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *CreateSpecType_AwsSecretKey:
-		s := proto.Size(x.AwsSecretKey)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AzurePfxCertificate:
-		s := proto.Size(x.AzurePfxCertificate)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AzureClientSecret:
-		s := proto.Size(x.AzureClientSecret)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_GcpCredFile:
-		s := proto.Size(x.GcpCredFile)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace cloud_credentials
@@ -623,9 +567,33 @@ type ReplaceSpecType struct {
 	Cloud isReplaceSpecType_Cloud `protobuf_oneof:"cloud"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{6}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_Cloud interface {
 	isReplaceSpecType_Cloud()
@@ -635,16 +603,16 @@ type isReplaceSpecType_Cloud interface {
 }
 
 type ReplaceSpecType_AwsSecretKey struct {
-	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,oneof"`
+	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
 type ReplaceSpecType_AzurePfxCertificate struct {
-	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,oneof"`
+	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
 type ReplaceSpecType_AzureClientSecret struct {
-	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,oneof"`
+	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,proto3,oneof" json:"azure_client_secret,omitempty"`
 }
 type ReplaceSpecType_GcpCredFile struct {
-	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,oneof"`
+	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,proto3,oneof" json:"gcp_cred_file,omitempty"`
 }
 
 func (*ReplaceSpecType_AwsSecretKey) isReplaceSpecType_Cloud()        {}
@@ -687,116 +655,14 @@ func (m *ReplaceSpecType) GetGcpCredFile() *GCPCredFileType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_AwsSecretKey)(nil),
 		(*ReplaceSpecType_AzurePfxCertificate)(nil),
 		(*ReplaceSpecType_AzureClientSecret)(nil),
 		(*ReplaceSpecType_GcpCredFile)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *ReplaceSpecType_AwsSecretKey:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AwsSecretKey); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AzurePfxCertificate:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzurePfxCertificate); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AzureClientSecret:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzureClientSecret); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_GcpCredFile:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GcpCredFile); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.Cloud has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 1: // cloud.aws_secret_key
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AWSSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &ReplaceSpecType_AwsSecretKey{msg}
-		return true, err
-	case 2: // cloud.azure_pfx_certificate
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzurePfxType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &ReplaceSpecType_AzurePfxCertificate{msg}
-		return true, err
-	case 3: // cloud.azure_client_secret
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzureSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &ReplaceSpecType_AzureClientSecret{msg}
-		return true, err
-	case 4: // cloud.gcp_cred_file
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPCredFileType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &ReplaceSpecType_GcpCredFile{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *ReplaceSpecType_AwsSecretKey:
-		s := proto.Size(x.AwsSecretKey)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AzurePfxCertificate:
-		s := proto.Size(x.AzurePfxCertificate)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AzureClientSecret:
-		s := proto.Size(x.AzureClientSecret)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_GcpCredFile:
-		s := proto.Size(x.GcpCredFile)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get cloud_credentials
@@ -812,9 +678,33 @@ type GetSpecType struct {
 	Cloud isGetSpecType_Cloud `protobuf_oneof:"cloud"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{7}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_Cloud interface {
 	isGetSpecType_Cloud()
@@ -824,16 +714,16 @@ type isGetSpecType_Cloud interface {
 }
 
 type GetSpecType_AwsSecretKey struct {
-	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,oneof"`
+	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
 type GetSpecType_AzurePfxCertificate struct {
-	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,oneof"`
+	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
 type GetSpecType_AzureClientSecret struct {
-	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,oneof"`
+	AzureClientSecret *AzureSecretType `protobuf:"bytes,3,opt,name=azure_client_secret,json=azureClientSecret,proto3,oneof" json:"azure_client_secret,omitempty"`
 }
 type GetSpecType_GcpCredFile struct {
-	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,oneof"`
+	GcpCredFile *GCPCredFileType `protobuf:"bytes,4,opt,name=gcp_cred_file,json=gcpCredFile,proto3,oneof" json:"gcp_cred_file,omitempty"`
 }
 
 func (*GetSpecType_AwsSecretKey) isGetSpecType_Cloud()        {}
@@ -876,116 +766,14 @@ func (m *GetSpecType) GetGcpCredFile() *GCPCredFileType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_AwsSecretKey)(nil),
 		(*GetSpecType_AzurePfxCertificate)(nil),
 		(*GetSpecType_AzureClientSecret)(nil),
 		(*GetSpecType_GcpCredFile)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *GetSpecType_AwsSecretKey:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AwsSecretKey); err != nil {
-			return err
-		}
-	case *GetSpecType_AzurePfxCertificate:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzurePfxCertificate); err != nil {
-			return err
-		}
-	case *GetSpecType_AzureClientSecret:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AzureClientSecret); err != nil {
-			return err
-		}
-	case *GetSpecType_GcpCredFile:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GcpCredFile); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.Cloud has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 1: // cloud.aws_secret_key
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AWSSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GetSpecType_AwsSecretKey{msg}
-		return true, err
-	case 2: // cloud.azure_pfx_certificate
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzurePfxType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GetSpecType_AzurePfxCertificate{msg}
-		return true, err
-	case 3: // cloud.azure_client_secret
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AzureSecretType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GetSpecType_AzureClientSecret{msg}
-		return true, err
-	case 4: // cloud.gcp_cred_file
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPCredFileType)
-		err := b.DecodeMessage(msg)
-		m.Cloud = &GetSpecType_GcpCredFile{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// cloud
-	switch x := m.Cloud.(type) {
-	case *GetSpecType_AwsSecretKey:
-		s := proto.Size(x.AwsSecretKey)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AzurePfxCertificate:
-		s := proto.Size(x.AzurePfxCertificate)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AzureClientSecret:
-		s := proto.Size(x.AzureClientSecret)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_GcpCredFile:
-		s := proto.Size(x.GcpCredFile)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -1006,6 +794,70 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cloud_credentials.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cloud_credentials.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/cloud_credentials/types.proto", fileDescriptor_801061f8f9e94c2a)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/cloud_credentials/types.proto", fileDescriptor_801061f8f9e94c2a)
+}
+
+var fileDescriptor_801061f8f9e94c2a = []byte{
+	// 819 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xde, 0x97, 0xb5, 0x43, 0x3c, 0x49, 0x6c, 0xb2, 0x15, 0xc8, 0x0d, 0xd1, 0x12, 0xf9, 0x54,
+	0x81, 0xbd, 0x4b, 0x53, 0xca, 0xc1, 0x48, 0x56, 0x63, 0x23, 0xe2, 0xd0, 0x4b, 0xb5, 0xa6, 0x45,
+	0x82, 0xc3, 0x6a, 0x3c, 0x3b, 0xde, 0xae, 0xba, 0xf1, 0xac, 0x66, 0xd7, 0x76, 0xcc, 0xa9, 0xe2,
+	0xc0, 0xb9, 0x12, 0xff, 0x04, 0x07, 0x90, 0xe0, 0xca, 0x5e, 0x22, 0x4e, 0x08, 0x2e, 0x3e, 0xe6,
+	0x48, 0xd6, 0x17, 0xb8, 0x55, 0xe1, 0x12, 0x71, 0x42, 0x9e, 0x5d, 0xd7, 0xbb, 0xa1, 0xa8, 0xbe,
+	0xd1, 0x4a, 0xb9, 0xcd, 0xcc, 0x7b, 0xdf, 0xf7, 0x7e, 0x7c, 0xef, 0x49, 0x83, 0xde, 0x1d, 0x52,
+	0x5f, 0x73, 0x98, 0xee, 0x93, 0x87, 0xf4, 0x08, 0xeb, 0xc4, 0x65, 0x03, 0xcb, 0x24, 0x9c, 0x5a,
+	0xb4, 0x1f, 0x38, 0xd8, 0xf5, 0xf5, 0x60, 0xec, 0x51, 0x5f, 0xf3, 0x38, 0x0b, 0x98, 0xf2, 0x76,
+	0xec, 0xac, 0xc5, 0xce, 0xda, 0xbf, 0x9c, 0xb7, 0x6b, 0xb6, 0x13, 0x3c, 0x1c, 0x74, 0x35, 0xc2,
+	0x8e, 0x74, 0x9b, 0xd9, 0x4c, 0x17, 0xb8, 0xee, 0xa0, 0x27, 0x6e, 0xe2, 0x22, 0x4e, 0x31, 0xdf,
+	0xf6, 0x5b, 0xd9, 0xe0, 0xcc, 0x0b, 0x1c, 0xd6, 0x4f, 0x82, 0x6d, 0x5f, 0xcf, 0x1a, 0x53, 0x79,
+	0x6c, 0xef, 0x64, 0x4d, 0x43, 0xec, 0x3a, 0x16, 0x0e, 0x68, 0x62, 0xdd, 0xbd, 0x64, 0x75, 0xe8,
+	0xc8, 0xcc, 0x50, 0x57, 0xbe, 0x06, 0xb4, 0xb9, 0xff, 0x59, 0xa7, 0x43, 0x09, 0xa7, 0xc1, 0xa7,
+	0x63, 0x8f, 0x2a, 0x35, 0x84, 0x30, 0x21, 0xd4, 0xf7, 0xcd, 0x47, 0x74, 0x5c, 0x86, 0x5d, 0xb8,
+	0x51, 0x68, 0x16, 0x2f, 0x42, 0x80, 0x9f, 0xfe, 0x3c, 0x91, 0xf3, 0x5c, 0x2e, 0x3f, 0x06, 0xa3,
+	0x10, 0x7b, 0xdc, 0xa5, 0x63, 0xa5, 0x81, 0x90, 0x2f, 0xc0, 0xc2, 0x7d, 0x65, 0x17, 0x6e, 0xac,
+	0xef, 0x5d, 0xd7, 0xb2, 0xdd, 0x59, 0xb0, 0x37, 0x73, 0x93, 0x10, 0xc0, 0x28, 0xc4, 0x90, 0xbb,
+	0x74, 0x5c, 0x5f, 0x3d, 0x6f, 0xc8, 0x37, 0xab, 0x7b, 0x95, 0xef, 0x56, 0xd0, 0xc6, 0xfe, 0x97,
+	0x03, 0x4e, 0xef, 0xf5, 0x8e, 0x45, 0x1e, 0xef, 0xa0, 0x02, 0x71, 0x1d, 0xda, 0x0f, 0x4c, 0xc7,
+	0x4a, 0xd2, 0xd8, 0xbc, 0x08, 0x41, 0x9a, 0xa5, 0x91, 0xe3, 0x2b, 0xe5, 0x3b, 0xc6, 0x5a, 0x6c,
+	0x3f, 0xb4, 0x94, 0x0f, 0x50, 0xc9, 0x1f, 0x74, 0x7d, 0xc2, 0x1d, 0x51, 0xdc, 0x0c, 0xb1, 0xf2,
+	0x3c, 0x44, 0x31, 0xed, 0x75, 0x68, 0xcd, 0x62, 0x04, 0xb4, 0x8f, 0xe3, 0x18, 0xf2, 0x73, 0x63,
+	0xc4, 0xf6, 0x43, 0x4b, 0xd9, 0x47, 0x25, 0x42, 0x79, 0xe0, 0xf4, 0x1c, 0x82, 0x03, 0x6a, 0x0e,
+	0xb8, 0x5b, 0xce, 0x09, 0x44, 0xf9, 0x22, 0x04, 0xf9, 0x59, 0x73, 0xee, 0x24, 0xa7, 0x27, 0x00,
+	0x46, 0x31, 0x05, 0xb8, 0xcf, 0x5d, 0xe5, 0x43, 0xb4, 0xe6, 0x61, 0xdf, 0x1f, 0x31, 0x6e, 0x95,
+	0xf3, 0xcb, 0x75, 0xea, 0x19, 0xa0, 0xbe, 0x71, 0xde, 0x28, 0xdc, 0xac, 0xee, 0x55, 0x6f, 0x55,
+	0xdf, 0xaf, 0xde, 0xae, 0xfc, 0x05, 0xa8, 0x24, 0xda, 0x95, 0x52, 0xee, 0x65, 0xeb, 0xd8, 0x47,
+	0x68, 0x33, 0xc9, 0x27, 0x96, 0x5b, 0xf4, 0x6b, 0x89, 0x9a, 0x37, 0x62, 0x54, 0xfc, 0x5e, 0x47,
+	0xe7, 0x8d, 0xd7, 0x92, 0xba, 0x2b, 0x5f, 0xa0, 0xd2, 0x41, 0xeb, 0x5e, 0x8b, 0x53, 0xeb, 0x63,
+	0xc7, 0xa5, 0xa2, 0xe8, 0x36, 0x2a, 0x2d, 0xd6, 0xce, 0xec, 0x39, 0x2e, 0x5d, 0x76, 0x08, 0x8b,
+	0x0b, 0xdc, 0x8c, 0xad, 0xf2, 0x9b, 0x8c, 0x8a, 0x07, 0x2e, 0xeb, 0x62, 0xb7, 0xe3, 0x51, 0x22,
+	0xc8, 0x1f, 0xa0, 0x22, 0x1e, 0xf9, 0x66, 0x6a, 0xc0, 0x41, 0x70, 0x6b, 0xda, 0x0b, 0xd6, 0x5f,
+	0xcb, 0xec, 0x54, 0x5b, 0x32, 0x36, 0xf0, 0xc8, 0xef, 0xcc, 0x87, 0x5e, 0x21, 0xe8, 0x0d, 0x3c,
+	0x13, 0xcf, 0xf4, 0x7a, 0xc7, 0x66, 0x6a, 0x48, 0x92, 0xd4, 0x6b, 0x2f, 0xa6, 0x4f, 0x6d, 0x4a,
+	0x5b, 0x32, 0xae, 0xe1, 0xe4, 0xde, 0x5a, 0x70, 0x29, 0x5d, 0x14, 0x3f, 0x9b, 0x59, 0x11, 0x64,
+	0x11, 0xe2, 0xbd, 0xe5, 0x42, 0x64, 0x6a, 0xd8, 0x12, 0x74, 0xad, 0x94, 0x38, 0xca, 0x03, 0xb4,
+	0x69, 0x13, 0x4f, 0xe0, 0xe2, 0xde, 0xe7, 0x96, 0x64, 0xbf, 0x24, 0x63, 0x5b, 0x32, 0xd6, 0x6d,
+	0xe2, 0xcd, 0x9f, 0xea, 0x3b, 0x3f, 0x87, 0x50, 0x46, 0x6f, 0xa2, 0xad, 0xd6, 0x0c, 0xb9, 0xdb,
+	0x5a, 0x20, 0x15, 0xb8, 0xdd, 0xdc, 0x41, 0x79, 0xc1, 0xa8, 0x5c, 0x3b, 0x09, 0x01, 0x26, 0x21,
+	0xe4, 0xa3, 0x10, 0xe6, 0x43, 0xf2, 0x49, 0x6e, 0x2d, 0xff, 0xfa, 0x6a, 0xe5, 0x07, 0x19, 0x15,
+	0x5b, 0x9c, 0xe2, 0x80, 0x5e, 0xa9, 0xf9, 0x7f, 0xab, 0xb9, 0xf5, 0x6b, 0xe3, 0xd2, 0x66, 0x35,
+	0x95, 0xb9, 0x84, 0x85, 0xaf, 0xfe, 0x86, 0xf8, 0x58, 0xf9, 0x51, 0x46, 0x25, 0x83, 0x7a, 0x2e,
+	0x26, 0x57, 0x9a, 0xbd, 0x2a, 0x9a, 0x7d, 0x2f, 0xa3, 0xf5, 0x03, 0x1a, 0x5c, 0xe9, 0xf5, 0x6a,
+	0xe8, 0xd5, 0xfc, 0x06, 0x26, 0x67, 0xaa, 0x74, 0x7a, 0xa6, 0x4a, 0x4f, 0xcf, 0x54, 0x78, 0x1c,
+	0xa9, 0xf0, 0x6d, 0xa4, 0xc2, 0x2f, 0x91, 0x0a, 0x93, 0x48, 0x85, 0xd3, 0x48, 0x85, 0xdf, 0x23,
+	0x15, 0xfe, 0x88, 0x54, 0xe9, 0x69, 0xa4, 0xc2, 0x93, 0xa9, 0x2a, 0x9d, 0x4c, 0x55, 0x98, 0x4c,
+	0x55, 0xe9, 0x74, 0xaa, 0x4a, 0x9f, 0xdf, 0xb7, 0x99, 0xf7, 0xc8, 0xd6, 0x86, 0xcc, 0x0d, 0x28,
+	0xe7, 0x58, 0x1b, 0xf8, 0xba, 0x38, 0xf4, 0x18, 0x3f, 0xaa, 0x79, 0x9c, 0x0d, 0x1d, 0x8b, 0xf2,
+	0xda, 0xdc, 0xac, 0x7b, 0x5d, 0x9b, 0xe9, 0xf4, 0x38, 0x48, 0xfe, 0x9f, 0xff, 0xf5, 0xb3, 0xee,
+	0xae, 0x8a, 0xcf, 0xe8, 0xad, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x5c, 0xbd, 0xae, 0xfb, 0x83,
+	0x0b, 0x00, 0x00,
+}
+
 func (this *AWSSecretType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1873,7 +1725,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *AWSSecretType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1881,33 +1733,41 @@ func (m *AWSSecretType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AWSSecretType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSSecretType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.AccessKey) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessKey)))
-		i += copy(dAtA[i:], m.AccessKey)
-	}
 	if m.SecretKey != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SecretKey.Size()))
-		n1, err := m.SecretKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.SecretKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n1
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.AccessKey) > 0 {
+		i -= len(m.AccessKey)
+		copy(dAtA[i:], m.AccessKey)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessKey)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzurePfxType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1915,51 +1775,62 @@ func (m *AzurePfxType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzurePfxType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzurePfxType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ClientId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientId)))
-		i += copy(dAtA[i:], m.ClientId)
-	}
-	if len(m.SubscriptionId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubscriptionId)))
-		i += copy(dAtA[i:], m.SubscriptionId)
-	}
-	if len(m.TenantId) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TenantId)))
-		i += copy(dAtA[i:], m.TenantId)
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.CertificateUrl) > 0 {
-		dAtA[i] = 0x22
-		i++
+		i -= len(m.CertificateUrl)
+		copy(dAtA[i:], m.CertificateUrl)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.CertificateUrl)))
-		i += copy(dAtA[i:], m.CertificateUrl)
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.Password != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Password.Size()))
-		n2, err := m.Password.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
+	if len(m.TenantId) > 0 {
+		i -= len(m.TenantId)
+		copy(dAtA[i:], m.TenantId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TenantId)))
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	if len(m.SubscriptionId) > 0 {
+		i -= len(m.SubscriptionId)
+		copy(dAtA[i:], m.SubscriptionId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubscriptionId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ClientId) > 0 {
+		i -= len(m.ClientId)
+		copy(dAtA[i:], m.ClientId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *AzureSecretType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1967,45 +1838,55 @@ func (m *AzureSecretType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *AzureSecretType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureSecretType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ClientId) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientId)))
-		i += copy(dAtA[i:], m.ClientId)
-	}
-	if len(m.SubscriptionId) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubscriptionId)))
-		i += copy(dAtA[i:], m.SubscriptionId)
+	if m.ClientSecret != nil {
+		{
+			size, err := m.ClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if len(m.TenantId) > 0 {
-		dAtA[i] = 0x1a
-		i++
+		i -= len(m.TenantId)
+		copy(dAtA[i:], m.TenantId)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.TenantId)))
-		i += copy(dAtA[i:], m.TenantId)
+		i--
+		dAtA[i] = 0x1a
 	}
-	if m.ClientSecret != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSecret.Size()))
-		n3, err := m.ClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
+	if len(m.SubscriptionId) > 0 {
+		i -= len(m.SubscriptionId)
+		copy(dAtA[i:], m.SubscriptionId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubscriptionId)))
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.ClientId) > 0 {
+		i -= len(m.ClientId)
+		copy(dAtA[i:], m.ClientId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPCredFileType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2013,27 +1894,34 @@ func (m *GCPCredFileType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPCredFileType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPCredFileType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.CredentialFile != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CredentialFile.Size()))
-		n4, err := m.CredentialFile.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CredentialFile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2041,80 +1929,115 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Cloud != nil {
-		nn5, err := m.Cloud.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn5
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_AwsSecretKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AwsSecretKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AwsSecretKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AwsSecretKey.Size()))
-		n6, err := m.AwsSecretKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AwsSecretKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AzurePfxCertificate) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AzurePfxCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzurePfxCertificate != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzurePfxCertificate.Size()))
-		n7, err := m.AzurePfxCertificate.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzurePfxCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AzureClientSecret) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AzureClientSecret) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzureClientSecret != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzureClientSecret.Size()))
-		n8, err := m.AzureClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzureClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_GcpCredFile) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GcpCredFile != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GcpCredFile.Size()))
-		n9, err := m.GcpCredFile.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GcpCredFile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2122,80 +2045,115 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Cloud != nil {
-		nn10, err := m.Cloud.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn10
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_AwsSecretKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AwsSecretKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AwsSecretKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AwsSecretKey.Size()))
-		n11, err := m.AwsSecretKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AwsSecretKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AzurePfxCertificate) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AzurePfxCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzurePfxCertificate != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzurePfxCertificate.Size()))
-		n12, err := m.AzurePfxCertificate.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzurePfxCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AzureClientSecret) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AzureClientSecret) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzureClientSecret != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzureClientSecret.Size()))
-		n13, err := m.AzureClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzureClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_GcpCredFile) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GcpCredFile != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GcpCredFile.Size()))
-		n14, err := m.GcpCredFile.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GcpCredFile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2203,80 +2161,115 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Cloud != nil {
-		nn15, err := m.Cloud.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn15
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_AwsSecretKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AwsSecretKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AwsSecretKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AwsSecretKey.Size()))
-		n16, err := m.AwsSecretKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AwsSecretKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AzurePfxCertificate) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AzurePfxCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzurePfxCertificate != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzurePfxCertificate.Size()))
-		n17, err := m.AzurePfxCertificate.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzurePfxCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AzureClientSecret) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AzureClientSecret) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzureClientSecret != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzureClientSecret.Size()))
-		n18, err := m.AzureClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzureClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_GcpCredFile) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GcpCredFile != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GcpCredFile.Size()))
-		n19, err := m.GcpCredFile.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GcpCredFile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2284,86 +2277,126 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Cloud != nil {
-		nn20, err := m.Cloud.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn20
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_AwsSecretKey) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AwsSecretKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AwsSecretKey != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AwsSecretKey.Size()))
-		n21, err := m.AwsSecretKey.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AwsSecretKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AzurePfxCertificate) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AzurePfxCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzurePfxCertificate != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzurePfxCertificate.Size()))
-		n22, err := m.AzurePfxCertificate.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzurePfxCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AzureClientSecret) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AzureClientSecret) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AzureClientSecret != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AzureClientSecret.Size()))
-		n23, err := m.AzureClientSecret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AzureClientSecret.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_GcpCredFile) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GcpCredFile != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GcpCredFile.Size()))
-		n24, err := m.GcpCredFile.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GcpCredFile.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *AWSSecretType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.AccessKey)
@@ -2378,6 +2411,9 @@ func (m *AWSSecretType) Size() (n int) {
 }
 
 func (m *AzurePfxType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientId)
@@ -2404,6 +2440,9 @@ func (m *AzurePfxType) Size() (n int) {
 }
 
 func (m *AzureSecretType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.ClientId)
@@ -2426,6 +2465,9 @@ func (m *AzureSecretType) Size() (n int) {
 }
 
 func (m *GCPCredFileType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CredentialFile != nil {
@@ -2436,6 +2478,9 @@ func (m *GCPCredFileType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Cloud != nil {
@@ -2445,6 +2490,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_AwsSecretKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AwsSecretKey != nil {
@@ -2454,6 +2502,9 @@ func (m *GlobalSpecType_AwsSecretKey) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AzurePfxCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzurePfxCertificate != nil {
@@ -2463,6 +2514,9 @@ func (m *GlobalSpecType_AzurePfxCertificate) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AzureClientSecret) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzureClientSecret != nil {
@@ -2472,6 +2526,9 @@ func (m *GlobalSpecType_AzureClientSecret) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_GcpCredFile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GcpCredFile != nil {
@@ -2481,6 +2538,9 @@ func (m *GlobalSpecType_GcpCredFile) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Cloud != nil {
@@ -2490,6 +2550,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_AwsSecretKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AwsSecretKey != nil {
@@ -2499,6 +2562,9 @@ func (m *CreateSpecType_AwsSecretKey) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AzurePfxCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzurePfxCertificate != nil {
@@ -2508,6 +2574,9 @@ func (m *CreateSpecType_AzurePfxCertificate) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AzureClientSecret) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzureClientSecret != nil {
@@ -2517,6 +2586,9 @@ func (m *CreateSpecType_AzureClientSecret) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_GcpCredFile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GcpCredFile != nil {
@@ -2526,6 +2598,9 @@ func (m *CreateSpecType_GcpCredFile) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Cloud != nil {
@@ -2535,6 +2610,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_AwsSecretKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AwsSecretKey != nil {
@@ -2544,6 +2622,9 @@ func (m *ReplaceSpecType_AwsSecretKey) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AzurePfxCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzurePfxCertificate != nil {
@@ -2553,6 +2634,9 @@ func (m *ReplaceSpecType_AzurePfxCertificate) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AzureClientSecret) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzureClientSecret != nil {
@@ -2562,6 +2646,9 @@ func (m *ReplaceSpecType_AzureClientSecret) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_GcpCredFile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GcpCredFile != nil {
@@ -2571,6 +2658,9 @@ func (m *ReplaceSpecType_GcpCredFile) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Cloud != nil {
@@ -2580,6 +2670,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_AwsSecretKey) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AwsSecretKey != nil {
@@ -2589,6 +2682,9 @@ func (m *GetSpecType_AwsSecretKey) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AzurePfxCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzurePfxCertificate != nil {
@@ -2598,6 +2694,9 @@ func (m *GetSpecType_AzurePfxCertificate) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AzureClientSecret) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AzureClientSecret != nil {
@@ -2607,6 +2706,9 @@ func (m *GetSpecType_AzureClientSecret) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_GcpCredFile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GcpCredFile != nil {
@@ -2617,14 +2719,7 @@ func (m *GetSpecType_GcpCredFile) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2635,7 +2730,7 @@ func (this *AWSSecretType) String() string {
 	}
 	s := strings.Join([]string{`&AWSSecretType{`,
 		`AccessKey:` + fmt.Sprintf("%v", this.AccessKey) + `,`,
-		`SecretKey:` + strings.Replace(fmt.Sprintf("%v", this.SecretKey), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`SecretKey:` + strings.Replace(fmt.Sprintf("%v", this.SecretKey), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2649,7 +2744,7 @@ func (this *AzurePfxType) String() string {
 		`SubscriptionId:` + fmt.Sprintf("%v", this.SubscriptionId) + `,`,
 		`TenantId:` + fmt.Sprintf("%v", this.TenantId) + `,`,
 		`CertificateUrl:` + fmt.Sprintf("%v", this.CertificateUrl) + `,`,
-		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2662,7 +2757,7 @@ func (this *AzureSecretType) String() string {
 		`ClientId:` + fmt.Sprintf("%v", this.ClientId) + `,`,
 		`SubscriptionId:` + fmt.Sprintf("%v", this.SubscriptionId) + `,`,
 		`TenantId:` + fmt.Sprintf("%v", this.TenantId) + `,`,
-		`ClientSecret:` + strings.Replace(fmt.Sprintf("%v", this.ClientSecret), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`ClientSecret:` + strings.Replace(fmt.Sprintf("%v", this.ClientSecret), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2672,7 +2767,7 @@ func (this *GCPCredFileType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPCredFileType{`,
-		`CredentialFile:` + strings.Replace(fmt.Sprintf("%v", this.CredentialFile), "SecretType", "ves_io_schema4.SecretType", 1) + `,`,
+		`CredentialFile:` + strings.Replace(fmt.Sprintf("%v", this.CredentialFile), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2900,7 +2995,7 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2928,7 +3023,7 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2938,6 +3033,9 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2957,7 +3055,7 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2966,11 +3064,14 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SecretKey == nil {
-				m.SecretKey = &ves_io_schema4.SecretType{}
+				m.SecretKey = &schema.SecretType{}
 			}
 			if err := m.SecretKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2983,6 +3084,9 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3012,7 +3116,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3040,7 +3144,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3050,6 +3154,9 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3069,7 +3176,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3079,6 +3186,9 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3098,7 +3208,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3108,6 +3218,9 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3127,7 +3240,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3137,6 +3250,9 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3156,7 +3272,7 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3165,11 +3281,14 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Password == nil {
-				m.Password = &ves_io_schema4.SecretType{}
+				m.Password = &schema.SecretType{}
 			}
 			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3182,6 +3301,9 @@ func (m *AzurePfxType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3211,7 +3333,7 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3239,7 +3361,7 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3249,6 +3371,9 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3268,7 +3393,7 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3278,6 +3403,9 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3297,7 +3425,7 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3307,6 +3435,9 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3326,7 +3457,7 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3335,11 +3466,14 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ClientSecret == nil {
-				m.ClientSecret = &ves_io_schema4.SecretType{}
+				m.ClientSecret = &schema.SecretType{}
 			}
 			if err := m.ClientSecret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3352,6 +3486,9 @@ func (m *AzureSecretType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3381,7 +3518,7 @@ func (m *GCPCredFileType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3409,7 +3546,7 @@ func (m *GCPCredFileType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3418,11 +3555,14 @@ func (m *GCPCredFileType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.CredentialFile == nil {
-				m.CredentialFile = &ves_io_schema4.SecretType{}
+				m.CredentialFile = &schema.SecretType{}
 			}
 			if err := m.CredentialFile.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3435,6 +3575,9 @@ func (m *GCPCredFileType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3464,7 +3607,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3492,7 +3635,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3501,6 +3644,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3524,7 +3670,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3533,6 +3679,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3556,7 +3705,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3565,6 +3714,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3588,7 +3740,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3597,6 +3749,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3613,6 +3768,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3642,7 +3800,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3670,7 +3828,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3679,6 +3837,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3702,7 +3863,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3711,6 +3872,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3734,7 +3898,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3743,6 +3907,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3766,7 +3933,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3775,6 +3942,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3791,6 +3961,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3820,7 +3993,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3848,7 +4021,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3857,6 +4030,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3880,7 +4056,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3889,6 +4065,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3912,7 +4091,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3921,6 +4100,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3944,7 +4126,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3953,6 +4135,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3969,6 +4154,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3998,7 +4186,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4026,7 +4214,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4035,6 +4223,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4058,7 +4249,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4067,6 +4258,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4090,7 +4284,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4099,6 +4293,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4122,7 +4319,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4131,6 +4328,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4149,6 +4349,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4164,6 +4367,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4195,10 +4399,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4215,113 +4417,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/cloud_credentials/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/cloud_credentials/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 812 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xbf, 0x8f, 0x1b, 0x45,
-	0x14, 0xde, 0x77, 0x6b, 0x1f, 0xe7, 0xb9, 0x3b, 0x9b, 0xdb, 0x08, 0xe4, 0x98, 0xd3, 0x62, 0xb9,
-	0x8a, 0xc0, 0xde, 0x25, 0x17, 0x42, 0x61, 0x24, 0x2b, 0x67, 0x23, 0xce, 0x47, 0x9a, 0x68, 0x4d,
-	0x82, 0x04, 0xc5, 0x6a, 0x3c, 0x3b, 0xde, 0xac, 0xb2, 0xe7, 0x59, 0xcd, 0xae, 0xed, 0x33, 0x55,
-	0x44, 0x41, 0x43, 0x93, 0x3f, 0x83, 0x02, 0x24, 0x68, 0xd9, 0xe6, 0x44, 0x85, 0xa0, 0x71, 0x99,
-	0x92, 0xdb, 0x34, 0xd0, 0x45, 0x47, 0x73, 0xa2, 0x42, 0x9e, 0x5d, 0xc7, 0xbb, 0x47, 0x50, 0xdc,
-	0x91, 0x48, 0xd7, 0xcd, 0xcc, 0x7b, 0xdf, 0xf7, 0x7e, 0x7c, 0xef, 0x49, 0x83, 0xde, 0x1d, 0x53,
-	0x5f, 0x73, 0x98, 0xee, 0x93, 0xfb, 0xf4, 0x08, 0xeb, 0xc4, 0x65, 0x23, 0xcb, 0x24, 0x9c, 0x5a,
-	0x74, 0x18, 0x38, 0xd8, 0xf5, 0xf5, 0x60, 0xea, 0x51, 0x5f, 0xf3, 0x38, 0x0b, 0x98, 0xf2, 0x76,
-	0xec, 0xac, 0xc5, 0xce, 0xda, 0xbf, 0x9c, 0x2b, 0x0d, 0xdb, 0x09, 0xee, 0x8f, 0xfa, 0x1a, 0x61,
-	0x47, 0xba, 0xcd, 0x6c, 0xa6, 0x0b, 0x5c, 0x7f, 0x34, 0x10, 0x37, 0x71, 0x11, 0xa7, 0x98, 0xaf,
-	0xf2, 0x56, 0x36, 0x38, 0xf3, 0x02, 0x87, 0x0d, 0x93, 0x60, 0x95, 0xab, 0x59, 0x63, 0x2a, 0x8f,
-	0xca, 0x6e, 0xd6, 0x34, 0xc6, 0xae, 0x63, 0xe1, 0x80, 0x26, 0xd6, 0xea, 0x05, 0xab, 0x43, 0x27,
-	0x66, 0x86, 0xba, 0xf6, 0x35, 0xa0, 0xed, 0xfd, 0xcf, 0x7a, 0x3d, 0x4a, 0x38, 0x0d, 0x3e, 0x9d,
-	0x7a, 0x54, 0x69, 0x20, 0x84, 0x09, 0xa1, 0xbe, 0x6f, 0x3e, 0xa0, 0xd3, 0x32, 0x54, 0xe1, 0x5a,
-	0xa1, 0x5d, 0x3c, 0x0f, 0x01, 0x7e, 0xfa, 0xf3, 0x44, 0xce, 0x73, 0xb9, 0xfc, 0x10, 0x8c, 0x42,
-	0xec, 0x71, 0x9b, 0x4e, 0x95, 0x16, 0x42, 0xbe, 0x00, 0x0b, 0xf7, 0xb5, 0x2a, 0x5c, 0xdb, 0xdc,
-	0xbb, 0xaa, 0x65, 0xbb, 0xb3, 0x64, 0x6f, 0xe7, 0x66, 0x21, 0x80, 0x51, 0x88, 0x21, 0xb7, 0xe9,
-	0xb4, 0xb9, 0x7e, 0xd6, 0x92, 0xaf, 0xd7, 0xf7, 0x6a, 0xdf, 0xad, 0xa1, 0xad, 0xfd, 0x2f, 0x47,
-	0x9c, 0xde, 0x19, 0x1c, 0x8b, 0x3c, 0xde, 0x41, 0x05, 0xe2, 0x3a, 0x74, 0x18, 0x98, 0x8e, 0x95,
-	0xa4, 0xb1, 0x7d, 0x1e, 0x82, 0x34, 0x4f, 0x23, 0xc7, 0xd7, 0xca, 0xb7, 0x8c, 0x8d, 0xd8, 0x7e,
-	0x68, 0x29, 0x1f, 0xa0, 0x92, 0x3f, 0xea, 0xfb, 0x84, 0x3b, 0xa2, 0xb8, 0x39, 0x62, 0xed, 0x79,
-	0x88, 0x62, 0xda, 0xeb, 0xd0, 0x9a, 0xc7, 0x08, 0xe8, 0x10, 0xc7, 0x31, 0xe4, 0xe7, 0xc6, 0x88,
-	0xed, 0x87, 0x96, 0xb2, 0x8f, 0x4a, 0x84, 0xf2, 0xc0, 0x19, 0x38, 0x04, 0x07, 0xd4, 0x1c, 0x71,
-	0xb7, 0x9c, 0x13, 0x88, 0xf2, 0x79, 0x08, 0xf2, 0xb3, 0xe6, 0xdc, 0x4a, 0x4e, 0x8f, 0x00, 0x8c,
-	0x62, 0x0a, 0x70, 0x97, 0xbb, 0xca, 0x87, 0x68, 0xc3, 0xc3, 0xbe, 0x3f, 0x61, 0xdc, 0x2a, 0xe7,
-	0x57, 0xeb, 0xd4, 0x33, 0x40, 0x73, 0xeb, 0xac, 0x55, 0xb8, 0x5e, 0xdf, 0xab, 0xdf, 0xa8, 0xbf,
-	0x5f, 0xbf, 0x59, 0xfb, 0x0b, 0x50, 0x49, 0xb4, 0x2b, 0xa5, 0xdc, 0xcb, 0xd6, 0xb1, 0x8f, 0xd0,
-	0x76, 0x92, 0x4f, 0x2c, 0xb7, 0xe8, 0xd7, 0x0a, 0x35, 0x6f, 0xc5, 0xa8, 0xf8, 0xbd, 0x89, 0xce,
-	0x5a, 0xaf, 0x25, 0x75, 0xd7, 0xbe, 0x40, 0xa5, 0x83, 0xce, 0x9d, 0x0e, 0xa7, 0xd6, 0xc7, 0x8e,
-	0x4b, 0x45, 0xd1, 0x5d, 0x54, 0x5a, 0xae, 0x9d, 0x39, 0x70, 0x5c, 0xba, 0xea, 0x10, 0x16, 0x97,
-	0xb8, 0x39, 0x5b, 0xed, 0x37, 0x19, 0x15, 0x0f, 0x5c, 0xd6, 0xc7, 0x6e, 0xcf, 0xa3, 0x44, 0x90,
-	0xdf, 0x43, 0x45, 0x3c, 0xf1, 0xcd, 0xd4, 0x80, 0x83, 0xe0, 0xd6, 0xb4, 0x17, 0xac, 0xbf, 0x96,
-	0xd9, 0xa9, 0xae, 0x64, 0x6c, 0xe1, 0x89, 0xdf, 0x5b, 0x0c, 0xbd, 0x42, 0xd0, 0x1b, 0x78, 0x2e,
-	0x9e, 0xe9, 0x0d, 0x8e, 0xcd, 0xd4, 0x90, 0x24, 0xa9, 0x37, 0x5e, 0x4c, 0x9f, 0xda, 0x94, 0xae,
-	0x64, 0x5c, 0xc1, 0xc9, 0xbd, 0xb3, 0xe4, 0x52, 0xfa, 0x28, 0x7e, 0x36, 0xb3, 0x22, 0xc8, 0x22,
-	0xc4, 0x7b, 0xab, 0x85, 0xc8, 0xd4, 0xb0, 0x23, 0xe8, 0x3a, 0x29, 0x71, 0x94, 0x7b, 0x68, 0xdb,
-	0x26, 0x9e, 0xc0, 0xc5, 0xbd, 0xcf, 0xad, 0xc8, 0x7e, 0x41, 0xc6, 0xae, 0x64, 0x6c, 0xda, 0xc4,
-	0x5b, 0x3c, 0x35, 0x77, 0x7f, 0x0e, 0xa1, 0x8c, 0xde, 0x44, 0x3b, 0x9d, 0x39, 0xb2, 0xda, 0x59,
-	0x22, 0x15, 0xb8, 0xd9, 0xde, 0x45, 0x79, 0xc1, 0xa8, 0x5c, 0x39, 0x09, 0x01, 0x66, 0x21, 0xe4,
-	0xa3, 0x10, 0x16, 0x43, 0xf2, 0x49, 0x6e, 0x23, 0xff, 0xfa, 0x7a, 0xed, 0x07, 0x19, 0x15, 0x3b,
-	0x9c, 0xe2, 0x80, 0x5e, 0xaa, 0xf9, 0x7f, 0xab, 0xb9, 0xf3, 0x6b, 0xeb, 0xc2, 0x66, 0xb5, 0x95,
-	0x85, 0x84, 0x85, 0xaf, 0xfe, 0x86, 0xf8, 0x58, 0xfb, 0x51, 0x46, 0x25, 0x83, 0x7a, 0x2e, 0x26,
-	0x97, 0x9a, 0xbd, 0x2a, 0x9a, 0x7d, 0x2f, 0xa3, 0xcd, 0x03, 0x1a, 0x5c, 0xea, 0xf5, 0x6a, 0xe8,
-	0xd5, 0xfe, 0x06, 0x66, 0xa7, 0xaa, 0xf4, 0xf8, 0x54, 0x95, 0x9e, 0x9e, 0xaa, 0xf0, 0x30, 0x52,
-	0xe1, 0xdb, 0x48, 0x85, 0x5f, 0x22, 0x15, 0x66, 0x91, 0x0a, 0x8f, 0x23, 0x15, 0x7e, 0x8f, 0x54,
-	0xf8, 0x23, 0x52, 0xa5, 0xa7, 0x91, 0x0a, 0x8f, 0x9e, 0xa8, 0xd2, 0xc9, 0x13, 0x15, 0x3e, 0xbf,
-	0x6b, 0x33, 0xef, 0x81, 0xad, 0x8d, 0x99, 0x1b, 0x50, 0xce, 0xb1, 0x36, 0xf2, 0x75, 0x71, 0x18,
-	0x30, 0x7e, 0xd4, 0xf0, 0x38, 0x1b, 0x3b, 0x16, 0xe5, 0x8d, 0x85, 0x59, 0xf7, 0xfa, 0x36, 0xd3,
-	0xe9, 0x71, 0x90, 0xfc, 0x3b, 0xff, 0xeb, 0x47, 0xdd, 0x5f, 0x17, 0x9f, 0xd0, 0x1b, 0xff, 0x04,
-	0x00, 0x00, 0xff, 0xff, 0xe8, 0x01, 0x9f, 0xc2, 0x7b, 0x0b, 0x00, 0x00,
-}

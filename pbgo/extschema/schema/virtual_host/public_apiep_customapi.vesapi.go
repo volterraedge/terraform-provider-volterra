@@ -700,7 +700,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_hostAPIEndpointLearntSchemaRsp"
                         }
@@ -757,15 +757,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Virtual Host\n\nx-example: \"blogging-app-vhost\"\nVirtual Host Name for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     },
                     {
                         "name": "collapsed_url",
@@ -804,7 +808,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_hostAPIEndpointPDFRsp"
                         }
@@ -861,15 +865,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Virtual Host\n\nx-example: \"blogging-app-vhost\"\nVirtual Host Name for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     },
                     {
                         "name": "collapsed_url",
@@ -908,7 +916,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_hostAPIEndpointsRsp"
                         }
@@ -965,15 +973,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     },
                     {
                         "name": "api_endpoint_info_request",
@@ -988,6 +1000,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                                 "API_ENDPOINT_INFO_PDF_SPARKLINES"
                             ]
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "API Endpoint Info PDF Sparklines"
                     }
                 ],
@@ -1007,7 +1020,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/apiHttpBody"
                         }
@@ -1064,15 +1077,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app\"\nVirtual Host for current request",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     }
                 ],
                 "tags": [

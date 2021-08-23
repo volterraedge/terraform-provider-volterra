@@ -1642,7 +1642,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Activate",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -1699,9 +1699,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1732,7 +1734,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -1789,9 +1791,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1822,7 +1826,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialListResponse"
                         }
@@ -1879,9 +1883,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -1899,7 +1905,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialCreateResponse"
                         }
@@ -1956,9 +1962,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1989,7 +1997,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialGetResponse"
                         }
@@ -2046,15 +2054,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Credential name\n\nx-required\nx-example: \"value\"\nName of API credential.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     }
                 ],
                 "tags": [
@@ -2077,7 +2089,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Renew",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -2134,9 +2146,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\" .",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2167,7 +2181,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -2224,9 +2238,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\" .",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2257,7 +2273,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Revoke",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -2314,9 +2330,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2347,7 +2365,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialStatusResponse"
                         }
@@ -2404,9 +2422,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2437,7 +2457,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialListResponse"
                         }
@@ -2494,9 +2514,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2514,7 +2536,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/api_credentialCreateResponse"
                         }
@@ -2571,9 +2593,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"system\"\nValue of namespace is always \"system\".",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

@@ -1641,7 +1641,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/http_loadbalancerCreateResponse"
                         }
@@ -1698,9 +1698,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1731,7 +1733,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/http_loadbalancerReplaceResponse"
                         }
@@ -1788,15 +1790,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.namespace",
+                        "description": "namespace\n\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created. \nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "metadata.name",
+                        "description": "name\n\nx-example: \"acmecorp-web\"\nThe configuration object to be replaced will be looked up by name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -1827,7 +1833,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/http_loadbalancerListResponse"
                         }
@@ -1884,9 +1890,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of http_loadbalancer",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "label_filter",
@@ -1905,6 +1913,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Fields"
                     },
                     {
@@ -1916,6 +1925,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Status Fields"
                     }
                 ],
@@ -1939,7 +1949,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/http_loadbalancerGetResponse"
                         }
@@ -1996,15 +2006,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "response_format",
@@ -2039,10 +2053,8 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.http_loadbalancer.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/googleprotobufEmpty"
-                        }
+                        "description": "A successful response.",
+                        "schema": {}
                     },
                     "401": {
                         "description": "Returned when operation is not authorized",
@@ -2096,15 +2108,19 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace in which the configuration object is present",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nName of the configuration object",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -2130,11 +2146,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "googleprotobufEmpty": {
-            "type": "object",
-            "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
-            "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
-        },
         "http_loadbalancerAdvancedOptionsType": {
             "type": "object",
             "description": "This defines various options to define a route",
@@ -4072,19 +4083,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "protobufListValue": {
-            "type": "object",
-            "description": "-ListValue- is a wrapper around a repeated field of values.\n\nThe JSON representation for -ListValue- is JSON array.",
-            "properties": {
-                "values": {
-                    "type": "array",
-                    "description": "Repeated field of dynamically typed values.",
-                    "items": {
-                        "$ref": "#/definitions/protobufValue"
-                    }
-                }
-            }
-        },
         "protobufNullValue": {
             "type": "string",
             "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
@@ -4092,48 +4090,6 @@ var APISwaggerJSON string = `{
                 "NULL_VALUE"
             ],
             "default": "NULL_VALUE"
-        },
-        "protobufStruct": {
-            "type": "object",
-            "description": "-Struct- represents a structured data value, consisting of fields\nwhich map to dynamically typed values. In some languages, -Struct-\nmight be supported by a native representation. For example, in\nscripting languages like JS a struct is represented as an\nobject. The details of that representation are described together\nwith the proto support for the language.\n\nThe JSON representation for -Struct- is JSON object.",
-            "properties": {
-                "fields": {
-                    "type": "object",
-                    "description": "Unordered map of dynamically typed values."
-                }
-            }
-        },
-        "protobufValue": {
-            "type": "object",
-            "description": "-Value- represents a dynamically typed value which can be either\nnull, a number, a string, a boolean, a recursive struct value, or a\nlist of values. A producer of value is expected to set one of that\nvariants, absence of any variant indicates an error.\n\nThe JSON representation for -Value- is JSON value.",
-            "properties": {
-                "bool_value": {
-                    "type": "boolean",
-                    "description": "Represents a boolean value.",
-                    "format": "boolean"
-                },
-                "list_value": {
-                    "description": "Represents a repeated -Value-.",
-                    "$ref": "#/definitions/protobufListValue"
-                },
-                "null_value": {
-                    "description": "Represents a null value.",
-                    "$ref": "#/definitions/protobufNullValue"
-                },
-                "number_value": {
-                    "type": "number",
-                    "description": "Represents a double value.",
-                    "format": "double"
-                },
-                "string_value": {
-                    "type": "string",
-                    "description": "Represents a string value."
-                },
-                "struct_value": {
-                    "description": "Represents a structured value.",
-                    "$ref": "#/definitions/protobufStruct"
-                }
-            }
         },
         "rate_limiterRateLimitPeriodUnit": {
             "type": "string",
@@ -7539,9 +7495,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Path of Javascript"
                 },
                 "script_config": {
+                    "type": "object",
                     "description": " Input passed to the script",
                     "title": "ScriptConfig",
-                    "$ref": "#/definitions/protobufStruct",
                     "x-displayname": "Configuration for Script"
                 }
             }

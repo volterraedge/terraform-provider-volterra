@@ -3,19 +3,26 @@
 
 package vesenv
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	proto "github.com/gogo/protobuf/proto"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // ServiceChoice enumerates all the service-framework based services in a VES environment
 type ServiceChoice struct {
@@ -53,9 +60,37 @@ type ServiceChoice struct {
 	Choice isServiceChoice_Choice `protobuf_oneof:"choice"`
 }
 
-func (m *ServiceChoice) Reset()                    { *m = ServiceChoice{} }
-func (*ServiceChoice) ProtoMessage()               {}
-func (*ServiceChoice) Descriptor() ([]byte, []int) { return fileDescriptorAllServices, []int{0} }
+func (m *ServiceChoice) Reset()      { *m = ServiceChoice{} }
+func (*ServiceChoice) ProtoMessage() {}
+func (*ServiceChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30eccf2b87cfc541, []int{0}
+}
+func (m *ServiceChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceChoice.Merge(m, src)
+}
+func (m *ServiceChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceChoice proto.InternalMessageInfo
 
 type isServiceChoice_Choice interface {
 	isServiceChoice_Choice()
@@ -65,94 +100,94 @@ type isServiceChoice_Choice interface {
 }
 
 type ServiceChoice_Akar struct {
-	Akar bool `protobuf:"varint,1,opt,name=akar,proto3,oneof"`
+	Akar bool `protobuf:"varint,1,opt,name=akar,proto3,oneof" json:"akar,omitempty"`
 }
 type ServiceChoice_Ares struct {
-	Ares bool `protobuf:"varint,2,opt,name=ares,proto3,oneof"`
+	Ares bool `protobuf:"varint,2,opt,name=ares,proto3,oneof" json:"ares,omitempty"`
 }
 type ServiceChoice_Asterix struct {
-	Asterix bool `protobuf:"varint,4,opt,name=asterix,proto3,oneof"`
+	Asterix bool `protobuf:"varint,4,opt,name=asterix,proto3,oneof" json:"asterix,omitempty"`
 }
 type ServiceChoice_Athena struct {
-	Athena bool `protobuf:"varint,6,opt,name=athena,proto3,oneof"`
+	Athena bool `protobuf:"varint,6,opt,name=athena,proto3,oneof" json:"athena,omitempty"`
 }
 type ServiceChoice_Automatix struct {
-	Automatix bool `protobuf:"varint,7,opt,name=automatix,proto3,oneof"`
+	Automatix bool `protobuf:"varint,7,opt,name=automatix,proto3,oneof" json:"automatix,omitempty"`
 }
 type ServiceChoice_Barracute struct {
-	Barracute bool `protobuf:"varint,8,opt,name=barracute,proto3,oneof"`
+	Barracute bool `protobuf:"varint,8,opt,name=barracute,proto3,oneof" json:"barracute,omitempty"`
 }
 type ServiceChoice_Blindfold struct {
-	Blindfold bool `protobuf:"varint,9,opt,name=blindfold,proto3,oneof"`
+	Blindfold bool `protobuf:"varint,9,opt,name=blindfold,proto3,oneof" json:"blindfold,omitempty"`
 }
 type ServiceChoice_Bolt struct {
-	Bolt bool `protobuf:"varint,10,opt,name=bolt,proto3,oneof"`
+	Bolt bool `protobuf:"varint,10,opt,name=bolt,proto3,oneof" json:"bolt,omitempty"`
 }
 type ServiceChoice_Charmander struct {
-	Charmander bool `protobuf:"varint,11,opt,name=charmander,proto3,oneof"`
+	Charmander bool `protobuf:"varint,11,opt,name=charmander,proto3,oneof" json:"charmander,omitempty"`
 }
 type ServiceChoice_Charmandercar struct {
-	Charmandercar bool `protobuf:"varint,12,opt,name=charmandercar,proto3,oneof"`
+	Charmandercar bool `protobuf:"varint,12,opt,name=charmandercar,proto3,oneof" json:"charmandercar,omitempty"`
 }
 type ServiceChoice_Drogon struct {
-	Drogon bool `protobuf:"varint,13,opt,name=drogon,proto3,oneof"`
+	Drogon bool `protobuf:"varint,13,opt,name=drogon,proto3,oneof" json:"drogon,omitempty"`
 }
 type ServiceChoice_Eywa struct {
-	Eywa bool `protobuf:"varint,14,opt,name=eywa,proto3,oneof"`
+	Eywa bool `protobuf:"varint,14,opt,name=eywa,proto3,oneof" json:"eywa,omitempty"`
 }
 type ServiceChoice_Griffin struct {
-	Griffin bool `protobuf:"varint,15,opt,name=griffin,proto3,oneof"`
+	Griffin bool `protobuf:"varint,15,opt,name=griffin,proto3,oneof" json:"griffin,omitempty"`
 }
 type ServiceChoice_Identityauthority struct {
-	Identityauthority bool `protobuf:"varint,16,opt,name=identityauthority,proto3,oneof"`
+	Identityauthority bool `protobuf:"varint,16,opt,name=identityauthority,proto3,oneof" json:"identityauthority,omitempty"`
 }
 type ServiceChoice_Keypr struct {
-	Keypr bool `protobuf:"varint,17,opt,name=keypr,proto3,oneof"`
+	Keypr bool `protobuf:"varint,17,opt,name=keypr,proto3,oneof" json:"keypr,omitempty"`
 }
 type ServiceChoice_Maurice struct {
-	Maurice bool `protobuf:"varint,18,opt,name=maurice,proto3,oneof"`
+	Maurice bool `protobuf:"varint,18,opt,name=maurice,proto3,oneof" json:"maurice,omitempty"`
 }
 type ServiceChoice_Obelix struct {
-	Obelix bool `protobuf:"varint,19,opt,name=obelix,proto3,oneof"`
+	Obelix bool `protobuf:"varint,19,opt,name=obelix,proto3,oneof" json:"obelix,omitempty"`
 }
 type ServiceChoice_Ocspmule struct {
-	Ocspmule bool `protobuf:"varint,20,opt,name=ocspmule,proto3,oneof"`
+	Ocspmule bool `protobuf:"varint,20,opt,name=ocspmule,proto3,oneof" json:"ocspmule,omitempty"`
 }
 type ServiceChoice_Opera struct {
-	Opera bool `protobuf:"varint,21,opt,name=opera,proto3,oneof"`
+	Opera bool `protobuf:"varint,21,opt,name=opera,proto3,oneof" json:"opera,omitempty"`
 }
 type ServiceChoice_Pikachu struct {
-	Pikachu bool `protobuf:"varint,22,opt,name=pikachu,proto3,oneof"`
+	Pikachu bool `protobuf:"varint,22,opt,name=pikachu,proto3,oneof" json:"pikachu,omitempty"`
 }
 type ServiceChoice_Pkifactory struct {
-	Pkifactory bool `protobuf:"varint,23,opt,name=pkifactory,proto3,oneof"`
+	Pkifactory bool `protobuf:"varint,23,opt,name=pkifactory,proto3,oneof" json:"pkifactory,omitempty"`
 }
 type ServiceChoice_Rakar struct {
-	Rakar bool `protobuf:"varint,24,opt,name=rakar,proto3,oneof"`
+	Rakar bool `protobuf:"varint,24,opt,name=rakar,proto3,oneof" json:"rakar,omitempty"`
 }
 type ServiceChoice_SiteConsole struct {
-	SiteConsole bool `protobuf:"varint,25,opt,name=site_console,json=siteConsole,proto3,oneof"`
+	SiteConsole bool `protobuf:"varint,25,opt,name=site_console,json=siteConsole,proto3,oneof" json:"site_console,omitempty"`
 }
 type ServiceChoice_Vega struct {
-	Vega bool `protobuf:"varint,26,opt,name=vega,proto3,oneof"`
+	Vega bool `protobuf:"varint,26,opt,name=vega,proto3,oneof" json:"vega,omitempty"`
 }
 type ServiceChoice_Voucher struct {
-	Voucher bool `protobuf:"varint,27,opt,name=voucher,proto3,oneof"`
+	Voucher bool `protobuf:"varint,27,opt,name=voucher,proto3,oneof" json:"voucher,omitempty"`
 }
 type ServiceChoice_Vpm struct {
-	Vpm bool `protobuf:"varint,28,opt,name=vpm,proto3,oneof"`
+	Vpm bool `protobuf:"varint,28,opt,name=vpm,proto3,oneof" json:"vpm,omitempty"`
 }
 type ServiceChoice_Vulpix struct {
-	Vulpix bool `protobuf:"varint,29,opt,name=vulpix,proto3,oneof"`
+	Vulpix bool `protobuf:"varint,29,opt,name=vulpix,proto3,oneof" json:"vulpix,omitempty"`
 }
 type ServiceChoice_Warden struct {
-	Warden bool `protobuf:"varint,30,opt,name=warden,proto3,oneof"`
+	Warden bool `protobuf:"varint,30,opt,name=warden,proto3,oneof" json:"warden,omitempty"`
 }
 type ServiceChoice_Wingman struct {
-	Wingman bool `protobuf:"varint,31,opt,name=wingman,proto3,oneof"`
+	Wingman bool `protobuf:"varint,31,opt,name=wingman,proto3,oneof" json:"wingman,omitempty"`
 }
 type ServiceChoice_Shape struct {
-	Shape bool `protobuf:"varint,32,opt,name=shape,proto3,oneof"`
+	Shape bool `protobuf:"varint,32,opt,name=shape,proto3,oneof" json:"shape,omitempty"`
 }
 
 func (*ServiceChoice_Akar) isServiceChoice_Choice()              {}
@@ -403,9 +438,9 @@ func (m *ServiceChoice) GetShape() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ServiceChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ServiceChoice_OneofMarshaler, _ServiceChoice_OneofUnmarshaler, _ServiceChoice_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ServiceChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ServiceChoice_Akar)(nil),
 		(*ServiceChoice_Ares)(nil),
 		(*ServiceChoice_Asterix)(nil),
@@ -439,549 +474,68 @@ func (*ServiceChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer)
 	}
 }
 
-func _ServiceChoice_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ServiceChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *ServiceChoice_Akar:
-		t := uint64(0)
-		if x.Akar {
-			t = 1
-		}
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Ares:
-		t := uint64(0)
-		if x.Ares {
-			t = 1
-		}
-		_ = b.EncodeVarint(2<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Asterix:
-		t := uint64(0)
-		if x.Asterix {
-			t = 1
-		}
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Athena:
-		t := uint64(0)
-		if x.Athena {
-			t = 1
-		}
-		_ = b.EncodeVarint(6<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Automatix:
-		t := uint64(0)
-		if x.Automatix {
-			t = 1
-		}
-		_ = b.EncodeVarint(7<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Barracute:
-		t := uint64(0)
-		if x.Barracute {
-			t = 1
-		}
-		_ = b.EncodeVarint(8<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Blindfold:
-		t := uint64(0)
-		if x.Blindfold {
-			t = 1
-		}
-		_ = b.EncodeVarint(9<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Bolt:
-		t := uint64(0)
-		if x.Bolt {
-			t = 1
-		}
-		_ = b.EncodeVarint(10<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Charmander:
-		t := uint64(0)
-		if x.Charmander {
-			t = 1
-		}
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Charmandercar:
-		t := uint64(0)
-		if x.Charmandercar {
-			t = 1
-		}
-		_ = b.EncodeVarint(12<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Drogon:
-		t := uint64(0)
-		if x.Drogon {
-			t = 1
-		}
-		_ = b.EncodeVarint(13<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Eywa:
-		t := uint64(0)
-		if x.Eywa {
-			t = 1
-		}
-		_ = b.EncodeVarint(14<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Griffin:
-		t := uint64(0)
-		if x.Griffin {
-			t = 1
-		}
-		_ = b.EncodeVarint(15<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Identityauthority:
-		t := uint64(0)
-		if x.Identityauthority {
-			t = 1
-		}
-		_ = b.EncodeVarint(16<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Keypr:
-		t := uint64(0)
-		if x.Keypr {
-			t = 1
-		}
-		_ = b.EncodeVarint(17<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Maurice:
-		t := uint64(0)
-		if x.Maurice {
-			t = 1
-		}
-		_ = b.EncodeVarint(18<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Obelix:
-		t := uint64(0)
-		if x.Obelix {
-			t = 1
-		}
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Ocspmule:
-		t := uint64(0)
-		if x.Ocspmule {
-			t = 1
-		}
-		_ = b.EncodeVarint(20<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Opera:
-		t := uint64(0)
-		if x.Opera {
-			t = 1
-		}
-		_ = b.EncodeVarint(21<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Pikachu:
-		t := uint64(0)
-		if x.Pikachu {
-			t = 1
-		}
-		_ = b.EncodeVarint(22<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Pkifactory:
-		t := uint64(0)
-		if x.Pkifactory {
-			t = 1
-		}
-		_ = b.EncodeVarint(23<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Rakar:
-		t := uint64(0)
-		if x.Rakar {
-			t = 1
-		}
-		_ = b.EncodeVarint(24<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_SiteConsole:
-		t := uint64(0)
-		if x.SiteConsole {
-			t = 1
-		}
-		_ = b.EncodeVarint(25<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Vega:
-		t := uint64(0)
-		if x.Vega {
-			t = 1
-		}
-		_ = b.EncodeVarint(26<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Voucher:
-		t := uint64(0)
-		if x.Voucher {
-			t = 1
-		}
-		_ = b.EncodeVarint(27<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Vpm:
-		t := uint64(0)
-		if x.Vpm {
-			t = 1
-		}
-		_ = b.EncodeVarint(28<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Vulpix:
-		t := uint64(0)
-		if x.Vulpix {
-			t = 1
-		}
-		_ = b.EncodeVarint(29<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Warden:
-		t := uint64(0)
-		if x.Warden {
-			t = 1
-		}
-		_ = b.EncodeVarint(30<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Wingman:
-		t := uint64(0)
-		if x.Wingman {
-			t = 1
-		}
-		_ = b.EncodeVarint(31<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *ServiceChoice_Shape:
-		t := uint64(0)
-		if x.Shape {
-			t = 1
-		}
-		_ = b.EncodeVarint(32<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("ServiceChoice.Choice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ServiceChoice_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ServiceChoice)
-	switch tag {
-	case 1: // choice.akar
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Akar{x != 0}
-		return true, err
-	case 2: // choice.ares
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Ares{x != 0}
-		return true, err
-	case 4: // choice.asterix
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Asterix{x != 0}
-		return true, err
-	case 6: // choice.athena
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Athena{x != 0}
-		return true, err
-	case 7: // choice.automatix
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Automatix{x != 0}
-		return true, err
-	case 8: // choice.barracute
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Barracute{x != 0}
-		return true, err
-	case 9: // choice.blindfold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Blindfold{x != 0}
-		return true, err
-	case 10: // choice.bolt
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Bolt{x != 0}
-		return true, err
-	case 11: // choice.charmander
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Charmander{x != 0}
-		return true, err
-	case 12: // choice.charmandercar
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Charmandercar{x != 0}
-		return true, err
-	case 13: // choice.drogon
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Drogon{x != 0}
-		return true, err
-	case 14: // choice.eywa
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Eywa{x != 0}
-		return true, err
-	case 15: // choice.griffin
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Griffin{x != 0}
-		return true, err
-	case 16: // choice.identityauthority
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Identityauthority{x != 0}
-		return true, err
-	case 17: // choice.keypr
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Keypr{x != 0}
-		return true, err
-	case 18: // choice.maurice
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Maurice{x != 0}
-		return true, err
-	case 19: // choice.obelix
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Obelix{x != 0}
-		return true, err
-	case 20: // choice.ocspmule
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Ocspmule{x != 0}
-		return true, err
-	case 21: // choice.opera
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Opera{x != 0}
-		return true, err
-	case 22: // choice.pikachu
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Pikachu{x != 0}
-		return true, err
-	case 23: // choice.pkifactory
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Pkifactory{x != 0}
-		return true, err
-	case 24: // choice.rakar
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Rakar{x != 0}
-		return true, err
-	case 25: // choice.site_console
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_SiteConsole{x != 0}
-		return true, err
-	case 26: // choice.vega
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Vega{x != 0}
-		return true, err
-	case 27: // choice.voucher
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Voucher{x != 0}
-		return true, err
-	case 28: // choice.vpm
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Vpm{x != 0}
-		return true, err
-	case 29: // choice.vulpix
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Vulpix{x != 0}
-		return true, err
-	case 30: // choice.warden
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Warden{x != 0}
-		return true, err
-	case 31: // choice.wingman
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Wingman{x != 0}
-		return true, err
-	case 32: // choice.shape
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &ServiceChoice_Shape{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ServiceChoice_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ServiceChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *ServiceChoice_Akar:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Ares:
-		n += proto.SizeVarint(2<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Asterix:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Athena:
-		n += proto.SizeVarint(6<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Automatix:
-		n += proto.SizeVarint(7<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Barracute:
-		n += proto.SizeVarint(8<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Blindfold:
-		n += proto.SizeVarint(9<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Bolt:
-		n += proto.SizeVarint(10<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Charmander:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Charmandercar:
-		n += proto.SizeVarint(12<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Drogon:
-		n += proto.SizeVarint(13<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Eywa:
-		n += proto.SizeVarint(14<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Griffin:
-		n += proto.SizeVarint(15<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Identityauthority:
-		n += proto.SizeVarint(16<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Keypr:
-		n += proto.SizeVarint(17<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Maurice:
-		n += proto.SizeVarint(18<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Obelix:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Ocspmule:
-		n += proto.SizeVarint(20<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Opera:
-		n += proto.SizeVarint(21<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Pikachu:
-		n += proto.SizeVarint(22<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Pkifactory:
-		n += proto.SizeVarint(23<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Rakar:
-		n += proto.SizeVarint(24<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_SiteConsole:
-		n += proto.SizeVarint(25<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Vega:
-		n += proto.SizeVarint(26<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Voucher:
-		n += proto.SizeVarint(27<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Vpm:
-		n += proto.SizeVarint(28<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Vulpix:
-		n += proto.SizeVarint(29<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Warden:
-		n += proto.SizeVarint(30<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Wingman:
-		n += proto.SizeVarint(31<<3 | proto.WireVarint)
-		n += 1
-	case *ServiceChoice_Shape:
-		n += proto.SizeVarint(32<<3 | proto.WireVarint)
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*ServiceChoice)(nil), "ves.io.schema.vesenv.ServiceChoice")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/vesenv/all_services.proto", fileDescriptor_30eccf2b87cfc541)
+}
+
+var fileDescriptor_30eccf2b87cfc541 = []byte{
+	// 790 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x95, 0x4f, 0x6e, 0xe3, 0x36,
+	0x14, 0xc6, 0xad, 0xd4, 0x91, 0x93, 0xe7, 0x38, 0x7f, 0x9c, 0x4c, 0xf3, 0x66, 0xa6, 0x55, 0x07,
+	0x83, 0x14, 0x1e, 0x18, 0xb0, 0x5d, 0x20, 0xe8, 0x2c, 0x5b, 0x20, 0x46, 0xd1, 0xa2, 0xdd, 0x4d,
+	0x77, 0xdd, 0x0c, 0x68, 0x99, 0xb6, 0x08, 0x4b, 0xa2, 0x40, 0x51, 0x8a, 0xbd, 0x9b, 0x23, 0xf4,
+	0x18, 0x3d, 0x83, 0x74, 0x81, 0x2e, 0xb3, 0x9c, 0x65, 0xe3, 0x6c, 0xba, 0xcc, 0x11, 0x06, 0xa2,
+	0x48, 0x9b, 0x0e, 0xb2, 0xe3, 0xf7, 0xe3, 0xf7, 0x3d, 0x93, 0x8f, 0xb4, 0x08, 0xbd, 0x9c, 0xa6,
+	0x43, 0xc6, 0x47, 0xa9, 0x1f, 0xd0, 0x88, 0x8c, 0x72, 0x9a, 0xd2, 0x38, 0x1f, 0x91, 0x30, 0xfc,
+	0x98, 0x52, 0x91, 0x33, 0x9f, 0xa6, 0xc3, 0x44, 0x70, 0xc9, 0xbb, 0x17, 0xb5, 0x71, 0x58, 0x1b,
+	0x87, 0xb5, 0xf1, 0xd5, 0xdb, 0x67, 0xe3, 0x3c, 0x91, 0x8c, 0xc7, 0x3a, 0xf9, 0xb6, 0x6c, 0x43,
+	0xe7, 0xcf, 0xba, 0xd8, 0x38, 0xe0, 0xcc, 0xa7, 0xdd, 0x2b, 0x68, 0x92, 0x05, 0x11, 0xe8, 0xbc,
+	0x71, 0xde, 0x1d, 0xdc, 0x1c, 0x17, 0x25, 0x42, 0x4d, 0xba, 0x7b, 0xbf, 0x8e, 0x7f, 0x6b, 0x7c,
+	0xa8, 0xc7, 0x95, 0x4b, 0xd0, 0x14, 0xf7, 0x76, 0x5c, 0x82, 0xa6, 0xdd, 0xbd, 0x0f, 0xbf, 0x28,
+	0x57, 0x35, 0x1e, 0x40, 0x8b, 0xa4, 0x92, 0x0a, 0xb6, 0xc4, 0xa6, 0x32, 0x9e, 0x15, 0x25, 0x76,
+	0x36, 0x50, 0x57, 0xdc, 0xc8, 0x3e, 0xb8, 0x44, 0x06, 0x34, 0x26, 0xe8, 0x2a, 0xf7, 0x69, 0x51,
+	0xe2, 0x91, 0x61, 0xda, 0x6c, 0xd4, 0x35, 0x1c, 0x92, 0x4c, 0xf2, 0x88, 0x48, 0xb6, 0xc4, 0x96,
+	0xb2, 0x9f, 0x17, 0x25, 0x9e, 0x58, 0x58, 0x27, 0x2c, 0x70, 0x0d, 0x87, 0x13, 0x22, 0x04, 0xf1,
+	0x33, 0x49, 0xf1, 0xc0, 0x0e, 0x6d, 0xb0, 0x09, 0x6d, 0x41, 0x15, 0x0a, 0x59, 0x3c, 0x9d, 0xf1,
+	0x70, 0x8a, 0x87, 0x3b, 0x21, 0x83, 0x37, 0xa1, 0x0d, 0xb8, 0x82, 0xe6, 0x84, 0x87, 0x12, 0xc1,
+	0xee, 0x4f, 0x45, 0x4c, 0x17, 0xd5, 0xf8, 0x3d, 0x80, 0x1f, 0x10, 0x11, 0x91, 0x78, 0x4a, 0x05,
+	0xb6, 0x95, 0xf7, 0xa2, 0x28, 0xf1, 0xd4, 0xe6, 0x3a, 0x61, 0x93, 0x9f, 0xa1, 0xb3, 0x55, 0x3e,
+	0x11, 0x78, 0xa4, 0xa2, 0x97, 0x45, 0x89, 0xe7, 0x4f, 0xa6, 0x74, 0xfa, 0x09, 0xec, 0x83, 0x3b,
+	0x15, 0x7c, 0xce, 0x63, 0xec, 0xd8, 0x9d, 0xae, 0x99, 0xe9, 0xb4, 0x56, 0x57, 0xd0, 0xa4, 0xab,
+	0x5b, 0x82, 0xc7, 0xf6, 0x56, 0x2a, 0x62, 0xb6, 0xa2, 0xc6, 0x03, 0x68, 0xcd, 0x05, 0x9b, 0xcd,
+	0x58, 0x8c, 0x27, 0xf6, 0x51, 0x6b, 0x68, 0x8e, 0xda, 0xc8, 0x3f, 0xe0, 0x8c, 0x4d, 0x69, 0x2c,
+	0x99, 0x5c, 0x91, 0x4c, 0x06, 0x5c, 0x30, 0xb9, 0xc2, 0x53, 0x15, 0x7c, 0x5d, 0x94, 0x78, 0xf9,
+	0xcc, 0xb4, 0x2e, 0xf1, 0xcc, 0x44, 0x0f, 0xf6, 0x17, 0x74, 0x95, 0x08, 0x3c, 0x53, 0x05, 0x4e,
+	0x8a, 0x12, 0xdb, 0x1a, 0xe9, 0x90, 0x16, 0x03, 0x68, 0x45, 0x24, 0x13, 0xcc, 0xa7, 0xd8, 0xb5,
+	0x17, 0xa9, 0xa1, 0x59, 0xa4, 0x91, 0x7d, 0x70, 0xf9, 0x84, 0x86, 0x6c, 0x89, 0xe7, 0x76, 0x97,
+	0x6a, 0xa6, 0x2f, 0xba, 0x51, 0x3f, 0xc0, 0x01, 0xf7, 0xd3, 0x24, 0xca, 0x42, 0x8a, 0x17, 0xca,
+	0xdd, 0x2d, 0x4a, 0x3c, 0xde, 0x52, 0x5d, 0x7c, 0xab, 0x47, 0xb0, 0xcf, 0x13, 0x2a, 0x08, 0xbe,
+	0xb0, 0x0e, 0xaf, 0x46, 0x95, 0xb7, 0xaa, 0xdf, 0xdd, 0x1b, 0x57, 0xbf, 0xa1, 0xe1, 0x00, 0x5a,
+	0x09, 0x5b, 0x10, 0x3f, 0xc8, 0xf0, 0x6b, 0x7b, 0xf5, 0x1a, 0x9a, 0xd5, 0x1b, 0xf9, 0x1e, 0x20,
+	0x59, 0xb0, 0x19, 0xf1, 0x25, 0x17, 0x2b, 0xbc, 0xb4, 0x2f, 0xd7, 0x96, 0x9b, 0xcb, 0x65, 0x91,
+	0x1e, 0xec, 0x0b, 0xf5, 0x05, 0x40, 0xbb, 0x9b, 0xa2, 0xfe, 0x04, 0xa8, 0x3d, 0x6b, 0xf1, 0x13,
+	0x1c, 0xa5, 0x4c, 0xd2, 0x8f, 0x3e, 0x8f, 0x53, 0x1e, 0x52, 0x7c, 0xa9, 0xfc, 0x2f, 0x8b, 0x12,
+	0x5f, 0x40, 0xbb, 0x9a, 0x19, 0xd7, 0x13, 0xd6, 0x4e, 0x76, 0xf0, 0x3b, 0x68, 0xe6, 0x74, 0x4e,
+	0xf0, 0x95, 0xd5, 0x2e, 0x45, 0xac, 0x40, 0xad, 0x07, 0xd0, 0xca, 0x79, 0xe6, 0x07, 0x54, 0xe0,
+	0x6b, 0x7b, 0xe7, 0x1a, 0xea, 0x65, 0x6d, 0xe4, 0xf7, 0xf0, 0x55, 0x9e, 0x44, 0xf8, 0x8d, 0x65,
+	0xad, 0x80, 0x55, 0x56, 0xc9, 0x3e, 0xb8, 0x79, 0x16, 0x26, 0x6c, 0x89, 0xdf, 0xda, 0xc7, 0x5b,
+	0x33, 0xf3, 0x27, 0xd0, 0xaa, 0x0f, 0xee, 0x2d, 0x11, 0x53, 0x1a, 0xa3, 0x67, 0x7b, 0x6b, 0x66,
+	0xbc, 0x5a, 0xfd, 0x08, 0xad, 0x5b, 0x16, 0xcf, 0x23, 0x12, 0xe3, 0x77, 0x56, 0x4b, 0x0c, 0x7c,
+	0x72, 0xb8, 0x1b, 0xdc, 0x83, 0xfd, 0x34, 0x20, 0x09, 0xc5, 0x37, 0x76, 0xdf, 0x15, 0x32, 0xb7,
+	0x58, 0x89, 0x9b, 0x03, 0x70, 0x7d, 0xf5, 0xad, 0xbe, 0xf9, 0xe4, 0xdc, 0xdd, 0x7b, 0x8d, 0xcf,
+	0xf7, 0x5e, 0xe3, 0xf1, 0xde, 0x73, 0x3e, 0xad, 0x3d, 0xe7, 0x9f, 0xb5, 0xe7, 0xfc, 0xbb, 0xf6,
+	0x9c, 0xbb, 0xb5, 0xe7, 0xfc, 0xb7, 0xf6, 0x9c, 0xff, 0xd7, 0x5e, 0xe3, 0x71, 0xed, 0x39, 0x7f,
+	0x3f, 0x78, 0x8d, 0xbb, 0x07, 0xaf, 0xf1, 0xf9, 0xc1, 0x6b, 0xfc, 0xf5, 0xfb, 0x9c, 0x27, 0x8b,
+	0xf9, 0x30, 0xe7, 0xa1, 0xa4, 0x42, 0x90, 0x61, 0x96, 0x8e, 0xd4, 0x60, 0xc6, 0x45, 0x34, 0x48,
+	0x04, 0xcf, 0xd9, 0x94, 0x8a, 0x81, 0x99, 0x1e, 0x25, 0x93, 0x39, 0x1f, 0xd1, 0xa5, 0xd4, 0xef,
+	0xc8, 0xce, 0x73, 0x32, 0x71, 0xd5, 0x3b, 0x72, 0xfd, 0x25, 0x00, 0x00, 0xff, 0xff, 0xd5, 0x90,
+	0x47, 0x7d, 0xac, 0x06, 0x00, 0x00,
+}
+
 func (this *ServiceChoice) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1995,7 +1549,7 @@ func valueToGoStringAllServices(v interface{}, typ string) string {
 func (m *ServiceChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2003,424 +1557,586 @@ func (m *ServiceChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ServiceChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn1, err := m.Choice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ServiceChoice_Akar) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Akar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Akar {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Ares) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x10
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ares) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Ares {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x10
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Asterix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Asterix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Asterix {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Athena) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x30
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Athena) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Athena {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x30
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Automatix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x38
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Automatix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Automatix {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x38
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Barracute) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Barracute) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Barracute {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Blindfold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x48
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Blindfold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Blindfold {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x48
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Bolt) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x50
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Bolt) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Bolt {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x50
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Charmander) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Charmander) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Charmander {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x58
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Charmandercar) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x60
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Charmandercar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Charmandercar {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x60
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Drogon) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x68
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Drogon) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Drogon {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x68
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Eywa) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x70
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Eywa) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Eywa {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x70
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Griffin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x78
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Griffin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Griffin {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x78
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Identityauthority) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Identityauthority) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Identityauthority {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Keypr) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Keypr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Keypr {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Maurice) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Maurice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Maurice {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Obelix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Obelix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Obelix {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Ocspmule) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ocspmule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Ocspmule {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Opera) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Opera) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Opera {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Pikachu) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Pikachu) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Pikachu {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Pkifactory) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Pkifactory) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Pkifactory {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Rakar) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Rakar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rakar {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_SiteConsole) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_SiteConsole) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.SiteConsole {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Vega) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Vega) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Vega {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Voucher) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Voucher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Voucher {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Vpm) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Vpm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Vpm {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Vulpix) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Vulpix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Vulpix {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Warden) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Warden) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Warden {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Wingman) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Wingman) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Wingman {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Shape) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x2
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Shape) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Shape {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func encodeVarintAllServices(dAtA []byte, offset int, v uint64) int {
+	offset -= sovAllServices(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *ServiceChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Choice != nil {
@@ -2430,180 +2146,270 @@ func (m *ServiceChoice) Size() (n int) {
 }
 
 func (m *ServiceChoice_Akar) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Ares) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Asterix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Athena) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Automatix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Barracute) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Blindfold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Bolt) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Charmander) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Charmandercar) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Drogon) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Eywa) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Griffin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *ServiceChoice_Identityauthority) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Keypr) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Maurice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Obelix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Ocspmule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Opera) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Pikachu) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Pkifactory) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Rakar) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_SiteConsole) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Vega) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Voucher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Vpm) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Vulpix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Warden) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Wingman) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *ServiceChoice_Shape) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
@@ -2611,14 +2417,7 @@ func (m *ServiceChoice_Shape) Size() (n int) {
 }
 
 func sovAllServices(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozAllServices(x uint64) (n int) {
 	return sovAllServices(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2956,7 +2755,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2984,7 +2783,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3005,7 +2804,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3026,7 +2825,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3047,7 +2846,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3068,7 +2867,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3089,7 +2888,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3110,7 +2909,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3131,7 +2930,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3152,7 +2951,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3173,7 +2972,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3194,7 +2993,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3215,7 +3014,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3236,7 +3035,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3257,7 +3056,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3278,7 +3077,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3299,7 +3098,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3320,7 +3119,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3341,7 +3140,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3362,7 +3161,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3383,7 +3182,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3404,7 +3203,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3425,7 +3224,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3446,7 +3245,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3467,7 +3266,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3488,7 +3287,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3509,7 +3308,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3530,7 +3329,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3551,7 +3350,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3572,7 +3371,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3593,7 +3392,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3607,6 +3406,9 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAllServices
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAllServices
 			}
 			if (iNdEx + skippy) > l {
@@ -3624,6 +3426,7 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 func skipAllServices(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3655,10 +3458,8 @@ func skipAllServices(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3675,108 +3476,34 @@ func skipAllServices(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthAllServices
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowAllServices
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipAllServices(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupAllServices
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthAllServices
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthAllServices = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowAllServices   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthAllServices        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAllServices          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAllServices = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/vesenv/all_services.proto", fileDescriptorAllServices) }
-
-var fileDescriptorAllServices = []byte{
-	// 782 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x95, 0x4f, 0x6e, 0xe3, 0x36,
-	0x14, 0xc6, 0xad, 0xd4, 0x96, 0x9d, 0xe7, 0x38, 0x7f, 0x9c, 0x4c, 0xf3, 0x66, 0xa6, 0x55, 0x07,
-	0x83, 0x14, 0x1e, 0x18, 0xb0, 0x5d, 0x20, 0xe8, 0x2c, 0x5b, 0x20, 0x46, 0xd1, 0xa2, 0xdd, 0x4d,
-	0x77, 0xdd, 0x0c, 0x68, 0x99, 0xb6, 0x08, 0x4b, 0xa2, 0x40, 0x51, 0x8a, 0xbd, 0xeb, 0x11, 0x7a,
-	0x8c, 0x9e, 0x41, 0xba, 0x40, 0x97, 0xb3, 0xec, 0xb2, 0x71, 0x37, 0x5d, 0xe6, 0x08, 0x85, 0x28,
-	0xd2, 0xa6, 0x83, 0xec, 0xf8, 0xfd, 0xf8, 0x7d, 0xcf, 0xe4, 0x23, 0x2d, 0xc2, 0x20, 0xa7, 0xe9,
-	0x98, 0xf1, 0x49, 0xea, 0x07, 0x34, 0x22, 0x93, 0x9c, 0xa6, 0x34, 0xce, 0x27, 0x24, 0x0c, 0x3f,
-	0xa6, 0x54, 0xe4, 0xcc, 0xa7, 0xe9, 0x38, 0x11, 0x5c, 0xf2, 0xfe, 0x55, 0x6d, 0x1c, 0xd7, 0xc6,
-	0x71, 0x6d, 0x7c, 0xf5, 0xf6, 0xd9, 0x38, 0x4f, 0x24, 0xe3, 0xb1, 0x4e, 0xbe, 0x2d, 0xbb, 0xd0,
-	0xfb, 0xb5, 0x2e, 0x36, 0x0d, 0x38, 0xf3, 0x69, 0xff, 0x06, 0x9a, 0x64, 0x45, 0x04, 0x3a, 0x6f,
-	0x9c, 0x77, 0x9d, 0xbb, 0xd3, 0xa2, 0x44, 0xa8, 0x49, 0xff, 0xe8, 0xc7, 0xe9, 0x4f, 0x8d, 0x0f,
-	0xf5, 0xb8, 0x72, 0x09, 0x9a, 0xe2, 0xd1, 0x81, 0x4b, 0xd0, 0xb4, 0x7f, 0xf4, 0xe1, 0x07, 0xe5,
-	0xaa, 0xc6, 0x23, 0x68, 0x93, 0x54, 0x52, 0xc1, 0xd6, 0xd8, 0x54, 0xc6, 0x8b, 0xa2, 0xc4, 0xde,
-	0x0e, 0xea, 0x8a, 0x3b, 0x39, 0x04, 0x97, 0xc8, 0x80, 0xc6, 0x04, 0x5d, 0xe5, 0x3e, 0x2f, 0x4a,
-	0x3c, 0x31, 0x4c, 0x9b, 0x8d, 0xba, 0x85, 0x63, 0x92, 0x49, 0x1e, 0x11, 0xc9, 0xd6, 0xd8, 0x56,
-	0xf6, 0xcb, 0xa2, 0xc4, 0x33, 0x0b, 0xeb, 0x84, 0x05, 0x6e, 0xe1, 0x78, 0x46, 0x84, 0x20, 0x7e,
-	0x26, 0x29, 0x76, 0xec, 0xd0, 0x0e, 0x9b, 0xd0, 0x1e, 0x54, 0xa1, 0x90, 0xc5, 0xf3, 0x05, 0x0f,
-	0xe7, 0x78, 0x7c, 0x10, 0x32, 0x78, 0x17, 0xda, 0x81, 0x1b, 0x68, 0xce, 0x78, 0x28, 0x11, 0xec,
-	0xfe, 0x54, 0xc4, 0x74, 0x51, 0x8d, 0xdf, 0x03, 0xf8, 0x01, 0x11, 0x11, 0x89, 0xe7, 0x54, 0x60,
-	0x57, 0x79, 0xaf, 0x8a, 0x12, 0xcf, 0x6d, 0xae, 0x13, 0x36, 0xf9, 0x1e, 0x7a, 0x7b, 0xe5, 0x13,
-	0x81, 0x27, 0x2a, 0x7a, 0x5d, 0x94, 0x78, 0xf9, 0x64, 0x4a, 0xa7, 0x9f, 0xc0, 0x21, 0xb8, 0x73,
-	0xc1, 0x97, 0x3c, 0xc6, 0x9e, 0xdd, 0xe9, 0x9a, 0x99, 0x4e, 0x6b, 0x75, 0x03, 0x4d, 0xba, 0xb9,
-	0x27, 0x78, 0x6a, 0x6f, 0xa5, 0x22, 0x66, 0x2b, 0x6a, 0x3c, 0x82, 0xf6, 0x52, 0xb0, 0xc5, 0x82,
-	0xc5, 0x78, 0x66, 0x1f, 0xb5, 0x86, 0xe6, 0xa8, 0x8d, 0xfc, 0x05, 0x2e, 0xd8, 0x9c, 0xc6, 0x92,
-	0xc9, 0x0d, 0xc9, 0x64, 0xc0, 0x05, 0x93, 0x1b, 0x3c, 0x57, 0xc1, 0xd7, 0x45, 0x89, 0xd7, 0xcf,
-	0x4c, 0xeb, 0x12, 0xcf, 0x4c, 0x0c, 0xa0, 0xb5, 0xa2, 0x9b, 0x44, 0xe0, 0x85, 0x2a, 0x70, 0x56,
-	0x94, 0xd8, 0xd5, 0x48, 0x87, 0xb4, 0x18, 0x41, 0x3b, 0x22, 0x99, 0x60, 0x3e, 0xc5, 0xbe, 0xbd,
-	0x48, 0x0d, 0xcd, 0x22, 0x8d, 0x1c, 0x82, 0xcb, 0x67, 0x34, 0x64, 0x6b, 0xbc, 0xb4, 0xbb, 0x54,
-	0x33, 0x7d, 0xd1, 0x8d, 0xfa, 0x06, 0x3a, 0xdc, 0x4f, 0x93, 0x28, 0x0b, 0x29, 0x5e, 0x29, 0x77,
-	0xbf, 0x28, 0xf1, 0x74, 0x4f, 0x75, 0xf1, 0xbd, 0x9e, 0x40, 0x8b, 0x27, 0x54, 0x10, 0x7c, 0x61,
-	0x1d, 0x5e, 0x8d, 0x2a, 0x6f, 0x55, 0xbf, 0x7f, 0x34, 0xad, 0x7e, 0x43, 0xc3, 0x11, 0xb4, 0x13,
-	0xb6, 0x22, 0x7e, 0x90, 0xe1, 0xe7, 0xf6, 0xea, 0x35, 0x34, 0xab, 0x37, 0xf2, 0x3d, 0x40, 0xb2,
-	0x62, 0x0b, 0xe2, 0x4b, 0x2e, 0x36, 0x78, 0x6d, 0x5f, 0xae, 0x3d, 0x37, 0x97, 0xcb, 0x22, 0x03,
-	0x68, 0x09, 0xf5, 0x05, 0x40, 0xbb, 0x9b, 0xa2, 0xfe, 0x04, 0xa8, 0x3d, 0x6b, 0xf1, 0x1d, 0x9c,
-	0xa4, 0x4c, 0xd2, 0x8f, 0x3e, 0x8f, 0x53, 0x1e, 0x52, 0x7c, 0xa9, 0xfc, 0x2f, 0x8b, 0x12, 0x5f,
-	0x40, 0xb7, 0x9a, 0x99, 0xd6, 0x13, 0xd6, 0x4e, 0x0e, 0xf0, 0x3b, 0x68, 0xe6, 0x74, 0x49, 0xf0,
-	0x95, 0xd5, 0x2e, 0x45, 0xac, 0x40, 0xad, 0x47, 0xd0, 0xce, 0x79, 0xe6, 0x07, 0x54, 0xe0, 0x6b,
-	0x7b, 0xe7, 0x1a, 0xea, 0x65, 0xed, 0xe4, 0xd7, 0xf0, 0x59, 0x9e, 0x44, 0xf8, 0x85, 0x65, 0xad,
-	0x80, 0x55, 0x56, 0xc9, 0x21, 0xb8, 0x79, 0x16, 0x26, 0x6c, 0x8d, 0x5f, 0xda, 0xc7, 0x5b, 0x33,
-	0xf3, 0x27, 0xd0, 0x6a, 0x08, 0xee, 0x3d, 0x11, 0x73, 0x1a, 0xa3, 0x67, 0x7b, 0x6b, 0x66, 0xbc,
-	0x5a, 0x7d, 0x0b, 0xed, 0x7b, 0x16, 0x2f, 0x23, 0x12, 0xe3, 0x57, 0x56, 0x4b, 0x0c, 0x7c, 0x72,
-	0xb8, 0x3b, 0x3c, 0x80, 0x56, 0x1a, 0x90, 0x84, 0xe2, 0x1b, 0xbb, 0xef, 0x0a, 0x99, 0x5b, 0xac,
-	0xc4, 0x5d, 0x07, 0x5c, 0x5f, 0x7d, 0xab, 0xef, 0xd6, 0x9f, 0x1e, 0xbc, 0xc6, 0xdf, 0x0f, 0x5e,
-	0xe3, 0xf1, 0xc1, 0x73, 0x7e, 0xdf, 0x7a, 0xce, 0x9f, 0x5b, 0xcf, 0xf9, 0x6b, 0xeb, 0x39, 0x9f,
-	0xb6, 0x9e, 0xf3, 0xcf, 0xd6, 0x73, 0xfe, 0xdb, 0x7a, 0x8d, 0xc7, 0xad, 0xe7, 0xfc, 0xf1, 0xaf,
-	0xd7, 0xf8, 0xed, 0xe7, 0x25, 0x4f, 0x56, 0xcb, 0x71, 0xce, 0x43, 0x49, 0x85, 0x20, 0xe3, 0x2c,
-	0x9d, 0xa8, 0xc1, 0x82, 0x8b, 0x68, 0x94, 0x08, 0x9e, 0xb3, 0x39, 0x15, 0x23, 0x33, 0x3d, 0x49,
-	0x66, 0x4b, 0x3e, 0xa1, 0x6b, 0xa9, 0x9f, 0x8f, 0x83, 0x57, 0x64, 0xe6, 0xaa, 0xe7, 0xe3, 0xf6,
-	0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0x9a, 0xf1, 0xfc, 0x55, 0xa3, 0x06, 0x00, 0x00,
-}

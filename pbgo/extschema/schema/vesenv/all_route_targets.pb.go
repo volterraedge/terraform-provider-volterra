@@ -3,19 +3,26 @@
 
 package vesenv
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	proto "github.com/gogo/protobuf/proto"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // RouteTargetChoice enumerates all the route-targets being used in a VES environment
 type RouteTargetChoice struct {
@@ -139,9 +146,37 @@ type RouteTargetChoice struct {
 	Choice isRouteTargetChoice_Choice `protobuf_oneof:"choice"`
 }
 
-func (m *RouteTargetChoice) Reset()                    { *m = RouteTargetChoice{} }
-func (*RouteTargetChoice) ProtoMessage()               {}
-func (*RouteTargetChoice) Descriptor() ([]byte, []int) { return fileDescriptorAllRouteTargets, []int{0} }
+func (m *RouteTargetChoice) Reset()      { *m = RouteTargetChoice{} }
+func (*RouteTargetChoice) ProtoMessage() {}
+func (*RouteTargetChoice) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5d2b748d7c51073f, []int{0}
+}
+func (m *RouteTargetChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RouteTargetChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RouteTargetChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RouteTargetChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RouteTargetChoice.Merge(m, src)
+}
+func (m *RouteTargetChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *RouteTargetChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_RouteTargetChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RouteTargetChoice proto.InternalMessageInfo
 
 type isRouteTargetChoice_Choice interface {
 	isRouteTargetChoice_Choice()
@@ -151,352 +186,352 @@ type isRouteTargetChoice_Choice interface {
 }
 
 type RouteTargetChoice_Rt_1001 struct {
-	Rt_1001 bool `protobuf:"varint,1001,opt,name=rt_1001,json=rt1001,proto3,oneof"`
+	Rt_1001 bool `protobuf:"varint,1001,opt,name=rt_1001,json=rt1001,proto3,oneof" json:"rt_1001,omitempty"`
 }
 type RouteTargetChoice_Rt_1002 struct {
-	Rt_1002 bool `protobuf:"varint,1002,opt,name=rt_1002,json=rt1002,proto3,oneof"`
+	Rt_1002 bool `protobuf:"varint,1002,opt,name=rt_1002,json=rt1002,proto3,oneof" json:"rt_1002,omitempty"`
 }
 type RouteTargetChoice_Rt_1003 struct {
-	Rt_1003 bool `protobuf:"varint,1003,opt,name=rt_1003,json=rt1003,proto3,oneof"`
+	Rt_1003 bool `protobuf:"varint,1003,opt,name=rt_1003,json=rt1003,proto3,oneof" json:"rt_1003,omitempty"`
 }
 type RouteTargetChoice_Rt_1004 struct {
-	Rt_1004 bool `protobuf:"varint,1004,opt,name=rt_1004,json=rt1004,proto3,oneof"`
+	Rt_1004 bool `protobuf:"varint,1004,opt,name=rt_1004,json=rt1004,proto3,oneof" json:"rt_1004,omitempty"`
 }
 type RouteTargetChoice_Rt_1005 struct {
-	Rt_1005 bool `protobuf:"varint,1005,opt,name=rt_1005,json=rt1005,proto3,oneof"`
+	Rt_1005 bool `protobuf:"varint,1005,opt,name=rt_1005,json=rt1005,proto3,oneof" json:"rt_1005,omitempty"`
 }
 type RouteTargetChoice_Rt_1006 struct {
-	Rt_1006 bool `protobuf:"varint,1006,opt,name=rt_1006,json=rt1006,proto3,oneof"`
+	Rt_1006 bool `protobuf:"varint,1006,opt,name=rt_1006,json=rt1006,proto3,oneof" json:"rt_1006,omitempty"`
 }
 type RouteTargetChoice_Rt_1007 struct {
-	Rt_1007 bool `protobuf:"varint,1007,opt,name=rt_1007,json=rt1007,proto3,oneof"`
+	Rt_1007 bool `protobuf:"varint,1007,opt,name=rt_1007,json=rt1007,proto3,oneof" json:"rt_1007,omitempty"`
 }
 type RouteTargetChoice_Rt_1008 struct {
-	Rt_1008 bool `protobuf:"varint,1008,opt,name=rt_1008,json=rt1008,proto3,oneof"`
+	Rt_1008 bool `protobuf:"varint,1008,opt,name=rt_1008,json=rt1008,proto3,oneof" json:"rt_1008,omitempty"`
 }
 type RouteTargetChoice_Rt_1009 struct {
-	Rt_1009 bool `protobuf:"varint,1009,opt,name=rt_1009,json=rt1009,proto3,oneof"`
+	Rt_1009 bool `protobuf:"varint,1009,opt,name=rt_1009,json=rt1009,proto3,oneof" json:"rt_1009,omitempty"`
 }
 type RouteTargetChoice_Rt_1010 struct {
-	Rt_1010 bool `protobuf:"varint,1010,opt,name=rt_1010,json=rt1010,proto3,oneof"`
+	Rt_1010 bool `protobuf:"varint,1010,opt,name=rt_1010,json=rt1010,proto3,oneof" json:"rt_1010,omitempty"`
 }
 type RouteTargetChoice_Rt_1011 struct {
-	Rt_1011 bool `protobuf:"varint,1011,opt,name=rt_1011,json=rt1011,proto3,oneof"`
+	Rt_1011 bool `protobuf:"varint,1011,opt,name=rt_1011,json=rt1011,proto3,oneof" json:"rt_1011,omitempty"`
 }
 type RouteTargetChoice_Rt_1012 struct {
-	Rt_1012 bool `protobuf:"varint,1012,opt,name=rt_1012,json=rt1012,proto3,oneof"`
+	Rt_1012 bool `protobuf:"varint,1012,opt,name=rt_1012,json=rt1012,proto3,oneof" json:"rt_1012,omitempty"`
 }
 type RouteTargetChoice_Rt_1013 struct {
-	Rt_1013 bool `protobuf:"varint,1013,opt,name=rt_1013,json=rt1013,proto3,oneof"`
+	Rt_1013 bool `protobuf:"varint,1013,opt,name=rt_1013,json=rt1013,proto3,oneof" json:"rt_1013,omitempty"`
 }
 type RouteTargetChoice_Rt_1014 struct {
-	Rt_1014 bool `protobuf:"varint,1014,opt,name=rt_1014,json=rt1014,proto3,oneof"`
+	Rt_1014 bool `protobuf:"varint,1014,opt,name=rt_1014,json=rt1014,proto3,oneof" json:"rt_1014,omitempty"`
 }
 type RouteTargetChoice_Rt_1015 struct {
-	Rt_1015 bool `protobuf:"varint,1015,opt,name=rt_1015,json=rt1015,proto3,oneof"`
+	Rt_1015 bool `protobuf:"varint,1015,opt,name=rt_1015,json=rt1015,proto3,oneof" json:"rt_1015,omitempty"`
 }
 type RouteTargetChoice_Rt_1016 struct {
-	Rt_1016 bool `protobuf:"varint,1016,opt,name=rt_1016,json=rt1016,proto3,oneof"`
+	Rt_1016 bool `protobuf:"varint,1016,opt,name=rt_1016,json=rt1016,proto3,oneof" json:"rt_1016,omitempty"`
 }
 type RouteTargetChoice_Rt_1017 struct {
-	Rt_1017 bool `protobuf:"varint,1017,opt,name=rt_1017,json=rt1017,proto3,oneof"`
+	Rt_1017 bool `protobuf:"varint,1017,opt,name=rt_1017,json=rt1017,proto3,oneof" json:"rt_1017,omitempty"`
 }
 type RouteTargetChoice_Rt_1018 struct {
-	Rt_1018 bool `protobuf:"varint,1018,opt,name=rt_1018,json=rt1018,proto3,oneof"`
+	Rt_1018 bool `protobuf:"varint,1018,opt,name=rt_1018,json=rt1018,proto3,oneof" json:"rt_1018,omitempty"`
 }
 type RouteTargetChoice_Rt_1019 struct {
-	Rt_1019 bool `protobuf:"varint,1019,opt,name=rt_1019,json=rt1019,proto3,oneof"`
+	Rt_1019 bool `protobuf:"varint,1019,opt,name=rt_1019,json=rt1019,proto3,oneof" json:"rt_1019,omitempty"`
 }
 type RouteTargetChoice_Rt_1020 struct {
-	Rt_1020 bool `protobuf:"varint,1020,opt,name=rt_1020,json=rt1020,proto3,oneof"`
+	Rt_1020 bool `protobuf:"varint,1020,opt,name=rt_1020,json=rt1020,proto3,oneof" json:"rt_1020,omitempty"`
 }
 type RouteTargetChoice_Rt_1021 struct {
-	Rt_1021 bool `protobuf:"varint,1021,opt,name=rt_1021,json=rt1021,proto3,oneof"`
+	Rt_1021 bool `protobuf:"varint,1021,opt,name=rt_1021,json=rt1021,proto3,oneof" json:"rt_1021,omitempty"`
 }
 type RouteTargetChoice_Rt_1022 struct {
-	Rt_1022 bool `protobuf:"varint,1022,opt,name=rt_1022,json=rt1022,proto3,oneof"`
+	Rt_1022 bool `protobuf:"varint,1022,opt,name=rt_1022,json=rt1022,proto3,oneof" json:"rt_1022,omitempty"`
 }
 type RouteTargetChoice_Rt_1023 struct {
-	Rt_1023 bool `protobuf:"varint,1023,opt,name=rt_1023,json=rt1023,proto3,oneof"`
+	Rt_1023 bool `protobuf:"varint,1023,opt,name=rt_1023,json=rt1023,proto3,oneof" json:"rt_1023,omitempty"`
 }
 type RouteTargetChoice_Rt_1024 struct {
-	Rt_1024 bool `protobuf:"varint,1024,opt,name=rt_1024,json=rt1024,proto3,oneof"`
+	Rt_1024 bool `protobuf:"varint,1024,opt,name=rt_1024,json=rt1024,proto3,oneof" json:"rt_1024,omitempty"`
 }
 type RouteTargetChoice_Rt_1025 struct {
-	Rt_1025 bool `protobuf:"varint,1025,opt,name=rt_1025,json=rt1025,proto3,oneof"`
+	Rt_1025 bool `protobuf:"varint,1025,opt,name=rt_1025,json=rt1025,proto3,oneof" json:"rt_1025,omitempty"`
 }
 type RouteTargetChoice_Rt_1026 struct {
-	Rt_1026 bool `protobuf:"varint,1026,opt,name=rt_1026,json=rt1026,proto3,oneof"`
+	Rt_1026 bool `protobuf:"varint,1026,opt,name=rt_1026,json=rt1026,proto3,oneof" json:"rt_1026,omitempty"`
 }
 type RouteTargetChoice_Rt_1027 struct {
-	Rt_1027 bool `protobuf:"varint,1027,opt,name=rt_1027,json=rt1027,proto3,oneof"`
+	Rt_1027 bool `protobuf:"varint,1027,opt,name=rt_1027,json=rt1027,proto3,oneof" json:"rt_1027,omitempty"`
 }
 type RouteTargetChoice_Rt_1028 struct {
-	Rt_1028 bool `protobuf:"varint,1028,opt,name=rt_1028,json=rt1028,proto3,oneof"`
+	Rt_1028 bool `protobuf:"varint,1028,opt,name=rt_1028,json=rt1028,proto3,oneof" json:"rt_1028,omitempty"`
 }
 type RouteTargetChoice_Rt_1029 struct {
-	Rt_1029 bool `protobuf:"varint,1029,opt,name=rt_1029,json=rt1029,proto3,oneof"`
+	Rt_1029 bool `protobuf:"varint,1029,opt,name=rt_1029,json=rt1029,proto3,oneof" json:"rt_1029,omitempty"`
 }
 type RouteTargetChoice_Rt_1030 struct {
-	Rt_1030 bool `protobuf:"varint,1030,opt,name=rt_1030,json=rt1030,proto3,oneof"`
+	Rt_1030 bool `protobuf:"varint,1030,opt,name=rt_1030,json=rt1030,proto3,oneof" json:"rt_1030,omitempty"`
 }
 type RouteTargetChoice_Rt_1031 struct {
-	Rt_1031 bool `protobuf:"varint,1031,opt,name=rt_1031,json=rt1031,proto3,oneof"`
+	Rt_1031 bool `protobuf:"varint,1031,opt,name=rt_1031,json=rt1031,proto3,oneof" json:"rt_1031,omitempty"`
 }
 type RouteTargetChoice_Rt_1032 struct {
-	Rt_1032 bool `protobuf:"varint,1032,opt,name=rt_1032,json=rt1032,proto3,oneof"`
+	Rt_1032 bool `protobuf:"varint,1032,opt,name=rt_1032,json=rt1032,proto3,oneof" json:"rt_1032,omitempty"`
 }
 type RouteTargetChoice_Rt_1033 struct {
-	Rt_1033 bool `protobuf:"varint,1033,opt,name=rt_1033,json=rt1033,proto3,oneof"`
+	Rt_1033 bool `protobuf:"varint,1033,opt,name=rt_1033,json=rt1033,proto3,oneof" json:"rt_1033,omitempty"`
 }
 type RouteTargetChoice_Rt_1034 struct {
-	Rt_1034 bool `protobuf:"varint,1034,opt,name=rt_1034,json=rt1034,proto3,oneof"`
+	Rt_1034 bool `protobuf:"varint,1034,opt,name=rt_1034,json=rt1034,proto3,oneof" json:"rt_1034,omitempty"`
 }
 type RouteTargetChoice_Rt_1035 struct {
-	Rt_1035 bool `protobuf:"varint,1035,opt,name=rt_1035,json=rt1035,proto3,oneof"`
+	Rt_1035 bool `protobuf:"varint,1035,opt,name=rt_1035,json=rt1035,proto3,oneof" json:"rt_1035,omitempty"`
 }
 type RouteTargetChoice_Rt_1036 struct {
-	Rt_1036 bool `protobuf:"varint,1036,opt,name=rt_1036,json=rt1036,proto3,oneof"`
+	Rt_1036 bool `protobuf:"varint,1036,opt,name=rt_1036,json=rt1036,proto3,oneof" json:"rt_1036,omitempty"`
 }
 type RouteTargetChoice_Rt_1037 struct {
-	Rt_1037 bool `protobuf:"varint,1037,opt,name=rt_1037,json=rt1037,proto3,oneof"`
+	Rt_1037 bool `protobuf:"varint,1037,opt,name=rt_1037,json=rt1037,proto3,oneof" json:"rt_1037,omitempty"`
 }
 type RouteTargetChoice_Rt_1038 struct {
-	Rt_1038 bool `protobuf:"varint,1038,opt,name=rt_1038,json=rt1038,proto3,oneof"`
+	Rt_1038 bool `protobuf:"varint,1038,opt,name=rt_1038,json=rt1038,proto3,oneof" json:"rt_1038,omitempty"`
 }
 type RouteTargetChoice_Rt_1039 struct {
-	Rt_1039 bool `protobuf:"varint,1039,opt,name=rt_1039,json=rt1039,proto3,oneof"`
+	Rt_1039 bool `protobuf:"varint,1039,opt,name=rt_1039,json=rt1039,proto3,oneof" json:"rt_1039,omitempty"`
 }
 type RouteTargetChoice_Rt_1040 struct {
-	Rt_1040 bool `protobuf:"varint,1040,opt,name=rt_1040,json=rt1040,proto3,oneof"`
+	Rt_1040 bool `protobuf:"varint,1040,opt,name=rt_1040,json=rt1040,proto3,oneof" json:"rt_1040,omitempty"`
 }
 type RouteTargetChoice_Rt_1041 struct {
-	Rt_1041 bool `protobuf:"varint,1041,opt,name=rt_1041,json=rt1041,proto3,oneof"`
+	Rt_1041 bool `protobuf:"varint,1041,opt,name=rt_1041,json=rt1041,proto3,oneof" json:"rt_1041,omitempty"`
 }
 type RouteTargetChoice_Rt_1042 struct {
-	Rt_1042 bool `protobuf:"varint,1042,opt,name=rt_1042,json=rt1042,proto3,oneof"`
+	Rt_1042 bool `protobuf:"varint,1042,opt,name=rt_1042,json=rt1042,proto3,oneof" json:"rt_1042,omitempty"`
 }
 type RouteTargetChoice_Rt_1043 struct {
-	Rt_1043 bool `protobuf:"varint,1043,opt,name=rt_1043,json=rt1043,proto3,oneof"`
+	Rt_1043 bool `protobuf:"varint,1043,opt,name=rt_1043,json=rt1043,proto3,oneof" json:"rt_1043,omitempty"`
 }
 type RouteTargetChoice_Rt_1044 struct {
-	Rt_1044 bool `protobuf:"varint,1044,opt,name=rt_1044,json=rt1044,proto3,oneof"`
+	Rt_1044 bool `protobuf:"varint,1044,opt,name=rt_1044,json=rt1044,proto3,oneof" json:"rt_1044,omitempty"`
 }
 type RouteTargetChoice_Rt_1045 struct {
-	Rt_1045 bool `protobuf:"varint,1045,opt,name=rt_1045,json=rt1045,proto3,oneof"`
+	Rt_1045 bool `protobuf:"varint,1045,opt,name=rt_1045,json=rt1045,proto3,oneof" json:"rt_1045,omitempty"`
 }
 type RouteTargetChoice_Rt_1046 struct {
-	Rt_1046 bool `protobuf:"varint,1046,opt,name=rt_1046,json=rt1046,proto3,oneof"`
+	Rt_1046 bool `protobuf:"varint,1046,opt,name=rt_1046,json=rt1046,proto3,oneof" json:"rt_1046,omitempty"`
 }
 type RouteTargetChoice_Rt_1047 struct {
-	Rt_1047 bool `protobuf:"varint,1047,opt,name=rt_1047,json=rt1047,proto3,oneof"`
+	Rt_1047 bool `protobuf:"varint,1047,opt,name=rt_1047,json=rt1047,proto3,oneof" json:"rt_1047,omitempty"`
 }
 type RouteTargetChoice_Rt_1048 struct {
-	Rt_1048 bool `protobuf:"varint,1048,opt,name=rt_1048,json=rt1048,proto3,oneof"`
+	Rt_1048 bool `protobuf:"varint,1048,opt,name=rt_1048,json=rt1048,proto3,oneof" json:"rt_1048,omitempty"`
 }
 type RouteTargetChoice_Rt_1049 struct {
-	Rt_1049 bool `protobuf:"varint,1049,opt,name=rt_1049,json=rt1049,proto3,oneof"`
+	Rt_1049 bool `protobuf:"varint,1049,opt,name=rt_1049,json=rt1049,proto3,oneof" json:"rt_1049,omitempty"`
 }
 type RouteTargetChoice_Rt_1050 struct {
-	Rt_1050 bool `protobuf:"varint,1050,opt,name=rt_1050,json=rt1050,proto3,oneof"`
+	Rt_1050 bool `protobuf:"varint,1050,opt,name=rt_1050,json=rt1050,proto3,oneof" json:"rt_1050,omitempty"`
 }
 type RouteTargetChoice_Rt_1051 struct {
-	Rt_1051 bool `protobuf:"varint,1051,opt,name=rt_1051,json=rt1051,proto3,oneof"`
+	Rt_1051 bool `protobuf:"varint,1051,opt,name=rt_1051,json=rt1051,proto3,oneof" json:"rt_1051,omitempty"`
 }
 type RouteTargetChoice_Rt_1052 struct {
-	Rt_1052 bool `protobuf:"varint,1052,opt,name=rt_1052,json=rt1052,proto3,oneof"`
+	Rt_1052 bool `protobuf:"varint,1052,opt,name=rt_1052,json=rt1052,proto3,oneof" json:"rt_1052,omitempty"`
 }
 type RouteTargetChoice_Rt_1053 struct {
-	Rt_1053 bool `protobuf:"varint,1053,opt,name=rt_1053,json=rt1053,proto3,oneof"`
+	Rt_1053 bool `protobuf:"varint,1053,opt,name=rt_1053,json=rt1053,proto3,oneof" json:"rt_1053,omitempty"`
 }
 type RouteTargetChoice_Rt_1054 struct {
-	Rt_1054 bool `protobuf:"varint,1054,opt,name=rt_1054,json=rt1054,proto3,oneof"`
+	Rt_1054 bool `protobuf:"varint,1054,opt,name=rt_1054,json=rt1054,proto3,oneof" json:"rt_1054,omitempty"`
 }
 type RouteTargetChoice_Rt_1055 struct {
-	Rt_1055 bool `protobuf:"varint,1055,opt,name=rt_1055,json=rt1055,proto3,oneof"`
+	Rt_1055 bool `protobuf:"varint,1055,opt,name=rt_1055,json=rt1055,proto3,oneof" json:"rt_1055,omitempty"`
 }
 type RouteTargetChoice_Rt_1056 struct {
-	Rt_1056 bool `protobuf:"varint,1056,opt,name=rt_1056,json=rt1056,proto3,oneof"`
+	Rt_1056 bool `protobuf:"varint,1056,opt,name=rt_1056,json=rt1056,proto3,oneof" json:"rt_1056,omitempty"`
 }
 type RouteTargetChoice_Rt_1057 struct {
-	Rt_1057 bool `protobuf:"varint,1057,opt,name=rt_1057,json=rt1057,proto3,oneof"`
+	Rt_1057 bool `protobuf:"varint,1057,opt,name=rt_1057,json=rt1057,proto3,oneof" json:"rt_1057,omitempty"`
 }
 type RouteTargetChoice_Rt_1058 struct {
-	Rt_1058 bool `protobuf:"varint,1058,opt,name=rt_1058,json=rt1058,proto3,oneof"`
+	Rt_1058 bool `protobuf:"varint,1058,opt,name=rt_1058,json=rt1058,proto3,oneof" json:"rt_1058,omitempty"`
 }
 type RouteTargetChoice_Rt_1059 struct {
-	Rt_1059 bool `protobuf:"varint,1059,opt,name=rt_1059,json=rt1059,proto3,oneof"`
+	Rt_1059 bool `protobuf:"varint,1059,opt,name=rt_1059,json=rt1059,proto3,oneof" json:"rt_1059,omitempty"`
 }
 type RouteTargetChoice_Rt_1060 struct {
-	Rt_1060 bool `protobuf:"varint,1060,opt,name=rt_1060,json=rt1060,proto3,oneof"`
+	Rt_1060 bool `protobuf:"varint,1060,opt,name=rt_1060,json=rt1060,proto3,oneof" json:"rt_1060,omitempty"`
 }
 type RouteTargetChoice_Rt_1061 struct {
-	Rt_1061 bool `protobuf:"varint,1061,opt,name=rt_1061,json=rt1061,proto3,oneof"`
+	Rt_1061 bool `protobuf:"varint,1061,opt,name=rt_1061,json=rt1061,proto3,oneof" json:"rt_1061,omitempty"`
 }
 type RouteTargetChoice_Rt_1062 struct {
-	Rt_1062 bool `protobuf:"varint,1062,opt,name=rt_1062,json=rt1062,proto3,oneof"`
+	Rt_1062 bool `protobuf:"varint,1062,opt,name=rt_1062,json=rt1062,proto3,oneof" json:"rt_1062,omitempty"`
 }
 type RouteTargetChoice_Rt_1063 struct {
-	Rt_1063 bool `protobuf:"varint,1063,opt,name=rt_1063,json=rt1063,proto3,oneof"`
+	Rt_1063 bool `protobuf:"varint,1063,opt,name=rt_1063,json=rt1063,proto3,oneof" json:"rt_1063,omitempty"`
 }
 type RouteTargetChoice_Rt_1064 struct {
-	Rt_1064 bool `protobuf:"varint,1064,opt,name=rt_1064,json=rt1064,proto3,oneof"`
+	Rt_1064 bool `protobuf:"varint,1064,opt,name=rt_1064,json=rt1064,proto3,oneof" json:"rt_1064,omitempty"`
 }
 type RouteTargetChoice_Rt_1065 struct {
-	Rt_1065 bool `protobuf:"varint,1065,opt,name=rt_1065,json=rt1065,proto3,oneof"`
+	Rt_1065 bool `protobuf:"varint,1065,opt,name=rt_1065,json=rt1065,proto3,oneof" json:"rt_1065,omitempty"`
 }
 type RouteTargetChoice_Rt_1066 struct {
-	Rt_1066 bool `protobuf:"varint,1066,opt,name=rt_1066,json=rt1066,proto3,oneof"`
+	Rt_1066 bool `protobuf:"varint,1066,opt,name=rt_1066,json=rt1066,proto3,oneof" json:"rt_1066,omitempty"`
 }
 type RouteTargetChoice_Rt_1067 struct {
-	Rt_1067 bool `protobuf:"varint,1067,opt,name=rt_1067,json=rt1067,proto3,oneof"`
+	Rt_1067 bool `protobuf:"varint,1067,opt,name=rt_1067,json=rt1067,proto3,oneof" json:"rt_1067,omitempty"`
 }
 type RouteTargetChoice_Rt_1068 struct {
-	Rt_1068 bool `protobuf:"varint,1068,opt,name=rt_1068,json=rt1068,proto3,oneof"`
+	Rt_1068 bool `protobuf:"varint,1068,opt,name=rt_1068,json=rt1068,proto3,oneof" json:"rt_1068,omitempty"`
 }
 type RouteTargetChoice_Rt_1069 struct {
-	Rt_1069 bool `protobuf:"varint,1069,opt,name=rt_1069,json=rt1069,proto3,oneof"`
+	Rt_1069 bool `protobuf:"varint,1069,opt,name=rt_1069,json=rt1069,proto3,oneof" json:"rt_1069,omitempty"`
 }
 type RouteTargetChoice_Rt_1070 struct {
-	Rt_1070 bool `protobuf:"varint,1070,opt,name=rt_1070,json=rt1070,proto3,oneof"`
+	Rt_1070 bool `protobuf:"varint,1070,opt,name=rt_1070,json=rt1070,proto3,oneof" json:"rt_1070,omitempty"`
 }
 type RouteTargetChoice_Rt_1071 struct {
-	Rt_1071 bool `protobuf:"varint,1071,opt,name=rt_1071,json=rt1071,proto3,oneof"`
+	Rt_1071 bool `protobuf:"varint,1071,opt,name=rt_1071,json=rt1071,proto3,oneof" json:"rt_1071,omitempty"`
 }
 type RouteTargetChoice_Rt_1072 struct {
-	Rt_1072 bool `protobuf:"varint,1072,opt,name=rt_1072,json=rt1072,proto3,oneof"`
+	Rt_1072 bool `protobuf:"varint,1072,opt,name=rt_1072,json=rt1072,proto3,oneof" json:"rt_1072,omitempty"`
 }
 type RouteTargetChoice_Rt_1073 struct {
-	Rt_1073 bool `protobuf:"varint,1073,opt,name=rt_1073,json=rt1073,proto3,oneof"`
+	Rt_1073 bool `protobuf:"varint,1073,opt,name=rt_1073,json=rt1073,proto3,oneof" json:"rt_1073,omitempty"`
 }
 type RouteTargetChoice_Rt_1074 struct {
-	Rt_1074 bool `protobuf:"varint,1074,opt,name=rt_1074,json=rt1074,proto3,oneof"`
+	Rt_1074 bool `protobuf:"varint,1074,opt,name=rt_1074,json=rt1074,proto3,oneof" json:"rt_1074,omitempty"`
 }
 type RouteTargetChoice_Rt_1075 struct {
-	Rt_1075 bool `protobuf:"varint,1075,opt,name=rt_1075,json=rt1075,proto3,oneof"`
+	Rt_1075 bool `protobuf:"varint,1075,opt,name=rt_1075,json=rt1075,proto3,oneof" json:"rt_1075,omitempty"`
 }
 type RouteTargetChoice_Rt_1076 struct {
-	Rt_1076 bool `protobuf:"varint,1076,opt,name=rt_1076,json=rt1076,proto3,oneof"`
+	Rt_1076 bool `protobuf:"varint,1076,opt,name=rt_1076,json=rt1076,proto3,oneof" json:"rt_1076,omitempty"`
 }
 type RouteTargetChoice_Rt_1077 struct {
-	Rt_1077 bool `protobuf:"varint,1077,opt,name=rt_1077,json=rt1077,proto3,oneof"`
+	Rt_1077 bool `protobuf:"varint,1077,opt,name=rt_1077,json=rt1077,proto3,oneof" json:"rt_1077,omitempty"`
 }
 type RouteTargetChoice_Rt_1078 struct {
-	Rt_1078 bool `protobuf:"varint,1078,opt,name=rt_1078,json=rt1078,proto3,oneof"`
+	Rt_1078 bool `protobuf:"varint,1078,opt,name=rt_1078,json=rt1078,proto3,oneof" json:"rt_1078,omitempty"`
 }
 type RouteTargetChoice_Rt_1079 struct {
-	Rt_1079 bool `protobuf:"varint,1079,opt,name=rt_1079,json=rt1079,proto3,oneof"`
+	Rt_1079 bool `protobuf:"varint,1079,opt,name=rt_1079,json=rt1079,proto3,oneof" json:"rt_1079,omitempty"`
 }
 type RouteTargetChoice_Rt_1080 struct {
-	Rt_1080 bool `protobuf:"varint,1080,opt,name=rt_1080,json=rt1080,proto3,oneof"`
+	Rt_1080 bool `protobuf:"varint,1080,opt,name=rt_1080,json=rt1080,proto3,oneof" json:"rt_1080,omitempty"`
 }
 type RouteTargetChoice_Rt_1081 struct {
-	Rt_1081 bool `protobuf:"varint,1081,opt,name=rt_1081,json=rt1081,proto3,oneof"`
+	Rt_1081 bool `protobuf:"varint,1081,opt,name=rt_1081,json=rt1081,proto3,oneof" json:"rt_1081,omitempty"`
 }
 type RouteTargetChoice_Rt_1082 struct {
-	Rt_1082 bool `protobuf:"varint,1082,opt,name=rt_1082,json=rt1082,proto3,oneof"`
+	Rt_1082 bool `protobuf:"varint,1082,opt,name=rt_1082,json=rt1082,proto3,oneof" json:"rt_1082,omitempty"`
 }
 type RouteTargetChoice_Rt_1083 struct {
-	Rt_1083 bool `protobuf:"varint,1083,opt,name=rt_1083,json=rt1083,proto3,oneof"`
+	Rt_1083 bool `protobuf:"varint,1083,opt,name=rt_1083,json=rt1083,proto3,oneof" json:"rt_1083,omitempty"`
 }
 type RouteTargetChoice_Rt_1084 struct {
-	Rt_1084 bool `protobuf:"varint,1084,opt,name=rt_1084,json=rt1084,proto3,oneof"`
+	Rt_1084 bool `protobuf:"varint,1084,opt,name=rt_1084,json=rt1084,proto3,oneof" json:"rt_1084,omitempty"`
 }
 type RouteTargetChoice_Rt_1085 struct {
-	Rt_1085 bool `protobuf:"varint,1085,opt,name=rt_1085,json=rt1085,proto3,oneof"`
+	Rt_1085 bool `protobuf:"varint,1085,opt,name=rt_1085,json=rt1085,proto3,oneof" json:"rt_1085,omitempty"`
 }
 type RouteTargetChoice_Rt_1086 struct {
-	Rt_1086 bool `protobuf:"varint,1086,opt,name=rt_1086,json=rt1086,proto3,oneof"`
+	Rt_1086 bool `protobuf:"varint,1086,opt,name=rt_1086,json=rt1086,proto3,oneof" json:"rt_1086,omitempty"`
 }
 type RouteTargetChoice_Rt_1087 struct {
-	Rt_1087 bool `protobuf:"varint,1087,opt,name=rt_1087,json=rt1087,proto3,oneof"`
+	Rt_1087 bool `protobuf:"varint,1087,opt,name=rt_1087,json=rt1087,proto3,oneof" json:"rt_1087,omitempty"`
 }
 type RouteTargetChoice_Rt_1088 struct {
-	Rt_1088 bool `protobuf:"varint,1088,opt,name=rt_1088,json=rt1088,proto3,oneof"`
+	Rt_1088 bool `protobuf:"varint,1088,opt,name=rt_1088,json=rt1088,proto3,oneof" json:"rt_1088,omitempty"`
 }
 type RouteTargetChoice_Rt_1089 struct {
-	Rt_1089 bool `protobuf:"varint,1089,opt,name=rt_1089,json=rt1089,proto3,oneof"`
+	Rt_1089 bool `protobuf:"varint,1089,opt,name=rt_1089,json=rt1089,proto3,oneof" json:"rt_1089,omitempty"`
 }
 type RouteTargetChoice_Rt_1090 struct {
-	Rt_1090 bool `protobuf:"varint,1090,opt,name=rt_1090,json=rt1090,proto3,oneof"`
+	Rt_1090 bool `protobuf:"varint,1090,opt,name=rt_1090,json=rt1090,proto3,oneof" json:"rt_1090,omitempty"`
 }
 type RouteTargetChoice_Rt_1091 struct {
-	Rt_1091 bool `protobuf:"varint,1091,opt,name=rt_1091,json=rt1091,proto3,oneof"`
+	Rt_1091 bool `protobuf:"varint,1091,opt,name=rt_1091,json=rt1091,proto3,oneof" json:"rt_1091,omitempty"`
 }
 type RouteTargetChoice_Rt_1092 struct {
-	Rt_1092 bool `protobuf:"varint,1092,opt,name=rt_1092,json=rt1092,proto3,oneof"`
+	Rt_1092 bool `protobuf:"varint,1092,opt,name=rt_1092,json=rt1092,proto3,oneof" json:"rt_1092,omitempty"`
 }
 type RouteTargetChoice_Rt_1093 struct {
-	Rt_1093 bool `protobuf:"varint,1093,opt,name=rt_1093,json=rt1093,proto3,oneof"`
+	Rt_1093 bool `protobuf:"varint,1093,opt,name=rt_1093,json=rt1093,proto3,oneof" json:"rt_1093,omitempty"`
 }
 type RouteTargetChoice_Rt_1094 struct {
-	Rt_1094 bool `protobuf:"varint,1094,opt,name=rt_1094,json=rt1094,proto3,oneof"`
+	Rt_1094 bool `protobuf:"varint,1094,opt,name=rt_1094,json=rt1094,proto3,oneof" json:"rt_1094,omitempty"`
 }
 type RouteTargetChoice_Rt_1095 struct {
-	Rt_1095 bool `protobuf:"varint,1095,opt,name=rt_1095,json=rt1095,proto3,oneof"`
+	Rt_1095 bool `protobuf:"varint,1095,opt,name=rt_1095,json=rt1095,proto3,oneof" json:"rt_1095,omitempty"`
 }
 type RouteTargetChoice_Rt_1096 struct {
-	Rt_1096 bool `protobuf:"varint,1096,opt,name=rt_1096,json=rt1096,proto3,oneof"`
+	Rt_1096 bool `protobuf:"varint,1096,opt,name=rt_1096,json=rt1096,proto3,oneof" json:"rt_1096,omitempty"`
 }
 type RouteTargetChoice_Rt_1097 struct {
-	Rt_1097 bool `protobuf:"varint,1097,opt,name=rt_1097,json=rt1097,proto3,oneof"`
+	Rt_1097 bool `protobuf:"varint,1097,opt,name=rt_1097,json=rt1097,proto3,oneof" json:"rt_1097,omitempty"`
 }
 type RouteTargetChoice_Rt_1098 struct {
-	Rt_1098 bool `protobuf:"varint,1098,opt,name=rt_1098,json=rt1098,proto3,oneof"`
+	Rt_1098 bool `protobuf:"varint,1098,opt,name=rt_1098,json=rt1098,proto3,oneof" json:"rt_1098,omitempty"`
 }
 type RouteTargetChoice_Rt_1099 struct {
-	Rt_1099 bool `protobuf:"varint,1099,opt,name=rt_1099,json=rt1099,proto3,oneof"`
+	Rt_1099 bool `protobuf:"varint,1099,opt,name=rt_1099,json=rt1099,proto3,oneof" json:"rt_1099,omitempty"`
 }
 type RouteTargetChoice_Rt_1100 struct {
-	Rt_1100 bool `protobuf:"varint,1100,opt,name=rt_1100,json=rt1100,proto3,oneof"`
+	Rt_1100 bool `protobuf:"varint,1100,opt,name=rt_1100,json=rt1100,proto3,oneof" json:"rt_1100,omitempty"`
 }
 type RouteTargetChoice_Rt_1101 struct {
-	Rt_1101 bool `protobuf:"varint,1101,opt,name=rt_1101,json=rt1101,proto3,oneof"`
+	Rt_1101 bool `protobuf:"varint,1101,opt,name=rt_1101,json=rt1101,proto3,oneof" json:"rt_1101,omitempty"`
 }
 type RouteTargetChoice_Rt_1102 struct {
-	Rt_1102 bool `protobuf:"varint,1102,opt,name=rt_1102,json=rt1102,proto3,oneof"`
+	Rt_1102 bool `protobuf:"varint,1102,opt,name=rt_1102,json=rt1102,proto3,oneof" json:"rt_1102,omitempty"`
 }
 type RouteTargetChoice_Rt_1103 struct {
-	Rt_1103 bool `protobuf:"varint,1103,opt,name=rt_1103,json=rt1103,proto3,oneof"`
+	Rt_1103 bool `protobuf:"varint,1103,opt,name=rt_1103,json=rt1103,proto3,oneof" json:"rt_1103,omitempty"`
 }
 type RouteTargetChoice_Rt_1104 struct {
-	Rt_1104 bool `protobuf:"varint,1104,opt,name=rt_1104,json=rt1104,proto3,oneof"`
+	Rt_1104 bool `protobuf:"varint,1104,opt,name=rt_1104,json=rt1104,proto3,oneof" json:"rt_1104,omitempty"`
 }
 type RouteTargetChoice_Rt_1105 struct {
-	Rt_1105 bool `protobuf:"varint,1105,opt,name=rt_1105,json=rt1105,proto3,oneof"`
+	Rt_1105 bool `protobuf:"varint,1105,opt,name=rt_1105,json=rt1105,proto3,oneof" json:"rt_1105,omitempty"`
 }
 type RouteTargetChoice_Rt_1106 struct {
-	Rt_1106 bool `protobuf:"varint,1106,opt,name=rt_1106,json=rt1106,proto3,oneof"`
+	Rt_1106 bool `protobuf:"varint,1106,opt,name=rt_1106,json=rt1106,proto3,oneof" json:"rt_1106,omitempty"`
 }
 type RouteTargetChoice_Rt_1107 struct {
-	Rt_1107 bool `protobuf:"varint,1107,opt,name=rt_1107,json=rt1107,proto3,oneof"`
+	Rt_1107 bool `protobuf:"varint,1107,opt,name=rt_1107,json=rt1107,proto3,oneof" json:"rt_1107,omitempty"`
 }
 type RouteTargetChoice_Rt_1108 struct {
-	Rt_1108 bool `protobuf:"varint,1108,opt,name=rt_1108,json=rt1108,proto3,oneof"`
+	Rt_1108 bool `protobuf:"varint,1108,opt,name=rt_1108,json=rt1108,proto3,oneof" json:"rt_1108,omitempty"`
 }
 type RouteTargetChoice_Rt_1109 struct {
-	Rt_1109 bool `protobuf:"varint,1109,opt,name=rt_1109,json=rt1109,proto3,oneof"`
+	Rt_1109 bool `protobuf:"varint,1109,opt,name=rt_1109,json=rt1109,proto3,oneof" json:"rt_1109,omitempty"`
 }
 type RouteTargetChoice_Rt_1110 struct {
-	Rt_1110 bool `protobuf:"varint,1110,opt,name=rt_1110,json=rt1110,proto3,oneof"`
+	Rt_1110 bool `protobuf:"varint,1110,opt,name=rt_1110,json=rt1110,proto3,oneof" json:"rt_1110,omitempty"`
 }
 type RouteTargetChoice_Rt_2001 struct {
-	Rt_2001 bool `protobuf:"varint,2001,opt,name=rt_2001,json=rt2001,proto3,oneof"`
+	Rt_2001 bool `protobuf:"varint,2001,opt,name=rt_2001,json=rt2001,proto3,oneof" json:"rt_2001,omitempty"`
 }
 type RouteTargetChoice_Rt_2002 struct {
-	Rt_2002 bool `protobuf:"varint,2002,opt,name=rt_2002,json=rt2002,proto3,oneof"`
+	Rt_2002 bool `protobuf:"varint,2002,opt,name=rt_2002,json=rt2002,proto3,oneof" json:"rt_2002,omitempty"`
 }
 type RouteTargetChoice_Rt_2003 struct {
-	Rt_2003 bool `protobuf:"varint,2003,opt,name=rt_2003,json=rt2003,proto3,oneof"`
+	Rt_2003 bool `protobuf:"varint,2003,opt,name=rt_2003,json=rt2003,proto3,oneof" json:"rt_2003,omitempty"`
 }
 type RouteTargetChoice_Rt_2004 struct {
-	Rt_2004 bool `protobuf:"varint,2004,opt,name=rt_2004,json=rt2004,proto3,oneof"`
+	Rt_2004 bool `protobuf:"varint,2004,opt,name=rt_2004,json=rt2004,proto3,oneof" json:"rt_2004,omitempty"`
 }
 type RouteTargetChoice_Rt_2005 struct {
-	Rt_2005 bool `protobuf:"varint,2005,opt,name=rt_2005,json=rt2005,proto3,oneof"`
+	Rt_2005 bool `protobuf:"varint,2005,opt,name=rt_2005,json=rt2005,proto3,oneof" json:"rt_2005,omitempty"`
 }
 type RouteTargetChoice_Rt_2006 struct {
-	Rt_2006 bool `protobuf:"varint,2006,opt,name=rt_2006,json=rt2006,proto3,oneof"`
+	Rt_2006 bool `protobuf:"varint,2006,opt,name=rt_2006,json=rt2006,proto3,oneof" json:"rt_2006,omitempty"`
 }
 
 func (*RouteTargetChoice_Rt_1001) isRouteTargetChoice_Choice() {}
@@ -1435,9 +1470,9 @@ func (m *RouteTargetChoice) GetRt_2006() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*RouteTargetChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _RouteTargetChoice_OneofMarshaler, _RouteTargetChoice_OneofUnmarshaler, _RouteTargetChoice_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RouteTargetChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*RouteTargetChoice_Rt_1001)(nil),
 		(*RouteTargetChoice_Rt_1002)(nil),
 		(*RouteTargetChoice_Rt_1003)(nil),
@@ -1557,2011 +1592,197 @@ func (*RouteTargetChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buf
 	}
 }
 
-func _RouteTargetChoice_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*RouteTargetChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *RouteTargetChoice_Rt_1001:
-		t := uint64(0)
-		if x.Rt_1001 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1001<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1002:
-		t := uint64(0)
-		if x.Rt_1002 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1002<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1003:
-		t := uint64(0)
-		if x.Rt_1003 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1003<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1004:
-		t := uint64(0)
-		if x.Rt_1004 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1004<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1005:
-		t := uint64(0)
-		if x.Rt_1005 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1005<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1006:
-		t := uint64(0)
-		if x.Rt_1006 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1006<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1007:
-		t := uint64(0)
-		if x.Rt_1007 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1007<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1008:
-		t := uint64(0)
-		if x.Rt_1008 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1008<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1009:
-		t := uint64(0)
-		if x.Rt_1009 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1009<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1010:
-		t := uint64(0)
-		if x.Rt_1010 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1010<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1011:
-		t := uint64(0)
-		if x.Rt_1011 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1011<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1012:
-		t := uint64(0)
-		if x.Rt_1012 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1012<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1013:
-		t := uint64(0)
-		if x.Rt_1013 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1013<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1014:
-		t := uint64(0)
-		if x.Rt_1014 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1014<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1015:
-		t := uint64(0)
-		if x.Rt_1015 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1015<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1016:
-		t := uint64(0)
-		if x.Rt_1016 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1016<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1017:
-		t := uint64(0)
-		if x.Rt_1017 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1017<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1018:
-		t := uint64(0)
-		if x.Rt_1018 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1018<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1019:
-		t := uint64(0)
-		if x.Rt_1019 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1019<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1020:
-		t := uint64(0)
-		if x.Rt_1020 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1020<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1021:
-		t := uint64(0)
-		if x.Rt_1021 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1021<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1022:
-		t := uint64(0)
-		if x.Rt_1022 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1022<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1023:
-		t := uint64(0)
-		if x.Rt_1023 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1023<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1024:
-		t := uint64(0)
-		if x.Rt_1024 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1024<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1025:
-		t := uint64(0)
-		if x.Rt_1025 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1025<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1026:
-		t := uint64(0)
-		if x.Rt_1026 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1026<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1027:
-		t := uint64(0)
-		if x.Rt_1027 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1027<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1028:
-		t := uint64(0)
-		if x.Rt_1028 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1028<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1029:
-		t := uint64(0)
-		if x.Rt_1029 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1029<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1030:
-		t := uint64(0)
-		if x.Rt_1030 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1030<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1031:
-		t := uint64(0)
-		if x.Rt_1031 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1031<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1032:
-		t := uint64(0)
-		if x.Rt_1032 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1032<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1033:
-		t := uint64(0)
-		if x.Rt_1033 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1033<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1034:
-		t := uint64(0)
-		if x.Rt_1034 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1034<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1035:
-		t := uint64(0)
-		if x.Rt_1035 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1035<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1036:
-		t := uint64(0)
-		if x.Rt_1036 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1036<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1037:
-		t := uint64(0)
-		if x.Rt_1037 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1037<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1038:
-		t := uint64(0)
-		if x.Rt_1038 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1038<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1039:
-		t := uint64(0)
-		if x.Rt_1039 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1039<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1040:
-		t := uint64(0)
-		if x.Rt_1040 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1040<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1041:
-		t := uint64(0)
-		if x.Rt_1041 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1041<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1042:
-		t := uint64(0)
-		if x.Rt_1042 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1042<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1043:
-		t := uint64(0)
-		if x.Rt_1043 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1043<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1044:
-		t := uint64(0)
-		if x.Rt_1044 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1044<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1045:
-		t := uint64(0)
-		if x.Rt_1045 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1045<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1046:
-		t := uint64(0)
-		if x.Rt_1046 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1046<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1047:
-		t := uint64(0)
-		if x.Rt_1047 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1047<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1048:
-		t := uint64(0)
-		if x.Rt_1048 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1048<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1049:
-		t := uint64(0)
-		if x.Rt_1049 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1049<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1050:
-		t := uint64(0)
-		if x.Rt_1050 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1050<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1051:
-		t := uint64(0)
-		if x.Rt_1051 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1051<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1052:
-		t := uint64(0)
-		if x.Rt_1052 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1052<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1053:
-		t := uint64(0)
-		if x.Rt_1053 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1053<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1054:
-		t := uint64(0)
-		if x.Rt_1054 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1054<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1055:
-		t := uint64(0)
-		if x.Rt_1055 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1055<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1056:
-		t := uint64(0)
-		if x.Rt_1056 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1056<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1057:
-		t := uint64(0)
-		if x.Rt_1057 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1057<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1058:
-		t := uint64(0)
-		if x.Rt_1058 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1058<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1059:
-		t := uint64(0)
-		if x.Rt_1059 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1059<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1060:
-		t := uint64(0)
-		if x.Rt_1060 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1060<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1061:
-		t := uint64(0)
-		if x.Rt_1061 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1061<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1062:
-		t := uint64(0)
-		if x.Rt_1062 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1062<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1063:
-		t := uint64(0)
-		if x.Rt_1063 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1063<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1064:
-		t := uint64(0)
-		if x.Rt_1064 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1064<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1065:
-		t := uint64(0)
-		if x.Rt_1065 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1065<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1066:
-		t := uint64(0)
-		if x.Rt_1066 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1066<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1067:
-		t := uint64(0)
-		if x.Rt_1067 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1067<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1068:
-		t := uint64(0)
-		if x.Rt_1068 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1068<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1069:
-		t := uint64(0)
-		if x.Rt_1069 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1069<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1070:
-		t := uint64(0)
-		if x.Rt_1070 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1070<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1071:
-		t := uint64(0)
-		if x.Rt_1071 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1071<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1072:
-		t := uint64(0)
-		if x.Rt_1072 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1072<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1073:
-		t := uint64(0)
-		if x.Rt_1073 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1073<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1074:
-		t := uint64(0)
-		if x.Rt_1074 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1074<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1075:
-		t := uint64(0)
-		if x.Rt_1075 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1075<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1076:
-		t := uint64(0)
-		if x.Rt_1076 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1076<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1077:
-		t := uint64(0)
-		if x.Rt_1077 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1077<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1078:
-		t := uint64(0)
-		if x.Rt_1078 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1078<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1079:
-		t := uint64(0)
-		if x.Rt_1079 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1079<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1080:
-		t := uint64(0)
-		if x.Rt_1080 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1080<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1081:
-		t := uint64(0)
-		if x.Rt_1081 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1081<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1082:
-		t := uint64(0)
-		if x.Rt_1082 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1082<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1083:
-		t := uint64(0)
-		if x.Rt_1083 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1083<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1084:
-		t := uint64(0)
-		if x.Rt_1084 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1084<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1085:
-		t := uint64(0)
-		if x.Rt_1085 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1085<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1086:
-		t := uint64(0)
-		if x.Rt_1086 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1086<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1087:
-		t := uint64(0)
-		if x.Rt_1087 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1087<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1088:
-		t := uint64(0)
-		if x.Rt_1088 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1088<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1089:
-		t := uint64(0)
-		if x.Rt_1089 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1089<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1090:
-		t := uint64(0)
-		if x.Rt_1090 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1090<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1091:
-		t := uint64(0)
-		if x.Rt_1091 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1091<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1092:
-		t := uint64(0)
-		if x.Rt_1092 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1092<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1093:
-		t := uint64(0)
-		if x.Rt_1093 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1093<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1094:
-		t := uint64(0)
-		if x.Rt_1094 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1094<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1095:
-		t := uint64(0)
-		if x.Rt_1095 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1095<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1096:
-		t := uint64(0)
-		if x.Rt_1096 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1096<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1097:
-		t := uint64(0)
-		if x.Rt_1097 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1097<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1098:
-		t := uint64(0)
-		if x.Rt_1098 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1098<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1099:
-		t := uint64(0)
-		if x.Rt_1099 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1099<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1100:
-		t := uint64(0)
-		if x.Rt_1100 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1100<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1101:
-		t := uint64(0)
-		if x.Rt_1101 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1101<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1102:
-		t := uint64(0)
-		if x.Rt_1102 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1102<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1103:
-		t := uint64(0)
-		if x.Rt_1103 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1103<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1104:
-		t := uint64(0)
-		if x.Rt_1104 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1104<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1105:
-		t := uint64(0)
-		if x.Rt_1105 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1105<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1106:
-		t := uint64(0)
-		if x.Rt_1106 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1106<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1107:
-		t := uint64(0)
-		if x.Rt_1107 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1107<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1108:
-		t := uint64(0)
-		if x.Rt_1108 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1108<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1109:
-		t := uint64(0)
-		if x.Rt_1109 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1109<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_1110:
-		t := uint64(0)
-		if x.Rt_1110 {
-			t = 1
-		}
-		_ = b.EncodeVarint(1110<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2001:
-		t := uint64(0)
-		if x.Rt_2001 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2001<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2002:
-		t := uint64(0)
-		if x.Rt_2002 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2002<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2003:
-		t := uint64(0)
-		if x.Rt_2003 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2003<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2004:
-		t := uint64(0)
-		if x.Rt_2004 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2004<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2005:
-		t := uint64(0)
-		if x.Rt_2005 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2005<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *RouteTargetChoice_Rt_2006:
-		t := uint64(0)
-		if x.Rt_2006 {
-			t = 1
-		}
-		_ = b.EncodeVarint(2006<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("RouteTargetChoice.Choice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _RouteTargetChoice_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*RouteTargetChoice)
-	switch tag {
-	case 1001: // choice.rt_1001
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1001{x != 0}
-		return true, err
-	case 1002: // choice.rt_1002
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1002{x != 0}
-		return true, err
-	case 1003: // choice.rt_1003
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1003{x != 0}
-		return true, err
-	case 1004: // choice.rt_1004
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1004{x != 0}
-		return true, err
-	case 1005: // choice.rt_1005
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1005{x != 0}
-		return true, err
-	case 1006: // choice.rt_1006
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1006{x != 0}
-		return true, err
-	case 1007: // choice.rt_1007
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1007{x != 0}
-		return true, err
-	case 1008: // choice.rt_1008
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1008{x != 0}
-		return true, err
-	case 1009: // choice.rt_1009
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1009{x != 0}
-		return true, err
-	case 1010: // choice.rt_1010
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1010{x != 0}
-		return true, err
-	case 1011: // choice.rt_1011
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1011{x != 0}
-		return true, err
-	case 1012: // choice.rt_1012
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1012{x != 0}
-		return true, err
-	case 1013: // choice.rt_1013
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1013{x != 0}
-		return true, err
-	case 1014: // choice.rt_1014
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1014{x != 0}
-		return true, err
-	case 1015: // choice.rt_1015
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1015{x != 0}
-		return true, err
-	case 1016: // choice.rt_1016
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1016{x != 0}
-		return true, err
-	case 1017: // choice.rt_1017
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1017{x != 0}
-		return true, err
-	case 1018: // choice.rt_1018
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1018{x != 0}
-		return true, err
-	case 1019: // choice.rt_1019
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1019{x != 0}
-		return true, err
-	case 1020: // choice.rt_1020
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1020{x != 0}
-		return true, err
-	case 1021: // choice.rt_1021
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1021{x != 0}
-		return true, err
-	case 1022: // choice.rt_1022
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1022{x != 0}
-		return true, err
-	case 1023: // choice.rt_1023
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1023{x != 0}
-		return true, err
-	case 1024: // choice.rt_1024
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1024{x != 0}
-		return true, err
-	case 1025: // choice.rt_1025
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1025{x != 0}
-		return true, err
-	case 1026: // choice.rt_1026
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1026{x != 0}
-		return true, err
-	case 1027: // choice.rt_1027
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1027{x != 0}
-		return true, err
-	case 1028: // choice.rt_1028
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1028{x != 0}
-		return true, err
-	case 1029: // choice.rt_1029
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1029{x != 0}
-		return true, err
-	case 1030: // choice.rt_1030
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1030{x != 0}
-		return true, err
-	case 1031: // choice.rt_1031
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1031{x != 0}
-		return true, err
-	case 1032: // choice.rt_1032
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1032{x != 0}
-		return true, err
-	case 1033: // choice.rt_1033
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1033{x != 0}
-		return true, err
-	case 1034: // choice.rt_1034
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1034{x != 0}
-		return true, err
-	case 1035: // choice.rt_1035
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1035{x != 0}
-		return true, err
-	case 1036: // choice.rt_1036
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1036{x != 0}
-		return true, err
-	case 1037: // choice.rt_1037
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1037{x != 0}
-		return true, err
-	case 1038: // choice.rt_1038
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1038{x != 0}
-		return true, err
-	case 1039: // choice.rt_1039
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1039{x != 0}
-		return true, err
-	case 1040: // choice.rt_1040
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1040{x != 0}
-		return true, err
-	case 1041: // choice.rt_1041
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1041{x != 0}
-		return true, err
-	case 1042: // choice.rt_1042
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1042{x != 0}
-		return true, err
-	case 1043: // choice.rt_1043
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1043{x != 0}
-		return true, err
-	case 1044: // choice.rt_1044
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1044{x != 0}
-		return true, err
-	case 1045: // choice.rt_1045
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1045{x != 0}
-		return true, err
-	case 1046: // choice.rt_1046
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1046{x != 0}
-		return true, err
-	case 1047: // choice.rt_1047
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1047{x != 0}
-		return true, err
-	case 1048: // choice.rt_1048
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1048{x != 0}
-		return true, err
-	case 1049: // choice.rt_1049
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1049{x != 0}
-		return true, err
-	case 1050: // choice.rt_1050
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1050{x != 0}
-		return true, err
-	case 1051: // choice.rt_1051
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1051{x != 0}
-		return true, err
-	case 1052: // choice.rt_1052
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1052{x != 0}
-		return true, err
-	case 1053: // choice.rt_1053
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1053{x != 0}
-		return true, err
-	case 1054: // choice.rt_1054
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1054{x != 0}
-		return true, err
-	case 1055: // choice.rt_1055
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1055{x != 0}
-		return true, err
-	case 1056: // choice.rt_1056
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1056{x != 0}
-		return true, err
-	case 1057: // choice.rt_1057
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1057{x != 0}
-		return true, err
-	case 1058: // choice.rt_1058
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1058{x != 0}
-		return true, err
-	case 1059: // choice.rt_1059
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1059{x != 0}
-		return true, err
-	case 1060: // choice.rt_1060
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1060{x != 0}
-		return true, err
-	case 1061: // choice.rt_1061
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1061{x != 0}
-		return true, err
-	case 1062: // choice.rt_1062
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1062{x != 0}
-		return true, err
-	case 1063: // choice.rt_1063
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1063{x != 0}
-		return true, err
-	case 1064: // choice.rt_1064
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1064{x != 0}
-		return true, err
-	case 1065: // choice.rt_1065
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1065{x != 0}
-		return true, err
-	case 1066: // choice.rt_1066
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1066{x != 0}
-		return true, err
-	case 1067: // choice.rt_1067
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1067{x != 0}
-		return true, err
-	case 1068: // choice.rt_1068
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1068{x != 0}
-		return true, err
-	case 1069: // choice.rt_1069
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1069{x != 0}
-		return true, err
-	case 1070: // choice.rt_1070
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1070{x != 0}
-		return true, err
-	case 1071: // choice.rt_1071
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1071{x != 0}
-		return true, err
-	case 1072: // choice.rt_1072
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1072{x != 0}
-		return true, err
-	case 1073: // choice.rt_1073
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1073{x != 0}
-		return true, err
-	case 1074: // choice.rt_1074
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1074{x != 0}
-		return true, err
-	case 1075: // choice.rt_1075
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1075{x != 0}
-		return true, err
-	case 1076: // choice.rt_1076
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1076{x != 0}
-		return true, err
-	case 1077: // choice.rt_1077
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1077{x != 0}
-		return true, err
-	case 1078: // choice.rt_1078
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1078{x != 0}
-		return true, err
-	case 1079: // choice.rt_1079
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1079{x != 0}
-		return true, err
-	case 1080: // choice.rt_1080
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1080{x != 0}
-		return true, err
-	case 1081: // choice.rt_1081
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1081{x != 0}
-		return true, err
-	case 1082: // choice.rt_1082
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1082{x != 0}
-		return true, err
-	case 1083: // choice.rt_1083
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1083{x != 0}
-		return true, err
-	case 1084: // choice.rt_1084
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1084{x != 0}
-		return true, err
-	case 1085: // choice.rt_1085
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1085{x != 0}
-		return true, err
-	case 1086: // choice.rt_1086
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1086{x != 0}
-		return true, err
-	case 1087: // choice.rt_1087
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1087{x != 0}
-		return true, err
-	case 1088: // choice.rt_1088
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1088{x != 0}
-		return true, err
-	case 1089: // choice.rt_1089
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1089{x != 0}
-		return true, err
-	case 1090: // choice.rt_1090
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1090{x != 0}
-		return true, err
-	case 1091: // choice.rt_1091
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1091{x != 0}
-		return true, err
-	case 1092: // choice.rt_1092
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1092{x != 0}
-		return true, err
-	case 1093: // choice.rt_1093
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1093{x != 0}
-		return true, err
-	case 1094: // choice.rt_1094
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1094{x != 0}
-		return true, err
-	case 1095: // choice.rt_1095
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1095{x != 0}
-		return true, err
-	case 1096: // choice.rt_1096
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1096{x != 0}
-		return true, err
-	case 1097: // choice.rt_1097
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1097{x != 0}
-		return true, err
-	case 1098: // choice.rt_1098
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1098{x != 0}
-		return true, err
-	case 1099: // choice.rt_1099
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1099{x != 0}
-		return true, err
-	case 1100: // choice.rt_1100
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1100{x != 0}
-		return true, err
-	case 1101: // choice.rt_1101
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1101{x != 0}
-		return true, err
-	case 1102: // choice.rt_1102
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1102{x != 0}
-		return true, err
-	case 1103: // choice.rt_1103
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1103{x != 0}
-		return true, err
-	case 1104: // choice.rt_1104
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1104{x != 0}
-		return true, err
-	case 1105: // choice.rt_1105
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1105{x != 0}
-		return true, err
-	case 1106: // choice.rt_1106
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1106{x != 0}
-		return true, err
-	case 1107: // choice.rt_1107
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1107{x != 0}
-		return true, err
-	case 1108: // choice.rt_1108
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1108{x != 0}
-		return true, err
-	case 1109: // choice.rt_1109
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1109{x != 0}
-		return true, err
-	case 1110: // choice.rt_1110
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_1110{x != 0}
-		return true, err
-	case 2001: // choice.rt_2001
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2001{x != 0}
-		return true, err
-	case 2002: // choice.rt_2002
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2002{x != 0}
-		return true, err
-	case 2003: // choice.rt_2003
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2003{x != 0}
-		return true, err
-	case 2004: // choice.rt_2004
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2004{x != 0}
-		return true, err
-	case 2005: // choice.rt_2005
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2005{x != 0}
-		return true, err
-	case 2006: // choice.rt_2006
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &RouteTargetChoice_Rt_2006{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _RouteTargetChoice_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*RouteTargetChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *RouteTargetChoice_Rt_1001:
-		n += proto.SizeVarint(1001<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1002:
-		n += proto.SizeVarint(1002<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1003:
-		n += proto.SizeVarint(1003<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1004:
-		n += proto.SizeVarint(1004<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1005:
-		n += proto.SizeVarint(1005<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1006:
-		n += proto.SizeVarint(1006<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1007:
-		n += proto.SizeVarint(1007<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1008:
-		n += proto.SizeVarint(1008<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1009:
-		n += proto.SizeVarint(1009<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1010:
-		n += proto.SizeVarint(1010<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1011:
-		n += proto.SizeVarint(1011<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1012:
-		n += proto.SizeVarint(1012<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1013:
-		n += proto.SizeVarint(1013<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1014:
-		n += proto.SizeVarint(1014<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1015:
-		n += proto.SizeVarint(1015<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1016:
-		n += proto.SizeVarint(1016<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1017:
-		n += proto.SizeVarint(1017<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1018:
-		n += proto.SizeVarint(1018<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1019:
-		n += proto.SizeVarint(1019<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1020:
-		n += proto.SizeVarint(1020<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1021:
-		n += proto.SizeVarint(1021<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1022:
-		n += proto.SizeVarint(1022<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1023:
-		n += proto.SizeVarint(1023<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1024:
-		n += proto.SizeVarint(1024<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1025:
-		n += proto.SizeVarint(1025<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1026:
-		n += proto.SizeVarint(1026<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1027:
-		n += proto.SizeVarint(1027<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1028:
-		n += proto.SizeVarint(1028<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1029:
-		n += proto.SizeVarint(1029<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1030:
-		n += proto.SizeVarint(1030<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1031:
-		n += proto.SizeVarint(1031<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1032:
-		n += proto.SizeVarint(1032<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1033:
-		n += proto.SizeVarint(1033<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1034:
-		n += proto.SizeVarint(1034<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1035:
-		n += proto.SizeVarint(1035<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1036:
-		n += proto.SizeVarint(1036<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1037:
-		n += proto.SizeVarint(1037<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1038:
-		n += proto.SizeVarint(1038<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1039:
-		n += proto.SizeVarint(1039<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1040:
-		n += proto.SizeVarint(1040<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1041:
-		n += proto.SizeVarint(1041<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1042:
-		n += proto.SizeVarint(1042<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1043:
-		n += proto.SizeVarint(1043<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1044:
-		n += proto.SizeVarint(1044<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1045:
-		n += proto.SizeVarint(1045<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1046:
-		n += proto.SizeVarint(1046<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1047:
-		n += proto.SizeVarint(1047<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1048:
-		n += proto.SizeVarint(1048<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1049:
-		n += proto.SizeVarint(1049<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1050:
-		n += proto.SizeVarint(1050<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1051:
-		n += proto.SizeVarint(1051<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1052:
-		n += proto.SizeVarint(1052<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1053:
-		n += proto.SizeVarint(1053<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1054:
-		n += proto.SizeVarint(1054<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1055:
-		n += proto.SizeVarint(1055<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1056:
-		n += proto.SizeVarint(1056<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1057:
-		n += proto.SizeVarint(1057<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1058:
-		n += proto.SizeVarint(1058<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1059:
-		n += proto.SizeVarint(1059<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1060:
-		n += proto.SizeVarint(1060<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1061:
-		n += proto.SizeVarint(1061<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1062:
-		n += proto.SizeVarint(1062<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1063:
-		n += proto.SizeVarint(1063<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1064:
-		n += proto.SizeVarint(1064<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1065:
-		n += proto.SizeVarint(1065<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1066:
-		n += proto.SizeVarint(1066<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1067:
-		n += proto.SizeVarint(1067<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1068:
-		n += proto.SizeVarint(1068<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1069:
-		n += proto.SizeVarint(1069<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1070:
-		n += proto.SizeVarint(1070<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1071:
-		n += proto.SizeVarint(1071<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1072:
-		n += proto.SizeVarint(1072<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1073:
-		n += proto.SizeVarint(1073<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1074:
-		n += proto.SizeVarint(1074<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1075:
-		n += proto.SizeVarint(1075<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1076:
-		n += proto.SizeVarint(1076<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1077:
-		n += proto.SizeVarint(1077<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1078:
-		n += proto.SizeVarint(1078<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1079:
-		n += proto.SizeVarint(1079<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1080:
-		n += proto.SizeVarint(1080<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1081:
-		n += proto.SizeVarint(1081<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1082:
-		n += proto.SizeVarint(1082<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1083:
-		n += proto.SizeVarint(1083<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1084:
-		n += proto.SizeVarint(1084<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1085:
-		n += proto.SizeVarint(1085<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1086:
-		n += proto.SizeVarint(1086<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1087:
-		n += proto.SizeVarint(1087<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1088:
-		n += proto.SizeVarint(1088<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1089:
-		n += proto.SizeVarint(1089<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1090:
-		n += proto.SizeVarint(1090<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1091:
-		n += proto.SizeVarint(1091<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1092:
-		n += proto.SizeVarint(1092<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1093:
-		n += proto.SizeVarint(1093<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1094:
-		n += proto.SizeVarint(1094<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1095:
-		n += proto.SizeVarint(1095<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1096:
-		n += proto.SizeVarint(1096<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1097:
-		n += proto.SizeVarint(1097<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1098:
-		n += proto.SizeVarint(1098<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1099:
-		n += proto.SizeVarint(1099<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1100:
-		n += proto.SizeVarint(1100<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1101:
-		n += proto.SizeVarint(1101<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1102:
-		n += proto.SizeVarint(1102<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1103:
-		n += proto.SizeVarint(1103<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1104:
-		n += proto.SizeVarint(1104<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1105:
-		n += proto.SizeVarint(1105<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1106:
-		n += proto.SizeVarint(1106<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1107:
-		n += proto.SizeVarint(1107<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1108:
-		n += proto.SizeVarint(1108<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1109:
-		n += proto.SizeVarint(1109<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_1110:
-		n += proto.SizeVarint(1110<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2001:
-		n += proto.SizeVarint(2001<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2002:
-		n += proto.SizeVarint(2002<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2003:
-		n += proto.SizeVarint(2003<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2004:
-		n += proto.SizeVarint(2004<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2005:
-		n += proto.SizeVarint(2005<<3 | proto.WireVarint)
-		n += 1
-	case *RouteTargetChoice_Rt_2006:
-		n += proto.SizeVarint(2006<<3 | proto.WireVarint)
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*RouteTargetChoice)(nil), "ves.io.schema.vesenv.RouteTargetChoice")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/vesenv/all_route_targets.proto", fileDescriptor_5d2b748d7c51073f)
+}
+
+var fileDescriptor_5d2b748d7c51073f = []byte{
+	// 2862 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x9a, 0x47, 0x94, 0xe4, 0x44,
+	0xb6, 0x86, 0xab, 0x36, 0x54, 0x9c, 0xde, 0xd4, 0x79, 0x3a, 0x6f, 0x71, 0xcf, 0x5b, 0xe4, 0x63,
+	0xb0, 0x0d, 0x74, 0x57, 0xc9, 0x1b, 0xc6, 0x2c, 0x60, 0x0c, 0xc3, 0x18, 0x66, 0x80, 0x71, 0x6c,
+	0x74, 0x54, 0xca, 0xc8, 0x2c, 0x51, 0x4a, 0x49, 0x13, 0x8a, 0xcc, 0xa2, 0x67, 0xd5, 0x78, 0xef,
+	0xbd, 0xf7, 0xde, 0x7b, 0x93, 0x78, 0x4f, 0xe2, 0xda, 0x1f, 0x96, 0x43, 0xb1, 0x19, 0x7c, 0xe3,
+	0x3d, 0xcc, 0xc9, 0x54, 0x4a, 0x8a, 0x52, 0x28, 0x72, 0x66, 0x0b, 0xd9, 0x5f, 0x47, 0xfe, 0x71,
+	0xff, 0xff, 0xde, 0xb8, 0x9d, 0x6b, 0xd6, 0xf5, 0x70, 0x3a, 0x17, 0xc4, 0xf3, 0xa9, 0xbf, 0x88,
+	0x3b, 0xde, 0x7c, 0x0f, 0xa7, 0x38, 0xea, 0xcd, 0x7b, 0x61, 0xe8, 0x92, 0xb8, 0x4b, 0xb1, 0x4b,
+	0x3d, 0xd2, 0xc6, 0x34, 0x9d, 0x4b, 0x48, 0x4c, 0x63, 0xe9, 0x7f, 0xb3, 0x4f, 0xcf, 0x65, 0x9f,
+	0x9e, 0xcb, 0x3e, 0xfd, 0x7f, 0xbb, 0xd5, 0x32, 0xe2, 0x84, 0x06, 0x71, 0x34, 0xfe, 0x93, 0xbb,
+	0x3d, 0x7f, 0xd0, 0x9a, 0xff, 0x39, 0x74, 0x48, 0x3c, 0x7c, 0x04, 0x3c, 0x70, 0x31, 0x0e, 0x7c,
+	0x2c, 0xfd, 0x71, 0xcd, 0x0c, 0xa1, 0xae, 0x22, 0xcb, 0x0a, 0xbc, 0x3d, 0xb3, 0xeb, 0xf4, 0x5a,
+	0x74, 0x80, 0x31, 0xe8, 0x83, 0x82, 0xde, 0x9e, 0x91, 0xd6, 0xad, 0xfe, 0xab, 0xbc, 0x66, 0x93,
+	0xe0, 0x34, 0x75, 0xbd, 0x30, 0x8c, 0x7d, 0x8f, 0xc6, 0x64, 0xee, 0x30, 0xea, 0xd1, 0x6e, 0x7a,
+	0xc8, 0xc2, 0x91, 0xd8, 0xa7, 0x07, 0x4d, 0x1d, 0xba, 0x0b, 0xa1, 0x43, 0x8e, 0xf4, 0x87, 0x1c,
+	0xa9, 0xc2, 0x3b, 0x19, 0x52, 0x1f, 0xf4, 0x41, 0x46, 0xef, 0xcc, 0x48, 0xfb, 0x55, 0x91, 0x3d,
+	0x4c, 0x68, 0x90, 0x62, 0x37, 0x89, 0xc3, 0xc0, 0xdf, 0x50, 0x4f, 0x54, 0xa5, 0xdf, 0xe6, 0x44,
+	0x0d, 0xde, 0xcd, 0x88, 0xf2, 0xa0, 0x0f, 0xeb, 0xd0, 0xbb, 0x33, 0xd2, 0xde, 0x15, 0x62, 0x88,
+	0x09, 0x9d, 0x48, 0xd3, 0xca, 0xf3, 0xe9, 0xf0, 0x1e, 0x7b, 0xbe, 0xf7, 0xf8, 0xf3, 0x31, 0x34,
+	0x37, 0xc5, 0xb4, 0x9e, 0xa8, 0x4b, 0xbf, 0xcf, 0x89, 0x06, 0xbc, 0x9f, 0x11, 0xd5, 0x41, 0x1f,
+	0xe6, 0xd0, 0xfb, 0x33, 0xd2, 0x3e, 0x75, 0x44, 0x82, 0x7d, 0x1c, 0xf4, 0xb0, 0x40, 0x41, 0xa3,
+	0xe4, 0x99, 0xf0, 0x01, 0xcb, 0xfb, 0x80, 0xe7, 0x25, 0x81, 0xeb, 0x13, 0xdc, 0xc4, 0x11, 0x0d,
+	0xbc, 0xb0, 0x9e, 0x67, 0x4a, 0xbf, 0xce, 0x79, 0x16, 0x7c, 0x98, 0xf1, 0xd6, 0x0f, 0xfa, 0xb0,
+	0x0f, 0xfa, 0x70, 0x46, 0xda, 0x83, 0xe7, 0xb5, 0x49, 0xdc, 0x4d, 0xea, 0x51, 0x56, 0x59, 0x2f,
+	0x36, 0xec, 0x64, 0xeb, 0x65, 0x27, 0x5f, 0x2f, 0x39, 0xca, 0xc5, 0x21, 0xee, 0xe0, 0x48, 0xa0,
+	0x9e, 0x2d, 0xfd, 0x26, 0x47, 0x3a, 0xf0, 0x51, 0x86, 0x9c, 0x1f, 0xf4, 0x61, 0x3f, 0xf4, 0xd1,
+	0x8c, 0xb4, 0x57, 0x15, 0x99, 0x0c, 0xaf, 0x81, 0x06, 0x51, 0xbb, 0x1e, 0xe6, 0x48, 0x07, 0x8d,
+	0x61, 0x8a, 0x0c, 0x1f, 0x67, 0xb0, 0x75, 0x83, 0x3e, 0xac, 0x45, 0x1f, 0xcf, 0x48, 0xbb, 0xf3,
+	0x30, 0xba, 0x21, 0xc1, 0xb5, 0x24, 0x45, 0x2e, 0x2e, 0x41, 0x51, 0xe0, 0x13, 0xf6, 0x12, 0x3e,
+	0xe1, 0x2f, 0xa1, 0x4b, 0x17, 0x87, 0x17, 0xe0, 0x7b, 0x43, 0xbf, 0xd5, 0xf3, 0x14, 0xe9, 0xc0,
+	0x9c, 0xa7, 0xc2, 0xa7, 0x19, 0x6f, 0xef, 0x41, 0x1f, 0x76, 0x47, 0x9f, 0xce, 0x48, 0x8d, 0xd5,
+	0xbc, 0x85, 0x76, 0xbd, 0xfc, 0x8a, 0x5a, 0x68, 0xa5, 0x68, 0xf0, 0x19, 0xab, 0xd5, 0x67, 0x9c,
+	0x56, 0x0b, 0xed, 0xc4, 0xf5, 0xd2, 0x48, 0x58, 0xb6, 0x8a, 0x26, 0x1d, 0x9a, 0xc3, 0x74, 0xf8,
+	0x3c, 0x83, 0x99, 0x83, 0x3e, 0xa8, 0xe8, 0xf3, 0x19, 0x69, 0xfd, 0x6a, 0x98, 0x3f, 0xb4, 0x69,
+	0x2b, 0xc0, 0x4d, 0x77, 0xd1, 0x23, 0xcd, 0x65, 0x8f, 0x08, 0x54, 0xd3, 0x8b, 0xfa, 0x50, 0x0c,
+	0xf8, 0x82, 0xad, 0x8f, 0x2f, 0xb8, 0xfa, 0xf0, 0xc3, 0xb8, 0xdb, 0x64, 0x8a, 0x37, 0xad, 0x47,
+	0x1a, 0xd2, 0xaf, 0x72, 0xa4, 0x09, 0x5f, 0x66, 0xc8, 0xfd, 0x06, 0x7d, 0xd8, 0x1b, 0x7d, 0x39,
+	0x23, 0xed, 0x56, 0x45, 0x76, 0x53, 0x2a, 0xb0, 0x95, 0x62, 0x96, 0x20, 0x0b, 0xbe, 0x62, 0x41,
+	0x5f, 0xf1, 0xa0, 0x38, 0xa2, 0x9e, 0x2f, 0x10, 0xce, 0x2a, 0x85, 0xb3, 0xe1, 0x6b, 0x56, 0xb8,
+	0xaf, 0x79, 0xe1, 0x86, 0xa0, 0x20, 0xc2, 0xc4, 0x25, 0xb8, 0x1d, 0xa4, 0x94, 0xd4, 0xa7, 0x92,
+	0x62, 0x17, 0xa9, 0xa4, 0x38, 0xf0, 0x0d, 0x9b, 0x4a, 0xdf, 0x70, 0xa9, 0xe4, 0x77, 0x53, 0x1a,
+	0x77, 0x30, 0x71, 0xd3, 0x6e, 0x92, 0xc4, 0x44, 0x70, 0x4a, 0xa7, 0x20, 0xaa, 0x32, 0x7c, 0xcb,
+	0x12, 0xbf, 0xe5, 0x88, 0x4d, 0xdf, 0x1d, 0x4b, 0x37, 0xc1, 0xfc, 0xaa, 0x5c, 0xe4, 0x88, 0xaa,
+	0xc0, 0x77, 0x6c, 0x8e, 0x7c, 0xc7, 0xe5, 0x48, 0x33, 0x48, 0xfd, 0xb8, 0x87, 0x05, 0x5f, 0x57,
+	0x55, 0xa4, 0x83, 0x73, 0x94, 0x0a, 0xdf, 0x67, 0xa8, 0xb9, 0x41, 0x1f, 0xf6, 0x45, 0xdf, 0xcf,
+	0x48, 0x7b, 0x56, 0x50, 0x51, 0xea, 0x36, 0xe3, 0x8e, 0x17, 0xd4, 0x3b, 0x4b, 0x55, 0x0b, 0xcf,
+	0xab, 0x1a, 0xfc, 0xc0, 0x7a, 0xfe, 0x07, 0xce, 0xf3, 0x38, 0x6a, 0x26, 0x71, 0x20, 0x88, 0x22,
+	0x55, 0x2b, 0x49, 0x3a, 0x6c, 0x44, 0x0c, 0x69, 0x23, 0xaa, 0x92, 0x5a, 0x5e, 0x4a, 0x5d, 0xcf,
+	0xaf, 0x8f, 0x5c, 0x55, 0x97, 0x7e, 0x97, 0x93, 0x0c, 0x38, 0x3a, 0x23, 0x29, 0x83, 0x3e, 0xac,
+	0x47, 0x47, 0x23, 0x69, 0x6d, 0x3d, 0xc9, 0x25, 0xdd, 0xb0, 0xde, 0x56, 0xaa, 0x51, 0x74, 0x40,
+	0xd5, 0x84, 0x63, 0x10, 0xd3, 0x01, 0x8f, 0x41, 0xd5, 0x0e, 0x58, 0xe0, 0x44, 0xc6, 0x57, 0x4d,
+	0xe9, 0x17, 0x39, 0xcd, 0x82, 0x63, 0x33, 0xda, 0x3e, 0x83, 0x3e, 0xec, 0x89, 0x8e, 0x45, 0xd2,
+	0xae, 0x15, 0x5a, 0x88, 0x45, 0x18, 0xab, 0x2c, 0x30, 0x1b, 0x8e, 0x43, 0x4c, 0x81, 0x1d, 0x87,
+	0xaa, 0x05, 0xd6, 0x8a, 0xc9, 0xb2, 0x47, 0x9a, 0x41, 0xd4, 0x76, 0xfd, 0xd0, 0x4b, 0xeb, 0xad,
+	0xae, 0x96, 0xad, 0x40, 0x75, 0xe0, 0x78, 0xc4, 0xc4, 0xdb, 0xf1, 0xa8, 0x1a, 0x6f, 0x8b, 0xd8,
+	0x0b, 0xe9, 0xa2, 0xbf, 0x88, 0xfd, 0xa5, 0x7a, 0x98, 0x23, 0xfd, 0x75, 0x0c, 0xd3, 0x64, 0x38,
+	0x21, 0x83, 0xfd, 0x64, 0xd0, 0x07, 0x1b, 0x9d, 0x80, 0x24, 0x6d, 0x35, 0x2c, 0x88, 0x5a, 0xc4,
+	0x1b, 0x4e, 0x49, 0xd8, 0xa7, 0x6e, 0x10, 0xb5, 0x62, 0xd2, 0x11, 0x47, 0xb9, 0x26, 0x17, 0x97,
+	0xab, 0x29, 0x70, 0x22, 0x7b, 0xb9, 0x27, 0x72, 0x97, 0x1b, 0x24, 0x6e, 0x42, 0x70, 0x2b, 0x38,
+	0x4a, 0x78, 0x1d, 0x5a, 0xd9, 0x19, 0x34, 0x15, 0x4e, 0x42, 0x4c, 0x67, 0x38, 0x09, 0x55, 0x3b,
+	0xc3, 0x91, 0xcb, 0x02, 0x48, 0x39, 0x23, 0x69, 0x1a, 0x9c, 0xcc, 0x56, 0xc8, 0xc9, 0x5c, 0x85,
+	0x1c, 0xb9, 0x4c, 0xdd, 0x84, 0xc4, 0xbd, 0xa0, 0x29, 0x88, 0x4a, 0x4d, 0x2b, 0x2e, 0x42, 0xd3,
+	0xe1, 0x14, 0xf6, 0x22, 0x4e, 0xe1, 0x2e, 0x62, 0xc9, 0x4e, 0xdd, 0x49, 0xb9, 0xab, 0xe9, 0x45,
+	0x9d, 0x68, 0x06, 0x9c, 0xca, 0xd6, 0xc9, 0xa9, 0x5c, 0x9d, 0x30, 0x30, 0x97, 0xc4, 0x02, 0x3b,
+	0x68, 0x46, 0x79, 0xb5, 0x26, 0x9c, 0xc6, 0x5e, 0xed, 0x69, 0xdc, 0xd5, 0x56, 0x89, 0xee, 0x42,
+	0x10, 0x35, 0x45, 0xf3, 0x83, 0x66, 0x4a, 0x7f, 0xc9, 0xc9, 0x16, 0x9c, 0x9e, 0x91, 0x7f, 0x3c,
+	0xe8, 0x83, 0x85, 0x4e, 0x47, 0x92, 0xca, 0x93, 0x93, 0xb8, 0xe9, 0xa6, 0xd8, 0xef, 0x92, 0x80,
+	0x6e, 0x98, 0x34, 0x75, 0x6a, 0x56, 0xd1, 0x7c, 0x34, 0x1b, 0xce, 0x40, 0x4c, 0xf3, 0x39, 0x03,
+	0x55, 0x9b, 0xcf, 0x52, 0x27, 0x75, 0x97, 0xb0, 0x00, 0x64, 0x17, 0xc9, 0xa9, 0x39, 0x70, 0x26,
+	0x62, 0x92, 0xf3, 0x4c, 0x54, 0x4d, 0xce, 0x21, 0x68, 0xd2, 0xa1, 0x1c, 0xe9, 0x90, 0x31, 0x4b,
+	0x97, 0xe1, 0xac, 0x8c, 0xa5, 0x0d, 0xfa, 0x30, 0x8f, 0xce, 0x42, 0xd2, 0xbe, 0x22, 0x96, 0x38,
+	0xa7, 0xf4, 0x72, 0x68, 0xd2, 0x15, 0x38, 0x1b, 0x31, 0x43, 0xd3, 0xd9, 0xa8, 0x3a, 0x34, 0x31,
+	0x40, 0x91, 0x35, 0x74, 0xa5, 0xe8, 0xb4, 0xba, 0x0a, 0xe7, 0x20, 0xa6, 0xd3, 0x9e, 0x83, 0xaa,
+	0x9d, 0x36, 0xc4, 0x1e, 0x89, 0xa8, 0x3b, 0x9c, 0xea, 0x12, 0x12, 0xb7, 0x02, 0xd1, 0x19, 0x4b,
+	0xa7, 0xe8, 0x1a, 0x9c, 0xcb, 0x3a, 0xe5, 0x5c, 0xce, 0x29, 0x61, 0xdc, 0x9e, 0x3c, 0xab, 0xeb,
+	0x9a, 0xf4, 0xb7, 0x9c, 0xa6, 0xc3, 0x79, 0x19, 0xed, 0xa7, 0x83, 0x3e, 0x38, 0xe8, 0x3c, 0x24,
+	0xe9, 0xab, 0x69, 0x1d, 0x2f, 0x0c, 0xfc, 0x20, 0xee, 0xa6, 0x6e, 0x37, 0xc5, 0xc4, 0xed, 0x04,
+	0x34, 0x68, 0x8b, 0x63, 0x46, 0xd7, 0x8b, 0x76, 0xab, 0x1b, 0x70, 0x3e, 0x62, 0xda, 0xed, 0xf9,
+	0xa8, 0xda, 0x6e, 0x23, 0xaf, 0x83, 0xd3, 0xc4, 0xf3, 0x05, 0xdf, 0xb9, 0x7c, 0x51, 0xe8, 0x26,
+	0x5c, 0xc0, 0xde, 0xcb, 0x05, 0xdc, 0xbd, 0x14, 0x28, 0xb1, 0x01, 0x75, 0xb3, 0x18, 0xf3, 0x74,
+	0x0b, 0x2e, 0x44, 0xcc, 0x98, 0x77, 0x21, 0xaa, 0x8e, 0x79, 0x11, 0xa6, 0xcb, 0x31, 0x59, 0x72,
+	0xfd, 0x38, 0x8a, 0xb0, 0x2f, 0x7a, 0x36, 0xea, 0x65, 0x37, 0xd1, 0x6d, 0xb8, 0x88, 0x4d, 0x89,
+	0x8b, 0xb8, 0x94, 0xc8, 0x91, 0xad, 0x80, 0xe0, 0x65, 0x2f, 0xac, 0xef, 0xc1, 0xba, 0x5d, 0x1e,
+	0xd2, 0x81, 0x8b, 0xd9, 0x43, 0x5e, 0x2c, 0x3c, 0x64, 0x10, 0x51, 0x4c, 0x5a, 0x42, 0x1d, 0x9d,
+	0x42, 0x47, 0x43, 0x86, 0x4b, 0x58, 0x1d, 0x2f, 0xe1, 0x75, 0x1c, 0x23, 0x27, 0x18, 0xd0, 0x90,
+	0xa5, 0xc3, 0x72, 0x9e, 0x02, 0x97, 0x66, 0x3c, 0x6b, 0xd0, 0x07, 0x0d, 0x5d, 0x8a, 0xa4, 0xb9,
+	0x49, 0x3c, 0xb1, 0x09, 0x8d, 0xd2, 0x34, 0x86, 0x0a, 0x97, 0xb1, 0xa6, 0xb9, 0x8c, 0x33, 0x4d,
+	0x05, 0x2a, 0x32, 0xa2, 0xa1, 0x16, 0x2d, 0xcf, 0xd0, 0xe0, 0x72, 0xb6, 0xe5, 0x5d, 0xce, 0xb5,
+	0xbc, 0xd8, 0x4f, 0x13, 0x97, 0xe0, 0x34, 0x89, 0xa3, 0x54, 0x70, 0x44, 0xad, 0xc4, 0xe9, 0x70,
+	0x05, 0x8b, 0xbb, 0x82, 0xc7, 0x05, 0x4d, 0x7f, 0x72, 0xbb, 0x32, 0xf4, 0x22, 0x5c, 0x0d, 0x03,
+	0xae, 0x64, 0xc3, 0xf5, 0x4a, 0x2e, 0x5c, 0x47, 0xdf, 0x54, 0x04, 0x32, 0x8a, 0x22, 0x34, 0x4c,
+	0xb8, 0x8a, 0x2d, 0xc2, 0xab, 0xb8, 0x22, 0x1c, 0x2d, 0x55, 0xfc, 0x38, 0x74, 0x27, 0x12, 0xcb,
+	0xb7, 0xb7, 0x61, 0xc1, 0xd5, 0xac, 0x89, 0xaf, 0xe6, 0x4c, 0x9c, 0x74, 0x17, 0xc2, 0xc0, 0x77,
+	0x83, 0xfa, 0xf1, 0xdb, 0xb0, 0x8a, 0xb1, 0xcd, 0xb0, 0xe1, 0x1a, 0x76, 0x6c, 0xbb, 0x86, 0x1b,
+	0xdb, 0xfe, 0xde, 0x8d, 0xa9, 0x57, 0x8f, 0xb1, 0x8b, 0xfc, 0x33, 0x1c, 0xb8, 0x96, 0xcd, 0xbf,
+	0x6b, 0xb9, 0xfc, 0x23, 0x1e, 0xc5, 0x6e, 0x18, 0x74, 0x02, 0x51, 0x73, 0x37, 0x9c, 0x62, 0x52,
+	0x30, 0x65, 0xb8, 0x8e, 0x9d, 0x14, 0xae, 0xe3, 0x26, 0x05, 0xb2, 0xe0, 0xf9, 0x93, 0xec, 0x60,
+	0xca, 0x45, 0x3f, 0x32, 0x15, 0xb8, 0x9e, 0xed, 0x47, 0xd7, 0x73, 0xfd, 0x88, 0xe0, 0x34, 0xee,
+	0x12, 0x7f, 0xe2, 0xe6, 0xc8, 0x54, 0xa4, 0x9f, 0xe7, 0x40, 0x15, 0x6e, 0xc8, 0x80, 0x6b, 0x07,
+	0x7d, 0xd8, 0x03, 0xdd, 0x80, 0xa4, 0xff, 0xaf, 0x00, 0x45, 0x69, 0x67, 0xaa, 0x85, 0xf0, 0xa6,
+	0x06, 0x37, 0xb2, 0xc2, 0xdf, 0xc8, 0x09, 0x3f, 0x5a, 0xd9, 0xd5, 0x63, 0xb4, 0x62, 0x6a, 0x31,
+	0x75, 0xb8, 0x89, 0x9d, 0x5a, 0x6e, 0xe2, 0xa6, 0x96, 0x14, 0xfb, 0x04, 0x53, 0xb7, 0xe3, 0x45,
+	0x5e, 0x7b, 0xb4, 0x3b, 0x71, 0x3d, 0xdf, 0xc7, 0x82, 0xb9, 0xd9, 0x2c, 0x5f, 0x1b, 0xa6, 0x01,
+	0x37, 0xb3, 0x76, 0xba, 0x99, 0xb3, 0xd3, 0x98, 0x3c, 0x49, 0x35, 0xa3, 0x08, 0x10, 0xd3, 0x84,
+	0x5b, 0xd8, 0x00, 0xb9, 0x85, 0x0b, 0x90, 0x55, 0x38, 0x71, 0x28, 0x99, 0x65, 0xc7, 0x30, 0x2d,
+	0xb8, 0x95, 0x0d, 0xe3, 0x5b, 0xb9, 0x30, 0x5e, 0xcd, 0x14, 0x65, 0x92, 0x69, 0x15, 0x61, 0x6c,
+	0xda, 0x70, 0x1b, 0x1b, 0xc6, 0xb7, 0x71, 0x61, 0x9c, 0x62, 0xd2, 0x0b, 0xfe, 0x43, 0xb1, 0xd8,
+	0x45, 0x18, 0x9b, 0x0e, 0xdc, 0xce, 0x86, 0xf1, 0xed, 0x5c, 0x18, 0xaf, 0xe6, 0x4d, 0xf8, 0xde,
+	0x4e, 0xa1, 0xa5, 0x25, 0xc3, 0x1d, 0xac, 0x96, 0x77, 0xd4, 0x68, 0xb9, 0x0a, 0x2a, 0xfa, 0xe2,
+	0x96, 0x2c, 0xfd, 0x32, 0x67, 0x2a, 0x70, 0x67, 0xc6, 0xdc, 0x77, 0xd0, 0x87, 0xbd, 0xd0, 0x9d,
+	0x48, 0xfa, 0x51, 0x85, 0x19, 0xb4, 0x23, 0xc1, 0x7b, 0xde, 0x2a, 0xdd, 0x61, 0xa9, 0x70, 0x17,
+	0xeb, 0x8e, 0xbb, 0x38, 0x77, 0xa4, 0x81, 0xa0, 0xac, 0x2d, 0xb5, 0x30, 0xad, 0xa5, 0xc1, 0xdd,
+	0xac, 0x69, 0xef, 0xe6, 0x4c, 0x3b, 0xa4, 0xb8, 0x1d, 0x9c, 0x2e, 0x4e, 0x58, 0x33, 0x58, 0xe5,
+	0x5e, 0xca, 0xd2, 0xe1, 0x1e, 0x56, 0xb2, 0x7b, 0x78, 0xc9, 0x48, 0xcf, 0x74, 0xf3, 0x26, 0x96,
+	0x0e, 0x73, 0xb8, 0x9e, 0xa9, 0x97, 0x92, 0x19, 0x70, 0x2f, 0x2b, 0xd9, 0xbd, 0x9c, 0x64, 0x14,
+	0x47, 0x9e, 0x60, 0x43, 0x60, 0x19, 0xc5, 0xf4, 0x6d, 0x99, 0x70, 0x1f, 0x3b, 0x7d, 0xdf, 0xc7,
+	0x4d, 0xdf, 0x34, 0xe8, 0xe0, 0x14, 0x93, 0x00, 0xd7, 0xbb, 0xd6, 0x2a, 0x9f, 0xe1, 0x96, 0x05,
+	0xf7, 0xb3, 0xb1, 0x72, 0x3f, 0x17, 0x2b, 0x34, 0x5e, 0xc2, 0xf5, 0x63, 0xa2, 0x65, 0x15, 0x09,
+	0x6c, 0xd9, 0xf0, 0x00, 0x9b, 0xc0, 0x0f, 0x70, 0x09, 0x4c, 0x93, 0x8e, 0xeb, 0x25, 0x81, 0xf0,
+	0x75, 0x61, 0x95, 0xcd, 0xc1, 0x72, 0xe0, 0x41, 0xb6, 0x39, 0x3c, 0xc8, 0x35, 0x87, 0x21, 0xcc,
+	0xf7, 0x28, 0x6e, 0xc7, 0x82, 0x2d, 0x8f, 0x55, 0x36, 0x07, 0x5b, 0x86, 0x87, 0xd8, 0xa3, 0x3d,
+	0x54, 0x7b, 0xb4, 0x2c, 0xee, 0xea, 0x3b, 0x8d, 0x5d, 0x36, 0x07, 0x5b, 0x81, 0x87, 0xd9, 0x3a,
+	0x7b, 0x98, 0xab, 0x33, 0x4a, 0x86, 0x0f, 0xbe, 0xa6, 0xeb, 0x7b, 0x6e, 0x18, 0xa4, 0xf5, 0x77,
+	0x69, 0x2b, 0x45, 0x4d, 0xd8, 0x2a, 0x3c, 0xc2, 0xd6, 0xc4, 0x23, 0x7c, 0x4d, 0x74, 0xa3, 0x08,
+	0xd7, 0xcf, 0x99, 0xb6, 0x5a, 0xd4, 0x84, 0xad, 0x41, 0x9f, 0xad, 0x89, 0x3e, 0x57, 0x13, 0xdd,
+	0x74, 0x61, 0x52, 0x06, 0xd9, 0x5a, 0x61, 0x49, 0x5b, 0x87, 0x47, 0x59, 0x4b, 0x3e, 0xca, 0x59,
+	0x72, 0xf8, 0x88, 0xa8, 0xa7, 0xe8, 0x45, 0x92, 0xd9, 0x06, 0x3c, 0xc6, 0x26, 0xd9, 0x63, 0x5c,
+	0x92, 0x8d, 0x9e, 0x22, 0xc1, 0x68, 0x05, 0xdb, 0x9a, 0xb4, 0xc0, 0xb6, 0xcb, 0xae, 0x60, 0x9b,
+	0xf0, 0x38, 0x6b, 0xcb, 0xc7, 0x39, 0x5b, 0xf6, 0x02, 0xbc, 0x9c, 0xce, 0x79, 0xcb, 0xa9, 0x4b,
+	0xdb, 0xcb, 0xae, 0x30, 0x3b, 0x6c, 0xb3, 0x64, 0x5a, 0xf0, 0x04, 0xcb, 0x7c, 0x62, 0x02, 0xb3,
+	0x97, 0xf8, 0x13, 0x98, 0x96, 0xf4, 0xa7, 0x9c, 0x69, 0xc3, 0x93, 0x19, 0xd3, 0x19, 0xf4, 0xc1,
+	0x40, 0x4f, 0x22, 0x49, 0xae, 0x65, 0xfe, 0xa3, 0x4b, 0xb0, 0xdb, 0x8b, 0x30, 0x9d, 0x80, 0xb5,
+	0xa5, 0x23, 0x72, 0xac, 0x03, 0x4f, 0x65, 0xd8, 0x9f, 0x0d, 0xfa, 0xb0, 0x3f, 0x7a, 0x0a, 0x49,
+	0x46, 0x1d, 0x76, 0xbc, 0xf3, 0x1a, 0xce, 0xae, 0x47, 0x4d, 0x5c, 0x0e, 0xd8, 0x65, 0x93, 0x70,
+	0x64, 0x78, 0x9a, 0x95, 0xe1, 0x69, 0x81, 0x0c, 0x6d, 0x3f, 0x99, 0x2c, 0x83, 0x23, 0x17, 0x9b,
+	0x0c, 0x47, 0x81, 0x67, 0xd8, 0x4d, 0xc6, 0x33, 0xdc, 0x26, 0x23, 0x63, 0x2e, 0x52, 0x9a, 0xb8,
+	0x61, 0xec, 0x35, 0x17, 0xbc, 0xd0, 0x8b, 0x44, 0x13, 0xad, 0xa3, 0x14, 0x2f, 0x5e, 0x47, 0x85,
+	0x67, 0xd9, 0x17, 0xef, 0xb3, 0xdc, 0x8b, 0x37, 0x03, 0x57, 0x1e, 0x19, 0xc3, 0xff, 0x58, 0x8f,
+	0x56, 0x0b, 0x8d, 0x1d, 0x0d, 0x9e, 0x63, 0x35, 0x7e, 0x4e, 0xa0, 0xf1, 0x18, 0xb9, 0xe0, 0xa5,
+	0xb8, 0x39, 0xfa, 0xe7, 0x52, 0xd1, 0x66, 0xc7, 0x29, 0x57, 0x5a, 0x8e, 0x0e, 0xcf, 0xb3, 0x59,
+	0xf4, 0x3c, 0x97, 0x45, 0x63, 0xf6, 0xf0, 0xde, 0xea, 0x61, 0x7a, 0xa9, 0x81, 0x01, 0x2f, 0xb0,
+	0x1a, 0xbc, 0x20, 0xd0, 0x80, 0x9d, 0xa4, 0x27, 0xd5, 0x82, 0x63, 0x48, 0x7f, 0xce, 0xd1, 0x26,
+	0xbc, 0x98, 0xa1, 0xf7, 0x1f, 0xf4, 0xc1, 0x44, 0x2f, 0x22, 0x49, 0xa9, 0x43, 0x53, 0xff, 0xbf,
+	0xb9, 0x36, 0xb3, 0xd4, 0xd6, 0x82, 0x97, 0x58, 0x6d, 0x5f, 0x12, 0x68, 0x9b, 0xf5, 0xc1, 0xe1,
+	0xbb, 0xbd, 0x15, 0xb4, 0xbb, 0x44, 0x1c, 0x0d, 0x8e, 0x55, 0xb2, 0x6d, 0x18, 0xb0, 0xec, 0x81,
+	0x90, 0x4d, 0x88, 0xd7, 0x8a, 0x49, 0xc7, 0x4d, 0x3c, 0xe2, 0x75, 0x30, 0xc5, 0xa4, 0xbe, 0x4b,
+	0x3a, 0xb6, 0x74, 0x78, 0xce, 0x76, 0xe0, 0xe5, 0x8c, 0x6d, 0x0f, 0xfa, 0xa0, 0xa3, 0x97, 0x91,
+	0x34, 0x5f, 0xc7, 0xee, 0xc5, 0x21, 0x4d, 0xa9, 0xe7, 0x2f, 0x4d, 0x70, 0x47, 0xf1, 0x90, 0x57,
+	0x64, 0x19, 0x5e, 0x61, 0x67, 0xc7, 0x57, 0xb8, 0xd9, 0x31, 0xa3, 0x0e, 0x2b, 0x78, 0xa8, 0x72,
+	0x1d, 0x4f, 0x91, 0xe5, 0xbc, 0x6f, 0x2a, 0xb2, 0x02, 0xaf, 0xb2, 0x7d, 0xf3, 0x55, 0xae, 0x6f,
+	0xf6, 0x02, 0x42, 0xbb, 0x5e, 0xe8, 0x2e, 0xc6, 0xf5, 0x9d, 0x49, 0x91, 0x95, 0xbc, 0x56, 0x15,
+	0x59, 0x85, 0xd7, 0xd8, 0x5a, 0x7d, 0xad, 0xa6, 0x56, 0x33, 0xda, 0x92, 0x9d, 0xd6, 0xc3, 0xd4,
+	0x7c, 0xf2, 0x56, 0x64, 0x0d, 0x5e, 0x67, 0x27, 0xef, 0xd7, 0xb9, 0xc9, 0x9b, 0x81, 0xb9, 0xc2,
+	0x27, 0xa4, 0x22, 0x6b, 0x79, 0x2b, 0x56, 0x64, 0x1d, 0x36, 0xb1, 0xad, 0x78, 0x13, 0xd7, 0x8a,
+	0x73, 0xe4, 0x38, 0x04, 0xea, 0x81, 0x7a, 0x29, 0x9f, 0x01, 0x9b, 0x59, 0xf9, 0x36, 0x0b, 0xe5,
+	0x13, 0x5d, 0xae, 0x22, 0x17, 0x16, 0x52, 0x64, 0x13, 0xb6, 0xb0, 0x16, 0xda, 0xc2, 0x5b, 0x68,
+	0x58, 0x2c, 0x8b, 0x1e, 0xc1, 0xae, 0xd7, 0xec, 0x04, 0xd1, 0x04, 0x6b, 0x2a, 0xb2, 0x99, 0x2f,
+	0xea, 0x15, 0xd9, 0x82, 0xad, 0xec, 0xa2, 0x7e, 0x2b, 0xb7, 0xa8, 0x5f, 0xf6, 0x5a, 0xf5, 0x10,
+	0x2b, 0x7f, 0xab, 0x29, 0xb2, 0x0d, 0xdb, 0xd8, 0xb7, 0xda, 0x36, 0xee, 0xad, 0xb6, 0xec, 0xb5,
+	0x46, 0x4f, 0x0b, 0xe1, 0x10, 0xa3, 0xc8, 0x76, 0xbe, 0x5f, 0x50, 0x64, 0x07, 0xb6, 0xb3, 0xfb,
+	0x85, 0xed, 0xdc, 0x7e, 0x21, 0xc7, 0x09, 0x0a, 0xa5, 0xd8, 0x06, 0x2b, 0x8a, 0x0c, 0x3b, 0xd8,
+	0x5b, 0xdd, 0xc1, 0xdd, 0x6a, 0xee, 0x06, 0xb7, 0x15, 0x7a, 0xbd, 0xfa, 0x95, 0x9e, 0xa2, 0xc8,
+	0xe3, 0x32, 0x56, 0x65, 0x59, 0x81, 0xcd, 0xb3, 0x4c, 0x19, 0x6f, 0x9e, 0xe5, 0xc6, 0xbf, 0x38,
+	0x89, 0xc3, 0xb8, 0xbd, 0xc1, 0x0d, 0xa2, 0x94, 0x0e, 0x63, 0x6c, 0x8e, 0x85, 0x0d, 0x09, 0xe3,
+	0x29, 0x4b, 0x95, 0x65, 0x15, 0xb6, 0xcc, 0x32, 0x53, 0xd6, 0x96, 0x59, 0x6e, 0xf2, 0xce, 0x61,
+	0x79, 0xd1, 0x55, 0x58, 0xea, 0x58, 0x34, 0x55, 0x96, 0x35, 0xd8, 0x3a, 0xcb, 0x88, 0xb6, 0x75,
+	0xb6, 0x2a, 0x5a, 0xc1, 0x22, 0xb8, 0x3d, 0x0c, 0xc0, 0x0a, 0x4a, 0x1b, 0xaf, 0x9e, 0x54, 0x59,
+	0xd6, 0x61, 0xdb, 0x2c, 0xb3, 0x7a, 0xda, 0x36, 0x5b, 0x5d, 0x3d, 0x15, 0xa8, 0x51, 0xe9, 0x56,
+	0x40, 0x7a, 0x79, 0x26, 0x03, 0xb6, 0xb3, 0x67, 0xda, 0x2e, 0x3e, 0x53, 0xda, 0x5d, 0x88, 0x30,
+	0xad, 0xa2, 0xf2, 0x49, 0x4d, 0x95, 0x65, 0x13, 0x76, 0xcc, 0x32, 0xe3, 0xc4, 0x8e, 0xd9, 0xea,
+	0x38, 0x51, 0xa0, 0x28, 0xf1, 0xa2, 0x34, 0xa0, 0x6e, 0xdb, 0xa3, 0x78, 0xd9, 0xdb, 0x50, 0x65,
+	0x9a, 0x07, 0xa0, 0x35, 0xbb, 0xf8, 0xa3, 0x9f, 0x0c, 0x1d, 0xb0, 0x71, 0x7a, 0xd3, 0x9b, 0x8d,
+	0xa9, 0x37, 0xde, 0x6c, 0x4c, 0xed, 0x7c, 0xb3, 0x31, 0xbd, 0x71, 0xa5, 0x31, 0x7d, 0xd3, 0x4a,
+	0x63, 0xfa, 0xc5, 0x95, 0xc6, 0xf4, 0xa6, 0x95, 0xc6, 0xf4, 0x3f, 0x57, 0x1a, 0xd3, 0xff, 0x5a,
+	0x69, 0x4c, 0xed, 0x5c, 0x69, 0x4c, 0x9f, 0xf5, 0x56, 0x63, 0x6a, 0xd3, 0x5b, 0x8d, 0xa9, 0x37,
+	0xde, 0x6a, 0x4c, 0x1d, 0x71, 0x70, 0x3b, 0x4e, 0x96, 0xda, 0x23, 0xc7, 0x0d, 0xd3, 0x7f, 0xae,
+	0x9b, 0xce, 0x17, 0x6d, 0x60, 0x7d, 0xbe, 0xe0, 0x5b, 0x9f, 0xff, 0xef, 0xf9, 0x64, 0xa1, 0x1d,
+	0xcf, 0xe3, 0xa3, 0xe8, 0xf8, 0x27, 0x4d, 0xab, 0x7e, 0xd9, 0xb4, 0xb0, 0xcb, 0x68, 0xfb, 0xa6,
+	0xfd, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x94, 0x47, 0x3c, 0xe7, 0x3c, 0x25, 0x00, 0x00,
+}
+
 func (this *RouteTargetChoice) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7327,7 +5548,7 @@ func valueToGoStringAllRouteTargets(v interface{}, typ string) string {
 func (m *RouteTargetChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7335,1654 +5556,2246 @@ func (m *RouteTargetChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RouteTargetChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn1, err := m.Choice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *RouteTargetChoice_Rt_1001) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1001) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1001 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1002) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1002) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1002 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1003) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1003) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1003 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1004) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1004) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1004 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1005) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1005) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1005 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1006) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1006) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1006 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1007) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x3e
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1007) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1007 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3e
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1008) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1008) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1008 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1009) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1009) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1009 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1010) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1010) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1010 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1011) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1011) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1011 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1012) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1012) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1012 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1013) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1013) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1013 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1014) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1014) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1014 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1015) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1015) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1015 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1016) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1016) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1016 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1017) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1017) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1017 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1018) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1018) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1018 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1019) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1019) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1019 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1020) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1020) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1020 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1021) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1021) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1021 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1022) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1022) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1022 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1023) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x3f
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1023) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1023 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x3f
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1024) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1024) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1024 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1025) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1025) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1025 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1026) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1026) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1026 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1027) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1027) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1027 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1028) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1028) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1028 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1029) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1029) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1029 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1030) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1030) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1030 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1031) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1031) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1031 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1032) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1032) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1032 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1033) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1033) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1033 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1034) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1034) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1034 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1035) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1035) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1035 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1036) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1036) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1036 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1037) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1037) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1037 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1038) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1038) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1038 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1039) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1039) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1039 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1040) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1040) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1040 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1041) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1041) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1041 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1042) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1042) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1042 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1043) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1043) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1043 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1044) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1044) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1044 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1045) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1045) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1045 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1046) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1046) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1046 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1047) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1047) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1047 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1048) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1048) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1048 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1049) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1049) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1049 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1050) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1050) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1050 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1051) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1051) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1051 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1052) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1052) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1052 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1053) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1053) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1053 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1054) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1054) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1054 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1055) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x41
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1055) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1055 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x41
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1056) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1056) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1056 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1057) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1057) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1057 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1058) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1058) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1058 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1059) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1059) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1059 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1060) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1060) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1060 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1061) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1061) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1061 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1062) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1062) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1062 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1063) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1063) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1063 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1064) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1064) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1064 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1065) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1065) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1065 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1066) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1066) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1066 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1067) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1067) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1067 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1068) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1068) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1068 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1069) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1069) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1069 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1070) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1070) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1070 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1071) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x42
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1071) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1071 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x42
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1072) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1072) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1072 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1073) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1073) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1073 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1074) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1074) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1074 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1075) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1075) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1075 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1076) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1076) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1076 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1077) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1077) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1077 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1078) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1078) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1078 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1079) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1079) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1079 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1080) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1080) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1080 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1081) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1081) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1081 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1082) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1082) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1082 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1083) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1083) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1083 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1084) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1084) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1084 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1085) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1085) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1085 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1086) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1086) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1086 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1087) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x43
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1087) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1087 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x43
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1088) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1088) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1088 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1089) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1089) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1089 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1090) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1090) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1090 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1091) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1091) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1091 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1092) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1092) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1092 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1093) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1093) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1093 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1094) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1094) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1094 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1095) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1095) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1095 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1096) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1096) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1096 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1097) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1097) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1097 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1098) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1098) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1098 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1099) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1099) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1099 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1100) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1100) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1100 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1101) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1101) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1101 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1102) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf0
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1102) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1102 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1103) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xf8
-	i++
-	dAtA[i] = 0x44
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1103) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1103 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x44
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1104) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1104) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1104 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1105) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1105) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1105 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1106) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1106) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1106 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1107) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1107) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1107 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1108) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1108) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1108 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1109) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1109) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1109 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_1110) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x45
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_1110) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_1110 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x45
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2001) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2001) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2001 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2002) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2002) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2002 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2003) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2003) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2003 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2004) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2004) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2004 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2005) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2005) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2005 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *RouteTargetChoice_Rt_2006) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x7d
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RouteTargetChoice_Rt_2006) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.Rt_2006 {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x7d
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func encodeVarintAllRouteTargets(dAtA []byte, offset int, v uint64) int {
+	offset -= sovAllRouteTargets(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *RouteTargetChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Choice != nil {
@@ -8992,696 +7805,1044 @@ func (m *RouteTargetChoice) Size() (n int) {
 }
 
 func (m *RouteTargetChoice_Rt_1001) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1002) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1003) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1004) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1005) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1006) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1007) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1008) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1009) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1010) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1011) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1012) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1013) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1014) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1015) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1016) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1017) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1018) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1019) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1020) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1021) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1022) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1023) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1024) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1025) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1026) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1027) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1028) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1029) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1030) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1031) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1032) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1033) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1034) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1035) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1036) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1037) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1038) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1039) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1040) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1041) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1042) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1043) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1044) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1045) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1046) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1047) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1048) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1049) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1050) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1051) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1052) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1053) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1054) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1055) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1056) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1057) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1058) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1059) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1060) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1061) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1062) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1063) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1064) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1065) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1066) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1067) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1068) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1069) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1070) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1071) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1072) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1073) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1074) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1075) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1076) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1077) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1078) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1079) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1080) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1081) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1082) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1083) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1084) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1085) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1086) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1087) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1088) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1089) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1090) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1091) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1092) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1093) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1094) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1095) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1096) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1097) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1098) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1099) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1100) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1101) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1102) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1103) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1104) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1105) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1106) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1107) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1108) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1109) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_1110) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2001) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2002) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2003) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2004) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2005) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *RouteTargetChoice_Rt_2006) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
@@ -9689,14 +8850,7 @@ func (m *RouteTargetChoice_Rt_2006) Size() (n int) {
 }
 
 func sovAllRouteTargets(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozAllRouteTargets(x uint64) (n int) {
 	return sovAllRouteTargets(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -10894,7 +10048,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -10922,7 +10076,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10943,7 +10097,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10964,7 +10118,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10985,7 +10139,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11006,7 +10160,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11027,7 +10181,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11048,7 +10202,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11069,7 +10223,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11090,7 +10244,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11111,7 +10265,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11132,7 +10286,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11153,7 +10307,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11174,7 +10328,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11195,7 +10349,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11216,7 +10370,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11237,7 +10391,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11258,7 +10412,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11279,7 +10433,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11300,7 +10454,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11321,7 +10475,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11342,7 +10496,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11363,7 +10517,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11384,7 +10538,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11405,7 +10559,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11426,7 +10580,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11447,7 +10601,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11468,7 +10622,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11489,7 +10643,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11510,7 +10664,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11531,7 +10685,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11552,7 +10706,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11573,7 +10727,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11594,7 +10748,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11615,7 +10769,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11636,7 +10790,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11657,7 +10811,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11678,7 +10832,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11699,7 +10853,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11720,7 +10874,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11741,7 +10895,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11762,7 +10916,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11783,7 +10937,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11804,7 +10958,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11825,7 +10979,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11846,7 +11000,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11867,7 +11021,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11888,7 +11042,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11909,7 +11063,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11930,7 +11084,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11951,7 +11105,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11972,7 +11126,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11993,7 +11147,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12014,7 +11168,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12035,7 +11189,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12056,7 +11210,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12077,7 +11231,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12098,7 +11252,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12119,7 +11273,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12140,7 +11294,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12161,7 +11315,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12182,7 +11336,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12203,7 +11357,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12224,7 +11378,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12245,7 +11399,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12266,7 +11420,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12287,7 +11441,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12308,7 +11462,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12329,7 +11483,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12350,7 +11504,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12371,7 +11525,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12392,7 +11546,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12413,7 +11567,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12434,7 +11588,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12455,7 +11609,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12476,7 +11630,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12497,7 +11651,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12518,7 +11672,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12539,7 +11693,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12560,7 +11714,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12581,7 +11735,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12602,7 +11756,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12623,7 +11777,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12644,7 +11798,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12665,7 +11819,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12686,7 +11840,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12707,7 +11861,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12728,7 +11882,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12749,7 +11903,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12770,7 +11924,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12791,7 +11945,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12812,7 +11966,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12833,7 +11987,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12854,7 +12008,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12875,7 +12029,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12896,7 +12050,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12917,7 +12071,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12938,7 +12092,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12959,7 +12113,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12980,7 +12134,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13001,7 +12155,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13022,7 +12176,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13043,7 +12197,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13064,7 +12218,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13085,7 +12239,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13106,7 +12260,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13127,7 +12281,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13148,7 +12302,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13169,7 +12323,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13190,7 +12344,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13211,7 +12365,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13232,7 +12386,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13253,7 +12407,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13274,7 +12428,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13295,7 +12449,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13316,7 +12470,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13337,7 +12491,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13351,6 +12505,9 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthAllRouteTargets
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthAllRouteTargets
 			}
 			if (iNdEx + skippy) > l {
@@ -13368,6 +12525,7 @@ func (m *RouteTargetChoice) Unmarshal(dAtA []byte) error {
 func skipAllRouteTargets(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -13399,10 +12557,8 @@ func skipAllRouteTargets(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -13419,240 +12575,34 @@ func skipAllRouteTargets(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthAllRouteTargets
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowAllRouteTargets
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipAllRouteTargets(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupAllRouteTargets
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthAllRouteTargets
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthAllRouteTargets = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowAllRouteTargets   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthAllRouteTargets        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAllRouteTargets          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAllRouteTargets = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/vesenv/all_route_targets.proto", fileDescriptorAllRouteTargets)
-}
-
-var fileDescriptorAllRouteTargets = []byte{
-	// 2850 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x9a, 0x47, 0x90, 0xe3, 0xc6,
-	0x15, 0x86, 0x77, 0x2e, 0x9a, 0xae, 0xbd, 0x4c, 0x19, 0xe5, 0xc3, 0x2b, 0x1f, 0xc6, 0xb2, 0xe2,
-	0x4a, 0xda, 0x9d, 0x41, 0x0e, 0x72, 0x38, 0x48, 0x0e, 0xb2, 0x1c, 0x64, 0x4b, 0x72, 0xd2, 0x05,
-	0xd5, 0x03, 0x36, 0x39, 0xd0, 0x90, 0x00, 0xdc, 0x68, 0x72, 0x76, 0x7d, 0x52, 0xce, 0x39, 0xe7,
-	0x9c, 0x73, 0x4e, 0x54, 0xce, 0xa2, 0xd2, 0xe6, 0xf2, 0xd1, 0x5a, 0x5f, 0xac, 0xbc, 0xca, 0x59,
-	0x72, 0x91, 0x20, 0x80, 0x1e, 0x34, 0x9a, 0xf6, 0x55, 0xe2, 0x7e, 0xdb, 0xfc, 0xfb, 0xfd, 0xff,
-	0x7b, 0xfd, 0x96, 0xab, 0xd7, 0xf6, 0x48, 0x3a, 0x17, 0xc6, 0xf3, 0x69, 0xb0, 0x48, 0x3a, 0x78,
-	0xbe, 0x47, 0x52, 0x12, 0xf5, 0xe6, 0x71, 0xbb, 0xed, 0xd3, 0xb8, 0xcb, 0x88, 0xcf, 0x30, 0x6d,
-	0x11, 0x96, 0xce, 0x25, 0x34, 0x66, 0xb1, 0xf2, 0xfd, 0xec, 0xd3, 0x73, 0xd9, 0xa7, 0xe7, 0xb2,
-	0x4f, 0xff, 0x60, 0xb7, 0x5a, 0x46, 0x9c, 0xb0, 0x30, 0x8e, 0xc6, 0x7f, 0x72, 0xb7, 0xe7, 0x0f,
-	0x5a, 0xfd, 0xbd, 0x43, 0x87, 0xc4, 0xc3, 0x47, 0xc0, 0x03, 0x17, 0xe3, 0x30, 0x20, 0xca, 0x1f,
-	0x57, 0x4f, 0x53, 0xe6, 0x6b, 0xaa, 0xaa, 0xc1, 0x9b, 0xd3, 0xbb, 0x4e, 0xad, 0x41, 0x07, 0x58,
-	0x83, 0x3e, 0x68, 0xe8, 0xcd, 0x69, 0x65, 0xed, 0xca, 0xbf, 0x0a, 0x37, 0x1a, 0x94, 0xa4, 0xa9,
-	0x8f, 0xdb, 0xed, 0x38, 0xc0, 0x2c, 0xa6, 0x73, 0x87, 0x31, 0xcc, 0xba, 0xe9, 0x21, 0x0b, 0x47,
-	0x92, 0x80, 0x1d, 0xb4, 0xea, 0xd0, 0x5d, 0x28, 0x1b, 0x72, 0x94, 0x3f, 0xe4, 0x48, 0x1d, 0xde,
-	0xca, 0x90, 0xe6, 0xa0, 0x0f, 0x2a, 0x7a, 0x6b, 0x5a, 0xd9, 0xaf, 0x8a, 0xec, 0x11, 0xca, 0xc2,
-	0x94, 0xf8, 0x49, 0xdc, 0x0e, 0x83, 0x0d, 0xf5, 0x44, 0x5d, 0xf9, 0x6d, 0x4e, 0x34, 0xe0, 0xed,
-	0x8c, 0xa8, 0x0e, 0xfa, 0xb0, 0x16, 0xbd, 0x3d, 0xad, 0xec, 0x5d, 0x21, 0xb6, 0x09, 0x65, 0x13,
-	0x69, 0x46, 0x79, 0x3e, 0x13, 0xde, 0xe1, 0xcf, 0xf7, 0x8e, 0x78, 0x3e, 0x8e, 0xe6, 0xa7, 0x84,
-	0xd5, 0x13, 0x4d, 0xe5, 0xf7, 0x39, 0xd1, 0x82, 0x77, 0x33, 0xa2, 0x3e, 0xe8, 0xc3, 0x1c, 0x7a,
-	0x77, 0x5a, 0xd9, 0xa7, 0x8e, 0x48, 0x49, 0x40, 0xc2, 0x1e, 0x91, 0x28, 0x68, 0x95, 0x3c, 0x1b,
-	0xde, 0xe3, 0x79, 0xef, 0x89, 0xbc, 0x24, 0xf4, 0x03, 0x4a, 0x1a, 0x24, 0x62, 0x21, 0x6e, 0xd7,
-	0xf3, 0x6c, 0xe5, 0xd7, 0x39, 0xcf, 0x81, 0xf7, 0x33, 0xde, 0xba, 0x41, 0x1f, 0xf6, 0x41, 0xef,
-	0x4f, 0x2b, 0x7b, 0x88, 0xbc, 0x16, 0x8d, 0xbb, 0x49, 0x3d, 0xca, 0x29, 0xeb, 0xc5, 0x85, 0x9d,
-	0x7c, 0xbd, 0xec, 0x14, 0xeb, 0x25, 0x47, 0xf9, 0xa4, 0x4d, 0x3a, 0x24, 0x92, 0xa8, 0xe7, 0x2a,
-	0xbf, 0xc9, 0x91, 0x1e, 0x7c, 0x90, 0x21, 0xe7, 0x07, 0x7d, 0xd8, 0x0f, 0x7d, 0x30, 0xad, 0xec,
-	0x55, 0x45, 0x26, 0xc3, 0x6b, 0x60, 0x61, 0xd4, 0xaa, 0x87, 0x79, 0xca, 0x41, 0x63, 0x98, 0xa6,
-	0xc2, 0x87, 0x19, 0x6c, 0xed, 0xa0, 0x0f, 0x6b, 0xd0, 0x87, 0xd3, 0xca, 0xee, 0x22, 0x8c, 0x6d,
-	0x48, 0x48, 0x2d, 0x49, 0x53, 0x8b, 0x4b, 0xd0, 0x34, 0xf8, 0x88, 0xbf, 0x84, 0x8f, 0xc4, 0x4b,
-	0xe8, 0xb2, 0xc5, 0xe1, 0x05, 0x04, 0x78, 0xe8, 0xb7, 0x7a, 0x9e, 0xa6, 0x1c, 0x98, 0xf3, 0x74,
-	0xf8, 0x38, 0xe3, 0xed, 0x3d, 0xe8, 0xc3, 0xee, 0xe8, 0xe3, 0x69, 0x65, 0x76, 0x25, 0x6f, 0xa1,
-	0x55, 0x2f, 0xbf, 0xa6, 0x17, 0x5a, 0x69, 0x06, 0x7c, 0xc2, 0x6b, 0xf5, 0x89, 0xa0, 0xd5, 0x42,
-	0x2b, 0xf1, 0x71, 0x1a, 0x49, 0xcb, 0x56, 0x33, 0x94, 0x43, 0x73, 0x98, 0x09, 0x9f, 0x66, 0x30,
-	0x7b, 0xd0, 0x07, 0x1d, 0x7d, 0x3a, 0xad, 0xac, 0x5b, 0x09, 0x0b, 0x86, 0x36, 0x6d, 0x86, 0xa4,
-	0xe1, 0x2f, 0x62, 0xda, 0x58, 0xc6, 0x54, 0xa2, 0x9a, 0x59, 0xd4, 0x87, 0x66, 0xc1, 0x67, 0x7c,
-	0x7d, 0x7c, 0x26, 0xd4, 0x47, 0xd0, 0x8e, 0xbb, 0x0d, 0xae, 0x78, 0xd3, 0x7a, 0xa4, 0xa5, 0xfc,
-	0x2a, 0x47, 0xda, 0xf0, 0x79, 0x86, 0xdc, 0x6f, 0xd0, 0x87, 0xbd, 0xd1, 0xe7, 0xd3, 0xca, 0x6e,
-	0x55, 0x64, 0x37, 0x65, 0x12, 0x5b, 0x69, 0x76, 0x09, 0x72, 0xe0, 0x0b, 0x1e, 0xf4, 0x85, 0x08,
-	0x8a, 0x23, 0x86, 0x03, 0x89, 0x70, 0x4e, 0x29, 0x9c, 0x0b, 0x5f, 0xf2, 0xc2, 0x7d, 0x29, 0x0a,
-	0x37, 0x04, 0x85, 0x11, 0xa1, 0x3e, 0x25, 0xad, 0x30, 0x65, 0xb4, 0x3e, 0x95, 0x34, 0xb7, 0x48,
-	0x25, 0xcd, 0x83, 0xaf, 0xf8, 0x54, 0xfa, 0x4a, 0x48, 0xa5, 0xa0, 0x9b, 0xb2, 0xb8, 0x43, 0xa8,
-	0x9f, 0x76, 0x93, 0x24, 0xa6, 0x92, 0x53, 0x7a, 0x05, 0x51, 0x57, 0xe1, 0x6b, 0x9e, 0xf8, 0xb5,
-	0x40, 0x6c, 0x04, 0xfe, 0x58, 0xba, 0x09, 0xe6, 0xd7, 0xd5, 0x22, 0x47, 0x74, 0x0d, 0xbe, 0xe1,
-	0x73, 0xe4, 0x1b, 0x21, 0x47, 0x1a, 0x61, 0x1a, 0xc4, 0x3d, 0x22, 0xf9, 0xba, 0xba, 0xa6, 0x1c,
-	0x9c, 0xa3, 0x74, 0xf8, 0x36, 0x43, 0xcd, 0x0d, 0xfa, 0xb0, 0x2f, 0xfa, 0x76, 0x5a, 0xd9, 0xb3,
-	0x82, 0x8a, 0x52, 0xbf, 0x11, 0x77, 0x70, 0x58, 0xef, 0x2c, 0x5d, 0x2f, 0x3c, 0xaf, 0x1b, 0xf0,
-	0x1d, 0xef, 0xf9, 0xef, 0x04, 0xcf, 0x93, 0xa8, 0x91, 0xc4, 0xa1, 0x24, 0x8a, 0x74, 0xa3, 0x24,
-	0x99, 0x70, 0x14, 0xe2, 0x48, 0x47, 0xa1, 0x2a, 0xa9, 0x89, 0x53, 0xe6, 0xe3, 0xa0, 0x3e, 0x72,
-	0x75, 0x53, 0xf9, 0x5d, 0x4e, 0xb2, 0xe0, 0xe8, 0x8c, 0xa4, 0x0d, 0xfa, 0xb0, 0x0e, 0x1d, 0x8d,
-	0x94, 0x35, 0xf5, 0x24, 0x9f, 0x76, 0xdb, 0xf5, 0xb6, 0xd2, 0xad, 0xa2, 0x03, 0xea, 0x36, 0x1c,
-	0x83, 0xb8, 0x0e, 0x78, 0x0c, 0xaa, 0x76, 0xc0, 0x02, 0x27, 0x33, 0xbe, 0x6e, 0x2b, 0xbf, 0xc8,
-	0x69, 0x0e, 0x1c, 0x9b, 0xd1, 0xf6, 0x19, 0xf4, 0x61, 0x4f, 0x74, 0x2c, 0x52, 0x76, 0xad, 0xd0,
-	0xda, 0x44, 0x86, 0x71, 0xca, 0x02, 0x73, 0xe1, 0x38, 0xc4, 0x15, 0xd8, 0x71, 0xa8, 0x5a, 0x60,
-	0xcd, 0x98, 0x2e, 0x63, 0xda, 0x08, 0xa3, 0x96, 0x1f, 0xb4, 0x71, 0x5a, 0x6f, 0x75, 0xbd, 0x6c,
-	0x05, 0xba, 0x07, 0xc7, 0x23, 0x2e, 0xde, 0x8e, 0x47, 0xd5, 0x78, 0x5b, 0x24, 0xb8, 0xcd, 0x16,
-	0x83, 0x45, 0x12, 0x2c, 0xd5, 0xc3, 0x3c, 0xe5, 0xaf, 0x63, 0x98, 0xa1, 0xc2, 0x09, 0x19, 0xec,
-	0x27, 0x83, 0x3e, 0xb8, 0xe8, 0x04, 0xa4, 0x18, 0x2b, 0x61, 0x61, 0xd4, 0xa4, 0x78, 0x38, 0x25,
-	0x91, 0x80, 0xf9, 0x61, 0xd4, 0x8c, 0x69, 0x47, 0x1e, 0xe5, 0x86, 0x5a, 0x5c, 0xae, 0xa1, 0xc1,
-	0x89, 0xfc, 0xe5, 0x9e, 0x28, 0x5c, 0x6e, 0x98, 0xf8, 0x09, 0x25, 0xcd, 0x70, 0xbd, 0xf4, 0x3a,
-	0x8c, 0xb2, 0x33, 0x18, 0x3a, 0x9c, 0x84, 0xb8, 0xce, 0x70, 0x12, 0xaa, 0x76, 0x86, 0x23, 0x97,
-	0x25, 0x90, 0x72, 0x46, 0x32, 0x0c, 0x38, 0x99, 0xaf, 0x90, 0x93, 0x85, 0x0a, 0x39, 0x72, 0x99,
-	0xf9, 0x09, 0x8d, 0x7b, 0x61, 0x43, 0x12, 0x95, 0x86, 0x51, 0x5c, 0x84, 0x61, 0xc2, 0x29, 0xfc,
-	0x45, 0x9c, 0x22, 0x5c, 0xc4, 0x92, 0x9b, 0xfa, 0x93, 0x72, 0xd7, 0x30, 0x8b, 0x3a, 0x31, 0x2c,
-	0x38, 0x95, 0xaf, 0x93, 0x53, 0x85, 0x3a, 0xe1, 0x60, 0x3e, 0x8d, 0x25, 0x76, 0x30, 0xac, 0xf2,
-	0x6a, 0x6d, 0x38, 0x8d, 0xbf, 0xda, 0xd3, 0x84, 0xab, 0xad, 0x12, 0xfd, 0x85, 0x30, 0x6a, 0xc8,
-	0xe6, 0x07, 0xc3, 0x56, 0xfe, 0x92, 0x93, 0x1d, 0x38, 0x3d, 0x23, 0xff, 0x78, 0xd0, 0x07, 0x07,
-	0x9d, 0x8e, 0x14, 0x5d, 0x24, 0x27, 0x71, 0xc3, 0x4f, 0x49, 0xd0, 0xa5, 0x21, 0xdb, 0x30, 0x69,
-	0xea, 0x34, 0x9c, 0xa2, 0xf9, 0x18, 0x2e, 0x9c, 0x81, 0xb8, 0xe6, 0x73, 0x06, 0xaa, 0x36, 0x9f,
-	0xa5, 0x4e, 0xea, 0x2f, 0x11, 0x09, 0xc8, 0x2d, 0x92, 0xd3, 0xf0, 0xe0, 0x4c, 0xc4, 0x25, 0xe7,
-	0x99, 0xa8, 0x9a, 0x9c, 0x43, 0xd0, 0xa4, 0x43, 0x79, 0xca, 0x21, 0x63, 0x96, 0xa9, 0xc2, 0x59,
-	0x19, 0xcb, 0x18, 0xf4, 0x61, 0x1e, 0x9d, 0x85, 0x94, 0x7d, 0x65, 0x2c, 0x79, 0x4e, 0x99, 0xe5,
-	0xd0, 0x64, 0x6a, 0x70, 0x36, 0xe2, 0x86, 0xa6, 0xb3, 0x51, 0x75, 0x68, 0xe2, 0x80, 0x32, 0x6b,
-	0x98, 0x5a, 0xd1, 0x69, 0x4d, 0x1d, 0xce, 0x41, 0x5c, 0xa7, 0x3d, 0x07, 0x55, 0x3b, 0x6d, 0x9b,
-	0x60, 0x1a, 0x31, 0x7f, 0x38, 0xd5, 0x25, 0x34, 0x6e, 0x86, 0xb2, 0x33, 0x96, 0x4e, 0x31, 0x0d,
-	0x38, 0x97, 0x77, 0xca, 0xb9, 0x82, 0x53, 0xda, 0x71, 0x6b, 0xf2, 0xac, 0x6e, 0x1a, 0xca, 0xdf,
-	0x72, 0x9a, 0x09, 0xe7, 0x65, 0xb4, 0x9f, 0x0e, 0xfa, 0xe0, 0xa1, 0xf3, 0x90, 0x62, 0xae, 0xa4,
-	0x75, 0x70, 0x3b, 0x0c, 0xc2, 0xb8, 0x9b, 0xfa, 0xdd, 0x94, 0x50, 0xbf, 0x13, 0xb2, 0xb0, 0x25,
-	0x8f, 0x19, 0xd3, 0x2c, 0xda, 0xad, 0x69, 0xc1, 0xf9, 0x88, 0x6b, 0xb7, 0xe7, 0xa3, 0x6a, 0xbb,
-	0x8d, 0x70, 0x87, 0xa4, 0x09, 0x0e, 0x24, 0xdf, 0xb9, 0x7c, 0x51, 0x98, 0x36, 0x5c, 0xc0, 0xdf,
-	0xcb, 0x05, 0xc2, 0xbd, 0x14, 0x28, 0xb9, 0x01, 0x4d, 0xbb, 0x18, 0xf3, 0x4c, 0x07, 0x2e, 0x44,
-	0xdc, 0x98, 0x77, 0x21, 0xaa, 0x8e, 0x79, 0x11, 0x61, 0xcb, 0x31, 0x5d, 0xf2, 0x83, 0x38, 0x8a,
-	0x48, 0x20, 0x7b, 0x36, 0x9a, 0x65, 0x37, 0x31, 0x5d, 0xb8, 0x88, 0x4f, 0x89, 0x8b, 0x84, 0x94,
-	0xc8, 0x91, 0xcd, 0x90, 0x92, 0x65, 0xdc, 0xae, 0xef, 0xc1, 0xa6, 0x5b, 0x1e, 0xd2, 0x83, 0x8b,
-	0xf9, 0x43, 0x5e, 0x2c, 0x3d, 0x64, 0x18, 0x31, 0x42, 0x9b, 0x52, 0x1d, 0xbd, 0x42, 0x47, 0x4b,
-	0x85, 0x4b, 0x78, 0x1d, 0x2f, 0x11, 0x75, 0x1c, 0x23, 0x27, 0x18, 0xd0, 0x52, 0x95, 0xc3, 0x72,
-	0x9e, 0x06, 0x97, 0x66, 0x3c, 0x67, 0xd0, 0x07, 0x03, 0x5d, 0x8a, 0x94, 0xb9, 0x49, 0x3c, 0xb9,
-	0x09, 0xad, 0xd2, 0x34, 0x96, 0x0e, 0x97, 0xf1, 0xa6, 0xb9, 0x4c, 0x30, 0x4d, 0x05, 0x2a, 0x33,
-	0xa2, 0xa5, 0x17, 0x2d, 0xcf, 0x32, 0xe0, 0x72, 0xbe, 0xe5, 0x5d, 0x2e, 0xb4, 0xbc, 0x38, 0x48,
-	0x13, 0x9f, 0x92, 0x34, 0x89, 0xa3, 0x54, 0x72, 0x44, 0xa3, 0xc4, 0x99, 0x70, 0x05, 0x8f, 0xbb,
-	0x42, 0xc4, 0x85, 0x8d, 0x60, 0x72, 0xbb, 0xb2, 0xcc, 0x22, 0x5c, 0x2d, 0x0b, 0xae, 0xe4, 0xc3,
-	0xf5, 0x4a, 0x21, 0x5c, 0x47, 0xdf, 0x54, 0x06, 0xb2, 0x8a, 0x22, 0xb4, 0x6c, 0xb8, 0x8a, 0x2f,
-	0xc2, 0xab, 0x84, 0x22, 0x1c, 0x2d, 0x55, 0x82, 0xb8, 0xed, 0x4f, 0x24, 0x96, 0x6f, 0x6f, 0xcb,
-	0x81, 0xab, 0x79, 0x13, 0x5f, 0x2d, 0x98, 0x38, 0xe9, 0x2e, 0xb4, 0xc3, 0xc0, 0x0f, 0xeb, 0xc7,
-	0x6f, 0xcb, 0x29, 0xc6, 0x36, 0xcb, 0x85, 0x6b, 0xf8, 0xb1, 0xed, 0x1a, 0x61, 0x6c, 0xfb, 0x7b,
-	0x37, 0x66, 0xb8, 0x1e, 0xe3, 0x16, 0xf9, 0x67, 0x79, 0x70, 0x2d, 0x9f, 0x7f, 0xd7, 0x0a, 0xf9,
-	0x47, 0x31, 0x23, 0x7e, 0x3b, 0xec, 0x84, 0xb2, 0xe6, 0x6e, 0x79, 0xc5, 0xa4, 0x60, 0xab, 0x70,
-	0x1d, 0x3f, 0x29, 0x5c, 0x27, 0x4c, 0x0a, 0x74, 0x01, 0x07, 0x93, 0xec, 0x60, 0xab, 0x45, 0x3f,
-	0xb2, 0x35, 0xb8, 0x9e, 0xef, 0x47, 0xd7, 0x0b, 0xfd, 0x88, 0x92, 0x34, 0xee, 0xd2, 0x60, 0xe2,
-	0xe6, 0xc8, 0xd6, 0x94, 0x9f, 0xe7, 0x40, 0x1d, 0x6e, 0xc8, 0x80, 0x6b, 0x06, 0x7d, 0xd8, 0x03,
-	0xdd, 0x80, 0x94, 0x1f, 0x56, 0x80, 0xb2, 0xb4, 0xb3, 0xf5, 0x42, 0x78, 0xdb, 0x80, 0x1b, 0x79,
-	0xe1, 0x6f, 0x14, 0x84, 0x1f, 0xad, 0xec, 0xea, 0x31, 0x46, 0x31, 0xb5, 0xd8, 0x26, 0xdc, 0xc4,
-	0x4f, 0x2d, 0x37, 0x09, 0x53, 0x4b, 0x4a, 0x02, 0x4a, 0x98, 0xdf, 0xc1, 0x11, 0x6e, 0x8d, 0x76,
-	0x27, 0x3e, 0x0e, 0x02, 0x22, 0x99, 0x9b, 0xed, 0xf2, 0xb5, 0x61, 0x5b, 0x70, 0x33, 0x6f, 0xa7,
-	0x9b, 0x05, 0x3b, 0x8d, 0xc9, 0x93, 0x54, 0xb3, 0x8a, 0x00, 0xb1, 0x6d, 0xb8, 0x85, 0x0f, 0x90,
-	0x5b, 0x84, 0x00, 0x59, 0x81, 0x93, 0x87, 0x92, 0x5d, 0x76, 0x0c, 0xdb, 0x81, 0x5b, 0xf9, 0x30,
-	0xbe, 0x55, 0x08, 0xe3, 0x95, 0x4c, 0x59, 0x26, 0xd9, 0x4e, 0x11, 0xc6, 0xb6, 0x0b, 0xb7, 0xf1,
-	0x61, 0x7c, 0x9b, 0x10, 0xc6, 0x29, 0xa1, 0xbd, 0xf0, 0x7f, 0x14, 0x8b, 0x5b, 0x84, 0xb1, 0xed,
-	0xc1, 0xed, 0x7c, 0x18, 0xdf, 0x2e, 0x84, 0xf1, 0x4a, 0xde, 0x84, 0xef, 0xed, 0x15, 0x5a, 0x3a,
-	0x2a, 0xdc, 0xc1, 0x6b, 0x79, 0x47, 0x8d, 0x96, 0x2b, 0xa0, 0xb2, 0x2f, 0xee, 0xa8, 0xca, 0x2f,
-	0x73, 0xa6, 0x06, 0x77, 0x66, 0xcc, 0x7d, 0x07, 0x7d, 0xd8, 0x0b, 0xdd, 0x89, 0x94, 0x1f, 0x55,
-	0x98, 0x61, 0x2b, 0x92, 0xbc, 0xe7, 0x9d, 0xd2, 0x1d, 0x8e, 0x0e, 0x77, 0xf1, 0xee, 0xb8, 0x4b,
-	0x70, 0x47, 0x1a, 0x4a, 0xca, 0xda, 0xd1, 0x0b, 0xd3, 0x3a, 0x06, 0xdc, 0xcd, 0x9b, 0xf6, 0x6e,
-	0xc1, 0xb4, 0x43, 0x8a, 0xdf, 0x21, 0xe9, 0xe2, 0x84, 0x35, 0x83, 0x53, 0xee, 0xa5, 0x1c, 0x13,
-	0xee, 0xe1, 0x25, 0xbb, 0x47, 0x94, 0x8c, 0xf6, 0x6c, 0x3f, 0x6f, 0x62, 0xe9, 0x30, 0x87, 0xeb,
-	0x99, 0x66, 0x29, 0x99, 0x05, 0xf7, 0xf2, 0x92, 0xdd, 0x2b, 0x48, 0xc6, 0x48, 0x84, 0x25, 0x1b,
-	0x02, 0xc7, 0x2a, 0xa6, 0x6f, 0xc7, 0x86, 0xfb, 0xf8, 0xe9, 0xfb, 0x3e, 0x61, 0xfa, 0x66, 0x61,
-	0x87, 0xa4, 0x84, 0x86, 0xa4, 0xde, 0xb5, 0x4e, 0xf9, 0x0c, 0x77, 0x1c, 0xb8, 0x9f, 0x8f, 0x95,
-	0xfb, 0x85, 0x58, 0x61, 0xf1, 0x12, 0xa9, 0x1f, 0x13, 0x1d, 0xa7, 0x48, 0x60, 0xc7, 0x85, 0x07,
-	0xf8, 0x04, 0x7e, 0x40, 0x48, 0x60, 0x96, 0x74, 0x7c, 0x9c, 0x84, 0xd2, 0xd7, 0x85, 0x53, 0x36,
-	0x07, 0xc7, 0x83, 0x07, 0xf9, 0xe6, 0xf0, 0xa0, 0xd0, 0x1c, 0x86, 0xb0, 0x00, 0x33, 0xd2, 0x8a,
-	0x25, 0x5b, 0x1e, 0xa7, 0x6c, 0x0e, 0xae, 0x0a, 0x0f, 0xf1, 0x47, 0x7b, 0xa8, 0xf6, 0x68, 0x59,
-	0xdc, 0xd5, 0x77, 0x1a, 0xb7, 0x6c, 0x0e, 0xae, 0x06, 0x0f, 0xf3, 0x75, 0xf6, 0xb0, 0x50, 0x67,
-	0x8c, 0x0e, 0x1f, 0x7c, 0x0d, 0x3f, 0xc0, 0x7e, 0x3b, 0x4c, 0xeb, 0xef, 0xd2, 0xd5, 0x8a, 0x9a,
-	0x70, 0x75, 0x78, 0x84, 0xaf, 0x89, 0x47, 0xc4, 0x9a, 0xe8, 0x46, 0x11, 0xa9, 0x9f, 0x33, 0x5d,
-	0xbd, 0xa8, 0x09, 0xd7, 0x80, 0x3e, 0x5f, 0x13, 0x7d, 0xa1, 0x26, 0xba, 0xe9, 0xc2, 0xa4, 0x0c,
-	0x72, 0x8d, 0xc2, 0x92, 0xae, 0x09, 0x8f, 0xf2, 0x96, 0x7c, 0x54, 0xb0, 0xe4, 0xf0, 0x11, 0x51,
-	0x4f, 0x31, 0x8b, 0x24, 0x73, 0x2d, 0x78, 0x8c, 0x4f, 0xb2, 0xc7, 0x84, 0x24, 0x1b, 0x3d, 0x45,
-	0xc2, 0xd1, 0x0a, 0xb6, 0x39, 0x69, 0x81, 0xed, 0x96, 0x5d, 0xc1, 0xb5, 0xe1, 0x71, 0xde, 0x96,
-	0x8f, 0x0b, 0xb6, 0xec, 0x85, 0x64, 0x39, 0x9d, 0xc3, 0xcb, 0xa9, 0xcf, 0x5a, 0xcb, 0xbe, 0x34,
-	0x3b, 0x5c, 0xbb, 0x64, 0x3a, 0xf0, 0x04, 0xcf, 0x7c, 0x62, 0x02, 0xb3, 0x97, 0x04, 0x13, 0x98,
-	0x8e, 0xf2, 0xa7, 0x9c, 0xe9, 0xc2, 0x93, 0x19, 0xd3, 0x1b, 0xf4, 0xc1, 0x42, 0x4f, 0x22, 0x45,
-	0xad, 0x65, 0xfe, 0xa3, 0x4b, 0x89, 0xdf, 0x8b, 0x08, 0x9b, 0x80, 0x75, 0x95, 0x23, 0x72, 0xac,
-	0x07, 0x4f, 0x65, 0xd8, 0x9f, 0x0d, 0xfa, 0xb0, 0x3f, 0x7a, 0x0a, 0x29, 0x56, 0x1d, 0x76, 0xbc,
-	0xf3, 0x1a, 0xce, 0xae, 0xeb, 0x27, 0x2e, 0x07, 0xdc, 0xb2, 0x49, 0x78, 0x2a, 0x3c, 0xcd, 0xcb,
-	0xf0, 0xb4, 0x44, 0x86, 0x56, 0x90, 0x4c, 0x96, 0xc1, 0x53, 0x8b, 0x4d, 0x86, 0xa7, 0xc1, 0x33,
-	0xfc, 0x26, 0xe3, 0x19, 0x61, 0x93, 0x91, 0x31, 0x17, 0x19, 0x4b, 0xfc, 0x76, 0x8c, 0x1b, 0x0b,
-	0xb8, 0x8d, 0x23, 0xd9, 0x44, 0xeb, 0x69, 0xc5, 0x8b, 0xd7, 0xd3, 0xe1, 0x59, 0xfe, 0xc5, 0xfb,
-	0xac, 0xf0, 0xe2, 0xcd, 0xc0, 0x95, 0x47, 0xc6, 0xf0, 0x3f, 0xd6, 0xa3, 0xf5, 0x42, 0x63, 0xcf,
-	0x80, 0xe7, 0x78, 0x8d, 0x9f, 0x93, 0x68, 0x3c, 0x46, 0x2e, 0xe0, 0x94, 0x34, 0x46, 0xff, 0x5c,
-	0x2a, 0xdb, 0xec, 0x78, 0xe5, 0x4a, 0xcb, 0x33, 0xe1, 0x79, 0x3e, 0x8b, 0x9e, 0x17, 0xb2, 0x68,
-	0xcc, 0x1e, 0xde, 0x5b, 0x3d, 0xcc, 0x2c, 0x35, 0xb0, 0xe0, 0x05, 0x5e, 0x83, 0x17, 0x24, 0x1a,
-	0xf0, 0x93, 0xf4, 0xa4, 0x5a, 0xf0, 0x2c, 0xe5, 0xcf, 0x39, 0xda, 0x86, 0x17, 0x33, 0xf4, 0xfe,
-	0x83, 0x3e, 0xd8, 0xe8, 0x45, 0xa4, 0x68, 0x75, 0x68, 0x16, 0xfc, 0x3f, 0xd7, 0x66, 0x97, 0xda,
-	0x3a, 0xf0, 0x12, 0xaf, 0xed, 0x4b, 0x12, 0x6d, 0xb3, 0x3e, 0x38, 0x7c, 0xb7, 0x37, 0xc3, 0x56,
-	0x97, 0xca, 0xa3, 0xc1, 0x73, 0x4a, 0xb6, 0x0b, 0x03, 0x9e, 0x3d, 0x90, 0xb2, 0x29, 0xc5, 0xcd,
-	0x98, 0x76, 0xfc, 0x04, 0x53, 0xdc, 0x21, 0x8c, 0xd0, 0xfa, 0x2e, 0xe9, 0xb9, 0xca, 0xe1, 0x39,
-	0xdb, 0x83, 0x97, 0x33, 0xb6, 0x3b, 0xe8, 0x83, 0x89, 0x5e, 0x46, 0xca, 0x7c, 0x1d, 0xbb, 0x17,
-	0xb7, 0x59, 0xca, 0x70, 0xb0, 0x34, 0xc1, 0x1d, 0xc5, 0x43, 0x5e, 0x53, 0x55, 0x78, 0x85, 0x9f,
-	0x1d, 0x5f, 0x11, 0x66, 0xc7, 0x8c, 0x3a, 0xac, 0xe0, 0xa1, 0xca, 0x75, 0x3c, 0x4d, 0x55, 0xf3,
-	0xbe, 0xa9, 0xa9, 0x1a, 0xbc, 0xca, 0xf7, 0xcd, 0x57, 0x85, 0xbe, 0xd9, 0x0b, 0x29, 0xeb, 0xe2,
-	0xb6, 0xbf, 0x18, 0xd7, 0x77, 0x26, 0x4d, 0xd5, 0xf2, 0x5a, 0xd5, 0x54, 0x1d, 0x5e, 0xe3, 0x6b,
-	0xf5, 0xb5, 0x9a, 0x5a, 0xcd, 0x68, 0x4b, 0x6e, 0x5a, 0x0f, 0xd3, 0xf3, 0xc9, 0x5b, 0x53, 0x0d,
-	0x78, 0x9d, 0x9f, 0xbc, 0x5f, 0x17, 0x26, 0x6f, 0x0e, 0xe6, 0x4b, 0x9f, 0x90, 0x9a, 0x6a, 0xe4,
-	0xad, 0x58, 0x53, 0x4d, 0xd8, 0xc8, 0xb7, 0xe2, 0x8d, 0x42, 0x2b, 0xce, 0x91, 0xe3, 0x10, 0xa8,
-	0x07, 0x9a, 0xa5, 0x7c, 0x16, 0x6c, 0xe2, 0xe5, 0xdb, 0x24, 0x95, 0x4f, 0x76, 0xb9, 0x9a, 0x5a,
-	0x58, 0x48, 0x53, 0x6d, 0xd8, 0xcc, 0x5b, 0x68, 0xb3, 0x68, 0xa1, 0x61, 0xb1, 0x2c, 0x62, 0x4a,
-	0x7c, 0xdc, 0xe8, 0x84, 0xd1, 0x04, 0x6b, 0x6a, 0xaa, 0x9d, 0x2f, 0xea, 0x35, 0xd5, 0x81, 0x2d,
-	0xfc, 0xa2, 0x7e, 0x8b, 0xb0, 0xa8, 0x5f, 0xc6, 0xcd, 0x7a, 0x88, 0x93, 0xbf, 0xd5, 0x34, 0xd5,
-	0x85, 0xad, 0xfc, 0x5b, 0x6d, 0xab, 0xf0, 0x56, 0x5b, 0xc6, 0xcd, 0xd1, 0xd3, 0x42, 0x3a, 0xc4,
-	0x68, 0xaa, 0x9b, 0xef, 0x17, 0x34, 0xd5, 0x83, 0x6d, 0xfc, 0x7e, 0x61, 0x9b, 0xb0, 0x5f, 0xc8,
-	0x71, 0x92, 0x42, 0x29, 0xb6, 0xc1, 0x9a, 0xa6, 0xc2, 0x76, 0xfe, 0x56, 0xb7, 0x0b, 0xb7, 0x9a,
-	0xbb, 0xc1, 0x6f, 0xb6, 0x71, 0xaf, 0x7e, 0xa5, 0xa7, 0x69, 0xea, 0xb8, 0x8c, 0x75, 0x55, 0xd5,
-	0x60, 0xd3, 0x0c, 0x57, 0xc6, 0x9b, 0x66, 0x84, 0xf1, 0x2f, 0x4e, 0xe2, 0x76, 0xdc, 0xda, 0xe0,
-	0x87, 0x51, 0xca, 0x86, 0x31, 0x36, 0xc7, 0xc3, 0x86, 0x84, 0xf1, 0x94, 0xa5, 0xab, 0xaa, 0x0e,
-	0x9b, 0x67, 0xb8, 0x29, 0x6b, 0xf3, 0x8c, 0x30, 0x79, 0xe7, 0xb0, 0xbc, 0xe8, 0x2a, 0x2c, 0x7d,
-	0x2c, 0x9a, 0xae, 0xaa, 0x06, 0x6c, 0x99, 0xe1, 0x44, 0xdb, 0x32, 0x53, 0x15, 0xad, 0x60, 0x51,
-	0xd2, 0x1a, 0x06, 0x60, 0x05, 0x65, 0x8c, 0x57, 0x4f, 0xba, 0xaa, 0x9a, 0xb0, 0x75, 0x86, 0x5b,
-	0x3d, 0x6d, 0x9d, 0xa9, 0xae, 0x9e, 0x0a, 0xd4, 0xa8, 0x74, 0x2b, 0x20, 0xb3, 0x3c, 0x93, 0x05,
-	0xdb, 0xf8, 0x33, 0x6d, 0x93, 0x9f, 0x29, 0xed, 0x2e, 0x44, 0x84, 0x55, 0x51, 0xf9, 0xa4, 0xa6,
-	0xab, 0xaa, 0x0d, 0xdb, 0x67, 0xb8, 0x71, 0x62, 0xfb, 0x4c, 0x75, 0x9c, 0x28, 0x50, 0x8c, 0xe2,
-	0x28, 0x0d, 0x99, 0xdf, 0xc2, 0x8c, 0x2c, 0xe3, 0x0d, 0x55, 0xa6, 0x7d, 0x00, 0x5a, 0xbd, 0x4b,
-	0x30, 0xfa, 0xc9, 0xd0, 0x01, 0xeb, 0x37, 0xbe, 0x31, 0xbb, 0xea, 0x9f, 0x6f, 0xcc, 0xae, 0xda,
-	0xf9, 0xc6, 0xec, 0xd4, 0x51, 0x3b, 0x66, 0xa7, 0x6e, 0xda, 0x31, 0x3b, 0xf5, 0xe2, 0x8e, 0xd9,
-	0xa9, 0x8d, 0x3b, 0x66, 0xa7, 0xfe, 0xb5, 0x63, 0x76, 0xea, 0x3f, 0x3b, 0x66, 0x57, 0xed, 0xdc,
-	0x31, 0x3b, 0x75, 0xd6, 0xbf, 0x67, 0x57, 0x1d, 0x71, 0x70, 0x2b, 0x4e, 0x96, 0x5a, 0x23, 0xa3,
-	0x0d, 0x43, 0x7f, 0xae, 0x9b, 0xce, 0x17, 0xe9, 0xbf, 0x2e, 0xdf, 0xeb, 0xad, 0xcb, 0xff, 0xf7,
-	0x7c, 0xb2, 0xd0, 0x8a, 0xe7, 0xc9, 0x7a, 0x36, 0xfe, 0x25, 0xd3, 0x8a, 0x1f, 0x34, 0x2d, 0xec,
-	0x32, 0x5a, 0xba, 0x19, 0xff, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x58, 0xa8, 0x82, 0x2a, 0x33, 0x25,
-	0x00, 0x00,
-}

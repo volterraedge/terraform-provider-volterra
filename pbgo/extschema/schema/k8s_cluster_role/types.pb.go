@@ -3,26 +3,30 @@
 
 package k8s_cluster_role
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // List of Non Resource URL(s)
 //
@@ -34,19 +38,43 @@ type NonResourceURLListType struct {
 	// x-displayName: "Non Resource URL(s)"
 	// x-required
 	// allowed URL(s) that do not represent any K8s resource. URL can be suffix or regex.
-	Urls []string `protobuf:"bytes,1,rep,name=urls" json:"urls,omitempty"`
+	Urls []string `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`
 	// Allowed Verbs
 	//
 	// x-displayName: "Allowed Verbs"
 	// x-example: "get"
 	// x-required
 	// Allowed list of verbs(operations) on resources. Use VerbAll for all operations
-	Verbs []string `protobuf:"bytes,4,rep,name=verbs" json:"verbs,omitempty"`
+	Verbs []string `protobuf:"bytes,4,rep,name=verbs,proto3" json:"verbs,omitempty"`
 }
 
-func (m *NonResourceURLListType) Reset()                    { *m = NonResourceURLListType{} }
-func (*NonResourceURLListType) ProtoMessage()               {}
-func (*NonResourceURLListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *NonResourceURLListType) Reset()      { *m = NonResourceURLListType{} }
+func (*NonResourceURLListType) ProtoMessage() {}
+func (*NonResourceURLListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{0}
+}
+func (m *NonResourceURLListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NonResourceURLListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NonResourceURLListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NonResourceURLListType.Merge(m, src)
+}
+func (m *NonResourceURLListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *NonResourceURLListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_NonResourceURLListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NonResourceURLListType proto.InternalMessageInfo
 
 func (m *NonResourceURLListType) GetUrls() []string {
 	if m != nil {
@@ -73,32 +101,56 @@ type ResourceListType struct {
 	// x-example: "rbac.authorization.k8s.io"
 	// x-required
 	// Allowed list of API group that contains resources, all resources of a given api group
-	ApiGroups []string `protobuf:"bytes,1,rep,name=api_groups,json=apiGroups" json:"api_groups,omitempty"`
+	ApiGroups []string `protobuf:"bytes,1,rep,name=api_groups,json=apiGroups,proto3" json:"api_groups,omitempty"`
 	// Resource Type
 	//
 	// x-displayName: "Resource Types"
 	// x-example: "role"
 	// x-required
 	// Allowed list of resource types within the api groups.
-	ResourceTypes []string `protobuf:"bytes,2,rep,name=resource_types,json=resourceTypes" json:"resource_types,omitempty"`
+	ResourceTypes []string `protobuf:"bytes,2,rep,name=resource_types,json=resourceTypes,proto3" json:"resource_types,omitempty"`
 	// Resource Instances
 	//
 	// x-displayName: "Resource Instances"
 	// x-example: "admin"
 	// Allowed list of resource instances within the resource types.
-	ResourceInstances []string `protobuf:"bytes,3,rep,name=resource_instances,json=resourceInstances" json:"resource_instances,omitempty"`
+	ResourceInstances []string `protobuf:"bytes,3,rep,name=resource_instances,json=resourceInstances,proto3" json:"resource_instances,omitempty"`
 	// Allowed Verbs
 	//
 	// x-displayName: "Allowed Verbs"
 	// x-example: "get"
 	// x-required
 	// Allowed list of verbs(operations) on resources. Use * for all operations
-	Verbs []string `protobuf:"bytes,4,rep,name=verbs" json:"verbs,omitempty"`
+	Verbs []string `protobuf:"bytes,4,rep,name=verbs,proto3" json:"verbs,omitempty"`
 }
 
-func (m *ResourceListType) Reset()                    { *m = ResourceListType{} }
-func (*ResourceListType) ProtoMessage()               {}
-func (*ResourceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *ResourceListType) Reset()      { *m = ResourceListType{} }
+func (*ResourceListType) ProtoMessage() {}
+func (*ResourceListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{1}
+}
+func (m *ResourceListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ResourceListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ResourceListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceListType.Merge(m, src)
+}
+func (m *ResourceListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ResourceListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceListType proto.InternalMessageInfo
 
 func (m *ResourceListType) GetApiGroups() []string {
 	if m != nil {
@@ -145,9 +197,33 @@ type PolicyRuleType struct {
 	ResourceChoice isPolicyRuleType_ResourceChoice `protobuf_oneof:"resource_choice"`
 }
 
-func (m *PolicyRuleType) Reset()                    { *m = PolicyRuleType{} }
-func (*PolicyRuleType) ProtoMessage()               {}
-func (*PolicyRuleType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *PolicyRuleType) Reset()      { *m = PolicyRuleType{} }
+func (*PolicyRuleType) ProtoMessage() {}
+func (*PolicyRuleType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{2}
+}
+func (m *PolicyRuleType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PolicyRuleType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PolicyRuleType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyRuleType.Merge(m, src)
+}
+func (m *PolicyRuleType) XXX_Size() int {
+	return m.Size()
+}
+func (m *PolicyRuleType) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyRuleType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PolicyRuleType proto.InternalMessageInfo
 
 type isPolicyRuleType_ResourceChoice interface {
 	isPolicyRuleType_ResourceChoice()
@@ -157,10 +233,10 @@ type isPolicyRuleType_ResourceChoice interface {
 }
 
 type PolicyRuleType_ResourceList struct {
-	ResourceList *ResourceListType `protobuf:"bytes,2,opt,name=resource_list,json=resourceList,oneof"`
+	ResourceList *ResourceListType `protobuf:"bytes,2,opt,name=resource_list,json=resourceList,proto3,oneof" json:"resource_list,omitempty"`
 }
 type PolicyRuleType_NonResourceUrlList struct {
-	NonResourceUrlList *NonResourceURLListType `protobuf:"bytes,3,opt,name=non_resource_url_list,json=nonResourceUrlList,oneof"`
+	NonResourceUrlList *NonResourceURLListType `protobuf:"bytes,3,opt,name=non_resource_url_list,json=nonResourceUrlList,proto3,oneof" json:"non_resource_url_list,omitempty"`
 }
 
 func (*PolicyRuleType_ResourceList) isPolicyRuleType_ResourceChoice()       {}
@@ -187,78 +263,12 @@ func (m *PolicyRuleType) GetNonResourceUrlList() *NonResourceURLListType {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*PolicyRuleType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _PolicyRuleType_OneofMarshaler, _PolicyRuleType_OneofUnmarshaler, _PolicyRuleType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*PolicyRuleType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*PolicyRuleType_ResourceList)(nil),
 		(*PolicyRuleType_NonResourceUrlList)(nil),
 	}
-}
-
-func _PolicyRuleType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*PolicyRuleType)
-	// resource_choice
-	switch x := m.ResourceChoice.(type) {
-	case *PolicyRuleType_ResourceList:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ResourceList); err != nil {
-			return err
-		}
-	case *PolicyRuleType_NonResourceUrlList:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NonResourceUrlList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("PolicyRuleType.ResourceChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _PolicyRuleType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*PolicyRuleType)
-	switch tag {
-	case 2: // resource_choice.resource_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ResourceListType)
-		err := b.DecodeMessage(msg)
-		m.ResourceChoice = &PolicyRuleType_ResourceList{msg}
-		return true, err
-	case 3: // resource_choice.non_resource_url_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(NonResourceURLListType)
-		err := b.DecodeMessage(msg)
-		m.ResourceChoice = &PolicyRuleType_NonResourceUrlList{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _PolicyRuleType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*PolicyRuleType)
-	// resource_choice
-	switch x := m.ResourceChoice.(type) {
-	case *PolicyRuleType_ResourceList:
-		s := proto.Size(x.ResourceList)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *PolicyRuleType_NonResourceUrlList:
-		s := proto.Size(x.NonResourceUrlList)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Policy Rule List
@@ -271,12 +281,36 @@ type PolicyRuleListType struct {
 	// x-displayName: "Policy Rules"
 	// x-required
 	// List of rules for role permissions
-	PolicyRule []*PolicyRuleType `protobuf:"bytes,1,rep,name=policy_rule,json=policyRule" json:"policy_rule,omitempty"`
+	PolicyRule []*PolicyRuleType `protobuf:"bytes,1,rep,name=policy_rule,json=policyRule,proto3" json:"policy_rule,omitempty"`
 }
 
-func (m *PolicyRuleListType) Reset()                    { *m = PolicyRuleListType{} }
-func (*PolicyRuleListType) ProtoMessage()               {}
-func (*PolicyRuleListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *PolicyRuleListType) Reset()      { *m = PolicyRuleListType{} }
+func (*PolicyRuleListType) ProtoMessage() {}
+func (*PolicyRuleListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{3}
+}
+func (m *PolicyRuleListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PolicyRuleListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PolicyRuleListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyRuleListType.Merge(m, src)
+}
+func (m *PolicyRuleListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *PolicyRuleListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyRuleListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PolicyRuleListType proto.InternalMessageInfo
 
 func (m *PolicyRuleListType) GetPolicyRule() []*PolicyRuleType {
 	if m != nil {
@@ -308,9 +342,33 @@ type GlobalSpecType struct {
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{4}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_RuleChoice interface {
 	isGlobalSpecType_RuleChoice()
@@ -320,13 +378,13 @@ type isGlobalSpecType_RuleChoice interface {
 }
 
 type GlobalSpecType_PolicyRuleList struct {
-	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,oneof"`
+	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,proto3,oneof" json:"policy_rule_list,omitempty"`
 }
 type GlobalSpecType_K8SClusterRoleSelector struct {
-	K8SClusterRoleSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,oneof"`
+	K8SClusterRoleSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,proto3,oneof" json:"k8s_cluster_role_selector,omitempty"`
 }
 type GlobalSpecType_Yaml struct {
-	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof"`
+	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof" json:"yaml,omitempty"`
 }
 
 func (*GlobalSpecType_PolicyRuleList) isGlobalSpecType_RuleChoice()         {}
@@ -347,7 +405,7 @@ func (m *GlobalSpecType) GetPolicyRuleList() *PolicyRuleListType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetK8SClusterRoleSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GlobalSpecType) GetK8SClusterRoleSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRuleChoice().(*GlobalSpecType_K8SClusterRoleSelector); ok {
 		return x.K8SClusterRoleSelector
 	}
@@ -368,93 +426,13 @@ func (m *GlobalSpecType) GetGeneratedYaml() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_PolicyRuleList)(nil),
 		(*GlobalSpecType_K8SClusterRoleSelector)(nil),
 		(*GlobalSpecType_Yaml)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GlobalSpecType_PolicyRuleList:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PolicyRuleList); err != nil {
-			return err
-		}
-	case *GlobalSpecType_K8SClusterRoleSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SClusterRoleSelector); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Yaml:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Yaml)
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.RuleChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 2: // rule_choice.policy_rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PolicyRuleListType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GlobalSpecType_PolicyRuleList{msg}
-		return true, err
-	case 3: // rule_choice.k8s_cluster_role_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GlobalSpecType_K8SClusterRoleSelector{msg}
-		return true, err
-	case 4: // rule_choice.yaml
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RuleChoice = &GlobalSpecType_Yaml{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GlobalSpecType_PolicyRuleList:
-		s := proto.Size(x.PolicyRuleList)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_K8SClusterRoleSelector:
-		s := proto.Size(x.K8SClusterRoleSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Yaml:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Yaml)))
-		n += len(x.Yaml)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Create k8s_cluster_role
@@ -469,9 +447,33 @@ type CreateSpecType struct {
 	RuleChoice isCreateSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{5}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_RuleChoice interface {
 	isCreateSpecType_RuleChoice()
@@ -481,13 +483,13 @@ type isCreateSpecType_RuleChoice interface {
 }
 
 type CreateSpecType_PolicyRuleList struct {
-	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,oneof"`
+	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,proto3,oneof" json:"policy_rule_list,omitempty"`
 }
 type CreateSpecType_K8SClusterRoleSelector struct {
-	K8SClusterRoleSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,oneof"`
+	K8SClusterRoleSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,proto3,oneof" json:"k8s_cluster_role_selector,omitempty"`
 }
 type CreateSpecType_Yaml struct {
-	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof"`
+	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof" json:"yaml,omitempty"`
 }
 
 func (*CreateSpecType_PolicyRuleList) isCreateSpecType_RuleChoice()         {}
@@ -508,7 +510,7 @@ func (m *CreateSpecType) GetPolicyRuleList() *PolicyRuleListType {
 	return nil
 }
 
-func (m *CreateSpecType) GetK8SClusterRoleSelector() *ves_io_schema4.LabelSelectorType {
+func (m *CreateSpecType) GetK8SClusterRoleSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRuleChoice().(*CreateSpecType_K8SClusterRoleSelector); ok {
 		return x.K8SClusterRoleSelector
 	}
@@ -522,93 +524,13 @@ func (m *CreateSpecType) GetYaml() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_PolicyRuleList)(nil),
 		(*CreateSpecType_K8SClusterRoleSelector)(nil),
 		(*CreateSpecType_Yaml)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *CreateSpecType_PolicyRuleList:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PolicyRuleList); err != nil {
-			return err
-		}
-	case *CreateSpecType_K8SClusterRoleSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SClusterRoleSelector); err != nil {
-			return err
-		}
-	case *CreateSpecType_Yaml:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Yaml)
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.RuleChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 2: // rule_choice.policy_rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PolicyRuleListType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &CreateSpecType_PolicyRuleList{msg}
-		return true, err
-	case 3: // rule_choice.k8s_cluster_role_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &CreateSpecType_K8SClusterRoleSelector{msg}
-		return true, err
-	case 4: // rule_choice.yaml
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RuleChoice = &CreateSpecType_Yaml{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *CreateSpecType_PolicyRuleList:
-		s := proto.Size(x.PolicyRuleList)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_K8SClusterRoleSelector:
-		s := proto.Size(x.K8SClusterRoleSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Yaml:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Yaml)))
-		n += len(x.Yaml)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Replace k8s_cluster_role
@@ -624,9 +546,33 @@ type ReplaceSpecType struct {
 	RuleChoice isReplaceSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{6}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_RuleChoice interface {
 	isReplaceSpecType_RuleChoice()
@@ -636,13 +582,13 @@ type isReplaceSpecType_RuleChoice interface {
 }
 
 type ReplaceSpecType_PolicyRuleList struct {
-	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,oneof"`
+	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,proto3,oneof" json:"policy_rule_list,omitempty"`
 }
 type ReplaceSpecType_K8SClusterRoleSelector struct {
-	K8SClusterRoleSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,oneof"`
+	K8SClusterRoleSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,proto3,oneof" json:"k8s_cluster_role_selector,omitempty"`
 }
 type ReplaceSpecType_Yaml struct {
-	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof"`
+	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof" json:"yaml,omitempty"`
 }
 
 func (*ReplaceSpecType_PolicyRuleList) isReplaceSpecType_RuleChoice()         {}
@@ -663,7 +609,7 @@ func (m *ReplaceSpecType) GetPolicyRuleList() *PolicyRuleListType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetK8SClusterRoleSelector() *ves_io_schema4.LabelSelectorType {
+func (m *ReplaceSpecType) GetK8SClusterRoleSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_K8SClusterRoleSelector); ok {
 		return x.K8SClusterRoleSelector
 	}
@@ -677,93 +623,13 @@ func (m *ReplaceSpecType) GetYaml() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_PolicyRuleList)(nil),
 		(*ReplaceSpecType_K8SClusterRoleSelector)(nil),
 		(*ReplaceSpecType_Yaml)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *ReplaceSpecType_PolicyRuleList:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PolicyRuleList); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_K8SClusterRoleSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SClusterRoleSelector); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Yaml:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Yaml)
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.RuleChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 2: // rule_choice.policy_rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PolicyRuleListType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &ReplaceSpecType_PolicyRuleList{msg}
-		return true, err
-	case 3: // rule_choice.k8s_cluster_role_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &ReplaceSpecType_K8SClusterRoleSelector{msg}
-		return true, err
-	case 4: // rule_choice.yaml
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RuleChoice = &ReplaceSpecType_Yaml{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *ReplaceSpecType_PolicyRuleList:
-		s := proto.Size(x.PolicyRuleList)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_K8SClusterRoleSelector:
-		s := proto.Size(x.K8SClusterRoleSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Yaml:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Yaml)))
-		n += len(x.Yaml)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Get k8s_cluster_role
@@ -778,9 +644,33 @@ type GetSpecType struct {
 	RuleChoice isGetSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f9c228cd8f0ca143, []int{7}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_RuleChoice interface {
 	isGetSpecType_RuleChoice()
@@ -790,13 +680,13 @@ type isGetSpecType_RuleChoice interface {
 }
 
 type GetSpecType_PolicyRuleList struct {
-	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,oneof"`
+	PolicyRuleList *PolicyRuleListType `protobuf:"bytes,2,opt,name=policy_rule_list,json=policyRuleList,proto3,oneof" json:"policy_rule_list,omitempty"`
 }
 type GetSpecType_K8SClusterRoleSelector struct {
-	K8SClusterRoleSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,oneof"`
+	K8SClusterRoleSelector *schema.LabelSelectorType `protobuf:"bytes,3,opt,name=k8s_cluster_role_selector,json=k8sClusterRoleSelector,proto3,oneof" json:"k8s_cluster_role_selector,omitempty"`
 }
 type GetSpecType_Yaml struct {
-	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof"`
+	Yaml string `protobuf:"bytes,4,opt,name=yaml,proto3,oneof" json:"yaml,omitempty"`
 }
 
 func (*GetSpecType_PolicyRuleList) isGetSpecType_RuleChoice()         {}
@@ -817,7 +707,7 @@ func (m *GetSpecType) GetPolicyRuleList() *PolicyRuleListType {
 	return nil
 }
 
-func (m *GetSpecType) GetK8SClusterRoleSelector() *ves_io_schema4.LabelSelectorType {
+func (m *GetSpecType) GetK8SClusterRoleSelector() *schema.LabelSelectorType {
 	if x, ok := m.GetRuleChoice().(*GetSpecType_K8SClusterRoleSelector); ok {
 		return x.K8SClusterRoleSelector
 	}
@@ -831,93 +721,13 @@ func (m *GetSpecType) GetYaml() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_PolicyRuleList)(nil),
 		(*GetSpecType_K8SClusterRoleSelector)(nil),
 		(*GetSpecType_Yaml)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GetSpecType_PolicyRuleList:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PolicyRuleList); err != nil {
-			return err
-		}
-	case *GetSpecType_K8SClusterRoleSelector:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SClusterRoleSelector); err != nil {
-			return err
-		}
-	case *GetSpecType_Yaml:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Yaml)
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.RuleChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 2: // rule_choice.policy_rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(PolicyRuleListType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GetSpecType_PolicyRuleList{msg}
-		return true, err
-	case 3: // rule_choice.k8s_cluster_role_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GetSpecType_K8SClusterRoleSelector{msg}
-		return true, err
-	case 4: // rule_choice.yaml
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RuleChoice = &GetSpecType_Yaml{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GetSpecType_PolicyRuleList:
-		s := proto.Size(x.PolicyRuleList)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_K8SClusterRoleSelector:
-		s := proto.Size(x.K8SClusterRoleSelector)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Yaml:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Yaml)))
-		n += len(x.Yaml)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -938,6 +748,117 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.k8s_cluster_role.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.k8s_cluster_role.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/k8s_cluster_role/types.proto", fileDescriptor_f9c228cd8f0ca143)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/k8s_cluster_role/types.proto", fileDescriptor_f9c228cd8f0ca143)
+}
+
+var fileDescriptor_f9c228cd8f0ca143 = []byte{
+	// 1578 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x3f, 0x8c, 0x5b, 0x49,
+	0x19, 0xf7, 0xd8, 0xde, 0x7f, 0x9f, 0x37, 0xde, 0xb5, 0x37, 0xb7, 0xe7, 0xdd, 0x84, 0xc7, 0x6a,
+	0xa1, 0x58, 0x9d, 0x12, 0x2f, 0x6c, 0x10, 0x3a, 0xa5, 0x40, 0x62, 0x53, 0x24, 0xa0, 0x08, 0x21,
+	0xdf, 0x01, 0x3a, 0x0a, 0xac, 0xf1, 0xbc, 0x6f, 0x9f, 0xe7, 0x76, 0xde, 0xcc, 0xdc, 0xcc, 0x3c,
+	0xef, 0x2d, 0xd2, 0x49, 0x11, 0x0d, 0xa2, 0x3b, 0x52, 0x82, 0x44, 0x41, 0x45, 0x89, 0x04, 0xd5,
+	0xf9, 0x8a, 0x08, 0x28, 0x10, 0xa2, 0x48, 0x99, 0x82, 0x82, 0x38, 0x14, 0x77, 0xa2, 0x49, 0x89,
+	0xa8, 0xd0, 0xcc, 0x7b, 0xcf, 0xb1, 0xad, 0xbd, 0x4b, 0x82, 0x10, 0x55, 0x1a, 0xeb, 0xbd, 0xef,
+	0xff, 0xfc, 0xbe, 0xdf, 0x37, 0xdf, 0x33, 0xbc, 0x31, 0x42, 0xdb, 0xe5, 0xea, 0xd0, 0xb2, 0x21,
+	0xa6, 0xf4, 0xf0, 0xf4, 0x4d, 0xdb, 0x67, 0x22, 0xb3, 0x0e, 0x4d, 0xdf, 0x28, 0x81, 0x87, 0xee,
+	0x5c, 0xa3, 0xed, 0x6a, 0xa3, 0x9c, 0x6a, 0x47, 0xb9, 0x6d, 0x37, 0xb7, 0xed, 0x2e, 0xda, 0xee,
+	0x5e, 0x4f, 0xb8, 0x1b, 0x66, 0x83, 0x2e, 0x53, 0xe9, 0x61, 0xa2, 0x12, 0x75, 0x18, 0xdc, 0x06,
+	0xd9, 0x49, 0x78, 0x0b, 0x2f, 0xe1, 0x29, 0x0f, 0xb7, 0x7b, 0x65, 0x3e, 0xb5, 0xd2, 0x8e, 0x2b,
+	0x59, 0xe4, 0xda, 0xdd, 0x99, 0x57, 0xce, 0x94, 0xb1, 0x7b, 0x75, 0x5e, 0x35, 0xa2, 0x82, 0xc7,
+	0xd4, 0x61, 0xa1, 0xdd, 0x5b, 0xd0, 0x72, 0x3c, 0xeb, 0xcf, 0x85, 0xde, 0xff, 0x2b, 0x81, 0xed,
+	0xef, 0x28, 0xd9, 0x43, 0xab, 0x32, 0xc3, 0xf0, 0x7b, 0xbd, 0xbb, 0x77, 0xb9, 0x75, 0x6f, 0x9f,
+	0x6b, 0x6c, 0x7f, 0x13, 0xea, 0x99, 0x11, 0xb6, 0x43, 0xf6, 0x6a, 0x07, 0x6b, 0xc7, 0xd7, 0x3f,
+	0xfa, 0xf4, 0x41, 0x0d, 0xee, 0x93, 0x95, 0xfd, 0x25, 0x53, 0x3b, 0xb8, 0x57, 0xf5, 0xaf, 0x4b,
+	0xf7, 0x49, 0x75, 0x73, 0xb3, 0x7c, 0x5a, 0x25, 0xe5, 0x53, 0x87, 0xf4, 0x82, 0x6b, 0x5b, 0xc1,
+	0xd2, 0x08, 0xcd, 0xc0, 0x76, 0xea, 0x21, 0xc6, 0x3b, 0x93, 0x31, 0x39, 0x00, 0xf2, 0x06, 0xd4,
+	0x12, 0x74, 0x50, 0xd3, 0x99, 0x83, 0xba, 0x56, 0xd6, 0xc1, 0x92, 0xa6, 0x8e, 0x0d, 0x61, 0xc5,
+	0xa0, 0x16, 0x94, 0x21, 0xd4, 0x32, 0x8b, 0x2f, 0x97, 0x2f, 0xcf, 0xb3, 0xff, 0xb7, 0x4b, 0xb0,
+	0x59, 0x9e, 0x65, 0x7a, 0x90, 0x7f, 0xd4, 0x00, 0xa8, 0xe6, 0xfd, 0xc4, 0xa8, 0x4c, 0x97, 0xe7,
+	0xf9, 0x53, 0x6d, 0x32, 0x26, 0xf7, 0x6b, 0xbe, 0x9a, 0xab, 0x34, 0x4e, 0xb9, 0xb5, 0x5c, 0x49,
+	0x83, 0x09, 0xb7, 0xce, 0x50, 0x8f, 0x90, 0x6f, 0x69, 0x97, 0x2b, 0xb8, 0x4c, 0x35, 0xc7, 0xf7,
+	0x1d, 0x4a, 0x1b, 0x60, 0x2b, 0xa4, 0xdb, 0x54, 0xf3, 0x8b, 0xac, 0xeb, 0x54, 0x6b, 0x0b, 0xaf,
+	0xd1, 0xcc, 0x0d, 0x51, 0x3a, 0xce, 0x16, 0x42, 0x65, 0x6e, 0xa8, 0x0c, 0xff, 0xf1, 0x9c, 0xb4,
+	0x41, 0x33, 0xa7, 0x2c, 0xa3, 0x82, 0xcb, 0x04, 0x96, 0x06, 0x01, 0x89, 0x2d, 0x86, 0xc6, 0xf1,
+	0x13, 0xef, 0x8f, 0xd3, 0x9c, 0x75, 0xa6, 0x0c, 0xc2, 0x16, 0x53, 0xca, 0xc4, 0x5c, 0xce, 0xc5,
+	0xd8, 0x8c, 0xb9, 0x65, 0x6a, 0x84, 0xe6, 0xbc, 0x94, 0x5c, 0xc2, 0x11, 0x4a, 0x37, 0xf5, 0x85,
+	0x67, 0x47, 0x80, 0xab, 0x27, 0x42, 0x9d, 0x31, 0x25, 0x9d, 0x51, 0xa2, 0x4b, 0x35, 0xb7, 0x68,
+	0x46, 0x68, 0x4a, 0xcb, 0x1d, 0x2e, 0x1d, 0x1a, 0x49, 0x2f, 0x50, 0xb5, 0x24, 0xba, 0x33, 0x65,
+	0x4e, 0xb9, 0x4c, 0xa6, 0xc5, 0x4b, 0x15, 0x63, 0xf9, 0xb2, 0xac, 0x95, 0xe0, 0xec, 0x1c, 0x76,
+	0xcc, 0x80, 0xb2, 0xee, 0x85, 0x87, 0x6d, 0x79, 0x2a, 0xc6, 0x99, 0x98, 0x09, 0xd1, 0xb4, 0x4e,
+	0x19, 0x9a, 0x94, 0x51, 0x5e, 0xae, 0xef, 0x6b, 0x54, 0xf3, 0xdb, 0xa1, 0xaf, 0xed, 0x7f, 0xae,
+	0x40, 0xd3, 0x14, 0xbd, 0xef, 0x87, 0x19, 0xe9, 0x54, 0x43, 0xab, 0xff, 0xb8, 0x32, 0x19, 0x93,
+	0x9f, 0xaf, 0xf8, 0x56, 0xaf, 0x0e, 0xb8, 0x8c, 0xb9, 0x4c, 0x2c, 0xb4, 0x98, 0x4a, 0xb5, 0x92,
+	0x1e, 0x23, 0x47, 0x5d, 0x66, 0xd1, 0x02, 0x30, 0x25, 0x4f, 0x78, 0x92, 0x52, 0x6d, 0x61, 0x0d,
+	0x65, 0xac, 0x15, 0x97, 0xce, 0xc2, 0x72, 0x8e, 0x24, 0x34, 0x04, 0x4f, 0xb9, 0x33, 0x54, 0x26,
+	0xde, 0x56, 0xd2, 0x14, 0xad, 0xa6, 0x0c, 0x2d, 0x2c, 0x79, 0x0c, 0x2c, 0x6c, 0x6b, 0x34, 0x96,
+	0x5b, 0x87, 0xd2, 0x8d, 0x94, 0xc8, 0x52, 0x64, 0x82, 0xf2, 0xd4, 0x42, 0x6b, 0x51, 0x6e, 0x3d,
+	0xeb, 0x63, 0x0b, 0xeb, 0x5a, 0xc5, 0x0e, 0x53, 0x2d, 0x7c, 0x93, 0x61, 0xdb, 0x93, 0xbf, 0x20,
+	0x4c, 0xd1, 0x1c, 0x81, 0xc6, 0x3e, 0x3b, 0xd3, 0x7b, 0x99, 0x72, 0xd4, 0xc2, 0x8a, 0x45, 0x66,
+	0xd0, 0x59, 0xd8, 0xf0, 0xcd, 0xe1, 0x0c, 0x29, 0x63, 0x2a, 0xf3, 0x05, 0xae, 0x16, 0x02, 0x0b,
+	0x5f, 0x48, 0x33, 0x47, 0x1d, 0x97, 0xc9, 0x19, 0x0e, 0x86, 0x4a, 0x9d, 0xe6, 0x07, 0xcb, 0x72,
+	0xaa, 0x5a, 0xf8, 0x62, 0x71, 0x4d, 0x7c, 0xa6, 0xc1, 0x0e, 0xcb, 0xac, 0x53, 0x69, 0x99, 0x39,
+	0xc6, 0x13, 0x2e, 0x79, 0xae, 0x6a, 0x14, 0xac, 0x08, 0x79, 0xb6, 0x9e, 0x15, 0x6a, 0x70, 0xc4,
+	0x73, 0x7a, 0x41, 0x4c, 0x31, 0x55, 0xd2, 0xfa, 0x1a, 0x1b, 0x31, 0x6a, 0xa1, 0xce, 0xd3, 0x1c,
+	0xc0, 0xe2, 0x84, 0x41, 0xb3, 0xee, 0x61, 0xc7, 0x93, 0x4c, 0xe4, 0x6f, 0x4e, 0x9d, 0xa2, 0xf4,
+	0x31, 0xf0, 0xcc, 0xc2, 0x8e, 0x50, 0x8c, 0x0a, 0x9b, 0x0d, 0xde, 0x45, 0xe6, 0x28, 0x63, 0x68,
+	0x6d, 0xa9, 0xea, 0x58, 0x14, 0x27, 0x17, 0x6a, 0x5e, 0x9f, 0xd1, 0x98, 0x4c, 0xe0, 0x54, 0x71,
+	0xf9, 0xe2, 0x40, 0x81, 0x9b, 0x4a, 0x3a, 0x2a, 0xb4, 0x8a, 0xcb, 0x11, 0xf4, 0x80, 0xaf, 0x32,
+	0xa3, 0xe4, 0xbb, 0x6a, 0x60, 0xa1, 0x1e, 0x7e, 0x77, 0x67, 0x67, 0x91, 0x27, 0x92, 0xcb, 0xc4,
+	0xe0, 0x7b, 0x19, 0x5a, 0xcf, 0x0d, 0x81, 0xd4, 0x53, 0xa7, 0x39, 0xa5, 0x8b, 0x08, 0xc0, 0x94,
+	0x9c, 0x59, 0x0b, 0xc6, 0xd6, 0x9b, 0x34, 0xfc, 0xd4, 0xe5, 0x17, 0xb1, 0x85, 0x2b, 0xda, 0x70,
+	0x65, 0xb8, 0x3b, 0x17, 0x38, 0x42, 0xb1, 0x80, 0x7e, 0xb3, 0x70, 0x62, 0x82, 0x06, 0xcf, 0x99,
+	0x20, 0x1b, 0xc5, 0x04, 0x86, 0x41, 0xe3, 0x3e, 0xb1, 0xc9, 0xa4, 0xe3, 0x81, 0x6b, 0xc1, 0xe0,
+	0xb2, 0x56, 0x71, 0xcc, 0xad, 0xc9, 0xc2, 0x2d, 0x3f, 0xc8, 0xe2, 0xc4, 0xc3, 0xbb, 0xe5, 0xf9,
+	0x86, 0x2c, 0xf3, 0x19, 0xa7, 0xae, 0x5b, 0xc5, 0xbe, 0xf2, 0xeb, 0x6a, 0x3a, 0x16, 0xeb, 0x33,
+	0x42, 0x0b, 0xeb, 0x73, 0xba, 0xa5, 0x5c, 0xb8, 0x51, 0xd6, 0x5e, 0xe6, 0x04, 0x66, 0x79, 0x6c,
+	0xf8, 0x28, 0x07, 0xcf, 0xf2, 0x7c, 0x1c, 0xca, 0xb1, 0x2e, 0xad, 0x5a, 0x39, 0xf9, 0xa9, 0x73,
+	0x94, 0x0d, 0x03, 0x21, 0x5e, 0x6e, 0xd2, 0x2f, 0x95, 0x6c, 0xf4, 0x77, 0xba, 0x6d, 0xf7, 0xa0,
+	0x3d, 0x1d, 0x76, 0x2e, 0xad, 0xa3, 0x92, 0xa1, 0xed, 0xd4, 0xc2, 0xc0, 0x7f, 0xe9, 0xb9, 0x91,
+	0x3b, 0xa4, 0xd7, 0x2a, 0xdd, 0xbf, 0x55, 0x7a, 0xb7, 0x7f, 0x45, 0xe6, 0xf7, 0xd5, 0x4f, 0xc9,
+	0x64, 0x4c, 0xbe, 0xef, 0xef, 0x8d, 0x65, 0x66, 0x90, 0x3a, 0xcc, 0x17, 0x57, 0x5d, 0x70, 0xbf,
+	0xb3, 0xce, 0xc2, 0x4d, 0xbd, 0x9c, 0x69, 0xbf, 0x70, 0xcb, 0x15, 0xb6, 0x1c, 0xa3, 0x40, 0x97,
+	0x6f, 0x30, 0xa8, 0x7b, 0xe8, 0x60, 0x15, 0x3d, 0xb3, 0xbc, 0x4d, 0x83, 0xa7, 0xfe, 0x2e, 0x50,
+	0x92, 0xba, 0xff, 0x6e, 0xbd, 0xdd, 0xab, 0x42, 0xf3, 0xbb, 0xe1, 0x8e, 0xed, 0x65, 0x22, 0x00,
+	0xd1, 0xfe, 0x01, 0x4c, 0x81, 0xe9, 0xfb, 0xba, 0x3a, 0xd5, 0x3d, 0x72, 0xd0, 0x38, 0xfa, 0x4a,
+	0xf7, 0xf3, 0xbf, 0x4f, 0xba, 0x8b, 0x5b, 0xf2, 0x4e, 0xa5, 0xb7, 0x6e, 0x66, 0x64, 0xed, 0x53,
+	0x78, 0x4d, 0x2a, 0xd9, 0x9f, 0x06, 0xcf, 0x8c, 0xc8, 0x13, 0xd4, 0x42, 0x82, 0xaf, 0x3f, 0x2f,
+	0xc1, 0xc5, 0x5f, 0x15, 0x77, 0x2a, 0xbd, 0xb6, 0x9c, 0xd1, 0x18, 0xe1, 0x35, 0xc7, 0xfb, 0xb0,
+	0x31, 0x4d, 0xc4, 0x86, 0x8a, 0x33, 0x6c, 0x6f, 0x3c, 0x18, 0x93, 0xea, 0xc3, 0x31, 0xf1, 0x3d,
+	0xa8, 0x1d, 0x5d, 0xbb, 0xf1, 0xed, 0xfa, 0x2a, 0xd9, 0xac, 0xee, 0xff, 0x8c, 0x40, 0xfb, 0x19,
+	0x04, 0xd3, 0x1d, 0x6f, 0xa1, 0x91, 0x2f, 0x9f, 0xbe, 0x9f, 0xfd, 0xb0, 0xe3, 0x1b, 0x47, 0xdd,
+	0xe7, 0xd5, 0x38, 0x8f, 0xe5, 0xf1, 0xfe, 0xd3, 0x31, 0x21, 0xcf, 0xe9, 0x04, 0xe8, 0xa9, 0xcf,
+	0xfe, 0x2f, 0x6b, 0xd0, 0xbc, 0x2d, 0xd4, 0x80, 0x8a, 0xb7, 0x34, 0xb2, 0x50, 0xc7, 0x8f, 0x60,
+	0x73, 0xa6, 0x8e, 0xd9, 0x8e, 0x1c, 0xbd, 0x78, 0x31, 0x33, 0x60, 0x35, 0xf5, 0x9c, 0xb4, 0x9d,
+	0xc0, 0xce, 0xa2, 0x63, 0xdf, 0xa2, 0x40, 0xe6, 0x94, 0x29, 0x3a, 0xb3, 0xb7, 0x90, 0xe8, 0x2e,
+	0x1d, 0xa0, 0x78, 0xab, 0xb0, 0x09, 0xe7, 0x5c, 0xfd, 0xc5, 0xc7, 0xa4, 0x0e, 0xd5, 0x0a, 0xb9,
+	0x53, 0xe9, 0x6d, 0x9f, 0xbe, 0x69, 0x6f, 0xe5, 0xd1, 0x7a, 0x4a, 0x60, 0x69, 0xd7, 0xbe, 0x09,
+	0xf5, 0x73, 0x9a, 0x8a, 0x4e, 0x7d, 0x8f, 0x1c, 0xac, 0x1d, 0x7f, 0xf9, 0xc1, 0x98, 0x90, 0x7f,
+	0x8d, 0x49, 0xfd, 0xd7, 0x1f, 0x93, 0x20, 0x0f, 0x88, 0x98, 0x5a, 0xe7, 0xde, 0x5e, 0xf1, 0xf4,
+	0x21, 0xf1, 0xd1, 0x82, 0xae, 0x7d, 0x0b, 0x9a, 0x09, 0x4a, 0x34, 0xd4, 0x61, 0xdc, 0x0f, 0x51,
+	0x3e, 0x5d, 0x09, 0x61, 0xae, 0x3c, 0xfa, 0x80, 0x7c, 0x52, 0x62, 0xbc, 0xe0, 0xdd, 0xbb, 0x34,
+	0xf5, 0x79, 0x87, 0xa6, 0xe2, 0xe6, 0xeb, 0x7f, 0x18, 0x93, 0x2d, 0x68, 0xc1, 0x7a, 0x51, 0xdd,
+	0x9e, 0x2f, 0xaf, 0x4d, 0xbe, 0x7a, 0xbc, 0x07, 0x8d, 0x80, 0x6d, 0xc1, 0x93, 0xd6, 0x0c, 0x4f,
+	0x96, 0x8e, 0xae, 0xdd, 0xb8, 0xf6, 0xb5, 0x82, 0x29, 0xbf, 0xab, 0x42, 0xf3, 0x56, 0x18, 0xdb,
+	0xff, 0x5b, 0x77, 0xcc, 0xff, 0xa2, 0x3b, 0x5b, 0x1f, 0x7d, 0xb0, 0xb9, 0x18, 0xe5, 0x73, 0x1a,
+	0x75, 0x79, 0xb6, 0x51, 0x65, 0x0b, 0x6e, 0xb6, 0xfe, 0xf2, 0x8d, 0x05, 0x6a, 0x1e, 0x47, 0xf3,
+	0xb8, 0x6d, 0xfc, 0xe4, 0xdf, 0x64, 0x56, 0x50, 0xa0, 0xf6, 0xfb, 0x2a, 0x6c, 0xf4, 0xf2, 0xcf,
+	0xf0, 0x57, 0xb0, 0xbd, 0x38, 0x6c, 0xbf, 0xad, 0x42, 0xe3, 0x36, 0xba, 0x57, 0x90, 0xbd, 0x30,
+	0x64, 0xc7, 0xf7, 0xc9, 0xc3, 0xc7, 0x51, 0xe5, 0xd1, 0xe3, 0xa8, 0xf2, 0xf4, 0x71, 0x44, 0xee,
+	0x4d, 0x22, 0xf2, 0x9b, 0x49, 0x44, 0xfe, 0x3c, 0x89, 0xc8, 0xc3, 0x49, 0x44, 0x1e, 0x4d, 0x22,
+	0xf2, 0xf7, 0x49, 0x44, 0x3e, 0x99, 0x44, 0x95, 0xa7, 0x93, 0x88, 0x7c, 0xf8, 0x24, 0xaa, 0x3c,
+	0x78, 0x12, 0x91, 0x87, 0x4f, 0xa2, 0xca, 0xa3, 0x27, 0x51, 0xe5, 0x87, 0x6f, 0x27, 0x4a, 0x9f,
+	0x26, 0xdd, 0x91, 0x12, 0xfe, 0x73, 0x85, 0x76, 0x33, 0x7b, 0x18, 0x1e, 0x4e, 0x94, 0x49, 0xaf,
+	0x6b, 0xa3, 0x46, 0x3c, 0x46, 0x73, 0xbd, 0x54, 0x1f, 0xea, 0x41, 0xa2, 0x0e, 0xf1, 0x7d, 0x57,
+	0xfc, 0x15, 0xfe, 0x8c, 0xbf, 0xf8, 0x83, 0xe5, 0xf0, 0xb7, 0xf8, 0xc6, 0x7f, 0x02, 0x00, 0x00,
+	0xff, 0xff, 0x32, 0x07, 0x69, 0x70, 0x0b, 0x10, 0x00, 0x00,
+}
+
 func (this *NonResourceURLListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1766,7 +1687,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *NonResourceURLListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1774,47 +1695,40 @@ func (m *NonResourceURLListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NonResourceURLListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NonResourceURLListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Urls) > 0 {
-		for _, s := range m.Urls {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
 	if len(m.Verbs) > 0 {
-		for _, s := range m.Verbs {
+		for iNdEx := len(m.Verbs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Verbs[iNdEx])
+			copy(dAtA[i:], m.Verbs[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Verbs[iNdEx])))
+			i--
 			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	if len(m.Urls) > 0 {
+		for iNdEx := len(m.Urls) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Urls[iNdEx])
+			copy(dAtA[i:], m.Urls[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Urls[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ResourceListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1822,77 +1736,58 @@ func (m *ResourceListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ResourceListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ResourceListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ApiGroups) > 0 {
-		for _, s := range m.ApiGroups {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.ResourceTypes) > 0 {
-		for _, s := range m.ResourceTypes {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.Verbs) > 0 {
+		for iNdEx := len(m.Verbs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Verbs[iNdEx])
+			copy(dAtA[i:], m.Verbs[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Verbs[iNdEx])))
+			i--
+			dAtA[i] = 0x22
 		}
 	}
 	if len(m.ResourceInstances) > 0 {
-		for _, s := range m.ResourceInstances {
+		for iNdEx := len(m.ResourceInstances) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResourceInstances[iNdEx])
+			copy(dAtA[i:], m.ResourceInstances[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResourceInstances[iNdEx])))
+			i--
 			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.Verbs) > 0 {
-		for _, s := range m.Verbs {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.ResourceTypes) > 0 {
+		for iNdEx := len(m.ResourceTypes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResourceTypes[iNdEx])
+			copy(dAtA[i:], m.ResourceTypes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResourceTypes[iNdEx])))
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.ApiGroups) > 0 {
+		for iNdEx := len(m.ApiGroups) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ApiGroups[iNdEx])
+			copy(dAtA[i:], m.ApiGroups[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiGroups[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *PolicyRuleType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1900,52 +1795,73 @@ func (m *PolicyRuleType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PolicyRuleType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PolicyRuleType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.ResourceChoice != nil {
-		nn1, err := m.ResourceChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ResourceChoice.Size()
+			i -= size
+			if _, err := m.ResourceChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *PolicyRuleType_ResourceList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PolicyRuleType_ResourceList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ResourceList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ResourceList.Size()))
-		n2, err := m.ResourceList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ResourceList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PolicyRuleType_NonResourceUrlList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PolicyRuleType_NonResourceUrlList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NonResourceUrlList != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NonResourceUrlList.Size()))
-		n3, err := m.NonResourceUrlList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NonResourceUrlList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *PolicyRuleListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1953,29 +1869,36 @@ func (m *PolicyRuleListType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *PolicyRuleListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PolicyRuleListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.PolicyRule) > 0 {
-		for _, msg := range m.PolicyRule {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.PolicyRule) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PolicyRule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1983,68 +1906,96 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.RuleChoice != nil {
-		nn4, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn4
-	}
 	if len(m.GeneratedYaml) > 0 {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x3e
-		i++
+		i -= len(m.GeneratedYaml)
+		copy(dAtA[i:], m.GeneratedYaml)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.GeneratedYaml)))
-		i += copy(dAtA[i:], m.GeneratedYaml)
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
 	}
-	return i, nil
+	if m.RuleChoice != nil {
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_PolicyRuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_PolicyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PolicyRuleList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicyRuleList.Size()))
-		n5, err := m.PolicyRuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PolicyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_K8SClusterRoleSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_K8SClusterRoleSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SClusterRoleSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRoleSelector.Size()))
-		n6, err := m.K8SClusterRoleSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SClusterRoleSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Yaml) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Yaml) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Yaml)
+	copy(dAtA[i:], m.Yaml)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Yaml)))
-	i += copy(dAtA[i:], m.Yaml)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2052,60 +2003,87 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
-		nn7, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn7
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_PolicyRuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_PolicyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PolicyRuleList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicyRuleList.Size()))
-		n8, err := m.PolicyRuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PolicyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_K8SClusterRoleSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_K8SClusterRoleSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SClusterRoleSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRoleSelector.Size()))
-		n9, err := m.K8SClusterRoleSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SClusterRoleSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Yaml) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Yaml) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Yaml)
+	copy(dAtA[i:], m.Yaml)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Yaml)))
-	i += copy(dAtA[i:], m.Yaml)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2113,60 +2091,87 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
-		nn10, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn10
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_PolicyRuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_PolicyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PolicyRuleList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicyRuleList.Size()))
-		n11, err := m.PolicyRuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PolicyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_K8SClusterRoleSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_K8SClusterRoleSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SClusterRoleSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRoleSelector.Size()))
-		n12, err := m.K8SClusterRoleSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SClusterRoleSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_Yaml) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Yaml) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Yaml)
+	copy(dAtA[i:], m.Yaml)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Yaml)))
-	i += copy(dAtA[i:], m.Yaml)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2174,66 +2179,98 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
-		nn13, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn13
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_PolicyRuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_PolicyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.PolicyRuleList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PolicyRuleList.Size()))
-		n14, err := m.PolicyRuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.PolicyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_K8SClusterRoleSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_K8SClusterRoleSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SClusterRoleSelector != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRoleSelector.Size()))
-		n15, err := m.K8SClusterRoleSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SClusterRoleSelector.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Yaml) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Yaml) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Yaml)
+	copy(dAtA[i:], m.Yaml)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Yaml)))
-	i += copy(dAtA[i:], m.Yaml)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *NonResourceURLListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Urls) > 0 {
@@ -2252,6 +2289,9 @@ func (m *NonResourceURLListType) Size() (n int) {
 }
 
 func (m *ResourceListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.ApiGroups) > 0 {
@@ -2282,6 +2322,9 @@ func (m *ResourceListType) Size() (n int) {
 }
 
 func (m *PolicyRuleType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ResourceChoice != nil {
@@ -2291,6 +2334,9 @@ func (m *PolicyRuleType) Size() (n int) {
 }
 
 func (m *PolicyRuleType_ResourceList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ResourceList != nil {
@@ -2300,6 +2346,9 @@ func (m *PolicyRuleType_ResourceList) Size() (n int) {
 	return n
 }
 func (m *PolicyRuleType_NonResourceUrlList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NonResourceUrlList != nil {
@@ -2309,6 +2358,9 @@ func (m *PolicyRuleType_NonResourceUrlList) Size() (n int) {
 	return n
 }
 func (m *PolicyRuleListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.PolicyRule) > 0 {
@@ -2321,6 +2373,9 @@ func (m *PolicyRuleListType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
@@ -2334,6 +2389,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_PolicyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicyRuleList != nil {
@@ -2343,6 +2401,9 @@ func (m *GlobalSpecType_PolicyRuleList) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_K8SClusterRoleSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRoleSelector != nil {
@@ -2352,6 +2413,9 @@ func (m *GlobalSpecType_K8SClusterRoleSelector) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Yaml) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Yaml)
@@ -2359,6 +2423,9 @@ func (m *GlobalSpecType_Yaml) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
@@ -2368,6 +2435,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_PolicyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicyRuleList != nil {
@@ -2377,6 +2447,9 @@ func (m *CreateSpecType_PolicyRuleList) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_K8SClusterRoleSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRoleSelector != nil {
@@ -2386,6 +2459,9 @@ func (m *CreateSpecType_K8SClusterRoleSelector) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Yaml) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Yaml)
@@ -2393,6 +2469,9 @@ func (m *CreateSpecType_Yaml) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
@@ -2402,6 +2481,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_PolicyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicyRuleList != nil {
@@ -2411,6 +2493,9 @@ func (m *ReplaceSpecType_PolicyRuleList) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_K8SClusterRoleSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRoleSelector != nil {
@@ -2420,6 +2505,9 @@ func (m *ReplaceSpecType_K8SClusterRoleSelector) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_Yaml) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Yaml)
@@ -2427,6 +2515,9 @@ func (m *ReplaceSpecType_Yaml) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RuleChoice != nil {
@@ -2436,6 +2527,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_PolicyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.PolicyRuleList != nil {
@@ -2445,6 +2539,9 @@ func (m *GetSpecType_PolicyRuleList) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_K8SClusterRoleSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRoleSelector != nil {
@@ -2454,6 +2551,9 @@ func (m *GetSpecType_K8SClusterRoleSelector) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Yaml) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Yaml)
@@ -2462,14 +2562,7 @@ func (m *GetSpecType_Yaml) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2532,8 +2625,13 @@ func (this *PolicyRuleListType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForPolicyRule := "[]*PolicyRuleType{"
+	for _, f := range this.PolicyRule {
+		repeatedStringForPolicyRule += strings.Replace(f.String(), "PolicyRuleType", "PolicyRuleType", 1) + ","
+	}
+	repeatedStringForPolicyRule += "}"
 	s := strings.Join([]string{`&PolicyRuleListType{`,
-		`PolicyRule:` + strings.Replace(fmt.Sprintf("%v", this.PolicyRule), "PolicyRuleType", "PolicyRuleType", 1) + `,`,
+		`PolicyRule:` + repeatedStringForPolicyRule + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2564,7 +2662,7 @@ func (this *GlobalSpecType_K8SClusterRoleSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_K8SClusterRoleSelector{`,
-		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2604,7 +2702,7 @@ func (this *CreateSpecType_K8SClusterRoleSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_K8SClusterRoleSelector{`,
-		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2644,7 +2742,7 @@ func (this *ReplaceSpecType_K8SClusterRoleSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_K8SClusterRoleSelector{`,
-		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2684,7 +2782,7 @@ func (this *GetSpecType_K8SClusterRoleSelector) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_K8SClusterRoleSelector{`,
-		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`K8SClusterRoleSelector:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRoleSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2722,7 +2820,7 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2750,7 +2848,7 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2760,6 +2858,9 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2779,7 +2880,7 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2789,6 +2890,9 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2801,6 +2905,9 @@ func (m *NonResourceURLListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2830,7 +2937,7 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2858,7 +2965,7 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2868,6 +2975,9 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2887,7 +2997,7 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2897,6 +3007,9 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2916,7 +3029,7 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2926,6 +3039,9 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2945,7 +3061,7 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2955,6 +3071,9 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2967,6 +3086,9 @@ func (m *ResourceListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2996,7 +3118,7 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3024,7 +3146,7 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3033,6 +3155,9 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3056,7 +3181,7 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3065,6 +3190,9 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3081,6 +3209,9 @@ func (m *PolicyRuleType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3110,7 +3241,7 @@ func (m *PolicyRuleListType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3138,7 +3269,7 @@ func (m *PolicyRuleListType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3147,6 +3278,9 @@ func (m *PolicyRuleListType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3162,6 +3296,9 @@ func (m *PolicyRuleListType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3191,7 +3328,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3219,7 +3356,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3228,6 +3365,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3251,7 +3391,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3260,10 +3400,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3283,7 +3426,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3293,6 +3436,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3312,7 +3458,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3322,6 +3468,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3334,6 +3483,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3363,7 +3515,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3391,7 +3543,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3400,6 +3552,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3423,7 +3578,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3432,10 +3587,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3455,7 +3613,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3465,6 +3623,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3477,6 +3638,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3506,7 +3670,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3534,7 +3698,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3543,6 +3707,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3566,7 +3733,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3575,10 +3742,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3598,7 +3768,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3608,6 +3778,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3620,6 +3793,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3649,7 +3825,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3677,7 +3853,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3686,6 +3862,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3709,7 +3888,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3718,10 +3897,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.LabelSelectorType{}
+			v := &schema.LabelSelectorType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3741,7 +3923,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3751,6 +3933,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3763,6 +3948,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -3780,6 +3968,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3811,10 +4000,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3831,161 +4018,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/k8s_cluster_role/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/k8s_cluster_role/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1571 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x3f, 0x8c, 0x5b, 0x49,
-	0x19, 0xdf, 0xb1, 0xbd, 0xff, 0x3e, 0x6f, 0xbc, 0xeb, 0xb7, 0xb9, 0x3d, 0xef, 0x26, 0x98, 0xd5,
-	0x42, 0xb1, 0x3a, 0x25, 0x5e, 0xd8, 0x20, 0x74, 0x4a, 0x81, 0xc4, 0xa6, 0x48, 0x40, 0x11, 0x42,
-	0xbe, 0x03, 0x74, 0x14, 0x58, 0xe3, 0x79, 0x9f, 0x9f, 0xe7, 0x76, 0xde, 0xcc, 0xdc, 0xcc, 0x3c,
-	0xef, 0x2d, 0xd2, 0x49, 0x11, 0x0d, 0x82, 0xea, 0x48, 0x09, 0x12, 0x05, 0x15, 0x25, 0x12, 0x54,
-	0xe7, 0x2b, 0x22, 0xa0, 0x40, 0x88, 0x22, 0x65, 0x0a, 0x0a, 0xe2, 0xa3, 0xb8, 0x13, 0x4d, 0x4a,
-	0x44, 0x85, 0x66, 0xde, 0x7b, 0x8e, 0x6d, 0xed, 0x5d, 0x12, 0x84, 0xae, 0x4a, 0x63, 0xbd, 0xf7,
-	0xfd, 0x9f, 0xdf, 0xf7, 0xfb, 0xe6, 0x7b, 0x86, 0xd7, 0x46, 0x68, 0x3b, 0x5c, 0x1d, 0x59, 0x36,
-	0xc4, 0x94, 0x1e, 0x9d, 0xbe, 0x6e, 0x7b, 0x4c, 0x64, 0xd6, 0xa1, 0xe9, 0x19, 0x25, 0xf0, 0xc8,
-	0x9d, 0x6b, 0xb4, 0x1d, 0x6d, 0x94, 0x53, 0x51, 0x3b, 0xb7, 0xed, 0xe4, 0xb6, 0x9d, 0x45, 0xdb,
-	0xbd, 0xeb, 0x09, 0x77, 0xc3, 0xac, 0xdf, 0x61, 0x2a, 0x3d, 0x4a, 0x54, 0xa2, 0x8e, 0x82, 0x5b,
-	0x3f, 0x1b, 0x84, 0xb7, 0xf0, 0x12, 0x9e, 0xf2, 0x70, 0x7b, 0x57, 0xe6, 0x53, 0x2b, 0xed, 0xb8,
-	0x92, 0x45, 0xae, 0xbd, 0xdd, 0x79, 0xe5, 0x4c, 0x19, 0x7b, 0x57, 0xe7, 0x55, 0x23, 0x2a, 0x78,
-	0x4c, 0x1d, 0x16, 0xda, 0xfd, 0x05, 0x2d, 0xc7, 0xb3, 0xde, 0x5c, 0xe8, 0x83, 0xbf, 0x11, 0xd8,
-	0xf9, 0x8e, 0x92, 0x5d, 0xb4, 0x2a, 0x33, 0x0c, 0xbf, 0xd7, 0xbd, 0x7b, 0x97, 0x5b, 0xf7, 0xe6,
-	0xb9, 0xc6, 0xe8, 0x9b, 0x50, 0xcb, 0x8c, 0xb0, 0x2d, 0xb2, 0x5f, 0x3d, 0x5c, 0x3f, 0xb9, 0xfe,
-	0xc1, 0x27, 0x0f, 0xaa, 0x70, 0x9f, 0xac, 0x1e, 0x2c, 0x9b, 0xea, 0xe1, 0xbd, 0x8a, 0x7f, 0x5d,
-	0xbe, 0x4f, 0x2a, 0x5b, 0x5b, 0xe5, 0xd3, 0x1a, 0x29, 0x9f, 0x5a, 0xa4, 0x1b, 0x5c, 0x23, 0x05,
-	0xcb, 0x23, 0x34, 0x7d, 0xdb, 0xaa, 0x85, 0x18, 0x6f, 0x4d, 0xc6, 0xe4, 0x10, 0xc8, 0x6b, 0x50,
-	0x4d, 0xd0, 0x41, 0x55, 0x67, 0x0e, 0x6a, 0x5a, 0x59, 0x07, 0xcb, 0x9a, 0x3a, 0x36, 0x84, 0x55,
-	0x83, 0x5a, 0x50, 0x86, 0x50, 0xcd, 0x2c, 0xbe, 0x58, 0xbe, 0x3c, 0xcf, 0xc1, 0xdf, 0x2f, 0xc1,
-	0x56, 0x79, 0x96, 0xe9, 0x41, 0xfe, 0x59, 0x05, 0xa0, 0x9a, 0xf7, 0x12, 0xa3, 0x32, 0x5d, 0x9e,
-	0xe7, 0xcf, 0xd5, 0xc9, 0x98, 0xdc, 0xaf, 0xfa, 0x6a, 0xae, 0xd2, 0x38, 0xe5, 0xd6, 0x72, 0x25,
-	0x0d, 0x26, 0xdc, 0x3a, 0x43, 0x3d, 0x42, 0xbe, 0xa5, 0x1d, 0xae, 0xe0, 0x32, 0xd5, 0x1c, 0xdf,
-	0x75, 0x28, 0x6d, 0x80, 0xad, 0x90, 0xee, 0x50, 0xcd, 0x2f, 0xb2, 0xae, 0x51, 0xad, 0x2d, 0xbc,
-	0x42, 0x33, 0x37, 0x44, 0xe9, 0x38, 0x5b, 0x08, 0x95, 0xb9, 0xa1, 0x32, 0xfc, 0xc7, 0x73, 0xd2,
-	0x3a, 0xcd, 0x9c, 0xb2, 0x8c, 0x0a, 0x2e, 0x13, 0x58, 0xee, 0x07, 0x24, 0xb6, 0x19, 0x1a, 0xc7,
-	0x07, 0xde, 0x1f, 0xa7, 0x39, 0x6b, 0x4c, 0x19, 0x84, 0x6d, 0xa6, 0x94, 0x89, 0xb9, 0x9c, 0x8b,
-	0xb1, 0x15, 0x73, 0xcb, 0xd4, 0x08, 0xcd, 0x79, 0x29, 0xb9, 0x84, 0x23, 0x94, 0x6e, 0xea, 0x0b,
-	0x4f, 0x8f, 0x00, 0x57, 0x07, 0x42, 0x9d, 0x31, 0x25, 0x9d, 0x51, 0xa2, 0x43, 0x35, 0xb7, 0x68,
-	0x46, 0x68, 0x4a, 0xcb, 0x5d, 0x2e, 0x1d, 0x1a, 0x49, 0x2f, 0x50, 0x35, 0x25, 0xba, 0x33, 0x65,
-	0x4e, 0xb9, 0x4c, 0xa6, 0xc5, 0x4b, 0x15, 0x63, 0xf9, 0xb2, 0xa2, 0x95, 0xe0, 0xec, 0x1c, 0x76,
-	0x4d, 0x9f, 0xb2, 0xce, 0x85, 0x87, 0x6d, 0x7a, 0x2a, 0xc6, 0x99, 0x98, 0x09, 0xd1, 0xb0, 0x4e,
-	0x19, 0x9a, 0x94, 0x51, 0x5e, 0xac, 0xef, 0xeb, 0x54, 0xf3, 0xdb, 0xa1, 0xaf, 0xd1, 0xbf, 0x56,
-	0xa1, 0x61, 0x8a, 0xde, 0xf7, 0xc2, 0x8c, 0xb4, 0x2a, 0xa1, 0xd5, 0x7f, 0x5a, 0x9d, 0x8c, 0xc9,
-	0x2f, 0x56, 0x7d, 0xab, 0xd7, 0xfa, 0x5c, 0xc6, 0x5c, 0x26, 0x16, 0x9a, 0x4c, 0xa5, 0x5a, 0x49,
-	0x8f, 0x91, 0xa3, 0x2e, 0xb3, 0x68, 0x01, 0x98, 0x92, 0x03, 0x9e, 0xa4, 0x54, 0x5b, 0x58, 0x47,
-	0x19, 0x6b, 0xc5, 0xa5, 0xb3, 0xb0, 0x92, 0x23, 0x09, 0x75, 0xc1, 0x53, 0xee, 0x0c, 0x95, 0x89,
-	0xb7, 0x95, 0x34, 0x45, 0xab, 0x29, 0x43, 0x0b, 0xcb, 0x1e, 0x03, 0x0b, 0x3b, 0x1a, 0x8d, 0xe5,
-	0xd6, 0xa1, 0x74, 0x23, 0x25, 0xb2, 0x14, 0x99, 0xa0, 0x3c, 0xb5, 0xd0, 0x5c, 0x94, 0x5b, 0xcf,
-	0xfa, 0xd8, 0xc2, 0x86, 0x56, 0xb1, 0xc3, 0x54, 0x0b, 0xdf, 0x64, 0xd8, 0xf1, 0xe4, 0x2f, 0x08,
-	0x53, 0x34, 0x47, 0xa0, 0xb1, 0x4f, 0xcf, 0xf4, 0x4e, 0xa6, 0x1c, 0xb5, 0xb0, 0x6a, 0x91, 0x19,
-	0x74, 0x16, 0x36, 0x7d, 0x73, 0x38, 0x43, 0xca, 0x98, 0xca, 0x7c, 0x81, 0x6b, 0x85, 0xc0, 0xc2,
-	0x17, 0xd2, 0xcc, 0x51, 0xc7, 0x65, 0x72, 0x86, 0xfd, 0xa1, 0x52, 0xa7, 0xf9, 0xc1, 0xb2, 0x9c,
-	0xaa, 0x16, 0xbe, 0x58, 0x5c, 0x13, 0x9f, 0x6a, 0xb0, 0xcb, 0x32, 0xeb, 0x54, 0x5a, 0x66, 0x8e,
-	0x71, 0xc0, 0x25, 0xcf, 0x55, 0xf5, 0x82, 0x15, 0x21, 0xcf, 0xf6, 0xd3, 0x42, 0x0d, 0x8e, 0x78,
-	0x4e, 0x2f, 0x88, 0x29, 0xa6, 0x4a, 0x5a, 0x5f, 0x63, 0x3d, 0x46, 0x2d, 0xd4, 0x79, 0x9a, 0x03,
-	0x58, 0x9c, 0x30, 0x68, 0x36, 0x3c, 0xec, 0x38, 0xc8, 0x44, 0xfe, 0xe6, 0xd4, 0x29, 0x4a, 0x1f,
-	0x03, 0xcf, 0x2c, 0xec, 0x0a, 0xc5, 0xa8, 0xb0, 0x59, 0xff, 0x6d, 0x64, 0x8e, 0x32, 0x86, 0xd6,
-	0x96, 0xaa, 0x96, 0x45, 0x31, 0xb8, 0x50, 0xf3, 0xea, 0x8c, 0xc6, 0x64, 0x02, 0xa7, 0x8a, 0xcb,
-	0x17, 0x07, 0x0a, 0xdc, 0x54, 0xd2, 0x51, 0xa1, 0x55, 0x5c, 0x8e, 0xa0, 0x07, 0x7c, 0x8d, 0x19,
-	0x25, 0xdf, 0x56, 0x7d, 0x0b, 0xb5, 0xf0, 0xbb, 0x37, 0x3b, 0x8b, 0x3c, 0x91, 0x5c, 0x26, 0x06,
-	0xdf, 0xc9, 0xd0, 0x7a, 0x6e, 0x08, 0xa4, 0x9e, 0x3a, 0x8d, 0x29, 0x5d, 0x44, 0x00, 0xa6, 0xe4,
-	0xcc, 0x7a, 0x30, 0xb6, 0xde, 0xa4, 0xee, 0xa7, 0x2e, 0xbf, 0x88, 0x2d, 0x5c, 0xd1, 0x86, 0x2b,
-	0xc3, 0xdd, 0xb9, 0xc0, 0x11, 0x8a, 0x05, 0xf4, 0x1b, 0x85, 0x13, 0x13, 0x34, 0x78, 0xce, 0x04,
-	0xd9, 0x2c, 0x26, 0x30, 0x0c, 0x1a, 0xf7, 0x89, 0x4d, 0x26, 0x1d, 0x0f, 0x5c, 0x0b, 0x06, 0x97,
-	0xb5, 0x8a, 0x63, 0x6e, 0x4d, 0x16, 0x6e, 0xf9, 0x7e, 0x16, 0x27, 0x1e, 0xde, 0x6d, 0xcf, 0x37,
-	0x64, 0x99, 0xcf, 0x38, 0x75, 0xdd, 0x2e, 0xf6, 0x95, 0x5f, 0x57, 0xd3, 0xb1, 0xd8, 0x98, 0x11,
-	0x5a, 0xd8, 0x98, 0xd3, 0x2d, 0xe7, 0xc2, 0xcd, 0xb2, 0xf6, 0x32, 0x27, 0x30, 0xcb, 0x63, 0xc3,
-	0x47, 0x39, 0x78, 0x96, 0xe7, 0xe3, 0x50, 0x8e, 0x75, 0x69, 0xd5, 0xcc, 0xc9, 0x4f, 0x9d, 0xa3,
-	0x6c, 0x18, 0x08, 0xf1, 0x62, 0x93, 0x7e, 0xa9, 0x64, 0xa3, 0xbf, 0xd3, 0x6d, 0xd4, 0x85, 0x68,
-	0x3a, 0xec, 0x5c, 0x5a, 0x47, 0x25, 0x43, 0xdb, 0xaa, 0x86, 0x81, 0xff, 0xd2, 0x33, 0x23, 0xb7,
-	0x48, 0xb7, 0x59, 0xba, 0x7f, 0xab, 0xf4, 0x8e, 0x7e, 0x4d, 0xe6, 0xf7, 0xd5, 0x4f, 0xc9, 0x64,
-	0x4c, 0xbe, 0xef, 0xef, 0x8d, 0x15, 0x66, 0x90, 0x3a, 0xcc, 0x17, 0x57, 0x4d, 0x70, 0xbf, 0xb3,
-	0xce, 0xc2, 0x4d, 0xbd, 0x92, 0x69, 0xbf, 0x70, 0xcb, 0x15, 0xb6, 0x12, 0xa3, 0x40, 0x97, 0x6f,
-	0x30, 0xa8, 0x79, 0xe8, 0x60, 0x0d, 0x3d, 0xb3, 0xbc, 0x4d, 0x9d, 0xa7, 0xfe, 0x2e, 0x50, 0x92,
-	0xba, 0xff, 0x6d, 0xbd, 0xdd, 0xab, 0x40, 0xe3, 0xbb, 0xe1, 0x8e, 0xed, 0x66, 0x22, 0x00, 0x11,
-	0xfd, 0x00, 0xa6, 0xc0, 0xf4, 0x7c, 0x5d, 0xad, 0xca, 0x3e, 0x39, 0xac, 0x1f, 0x7f, 0xa5, 0xf3,
-	0xd9, 0xdf, 0x27, 0x9d, 0xc5, 0x2d, 0x79, 0x67, 0xa9, 0xbb, 0x61, 0x66, 0x64, 0xd1, 0x29, 0xbc,
-	0x22, 0x95, 0xec, 0x4d, 0x83, 0x67, 0x46, 0xe4, 0x09, 0xaa, 0x21, 0xc1, 0xd7, 0x9f, 0x95, 0xe0,
-	0xe2, 0xaf, 0x8a, 0x3b, 0x4b, 0xdd, 0x48, 0xce, 0x68, 0x8c, 0xf0, 0x9a, 0x93, 0x03, 0xd8, 0x9c,
-	0x26, 0x62, 0x43, 0xc5, 0x19, 0x46, 0x9b, 0x0f, 0xc6, 0xa4, 0xf2, 0x70, 0x4c, 0x7c, 0x0f, 0xaa,
-	0xc7, 0xd7, 0x6e, 0x7c, 0xbb, 0xb6, 0x46, 0xb6, 0x2a, 0x07, 0x3f, 0x23, 0x10, 0x3d, 0x85, 0x60,
-	0xba, 0xe3, 0x2d, 0xd4, 0xf3, 0xe5, 0xd3, 0xf3, 0xb3, 0x1f, 0x76, 0x7c, 0xfd, 0xb8, 0xf3, 0xac,
-	0x1a, 0xe7, 0xb1, 0x3c, 0x39, 0x78, 0x32, 0x26, 0xe4, 0x19, 0x9d, 0x00, 0x3d, 0xf5, 0x39, 0xf8,
-	0x55, 0x15, 0x1a, 0xb7, 0x85, 0xea, 0x53, 0xf1, 0x86, 0x46, 0x16, 0xea, 0xf8, 0x11, 0x6c, 0xcd,
-	0xd4, 0x31, 0xdb, 0x91, 0xe3, 0xe7, 0x2f, 0x66, 0x06, 0xac, 0x86, 0x9e, 0x93, 0x46, 0x09, 0xec,
-	0x2e, 0x3a, 0xf6, 0x2c, 0x0a, 0x64, 0x4e, 0x99, 0xa2, 0x33, 0xfb, 0x0b, 0x89, 0xee, 0xd2, 0x3e,
-	0x8a, 0x37, 0x0a, 0x9b, 0x70, 0xce, 0xb5, 0x5f, 0x7e, 0x48, 0x6a, 0x50, 0x59, 0x22, 0x77, 0x96,
-	0xba, 0x3b, 0xa7, 0xaf, 0xdb, 0x5b, 0x79, 0xb4, 0xae, 0x12, 0x58, 0xda, 0x45, 0x37, 0xa1, 0x76,
-	0x4e, 0x53, 0xd1, 0xaa, 0xed, 0x93, 0xc3, 0xf5, 0x93, 0x2f, 0x3f, 0x18, 0x13, 0xf2, 0xef, 0x31,
-	0xa9, 0xfd, 0xe6, 0x43, 0x12, 0xe4, 0x01, 0x11, 0x53, 0x6d, 0xdd, 0xdb, 0x2f, 0x9e, 0xde, 0x27,
-	0x3e, 0x5a, 0xd0, 0x45, 0xb7, 0xa0, 0x91, 0xa0, 0x44, 0x43, 0x1d, 0xc6, 0xbd, 0x10, 0xe5, 0x93,
-	0xd5, 0x10, 0xe6, 0xca, 0xa3, 0xf7, 0xc8, 0xc7, 0x25, 0xc6, 0x0b, 0xde, 0xdd, 0x4b, 0x53, 0x9f,
-	0xb7, 0x68, 0x2a, 0x6e, 0xbe, 0xfa, 0xc7, 0x31, 0xd9, 0x86, 0x26, 0x6c, 0x14, 0xd5, 0xed, 0xfb,
-	0xf2, 0x22, 0xf2, 0xd5, 0x93, 0x7d, 0xa8, 0x07, 0x6c, 0x0b, 0x9e, 0x34, 0x67, 0x78, 0xb2, 0x7c,
-	0x7c, 0xed, 0xc6, 0xb5, 0xaf, 0x15, 0x4c, 0xf9, 0x7d, 0x05, 0x1a, 0xb7, 0xc2, 0xd8, 0x7e, 0x6e,
-	0xdd, 0x31, 0xff, 0x8f, 0xee, 0x6c, 0x7f, 0xf0, 0xde, 0xd6, 0x62, 0x94, 0xcf, 0x68, 0xd4, 0xe5,
-	0xd9, 0x46, 0x95, 0x2d, 0xb8, 0xd9, 0xfc, 0xeb, 0x37, 0x16, 0xa8, 0x79, 0xd2, 0x9e, 0xc7, 0x6d,
-	0xf3, 0x27, 0xff, 0x21, 0xb3, 0x82, 0x02, 0xb5, 0x3f, 0x54, 0x60, 0xb3, 0x9b, 0x7f, 0x86, 0xbf,
-	0x84, 0xed, 0xf9, 0x61, 0xfb, 0x5d, 0x05, 0xea, 0xb7, 0xd1, 0xbd, 0x84, 0xec, 0xb9, 0x21, 0x3b,
-	0xf9, 0x39, 0x79, 0xf8, 0xb8, 0xbd, 0xf4, 0xe8, 0x71, 0x7b, 0xe9, 0xc9, 0xe3, 0x36, 0xb9, 0x37,
-	0x69, 0x93, 0xdf, 0x4e, 0xda, 0xe4, 0x2f, 0x93, 0x36, 0x79, 0x38, 0x69, 0x93, 0x47, 0x93, 0x36,
-	0xf9, 0xc7, 0xa4, 0x4d, 0x3e, 0x9e, 0xb4, 0x97, 0x9e, 0x4c, 0xda, 0xe4, 0xfd, 0x8f, 0xda, 0x4b,
-	0x0f, 0x3e, 0x6a, 0x93, 0x1f, 0xbe, 0x99, 0x28, 0x7d, 0x9a, 0x74, 0x46, 0x4a, 0xf8, 0xcf, 0x14,
-	0xda, 0xc9, 0xec, 0x51, 0x78, 0x18, 0x28, 0x93, 0x5e, 0xd7, 0x46, 0x8d, 0x78, 0x8c, 0xe6, 0x7a,
-	0xa9, 0x3e, 0xd2, 0xfd, 0x44, 0x1d, 0xe1, 0xbb, 0xae, 0xf8, 0x0b, 0xfc, 0x29, 0x7f, 0xed, 0xfb,
-	0x2b, 0xe1, 0xef, 0xf0, 0x8d, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x57, 0x60, 0x4b, 0xdf, 0x03,
-	0x10, 0x00, 0x00,
-}

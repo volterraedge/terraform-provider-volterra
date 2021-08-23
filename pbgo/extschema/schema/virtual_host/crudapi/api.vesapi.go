@@ -1482,7 +1482,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectGetRsp"
                         }
@@ -1557,7 +1557,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "include_referred_id",
@@ -1581,7 +1582,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectDeleteRsp"
                         }
@@ -1656,7 +1657,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectReplaceRsp"
                         }
@@ -1746,7 +1747,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectListRsp"
                         }
@@ -1809,7 +1810,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -1819,7 +1821,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -1836,7 +1839,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -1868,7 +1872,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectCreateRsp"
                         }
@@ -1952,9 +1956,9 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.ListStream",
                 "responses": {
                     "200": {
-                        "description": "(streaming responses)",
+                        "description": "A successful response.(streaming responses)",
                         "schema": {
-                            "$ref": "#/definitions/crudapiObjectListRsp"
+                            "$ref": "#/x-stream-definitions/crudapiObjectListRsp"
                         }
                     },
                     "401": {
@@ -2015,7 +2019,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -2025,7 +2030,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -2042,7 +2048,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -2081,7 +2088,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectGetRsp"
                         }
@@ -2156,7 +2163,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "include_referred_id",
@@ -2187,7 +2195,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectListRsp"
                         }
@@ -2250,7 +2258,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -2260,7 +2269,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -2277,7 +2287,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -2316,7 +2327,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectDeleteRsp"
                         }
@@ -2391,7 +2402,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectReplaceRsp"
                         }
@@ -2481,7 +2492,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_host.crudapi.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectCreateRsp"
                         }
@@ -2918,19 +2929,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "protobufListValue": {
-            "type": "object",
-            "description": "-ListValue- is a wrapper around a repeated field of values.\n\nThe JSON representation for -ListValue- is JSON array.",
-            "properties": {
-                "values": {
-                    "type": "array",
-                    "description": "Repeated field of dynamically typed values.",
-                    "items": {
-                        "$ref": "#/definitions/protobufValue"
-                    }
-                }
-            }
-        },
         "protobufNullValue": {
             "type": "string",
             "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
@@ -2939,45 +2937,28 @@ var APISwaggerJSON string = `{
             ],
             "default": "NULL_VALUE"
         },
-        "protobufStruct": {
+        "runtimeStreamError": {
             "type": "object",
-            "description": "-Struct- represents a structured data value, consisting of fields\nwhich map to dynamically typed values. In some languages, -Struct-\nmight be supported by a native representation. For example, in\nscripting languages like JS a struct is represented as an\nobject. The details of that representation are described together\nwith the proto support for the language.\n\nThe JSON representation for -Struct- is JSON object.",
             "properties": {
-                "fields": {
-                    "type": "object",
-                    "description": "Unordered map of dynamically typed values."
-                }
-            }
-        },
-        "protobufValue": {
-            "type": "object",
-            "description": "-Value- represents a dynamically typed value which can be either\nnull, a number, a string, a boolean, a recursive struct value, or a\nlist of values. A producer of value is expected to set one of that\nvariants, absence of any variant indicates an error.\n\nThe JSON representation for -Value- is JSON value.",
-            "properties": {
-                "bool_value": {
-                    "type": "boolean",
-                    "description": "Represents a boolean value.",
-                    "format": "boolean"
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
                 },
-                "list_value": {
-                    "description": "Represents a repeated -Value-.",
-                    "$ref": "#/definitions/protobufListValue"
+                "grpc_code": {
+                    "type": "integer",
+                    "format": "int32"
                 },
-                "null_value": {
-                    "description": "Represents a null value.",
-                    "$ref": "#/definitions/protobufNullValue"
+                "http_code": {
+                    "type": "integer",
+                    "format": "int32"
                 },
-                "number_value": {
-                    "type": "number",
-                    "description": "Represents a double value.",
-                    "format": "double"
+                "http_status": {
+                    "type": "string"
                 },
-                "string_value": {
-                    "type": "string",
-                    "description": "Represents a string value."
-                },
-                "struct_value": {
-                    "description": "Represents a structured value.",
-                    "$ref": "#/definitions/protobufStruct"
+                "message": {
+                    "type": "string"
                 }
             }
         },
@@ -4818,9 +4799,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Path of Javascript"
                 },
                 "script_config": {
+                    "type": "object",
                     "description": " Input passed to the script",
                     "title": "ScriptConfig",
-                    "$ref": "#/definitions/protobufStruct",
                     "x-displayname": "Configuration for Script"
                 }
             }
@@ -5019,5 +5000,19 @@ var APISwaggerJSON string = `{
         }
     },
     "x-displayname": "",
+    "x-stream-definitions": {
+        "crudapiObjectListRsp": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                    "$ref": "#/definitions/crudapiObjectListRsp"
+                }
+            },
+            "title": "Stream result of crudapiObjectListRsp",
+            "type": "object"
+        }
+    },
     "x-ves-proto-file": "ves.io/schema/virtual_host/crudapi/api.proto"
 }`

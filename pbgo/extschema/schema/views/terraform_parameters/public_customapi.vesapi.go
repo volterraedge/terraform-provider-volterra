@@ -421,12 +421,12 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/force-delete": {
             "post": {
-                "summary": "Force delete view",
-                "description": "force delete view object. This can result in staled objects in cloud provider.",
+                "summary": "Get Status of Terraform for a View",
+                "description": "returned from list of terraform parameter status objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersForceDeleteResponse"
                         }
@@ -483,21 +483,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     },
                     {
                         "name": "body",
@@ -523,12 +529,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/run": {
             "post": {
-                "summary": "Run Terraform Action for view",
-                "description": "perform terraform actions for a given view. Supported actions are apply and plan.",
+                "summary": "Get Terraform Parameters for a View",
+                "description": "returned from list of terraform parameter objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersRunResponse"
                         }
@@ -585,21 +591,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     },
                     {
                         "name": "body",
@@ -630,7 +642,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersGetResponse"
                         }
@@ -687,21 +699,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     }
                 ],
                 "tags": [
@@ -724,7 +742,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersGetStatusResponse"
                         }
@@ -781,21 +799,27 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     }
                 ],
                 "tags": [
@@ -1661,12 +1685,12 @@ var CustomActionAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/force-delete": {
             "post": {
-                "summary": "Force delete view",
-                "description": "force delete view object. This can result in staled objects in cloud provider.",
+                "summary": "Get Status of Terraform for a View",
+                "description": "returned from list of terraform parameter status objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersForceDeleteResponse"
                         }
@@ -1723,21 +1747,27 @@ var CustomActionAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     },
                     {
                         "name": "body",
@@ -1763,12 +1793,12 @@ var CustomActionAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/terraform/{view_kind}/{view_name}/run": {
             "post": {
-                "summary": "Run Terraform Action for view",
-                "description": "perform terraform actions for a given view. Supported actions are apply and plan.",
+                "summary": "Get Terraform Parameters for a View",
+                "description": "returned from list of terraform parameter objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersRunResponse"
                         }
@@ -1825,21 +1855,27 @@ var CustomActionAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     },
                     {
                         "name": "body",
@@ -1870,7 +1906,7 @@ var CustomActionAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersGetResponse"
                         }
@@ -1927,21 +1963,27 @@ var CustomActionAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     }
                 ],
                 "tags": [
@@ -1964,7 +2006,7 @@ var CustomActionAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/terraform_parametersGetStatusResponse"
                         }
@@ -2021,21 +2063,27 @@ var CustomActionAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the label to be retrieved",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "view_kind",
+                        "description": "Kind of View\n\nx-example: \"value\"\nKind of view of which terraform parameters are requested e.g. aws_vpc_site, azure_vnet_site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Kind of View"
                     },
                     {
                         "name": "view_name",
+                        "description": "Name of view\n\nx-example: \"value\"\nName of the view for which terraform parameters are requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name of view"
                     }
                 ],
                 "tags": [

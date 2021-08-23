@@ -3,30 +3,33 @@
 
 package gcp_vpc_site
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GCP Ingress Gateway
 //
@@ -47,7 +50,7 @@ type GCPVPCIngressGwType struct {
 	// x-required
 	// x-example: "us-west1-a, us-west1-b, us-west1-c"
 	// List of zones when instances will be created, needs to match with region selected.
-	GcpZoneNames []string `protobuf:"bytes,4,rep,name=gcp_zone_names,json=gcpZoneNames" json:"gcp_zone_names,omitempty"`
+	GcpZoneNames []string `protobuf:"bytes,4,rep,name=gcp_zone_names,json=gcpZoneNames,proto3" json:"gcp_zone_names,omitempty"`
 	// Number of main nodes
 	//
 	// x-displayName: "Number of main nodes"
@@ -57,17 +60,41 @@ type GCPVPCIngressGwType struct {
 	//
 	// x-displayName: "VPC Network for Local Interface"
 	// Network for the local interface of the node
-	LocalNetwork *ves_io_schema_views1.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=local_network,json=localNetwork" json:"local_network,omitempty"`
+	LocalNetwork *views.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=local_network,json=localNetwork,proto3" json:"local_network,omitempty"`
 	// Subnet
 	//
 	// x-displayName: "Subnet for Local Interface"
 	// Subnet for the local interface of the node.
-	LocalSubnet *ves_io_schema_views1.GCPVPCSubnetChoiceType `protobuf:"bytes,5,opt,name=local_subnet,json=localSubnet" json:"local_subnet,omitempty"`
+	LocalSubnet *views.GCPVPCSubnetChoiceType `protobuf:"bytes,5,opt,name=local_subnet,json=localSubnet,proto3" json:"local_subnet,omitempty"`
 }
 
-func (m *GCPVPCIngressGwType) Reset()                    { *m = GCPVPCIngressGwType{} }
-func (*GCPVPCIngressGwType) ProtoMessage()               {}
-func (*GCPVPCIngressGwType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GCPVPCIngressGwType) Reset()      { *m = GCPVPCIngressGwType{} }
+func (*GCPVPCIngressGwType) ProtoMessage() {}
+func (*GCPVPCIngressGwType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{0}
+}
+func (m *GCPVPCIngressGwType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCIngressGwType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCIngressGwType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCIngressGwType.Merge(m, src)
+}
+func (m *GCPVPCIngressGwType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCIngressGwType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCIngressGwType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCIngressGwType proto.InternalMessageInfo
 
 func (m *GCPVPCIngressGwType) GetGcpCertifiedHw() string {
 	if m != nil {
@@ -90,14 +117,14 @@ func (m *GCPVPCIngressGwType) GetNodeNumber() uint32 {
 	return 0
 }
 
-func (m *GCPVPCIngressGwType) GetLocalNetwork() *ves_io_schema_views1.GCPVPCNetworkChoiceType {
+func (m *GCPVPCIngressGwType) GetLocalNetwork() *views.GCPVPCNetworkChoiceType {
 	if m != nil {
 		return m.LocalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressGwType) GetLocalSubnet() *ves_io_schema_views1.GCPVPCSubnetChoiceType {
+func (m *GCPVPCIngressGwType) GetLocalSubnet() *views.GCPVPCSubnetChoiceType {
 	if m != nil {
 		return m.LocalSubnet
 	}
@@ -123,7 +150,7 @@ type GCPVPCIngressEgressGwType struct {
 	// x-required
 	// x-example: "us-west1-a, us-west1-b, us-west1-c"
 	// List of zones when instances will be created, needs to match with region selected.
-	GcpZoneNames []string `protobuf:"bytes,24,rep,name=gcp_zone_names,json=gcpZoneNames" json:"gcp_zone_names,omitempty"`
+	GcpZoneNames []string `protobuf:"bytes,24,rep,name=gcp_zone_names,json=gcpZoneNames,proto3" json:"gcp_zone_names,omitempty"`
 	// Number of main nodes
 	//
 	// x-displayName: "Number of main nodes"
@@ -133,22 +160,22 @@ type GCPVPCIngressEgressGwType struct {
 	//
 	// x-displayName: "VPC Network for Inside Interface"
 	// Network for the inside interface of the node
-	InsideNetwork *ves_io_schema_views1.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=inside_network,json=insideNetwork" json:"inside_network,omitempty"`
+	InsideNetwork *views.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=inside_network,json=insideNetwork,proto3" json:"inside_network,omitempty"`
 	// Subnet
 	//
 	// x-displayName: "Subnet for Inside Interface"
 	// Subnet for the inside interface of the node.
-	InsideSubnet *ves_io_schema_views1.GCPVPCSubnetChoiceType `protobuf:"bytes,21,opt,name=inside_subnet,json=insideSubnet" json:"inside_subnet,omitempty"`
+	InsideSubnet *views.GCPVPCSubnetChoiceType `protobuf:"bytes,21,opt,name=inside_subnet,json=insideSubnet,proto3" json:"inside_subnet,omitempty"`
 	// Network
 	//
 	// x-displayName: "VPC Network for Outside Interface"
 	// Network for the outside interface of the node
-	OutsideNetwork *ves_io_schema_views1.GCPVPCNetworkChoiceType `protobuf:"bytes,3,opt,name=outside_network,json=outsideNetwork" json:"outside_network,omitempty"`
+	OutsideNetwork *views.GCPVPCNetworkChoiceType `protobuf:"bytes,3,opt,name=outside_network,json=outsideNetwork,proto3" json:"outside_network,omitempty"`
 	// Subnet
 	//
 	// x-displayName: "Subnet for Outside Interface"
 	// Subnet for the outside interface of the node.
-	OutsideSubnet *ves_io_schema_views1.GCPVPCSubnetChoiceType `protobuf:"bytes,22,opt,name=outside_subnet,json=outsideSubnet" json:"outside_subnet,omitempty"`
+	OutsideSubnet *views.GCPVPCSubnetChoiceType `protobuf:"bytes,22,opt,name=outside_subnet,json=outsideSubnet,proto3" json:"outside_subnet,omitempty"`
 	// Manage Network Policy
 	//
 	// x-displayName: "Manage Network Policy"
@@ -202,9 +229,33 @@ type GCPVPCIngressEgressGwType struct {
 	OutsideStaticRouteChoice isGCPVPCIngressEgressGwType_OutsideStaticRouteChoice `protobuf_oneof:"outside_static_route_choice"`
 }
 
-func (m *GCPVPCIngressEgressGwType) Reset()                    { *m = GCPVPCIngressEgressGwType{} }
-func (*GCPVPCIngressEgressGwType) ProtoMessage()               {}
-func (*GCPVPCIngressEgressGwType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *GCPVPCIngressEgressGwType) Reset()      { *m = GCPVPCIngressEgressGwType{} }
+func (*GCPVPCIngressEgressGwType) ProtoMessage() {}
+func (*GCPVPCIngressEgressGwType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{1}
+}
+func (m *GCPVPCIngressEgressGwType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCIngressEgressGwType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCIngressEgressGwType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCIngressEgressGwType.Merge(m, src)
+}
+func (m *GCPVPCIngressEgressGwType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCIngressEgressGwType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCIngressEgressGwType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCIngressEgressGwType proto.InternalMessageInfo
 
 type isGCPVPCIngressEgressGwType_NetworkPolicyChoice interface {
 	isGCPVPCIngressEgressGwType_NetworkPolicyChoice()
@@ -238,37 +289,37 @@ type isGCPVPCIngressEgressGwType_OutsideStaticRouteChoice interface {
 }
 
 type GCPVPCIngressEgressGwType_NoNetworkPolicy struct {
-	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
+	NoNetworkPolicy *schema.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
 }
 type GCPVPCIngressEgressGwType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ves_io_schema_network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GCPVPCIngressEgressGwType_NoForwardProxy struct {
-	NoForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,oneof"`
+	NoForwardProxy *schema.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,proto3,oneof" json:"no_forward_proxy,omitempty"`
 }
 type GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GCPVPCIngressEgressGwType_ForwardProxyAllowAll struct {
-	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
+	ForwardProxyAllowAll *schema.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,proto3,oneof" json:"forward_proxy_allow_all,omitempty"`
 }
 type GCPVPCIngressEgressGwType_NoGlobalNetwork struct {
-	NoGlobalNetwork *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,oneof"`
+	NoGlobalNetwork *schema.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,proto3,oneof" json:"no_global_network,omitempty"`
 }
 type GCPVPCIngressEgressGwType_GlobalNetworkList struct {
-	GlobalNetworkList *ves_io_schema_views1.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,oneof"`
+	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
 type GCPVPCIngressEgressGwType_NoInsideStaticRoutes struct {
-	NoInsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=no_inside_static_routes,json=noInsideStaticRoutes,oneof"`
+	NoInsideStaticRoutes *schema.Empty `protobuf:"bytes,15,opt,name=no_inside_static_routes,json=noInsideStaticRoutes,proto3,oneof" json:"no_inside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwType_InsideStaticRoutes struct {
-	InsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=inside_static_routes,json=insideStaticRoutes,oneof"`
+	InsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=inside_static_routes,json=insideStaticRoutes,proto3,oneof" json:"inside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwType_NoOutsideStaticRoutes struct {
-	NoOutsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,oneof"`
+	NoOutsideStaticRoutes *schema.Empty `protobuf:"bytes,18,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,proto3,oneof" json:"no_outside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwType_OutsideStaticRoutes struct {
-	OutsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,19,opt,name=outside_static_routes,json=outsideStaticRoutes,oneof"`
+	OutsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,19,opt,name=outside_static_routes,json=outsideStaticRoutes,proto3,oneof" json:"outside_static_routes,omitempty"`
 }
 
 func (*GCPVPCIngressEgressGwType_NoNetworkPolicy) isGCPVPCIngressEgressGwType_NetworkPolicyChoice() {}
@@ -343,114 +394,114 @@ func (m *GCPVPCIngressEgressGwType) GetNodeNumber() uint32 {
 	return 0
 }
 
-func (m *GCPVPCIngressEgressGwType) GetInsideNetwork() *ves_io_schema_views1.GCPVPCNetworkChoiceType {
+func (m *GCPVPCIngressEgressGwType) GetInsideNetwork() *views.GCPVPCNetworkChoiceType {
 	if m != nil {
 		return m.InsideNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetInsideSubnet() *ves_io_schema_views1.GCPVPCSubnetChoiceType {
+func (m *GCPVPCIngressEgressGwType) GetInsideSubnet() *views.GCPVPCSubnetChoiceType {
 	if m != nil {
 		return m.InsideSubnet
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetOutsideNetwork() *ves_io_schema_views1.GCPVPCNetworkChoiceType {
+func (m *GCPVPCIngressEgressGwType) GetOutsideNetwork() *views.GCPVPCNetworkChoiceType {
 	if m != nil {
 		return m.OutsideNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetOutsideSubnet() *ves_io_schema_views1.GCPVPCSubnetChoiceType {
+func (m *GCPVPCIngressEgressGwType) GetOutsideSubnet() *views.GCPVPCSubnetChoiceType {
 	if m != nil {
 		return m.OutsideSubnet
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetNoNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetNoNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCIngressEgressGwType_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetActiveNetworkPolicies() *ves_io_schema_network_firewall.ActiveNetworkPoliciesType {
+func (m *GCPVPCIngressEgressGwType) GetActiveNetworkPolicies() *network_firewall.ActiveNetworkPoliciesType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCIngressEgressGwType_ActiveNetworkPolicies); ok {
 		return x.ActiveNetworkPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetNoForwardProxy() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetNoForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_NoForwardProxy); ok {
 		return x.NoForwardProxy
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetActiveForwardProxyPolicies() *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType {
+func (m *GCPVPCIngressEgressGwType) GetActiveForwardProxyPolicies() *network_firewall.ActiveForwardProxyPoliciesType {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies); ok {
 		return x.ActiveForwardProxyPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetForwardProxyAllowAll() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_ForwardProxyAllowAll); ok {
 		return x.ForwardProxyAllowAll
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetNoGlobalNetwork() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetNoGlobalNetwork() *schema.Empty {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCIngressEgressGwType_NoGlobalNetwork); ok {
 		return x.NoGlobalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetGlobalNetworkList() *ves_io_schema_views1.GlobalNetworkConnectionListType {
+func (m *GCPVPCIngressEgressGwType) GetGlobalNetworkList() *views.GlobalNetworkConnectionListType {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCIngressEgressGwType_GlobalNetworkList); ok {
 		return x.GlobalNetworkList
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetNoInsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetNoInsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetInsideStaticRouteChoice().(*GCPVPCIngressEgressGwType_NoInsideStaticRoutes); ok {
 		return x.NoInsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetInsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCIngressEgressGwType) GetInsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetInsideStaticRouteChoice().(*GCPVPCIngressEgressGwType_InsideStaticRoutes); ok {
 		return x.InsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetNoOutsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwType) GetNoOutsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCIngressEgressGwType_NoOutsideStaticRoutes); ok {
 		return x.NoOutsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwType) GetOutsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCIngressEgressGwType) GetOutsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCIngressEgressGwType_OutsideStaticRoutes); ok {
 		return x.OutsideStaticRoutes
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GCPVPCIngressEgressGwType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GCPVPCIngressEgressGwType_OneofMarshaler, _GCPVPCIngressEgressGwType_OneofUnmarshaler, _GCPVPCIngressEgressGwType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPVPCIngressEgressGwType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GCPVPCIngressEgressGwType_NoNetworkPolicy)(nil),
 		(*GCPVPCIngressEgressGwType_ActiveNetworkPolicies)(nil),
 		(*GCPVPCIngressEgressGwType_NoForwardProxy)(nil),
@@ -463,282 +514,6 @@ func (*GCPVPCIngressEgressGwType) XXX_OneofFuncs() (func(msg proto.Message, b *p
 		(*GCPVPCIngressEgressGwType_NoOutsideStaticRoutes)(nil),
 		(*GCPVPCIngressEgressGwType_OutsideStaticRoutes)(nil),
 	}
-}
-
-func _GCPVPCIngressEgressGwType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GCPVPCIngressEgressGwType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoNetworkPolicy:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoNetworkPolicy); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoForwardProxy:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoForwardProxy); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyAllowAll); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoGlobalNetwork:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoGlobalNetwork); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_GlobalNetworkList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GlobalNetworkList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwType.GlobalNetworkChoice has unexpected type %T", x)
-	}
-	// inside_static_route_choice
-	switch x := m.InsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoInsideStaticRoutes:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoInsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_InsideStaticRoutes:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwType.InsideStaticRouteChoice has unexpected type %T", x)
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoOutsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwType_OutsideStaticRoutes:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwType.OutsideStaticRouteChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GCPVPCIngressEgressGwType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GCPVPCIngressEgressGwType)
-	switch tag {
-	case 6: // network_policy_choice.no_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCIngressEgressGwType_NoNetworkPolicy{msg}
-		return true, err
-	case 7: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCIngressEgressGwType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 9: // forward_proxy_choice.no_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwType_NoForwardProxy{msg}
-		return true, err
-	case 10: // forward_proxy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 20: // forward_proxy_choice.forward_proxy_allow_all
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwType_ForwardProxyAllowAll{msg}
-		return true, err
-	case 12: // global_network_choice.no_global_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCIngressEgressGwType_NoGlobalNetwork{msg}
-		return true, err
-	case 13: // global_network_choice.global_network_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.GlobalNetworkConnectionListType)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCIngressEgressGwType_GlobalNetworkList{msg}
-		return true, err
-	case 15: // inside_static_route_choice.no_inside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InsideStaticRouteChoice = &GCPVPCIngressEgressGwType_NoInsideStaticRoutes{msg}
-		return true, err
-	case 16: // inside_static_route_choice.inside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.InsideStaticRouteChoice = &GCPVPCIngressEgressGwType_InsideStaticRoutes{msg}
-		return true, err
-	case 18: // outside_static_route_choice.no_outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCIngressEgressGwType_NoOutsideStaticRoutes{msg}
-		return true, err
-	case 19: // outside_static_route_choice.outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCIngressEgressGwType_OutsideStaticRoutes{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GCPVPCIngressEgressGwType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GCPVPCIngressEgressGwType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoNetworkPolicy:
-		s := proto.Size(x.NoNetworkPolicy)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoForwardProxy:
-		s := proto.Size(x.NoForwardProxy)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
-		s := proto.Size(x.ForwardProxyAllowAll)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoGlobalNetwork:
-		s := proto.Size(x.NoGlobalNetwork)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_GlobalNetworkList:
-		s := proto.Size(x.GlobalNetworkList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// inside_static_route_choice
-	switch x := m.InsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoInsideStaticRoutes:
-		s := proto.Size(x.NoInsideStaticRoutes)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_InsideStaticRoutes:
-		s := proto.Size(x.InsideStaticRoutes)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes:
-		s := proto.Size(x.NoOutsideStaticRoutes)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwType_OutsideStaticRoutes:
-		s := proto.Size(x.OutsideStaticRoutes)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GCP Voltstack Cluster
@@ -760,7 +535,7 @@ type GCPVPCVoltstackClusterType struct {
 	// x-required
 	// x-example: "us-west1-a, us-west1-b, us-west1-c"
 	// List of zones when instances will be created, needs to match with region selected.
-	GcpZoneNames []string `protobuf:"bytes,20,rep,name=gcp_zone_names,json=gcpZoneNames" json:"gcp_zone_names,omitempty"`
+	GcpZoneNames []string `protobuf:"bytes,20,rep,name=gcp_zone_names,json=gcpZoneNames,proto3" json:"gcp_zone_names,omitempty"`
 	// Number of main nodes
 	//
 	// x-displayName: "Number of main Nodes"
@@ -770,12 +545,12 @@ type GCPVPCVoltstackClusterType struct {
 	//
 	// x-displayName: "VPC Network for Local Interface"
 	// Network for the local interface of the node
-	SiteLocalNetwork *ves_io_schema_views1.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=site_local_network,json=siteLocalNetwork" json:"site_local_network,omitempty"`
+	SiteLocalNetwork *views.GCPVPCNetworkChoiceType `protobuf:"bytes,2,opt,name=site_local_network,json=siteLocalNetwork,proto3" json:"site_local_network,omitempty"`
 	// Subnet
 	//
 	// x-displayName: "Subnet for Local Interface"
 	// Subnet for the local interface of the node.
-	SiteLocalSubnet *ves_io_schema_views1.GCPVPCSubnetChoiceType `protobuf:"bytes,19,opt,name=site_local_subnet,json=siteLocalSubnet" json:"site_local_subnet,omitempty"`
+	SiteLocalSubnet *views.GCPVPCSubnetChoiceType `protobuf:"bytes,19,opt,name=site_local_subnet,json=siteLocalSubnet,proto3" json:"site_local_subnet,omitempty"`
 	// Manage Network Policy
 	//
 	// x-displayName: "Manage Network Policy"
@@ -829,9 +604,33 @@ type GCPVPCVoltstackClusterType struct {
 	K8SClusterChoice isGCPVPCVoltstackClusterType_K8SClusterChoice `protobuf_oneof:"k8s_cluster_choice"`
 }
 
-func (m *GCPVPCVoltstackClusterType) Reset()                    { *m = GCPVPCVoltstackClusterType{} }
-func (*GCPVPCVoltstackClusterType) ProtoMessage()               {}
-func (*GCPVPCVoltstackClusterType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *GCPVPCVoltstackClusterType) Reset()      { *m = GCPVPCVoltstackClusterType{} }
+func (*GCPVPCVoltstackClusterType) ProtoMessage() {}
+func (*GCPVPCVoltstackClusterType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{2}
+}
+func (m *GCPVPCVoltstackClusterType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCVoltstackClusterType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCVoltstackClusterType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCVoltstackClusterType.Merge(m, src)
+}
+func (m *GCPVPCVoltstackClusterType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCVoltstackClusterType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCVoltstackClusterType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCVoltstackClusterType proto.InternalMessageInfo
 
 type isGCPVPCVoltstackClusterType_NetworkPolicyChoice interface {
 	isGCPVPCVoltstackClusterType_NetworkPolicyChoice()
@@ -865,37 +664,37 @@ type isGCPVPCVoltstackClusterType_K8SClusterChoice interface {
 }
 
 type GCPVPCVoltstackClusterType_NoNetworkPolicy struct {
-	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
+	NoNetworkPolicy *schema.Empty `protobuf:"bytes,5,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
 }
 type GCPVPCVoltstackClusterType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ves_io_schema_network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,6,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,6,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GCPVPCVoltstackClusterType_NoForwardProxy struct {
-	NoForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=no_forward_proxy,json=noForwardProxy,oneof"`
+	NoForwardProxy *schema.Empty `protobuf:"bytes,8,opt,name=no_forward_proxy,json=noForwardProxy,proto3,oneof" json:"no_forward_proxy,omitempty"`
 }
 type GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,9,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,9,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GCPVPCVoltstackClusterType_ForwardProxyAllowAll struct {
-	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,17,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
+	ForwardProxyAllowAll *schema.Empty `protobuf:"bytes,17,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,proto3,oneof" json:"forward_proxy_allow_all,omitempty"`
 }
 type GCPVPCVoltstackClusterType_NoGlobalNetwork struct {
-	NoGlobalNetwork *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=no_global_network,json=noGlobalNetwork,oneof"`
+	NoGlobalNetwork *schema.Empty `protobuf:"bytes,11,opt,name=no_global_network,json=noGlobalNetwork,proto3,oneof" json:"no_global_network,omitempty"`
 }
 type GCPVPCVoltstackClusterType_GlobalNetworkList struct {
-	GlobalNetworkList *ves_io_schema_views1.GlobalNetworkConnectionListType `protobuf:"bytes,12,opt,name=global_network_list,json=globalNetworkList,oneof"`
+	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,12,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
 type GCPVPCVoltstackClusterType_NoOutsideStaticRoutes struct {
-	NoOutsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,oneof"`
+	NoOutsideStaticRoutes *schema.Empty `protobuf:"bytes,15,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,proto3,oneof" json:"no_outside_static_routes,omitempty"`
 }
 type GCPVPCVoltstackClusterType_OutsideStaticRoutes struct {
-	OutsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=outside_static_routes,json=outsideStaticRoutes,oneof"`
+	OutsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=outside_static_routes,json=outsideStaticRoutes,proto3,oneof" json:"outside_static_routes,omitempty"`
 }
 type GCPVPCVoltstackClusterType_NoK8SCluster struct {
-	NoK8SCluster *ves_io_schema4.Empty `protobuf:"bytes,26,opt,name=no_k8s_cluster,json=noK8sCluster,oneof"`
+	NoK8SCluster *schema.Empty `protobuf:"bytes,26,opt,name=no_k8s_cluster,json=noK8sCluster,proto3,oneof" json:"no_k8s_cluster,omitempty"`
 }
 type GCPVPCVoltstackClusterType_K8SCluster struct {
-	K8SCluster *ves_io_schema_views.ObjectRefType `protobuf:"bytes,27,opt,name=k8s_cluster,json=k8sCluster,oneof"`
+	K8SCluster *views.ObjectRefType `protobuf:"bytes,27,opt,name=k8s_cluster,json=k8sCluster,proto3,oneof" json:"k8s_cluster,omitempty"`
 }
 
 func (*GCPVPCVoltstackClusterType_NoNetworkPolicy) isGCPVPCVoltstackClusterType_NetworkPolicyChoice() {
@@ -970,100 +769,100 @@ func (m *GCPVPCVoltstackClusterType) GetNodeNumber() uint32 {
 	return 0
 }
 
-func (m *GCPVPCVoltstackClusterType) GetSiteLocalNetwork() *ves_io_schema_views1.GCPVPCNetworkChoiceType {
+func (m *GCPVPCVoltstackClusterType) GetSiteLocalNetwork() *views.GCPVPCNetworkChoiceType {
 	if m != nil {
 		return m.SiteLocalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetSiteLocalSubnet() *ves_io_schema_views1.GCPVPCSubnetChoiceType {
+func (m *GCPVPCVoltstackClusterType) GetSiteLocalSubnet() *views.GCPVPCSubnetChoiceType {
 	if m != nil {
 		return m.SiteLocalSubnet
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetNoNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetNoNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCVoltstackClusterType_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetActiveNetworkPolicies() *ves_io_schema_network_firewall.ActiveNetworkPoliciesType {
+func (m *GCPVPCVoltstackClusterType) GetActiveNetworkPolicies() *network_firewall.ActiveNetworkPoliciesType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCVoltstackClusterType_ActiveNetworkPolicies); ok {
 		return x.ActiveNetworkPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetNoForwardProxy() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetNoForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_NoForwardProxy); ok {
 		return x.NoForwardProxy
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetActiveForwardProxyPolicies() *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType {
+func (m *GCPVPCVoltstackClusterType) GetActiveForwardProxyPolicies() *network_firewall.ActiveForwardProxyPoliciesType {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies); ok {
 		return x.ActiveForwardProxyPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetForwardProxyAllowAll() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_ForwardProxyAllowAll); ok {
 		return x.ForwardProxyAllowAll
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetNoGlobalNetwork() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetNoGlobalNetwork() *schema.Empty {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCVoltstackClusterType_NoGlobalNetwork); ok {
 		return x.NoGlobalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetGlobalNetworkList() *ves_io_schema_views1.GlobalNetworkConnectionListType {
+func (m *GCPVPCVoltstackClusterType) GetGlobalNetworkList() *views.GlobalNetworkConnectionListType {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCVoltstackClusterType_GlobalNetworkList); ok {
 		return x.GlobalNetworkList
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetNoOutsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetNoOutsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCVoltstackClusterType_NoOutsideStaticRoutes); ok {
 		return x.NoOutsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetOutsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCVoltstackClusterType) GetOutsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCVoltstackClusterType_OutsideStaticRoutes); ok {
 		return x.OutsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetNoK8SCluster() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterType) GetNoK8SCluster() *schema.Empty {
 	if x, ok := m.GetK8SClusterChoice().(*GCPVPCVoltstackClusterType_NoK8SCluster); ok {
 		return x.NoK8SCluster
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterType) GetK8SCluster() *ves_io_schema_views.ObjectRefType {
+func (m *GCPVPCVoltstackClusterType) GetK8SCluster() *views.ObjectRefType {
 	if x, ok := m.GetK8SClusterChoice().(*GCPVPCVoltstackClusterType_K8SCluster); ok {
 		return x.K8SCluster
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GCPVPCVoltstackClusterType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GCPVPCVoltstackClusterType_OneofMarshaler, _GCPVPCVoltstackClusterType_OneofUnmarshaler, _GCPVPCVoltstackClusterType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPVPCVoltstackClusterType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GCPVPCVoltstackClusterType_NoNetworkPolicy)(nil),
 		(*GCPVPCVoltstackClusterType_ActiveNetworkPolicies)(nil),
 		(*GCPVPCVoltstackClusterType_NoForwardProxy)(nil),
@@ -1078,282 +877,6 @@ func (*GCPVPCVoltstackClusterType) XXX_OneofFuncs() (func(msg proto.Message, b *
 	}
 }
 
-func _GCPVPCVoltstackClusterType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GCPVPCVoltstackClusterType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoNetworkPolicy:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoNetworkPolicy); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoForwardProxy:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoForwardProxy); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyAllowAll); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoGlobalNetwork:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoGlobalNetwork); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_GlobalNetworkList:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GlobalNetworkList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterType.GlobalNetworkChoice has unexpected type %T", x)
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoOutsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_OutsideStaticRoutes:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterType.OutsideStaticRouteChoice has unexpected type %T", x)
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoK8SCluster:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoK8SCluster); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterType_K8SCluster:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.K8SCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterType.K8SClusterChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GCPVPCVoltstackClusterType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GCPVPCVoltstackClusterType)
-	switch tag {
-	case 5: // network_policy_choice.no_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCVoltstackClusterType_NoNetworkPolicy{msg}
-		return true, err
-	case 6: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCVoltstackClusterType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 8: // forward_proxy_choice.no_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterType_NoForwardProxy{msg}
-		return true, err
-	case 9: // forward_proxy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 17: // forward_proxy_choice.forward_proxy_allow_all
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterType_ForwardProxyAllowAll{msg}
-		return true, err
-	case 11: // global_network_choice.no_global_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCVoltstackClusterType_NoGlobalNetwork{msg}
-		return true, err
-	case 12: // global_network_choice.global_network_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.GlobalNetworkConnectionListType)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCVoltstackClusterType_GlobalNetworkList{msg}
-		return true, err
-	case 15: // outside_static_route_choice.no_outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCVoltstackClusterType_NoOutsideStaticRoutes{msg}
-		return true, err
-	case 16: // outside_static_route_choice.outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCVoltstackClusterType_OutsideStaticRoutes{msg}
-		return true, err
-	case 26: // k8s_cluster_choice.no_k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GCPVPCVoltstackClusterType_NoK8SCluster{msg}
-		return true, err
-	case 27: // k8s_cluster_choice.k8s_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.K8SClusterChoice = &GCPVPCVoltstackClusterType_K8SCluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GCPVPCVoltstackClusterType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GCPVPCVoltstackClusterType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoNetworkPolicy:
-		s := proto.Size(x.NoNetworkPolicy)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoForwardProxy:
-		s := proto.Size(x.NoForwardProxy)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
-		s := proto.Size(x.ForwardProxyAllowAll)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoGlobalNetwork:
-		s := proto.Size(x.NoGlobalNetwork)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_GlobalNetworkList:
-		s := proto.Size(x.GlobalNetworkList)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes:
-		s := proto.Size(x.NoOutsideStaticRoutes)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_OutsideStaticRoutes:
-		s := proto.Size(x.OutsideStaticRoutes)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// k8s_cluster_choice
-	switch x := m.K8SClusterChoice.(type) {
-	case *GCPVPCVoltstackClusterType_NoK8SCluster:
-		s := proto.Size(x.NoK8SCluster)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterType_K8SCluster:
-		s := proto.Size(x.K8SCluster)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // GCP Ingress Gateway
 //
 // x-displayName: "GCP Ingress Gateway"
@@ -1361,9 +884,33 @@ func _GCPVPCVoltstackClusterType_OneofSizer(msg proto.Message) (n int) {
 type GCPVPCIngressGwReplaceType struct {
 }
 
-func (m *GCPVPCIngressGwReplaceType) Reset()                    { *m = GCPVPCIngressGwReplaceType{} }
-func (*GCPVPCIngressGwReplaceType) ProtoMessage()               {}
-func (*GCPVPCIngressGwReplaceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GCPVPCIngressGwReplaceType) Reset()      { *m = GCPVPCIngressGwReplaceType{} }
+func (*GCPVPCIngressGwReplaceType) ProtoMessage() {}
+func (*GCPVPCIngressGwReplaceType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{3}
+}
+func (m *GCPVPCIngressGwReplaceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCIngressGwReplaceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCIngressGwReplaceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCIngressGwReplaceType.Merge(m, src)
+}
+func (m *GCPVPCIngressGwReplaceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCIngressGwReplaceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCIngressGwReplaceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCIngressGwReplaceType proto.InternalMessageInfo
 
 // GCP Ingress Egress Gateway
 //
@@ -1426,8 +973,30 @@ type GCPVPCIngressEgressGwReplaceType struct {
 func (m *GCPVPCIngressEgressGwReplaceType) Reset()      { *m = GCPVPCIngressEgressGwReplaceType{} }
 func (*GCPVPCIngressEgressGwReplaceType) ProtoMessage() {}
 func (*GCPVPCIngressEgressGwReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{4}
+	return fileDescriptor_29b986390e509b9b, []int{4}
 }
+func (m *GCPVPCIngressEgressGwReplaceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCIngressEgressGwReplaceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCIngressEgressGwReplaceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCIngressEgressGwReplaceType.Merge(m, src)
+}
+func (m *GCPVPCIngressEgressGwReplaceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCIngressEgressGwReplaceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCIngressEgressGwReplaceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCIngressEgressGwReplaceType proto.InternalMessageInfo
 
 type isGCPVPCIngressEgressGwReplaceType_NetworkPolicyChoice interface {
 	isGCPVPCIngressEgressGwReplaceType_NetworkPolicyChoice()
@@ -1461,37 +1030,37 @@ type isGCPVPCIngressEgressGwReplaceType_OutsideStaticRouteChoice interface {
 }
 
 type GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy struct {
-	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
+	NoNetworkPolicy *schema.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ves_io_schema_network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_NoForwardProxy struct {
-	NoForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,oneof"`
+	NoForwardProxy *schema.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,proto3,oneof" json:"no_forward_proxy,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll struct {
-	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
+	ForwardProxyAllowAll *schema.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,proto3,oneof" json:"forward_proxy_allow_all,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork struct {
-	NoGlobalNetwork *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,oneof"`
+	NoGlobalNetwork *schema.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,proto3,oneof" json:"no_global_network,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_GlobalNetworkList struct {
-	GlobalNetworkList *ves_io_schema_views1.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,oneof"`
+	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes struct {
-	NoInsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=no_inside_static_routes,json=noInsideStaticRoutes,oneof"`
+	NoInsideStaticRoutes *schema.Empty `protobuf:"bytes,15,opt,name=no_inside_static_routes,json=noInsideStaticRoutes,proto3,oneof" json:"no_inside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes struct {
-	InsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=inside_static_routes,json=insideStaticRoutes,oneof"`
+	InsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=inside_static_routes,json=insideStaticRoutes,proto3,oneof" json:"inside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes struct {
-	NoOutsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,oneof"`
+	NoOutsideStaticRoutes *schema.Empty `protobuf:"bytes,18,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,proto3,oneof" json:"no_outside_static_routes,omitempty"`
 }
 type GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes struct {
-	OutsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,19,opt,name=outside_static_routes,json=outsideStaticRoutes,oneof"`
+	OutsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,19,opt,name=outside_static_routes,json=outsideStaticRoutes,proto3,oneof" json:"outside_static_routes,omitempty"`
 }
 
 func (*GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) isGCPVPCIngressEgressGwReplaceType_NetworkPolicyChoice() {
@@ -1548,86 +1117,86 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoice() isGCPVP
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetNoNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetNoNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetActiveNetworkPolicies() *ves_io_schema_network_firewall.ActiveNetworkPoliciesType {
+func (m *GCPVPCIngressEgressGwReplaceType) GetActiveNetworkPolicies() *network_firewall.ActiveNetworkPoliciesType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies); ok {
 		return x.ActiveNetworkPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetNoForwardProxy() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetNoForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_NoForwardProxy); ok {
 		return x.NoForwardProxy
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetActiveForwardProxyPolicies() *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType {
+func (m *GCPVPCIngressEgressGwReplaceType) GetActiveForwardProxyPolicies() *network_firewall.ActiveForwardProxyPoliciesType {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies); ok {
 		return x.ActiveForwardProxyPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetForwardProxyAllowAll() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll); ok {
 		return x.ForwardProxyAllowAll
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetNoGlobalNetwork() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetNoGlobalNetwork() *schema.Empty {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork); ok {
 		return x.NoGlobalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetGlobalNetworkList() *ves_io_schema_views1.GlobalNetworkConnectionListType {
+func (m *GCPVPCIngressEgressGwReplaceType) GetGlobalNetworkList() *views.GlobalNetworkConnectionListType {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCIngressEgressGwReplaceType_GlobalNetworkList); ok {
 		return x.GlobalNetworkList
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetNoInsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetNoInsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetInsideStaticRouteChoice().(*GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes); ok {
 		return x.NoInsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetInsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCIngressEgressGwReplaceType) GetInsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetInsideStaticRouteChoice().(*GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes); ok {
 		return x.InsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetNoOutsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCIngressEgressGwReplaceType) GetNoOutsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes); ok {
 		return x.NoOutsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes); ok {
 		return x.OutsideStaticRoutes
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GCPVPCIngressEgressGwReplaceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GCPVPCIngressEgressGwReplaceType_OneofMarshaler, _GCPVPCIngressEgressGwReplaceType_OneofUnmarshaler, _GCPVPCIngressEgressGwReplaceType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPVPCIngressEgressGwReplaceType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy)(nil),
 		(*GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies)(nil),
 		(*GCPVPCIngressEgressGwReplaceType_NoForwardProxy)(nil),
@@ -1640,282 +1209,6 @@ func (*GCPVPCIngressEgressGwReplaceType) XXX_OneofFuncs() (func(msg proto.Messag
 		(*GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes)(nil),
 		(*GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes)(nil),
 	}
-}
-
-func _GCPVPCIngressEgressGwReplaceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GCPVPCIngressEgressGwReplaceType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoNetworkPolicy); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwReplaceType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxy:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoForwardProxy); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyAllowAll); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwReplaceType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoGlobalNetwork); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GlobalNetworkList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwReplaceType.GlobalNetworkChoice has unexpected type %T", x)
-	}
-	// inside_static_route_choice
-	switch x := m.InsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoInsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwReplaceType.InsideStaticRouteChoice has unexpected type %T", x)
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoOutsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCIngressEgressGwReplaceType.OutsideStaticRouteChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GCPVPCIngressEgressGwReplaceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GCPVPCIngressEgressGwReplaceType)
-	switch tag {
-	case 6: // network_policy_choice.no_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy{msg}
-		return true, err
-	case 7: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 9: // forward_proxy_choice.no_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_NoForwardProxy{msg}
-		return true, err
-	case 10: // forward_proxy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 20: // forward_proxy_choice.forward_proxy_allow_all
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll{msg}
-		return true, err
-	case 12: // global_network_choice.no_global_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork{msg}
-		return true, err
-	case 13: // global_network_choice.global_network_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.GlobalNetworkConnectionListType)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCIngressEgressGwReplaceType_GlobalNetworkList{msg}
-		return true, err
-	case 15: // inside_static_route_choice.no_inside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.InsideStaticRouteChoice = &GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes{msg}
-		return true, err
-	case 16: // inside_static_route_choice.inside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.InsideStaticRouteChoice = &GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes{msg}
-		return true, err
-	case 18: // outside_static_route_choice.no_outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes{msg}
-		return true, err
-	case 19: // outside_static_route_choice.outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GCPVPCIngressEgressGwReplaceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GCPVPCIngressEgressGwReplaceType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy:
-		s := proto.Size(x.NoNetworkPolicy)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxy:
-		s := proto.Size(x.NoForwardProxy)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		s := proto.Size(x.ForwardProxyAllowAll)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork:
-		s := proto.Size(x.NoGlobalNetwork)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList:
-		s := proto.Size(x.GlobalNetworkList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// inside_static_route_choice
-	switch x := m.InsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes:
-		s := proto.Size(x.NoInsideStaticRoutes)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes:
-		s := proto.Size(x.InsideStaticRoutes)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes:
-		s := proto.Size(x.NoOutsideStaticRoutes)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes:
-		s := proto.Size(x.OutsideStaticRoutes)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GCP Voltstack Cluster
@@ -1969,8 +1262,30 @@ type GCPVPCVoltstackClusterReplaceType struct {
 func (m *GCPVPCVoltstackClusterReplaceType) Reset()      { *m = GCPVPCVoltstackClusterReplaceType{} }
 func (*GCPVPCVoltstackClusterReplaceType) ProtoMessage() {}
 func (*GCPVPCVoltstackClusterReplaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{5}
+	return fileDescriptor_29b986390e509b9b, []int{5}
 }
+func (m *GCPVPCVoltstackClusterReplaceType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPVPCVoltstackClusterReplaceType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPVPCVoltstackClusterReplaceType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPVPCVoltstackClusterReplaceType.Merge(m, src)
+}
+func (m *GCPVPCVoltstackClusterReplaceType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPVPCVoltstackClusterReplaceType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPVPCVoltstackClusterReplaceType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPVPCVoltstackClusterReplaceType proto.InternalMessageInfo
 
 type isGCPVPCVoltstackClusterReplaceType_NetworkPolicyChoice interface {
 	isGCPVPCVoltstackClusterReplaceType_NetworkPolicyChoice()
@@ -1998,31 +1313,31 @@ type isGCPVPCVoltstackClusterReplaceType_OutsideStaticRouteChoice interface {
 }
 
 type GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy struct {
-	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
+	NoNetworkPolicy *schema.Empty `protobuf:"bytes,6,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies struct {
-	ActiveNetworkPolicies *ves_io_schema_network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,oneof"`
+	ActiveNetworkPolicies *network_firewall.ActiveNetworkPoliciesType `protobuf:"bytes,7,opt,name=active_network_policies,json=activeNetworkPolicies,proto3,oneof" json:"active_network_policies,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_NoForwardProxy struct {
-	NoForwardProxy *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,oneof"`
+	NoForwardProxy *schema.Empty `protobuf:"bytes,9,opt,name=no_forward_proxy,json=noForwardProxy,proto3,oneof" json:"no_forward_proxy,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies struct {
-	ActiveForwardProxyPolicies *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,oneof"`
+	ActiveForwardProxyPolicies *network_firewall.ActiveForwardProxyPoliciesType `protobuf:"bytes,10,opt,name=active_forward_proxy_policies,json=activeForwardProxyPolicies,proto3,oneof" json:"active_forward_proxy_policies,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll struct {
-	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
+	ForwardProxyAllowAll *schema.Empty `protobuf:"bytes,20,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,proto3,oneof" json:"forward_proxy_allow_all,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork struct {
-	NoGlobalNetwork *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,oneof"`
+	NoGlobalNetwork *schema.Empty `protobuf:"bytes,12,opt,name=no_global_network,json=noGlobalNetwork,proto3,oneof" json:"no_global_network,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_GlobalNetworkList struct {
-	GlobalNetworkList *ves_io_schema_views1.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,oneof"`
+	GlobalNetworkList *views.GlobalNetworkConnectionListType `protobuf:"bytes,13,opt,name=global_network_list,json=globalNetworkList,proto3,oneof" json:"global_network_list,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes struct {
-	NoOutsideStaticRoutes *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,oneof"`
+	NoOutsideStaticRoutes *schema.Empty `protobuf:"bytes,15,opt,name=no_outside_static_routes,json=noOutsideStaticRoutes,proto3,oneof" json:"no_outside_static_routes,omitempty"`
 }
 type GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes struct {
-	OutsideStaticRoutes *ves_io_schema_views1.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=outside_static_routes,json=outsideStaticRoutes,oneof"`
+	OutsideStaticRoutes *views.SiteStaticRoutesListType `protobuf:"bytes,16,opt,name=outside_static_routes,json=outsideStaticRoutes,proto3,oneof" json:"outside_static_routes,omitempty"`
 }
 
 func (*GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) isGCPVPCVoltstackClusterReplaceType_NetworkPolicyChoice() {
@@ -2069,72 +1384,72 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoice() isGCPV
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetNoNetworkPolicy() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterReplaceType) GetNoNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetActiveNetworkPolicies() *ves_io_schema_network_firewall.ActiveNetworkPoliciesType {
+func (m *GCPVPCVoltstackClusterReplaceType) GetActiveNetworkPolicies() *network_firewall.ActiveNetworkPoliciesType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies); ok {
 		return x.ActiveNetworkPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetNoForwardProxy() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterReplaceType) GetNoForwardProxy() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_NoForwardProxy); ok {
 		return x.NoForwardProxy
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetActiveForwardProxyPolicies() *ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType {
+func (m *GCPVPCVoltstackClusterReplaceType) GetActiveForwardProxyPolicies() *network_firewall.ActiveForwardProxyPoliciesType {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies); ok {
 		return x.ActiveForwardProxyPolicies
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterReplaceType) GetForwardProxyAllowAll() *schema.Empty {
 	if x, ok := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll); ok {
 		return x.ForwardProxyAllowAll
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetNoGlobalNetwork() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterReplaceType) GetNoGlobalNetwork() *schema.Empty {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork); ok {
 		return x.NoGlobalNetwork
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetGlobalNetworkList() *ves_io_schema_views1.GlobalNetworkConnectionListType {
+func (m *GCPVPCVoltstackClusterReplaceType) GetGlobalNetworkList() *views.GlobalNetworkConnectionListType {
 	if x, ok := m.GetGlobalNetworkChoice().(*GCPVPCVoltstackClusterReplaceType_GlobalNetworkList); ok {
 		return x.GlobalNetworkList
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetNoOutsideStaticRoutes() *ves_io_schema4.Empty {
+func (m *GCPVPCVoltstackClusterReplaceType) GetNoOutsideStaticRoutes() *schema.Empty {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes); ok {
 		return x.NoOutsideStaticRoutes
 	}
 	return nil
 }
 
-func (m *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRoutes() *ves_io_schema_views1.SiteStaticRoutesListType {
+func (m *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRoutes() *views.SiteStaticRoutesListType {
 	if x, ok := m.GetOutsideStaticRouteChoice().(*GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes); ok {
 		return x.OutsideStaticRoutes
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GCPVPCVoltstackClusterReplaceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GCPVPCVoltstackClusterReplaceType_OneofMarshaler, _GCPVPCVoltstackClusterReplaceType_OneofUnmarshaler, _GCPVPCVoltstackClusterReplaceType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPVPCVoltstackClusterReplaceType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy)(nil),
 		(*GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies)(nil),
 		(*GCPVPCVoltstackClusterReplaceType_NoForwardProxy)(nil),
@@ -2145,234 +1460,6 @@ func (*GCPVPCVoltstackClusterReplaceType) XXX_OneofFuncs() (func(msg proto.Messa
 		(*GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes)(nil),
 		(*GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes)(nil),
 	}
-}
-
-func _GCPVPCVoltstackClusterReplaceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GCPVPCVoltstackClusterReplaceType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoNetworkPolicy); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveNetworkPolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterReplaceType.NetworkPolicyChoice has unexpected type %T", x)
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxy:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoForwardProxy); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveForwardProxyPolicies); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ForwardProxyAllowAll); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterReplaceType.ForwardProxyChoice has unexpected type %T", x)
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoGlobalNetwork); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.GlobalNetworkList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterReplaceType.GlobalNetworkChoice has unexpected type %T", x)
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoOutsideStaticRoutes); err != nil {
-			return err
-		}
-	case *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideStaticRoutes); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GCPVPCVoltstackClusterReplaceType.OutsideStaticRouteChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GCPVPCVoltstackClusterReplaceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GCPVPCVoltstackClusterReplaceType)
-	switch tag {
-	case 6: // network_policy_choice.no_network_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy{msg}
-		return true, err
-	case 7: // network_policy_choice.active_network_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveNetworkPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.NetworkPolicyChoice = &GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies{msg}
-		return true, err
-	case 9: // forward_proxy_choice.no_forward_proxy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_NoForwardProxy{msg}
-		return true, err
-	case 10: // forward_proxy_choice.active_forward_proxy_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies{msg}
-		return true, err
-	case 20: // forward_proxy_choice.forward_proxy_allow_all
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll{msg}
-		return true, err
-	case 12: // global_network_choice.no_global_network
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork{msg}
-		return true, err
-	case 13: // global_network_choice.global_network_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.GlobalNetworkConnectionListType)
-		err := b.DecodeMessage(msg)
-		m.GlobalNetworkChoice = &GCPVPCVoltstackClusterReplaceType_GlobalNetworkList{msg}
-		return true, err
-	case 15: // outside_static_route_choice.no_outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes{msg}
-		return true, err
-	case 16: // outside_static_route_choice.outside_static_routes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views1.SiteStaticRoutesListType)
-		err := b.DecodeMessage(msg)
-		m.OutsideStaticRouteChoice = &GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GCPVPCVoltstackClusterReplaceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GCPVPCVoltstackClusterReplaceType)
-	// network_policy_choice
-	switch x := m.NetworkPolicyChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy:
-		s := proto.Size(x.NoNetworkPolicy)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies:
-		s := proto.Size(x.ActiveNetworkPolicies)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// forward_proxy_choice
-	switch x := m.ForwardProxyChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxy:
-		s := proto.Size(x.NoForwardProxy)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		s := proto.Size(x.ActiveForwardProxyPolicies)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		s := proto.Size(x.ForwardProxyAllowAll)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// global_network_choice
-	switch x := m.GlobalNetworkChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork:
-		s := proto.Size(x.NoGlobalNetwork)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList:
-		s := proto.Size(x.GlobalNetworkList)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// outside_static_route_choice
-	switch x := m.OutsideStaticRouteChoice.(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes:
-		s := proto.Size(x.NoOutsideStaticRoutes)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes:
-		s := proto.Size(x.OutsideStaticRoutes)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GlobalSpecType
@@ -2455,7 +1542,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Co-ordinates"
 	// Site longitude and latitude co-ordinates
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,16,opt,name=coordinates" json:"coordinates,omitempty"`
+	Coordinates *site.Coordinates `protobuf:"bytes,16,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Logs Streaming
 	//
 	// x-displayName: "Logs Streaming"
@@ -2470,27 +1557,51 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Volterra Software"
 	// Volterra Software Details
-	Sw *ves_io_schema_views.VolterraSoftwareType `protobuf:"bytes,20,opt,name=sw" json:"sw,omitempty"`
+	Sw *views.VolterraSoftwareType `protobuf:"bytes,20,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//
 	// x-displayName: "Operating System"
 	// Operating System Details
-	Os *ves_io_schema_views.OperatingSystemType `protobuf:"bytes,21,opt,name=os" json:"os,omitempty"`
+	Os *views.OperatingSystemType `protobuf:"bytes,21,opt,name=os,proto3" json:"os,omitempty"`
 	// Reference to terraform parameters
 	//
 	// x-displayName: "Terraform Parameters"
 	// Reference to view internal object
-	TfParams *ves_io_schema_views.ObjectRefType `protobuf:"bytes,999,opt,name=tf_params,json=tfParams" json:"tf_params,omitempty"`
+	TfParams *views.ObjectRefType `protobuf:"bytes,999,opt,name=tf_params,json=tfParams,proto3" json:"tf_params,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{6}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_SiteType interface {
 	isGlobalSpecType_SiteType()
@@ -2512,25 +1623,25 @@ type isGlobalSpecType_LogsReceiverChoice interface {
 }
 
 type GlobalSpecType_IngressGw struct {
-	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,oneof"`
+	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,proto3,oneof" json:"ingress_gw,omitempty"`
 }
 type GlobalSpecType_IngressEgressGw struct {
-	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,oneof"`
+	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,proto3,oneof" json:"ingress_egress_gw,omitempty"`
 }
 type GlobalSpecType_VoltstackCluster struct {
-	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,oneof"`
+	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,proto3,oneof" json:"voltstack_cluster,omitempty"`
 }
 type GlobalSpecType_CloudCredentials struct {
-	CloudCredentials *ves_io_schema_views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,oneof"`
+	CloudCredentials *views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,proto3,oneof" json:"cloud_credentials,omitempty"`
 }
 type GlobalSpecType_Assisted struct {
-	Assisted *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=assisted,oneof"`
+	Assisted *schema.Empty `protobuf:"bytes,7,opt,name=assisted,proto3,oneof" json:"assisted,omitempty"`
 }
 type GlobalSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GlobalSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 
 func (*GlobalSpecType_IngressGw) isGlobalSpecType_SiteType()                       {}
@@ -2588,14 +1699,14 @@ func (m *GlobalSpecType) GetVoltstackCluster() *GCPVPCVoltstackClusterType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetCloudCredentials() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetCloudCredentials() *views.ObjectRefType {
 	if x, ok := m.GetDeployment().(*GlobalSpecType_CloudCredentials); ok {
 		return x.CloudCredentials
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAssisted() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetAssisted() *schema.Empty {
 	if x, ok := m.GetDeployment().(*GlobalSpecType_Assisted); ok {
 		return x.Assisted
 	}
@@ -2651,58 +1762,58 @@ func (m *GlobalSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *GlobalSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSw() *ves_io_schema_views.VolterraSoftwareType {
+func (m *GlobalSpecType) GetSw() *views.VolterraSoftwareType {
 	if m != nil {
 		return m.Sw
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetOs() *ves_io_schema_views.OperatingSystemType {
+func (m *GlobalSpecType) GetOs() *views.OperatingSystemType {
 	if m != nil {
 		return m.Os
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetTfParams() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetTfParams() *views.ObjectRefType {
 	if m != nil {
 		return m.TfParams
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_IngressGw)(nil),
 		(*GlobalSpecType_IngressEgressGw)(nil),
 		(*GlobalSpecType_VoltstackCluster)(nil),
@@ -2711,186 +1822,6 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_LogsStreamingDisabled)(nil),
 		(*GlobalSpecType_LogReceiver)(nil),
 	}
-}
-
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *GlobalSpecType_IngressGw:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressGw); err != nil {
-			return err
-		}
-	case *GlobalSpecType_IngressEgressGw:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressEgressGw); err != nil {
-			return err
-		}
-	case *GlobalSpecType_VoltstackCluster:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.VoltstackCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.SiteType has unexpected type %T", x)
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *GlobalSpecType_CloudCredentials:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CloudCredentials); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Assisted:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Assisted); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.Deployment has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LogReceiver:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 3: // site_type.ingress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GlobalSpecType_IngressGw{msg}
-		return true, err
-	case 4: // site_type.ingress_egress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressEgressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GlobalSpecType_IngressEgressGw{msg}
-		return true, err
-	case 14: // site_type.voltstack_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCVoltstackClusterType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GlobalSpecType_VoltstackCluster{msg}
-		return true, err
-	case 6: // deployment.cloud_credentials
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &GlobalSpecType_CloudCredentials{msg}
-		return true, err
-	case 7: // deployment.assisted
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &GlobalSpecType_Assisted{msg}
-		return true, err
-	case 18: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 19: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GlobalSpecType_LogReceiver{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *GlobalSpecType_IngressGw:
-		s := proto.Size(x.IngressGw)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_IngressEgressGw:
-		s := proto.Size(x.IngressEgressGw)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_VoltstackCluster:
-		s := proto.Size(x.VoltstackCluster)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *GlobalSpecType_CloudCredentials:
-		s := proto.Size(x.CloudCredentials)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Assisted:
-		s := proto.Size(x.Assisted)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GlobalSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // CreateSpecType
@@ -2907,13 +1838,13 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to Deployment:
 	//	*CreateSpecType_CloudCredentials
 	//	*CreateSpecType_Assisted
-	Deployment   isCreateSpecType_Deployment     `protobuf_oneof:"deployment"`
-	InstanceType string                          `protobuf:"bytes,8,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
-	NodesPerAz   uint32                          `protobuf:"varint,9,opt,name=nodes_per_az,json=nodesPerAz,proto3" json:"nodes_per_az,omitempty"`
-	DiskSize     uint32                          `protobuf:"varint,12,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
-	SshKey       string                          `protobuf:"bytes,13,opt,name=ssh_key,json=sshKey,proto3" json:"ssh_key,omitempty"`
-	Address      string                          `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates  *ves_io_schema_site.Coordinates `protobuf:"bytes,16,opt,name=coordinates" json:"coordinates,omitempty"`
+	Deployment   isCreateSpecType_Deployment `protobuf_oneof:"deployment"`
+	InstanceType string                      `protobuf:"bytes,8,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
+	NodesPerAz   uint32                      `protobuf:"varint,9,opt,name=nodes_per_az,json=nodesPerAz,proto3" json:"nodes_per_az,omitempty"`
+	DiskSize     uint32                      `protobuf:"varint,12,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
+	SshKey       string                      `protobuf:"bytes,13,opt,name=ssh_key,json=sshKey,proto3" json:"ssh_key,omitempty"`
+	Address      string                      `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates  *site.Coordinates           `protobuf:"bytes,16,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
 	//	*CreateSpecType_LogsStreamingDisabled
 	//	*CreateSpecType_LogReceiver
@@ -2922,17 +1853,41 @@ type CreateSpecType struct {
 	//
 	// x-displayName: "Volterra Software"
 	// Volterra Software Details
-	Sw *ves_io_schema_views.VolterraSoftwareType `protobuf:"bytes,20,opt,name=sw" json:"sw,omitempty"`
+	Sw *views.VolterraSoftwareType `protobuf:"bytes,20,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//
 	// x-displayName: "Operating System"
 	// Operating System Details
-	Os *ves_io_schema_views.OperatingSystemType `protobuf:"bytes,21,opt,name=os" json:"os,omitempty"`
+	Os *views.OperatingSystemType `protobuf:"bytes,21,opt,name=os,proto3" json:"os,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{7}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_SiteType interface {
 	isCreateSpecType_SiteType()
@@ -2954,25 +1909,25 @@ type isCreateSpecType_LogsReceiverChoice interface {
 }
 
 type CreateSpecType_IngressGw struct {
-	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,oneof"`
+	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,proto3,oneof" json:"ingress_gw,omitempty"`
 }
 type CreateSpecType_IngressEgressGw struct {
-	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,oneof"`
+	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,proto3,oneof" json:"ingress_egress_gw,omitempty"`
 }
 type CreateSpecType_VoltstackCluster struct {
-	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,oneof"`
+	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,proto3,oneof" json:"voltstack_cluster,omitempty"`
 }
 type CreateSpecType_CloudCredentials struct {
-	CloudCredentials *ves_io_schema_views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,oneof"`
+	CloudCredentials *views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,proto3,oneof" json:"cloud_credentials,omitempty"`
 }
 type CreateSpecType_Assisted struct {
-	Assisted *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=assisted,oneof"`
+	Assisted *schema.Empty `protobuf:"bytes,7,opt,name=assisted,proto3,oneof" json:"assisted,omitempty"`
 }
 type CreateSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type CreateSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 
 func (*CreateSpecType_IngressGw) isCreateSpecType_SiteType()                       {}
@@ -3030,14 +1985,14 @@ func (m *CreateSpecType) GetVoltstackCluster() *GCPVPCVoltstackClusterType {
 	return nil
 }
 
-func (m *CreateSpecType) GetCloudCredentials() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetCloudCredentials() *views.ObjectRefType {
 	if x, ok := m.GetDeployment().(*CreateSpecType_CloudCredentials); ok {
 		return x.CloudCredentials
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAssisted() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetAssisted() *schema.Empty {
 	if x, ok := m.GetDeployment().(*CreateSpecType_Assisted); ok {
 		return x.Assisted
 	}
@@ -3079,44 +2034,44 @@ func (m *CreateSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *CreateSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *CreateSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetSw() *ves_io_schema_views.VolterraSoftwareType {
+func (m *CreateSpecType) GetSw() *views.VolterraSoftwareType {
 	if m != nil {
 		return m.Sw
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetOs() *ves_io_schema_views.OperatingSystemType {
+func (m *CreateSpecType) GetOs() *views.OperatingSystemType {
 	if m != nil {
 		return m.Os
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_IngressGw)(nil),
 		(*CreateSpecType_IngressEgressGw)(nil),
 		(*CreateSpecType_VoltstackCluster)(nil),
@@ -3125,186 +2080,6 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_LogsStreamingDisabled)(nil),
 		(*CreateSpecType_LogReceiver)(nil),
 	}
-}
-
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *CreateSpecType_IngressGw:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressGw); err != nil {
-			return err
-		}
-	case *CreateSpecType_IngressEgressGw:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressEgressGw); err != nil {
-			return err
-		}
-	case *CreateSpecType_VoltstackCluster:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.VoltstackCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.SiteType has unexpected type %T", x)
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *CreateSpecType_CloudCredentials:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CloudCredentials); err != nil {
-			return err
-		}
-	case *CreateSpecType_Assisted:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Assisted); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.Deployment has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *CreateSpecType_LogReceiver:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 3: // site_type.ingress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &CreateSpecType_IngressGw{msg}
-		return true, err
-	case 4: // site_type.ingress_egress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressEgressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &CreateSpecType_IngressEgressGw{msg}
-		return true, err
-	case 14: // site_type.voltstack_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCVoltstackClusterType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &CreateSpecType_VoltstackCluster{msg}
-		return true, err
-	case 6: // deployment.cloud_credentials
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &CreateSpecType_CloudCredentials{msg}
-		return true, err
-	case 7: // deployment.assisted
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &CreateSpecType_Assisted{msg}
-		return true, err
-	case 18: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 19: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &CreateSpecType_LogReceiver{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *CreateSpecType_IngressGw:
-		s := proto.Size(x.IngressGw)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_IngressEgressGw:
-		s := proto.Size(x.IngressEgressGw)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_VoltstackCluster:
-		s := proto.Size(x.VoltstackCluster)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *CreateSpecType_CloudCredentials:
-		s := proto.Size(x.CloudCredentials)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Assisted:
-		s := proto.Size(x.Assisted)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *CreateSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // ReplaceSpecType
@@ -3322,18 +2097,42 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_IngressGw
 	//	*ReplaceSpecType_IngressEgressGw
 	//	*ReplaceSpecType_VoltstackCluster
-	SiteType    isReplaceSpecType_SiteType      `protobuf_oneof:"site_type"`
-	Address     string                          `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates *ves_io_schema_site.Coordinates `protobuf:"bytes,16,opt,name=coordinates" json:"coordinates,omitempty"`
+	SiteType    isReplaceSpecType_SiteType `protobuf_oneof:"site_type"`
+	Address     string                     `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates *site.Coordinates          `protobuf:"bytes,16,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
 	//	*ReplaceSpecType_LogsStreamingDisabled
 	//	*ReplaceSpecType_LogReceiver
 	LogsReceiverChoice isReplaceSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{8}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_SiteType interface {
 	isReplaceSpecType_SiteType()
@@ -3349,19 +2148,19 @@ type isReplaceSpecType_LogsReceiverChoice interface {
 }
 
 type ReplaceSpecType_IngressGw struct {
-	IngressGw *GCPVPCIngressGwReplaceType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,oneof"`
+	IngressGw *GCPVPCIngressGwReplaceType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,proto3,oneof" json:"ingress_gw,omitempty"`
 }
 type ReplaceSpecType_IngressEgressGw struct {
-	IngressEgressGw *GCPVPCIngressEgressGwReplaceType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,oneof"`
+	IngressEgressGw *GCPVPCIngressEgressGwReplaceType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,proto3,oneof" json:"ingress_egress_gw,omitempty"`
 }
 type ReplaceSpecType_VoltstackCluster struct {
-	VoltstackCluster *GCPVPCVoltstackClusterReplaceType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,oneof"`
+	VoltstackCluster *GCPVPCVoltstackClusterReplaceType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,proto3,oneof" json:"voltstack_cluster,omitempty"`
 }
 type ReplaceSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type ReplaceSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 
 func (*ReplaceSpecType_IngressGw) isReplaceSpecType_SiteType()                       {}
@@ -3411,168 +2210,36 @@ func (m *ReplaceSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *ReplaceSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_IngressGw)(nil),
 		(*ReplaceSpecType_IngressEgressGw)(nil),
 		(*ReplaceSpecType_VoltstackCluster)(nil),
 		(*ReplaceSpecType_LogsStreamingDisabled)(nil),
 		(*ReplaceSpecType_LogReceiver)(nil),
 	}
-}
-
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *ReplaceSpecType_IngressGw:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressGw); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_IngressEgressGw:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressEgressGw); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_VoltstackCluster:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.VoltstackCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.SiteType has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_LogReceiver:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 3: // site_type.ingress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressGwReplaceType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &ReplaceSpecType_IngressGw{msg}
-		return true, err
-	case 4: // site_type.ingress_egress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressEgressGwReplaceType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &ReplaceSpecType_IngressEgressGw{msg}
-		return true, err
-	case 14: // site_type.voltstack_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCVoltstackClusterReplaceType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &ReplaceSpecType_VoltstackCluster{msg}
-		return true, err
-	case 18: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 19: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *ReplaceSpecType_IngressGw:
-		s := proto.Size(x.IngressGw)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_IngressEgressGw:
-		s := proto.Size(x.IngressEgressGw)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_VoltstackCluster:
-		s := proto.Size(x.VoltstackCluster)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *ReplaceSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GetSpecType
@@ -3589,25 +2256,49 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to Deployment:
 	//	*GetSpecType_CloudCredentials
 	//	*GetSpecType_Assisted
-	Deployment              isGetSpecType_Deployment        `protobuf_oneof:"deployment"`
-	InstanceType            string                          `protobuf:"bytes,8,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
-	NodesPerAz              uint32                          `protobuf:"varint,9,opt,name=nodes_per_az,json=nodesPerAz,proto3" json:"nodes_per_az,omitempty"`
-	VolterraSoftwareVersion string                          `protobuf:"bytes,10,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
-	OperatingSystemVersion  string                          `protobuf:"bytes,11,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
-	DiskSize                uint32                          `protobuf:"varint,12,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
-	SshKey                  string                          `protobuf:"bytes,13,opt,name=ssh_key,json=sshKey,proto3" json:"ssh_key,omitempty"`
-	Address                 string                          `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
-	Coordinates             *ves_io_schema_site.Coordinates `protobuf:"bytes,16,opt,name=coordinates" json:"coordinates,omitempty"`
+	Deployment              isGetSpecType_Deployment `protobuf_oneof:"deployment"`
+	InstanceType            string                   `protobuf:"bytes,8,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
+	NodesPerAz              uint32                   `protobuf:"varint,9,opt,name=nodes_per_az,json=nodesPerAz,proto3" json:"nodes_per_az,omitempty"`
+	VolterraSoftwareVersion string                   `protobuf:"bytes,10,opt,name=volterra_software_version,json=volterraSoftwareVersion,proto3" json:"volterra_software_version,omitempty"`
+	OperatingSystemVersion  string                   `protobuf:"bytes,11,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
+	DiskSize                uint32                   `protobuf:"varint,12,opt,name=disk_size,json=diskSize,proto3" json:"disk_size,omitempty"`
+	SshKey                  string                   `protobuf:"bytes,13,opt,name=ssh_key,json=sshKey,proto3" json:"ssh_key,omitempty"`
+	Address                 string                   `protobuf:"bytes,15,opt,name=address,proto3" json:"address,omitempty"`
+	Coordinates             *site.Coordinates        `protobuf:"bytes,16,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
 	//	*GetSpecType_LogsStreamingDisabled
 	//	*GetSpecType_LogReceiver
 	LogsReceiverChoice isGetSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
-	SiteState          ves_io_schema_site.SiteState     `protobuf:"varint,20,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
+	SiteState          site.SiteState                   `protobuf:"varint,20,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_29b986390e509b9b, []int{9}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_SiteType interface {
 	isGetSpecType_SiteType()
@@ -3629,25 +2320,25 @@ type isGetSpecType_LogsReceiverChoice interface {
 }
 
 type GetSpecType_IngressGw struct {
-	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,oneof"`
+	IngressGw *GCPVPCIngressGwType `protobuf:"bytes,3,opt,name=ingress_gw,json=ingressGw,proto3,oneof" json:"ingress_gw,omitempty"`
 }
 type GetSpecType_IngressEgressGw struct {
-	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,oneof"`
+	IngressEgressGw *GCPVPCIngressEgressGwType `protobuf:"bytes,4,opt,name=ingress_egress_gw,json=ingressEgressGw,proto3,oneof" json:"ingress_egress_gw,omitempty"`
 }
 type GetSpecType_VoltstackCluster struct {
-	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,oneof"`
+	VoltstackCluster *GCPVPCVoltstackClusterType `protobuf:"bytes,14,opt,name=voltstack_cluster,json=voltstackCluster,proto3,oneof" json:"voltstack_cluster,omitempty"`
 }
 type GetSpecType_CloudCredentials struct {
-	CloudCredentials *ves_io_schema_views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,oneof"`
+	CloudCredentials *views.ObjectRefType `protobuf:"bytes,6,opt,name=cloud_credentials,json=cloudCredentials,proto3,oneof" json:"cloud_credentials,omitempty"`
 }
 type GetSpecType_Assisted struct {
-	Assisted *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=assisted,oneof"`
+	Assisted *schema.Empty `protobuf:"bytes,7,opt,name=assisted,proto3,oneof" json:"assisted,omitempty"`
 }
 type GetSpecType_LogsStreamingDisabled struct {
-	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+	LogsStreamingDisabled *schema.Empty `protobuf:"bytes,18,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,proto3,oneof" json:"logs_streaming_disabled,omitempty"`
 }
 type GetSpecType_LogReceiver struct {
-	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,oneof"`
+	LogReceiver *views.ObjectRefType `protobuf:"bytes,19,opt,name=log_receiver,json=logReceiver,proto3,oneof" json:"log_receiver,omitempty"`
 }
 
 func (*GetSpecType_IngressGw) isGetSpecType_SiteType()                       {}
@@ -3705,14 +2396,14 @@ func (m *GetSpecType) GetVoltstackCluster() *GCPVPCVoltstackClusterType {
 	return nil
 }
 
-func (m *GetSpecType) GetCloudCredentials() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetCloudCredentials() *views.ObjectRefType {
 	if x, ok := m.GetDeployment().(*GetSpecType_CloudCredentials); ok {
 		return x.CloudCredentials
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAssisted() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetAssisted() *schema.Empty {
 	if x, ok := m.GetDeployment().(*GetSpecType_Assisted); ok {
 		return x.Assisted
 	}
@@ -3768,37 +2459,37 @@ func (m *GetSpecType) GetAddress() string {
 	return ""
 }
 
-func (m *GetSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
+func (m *GetSpecType) GetCoordinates() *site.Coordinates {
 	if m != nil {
 		return m.Coordinates
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetLogsStreamingDisabled() *schema.Empty {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogsStreamingDisabled); ok {
 		return x.LogsStreamingDisabled
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetLogReceiver() *views.ObjectRefType {
 	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiver); ok {
 		return x.LogReceiver
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetSiteState() ves_io_schema_site.SiteState {
+func (m *GetSpecType) GetSiteState() site.SiteState {
 	if m != nil {
 		return m.SiteState
 	}
-	return ves_io_schema_site.ONLINE
+	return site.ONLINE
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_IngressGw)(nil),
 		(*GetSpecType_IngressEgressGw)(nil),
 		(*GetSpecType_VoltstackCluster)(nil),
@@ -3807,186 +2498,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_LogsStreamingDisabled)(nil),
 		(*GetSpecType_LogReceiver)(nil),
 	}
-}
-
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *GetSpecType_IngressGw:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressGw); err != nil {
-			return err
-		}
-	case *GetSpecType_IngressEgressGw:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IngressEgressGw); err != nil {
-			return err
-		}
-	case *GetSpecType_VoltstackCluster:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.VoltstackCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.SiteType has unexpected type %T", x)
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *GetSpecType_CloudCredentials:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CloudCredentials); err != nil {
-			return err
-		}
-	case *GetSpecType_Assisted:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Assisted); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.Deployment has unexpected type %T", x)
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
-			return err
-		}
-	case *GetSpecType_LogReceiver:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LogReceiver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.LogsReceiverChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 3: // site_type.ingress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GetSpecType_IngressGw{msg}
-		return true, err
-	case 4: // site_type.ingress_egress_gw
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCIngressEgressGwType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GetSpecType_IngressEgressGw{msg}
-		return true, err
-	case 14: // site_type.voltstack_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GCPVPCVoltstackClusterType)
-		err := b.DecodeMessage(msg)
-		m.SiteType = &GetSpecType_VoltstackCluster{msg}
-		return true, err
-	case 6: // deployment.cloud_credentials
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &GetSpecType_CloudCredentials{msg}
-		return true, err
-	case 7: // deployment.assisted
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.Deployment = &GetSpecType_Assisted{msg}
-		return true, err
-	case 18: // logs_receiver_choice.logs_streaming_disabled
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{msg}
-		return true, err
-	case 19: // logs_receiver_choice.log_receiver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.LogsReceiverChoice = &GetSpecType_LogReceiver{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// site_type
-	switch x := m.SiteType.(type) {
-	case *GetSpecType_IngressGw:
-		s := proto.Size(x.IngressGw)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_IngressEgressGw:
-		s := proto.Size(x.IngressEgressGw)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_VoltstackCluster:
-		s := proto.Size(x.VoltstackCluster)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// deployment
-	switch x := m.Deployment.(type) {
-	case *GetSpecType_CloudCredentials:
-		s := proto.Size(x.CloudCredentials)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Assisted:
-		s := proto.Size(x.Assisted)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// logs_receiver_choice
-	switch x := m.LogsReceiverChoice.(type) {
-	case *GetSpecType_LogsStreamingDisabled:
-		s := proto.Size(x.LogsStreamingDisabled)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_LogReceiver:
-		s := proto.Size(x.LogReceiver)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
@@ -4011,6 +2522,224 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.gcp_vpc_site.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.gcp_vpc_site.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/types.proto", fileDescriptor_29b986390e509b9b)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/types.proto", fileDescriptor_29b986390e509b9b)
+}
+
+var fileDescriptor_29b986390e509b9b = []byte{
+	// 3285 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0xdb, 0x6f, 0xdb, 0xd6,
+	0x19, 0xf7, 0x91, 0x65, 0x5b, 0x3a, 0x92, 0x65, 0x99, 0x96, 0x63, 0xd9, 0x49, 0x54, 0xd5, 0xdb,
+	0x50, 0x37, 0xa1, 0xec, 0x88, 0x92, 0x1d, 0xc7, 0xcb, 0xbc, 0x98, 0x5a, 0x9b, 0xc4, 0x6d, 0x53,
+	0x8f, 0x6e, 0xd3, 0xcb, 0xda, 0x71, 0x14, 0x75, 0x2c, 0x73, 0x96, 0x78, 0x54, 0x92, 0xb2, 0xe3,
+	0x00, 0x01, 0x8a, 0xec, 0x65, 0x7b, 0x1b, 0xba, 0x61, 0xd8, 0x9f, 0x30, 0xe4, 0x61, 0xd8, 0xb0,
+	0x97, 0x61, 0x1c, 0x30, 0x23, 0x2f, 0x2b, 0xf2, 0xe4, 0x87, 0x3d, 0x04, 0x19, 0x30, 0xac, 0xce,
+	0xc3, 0xb2, 0x97, 0xa1, 0x18, 0xf6, 0x50, 0x64, 0x2f, 0x03, 0x0f, 0x2f, 0x26, 0x29, 0x4a, 0x71,
+	0x94, 0xf4, 0xb6, 0xea, 0x25, 0x38, 0x97, 0xef, 0xfb, 0x9d, 0x8f, 0x97, 0xf3, 0xfb, 0x7e, 0xe7,
+	0xa3, 0x62, 0x48, 0x6f, 0x23, 0x75, 0x56, 0xc2, 0x73, 0xaa, 0xb8, 0x89, 0xea, 0xc2, 0xdc, 0xb6,
+	0x84, 0x76, 0xd4, 0xb9, 0xaa, 0xd8, 0xe0, 0xb7, 0x1b, 0x22, 0xaf, 0x4a, 0x1a, 0x9a, 0xd3, 0x76,
+	0x1b, 0x48, 0x9d, 0x6d, 0x28, 0x58, 0xc3, 0x54, 0xd6, 0xb4, 0x9e, 0x35, 0xad, 0x67, 0x89, 0xf5,
+	0xac, 0xdb, 0x7a, 0x2a, 0x57, 0x95, 0xb4, 0xcd, 0x66, 0x79, 0x56, 0xc4, 0xf5, 0xb9, 0x2a, 0xae,
+	0xe2, 0x39, 0xe2, 0x58, 0x6e, 0x6e, 0x90, 0x1e, 0xe9, 0x90, 0x96, 0x09, 0x38, 0x75, 0xca, 0xbb,
+	0xbc, 0x8c, 0xb4, 0x1d, 0xac, 0x6c, 0xf1, 0x1b, 0x92, 0x82, 0x76, 0x84, 0x5a, 0xcd, 0xbd, 0xf8,
+	0xd4, 0x71, 0xaf, 0x2d, 0x6e, 0x68, 0x12, 0x96, 0xed, 0xc9, 0x8c, 0x77, 0xd2, 0x1f, 0xf9, 0xd4,
+	0xa4, 0x77, 0xde, 0x3d, 0x75, 0xc2, 0x77, 0x0b, 0x84, 0x9a, 0x54, 0x11, 0x34, 0x64, 0xcd, 0x66,
+	0x5b, 0x6f, 0x10, 0xef, 0x5d, 0xfa, 0xeb, 0x41, 0xb7, 0xd0, 0x08, 0x80, 0x77, 0xaf, 0xf2, 0x4c,
+	0x90, 0x95, 0xcb, 0x60, 0xfa, 0x6e, 0x1c, 0x8e, 0x5d, 0x2c, 0xad, 0x5d, 0x5d, 0x2b, 0x5d, 0x96,
+	0xab, 0x0a, 0x52, 0xd5, 0x8b, 0x3b, 0xaf, 0xed, 0x36, 0x10, 0xc5, 0xc3, 0xa4, 0x71, 0x87, 0x45,
+	0xa4, 0x68, 0xd2, 0x86, 0x84, 0x2a, 0xfc, 0xe6, 0x4e, 0x1a, 0x64, 0xc1, 0x4c, 0x94, 0x9d, 0xbf,
+	0xa7, 0x83, 0xd1, 0xaa, 0xd8, 0xc8, 0x95, 0x77, 0x71, 0x2d, 0xb7, 0x8d, 0x6b, 0x5a, 0x1d, 0xa9,
+	0x9b, 0x9f, 0xe8, 0xa0, 0xef, 0x0f, 0xff, 0xdc, 0xeb, 0x9f, 0x50, 0xc6, 0xd3, 0x17, 0xb8, 0xd6,
+	0x79, 0x2e, 0x51, 0x15, 0x1b, 0x25, 0x1b, 0xed, 0xd2, 0x0e, 0xf5, 0xaf, 0x28, 0x34, 0x86, 0xf8,
+	0xeb, 0x58, 0x46, 0xbc, 0x2c, 0xd4, 0x91, 0x9a, 0x0e, 0x67, 0xfb, 0x67, 0xa2, 0xec, 0x9f, 0xa3,
+	0x36, 0xd6, 0xc0, 0x07, 0x20, 0x94, 0x06, 0x46, 0xeb, 0x77, 0x51, 0xe5, 0x37, 0x51, 0x2e, 0x2e,
+	0xa8, 0x92, 0x90, 0x43, 0x82, 0xaa, 0xe5, 0x73, 0x82, 0xa7, 0x57, 0xf6, 0xf4, 0x44, 0x57, 0x8f,
+	0xf1, 0x58, 0x32, 0x1e, 0x4b, 0x26, 0x27, 0x72, 0xa3, 0xa4, 0x27, 0x63, 0x45, 0xdb, 0xb4, 0x81,
+	0x5b, 0x86, 0xca, 0xad, 0x43, 0x2d, 0x8e, 0x4c, 0xab, 0x23, 0xd3, 0xea, 0x18, 0xb0, 0x62, 0xa1,
+	0xd5, 0xb1, 0xd0, 0xea, 0x58, 0xc8, 0x89, 0xdc, 0x30, 0x19, 0x52, 0x71, 0x53, 0xdb, 0x34, 0xc2,
+	0xf4, 0x74, 0xcb, 0xde, 0xae, 0xbd, 0x0a, 0xe9, 0x7a, 0xaf, 0xcb, 0x35, 0x54, 0x6e, 0x1d, 0x6a,
+	0x71, 0x64, 0x5a, 0x1d, 0x99, 0x56, 0x47, 0xe3, 0xba, 0x8e, 0x09, 0x4d, 0x55, 0x53, 0x84, 0x9a,
+	0x7f, 0xd9, 0xe0, 0xf1, 0x72, 0x9b, 0x71, 0x91, 0x1b, 0x41, 0x4d, 0x05, 0x37, 0x90, 0x79, 0xed,
+	0x06, 0x80, 0x6f, 0xa0, 0xec, 0x1f, 0x10, 0xb9, 0x84, 0x35, 0xb0, 0x83, 0x4c, 0x68, 0x6f, 0xdf,
+	0x3f, 0x5f, 0xf1, 0xf4, 0x8d, 0x0b, 0xf4, 0xf6, 0xcb, 0xbe, 0xbe, 0xd7, 0xbf, 0xe0, 0xb3, 0x2f,
+	0xf8, 0xec, 0x0b, 0x3e, 0xfb, 0xa2, 0xcf, 0xbe, 0xe8, 0xb3, 0x2f, 0xfa, 0xec, 0x17, 0x7c, 0xf6,
+	0x0b, 0x3e, 0xfb, 0x85, 0x9c, 0xc8, 0x4d, 0x92, 0x2b, 0x17, 0xea, 0x48, 0x91, 0x44, 0xdf, 0xcb,
+	0xdb, 0x76, 0xaa, 0xdc, 0x7e, 0x4a, 0xe4, 0x52, 0xe4, 0x09, 0xd8, 0x53, 0x36, 0x56, 0xd0, 0x68,
+	0x39, 0x70, 0x54, 0xe4, 0x86, 0x9b, 0x6a, 0x4e, 0x44, 0xb2, 0xf1, 0x40, 0xc9, 0xcb, 0xe9, 0xee,
+	0x96, 0xbd, 0x5d, 0x9f, 0xf1, 0x06, 0x07, 0x9b, 0xaa, 0x83, 0x7e, 0xd8, 0x16, 0x5d, 0xed, 0x8a,
+	0xd3, 0x36, 0x6e, 0xe7, 0x61, 0xbb, 0xec, 0x6a, 0x9b, 0xf6, 0xe6, 0x23, 0x16, 0x5c, 0xed, 0xb2,
+	0xab, 0x7d, 0x68, 0xc3, 0xb8, 0x6c, 0x18, 0x97, 0x0d, 0xe3, 0xb2, 0x29, 0xb8, 0x6c, 0x0a, 0x2e,
+	0x9b, 0x82, 0xcb, 0xa6, 0xe8, 0xb2, 0x29, 0xba, 0x6c, 0x8c, 0x78, 0xe2, 0x55, 0xb1, 0xf1, 0x36,
+	0x96, 0xd1, 0x15, 0x83, 0xdd, 0x28, 0x1a, 0xc6, 0x64, 0x5c, 0x41, 0xbc, 0xdc, 0xac, 0x97, 0x91,
+	0x92, 0x1e, 0xcc, 0x82, 0x99, 0x61, 0x36, 0x66, 0xb0, 0xdb, 0xe0, 0xa9, 0x30, 0x13, 0x02, 0xfd,
+	0x1c, 0x34, 0xe6, 0xaf, 0x90, 0x69, 0xea, 0x0d, 0x38, 0x5c, 0xc3, 0xa2, 0x50, 0xe3, 0xad, 0xe4,
+	0x94, 0x0e, 0x65, 0xc1, 0x4c, 0x8c, 0xa1, 0x67, 0x83, 0x72, 0xa1, 0x49, 0xe0, 0x57, 0x4c, 0xcb,
+	0xd2, 0x26, 0x96, 0x44, 0x64, 0x90, 0x38, 0x1b, 0xfe, 0x58, 0x07, 0x80, 0x8b, 0x13, 0x20, 0x6b,
+	0x96, 0x7a, 0x0d, 0x9a, 0x7d, 0x5e, 0x6d, 0x96, 0x65, 0xa4, 0xa5, 0x07, 0x08, 0xee, 0xe9, 0x0e,
+	0xb8, 0xeb, 0xc4, 0xb0, 0x05, 0x36, 0x46, 0x60, 0xcc, 0xc9, 0xa5, 0xf8, 0xbf, 0x97, 0xa3, 0x79,
+	0xba, 0x48, 0x2f, 0xd0, 0x0c, 0x3d, 0xbf, 0x1a, 0x8e, 0xf4, 0x27, 0xc3, 0xd3, 0x3f, 0x99, 0x84,
+	0x93, 0x9e, 0xd4, 0xf2, 0x82, 0x3b, 0xc1, 0xa8, 0x6d, 0x13, 0xcc, 0xe5, 0x7b, 0x3a, 0x38, 0xee,
+	0x24, 0x90, 0x7a, 0xb3, 0xa6, 0x49, 0x39, 0x59, 0x12, 0x5b, 0x52, 0xcd, 0xb3, 0xca, 0x33, 0xe9,
+	0x0b, 0x5c, 0x27, 0xcb, 0xa3, 0x24, 0x9d, 0x74, 0x2f, 0xe9, 0xf4, 0x92, 0x4e, 0x2f, 0xe9, 0xf4,
+	0x92, 0xce, 0x57, 0x21, 0xe9, 0x4c, 0x74, 0x4e, 0x3a, 0x6f, 0xc1, 0x84, 0x24, 0xab, 0x92, 0x61,
+	0xff, 0xc4, 0x59, 0x67, 0xd8, 0x44, 0xb2, 0xd3, 0xce, 0x55, 0x68, 0x0d, 0xd8, 0x79, 0x67, 0xbc,
+	0xdb, 0xbc, 0x13, 0x37, 0x71, 0xcc, 0x59, 0xea, 0x7b, 0x70, 0x04, 0x37, 0x35, 0x4f, 0xcc, 0xfd,
+	0x5d, 0xc7, 0x9c, 0xb0, 0xa0, 0xec, 0xa0, 0xdf, 0x84, 0xf6, 0x88, 0x1d, 0xf5, 0xb1, 0x6e, 0xa3,
+	0x1e, 0xb6, 0x80, 0xac, 0xb0, 0x59, 0x38, 0x2a, 0x63, 0x3b, 0x62, 0xbe, 0x81, 0x6b, 0x92, 0xb8,
+	0x4b, 0x24, 0x41, 0x8c, 0x49, 0xf9, 0xc0, 0x5f, 0xa8, 0x37, 0xb4, 0xdd, 0x4b, 0x7d, 0xdc, 0x88,
+	0x8c, 0xad, 0xb8, 0xd6, 0x88, 0x39, 0xa5, 0xc2, 0x09, 0x41, 0xd4, 0xa4, 0x6d, 0xe4, 0xc5, 0x91,
+	0x90, 0x9a, 0x1e, 0x22, 0x48, 0xe7, 0x7c, 0x48, 0xfe, 0x73, 0xee, 0xec, 0x0a, 0x71, 0x77, 0xa3,
+	0x4a, 0x48, 0x35, 0x82, 0xbe, 0xd4, 0xc7, 0x8d, 0x0b, 0x41, 0x93, 0xd4, 0x05, 0x98, 0x94, 0x31,
+	0xbf, 0x81, 0x95, 0x1d, 0x41, 0xa9, 0xf0, 0x0d, 0x05, 0x5f, 0xdb, 0x4d, 0x47, 0x3b, 0xc4, 0x0d,
+	0xb8, 0x84, 0x8c, 0x5f, 0x34, 0xcd, 0xd7, 0x0c, 0x6b, 0xea, 0x47, 0x00, 0x9e, 0xb4, 0xe2, 0xf6,
+	0xc0, 0x1c, 0x46, 0x0f, 0x09, 0xde, 0xf2, 0xd1, 0xa2, 0x77, 0x63, 0x7b, 0x2e, 0x01, 0x70, 0x53,
+	0x42, 0x5b, 0x0b, 0xea, 0x15, 0x38, 0xe1, 0x5d, 0x5d, 0xa8, 0xd5, 0xf0, 0x8e, 0xf1, 0x6f, 0x3a,
+	0xd5, 0xf1, 0x72, 0x52, 0x1b, 0x2e, 0xb8, 0x15, 0xc3, 0x69, 0xa5, 0x56, 0xb3, 0x9e, 0x67, 0xb5,
+	0x86, 0xcb, 0x2e, 0xc9, 0x16, 0xef, 0x00, 0x14, 0x32, 0x9e, 0xe7, 0x45, 0x62, 0x6f, 0xbf, 0x6d,
+	0x1b, 0x70, 0xcc, 0x0b, 0xc0, 0xd7, 0x24, 0x55, 0x4b, 0x0f, 0x13, 0x94, 0x62, 0xf0, 0x2b, 0xe7,
+	0x06, 0x28, 0x61, 0x59, 0x46, 0xa2, 0x26, 0x61, 0xf9, 0x65, 0x49, 0xd5, 0xc8, 0x3d, 0x08, 0x71,
+	0xa3, 0x55, 0xb7, 0x89, 0x31, 0x41, 0xad, 0xc3, 0x09, 0x19, 0xf3, 0xf6, 0x6e, 0xd4, 0x04, 0x4d,
+	0x12, 0x79, 0x05, 0x37, 0x35, 0xa4, 0xa6, 0x47, 0xda, 0x47, 0xcc, 0x86, 0xf7, 0x74, 0x00, 0x2e,
+	0xf5, 0x73, 0x29, 0x19, 0x5f, 0x36, 0x77, 0x20, 0x71, 0xe5, 0x88, 0x27, 0x55, 0x85, 0xa9, 0x40,
+	0xc4, 0x24, 0x41, 0xcc, 0x05, 0x46, 0xbf, 0x2e, 0x69, 0x1e, 0x10, 0x3b, 0x6c, 0x67, 0x29, 0x4a,
+	0x6a, 0x5d, 0xe8, 0x75, 0x98, 0x96, 0x31, 0xef, 0x6c, 0x4b, 0xcf, 0x62, 0xd4, 0x23, 0xc3, 0x0f,
+	0x73, 0xe3, 0x32, 0x7e, 0xd5, 0xda, 0x8a, 0x6e, 0x58, 0x09, 0x8e, 0x07, 0x63, 0x8e, 0x75, 0x7f,
+	0x01, 0x61, 0x6e, 0x0c, 0xb7, 0x2e, 0xb5, 0xf4, 0xce, 0x6d, 0x1d, 0xbc, 0x09, 0xa7, 0xe0, 0xc0,
+	0x15, 0x5c, 0x41, 0x2a, 0x35, 0x9a, 0xa7, 0x99, 0x22, 0xcd, 0x14, 0x68, 0x86, 0x66, 0xf2, 0x74,
+	0x81, 0x66, 0x18, 0x78, 0x02, 0x8e, 0x1b, 0xd0, 0x59, 0xeb, 0xa9, 0x65, 0x5f, 0xb4, 0x5e, 0x79,
+	0xaa, 0x7f, 0x9e, 0x5e, 0x84, 0x27, 0x60, 0x72, 0xa5, 0xb2, 0x2d, 0xc8, 0x22, 0xaa, 0x64, 0x5f,
+	0x35, 0x6b, 0x42, 0x54, 0x24, 0x9f, 0xa7, 0xf3, 0x45, 0x3a, 0x7f, 0x96, 0x9d, 0x81, 0xe3, 0x5e,
+	0x5a, 0xe1, 0x45, 0xc2, 0x45, 0xd4, 0xc8, 0x9e, 0x0e, 0x06, 0xf7, 0x75, 0x30, 0x70, 0xa0, 0x83,
+	0xfe, 0x05, 0xfa, 0x2c, 0x7b, 0x1a, 0xa6, 0xbc, 0x5b, 0xc0, 0x32, 0x1c, 0xdb, 0xd3, 0x41, 0x74,
+	0x5f, 0x07, 0x91, 0x03, 0x1d, 0x0c, 0x9d, 0xa3, 0x99, 0x33, 0x74, 0xfe, 0x0c, 0x3b, 0x0b, 0xc7,
+	0x7d, 0x2f, 0xa7, 0x65, 0x3d, 0xbe, 0xa7, 0x83, 0xf8, 0x87, 0x3a, 0x00, 0xfb, 0x3a, 0x88, 0x1d,
+	0xe8, 0x60, 0x20, 0xcf, 0xd0, 0xf9, 0x02, 0x5b, 0x80, 0x53, 0x01, 0xef, 0x83, 0xdb, 0x69, 0xc4,
+	0x72, 0x4a, 0x10, 0xa7, 0x79, 0x3a, 0xbf, 0xc0, 0x16, 0xe1, 0xf1, 0xa0, 0x87, 0xe0, 0xf6, 0xa2,
+	0x2c, 0xaf, 0x51, 0xe2, 0xb5, 0x48, 0xe7, 0xcf, 0xad, 0x86, 0x23, 0xe1, 0xe4, 0xc0, 0x6a, 0x38,
+	0x32, 0x90, 0x1c, 0x5c, 0x0d, 0x47, 0x22, 0xc9, 0xe8, 0x6a, 0x38, 0x12, 0x4b, 0xc6, 0x57, 0xc3,
+	0x91, 0x44, 0x72, 0x64, 0x35, 0x1c, 0x19, 0x4d, 0x52, 0xd3, 0xbf, 0x9e, 0x80, 0x53, 0x26, 0x3f,
+	0x5f, 0xc5, 0x35, 0x4d, 0xd5, 0x04, 0x71, 0xab, 0x54, 0x6b, 0xaa, 0x1a, 0x52, 0xc8, 0x61, 0xa4,
+	0xde, 0xf6, 0x30, 0x52, 0xba, 0xa7, 0x83, 0xb4, 0xa7, 0x9a, 0x45, 0x9c, 0x73, 0x22, 0xae, 0x97,
+	0xb1, 0x7d, 0x66, 0xc8, 0x28, 0x27, 0xd2, 0x17, 0xb8, 0xb6, 0x66, 0x47, 0x39, 0x86, 0xa4, 0x7a,
+	0xc7, 0x90, 0xde, 0x31, 0xa4, 0x77, 0x0c, 0xe9, 0x1d, 0x43, 0xbe, 0x0a, 0xc7, 0x10, 0xaa, 0xf3,
+	0x31, 0xe4, 0x07, 0x90, 0x22, 0x1f, 0x32, 0x9e, 0x56, 0x01, 0x2c, 0x69, 0xa0, 0xbd, 0xec, 0x2e,
+	0x82, 0xbd, 0x0b, 0x47, 0x5d, 0x2b, 0x58, 0xda, 0x7e, 0xac, 0x5b, 0x6d, 0x3f, 0xe2, 0xe0, 0x77,
+	0x52, 0xf7, 0x03, 0x4f, 0x4d, 0xdd, 0x0f, 0x7e, 0xa6, 0xea, 0x3e, 0xf2, 0x94, 0xd5, 0x7d, 0xf4,
+	0xf3, 0x55, 0xf7, 0xa3, 0x4f, 0x4b, 0xdd, 0xc7, 0x9e, 0x8a, 0xba, 0x8f, 0x3f, 0x6d, 0x75, 0xdf,
+	0x49, 0x1f, 0x1f, 0x45, 0xde, 0x3f, 0xae, 0x3e, 0x7e, 0x22, 0x81, 0x1f, 0xa4, 0x8f, 0x29, 0x16,
+	0x26, 0x64, 0xcc, 0x6f, 0x2d, 0xaa, 0xbc, 0x68, 0x4a, 0xb4, 0xf4, 0xd4, 0x11, 0x74, 0x7d, 0x5c,
+	0xc6, 0x2f, 0x2d, 0xaa, 0x96, 0xa8, 0xa3, 0xde, 0x82, 0x31, 0x37, 0xc0, 0x71, 0x02, 0x30, 0x1d,
+	0x18, 0xe4, 0xab, 0xe5, 0x1f, 0x22, 0x51, 0xe3, 0xd0, 0x06, 0x89, 0x8c, 0xba, 0x75, 0xc3, 0xed,
+	0x69, 0x81, 0xc3, 0x2d, 0x07, 0x7a, 0xe9, 0x8d, 0xdb, 0x3a, 0x58, 0x87, 0xe3, 0xb6, 0x7c, 0x8f,
+	0xe7, 0x89, 0x42, 0x5e, 0xa4, 0x19, 0x3a, 0x7f, 0xae, 0x83, 0x72, 0x2f, 0xd2, 0x67, 0xdb, 0x28,
+	0xf7, 0x33, 0x86, 0x72, 0x67, 0xe6, 0x3b, 0x2b, 0xf7, 0x81, 0x7d, 0x1d, 0x84, 0x0d, 0xe5, 0x3e,
+	0x4f, 0x2f, 0xb0, 0xa7, 0xda, 0x28, 0x77, 0x6a, 0x4f, 0x07, 0x91, 0x7d, 0x1d, 0x0c, 0x1d, 0xe8,
+	0x60, 0x70, 0x91, 0xce, 0x9f, 0xa5, 0xcf, 0x75, 0x16, 0xee, 0x31, 0x4b, 0x4d, 0x43, 0xa2, 0xa6,
+	0xf3, 0x74, 0x9e, 0x39, 0x8a, 0x06, 0x0f, 0x50, 0xee, 0xa7, 0x21, 0xe5, 0xba, 0x6b, 0x6e, 0xe3,
+	0x29, 0xcb, 0x78, 0xd2, 0x30, 0x66, 0x16, 0x68, 0xe6, 0xac, 0xf9, 0x79, 0xc0, 0x91, 0xed, 0x43,
+	0xc9, 0xc8, 0x6a, 0x38, 0x02, 0x93, 0x31, 0x47, 0xb0, 0x4f, 0x26, 0xa7, 0xa6, 0x8b, 0xb6, 0x5e,
+	0x77, 0x3e, 0x4b, 0x73, 0xa8, 0x51, 0x13, 0x4c, 0xde, 0x5d, 0x3a, 0x76, 0x67, 0x39, 0xe8, 0xab,
+	0xf5, 0xf4, 0xcf, 0xe2, 0x30, 0x1b, 0xf8, 0xc9, 0xc1, 0xe5, 0xdc, 0xab, 0xbd, 0xf4, 0x6a, 0x2f,
+	0xbd, 0xda, 0xcb, 0x57, 0xb5, 0xf6, 0x72, 0x67, 0xb9, 0xfd, 0x37, 0xc9, 0xdb, 0x3a, 0x38, 0xff,
+	0x44, 0xb5, 0x97, 0x95, 0x76, 0x0c, 0x3e, 0xe3, 0xab, 0xbd, 0xdc, 0x7c, 0x08, 0x82, 0x2d, 0xd9,
+	0x52, 0x1b, 0x6a, 0x3f, 0x1d, 0x50, 0x94, 0xb9, 0xf9, 0x10, 0x04, 0x1a, 0xb3, 0x17, 0xdb, 0x71,
+	0xfe, 0x6c, 0x60, 0xb1, 0xc6, 0x88, 0x26, 0xd0, 0x9e, 0xfd, 0x6e, 0xc7, 0x2a, 0x4e, 0x21, 0x30,
+	0x17, 0xdc, 0x7c, 0x08, 0x3a, 0x38, 0xb1, 0xeb, 0x9d, 0xf3, 0x4b, 0x31, 0xb0, 0xc6, 0x73, 0xf3,
+	0x21, 0xe8, 0xe4, 0xf5, 0x88, 0xe2, 0xcf, 0x7f, 0xa3, 0xf0, 0xd9, 0xe0, 0xe2, 0x4f, 0x2f, 0x2d,
+	0xf4, 0xd2, 0xc2, 0x17, 0x21, 0x2d, 0x7c, 0xe9, 0x45, 0xfb, 0xd2, 0xdb, 0x77, 0x96, 0x3b, 0x14,
+	0x58, 0x6f, 0xeb, 0xe0, 0xdc, 0x23, 0x98, 0x75, 0x32, 0x80, 0x59, 0x89, 0x24, 0x2d, 0xfe, 0xff,
+	0xd1, 0xea, 0x11, 0x38, 0x30, 0x90, 0x57, 0xbb, 0xe1, 0xc0, 0xe9, 0x5f, 0x50, 0x30, 0x61, 0xbe,
+	0x94, 0xeb, 0x0d, 0x24, 0x12, 0xaa, 0xfb, 0x71, 0x3f, 0x84, 0x55, 0xb1, 0xc1, 0x2b, 0xa8, 0x2a,
+	0x61, 0xd9, 0xaa, 0x74, 0x3f, 0x08, 0xd9, 0xb5, 0xe7, 0xbf, 0x85, 0x94, 0xbf, 0x86, 0x38, 0x78,
+	0x58, 0x55, 0x76, 0xb5, 0x19, 0x6e, 0xc4, 0x57, 0x0f, 0xf6, 0x0f, 0xb4, 0x58, 0x14, 0xb8, 0x98,
+	0xab, 0x3e, 0x6b, 0xcd, 0x1e, 0x96, 0x3d, 0xfd, 0x03, 0x0c, 0x97, 0x0a, 0xaa, 0x8e, 0x72, 0xc3,
+	0x9e, 0xca, 0x27, 0x17, 0x77, 0xd7, 0x35, 0x3d, 0x3d, 0xc6, 0xd3, 0x2b, 0x78, 0x7a, 0x45, 0x4f,
+	0x6f, 0x81, 0x9b, 0x68, 0x53, 0x17, 0xe4, 0xa8, 0xd6, 0x4a, 0x1f, 0x17, 0x73, 0x95, 0xee, 0xb8,
+	0x88, 0x5d, 0xa0, 0x73, 0x5a, 0x45, 0xd2, 0x32, 0xe3, 0xb1, 0x5b, 0x8c, 0xd3, 0x2a, 0x38, 0xad,
+	0x22, 0x17, 0xad, 0x8a, 0x0d, 0x8e, 0xdc, 0x7b, 0xea, 0x1d, 0x08, 0x25, 0x53, 0x89, 0xf0, 0xd5,
+	0x1d, 0xeb, 0xd3, 0xf5, 0xfc, 0xec, 0xa3, 0x7e, 0xf0, 0x3c, 0x1b, 0x70, 0xf8, 0x61, 0xc3, 0xfb,
+	0xc6, 0xfe, 0xec, 0xe3, 0xa2, 0x92, 0x3d, 0x4c, 0x61, 0x38, 0x6a, 0xa3, 0x23, 0x67, 0x91, 0x30,
+	0x59, 0xe4, 0x9b, 0x8f, 0xb9, 0xc8, 0x0b, 0x41, 0x4b, 0x8d, 0x48, 0xde, 0x49, 0xea, 0x3d, 0x38,
+	0xea, 0x7c, 0xfc, 0x70, 0x4e, 0xdf, 0x09, 0xb2, 0xe0, 0xf9, 0xa3, 0x2e, 0x18, 0x44, 0x20, 0xce,
+	0x8a, 0xc9, 0x6d, 0xdf, 0x2c, 0x55, 0x85, 0xa3, 0x62, 0x0d, 0x37, 0x2b, 0xbc, 0xa8, 0xa0, 0x0a,
+	0x92, 0x35, 0x49, 0xa8, 0xd9, 0x25, 0xb2, 0xa3, 0x1c, 0xf8, 0x53, 0xb7, 0x6e, 0xb4, 0xfa, 0x5f,
+	0x02, 0x5c, 0x92, 0x0c, 0x96, 0x0e, 0xc7, 0x28, 0x06, 0x46, 0x04, 0x55, 0x95, 0x54, 0x0d, 0x55,
+	0xac, 0x6c, 0xde, 0x2e, 0x21, 0x39, 0x76, 0xd4, 0x43, 0x40, 0x7e, 0xf7, 0xa0, 0x19, 0xbc, 0x46,
+	0x7e, 0x98, 0x4d, 0xca, 0x69, 0x51, 0xf6, 0x2f, 0xe0, 0x9e, 0x0e, 0x86, 0xe5, 0x7c, 0xce, 0x98,
+	0xaa, 0x08, 0x4a, 0x25, 0x57, 0x34, 0x76, 0xdf, 0x07, 0x7f, 0x04, 0xbf, 0x05, 0x70, 0x11, 0x7a,
+	0x67, 0xa8, 0xe7, 0x66, 0x8a, 0xd9, 0x6b, 0xd9, 0xed, 0xd2, 0xda, 0xeb, 0x74, 0x36, 0xbf, 0x70,
+	0x91, 0xcd, 0x72, 0x2b, 0xaf, 0x3c, 0x9f, 0xad, 0xa3, 0x8a, 0xd4, 0xac, 0x67, 0x1b, 0x48, 0xd9,
+	0xc0, 0x4a, 0xdd, 0x58, 0x01, 0x2e, 0x78, 0x3d, 0x17, 0xa9, 0x6f, 0xcc, 0x2c, 0x3a, 0x9e, 0x05,
+	0xc6, 0xf6, 0xdc, 0x94, 0xaa, 0x9b, 0x1e, 0xbf, 0x6f, 0xc1, 0x84, 0xdb, 0x2f, 0xbf, 0x40, 0x9d,
+	0x9e, 0xc9, 0x2f, 0x38, 0x9e, 0x0b, 0x45, 0xdb, 0x73, 0x1b, 0x29, 0xbb, 0x2d, 0xee, 0x06, 0x67,
+	0x84, 0x95, 0x50, 0xfa, 0x02, 0xf9, 0x6d, 0x06, 0xb9, 0x56, 0x42, 0x33, 0x8b, 0x30, 0x2e, 0xe3,
+	0x0a, 0x52, 0xf9, 0x06, 0x52, 0x78, 0xe1, 0x3a, 0x11, 0x25, 0xc3, 0xec, 0x31, 0x23, 0x8d, 0xdc,
+	0xd3, 0x01, 0x38, 0x63, 0xf3, 0x4d, 0xf8, 0x54, 0x28, 0x3d, 0x6e, 0x56, 0x80, 0xd5, 0x35, 0xa4,
+	0xac, 0x5c, 0xa7, 0xd6, 0xe0, 0xa4, 0xf1, 0x9c, 0x91, 0xa2, 0x08, 0xbc, 0x8a, 0x37, 0xb4, 0x1d,
+	0x41, 0x41, 0xfc, 0x36, 0x52, 0x54, 0x83, 0xae, 0x20, 0xb9, 0x83, 0xa9, 0xbb, 0x37, 0xc0, 0x03,
+	0x1d, 0x00, 0x07, 0x84, 0x04, 0x30, 0x61, 0xbb, 0xad, 0x5b, 0x5e, 0x57, 0x4d, 0x27, 0xea, 0x0a,
+	0x4c, 0xe3, 0x06, 0x52, 0x04, 0x4d, 0x92, 0xab, 0xbc, 0xba, 0xab, 0x6a, 0xa8, 0xee, 0x00, 0xc6,
+	0x3a, 0x00, 0x1e, 0x73, 0xbc, 0xd6, 0x89, 0x93, 0x8d, 0x77, 0x06, 0x46, 0x2b, 0x92, 0xba, 0xc5,
+	0xab, 0xd2, 0x75, 0x44, 0x54, 0xc5, 0x30, 0x3b, 0xb6, 0xe7, 0xf2, 0x1e, 0x3c, 0x15, 0x4e, 0xbf,
+	0xff, 0x9f, 0x7e, 0x2e, 0x62, 0x58, 0xad, 0x4b, 0xd7, 0x11, 0xf5, 0x1c, 0x1c, 0x52, 0xd5, 0x4d,
+	0x7e, 0x0b, 0xed, 0x12, 0xfd, 0x10, 0x65, 0x13, 0x9f, 0xe8, 0xa0, 0x9f, 0x7c, 0xeb, 0x53, 0xfa,
+	0xd3, 0xef, 0x5f, 0xe0, 0x06, 0x55, 0x75, 0xf3, 0x25, 0xb4, 0x4b, 0xcd, 0xc0, 0x21, 0xa1, 0x52,
+	0x31, 0x36, 0x14, 0xc9, 0xfd, 0x51, 0x36, 0x61, 0x00, 0x3b, 0x86, 0x21, 0xce, 0x9e, 0xa6, 0x2e,
+	0xc2, 0x98, 0x88, 0xb1, 0x52, 0x91, 0x64, 0xe1, 0x30, 0xab, 0x3f, 0xe3, 0x7b, 0x29, 0xc9, 0xce,
+	0x2a, 0x1d, 0x9a, 0x99, 0x79, 0x9c, 0x73, 0x7b, 0x52, 0xaf, 0xc1, 0x89, 0x1a, 0xae, 0xaa, 0xbc,
+	0xaa, 0x29, 0x48, 0xa8, 0x1b, 0xb7, 0xa8, 0x22, 0xa9, 0x42, 0xb9, 0x86, 0x2a, 0x47, 0x38, 0xd7,
+	0x85, 0xb8, 0x71, 0xc3, 0x79, 0xdd, 0xf6, 0xfd, 0x8e, 0xe5, 0x4a, 0xbd, 0x03, 0xe3, 0x35, 0x5c,
+	0xe5, 0x15, 0x24, 0x22, 0x69, 0x1b, 0x29, 0xd6, 0x71, 0xee, 0x28, 0x9b, 0x72, 0xec, 0xd6, 0x0d,
+	0x8f, 0xab, 0xb5, 0x4e, 0xac, 0x86, 0xab, 0x9c, 0x35, 0x44, 0x95, 0x60, 0x48, 0xdd, 0xb1, 0x94,
+	0xe1, 0xf3, 0x81, 0x98, 0x57, 0x7d, 0xef, 0x02, 0x81, 0x8e, 0x18, 0x58, 0xa4, 0x6c, 0x1f, 0x52,
+	0x77, 0x28, 0x16, 0x86, 0xb0, 0x6a, 0xfd, 0x16, 0x69, 0x26, 0x38, 0x30, 0xef, 0xf3, 0xf7, 0x63,
+	0x60, 0x95, 0x7a, 0x17, 0x46, 0xb5, 0x0d, 0xbe, 0x21, 0x28, 0x42, 0x5d, 0x4d, 0xff, 0x63, 0xe8,
+	0xc8, 0x17, 0x79, 0xfc, 0xd6, 0x8d, 0x14, 0x89, 0xcf, 0xd8, 0x47, 0xa6, 0x3f, 0xd2, 0x90, 0xa2,
+	0x1a, 0x2f, 0x21, 0x17, 0xd1, 0x36, 0xd6, 0x08, 0x22, 0xf5, 0x7d, 0x38, 0x4c, 0xfe, 0xfb, 0x87,
+	0x24, 0x6b, 0x48, 0x91, 0x85, 0x5a, 0xfa, 0xc1, 0xd0, 0xe3, 0x90, 0x9b, 0xd7, 0x99, 0x60, 0xc7,
+	0x8d, 0xa1, 0xcb, 0xd6, 0xc8, 0x52, 0xf3, 0xb6, 0x0e, 0xde, 0x83, 0x27, 0xe0, 0x18, 0x11, 0x67,
+	0x86, 0x5b, 0x76, 0x1d, 0xd5, 0x4c, 0xd5, 0x4a, 0x0d, 0xe4, 0x69, 0x86, 0x9e, 0x87, 0x39, 0x98,
+	0x32, 0xa5, 0x1b, 0xae, 0xa0, 0xec, 0x9a, 0x13, 0x29, 0x35, 0xbe, 0x48, 0x13, 0xa9, 0x43, 0x9f,
+	0xa3, 0xf3, 0x67, 0x68, 0x43, 0xad, 0x19, 0x4a, 0x05, 0x4e, 0xc3, 0x63, 0x8e, 0x96, 0x2b, 0x61,
+	0x79, 0x43, 0xaa, 0x36, 0x8d, 0x7b, 0x88, 0x65, 0x2a, 0x92, 0x3f, 0x6b, 0x88, 0x2c, 0x26, 0xcf,
+	0x66, 0x61, 0xd4, 0xf9, 0xdf, 0x2a, 0xe4, 0x27, 0x07, 0xfd, 0xfb, 0x3a, 0x08, 0x19, 0x42, 0xae,
+	0x40, 0x17, 0x8d, 0x30, 0xd9, 0x93, 0x10, 0x56, 0x50, 0xa3, 0x86, 0x77, 0xeb, 0x48, 0xd6, 0x5a,
+	0x7f, 0xbe, 0x90, 0x83, 0x29, 0xf2, 0xce, 0xda, 0xef, 0xc8, 0x23, 0x7f, 0x25, 0x10, 0x4a, 0xf6,
+	0x3b, 0x22, 0xc9, 0x38, 0x16, 0xfe, 0x32, 0x0a, 0x13, 0x25, 0x05, 0x09, 0x1a, 0x72, 0x84, 0xd1,
+	0xc9, 0x56, 0x5d, 0xe4, 0x4e, 0xd6, 0x57, 0x9f, 0x5a, 0xb2, 0xf6, 0xa6, 0x69, 0xe9, 0xd3, 0x49,
+	0xd3, 0x41, 0x09, 0x7a, 0xeb, 0x53, 0x4a, 0xd0, 0x5f, 0xbe, 0xd4, 0xfc, 0xb5, 0xc0, 0xcc, 0xec,
+	0x4b, 0x61, 0xd9, 0xa0, 0x14, 0xe6, 0x49, 0x55, 0xc7, 0x5b, 0x12, 0x81, 0x8b, 0xf3, 0x27, 0x7c,
+	0x9c, 0xef, 0x70, 0x7c, 0xda, 0xc7, 0xf1, 0x87, 0x9c, 0xbe, 0xd2, 0x0d, 0xa7, 0x7b, 0xd9, 0xfc,
+	0x4a, 0x57, 0x6c, 0xde, 0x9e, 0xc7, 0xdf, 0xec, 0x9a, 0xc7, 0x47, 0x7c, 0x3c, 0xee, 0xe7, 0xf0,
+	0x6f, 0x77, 0xc7, 0xe1, 0x61, 0x87, 0xbf, 0x97, 0xbb, 0xe2, 0xef, 0xb0, 0xcd, 0xdd, 0x4b, 0xa3,
+	0x77, 0x96, 0x7d, 0x87, 0x23, 0x76, 0xca, 0x4d, 0x4c, 0xc3, 0x37, 0x1f, 0x82, 0xc3, 0x2e, 0x7b,
+	0xc2, 0x43, 0x49, 0x89, 0x9b, 0x0f, 0x81, 0xab, 0xcf, 0x9e, 0x69, 0xc3, 0x48, 0x69, 0xe3, 0x44,
+	0x19, 0x34, 0xe3, 0x90, 0x92, 0xf9, 0xf5, 0xc3, 0x3c, 0xb3, 0x19, 0xd4, 0xf4, 0xfb, 0x41, 0x38,
+	0x62, 0xd5, 0xa6, 0x1c, 0x6e, 0x12, 0x03, 0xc8, 0xe7, 0xfc, 0x63, 0x93, 0x8f, 0xab, 0xe2, 0x15,
+	0x74, 0x60, 0xd8, 0x6e, 0xcf, 0x44, 0x6c, 0x97, 0x4c, 0x14, 0xb4, 0x62, 0x0b, 0x2d, 0x5d, 0x6b,
+	0x4f, 0x4b, 0xa5, 0x6e, 0x69, 0x29, 0x68, 0xe1, 0x56, 0x8e, 0xfa, 0x22, 0xee, 0x44, 0xf0, 0x19,
+	0xec, 0x44, 0xe0, 0xd9, 0x89, 0x4b, 0x2f, 0xb7, 0x6c, 0x84, 0xdb, 0x3a, 0x38, 0x0b, 0x8f, 0xc1,
+	0x51, 0xab, 0x5c, 0x23, 0xc9, 0x55, 0x2b, 0x97, 0x53, 0x80, 0x81, 0x27, 0xdb, 0x08, 0x02, 0xeb,
+	0x73, 0xe0, 0xf3, 0xee, 0x3d, 0x74, 0xc2, 0x97, 0xdc, 0xbd, 0x5b, 0xaa, 0xfb, 0x4d, 0x13, 0x4d,
+	0xc2, 0x80, 0xad, 0xf3, 0xa7, 0x28, 0x8c, 0x5d, 0x44, 0x5a, 0x2f, 0xa5, 0xf7, 0x52, 0x7a, 0xb7,
+	0x29, 0x7d, 0xe9, 0x91, 0xa7, 0xcf, 0xf6, 0xe7, 0xcc, 0xc5, 0x47, 0x9d, 0x33, 0xdb, 0x9e, 0x28,
+	0x7b, 0x42, 0xe2, 0x09, 0x84, 0xc4, 0x79, 0x08, 0x09, 0xa5, 0xa8, 0x9a, 0xa0, 0x21, 0x22, 0x28,
+	0x12, 0xcc, 0xc9, 0xa0, 0x6b, 0xb5, 0xab, 0xdb, 0x88, 0x23, 0x1c, 0x44, 0x9a, 0x4b, 0xa9, 0x16,
+	0xf2, 0x7b, 0xb0, 0x0c, 0x3e, 0x17, 0x21, 0x30, 0x9a, 0xa4, 0xd8, 0x9f, 0x83, 0xfd, 0x8f, 0x32,
+	0x7d, 0x77, 0x3f, 0xca, 0xf4, 0x7d, 0xfc, 0x51, 0x06, 0xbc, 0x7f, 0x90, 0x01, 0xbf, 0x3a, 0xc8,
+	0x80, 0x0f, 0x0f, 0x32, 0x60, 0xff, 0x20, 0x03, 0xee, 0x1e, 0x64, 0xc0, 0xdf, 0x0f, 0x32, 0xe0,
+	0xc1, 0x41, 0xa6, 0xef, 0xe3, 0x83, 0x0c, 0xf8, 0xe9, 0xfd, 0x4c, 0xdf, 0xde, 0xfd, 0x0c, 0xd8,
+	0xbf, 0x9f, 0xe9, 0xbb, 0x7b, 0x3f, 0xd3, 0xf7, 0xf6, 0xd5, 0x2a, 0x6e, 0x6c, 0x55, 0x67, 0xed,
+	0x17, 0x74, 0xb6, 0xa9, 0xce, 0x39, 0xa7, 0xcc, 0x5c, 0x43, 0xc1, 0xdb, 0x52, 0x05, 0x29, 0x39,
+	0x7b, 0x7a, 0xae, 0x51, 0xae, 0xe2, 0x39, 0x74, 0x4d, 0xb3, 0xff, 0x84, 0x41, 0xbb, 0xbf, 0xc8,
+	0x50, 0x1e, 0x24, 0x7f, 0x30, 0xa0, 0xf0, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x28, 0xc8, 0x88,
+	0xcb, 0xbc, 0x41, 0x00, 0x00,
+}
+
 func (this *GCPVPCIngressGwType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7113,7 +5842,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GCPVPCIngressGwType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7121,63 +5850,67 @@ func (m *GCPVPCIngressGwType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCIngressGwType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressGwType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
-		i += copy(dAtA[i:], m.GcpCertifiedHw)
-	}
-	if m.LocalNetwork != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalNetwork.Size()))
-		n1, err := m.LocalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n1
-	}
-	if len(m.GcpZoneNames) > 0 {
-		for _, s := range m.GcpZoneNames {
-			dAtA[i] = 0x22
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
+	if m.NodeNumber != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NodeNumber))
+		i--
+		dAtA[i] = 0x30
 	}
 	if m.LocalSubnet != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LocalSubnet.Size()))
-		n2, err := m.LocalSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LocalSubnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x2a
 	}
-	if m.NodeNumber != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NodeNumber))
+	if len(m.GcpZoneNames) > 0 {
+		for iNdEx := len(m.GcpZoneNames) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GcpZoneNames[iNdEx])
+			copy(dAtA[i:], m.GcpZoneNames[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpZoneNames[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
 	}
-	return i, nil
+	if m.LocalNetwork != nil {
+		{
+			size, err := m.LocalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.GcpCertifiedHw) > 0 {
+		i -= len(m.GcpCertifiedHw)
+		copy(dAtA[i:], m.GcpCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCIngressEgressGwType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7185,288 +5918,383 @@ func (m *GCPVPCIngressEgressGwType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCIngressEgressGwType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
-		i += copy(dAtA[i:], m.GcpCertifiedHw)
-	}
-	if m.InsideNetwork != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideNetwork.Size()))
-		n3, err := m.InsideNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.GcpZoneNames) > 0 {
+		for iNdEx := len(m.GcpZoneNames) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GcpZoneNames[iNdEx])
+			copy(dAtA[i:], m.GcpZoneNames[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpZoneNames[iNdEx])))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xc2
 		}
-		i += n3
-	}
-	if m.OutsideNetwork != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideNetwork.Size()))
-		n4, err := m.OutsideNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	if m.NetworkPolicyChoice != nil {
-		nn5, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn5
-	}
-	if m.ForwardProxyChoice != nil {
-		nn6, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn6
-	}
-	if m.GlobalNetworkChoice != nil {
-		nn7, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn7
-	}
-	if m.InsideStaticRouteChoice != nil {
-		nn8, err := m.InsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn8
-	}
-	if m.OutsideStaticRouteChoice != nil {
-		nn9, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn9
-	}
-	if m.InsideSubnet != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideSubnet.Size()))
-		n10, err := m.InsideSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
-	}
-	if m.OutsideSubnet != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideSubnet.Size()))
-		n11, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n11
 	}
 	if m.NodeNumber != 0 {
-		dAtA[i] = 0xb8
-		i++
-		dAtA[i] = 0x1
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NodeNumber))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb8
 	}
-	if len(m.GcpZoneNames) > 0 {
-		for _, s := range m.GcpZoneNames {
-			dAtA[i] = 0xc2
-			i++
-			dAtA[i] = 0x1
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if m.OutsideSubnet != nil {
+		{
+			size, err := m.OutsideSubnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	if m.InsideSubnet != nil {
+		{
+			size, err := m.InsideSubnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	if m.ForwardProxyChoice != nil {
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
-	return i, nil
+	if m.OutsideStaticRouteChoice != nil {
+		{
+			size := m.OutsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.InsideStaticRouteChoice != nil {
+		{
+			size := m.InsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.InsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.GlobalNetworkChoice != nil {
+		{
+			size := m.GlobalNetworkChoice.Size()
+			i -= size
+			if _, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.OutsideNetwork != nil {
+		{
+			size, err := m.OutsideNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.InsideNetwork != nil {
+		{
+			size, err := m.InsideNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.GcpCertifiedHw) > 0 {
+		i -= len(m.GcpCertifiedHw)
+		copy(dAtA[i:], m.GcpCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCIngressEgressGwType_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_NoNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoNetworkPolicy != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n12, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n13, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_NoForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoForwardProxy != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n14, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n15, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_NoGlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_NoGlobalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoGlobalNetwork != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoGlobalNetwork.Size()))
-		n16, err := m.NoGlobalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoGlobalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_GlobalNetworkList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_GlobalNetworkList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GlobalNetworkList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetworkList.Size()))
-		n17, err := m.GlobalNetworkList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GlobalNetworkList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n17
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_NoInsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_NoInsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoInsideStaticRoutes != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoInsideStaticRoutes.Size()))
-		n18, err := m.NoInsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoInsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_InsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_InsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InsideStaticRoutes != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideStaticRoutes.Size()))
-		n19, err := m.InsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoOutsideStaticRoutes != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoOutsideStaticRoutes.Size()))
-		n20, err := m.NoOutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoOutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_OutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_OutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideStaticRoutes.Size()))
-		n21, err := m.OutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwType_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwType_ForwardProxyAllowAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyAllowAll != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n22, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyAllowAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7474,266 +6302,357 @@ func (m *GCPVPCVoltstackClusterType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCVoltstackClusterType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpCertifiedHw) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
-		i += copy(dAtA[i:], m.GcpCertifiedHw)
-	}
-	if m.SiteLocalNetwork != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalNetwork.Size()))
-		n23, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.K8SClusterChoice != nil {
+		{
+			size := m.K8SClusterChoice.Size()
+			i -= size
+			if _, err := m.K8SClusterChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n23
-	}
-	if m.NetworkPolicyChoice != nil {
-		nn24, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn24
-	}
-	if m.ForwardProxyChoice != nil {
-		nn25, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn25
-	}
-	if m.GlobalNetworkChoice != nil {
-		nn26, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn26
-	}
-	if m.OutsideStaticRouteChoice != nil {
-		nn27, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn27
-	}
-	if m.NodeNumber != 0 {
-		dAtA[i] = 0x90
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NodeNumber))
-	}
-	if m.SiteLocalSubnet != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalSubnet.Size()))
-		n28, err := m.SiteLocalSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n28
 	}
 	if len(m.GcpZoneNames) > 0 {
-		for _, s := range m.GcpZoneNames {
-			dAtA[i] = 0xa2
-			i++
+		for iNdEx := len(m.GcpZoneNames) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.GcpZoneNames[iNdEx])
+			copy(dAtA[i:], m.GcpZoneNames[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpZoneNames[iNdEx])))
+			i--
 			dAtA[i] = 0x1
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+			i--
+			dAtA[i] = 0xa2
+		}
+	}
+	if m.SiteLocalSubnet != nil {
+		{
+			size, err := m.SiteLocalSubnet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if m.NodeNumber != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NodeNumber))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x90
+	}
+	if m.ForwardProxyChoice != nil {
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
-	if m.K8SClusterChoice != nil {
-		nn29, err := m.K8SClusterChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.OutsideStaticRouteChoice != nil {
+		{
+			size := m.OutsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn29
 	}
-	return i, nil
+	if m.GlobalNetworkChoice != nil {
+		{
+			size := m.GlobalNetworkChoice.Size()
+			i -= size
+			if _, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SiteLocalNetwork != nil {
+		{
+			size, err := m.SiteLocalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.GcpCertifiedHw) > 0 {
+		i -= len(m.GcpCertifiedHw)
+		copy(dAtA[i:], m.GcpCertifiedHw)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpCertifiedHw)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCVoltstackClusterType_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_NoNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoNetworkPolicy != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n30, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n30
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n31, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n31
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_NoForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoForwardProxy != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n32, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n32
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n33, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n33
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_NoGlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_NoGlobalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoGlobalNetwork != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoGlobalNetwork.Size()))
-		n34, err := m.NoGlobalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoGlobalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x5a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_GlobalNetworkList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_GlobalNetworkList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GlobalNetworkList != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetworkList.Size()))
-		n35, err := m.GlobalNetworkList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GlobalNetworkList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoOutsideStaticRoutes != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoOutsideStaticRoutes.Size()))
-		n36, err := m.NoOutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoOutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_OutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_OutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideStaticRoutes != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideStaticRoutes.Size()))
-		n37, err := m.OutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_ForwardProxyAllowAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyAllowAll != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n38, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyAllowAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n38
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_NoK8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_NoK8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoK8SCluster != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoK8SCluster.Size()))
-		n39, err := m.NoK8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoK8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n39
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterType_K8SCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterType_K8SCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.K8SCluster != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SCluster.Size()))
-		n40, err := m.K8SCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.K8SCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n40
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressGwReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7741,17 +6660,22 @@ func (m *GCPVPCIngressGwReplaceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCIngressGwReplaceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressGwReplaceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7759,214 +6683,306 @@ func (m *GCPVPCIngressEgressGwReplaceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkPolicyChoice != nil {
-		nn41, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn41
-	}
 	if m.ForwardProxyChoice != nil {
-		nn42, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn42
-	}
-	if m.GlobalNetworkChoice != nil {
-		nn43, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn43
-	}
-	if m.InsideStaticRouteChoice != nil {
-		nn44, err := m.InsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn44
 	}
 	if m.OutsideStaticRouteChoice != nil {
-		nn45, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.OutsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn45
 	}
-	return i, nil
+	if m.InsideStaticRouteChoice != nil {
+		{
+			size := m.InsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.InsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.GlobalNetworkChoice != nil {
+		{
+			size := m.GlobalNetworkChoice.Size()
+			i -= size
+			if _, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoNetworkPolicy != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n46, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n46
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n47, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n47
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_NoForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoForwardProxy != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n48, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n48
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n49, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n49
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoGlobalNetwork != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoGlobalNetwork.Size()))
-		n50, err := m.NoGlobalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoGlobalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n50
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GlobalNetworkList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetworkList.Size()))
-		n51, err := m.GlobalNetworkList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GlobalNetworkList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n51
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoInsideStaticRoutes != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoInsideStaticRoutes.Size()))
-		n52, err := m.NoInsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoInsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n52
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.InsideStaticRoutes != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideStaticRoutes.Size()))
-		n53, err := m.InsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.InsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n53
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoOutsideStaticRoutes != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoOutsideStaticRoutes.Size()))
-		n54, err := m.NoOutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoOutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n54
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideStaticRoutes != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideStaticRoutes.Size()))
-		n55, err := m.OutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n55
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyAllowAll != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n56, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyAllowAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n56
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -7974,175 +6990,251 @@ func (m *GCPVPCVoltstackClusterReplaceType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GCPVPCVoltstackClusterReplaceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NetworkPolicyChoice != nil {
-		nn57, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn57
-	}
 	if m.ForwardProxyChoice != nil {
-		nn58, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ForwardProxyChoice.Size()
+			i -= size
+			if _, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn58
-	}
-	if m.GlobalNetworkChoice != nil {
-		nn59, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn59
 	}
 	if m.OutsideStaticRouteChoice != nil {
-		nn60, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.OutsideStaticRouteChoice.Size()
+			i -= size
+			if _, err := m.OutsideStaticRouteChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn60
 	}
-	return i, nil
+	if m.GlobalNetworkChoice != nil {
+		{
+			size := m.GlobalNetworkChoice.Size()
+			i -= size
+			if _, err := m.GlobalNetworkChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoNetworkPolicy != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n61, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoNetworkPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n61
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveNetworkPolicies != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n62, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveNetworkPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n62
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_NoForwardProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoForwardProxy != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n63, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoForwardProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n63
+		i--
+		dAtA[i] = 0x4a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ActiveForwardProxyPolicies != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n64, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ActiveForwardProxyPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n64
+		i--
+		dAtA[i] = 0x52
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoGlobalNetwork != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoGlobalNetwork.Size()))
-		n65, err := m.NoGlobalNetwork.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoGlobalNetwork.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n65
+		i--
+		dAtA[i] = 0x62
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.GlobalNetworkList != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetworkList.Size()))
-		n66, err := m.GlobalNetworkList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.GlobalNetworkList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n66
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.NoOutsideStaticRoutes != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoOutsideStaticRoutes.Size()))
-		n67, err := m.NoOutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.NoOutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n67
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.OutsideStaticRoutes != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideStaticRoutes.Size()))
-		n68, err := m.OutsideStaticRoutes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.OutsideStaticRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n68
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ForwardProxyAllowAll != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n69, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ForwardProxyAllowAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n69
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -8150,246 +7242,322 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpRegion) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
-		i += copy(dAtA[i:], m.GcpRegion)
-	}
-	if m.SiteType != nil {
-		nn70, err := m.SiteType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn70
-	}
-	if m.Deployment != nil {
-		nn71, err := m.Deployment.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn71
-	}
-	if len(m.InstanceType) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
-		i += copy(dAtA[i:], m.InstanceType)
-	}
-	if m.NodesPerAz != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if m.DiskSize != 0 {
-		dAtA[i] = 0x60
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
-	}
-	if len(m.SshKey) > 0 {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
-		i += copy(dAtA[i:], m.SshKey)
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n72, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n72
-	}
-	if m.LogsReceiverChoice != nil {
-		nn73, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn73
-	}
-	if m.Sw != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sw.Size()))
-		n74, err := m.Sw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n74
-	}
-	if m.Os != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Os.Size()))
-		n75, err := m.Os.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n75
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
 	}
 	if m.TfParams != nil {
+		{
+			size, err := m.TfParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
 		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TfParams.Size()))
-		n76, err := m.TfParams.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n76
 	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n77, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Os != nil {
+		{
+			size, err := m.Os.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n77
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
-	return i, nil
+	if m.Sw != nil {
+		{
+			size, err := m.Sw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x7a
+	}
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.SshKey) > 0 {
+		i -= len(m.SshKey)
+		copy(dAtA[i:], m.SshKey)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.DiskSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
+		i--
+		dAtA[i] = 0x60
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.NodesPerAz != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.InstanceType) > 0 {
+		i -= len(m.InstanceType)
+		copy(dAtA[i:], m.InstanceType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Deployment != nil {
+		{
+			size := m.Deployment.Size()
+			i -= size
+			if _, err := m.Deployment.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.GcpRegion) > 0 {
+		i -= len(m.GcpRegion)
+		copy(dAtA[i:], m.GcpRegion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_IngressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_IngressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressGw != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressGw.Size()))
-		n78, err := m.IngressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n78
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_IngressEgressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_IngressEgressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressEgressGw != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressEgressGw.Size()))
-		n79, err := m.IngressEgressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressEgressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n79
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_CloudCredentials) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_CloudCredentials) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CloudCredentials != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CloudCredentials.Size()))
-		n80, err := m.CloudCredentials.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CloudCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n80
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_Assisted) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Assisted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Assisted != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Assisted.Size()))
-		n81, err := m.Assisted.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Assisted.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n81
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_VoltstackCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_VoltstackCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.VoltstackCluster != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VoltstackCluster.Size()))
-		n82, err := m.VoltstackCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VoltstackCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n82
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n83, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n83
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n84, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n84
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -8397,210 +7565,280 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpRegion) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
-		i += copy(dAtA[i:], m.GcpRegion)
-	}
-	if m.SiteType != nil {
-		nn85, err := m.SiteType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.Os != nil {
+		{
+			size, err := m.Os.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += nn85
-	}
-	if m.Deployment != nil {
-		nn86, err := m.Deployment.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn86
-	}
-	if len(m.InstanceType) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
-		i += copy(dAtA[i:], m.InstanceType)
-	}
-	if m.NodesPerAz != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
-	}
-	if m.DiskSize != 0 {
-		dAtA[i] = 0x60
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
-	}
-	if len(m.SshKey) > 0 {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
-		i += copy(dAtA[i:], m.SshKey)
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x82
-		i++
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n87, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n87
-	}
-	if m.LogsReceiverChoice != nil {
-		nn88, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn88
+		i--
+		dAtA[i] = 0xaa
 	}
 	if m.Sw != nil {
+		{
+			size, err := m.Sw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
 		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Sw.Size()))
-		n89, err := m.Sw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n89
 	}
-	if m.Os != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Os.Size()))
-		n90, err := m.Os.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += n90
 	}
-	return i, nil
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x7a
+	}
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.SshKey) > 0 {
+		i -= len(m.SshKey)
+		copy(dAtA[i:], m.SshKey)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.DiskSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.NodesPerAz != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.InstanceType) > 0 {
+		i -= len(m.InstanceType)
+		copy(dAtA[i:], m.InstanceType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Deployment != nil {
+		{
+			size := m.Deployment.Size()
+			i -= size
+			if _, err := m.Deployment.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.GcpRegion) > 0 {
+		i -= len(m.GcpRegion)
+		copy(dAtA[i:], m.GcpRegion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_IngressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_IngressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressGw != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressGw.Size()))
-		n91, err := m.IngressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n91
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_IngressEgressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_IngressEgressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressEgressGw != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressEgressGw.Size()))
-		n92, err := m.IngressEgressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressEgressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n92
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_CloudCredentials) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_CloudCredentials) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CloudCredentials != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CloudCredentials.Size()))
-		n93, err := m.CloudCredentials.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CloudCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n93
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_Assisted) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Assisted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Assisted != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Assisted.Size()))
-		n94, err := m.Assisted.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Assisted.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n94
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_VoltstackCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_VoltstackCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.VoltstackCluster != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VoltstackCluster.Size()))
-		n95, err := m.VoltstackCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VoltstackCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n95
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n96, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n96
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n97, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n97
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -8608,123 +7846,170 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.SiteType != nil {
-		nn98, err := m.SiteType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.LogsReceiverChoice != nil {
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn98
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
 	}
 	if m.Coordinates != nil {
-		dAtA[i] = 0x82
-		i++
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n99, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n99
+		i--
+		dAtA[i] = 0x82
 	}
-	if m.LogsReceiverChoice != nil {
-		nn100, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn100
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_IngressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_IngressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressGw != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressGw.Size()))
-		n101, err := m.IngressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n101
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_IngressEgressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_IngressEgressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressEgressGw != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressEgressGw.Size()))
-		n102, err := m.IngressEgressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressEgressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n102
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_VoltstackCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_VoltstackCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.VoltstackCluster != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VoltstackCluster.Size()))
-		n103, err := m.VoltstackCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VoltstackCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n103
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n104, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n104
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n105, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n105
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -8732,211 +8017,284 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.GcpRegion) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
-		i += copy(dAtA[i:], m.GcpRegion)
-	}
-	if m.SiteType != nil {
-		nn106, err := m.SiteType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn106
-	}
-	if m.Deployment != nil {
-		nn107, err := m.Deployment.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn107
-	}
-	if len(m.InstanceType) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
-		i += copy(dAtA[i:], m.InstanceType)
-	}
-	if m.NodesPerAz != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
-	}
-	if len(m.VolterraSoftwareVersion) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
-		i += copy(dAtA[i:], m.VolterraSoftwareVersion)
-	}
-	if len(m.OperatingSystemVersion) > 0 {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
-		i += copy(dAtA[i:], m.OperatingSystemVersion)
-	}
-	if m.DiskSize != 0 {
-		dAtA[i] = 0x60
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
-	}
-	if len(m.SshKey) > 0 {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
-		i += copy(dAtA[i:], m.SshKey)
-	}
-	if len(m.Address) > 0 {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
-		i += copy(dAtA[i:], m.Address)
-	}
-	if m.Coordinates != nil {
-		dAtA[i] = 0x82
-		i++
+	if m.SiteState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n108, err := m.Coordinates.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n108
+		i--
+		dAtA[i] = 0xa0
 	}
 	if m.LogsReceiverChoice != nil {
-		nn109, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.LogsReceiverChoice.Size()
+			i -= size
+			if _, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn109
 	}
-	if m.SiteState != 0 {
-		dAtA[i] = 0xa0
-		i++
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x7a
+	}
+	if m.SiteType != nil {
+		{
+			size := m.SiteType.Size()
+			i -= size
+			if _, err := m.SiteType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.SshKey) > 0 {
+		i -= len(m.SshKey)
+		copy(dAtA[i:], m.SshKey)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SshKey)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.DiskSize != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DiskSize))
+		i--
+		dAtA[i] = 0x60
+	}
+	if len(m.OperatingSystemVersion) > 0 {
+		i -= len(m.OperatingSystemVersion)
+		copy(dAtA[i:], m.OperatingSystemVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OperatingSystemVersion)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.VolterraSoftwareVersion) > 0 {
+		i -= len(m.VolterraSoftwareVersion)
+		copy(dAtA[i:], m.VolterraSoftwareVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VolterraSoftwareVersion)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.NodesPerAz != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.NodesPerAz))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.InstanceType) > 0 {
+		i -= len(m.InstanceType)
+		copy(dAtA[i:], m.InstanceType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.InstanceType)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Deployment != nil {
+		{
+			size := m.Deployment.Size()
+			i -= size
+			if _, err := m.Deployment.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.GcpRegion) > 0 {
+		i -= len(m.GcpRegion)
+		copy(dAtA[i:], m.GcpRegion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GcpRegion)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_IngressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_IngressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressGw != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressGw.Size()))
-		n110, err := m.IngressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n110
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_IngressEgressGw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_IngressEgressGw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.IngressEgressGw != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IngressEgressGw.Size()))
-		n111, err := m.IngressEgressGw.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.IngressEgressGw.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n111
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_CloudCredentials) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_CloudCredentials) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CloudCredentials != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CloudCredentials.Size()))
-		n112, err := m.CloudCredentials.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CloudCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n112
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_Assisted) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Assisted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Assisted != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Assisted.Size()))
-		n113, err := m.Assisted.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Assisted.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n113
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_VoltstackCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_VoltstackCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.VoltstackCluster != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.VoltstackCluster.Size()))
-		n114, err := m.VoltstackCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.VoltstackCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n114
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogsStreamingDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogsStreamingDisabled != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
-		n115, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogsStreamingDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n115
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.LogReceiver != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
-		n116, err := m.LogReceiver.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.LogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n116
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GCPVPCIngressGwType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpCertifiedHw)
@@ -8964,6 +8322,9 @@ func (m *GCPVPCIngressGwType) Size() (n int) {
 }
 
 func (m *GCPVPCIngressEgressGwType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpCertifiedHw)
@@ -9014,6 +8375,9 @@ func (m *GCPVPCIngressEgressGwType) Size() (n int) {
 }
 
 func (m *GCPVPCIngressEgressGwType_NoNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoNetworkPolicy != nil {
@@ -9023,6 +8387,9 @@ func (m *GCPVPCIngressEgressGwType_NoNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -9032,6 +8399,9 @@ func (m *GCPVPCIngressEgressGwType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_NoForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoForwardProxy != nil {
@@ -9041,6 +8411,9 @@ func (m *GCPVPCIngressEgressGwType_NoForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -9050,6 +8423,9 @@ func (m *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_NoGlobalNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoGlobalNetwork != nil {
@@ -9059,6 +8435,9 @@ func (m *GCPVPCIngressEgressGwType_NoGlobalNetwork) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_GlobalNetworkList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalNetworkList != nil {
@@ -9068,6 +8447,9 @@ func (m *GCPVPCIngressEgressGwType_GlobalNetworkList) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_NoInsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoInsideStaticRoutes != nil {
@@ -9077,6 +8459,9 @@ func (m *GCPVPCIngressEgressGwType_NoInsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_InsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InsideStaticRoutes != nil {
@@ -9086,6 +8471,9 @@ func (m *GCPVPCIngressEgressGwType_InsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoOutsideStaticRoutes != nil {
@@ -9095,6 +8483,9 @@ func (m *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_OutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideStaticRoutes != nil {
@@ -9104,6 +8495,9 @@ func (m *GCPVPCIngressEgressGwType_OutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwType_ForwardProxyAllowAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
@@ -9113,6 +8507,9 @@ func (m *GCPVPCIngressEgressGwType_ForwardProxyAllowAll) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpCertifiedHw)
@@ -9155,6 +8552,9 @@ func (m *GCPVPCVoltstackClusterType) Size() (n int) {
 }
 
 func (m *GCPVPCVoltstackClusterType_NoNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoNetworkPolicy != nil {
@@ -9164,6 +8564,9 @@ func (m *GCPVPCVoltstackClusterType_NoNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -9173,6 +8576,9 @@ func (m *GCPVPCVoltstackClusterType_ActiveNetworkPolicies) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_NoForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoForwardProxy != nil {
@@ -9182,6 +8588,9 @@ func (m *GCPVPCVoltstackClusterType_NoForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -9191,6 +8600,9 @@ func (m *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_NoGlobalNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoGlobalNetwork != nil {
@@ -9200,6 +8612,9 @@ func (m *GCPVPCVoltstackClusterType_NoGlobalNetwork) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_GlobalNetworkList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalNetworkList != nil {
@@ -9209,6 +8624,9 @@ func (m *GCPVPCVoltstackClusterType_GlobalNetworkList) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoOutsideStaticRoutes != nil {
@@ -9218,6 +8636,9 @@ func (m *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_OutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideStaticRoutes != nil {
@@ -9227,6 +8648,9 @@ func (m *GCPVPCVoltstackClusterType_OutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_ForwardProxyAllowAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
@@ -9236,6 +8660,9 @@ func (m *GCPVPCVoltstackClusterType_ForwardProxyAllowAll) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_NoK8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoK8SCluster != nil {
@@ -9245,6 +8672,9 @@ func (m *GCPVPCVoltstackClusterType_NoK8SCluster) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterType_K8SCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SCluster != nil {
@@ -9254,12 +8684,18 @@ func (m *GCPVPCVoltstackClusterType_K8SCluster) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressGwReplaceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	return n
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyChoice != nil {
@@ -9281,6 +8717,9 @@ func (m *GCPVPCIngressEgressGwReplaceType) Size() (n int) {
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoNetworkPolicy != nil {
@@ -9290,6 +8729,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -9299,6 +8741,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies) Size() (n int) 
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoForwardProxy != nil {
@@ -9308,6 +8753,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_NoForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -9317,6 +8765,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies) Size() (n 
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoGlobalNetwork != nil {
@@ -9326,6 +8777,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalNetworkList != nil {
@@ -9335,6 +8789,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoInsideStaticRoutes != nil {
@@ -9344,6 +8801,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.InsideStaticRoutes != nil {
@@ -9353,6 +8813,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoOutsideStaticRoutes != nil {
@@ -9362,6 +8825,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes) Size() (n int) 
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideStaticRoutes != nil {
@@ -9371,6 +8837,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
@@ -9380,6 +8849,9 @@ func (m *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NetworkPolicyChoice != nil {
@@ -9398,6 +8870,9 @@ func (m *GCPVPCVoltstackClusterReplaceType) Size() (n int) {
 }
 
 func (m *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoNetworkPolicy != nil {
@@ -9407,6 +8882,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveNetworkPolicies != nil {
@@ -9416,6 +8894,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies) Size() (n int)
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoForwardProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoForwardProxy != nil {
@@ -9425,6 +8906,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_NoForwardProxy) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ActiveForwardProxyPolicies != nil {
@@ -9434,6 +8918,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies) Size() (n
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoGlobalNetwork != nil {
@@ -9443,6 +8930,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.GlobalNetworkList != nil {
@@ -9452,6 +8942,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.NoOutsideStaticRoutes != nil {
@@ -9461,6 +8954,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes) Size() (n int)
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.OutsideStaticRoutes != nil {
@@ -9470,6 +8966,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes) Size() (n int) {
 	return n
 }
 func (m *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
@@ -9479,6 +8978,9 @@ func (m *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll) Size() (n int) 
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpRegion)
@@ -9544,6 +9046,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_IngressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressGw != nil {
@@ -9553,6 +9058,9 @@ func (m *GlobalSpecType_IngressGw) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_IngressEgressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressEgressGw != nil {
@@ -9562,6 +9070,9 @@ func (m *GlobalSpecType_IngressEgressGw) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_CloudCredentials) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CloudCredentials != nil {
@@ -9571,6 +9082,9 @@ func (m *GlobalSpecType_CloudCredentials) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_Assisted) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Assisted != nil {
@@ -9580,6 +9094,9 @@ func (m *GlobalSpecType_Assisted) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_VoltstackCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.VoltstackCluster != nil {
@@ -9589,6 +9106,9 @@ func (m *GlobalSpecType_VoltstackCluster) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -9598,6 +9118,9 @@ func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -9607,6 +9130,9 @@ func (m *GlobalSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpRegion)
@@ -9656,6 +9182,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_IngressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressGw != nil {
@@ -9665,6 +9194,9 @@ func (m *CreateSpecType_IngressGw) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_IngressEgressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressEgressGw != nil {
@@ -9674,6 +9206,9 @@ func (m *CreateSpecType_IngressEgressGw) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_CloudCredentials) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CloudCredentials != nil {
@@ -9683,6 +9218,9 @@ func (m *CreateSpecType_CloudCredentials) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_Assisted) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Assisted != nil {
@@ -9692,6 +9230,9 @@ func (m *CreateSpecType_Assisted) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_VoltstackCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.VoltstackCluster != nil {
@@ -9701,6 +9242,9 @@ func (m *CreateSpecType_VoltstackCluster) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -9710,6 +9254,9 @@ func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -9719,6 +9266,9 @@ func (m *CreateSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SiteType != nil {
@@ -9739,6 +9289,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_IngressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressGw != nil {
@@ -9748,6 +9301,9 @@ func (m *ReplaceSpecType_IngressGw) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_IngressEgressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressEgressGw != nil {
@@ -9757,6 +9313,9 @@ func (m *ReplaceSpecType_IngressEgressGw) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_VoltstackCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.VoltstackCluster != nil {
@@ -9766,6 +9325,9 @@ func (m *ReplaceSpecType_VoltstackCluster) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -9775,6 +9337,9 @@ func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -9784,6 +9349,9 @@ func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.GcpRegion)
@@ -9836,6 +9404,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_IngressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressGw != nil {
@@ -9845,6 +9416,9 @@ func (m *GetSpecType_IngressGw) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_IngressEgressGw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.IngressEgressGw != nil {
@@ -9854,6 +9428,9 @@ func (m *GetSpecType_IngressEgressGw) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_CloudCredentials) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CloudCredentials != nil {
@@ -9863,6 +9440,9 @@ func (m *GetSpecType_CloudCredentials) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_Assisted) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Assisted != nil {
@@ -9872,6 +9452,9 @@ func (m *GetSpecType_Assisted) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_VoltstackCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.VoltstackCluster != nil {
@@ -9881,6 +9464,9 @@ func (m *GetSpecType_VoltstackCluster) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogsStreamingDisabled != nil {
@@ -9890,6 +9476,9 @@ func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_LogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.LogReceiver != nil {
@@ -9900,14 +9489,7 @@ func (m *GetSpecType_LogReceiver) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -9918,9 +9500,9 @@ func (this *GCPVPCIngressGwType) String() string {
 	}
 	s := strings.Join([]string{`&GCPVPCIngressGwType{`,
 		`GcpCertifiedHw:` + fmt.Sprintf("%v", this.GcpCertifiedHw) + `,`,
-		`LocalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.LocalNetwork), "GCPVPCNetworkChoiceType", "ves_io_schema_views1.GCPVPCNetworkChoiceType", 1) + `,`,
+		`LocalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.LocalNetwork), "GCPVPCNetworkChoiceType", "views.GCPVPCNetworkChoiceType", 1) + `,`,
 		`GcpZoneNames:` + fmt.Sprintf("%v", this.GcpZoneNames) + `,`,
-		`LocalSubnet:` + strings.Replace(fmt.Sprintf("%v", this.LocalSubnet), "GCPVPCSubnetChoiceType", "ves_io_schema_views1.GCPVPCSubnetChoiceType", 1) + `,`,
+		`LocalSubnet:` + strings.Replace(fmt.Sprintf("%v", this.LocalSubnet), "GCPVPCSubnetChoiceType", "views.GCPVPCSubnetChoiceType", 1) + `,`,
 		`NodeNumber:` + fmt.Sprintf("%v", this.NodeNumber) + `,`,
 		`}`,
 	}, "")
@@ -9932,15 +9514,15 @@ func (this *GCPVPCIngressEgressGwType) String() string {
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType{`,
 		`GcpCertifiedHw:` + fmt.Sprintf("%v", this.GcpCertifiedHw) + `,`,
-		`InsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideNetwork), "GCPVPCNetworkChoiceType", "ves_io_schema_views1.GCPVPCNetworkChoiceType", 1) + `,`,
-		`OutsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideNetwork), "GCPVPCNetworkChoiceType", "ves_io_schema_views1.GCPVPCNetworkChoiceType", 1) + `,`,
+		`InsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.InsideNetwork), "GCPVPCNetworkChoiceType", "views.GCPVPCNetworkChoiceType", 1) + `,`,
+		`OutsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.OutsideNetwork), "GCPVPCNetworkChoiceType", "views.GCPVPCNetworkChoiceType", 1) + `,`,
 		`NetworkPolicyChoice:` + fmt.Sprintf("%v", this.NetworkPolicyChoice) + `,`,
 		`ForwardProxyChoice:` + fmt.Sprintf("%v", this.ForwardProxyChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`InsideStaticRouteChoice:` + fmt.Sprintf("%v", this.InsideStaticRouteChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
-		`InsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.InsideSubnet), "GCPVPCSubnetChoiceType", "ves_io_schema_views1.GCPVPCSubnetChoiceType", 1) + `,`,
-		`OutsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.OutsideSubnet), "GCPVPCSubnetChoiceType", "ves_io_schema_views1.GCPVPCSubnetChoiceType", 1) + `,`,
+		`InsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.InsideSubnet), "GCPVPCSubnetChoiceType", "views.GCPVPCSubnetChoiceType", 1) + `,`,
+		`OutsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.OutsideSubnet), "GCPVPCSubnetChoiceType", "views.GCPVPCSubnetChoiceType", 1) + `,`,
 		`NodeNumber:` + fmt.Sprintf("%v", this.NodeNumber) + `,`,
 		`GcpZoneNames:` + fmt.Sprintf("%v", this.GcpZoneNames) + `,`,
 		`}`,
@@ -9952,7 +9534,7 @@ func (this *GCPVPCIngressEgressGwType_NoNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_NoNetworkPolicy{`,
-		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9962,7 +9544,7 @@ func (this *GCPVPCIngressEgressGwType_ActiveNetworkPolicies) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_ActiveNetworkPolicies{`,
-		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "ves_io_schema_network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
+		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9972,7 +9554,7 @@ func (this *GCPVPCIngressEgressGwType_NoForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_NoForwardProxy{`,
-		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9982,7 +9564,7 @@ func (this *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies) String() strin
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies{`,
-		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
+		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9992,7 +9574,7 @@ func (this *GCPVPCIngressEgressGwType_NoGlobalNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_NoGlobalNetwork{`,
-		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10002,7 +9584,7 @@ func (this *GCPVPCIngressEgressGwType_GlobalNetworkList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_GlobalNetworkList{`,
-		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "ves_io_schema_views1.GlobalNetworkConnectionListType", 1) + `,`,
+		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "views.GlobalNetworkConnectionListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10012,7 +9594,7 @@ func (this *GCPVPCIngressEgressGwType_NoInsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_NoInsideStaticRoutes{`,
-		`NoInsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoInsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoInsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoInsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10022,7 +9604,7 @@ func (this *GCPVPCIngressEgressGwType_InsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_InsideStaticRoutes{`,
-		`InsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.InsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`InsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.InsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10032,7 +9614,7 @@ func (this *GCPVPCIngressEgressGwType_NoOutsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_NoOutsideStaticRoutes{`,
-		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10042,7 +9624,7 @@ func (this *GCPVPCIngressEgressGwType_OutsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_OutsideStaticRoutes{`,
-		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10052,7 +9634,7 @@ func (this *GCPVPCIngressEgressGwType_ForwardProxyAllowAll) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwType_ForwardProxyAllowAll{`,
-		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10063,13 +9645,13 @@ func (this *GCPVPCVoltstackClusterType) String() string {
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType{`,
 		`GcpCertifiedHw:` + fmt.Sprintf("%v", this.GcpCertifiedHw) + `,`,
-		`SiteLocalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalNetwork), "GCPVPCNetworkChoiceType", "ves_io_schema_views1.GCPVPCNetworkChoiceType", 1) + `,`,
+		`SiteLocalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalNetwork), "GCPVPCNetworkChoiceType", "views.GCPVPCNetworkChoiceType", 1) + `,`,
 		`NetworkPolicyChoice:` + fmt.Sprintf("%v", this.NetworkPolicyChoice) + `,`,
 		`ForwardProxyChoice:` + fmt.Sprintf("%v", this.ForwardProxyChoice) + `,`,
 		`GlobalNetworkChoice:` + fmt.Sprintf("%v", this.GlobalNetworkChoice) + `,`,
 		`OutsideStaticRouteChoice:` + fmt.Sprintf("%v", this.OutsideStaticRouteChoice) + `,`,
 		`NodeNumber:` + fmt.Sprintf("%v", this.NodeNumber) + `,`,
-		`SiteLocalSubnet:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalSubnet), "GCPVPCSubnetChoiceType", "ves_io_schema_views1.GCPVPCSubnetChoiceType", 1) + `,`,
+		`SiteLocalSubnet:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalSubnet), "GCPVPCSubnetChoiceType", "views.GCPVPCSubnetChoiceType", 1) + `,`,
 		`GcpZoneNames:` + fmt.Sprintf("%v", this.GcpZoneNames) + `,`,
 		`K8SClusterChoice:` + fmt.Sprintf("%v", this.K8SClusterChoice) + `,`,
 		`}`,
@@ -10081,7 +9663,7 @@ func (this *GCPVPCVoltstackClusterType_NoNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_NoNetworkPolicy{`,
-		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10091,7 +9673,7 @@ func (this *GCPVPCVoltstackClusterType_ActiveNetworkPolicies) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_ActiveNetworkPolicies{`,
-		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "ves_io_schema_network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
+		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10101,7 +9683,7 @@ func (this *GCPVPCVoltstackClusterType_NoForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_NoForwardProxy{`,
-		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10111,7 +9693,7 @@ func (this *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies) String() stri
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies{`,
-		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
+		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10121,7 +9703,7 @@ func (this *GCPVPCVoltstackClusterType_NoGlobalNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_NoGlobalNetwork{`,
-		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10131,7 +9713,7 @@ func (this *GCPVPCVoltstackClusterType_GlobalNetworkList) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_GlobalNetworkList{`,
-		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "ves_io_schema_views1.GlobalNetworkConnectionListType", 1) + `,`,
+		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "views.GlobalNetworkConnectionListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10141,7 +9723,7 @@ func (this *GCPVPCVoltstackClusterType_NoOutsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_NoOutsideStaticRoutes{`,
-		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10151,7 +9733,7 @@ func (this *GCPVPCVoltstackClusterType_OutsideStaticRoutes) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_OutsideStaticRoutes{`,
-		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10161,7 +9743,7 @@ func (this *GCPVPCVoltstackClusterType_ForwardProxyAllowAll) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_ForwardProxyAllowAll{`,
-		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10171,7 +9753,7 @@ func (this *GCPVPCVoltstackClusterType_NoK8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_NoK8SCluster{`,
-		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoK8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.NoK8SCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10181,7 +9763,7 @@ func (this *GCPVPCVoltstackClusterType_K8SCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterType_K8SCluster{`,
-		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`K8SCluster:` + strings.Replace(fmt.Sprintf("%v", this.K8SCluster), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10214,7 +9796,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy{`,
-		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10224,7 +9806,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies) String() str
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies{`,
-		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "ves_io_schema_network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
+		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10234,7 +9816,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_NoForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_NoForwardProxy{`,
-		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10244,7 +9826,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies) String(
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies{`,
-		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
+		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10254,7 +9836,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_NoGlobalNetwork{`,
-		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10264,7 +9846,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList) String() string 
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_GlobalNetworkList{`,
-		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "ves_io_schema_views1.GlobalNetworkConnectionListType", 1) + `,`,
+		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "views.GlobalNetworkConnectionListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10274,7 +9856,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes) String() stri
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_NoInsideStaticRoutes{`,
-		`NoInsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoInsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoInsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoInsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10284,7 +9866,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes) String() string
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes{`,
-		`InsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.InsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`InsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.InsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10294,7 +9876,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes) String() str
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_NoOutsideStaticRoutes{`,
-		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10304,7 +9886,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes) String() strin
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes{`,
-		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10314,7 +9896,7 @@ func (this *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll) String() stri
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll{`,
-		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10337,7 +9919,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_NoNetworkPolicy{`,
-		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoNetworkPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoNetworkPolicy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10347,7 +9929,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies) String() st
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies{`,
-		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "ves_io_schema_network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
+		`ActiveNetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveNetworkPolicies), "ActiveNetworkPoliciesType", "network_firewall.ActiveNetworkPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10357,7 +9939,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_NoForwardProxy) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_NoForwardProxy{`,
-		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoForwardProxy:` + strings.Replace(fmt.Sprintf("%v", this.NoForwardProxy), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10367,7 +9949,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies) String
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies{`,
-		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
+		`ActiveForwardProxyPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveForwardProxyPolicies), "ActiveForwardProxyPoliciesType", "network_firewall.ActiveForwardProxyPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10377,7 +9959,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_NoGlobalNetwork{`,
-		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoGlobalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.NoGlobalNetwork), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10387,7 +9969,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList) String() string
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_GlobalNetworkList{`,
-		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "ves_io_schema_views1.GlobalNetworkConnectionListType", 1) + `,`,
+		`GlobalNetworkList:` + strings.Replace(fmt.Sprintf("%v", this.GlobalNetworkList), "GlobalNetworkConnectionListType", "views.GlobalNetworkConnectionListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10397,7 +9979,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes) String() st
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_NoOutsideStaticRoutes{`,
-		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`NoOutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.NoOutsideStaticRoutes), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10407,7 +9989,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes) String() stri
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes{`,
-		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "ves_io_schema_views1.SiteStaticRoutesListType", 1) + `,`,
+		`OutsideStaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.OutsideStaticRoutes), "SiteStaticRoutesListType", "views.SiteStaticRoutesListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10417,7 +9999,7 @@ func (this *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll) String() str
 		return "nil"
 	}
 	s := strings.Join([]string{`&GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll{`,
-		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`ForwardProxyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.ForwardProxyAllowAll), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10437,12 +10019,12 @@ func (this *GlobalSpecType) String() string {
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
 		`SshKey:` + fmt.Sprintf("%v", this.SshKey) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
-		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "ves_io_schema_views.VolterraSoftwareType", 1) + `,`,
-		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "ves_io_schema_views.OperatingSystemType", 1) + `,`,
-		`TfParams:` + strings.Replace(fmt.Sprintf("%v", this.TfParams), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
+		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
+		`TfParams:` + strings.Replace(fmt.Sprintf("%v", this.TfParams), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10472,7 +10054,7 @@ func (this *GlobalSpecType_CloudCredentials) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_CloudCredentials{`,
-		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10482,7 +10064,7 @@ func (this *GlobalSpecType_Assisted) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Assisted{`,
-		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10502,7 +10084,7 @@ func (this *GlobalSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10512,7 +10094,7 @@ func (this *GlobalSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10530,10 +10112,10 @@ func (this *CreateSpecType) String() string {
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
 		`SshKey:` + fmt.Sprintf("%v", this.SshKey) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
-		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "ves_io_schema_views.VolterraSoftwareType", 1) + `,`,
-		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "ves_io_schema_views.OperatingSystemType", 1) + `,`,
+		`Sw:` + strings.Replace(fmt.Sprintf("%v", this.Sw), "VolterraSoftwareType", "views.VolterraSoftwareType", 1) + `,`,
+		`Os:` + strings.Replace(fmt.Sprintf("%v", this.Os), "OperatingSystemType", "views.OperatingSystemType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10563,7 +10145,7 @@ func (this *CreateSpecType_CloudCredentials) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_CloudCredentials{`,
-		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10573,7 +10155,7 @@ func (this *CreateSpecType_Assisted) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Assisted{`,
-		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10593,7 +10175,7 @@ func (this *CreateSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10603,7 +10185,7 @@ func (this *CreateSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10615,7 +10197,7 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`}`,
 	}, "")
@@ -10656,7 +10238,7 @@ func (this *ReplaceSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10666,7 +10248,7 @@ func (this *ReplaceSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10686,7 +10268,7 @@ func (this *GetSpecType) String() string {
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
 		`SshKey:` + fmt.Sprintf("%v", this.SshKey) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`SiteState:` + fmt.Sprintf("%v", this.SiteState) + `,`,
 		`}`,
@@ -10718,7 +10300,7 @@ func (this *GetSpecType_CloudCredentials) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_CloudCredentials{`,
-		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`CloudCredentials:` + strings.Replace(fmt.Sprintf("%v", this.CloudCredentials), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10728,7 +10310,7 @@ func (this *GetSpecType_Assisted) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Assisted{`,
-		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Assisted:` + strings.Replace(fmt.Sprintf("%v", this.Assisted), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10748,7 +10330,7 @@ func (this *GetSpecType_LogsStreamingDisabled) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogsStreamingDisabled{`,
-		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10758,7 +10340,7 @@ func (this *GetSpecType_LogReceiver) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_LogReceiver{`,
-		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10786,7 +10368,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -10814,7 +10396,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10824,6 +10406,9 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10843,7 +10428,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10852,11 +10437,14 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LocalNetwork == nil {
-				m.LocalNetwork = &ves_io_schema_views1.GCPVPCNetworkChoiceType{}
+				m.LocalNetwork = &views.GCPVPCNetworkChoiceType{}
 			}
 			if err := m.LocalNetwork.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -10876,7 +10464,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10886,6 +10474,9 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -10905,7 +10496,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10914,11 +10505,14 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.LocalSubnet == nil {
-				m.LocalSubnet = &ves_io_schema_views1.GCPVPCSubnetChoiceType{}
+				m.LocalSubnet = &views.GCPVPCSubnetChoiceType{}
 			}
 			if err := m.LocalSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -10938,7 +10532,7 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodeNumber |= (uint32(b) & 0x7F) << shift
+				m.NodeNumber |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -10950,6 +10544,9 @@ func (m *GCPVPCIngressGwType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -10979,7 +10576,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11007,7 +10604,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11017,6 +10614,9 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11036,7 +10636,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11045,11 +10645,14 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.InsideNetwork == nil {
-				m.InsideNetwork = &ves_io_schema_views1.GCPVPCNetworkChoiceType{}
+				m.InsideNetwork = &views.GCPVPCNetworkChoiceType{}
 			}
 			if err := m.InsideNetwork.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11069,7 +10672,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11078,11 +10681,14 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.OutsideNetwork == nil {
-				m.OutsideNetwork = &ves_io_schema_views1.GCPVPCNetworkChoiceType{}
+				m.OutsideNetwork = &views.GCPVPCNetworkChoiceType{}
 			}
 			if err := m.OutsideNetwork.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11102,7 +10708,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11111,10 +10717,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11134,7 +10743,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11143,10 +10752,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+			v := &network_firewall.ActiveNetworkPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11166,7 +10778,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11175,10 +10787,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11198,7 +10813,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11207,10 +10822,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
+			v := &network_firewall.ActiveForwardProxyPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11230,7 +10848,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11239,10 +10857,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11262,7 +10883,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11271,10 +10892,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.GlobalNetworkConnectionListType{}
+			v := &views.GlobalNetworkConnectionListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11294,7 +10918,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11303,10 +10927,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11326,7 +10953,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11335,10 +10962,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11358,7 +10988,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11367,10 +10997,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11390,7 +11023,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11399,10 +11032,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11422,7 +11058,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11431,10 +11067,13 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11454,7 +11093,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11463,11 +11102,14 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.InsideSubnet == nil {
-				m.InsideSubnet = &ves_io_schema_views1.GCPVPCSubnetChoiceType{}
+				m.InsideSubnet = &views.GCPVPCSubnetChoiceType{}
 			}
 			if err := m.InsideSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11487,7 +11129,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11496,11 +11138,14 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.OutsideSubnet == nil {
-				m.OutsideSubnet = &ves_io_schema_views1.GCPVPCSubnetChoiceType{}
+				m.OutsideSubnet = &views.GCPVPCSubnetChoiceType{}
 			}
 			if err := m.OutsideSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11520,7 +11165,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodeNumber |= (uint32(b) & 0x7F) << shift
+				m.NodeNumber |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11539,7 +11184,7 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11549,6 +11194,9 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11561,6 +11209,9 @@ func (m *GCPVPCIngressEgressGwType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -11590,7 +11241,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -11618,7 +11269,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11628,6 +11279,9 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -11647,7 +11301,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11656,11 +11310,14 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SiteLocalNetwork == nil {
-				m.SiteLocalNetwork = &ves_io_schema_views1.GCPVPCNetworkChoiceType{}
+				m.SiteLocalNetwork = &views.GCPVPCNetworkChoiceType{}
 			}
 			if err := m.SiteLocalNetwork.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -11680,7 +11337,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11689,10 +11346,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11712,7 +11372,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11721,10 +11381,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+			v := &network_firewall.ActiveNetworkPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11744,7 +11407,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11753,10 +11416,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11776,7 +11442,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11785,10 +11451,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
+			v := &network_firewall.ActiveForwardProxyPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11808,7 +11477,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11817,10 +11486,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11840,7 +11512,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11849,10 +11521,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.GlobalNetworkConnectionListType{}
+			v := &views.GlobalNetworkConnectionListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11872,7 +11547,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11881,10 +11556,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11904,7 +11582,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11913,10 +11591,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11936,7 +11617,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11945,10 +11626,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -11968,7 +11652,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodeNumber |= (uint32(b) & 0x7F) << shift
+				m.NodeNumber |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11987,7 +11671,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -11996,11 +11680,14 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SiteLocalSubnet == nil {
-				m.SiteLocalSubnet = &ves_io_schema_views1.GCPVPCSubnetChoiceType{}
+				m.SiteLocalSubnet = &views.GCPVPCSubnetChoiceType{}
 			}
 			if err := m.SiteLocalSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -12020,7 +11707,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12030,6 +11717,9 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12049,7 +11739,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12058,10 +11748,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12081,7 +11774,7 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12090,10 +11783,13 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12106,6 +11802,9 @@ func (m *GCPVPCVoltstackClusterType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -12135,7 +11834,7 @@ func (m *GCPVPCIngressGwReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12156,6 +11855,9 @@ func (m *GCPVPCIngressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -12185,7 +11887,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12213,7 +11915,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12222,10 +11924,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12245,7 +11950,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12254,10 +11959,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+			v := &network_firewall.ActiveNetworkPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12277,7 +11985,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12286,10 +11994,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12309,7 +12020,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12318,10 +12029,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
+			v := &network_firewall.ActiveForwardProxyPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12341,7 +12055,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12350,10 +12064,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12373,7 +12090,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12382,10 +12099,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.GlobalNetworkConnectionListType{}
+			v := &views.GlobalNetworkConnectionListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12405,7 +12125,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12414,10 +12134,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12437,7 +12160,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12446,10 +12169,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12469,7 +12195,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12478,10 +12204,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12501,7 +12230,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12510,10 +12239,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12533,7 +12265,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12542,10 +12274,13 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12558,6 +12293,9 @@ func (m *GCPVPCIngressEgressGwReplaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -12587,7 +12325,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12615,7 +12353,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12624,10 +12362,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12647,7 +12388,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12656,10 +12397,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+			v := &network_firewall.ActiveNetworkPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12679,7 +12423,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12688,10 +12432,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12711,7 +12458,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12720,10 +12467,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
+			v := &network_firewall.ActiveForwardProxyPoliciesType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12743,7 +12493,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12752,10 +12502,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12775,7 +12528,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12784,10 +12537,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.GlobalNetworkConnectionListType{}
+			v := &views.GlobalNetworkConnectionListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12807,7 +12563,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12816,10 +12572,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12839,7 +12598,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12848,10 +12607,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views1.SiteStaticRoutesListType{}
+			v := &views.SiteStaticRoutesListType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12871,7 +12633,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12880,10 +12642,13 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -12896,6 +12661,9 @@ func (m *GCPVPCVoltstackClusterReplaceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -12925,7 +12693,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -12953,7 +12721,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12963,6 +12731,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -12982,7 +12753,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -12991,6 +12762,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13014,7 +12788,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13023,6 +12797,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13046,7 +12823,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13055,10 +12832,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13078,7 +12858,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13087,10 +12867,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13110,7 +12893,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13120,6 +12903,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13139,7 +12925,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodesPerAz |= (uint32(b) & 0x7F) << shift
+				m.NodesPerAz |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13158,7 +12944,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13168,6 +12954,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13187,7 +12976,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13197,6 +12986,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13216,7 +13008,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DiskSize |= (uint32(b) & 0x7F) << shift
+				m.DiskSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13235,7 +13027,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13245,6 +13037,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13264,7 +13059,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13273,6 +13068,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13296,7 +13094,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13306,6 +13104,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13325,7 +13126,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13334,11 +13135,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13358,7 +13162,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13367,10 +13171,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13390,7 +13197,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13399,10 +13206,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13422,7 +13232,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13431,11 +13241,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sw == nil {
-				m.Sw = &ves_io_schema_views.VolterraSoftwareType{}
+				m.Sw = &views.VolterraSoftwareType{}
 			}
 			if err := m.Sw.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13455,7 +13268,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13464,11 +13277,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Os == nil {
-				m.Os = &ves_io_schema_views.OperatingSystemType{}
+				m.Os = &views.OperatingSystemType{}
 			}
 			if err := m.Os.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13488,7 +13304,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13497,11 +13313,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.TfParams == nil {
-				m.TfParams = &ves_io_schema_views.ObjectRefType{}
+				m.TfParams = &views.ObjectRefType{}
 			}
 			if err := m.TfParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13521,7 +13340,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13530,11 +13349,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13547,6 +13369,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -13576,7 +13401,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -13604,7 +13429,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13614,6 +13439,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13633,7 +13461,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13642,6 +13470,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13665,7 +13496,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13674,6 +13505,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13697,7 +13531,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13706,10 +13540,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13729,7 +13566,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13738,10 +13575,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13761,7 +13601,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13771,6 +13611,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13790,7 +13633,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodesPerAz |= (uint32(b) & 0x7F) << shift
+				m.NodesPerAz |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13809,7 +13652,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DiskSize |= (uint32(b) & 0x7F) << shift
+				m.DiskSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13828,7 +13671,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13838,6 +13681,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13857,7 +13703,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13866,6 +13712,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13889,7 +13738,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13899,6 +13748,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -13918,7 +13770,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13927,11 +13779,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13951,7 +13806,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13960,10 +13815,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -13983,7 +13841,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -13992,10 +13850,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14015,7 +13876,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14024,11 +13885,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sw == nil {
-				m.Sw = &ves_io_schema_views.VolterraSoftwareType{}
+				m.Sw = &views.VolterraSoftwareType{}
 			}
 			if err := m.Sw.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14048,7 +13912,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14057,11 +13921,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Os == nil {
-				m.Os = &ves_io_schema_views.OperatingSystemType{}
+				m.Os = &views.OperatingSystemType{}
 			}
 			if err := m.Os.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14074,6 +13941,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -14103,7 +13973,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14131,7 +14001,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14140,6 +14010,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14163,7 +14036,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14172,6 +14045,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14195,7 +14071,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14204,6 +14080,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14227,7 +14106,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14237,6 +14116,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14256,7 +14138,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14265,11 +14147,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14289,7 +14174,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14298,10 +14183,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14321,7 +14209,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14330,10 +14218,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14346,6 +14237,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -14375,7 +14269,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -14403,7 +14297,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14413,6 +14307,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14432,7 +14329,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14441,6 +14338,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14464,7 +14364,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14473,6 +14373,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14496,7 +14399,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14505,10 +14408,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14528,7 +14434,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14537,10 +14443,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14560,7 +14469,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14570,6 +14479,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14589,7 +14501,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodesPerAz |= (uint32(b) & 0x7F) << shift
+				m.NodesPerAz |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14608,7 +14520,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14618,6 +14530,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14637,7 +14552,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14647,6 +14562,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14666,7 +14584,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DiskSize |= (uint32(b) & 0x7F) << shift
+				m.DiskSize |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14685,7 +14603,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14695,6 +14613,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14714,7 +14635,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14723,6 +14644,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14746,7 +14670,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14756,6 +14680,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -14775,7 +14702,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14784,11 +14711,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Coordinates == nil {
-				m.Coordinates = &ves_io_schema_site.Coordinates{}
+				m.Coordinates = &site.Coordinates{}
 			}
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14808,7 +14738,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14817,10 +14747,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14840,7 +14773,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14849,10 +14782,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.ObjectRefType{}
+			v := &views.ObjectRefType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -14872,7 +14808,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.SiteState |= (ves_io_schema_site.SiteState(b) & 0x7F) << shift
+				m.SiteState |= site.SiteState(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -14884,6 +14820,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -14901,6 +14840,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -14932,10 +14872,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -14952,269 +14890,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 3298 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0xcd, 0x6f, 0x1b, 0xd7,
-	0xb5, 0xd7, 0xa5, 0x28, 0x89, 0xbc, 0xa4, 0x28, 0x72, 0x44, 0x59, 0x94, 0x6c, 0x33, 0x8c, 0xde,
-	0x7b, 0x88, 0x62, 0x0f, 0x25, 0x73, 0x48, 0xc9, 0xb2, 0x9e, 0x9f, 0x9e, 0x35, 0x7c, 0x89, 0x6d,
-	0x25, 0x71, 0xf4, 0x46, 0x89, 0xf3, 0xf1, 0x9c, 0x37, 0x6f, 0x38, 0xbc, 0xa2, 0xe6, 0x89, 0x9c,
-	0xcb, 0xcc, 0x0c, 0x25, 0xcb, 0x80, 0x81, 0xc0, 0xdd, 0xb4, 0x40, 0x17, 0x45, 0x0a, 0x14, 0xfd,
-	0x13, 0x0a, 0x2f, 0x8a, 0x16, 0xdd, 0x14, 0x9d, 0x02, 0x15, 0xbc, 0x69, 0xe0, 0x95, 0x16, 0x5d,
-	0x18, 0x2e, 0x50, 0x34, 0xca, 0xa2, 0xee, 0xa6, 0x08, 0x8a, 0x2e, 0x02, 0x77, 0x53, 0xcc, 0x9d,
-	0x0f, 0xcd, 0x0c, 0x87, 0xb4, 0xcc, 0x38, 0x09, 0xe2, 0x72, 0x23, 0xdc, 0x8f, 0x73, 0xce, 0x3d,
-	0x33, 0x73, 0xef, 0xef, 0xfc, 0xce, 0x99, 0x11, 0x21, 0xbd, 0x83, 0xd4, 0x39, 0x09, 0xcf, 0xab,
-	0xe2, 0x16, 0x6a, 0x08, 0xf3, 0x3b, 0x12, 0xda, 0x55, 0xe7, 0x6b, 0x62, 0x93, 0xdf, 0x69, 0x8a,
-	0xbc, 0x2a, 0x69, 0x68, 0x5e, 0xdb, 0x6b, 0x22, 0x75, 0xae, 0xa9, 0x60, 0x0d, 0x53, 0x39, 0x53,
-	0x7a, 0xce, 0x94, 0x9e, 0x23, 0xd2, 0x73, 0x6e, 0xe9, 0xe9, 0x7c, 0x4d, 0xd2, 0xb6, 0x5a, 0x95,
-	0x39, 0x11, 0x37, 0xe6, 0x6b, 0xb8, 0x86, 0xe7, 0x89, 0x62, 0xa5, 0xb5, 0x49, 0x7a, 0xa4, 0x43,
-	0x5a, 0xa6, 0xc1, 0xe9, 0x33, 0xde, 0xe5, 0x65, 0xa4, 0xed, 0x62, 0x65, 0x9b, 0xdf, 0x94, 0x14,
-	0xb4, 0x2b, 0xd4, 0xeb, 0xee, 0xc5, 0xa7, 0x4f, 0x7a, 0x65, 0x71, 0x53, 0x93, 0xb0, 0x6c, 0x4f,
-	0x66, 0xbd, 0x93, 0x7e, 0xcf, 0xa7, 0xa7, 0xbc, 0xf3, 0xee, 0xa9, 0x53, 0xbe, 0x5b, 0x20, 0xd4,
-	0xa5, 0xaa, 0xa0, 0x21, 0x6b, 0x36, 0xd7, 0x7e, 0x83, 0x78, 0xef, 0xd2, 0xff, 0x1a, 0x74, 0x0b,
-	0x0d, 0x07, 0x78, 0xf7, 0x2a, 0x2f, 0x04, 0x49, 0xb9, 0x04, 0x66, 0x1e, 0xc4, 0xe1, 0xf8, 0xe5,
-	0xf2, 0xfa, 0xf5, 0xf5, 0xf2, 0x55, 0xb9, 0xa6, 0x20, 0x55, 0xbd, 0xbc, 0xfb, 0xd6, 0x5e, 0x13,
-	0x51, 0x3c, 0x4c, 0x1a, 0x77, 0x58, 0x44, 0x8a, 0x26, 0x6d, 0x4a, 0xa8, 0xca, 0x6f, 0xed, 0x66,
-	0x40, 0x0e, 0xcc, 0x46, 0xd9, 0x85, 0x87, 0x3a, 0x48, 0xd5, 0xc4, 0x66, 0xbe, 0xb2, 0x87, 0xeb,
-	0xf9, 0x1d, 0x5c, 0xd7, 0x1a, 0x48, 0xdd, 0xfa, 0x42, 0x07, 0x03, 0xbf, 0xfa, 0xf3, 0xfe, 0xe0,
-	0xa4, 0x32, 0x91, 0xb9, 0xc4, 0xb5, 0xcf, 0x73, 0x89, 0x9a, 0xd8, 0x2c, 0xdb, 0xd6, 0xae, 0xec,
-	0x52, 0xef, 0xc0, 0xd1, 0x3a, 0x16, 0x85, 0x3a, 0x6f, 0xdd, 0xfd, 0x4c, 0x28, 0x07, 0x66, 0x63,
-	0x0c, 0x3d, 0x17, 0xf4, 0xb0, 0x4d, 0x0f, 0xaf, 0x99, 0x92, 0xe5, 0x2d, 0x2c, 0x89, 0xc8, 0xf0,
-	0x92, 0x0d, 0x7f, 0xae, 0x03, 0xc0, 0xc5, 0x89, 0x21, 0x6b, 0x96, 0xfa, 0x4b, 0x14, 0x1a, 0x6b,
-	0xf1, 0xb7, 0xb0, 0x8c, 0x78, 0x59, 0x68, 0x20, 0x35, 0x13, 0xce, 0x0d, 0xce, 0x46, 0xd9, 0xdf,
-	0x46, 0x6d, 0x27, 0x87, 0x3e, 0x06, 0xa1, 0x0c, 0x30, 0x5a, 0xbf, 0x88, 0x2a, 0x3f, 0x8b, 0x72,
-	0x71, 0x41, 0x95, 0x84, 0x3c, 0x12, 0x54, 0xad, 0x90, 0x17, 0x3c, 0xbd, 0x8a, 0xa7, 0x27, 0xba,
-	0x7a, 0x8c, 0x47, 0x92, 0xf1, 0x48, 0x32, 0x79, 0x91, 0x4b, 0x91, 0x9e, 0x8c, 0x15, 0x6d, 0xcb,
-	0x36, 0xdc, 0x36, 0x54, 0x69, 0x1f, 0x6a, 0x53, 0x64, 0xda, 0x15, 0x99, 0x76, 0xc5, 0x80, 0x15,
-	0x8b, 0xed, 0x8a, 0xc5, 0x76, 0xc5, 0x62, 0x5e, 0xe4, 0x46, 0xc9, 0x90, 0x8a, 0x5b, 0xda, 0x96,
-	0xe1, 0xa6, 0xa7, 0x5b, 0xf1, 0x76, 0xed, 0x55, 0x48, 0xd7, 0x7b, 0x5d, 0xae, 0xa1, 0x4a, 0xfb,
-	0x50, 0x9b, 0x22, 0xd3, 0xae, 0xc8, 0xb4, 0x2b, 0x1a, 0xd7, 0x75, 0x42, 0x68, 0xa9, 0x9a, 0x22,
-	0xd4, 0xfd, 0xcb, 0x06, 0x8f, 0x57, 0x3a, 0x8c, 0x8b, 0xdc, 0x18, 0x6a, 0x29, 0xb8, 0x89, 0xcc,
-	0x6b, 0x37, 0x0c, 0xf8, 0x06, 0x2a, 0xfe, 0x01, 0x91, 0x4b, 0x58, 0x03, 0xbb, 0xc8, 0x34, 0xed,
-	0xed, 0xfb, 0xe7, 0xab, 0x9e, 0xbe, 0x71, 0x81, 0xde, 0x7e, 0xc5, 0xd7, 0xf7, 0xea, 0x17, 0x7d,
-	0xf2, 0x45, 0x9f, 0x7c, 0xd1, 0x27, 0x5f, 0xf2, 0xc9, 0x97, 0x7c, 0xf2, 0x25, 0x9f, 0xfc, 0xa2,
-	0x4f, 0x7e, 0xd1, 0x27, 0xbf, 0x98, 0x17, 0xb9, 0x29, 0x72, 0xe5, 0x42, 0x03, 0x29, 0x92, 0xe8,
-	0xdb, 0xbc, 0x1d, 0xa7, 0x2a, 0x9d, 0xa7, 0x44, 0x2e, 0x4d, 0x9e, 0x80, 0x3d, 0x65, 0xdb, 0x0a,
-	0x1a, 0xad, 0x04, 0x8e, 0x8a, 0xdc, 0x68, 0x4b, 0xcd, 0x8b, 0x48, 0x36, 0x1e, 0x28, 0xd9, 0x9c,
-	0xee, 0x6e, 0xc5, 0xdb, 0xf5, 0x09, 0x6f, 0x72, 0xb0, 0xa5, 0x3a, 0xd6, 0x8f, 0xda, 0xa2, 0xab,
-	0x5d, 0x75, 0xda, 0xc6, 0xed, 0x3c, 0x6a, 0x57, 0x5c, 0x6d, 0x53, 0xde, 0x7c, 0xc4, 0x82, 0xab,
-	0x5d, 0x71, 0xb5, 0x8f, 0x64, 0x18, 0x97, 0x0c, 0xe3, 0x92, 0x61, 0x5c, 0x32, 0x45, 0x97, 0x4c,
-	0xd1, 0x25, 0x53, 0x74, 0xc9, 0x94, 0x5c, 0x32, 0x25, 0x97, 0x8c, 0xe1, 0x4f, 0xbc, 0x26, 0x36,
-	0xdf, 0xc7, 0x32, 0xba, 0x66, 0xa0, 0x1b, 0xf5, 0x16, 0x34, 0x01, 0x90, 0x57, 0x5b, 0x15, 0x19,
-	0x69, 0x99, 0x21, 0x02, 0xa4, 0x67, 0xbb, 0x00, 0xe9, 0x06, 0x11, 0x6c, 0xc3, 0xd1, 0x18, 0x31,
-	0x63, 0x4e, 0x52, 0x34, 0x8c, 0xc9, 0xb8, 0x8a, 0x78, 0xb9, 0xd5, 0xa8, 0x20, 0x25, 0x33, 0x9c,
-	0x03, 0xb3, 0xa3, 0x6c, 0xcc, 0xc0, 0xcc, 0xe1, 0x33, 0x61, 0x26, 0x04, 0x06, 0x39, 0x68, 0xcc,
-	0x5f, 0x23, 0xd3, 0xcb, 0xf1, 0xbf, 0xae, 0x44, 0x0b, 0x74, 0x89, 0x5e, 0xa4, 0x19, 0x7a, 0x61,
-	0x2d, 0x1c, 0x19, 0x4c, 0x86, 0x67, 0xbe, 0x37, 0x05, 0xa7, 0x3c, 0xa1, 0xe5, 0x15, 0x77, 0x80,
-	0x51, 0x3b, 0x06, 0x98, 0xab, 0x0f, 0x75, 0x70, 0xd2, 0x09, 0x20, 0x8d, 0x56, 0x5d, 0x93, 0xf2,
-	0xb2, 0x24, 0xb6, 0x85, 0x9a, 0x17, 0x95, 0x17, 0x32, 0x97, 0xb8, 0x6e, 0x92, 0x6d, 0x41, 0xe7,
-	0x3d, 0x98, 0x90, 0x64, 0x55, 0x32, 0x2e, 0xeb, 0x4b, 0x47, 0x9d, 0x51, 0xd3, 0x92, 0x1d, 0x76,
-	0xfe, 0x07, 0x8e, 0xe1, 0x96, 0xe6, 0xb1, 0x3d, 0xd8, 0xb3, 0xed, 0x84, 0x65, 0xca, 0x36, 0xce,
-	0xc2, 0x94, 0x8c, 0x6d, 0xbb, 0x7c, 0x13, 0xd7, 0x25, 0x71, 0x8f, 0x3c, 0x92, 0x18, 0x93, 0xf6,
-	0x99, 0x7f, 0xa5, 0xd1, 0xd4, 0xf6, 0xae, 0x0c, 0x70, 0x63, 0x32, 0xb6, 0xb4, 0xd7, 0x89, 0x38,
-	0xa5, 0xc2, 0x49, 0x41, 0xd4, 0xa4, 0x1d, 0xe4, 0xb5, 0x23, 0x21, 0x35, 0x33, 0x42, 0x2c, 0x5d,
-	0xf0, 0x59, 0xf2, 0xd3, 0xa2, 0xb9, 0x55, 0xa2, 0xee, 0xb6, 0x2a, 0x21, 0xd5, 0xf0, 0xfa, 0xca,
-	0x00, 0x37, 0x21, 0x04, 0x4d, 0x52, 0x97, 0x60, 0x52, 0xc6, 0xfc, 0x26, 0x56, 0x76, 0x05, 0xa5,
-	0xca, 0x37, 0x15, 0x7c, 0x73, 0x2f, 0x13, 0xed, 0xe2, 0x37, 0xe0, 0x12, 0x32, 0x7e, 0xd5, 0x14,
-	0x5f, 0x37, 0xa4, 0xa9, 0xef, 0x00, 0x78, 0xda, 0xf2, 0xdb, 0x63, 0xe6, 0xc8, 0x7b, 0x48, 0xec,
-	0xad, 0x1c, 0xcf, 0x7b, 0xb7, 0x6d, 0xcf, 0x25, 0x00, 0x6e, 0x5a, 0xe8, 0x28, 0x61, 0x3d, 0x80,
-	0x5a, 0x1d, 0x57, 0x5c, 0x8c, 0x25, 0xde, 0xe5, 0x42, 0x42, 0xc6, 0x03, 0xb8, 0x4c, 0xe4, 0xed,
-	0x87, 0xb8, 0x09, 0xc7, 0xbd, 0x06, 0xf8, 0xba, 0xa4, 0x6a, 0x99, 0x51, 0x62, 0xa5, 0x14, 0xbc,
-	0x4b, 0xdc, 0x06, 0xca, 0x58, 0x96, 0x91, 0x68, 0x70, 0xc0, 0xd7, 0x25, 0x55, 0x23, 0x4e, 0x87,
-	0xb8, 0x54, 0xcd, 0x2d, 0x62, 0x4c, 0x50, 0x1b, 0x70, 0x52, 0xc6, 0xbc, 0xb5, 0xcf, 0x55, 0x4d,
-	0xd0, 0x24, 0x91, 0x57, 0x70, 0x4b, 0x43, 0x6a, 0x66, 0xac, 0xb3, 0xc7, 0x6c, 0x78, 0x5f, 0x07,
-	0xe0, 0xca, 0x20, 0x97, 0x96, 0xf1, 0x55, 0xa2, 0xbb, 0x41, 0x54, 0x39, 0xa2, 0x49, 0xd5, 0x60,
-	0x3a, 0xd0, 0x62, 0x92, 0x58, 0xcc, 0x07, 0x7a, 0xbf, 0x21, 0x69, 0x1e, 0x23, 0xb6, 0xdb, 0xce,
-	0x52, 0x94, 0xd4, 0xbe, 0xd0, 0xdb, 0x30, 0x23, 0x63, 0xde, 0x3e, 0x4a, 0xde, 0xc5, 0xa8, 0x27,
-	0xba, 0x1f, 0xe6, 0x26, 0x64, 0xfc, 0xa6, 0xa9, 0xec, 0x31, 0x2b, 0xc1, 0x89, 0x60, 0x9b, 0xe3,
-	0xbd, 0x5f, 0x40, 0x98, 0x1b, 0xc7, 0x01, 0x4b, 0xbd, 0x01, 0x27, 0xbd, 0x3b, 0x55, 0xa8, 0xd7,
-	0xf1, 0xae, 0xf1, 0x37, 0x93, 0xee, 0xba, 0xf5, 0xd3, 0x9b, 0xae, 0xad, 0xb7, 0x6a, 0x28, 0xad,
-	0xd6, 0xeb, 0xd4, 0x75, 0x38, 0x6a, 0xdf, 0x79, 0x13, 0xdf, 0x27, 0x7a, 0xc5, 0xf7, 0xb8, 0x75,
-	0xbb, 0x4d, 0x80, 0x7f, 0x17, 0x26, 0x9c, 0x3b, 0x62, 0x1a, 0x3e, 0xd1, 0xab, 0xe1, 0x51, 0xfb,
-	0x36, 0x04, 0x86, 0x8e, 0xc9, 0xae, 0xa1, 0x23, 0x88, 0xaf, 0x67, 0xfa, 0x7c, 0xbd, 0xcf, 0xd7,
-	0xfb, 0x7c, 0xbd, 0xcf, 0xd7, 0x9f, 0x47, 0xbe, 0xbe, 0x7c, 0xe3, 0x9e, 0x0e, 0xde, 0x85, 0xd3,
-	0x70, 0xe8, 0x1a, 0xae, 0x22, 0x95, 0x4a, 0x15, 0x68, 0xa6, 0x44, 0x33, 0x45, 0x9a, 0xa1, 0x99,
-	0x02, 0x5d, 0xa4, 0x19, 0x06, 0x9e, 0x82, 0x13, 0x46, 0xe8, 0xc9, 0x59, 0x51, 0x3d, 0xf7, 0xaa,
-	0xc5, 0x61, 0xa8, 0xc1, 0x05, 0x7a, 0x09, 0x9e, 0x82, 0xc9, 0xd5, 0xea, 0x8e, 0x20, 0x8b, 0xa8,
-	0x9a, 0x7b, 0xd3, 0xac, 0x09, 0x51, 0x91, 0x42, 0x81, 0x2e, 0x94, 0xe8, 0xc2, 0x79, 0x76, 0x16,
-	0x4e, 0x78, 0x79, 0x22, 0x2f, 0x12, 0xb8, 0xa6, 0xc6, 0xf6, 0x75, 0x30, 0x7c, 0xa0, 0x83, 0xa1,
-	0x43, 0x1d, 0x0c, 0x2e, 0xd2, 0xe7, 0xd9, 0xb3, 0x30, 0xed, 0x8d, 0x53, 0x96, 0xe0, 0xf8, 0xbe,
-	0x0e, 0xa2, 0x07, 0x3a, 0x88, 0x1c, 0xea, 0x60, 0xe4, 0x02, 0xcd, 0x9c, 0xa3, 0x0b, 0xe7, 0xd8,
-	0x39, 0x38, 0xe1, 0x23, 0x2f, 0x96, 0xf4, 0xc4, 0xbe, 0x0e, 0xe2, 0x9f, 0xe8, 0x00, 0x1c, 0xe8,
-	0x20, 0x76, 0xa8, 0x83, 0xa1, 0x02, 0x43, 0x17, 0x8a, 0x6c, 0x11, 0x4e, 0x07, 0xf0, 0x05, 0xb7,
-	0xd2, 0x98, 0xa5, 0x94, 0x20, 0x4a, 0x0b, 0x74, 0x61, 0x91, 0x2d, 0xc1, 0x93, 0x41, 0x41, 0xda,
-	0xad, 0x45, 0x59, 0x5a, 0x29, 0xa2, 0xb5, 0x44, 0x17, 0x2e, 0xac, 0x85, 0x23, 0xe1, 0xe4, 0xd0,
-	0x5a, 0x38, 0x32, 0x94, 0x1c, 0x5e, 0x0b, 0x47, 0x22, 0xc9, 0xe8, 0x5a, 0x38, 0x12, 0x4b, 0xc6,
-	0xd7, 0xc2, 0x91, 0x44, 0x72, 0x6c, 0x2d, 0x1c, 0x49, 0x25, 0xa9, 0x99, 0x9f, 0x4e, 0xc2, 0x69,
-	0x33, 0x84, 0x5d, 0xc7, 0x75, 0x4d, 0xd5, 0x04, 0x71, 0xbb, 0x5c, 0x6f, 0xa9, 0x1a, 0x52, 0x48,
-	0x32, 0xd2, 0xe8, 0x98, 0x8c, 0x94, 0x1f, 0xea, 0x20, 0xe3, 0xa9, 0x66, 0x11, 0xe5, 0xbc, 0x88,
-	0x1b, 0x15, 0x6c, 0xc7, 0xa7, 0xac, 0x72, 0x2a, 0x73, 0x89, 0xeb, 0x28, 0xd6, 0x96, 0x86, 0xfc,
-	0x1f, 0xa4, 0x48, 0xa5, 0xee, 0x59, 0x15, 0xc0, 0x92, 0x86, 0xb5, 0xd7, 0xdd, 0x45, 0xb0, 0xc0,
-	0x84, 0x61, 0xe8, 0x99, 0x25, 0x0c, 0xc3, 0x5f, 0x6b, 0xc2, 0x10, 0x79, 0xc6, 0x09, 0x43, 0xf4,
-	0x9b, 0x4a, 0x18, 0x62, 0xcf, 0x24, 0x61, 0x88, 0x3f, 0xeb, 0x84, 0xa1, 0x1b, 0xe5, 0x3e, 0x4e,
-	0xc6, 0xf0, 0xb4, 0x94, 0xfb, 0x4b, 0xe5, 0x0c, 0x4f, 0x4b, 0xb9, 0x53, 0x3d, 0x50, 0x6e, 0x1f,
-	0x81, 0xa5, 0xba, 0x13, 0xd8, 0x0f, 0x60, 0xca, 0x75, 0x9a, 0x2d, 0x2e, 0x3d, 0xde, 0x2b, 0x97,
-	0x1e, 0x73, 0xce, 0xb2, 0xc5, 0xa6, 0x03, 0xf8, 0x71, 0xba, 0xcf, 0x8f, 0xfb, 0xfc, 0xb8, 0xcf,
-	0x8f, 0xfb, 0xfc, 0xf8, 0xb9, 0xac, 0x67, 0xb3, 0x30, 0x21, 0x63, 0x7e, 0x7b, 0x49, 0xe5, 0x45,
-	0x93, 0xa2, 0x65, 0xa6, 0x8f, 0x51, 0xf7, 0x89, 0xcb, 0xf8, 0xb5, 0x25, 0xd5, 0x22, 0x75, 0xd4,
-	0x7b, 0x30, 0xe6, 0x36, 0x70, 0x92, 0x18, 0x98, 0x09, 0x44, 0xe3, 0x37, 0x2b, 0xff, 0x8f, 0x44,
-	0x8d, 0x43, 0x9b, 0x04, 0x84, 0xa9, 0xbb, 0xb7, 0xdd, 0x9a, 0x96, 0x71, 0xb8, 0xed, 0x98, 0x5e,
-	0x7e, 0xe7, 0x9e, 0x0e, 0x36, 0xe0, 0x84, 0x4d, 0xdf, 0xe3, 0x05, 0xc2, 0x90, 0x97, 0x68, 0x86,
-	0x2e, 0x5c, 0xe8, 0xc2, 0xdc, 0x4b, 0xf4, 0xf9, 0x0e, 0xcc, 0xfd, 0x9c, 0xc1, 0xdc, 0x99, 0x85,
-	0xee, 0xcc, 0x7d, 0xe8, 0x40, 0x07, 0x61, 0x83, 0xb9, 0x2f, 0xd0, 0x8b, 0xec, 0x99, 0x0e, 0xcc,
-	0x9d, 0xda, 0xd7, 0x41, 0xe4, 0x40, 0x07, 0x23, 0x87, 0x3a, 0x18, 0x5e, 0xa2, 0x0b, 0xe7, 0xe9,
-	0x0b, 0xdd, 0x89, 0x7b, 0xcc, 0x62, 0xd3, 0x90, 0xb0, 0xe9, 0x02, 0x5d, 0x60, 0x8e, 0xc3, 0xc1,
-	0x03, 0x98, 0xfb, 0x59, 0x48, 0xb9, 0xee, 0x9a, 0x5b, 0x78, 0xda, 0x12, 0x9e, 0x32, 0x84, 0x99,
-	0x45, 0x9a, 0x39, 0x6f, 0xbe, 0x1e, 0x70, 0x68, 0xfb, 0x48, 0x32, 0xb2, 0x16, 0x8e, 0xc0, 0x64,
-	0xcc, 0x21, 0xec, 0x53, 0xc9, 0xe9, 0x99, 0x92, 0xcd, 0xd7, 0x9d, 0xd7, 0xd2, 0x1c, 0x6a, 0xd6,
-	0x05, 0x33, 0x54, 0x2e, 0x9f, 0xb8, 0xbf, 0x12, 0xf4, 0xd6, 0x7a, 0xe6, 0x87, 0x71, 0x98, 0x0b,
-	0x7c, 0xe5, 0xe0, 0x52, 0xee, 0x17, 0xd3, 0xfb, 0xc5, 0xf4, 0x7e, 0x31, 0xfd, 0x9f, 0xb3, 0x98,
-	0xbe, 0x7c, 0xe3, 0xfe, 0x4a, 0xe7, 0x77, 0x92, 0xf7, 0x74, 0x70, 0xf1, 0x4b, 0xd5, 0x5e, 0x56,
-	0x3b, 0x21, 0xf8, 0xac, 0xaf, 0xf6, 0x72, 0xe7, 0x31, 0x08, 0x96, 0x64, 0xcb, 0x1d, 0xa0, 0xfd,
-	0x6c, 0x40, 0x51, 0xe6, 0xce, 0x63, 0x10, 0x28, 0xcc, 0x5e, 0xee, 0x84, 0xf9, 0x73, 0x81, 0xc5,
-	0x1a, 0xc3, 0x9b, 0x40, 0x79, 0xf6, 0xbf, 0xbb, 0x56, 0x71, 0x8a, 0x81, 0xb1, 0xe0, 0xce, 0x63,
-	0xd0, 0x45, 0x89, 0xdd, 0xe8, 0x1e, 0x5f, 0x4a, 0x81, 0x35, 0x9e, 0x3b, 0x8f, 0x41, 0x37, 0xad,
-	0x27, 0x14, 0x7f, 0xfe, 0x1e, 0x85, 0x2f, 0x06, 0x17, 0x7f, 0xfa, 0x61, 0xa1, 0x1f, 0x16, 0xfa,
-	0x25, 0x93, 0x67, 0x01, 0xac, 0xef, 0xdf, 0x5f, 0xe9, 0x52, 0x60, 0xbd, 0xa7, 0x83, 0x0b, 0x4f,
-	0x40, 0xd6, 0xa9, 0x00, 0x64, 0x25, 0x94, 0xb4, 0xf4, 0xfc, 0xc1, 0xea, 0x31, 0x30, 0x30, 0x10,
-	0x57, 0x7b, 0xc1, 0xc0, 0x99, 0x1f, 0x51, 0x30, 0x61, 0xee, 0xf1, 0x8d, 0x26, 0x12, 0x09, 0xd4,
-	0x7d, 0x77, 0x10, 0xc2, 0x9a, 0xd8, 0xe4, 0x15, 0x54, 0x93, 0xb0, 0x6c, 0x55, 0xba, 0x1f, 0x85,
-	0xec, 0x72, 0xd2, 0x1f, 0x42, 0xca, 0xef, 0x43, 0x1c, 0x3c, 0x2a, 0x14, 0xb9, 0xda, 0x0c, 0x37,
-	0xe6, 0x2b, 0xf1, 0xf8, 0x07, 0xda, 0x24, 0x8a, 0x5c, 0xcc, 0x55, 0x72, 0xb1, 0x66, 0x8f, 0x2a,
-	0x19, 0xfe, 0x01, 0x86, 0x4b, 0x07, 0x15, 0x3c, 0xb8, 0x51, 0x4f, 0x31, 0x83, 0x8b, 0xbb, 0x4b,
-	0x15, 0x9e, 0x1e, 0xe3, 0xe9, 0x15, 0x3d, 0xbd, 0x92, 0xa7, 0xb7, 0xc8, 0x4d, 0x76, 0x48, 0xf5,
-	0x39, 0xaa, 0x3d, 0x79, 0xe7, 0x62, 0xae, 0x6c, 0x9c, 0x8b, 0xd8, 0x39, 0xb7, 0xd3, 0x2a, 0x91,
-	0x96, 0xe9, 0x8f, 0xdd, 0x62, 0x9c, 0x56, 0xd1, 0x69, 0x95, 0xb8, 0x68, 0x4d, 0x6c, 0x72, 0xe4,
-	0xde, 0x53, 0x37, 0x20, 0x94, 0x4c, 0x26, 0xc2, 0xd7, 0x76, 0xad, 0x2f, 0x86, 0x16, 0xe6, 0x9e,
-	0xf4, 0xc1, 0xf3, 0x5c, 0x40, 0xf2, 0xc3, 0x86, 0x0f, 0x8c, 0xe3, 0x3e, 0xc0, 0x45, 0x25, 0x7b,
-	0x98, 0xc2, 0x30, 0x65, 0x5b, 0x47, 0xce, 0x22, 0x61, 0xb2, 0xc8, 0xbf, 0x3f, 0xe5, 0x22, 0xaf,
-	0x04, 0x2d, 0x35, 0x26, 0x79, 0x27, 0xa9, 0x1a, 0x4c, 0x89, 0x75, 0xdc, 0xaa, 0xf2, 0xa2, 0x82,
-	0xaa, 0x48, 0xd6, 0x24, 0xa1, 0x6e, 0xbf, 0x2d, 0x38, 0x4e, 0xf6, 0x9d, 0xbe, 0x7b, 0xbb, 0x5d,
-	0xff, 0x0a, 0xe0, 0x92, 0x64, 0xb0, 0x7c, 0x34, 0x46, 0x31, 0x30, 0x22, 0xa8, 0xaa, 0xa4, 0x6a,
-	0xa8, 0x6a, 0x85, 0xd6, 0x4e, 0x78, 0xe5, 0xc8, 0x51, 0x8f, 0x01, 0xf9, 0x94, 0x42, 0x33, 0x40,
-	0x86, 0x7c, 0x25, 0x4d, 0xde, 0x2c, 0x44, 0xd9, 0xdf, 0x81, 0x87, 0x3a, 0x18, 0x95, 0x0b, 0x79,
-	0x63, 0xaa, 0x2a, 0x28, 0xd5, 0x7c, 0xc9, 0x38, 0x0a, 0x1f, 0xff, 0x1a, 0xfc, 0x1c, 0xc0, 0x25,
-	0xe8, 0x9d, 0xa1, 0x5e, 0x9a, 0x2d, 0xe5, 0x6e, 0xe6, 0x76, 0xca, 0xeb, 0x6f, 0xd3, 0xb9, 0xc2,
-	0xe2, 0x65, 0x36, 0xc7, 0xad, 0xbe, 0xf1, 0x72, 0xae, 0x81, 0xaa, 0x52, 0xab, 0x91, 0x6b, 0x22,
-	0x65, 0x13, 0x2b, 0x0d, 0x63, 0x05, 0xb8, 0xe8, 0xd5, 0x5c, 0xa2, 0xfe, 0x6d, 0x76, 0xc9, 0xd1,
-	0x2c, 0x32, 0xb6, 0xe6, 0x96, 0x54, 0xdb, 0xf2, 0xe8, 0xfd, 0x07, 0x4c, 0xb8, 0xf5, 0x0a, 0x8b,
-	0xd4, 0xd9, 0xd9, 0xc2, 0xa2, 0xa3, 0xb9, 0x58, 0xb2, 0x35, 0x77, 0x90, 0xb2, 0xd7, 0xa6, 0x6e,
-	0x1c, 0xe0, 0xb0, 0x12, 0xca, 0x5c, 0x22, 0x9f, 0x7b, 0x90, 0x6b, 0x25, 0x67, 0x7e, 0x09, 0xc6,
-	0x65, 0x5c, 0x45, 0x2a, 0xdf, 0x44, 0x0a, 0x2f, 0xdc, 0x22, 0x0c, 0x61, 0x94, 0x3d, 0x61, 0x84,
-	0x88, 0x87, 0x3a, 0x00, 0xe7, 0xec, 0xc3, 0x1f, 0x3e, 0x13, 0xca, 0x4c, 0x98, 0xf5, 0x6d, 0x75,
-	0x1d, 0x29, 0xab, 0xb7, 0xa8, 0x75, 0x38, 0xb5, 0x83, 0xeb, 0x1a, 0x52, 0x14, 0x81, 0x57, 0xf1,
-	0xa6, 0xb6, 0x2b, 0x28, 0x88, 0xdf, 0x41, 0x8a, 0x6a, 0x60, 0x07, 0x24, 0x77, 0x30, 0xfd, 0xe0,
-	0x36, 0x78, 0xa4, 0x03, 0xe0, 0x18, 0x21, 0x0e, 0x4c, 0xda, 0x6a, 0x1b, 0x96, 0xd6, 0x75, 0x53,
-	0x89, 0xba, 0x06, 0x33, 0xb8, 0x89, 0x14, 0x41, 0x93, 0xe4, 0x1a, 0xaf, 0xee, 0xa9, 0x1a, 0x6a,
-	0x38, 0x06, 0x63, 0x5d, 0x0c, 0x9e, 0x70, 0xb4, 0x36, 0x88, 0x92, 0x6d, 0xef, 0x1c, 0x8c, 0x56,
-	0x25, 0x75, 0x9b, 0x57, 0xa5, 0x5b, 0x88, 0x30, 0x86, 0x51, 0x76, 0x7c, 0xdf, 0xa5, 0x3d, 0x7c,
-	0x26, 0x9c, 0xf9, 0xe8, 0x6f, 0x83, 0x5c, 0xc4, 0x90, 0xda, 0x90, 0x6e, 0x21, 0xea, 0x25, 0x38,
-	0xa2, 0xaa, 0x5b, 0xfc, 0x36, 0xda, 0x23, 0xdc, 0x20, 0xca, 0x26, 0xbe, 0xd0, 0xc1, 0x20, 0xa9,
-	0xa5, 0x2b, 0x83, 0x99, 0x8f, 0x2e, 0x71, 0xc3, 0xaa, 0xba, 0xf5, 0x1a, 0xda, 0xa3, 0x3e, 0x84,
-	0x29, 0xe7, 0x6d, 0x9e, 0x53, 0x4e, 0x4a, 0x90, 0x0d, 0x77, 0xf1, 0xb8, 0x27, 0x28, 0x28, 0x22,
-	0x3a, 0x47, 0x28, 0xb9, 0xe3, 0x9b, 0xa5, 0x66, 0xe1, 0x88, 0x50, 0xad, 0x1a, 0x07, 0x8a, 0x50,
-	0x89, 0x28, 0x9b, 0x30, 0xae, 0xc5, 0xf1, 0x2d, 0xc4, 0xd9, 0xd3, 0xd4, 0x65, 0x18, 0x13, 0x31,
-	0x56, 0xaa, 0x92, 0x2c, 0x1c, 0x91, 0x84, 0x17, 0x7c, 0x6e, 0x11, 0x47, 0xca, 0x47, 0x62, 0x26,
-	0x2d, 0xe0, 0xdc, 0x9a, 0xd4, 0x5b, 0x70, 0xb2, 0x8e, 0x6b, 0x2a, 0xaf, 0x6a, 0x0a, 0x12, 0x1a,
-	0xc6, 0x53, 0xa9, 0x4a, 0xaa, 0x50, 0xa9, 0xa3, 0xea, 0x31, 0xd2, 0xc4, 0x10, 0x37, 0x61, 0x28,
-	0x6f, 0xd8, 0xba, 0xff, 0x65, 0xa9, 0x52, 0x37, 0x60, 0xbc, 0x8e, 0x6b, 0xbc, 0x82, 0x44, 0x24,
-	0xed, 0x20, 0xc5, 0xca, 0x0e, 0x8f, 0x83, 0x03, 0xe3, 0x77, 0x6f, 0x7b, 0x54, 0xad, 0x75, 0x62,
-	0x75, 0x5c, 0xe3, 0xac, 0x21, 0xaa, 0x0c, 0x43, 0xea, 0xae, 0xc5, 0x55, 0x5e, 0x0e, 0xb4, 0x79,
-	0xdd, 0xb7, 0xfd, 0x88, 0xe9, 0x88, 0x61, 0x8b, 0xbc, 0x69, 0x09, 0xa9, 0xbb, 0x14, 0x0b, 0x43,
-	0x58, 0xb5, 0xbe, 0xa8, 0x9a, 0x0d, 0x76, 0xcc, 0xbb, 0xe5, 0xfc, 0x36, 0xb0, 0x4a, 0x7d, 0x00,
-	0xa3, 0xda, 0x26, 0xdf, 0x14, 0x14, 0xa1, 0xa1, 0x66, 0xfe, 0x34, 0x72, 0xec, 0x8b, 0x3c, 0x79,
-	0xf7, 0x76, 0x9a, 0xf8, 0x67, 0x1c, 0x5d, 0x53, 0x1f, 0x69, 0x48, 0x51, 0x8d, 0x7d, 0xcf, 0x45,
-	0xb4, 0xcd, 0x75, 0x62, 0x91, 0xfa, 0x5f, 0x38, 0x4a, 0xfe, 0xfd, 0x43, 0x92, 0x35, 0xa4, 0xc8,
-	0x42, 0x3d, 0xf3, 0x68, 0xe4, 0x69, 0xf0, 0xd4, 0xab, 0x4c, 0x6c, 0xc7, 0x8d, 0xa1, 0xab, 0xd6,
-	0xc8, 0x72, 0xeb, 0x9e, 0x0e, 0x3e, 0x84, 0xa7, 0xe0, 0x38, 0x21, 0x67, 0x86, 0x5a, 0x6e, 0x03,
-	0xd5, 0x4d, 0x12, 0x4c, 0x0d, 0x15, 0x68, 0x86, 0x5e, 0x80, 0x79, 0x98, 0x36, 0xa9, 0x1b, 0xae,
-	0xa2, 0xdc, 0xba, 0xe3, 0x29, 0x35, 0xb1, 0x44, 0x13, 0xaa, 0x43, 0x5f, 0xa0, 0x0b, 0xe7, 0x68,
-	0x83, 0xad, 0x19, 0x4c, 0x05, 0xce, 0xc0, 0x13, 0x0e, 0x97, 0x2b, 0x63, 0x79, 0x53, 0xaa, 0xb5,
-	0x8c, 0x7b, 0x88, 0x65, 0x2a, 0x52, 0x38, 0x6f, 0x90, 0x2c, 0xa6, 0xc0, 0xe6, 0x60, 0xd4, 0xf9,
-	0x6f, 0x15, 0xf2, 0xc9, 0xc1, 0xe0, 0x81, 0x0e, 0x42, 0x06, 0x91, 0x2b, 0xd2, 0x25, 0xc3, 0x4d,
-	0xf6, 0x34, 0x84, 0x55, 0xd4, 0xac, 0xe3, 0xbd, 0x06, 0x92, 0xb5, 0xf6, 0xcf, 0x17, 0xf2, 0x30,
-	0x4d, 0xf6, 0xac, 0xbd, 0x47, 0x9e, 0xf8, 0x95, 0x40, 0x28, 0x39, 0xe8, 0x90, 0x24, 0x23, 0x2d,
-	0xfc, 0x71, 0x14, 0x26, 0xca, 0x0a, 0x12, 0x34, 0xe4, 0x10, 0xa3, 0xd3, 0xed, 0xbc, 0xc8, 0x1d,
-	0xac, 0xaf, 0x3f, 0xb3, 0x60, 0xed, 0x0d, 0xd3, 0xd2, 0x57, 0x13, 0xa6, 0xbf, 0x75, 0x01, 0xfa,
-	0x5f, 0x02, 0xe3, 0xb3, 0x2f, 0x90, 0xe5, 0x82, 0x02, 0x99, 0x27, 0x60, 0x9d, 0x6c, 0x0b, 0x07,
-	0x2e, 0xe4, 0x9f, 0xf4, 0x21, 0xbf, 0x83, 0xf4, 0xdb, 0x5f, 0x11, 0xd2, 0x07, 0x62, 0x7c, 0xc6,
-	0x87, 0xf1, 0x47, 0x98, 0xbe, 0xda, 0x0b, 0xa6, 0x7b, 0xd1, 0xfc, 0x5a, 0x4f, 0x68, 0xde, 0x19,
-	0xc7, 0xdf, 0xed, 0x19, 0xc7, 0xc7, 0x7c, 0x38, 0xee, 0xc7, 0xf0, 0xff, 0xec, 0x0d, 0xc3, 0xc3,
-	0x0e, 0x7e, 0xaf, 0xf4, 0x84, 0xdf, 0x61, 0x1b, 0xbb, 0x97, 0x53, 0xf7, 0x57, 0x7c, 0xc9, 0x11,
-	0x3b, 0xed, 0x06, 0xa6, 0xd1, 0x3b, 0x8f, 0xc1, 0x51, 0x97, 0x3d, 0xe5, 0x81, 0xa4, 0xc4, 0x9d,
-	0xc7, 0xc0, 0xd5, 0x67, 0xcf, 0x75, 0x40, 0xa4, 0x8c, 0x91, 0x51, 0x06, 0xcd, 0x38, 0xa0, 0x64,
-	0xbe, 0xfd, 0x30, 0x73, 0x36, 0x03, 0x9a, 0x7e, 0x39, 0x0c, 0xc7, 0xac, 0xda, 0x94, 0x83, 0x4d,
-	0x62, 0x00, 0xf8, 0x5c, 0x7c, 0x6a, 0xf0, 0x71, 0x55, 0xbc, 0x82, 0x12, 0x86, 0x9d, 0xce, 0x48,
-	0xc4, 0xf6, 0x88, 0x44, 0x41, 0x2b, 0xb6, 0xc1, 0xd2, 0xcd, 0xce, 0x87, 0xaf, 0xdc, 0xeb, 0xe1,
-	0x0b, 0x5a, 0xf8, 0xdb, 0x71, 0x12, 0xc1, 0xd7, 0x70, 0x12, 0x81, 0xe7, 0x24, 0x2e, 0xbf, 0xde,
-	0x76, 0x10, 0xee, 0xe9, 0xe0, 0x3c, 0x3c, 0x01, 0x53, 0x56, 0xb9, 0x46, 0x92, 0x6b, 0x56, 0x2c,
-	0xa7, 0x00, 0x03, 0x4f, 0x77, 0x20, 0x04, 0xd6, 0xeb, 0xc0, 0x97, 0xdd, 0x67, 0xe8, 0x94, 0x2f,
-	0xb8, 0x7b, 0x8f, 0x54, 0xef, 0x87, 0x26, 0x9a, 0x84, 0x01, 0x47, 0xe7, 0x37, 0x51, 0x18, 0xbb,
-	0x8c, 0xb4, 0x7e, 0x48, 0x7f, 0xae, 0x42, 0xfa, 0xf2, 0x13, 0x73, 0xd0, 0xce, 0xd9, 0xe6, 0xd2,
-	0x93, 0xb2, 0xcd, 0x8e, 0x79, 0x65, 0x9f, 0x48, 0x7c, 0x5b, 0x88, 0xc4, 0x45, 0x08, 0x09, 0xa4,
-	0xa8, 0x9a, 0xa0, 0x21, 0x42, 0x28, 0x12, 0xcc, 0xe9, 0xa0, 0x6b, 0xb5, 0x8b, 0xe5, 0x88, 0x23,
-	0x18, 0x44, 0x9a, 0xcb, 0xe9, 0x36, 0xf0, 0x7b, 0xb4, 0x02, 0xbe, 0x11, 0x22, 0x90, 0x4a, 0x52,
-	0xec, 0xf7, 0xc1, 0xc1, 0xa7, 0xd9, 0x81, 0x07, 0x9f, 0x66, 0x07, 0x3e, 0xff, 0x34, 0x0b, 0x3e,
-	0x3a, 0xcc, 0x82, 0x9f, 0x1c, 0x66, 0xc1, 0x27, 0x87, 0x59, 0x70, 0x70, 0x98, 0x05, 0x0f, 0x0e,
-	0xb3, 0xe0, 0x8f, 0x87, 0x59, 0xf0, 0xe8, 0x30, 0x3b, 0xf0, 0xf9, 0x61, 0x16, 0xfc, 0xe0, 0xb3,
-	0xec, 0xc0, 0xfe, 0x67, 0x59, 0xf0, 0xfe, 0xf5, 0x1a, 0x6e, 0x6e, 0xd7, 0xe6, 0xec, 0x53, 0x30,
-	0xd7, 0x52, 0xe7, 0x9d, 0xec, 0x32, 0xdf, 0x54, 0xf0, 0x8e, 0x54, 0x45, 0x4a, 0xde, 0x9e, 0x9e,
-	0x6f, 0x56, 0x6a, 0x78, 0x1e, 0xdd, 0xd4, 0xec, 0x9f, 0x2e, 0xe8, 0xf4, 0x4b, 0x0c, 0x95, 0x61,
-	0xf2, 0x43, 0x01, 0xc5, 0x7f, 0x04, 0x00, 0x00, 0xff, 0xff, 0x5d, 0x62, 0xa0, 0x33, 0xb4, 0x41,
-	0x00, 0x00,
-}

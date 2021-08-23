@@ -427,7 +427,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/apiHttpBody"
                         }
@@ -484,15 +484,19 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nK8s Cluster namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nK8s Cluster name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -523,7 +527,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/siteListKubeConfigRsp"
                         }
@@ -580,15 +584,19 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nK8s Cluster namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-required\nx-example: \"ce398\"\nK8s Cluster name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     }
                 ],
                 "tags": [

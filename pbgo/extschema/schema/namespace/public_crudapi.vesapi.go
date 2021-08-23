@@ -1513,7 +1513,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceListResponse"
                         }
@@ -1593,6 +1593,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Fields"
                     },
                     {
@@ -1604,6 +1605,7 @@ var APISwaggerJSON string = `{
                         "items": {
                             "type": "string"
                         },
+                        "collectionFormat": "multi",
                         "x-displayname": "Report Status Fields"
                     }
                 ],
@@ -1622,7 +1624,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceCreateResponse"
                         }
@@ -1706,7 +1708,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceReplaceResponse"
                         }
@@ -1763,9 +1765,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "metadata.name",
+                        "description": "name\n\nx-example: \"acmecorp-web\"\nThe configuration object to be replaced will be looked up by name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -1796,7 +1800,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceGetResponse"
                         }
@@ -1853,9 +1857,11 @@ var APISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "namespace",

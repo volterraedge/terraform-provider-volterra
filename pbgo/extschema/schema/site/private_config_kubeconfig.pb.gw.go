@@ -9,13 +9,13 @@ It translates gRPC into RESTful JSON APIs.
 package site
 
 import (
+	"context"
 	"io"
 	"net/http"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/utilities"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
@@ -66,6 +66,44 @@ func request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0(ctx context.Contex
 
 }
 
+func local_request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0(ctx context.Context, marshaler runtime.Marshaler, server PrivateConfigKubeConfigAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GlobalAccessCheckRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := server.GlobalAccessEnabled(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 func request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1(ctx context.Context, marshaler runtime.Marshaler, client PrivateConfigKubeConfigAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GlobalAccessCheckRequest
 	var metadata runtime.ServerMetadata
@@ -104,6 +142,92 @@ func request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1(ctx context.Contex
 
 }
 
+func local_request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1(ctx context.Context, marshaler runtime.Marshaler, server PrivateConfigKubeConfigAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GlobalAccessCheckRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := server.GlobalAccessEnabled(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+// RegisterPrivateConfigKubeConfigAPIHandlerServer registers the http handlers for service PrivateConfigKubeConfigAPI to "mux".
+// UnaryRPC     :call PrivateConfigKubeConfigAPIServer directly.
+// StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+func RegisterPrivateConfigKubeConfigAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server PrivateConfigKubeConfigAPIServer) error {
+
+	mux.Handle("GET", pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0(rctx, inboundMarshaler, server, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1(rctx, inboundMarshaler, server, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	return nil
+}
+
 // RegisterPrivateConfigKubeConfigAPIHandlerFromEndpoint is same as RegisterPrivateConfigKubeConfigAPIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterPrivateConfigKubeConfigAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
@@ -114,14 +238,14 @@ func RegisterPrivateConfigKubeConfigAPIHandlerFromEndpoint(ctx context.Context, 
 	defer func() {
 		if err != nil {
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Printf("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 			return
 		}
 		go func() {
 			<-ctx.Done()
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Printf("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 		}()
 	}()
@@ -135,8 +259,8 @@ func RegisterPrivateConfigKubeConfigAPIHandler(ctx context.Context, mux *runtime
 	return RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx, mux, NewPrivateConfigKubeConfigAPIClient(conn))
 }
 
-// RegisterPrivateConfigKubeConfigAPIHandler registers the http handlers for service PrivateConfigKubeConfigAPI to "mux".
-// The handlers forward requests to the grpc endpoint over the given implementation of "PrivateConfigKubeConfigAPIClient".
+// RegisterPrivateConfigKubeConfigAPIHandlerClient registers the http handlers for service PrivateConfigKubeConfigAPI
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "PrivateConfigKubeConfigAPIClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "PrivateConfigKubeConfigAPIClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
 // "PrivateConfigKubeConfigAPIClient" to call the correct interceptors.
@@ -145,15 +269,6 @@ func RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx context.Context, mux *r
 	mux.Handle("GET", pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
-		if cn, ok := w.(http.CloseNotifier); ok {
-			go func(done <-chan struct{}, closed <-chan bool) {
-				select {
-				case <-done:
-				case <-closed:
-					cancel()
-				}
-			}(ctx.Done(), cn.CloseNotify())
-		}
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		rctx, err := runtime.AnnotateContext(ctx, mux, req)
 		if err != nil {
@@ -174,15 +289,6 @@ func RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx context.Context, mux *r
 	mux.Handle("GET", pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
-		if cn, ok := w.(http.CloseNotifier); ok {
-			go func(done <-chan struct{}, closed <-chan bool) {
-				select {
-				case <-done:
-				case <-closed:
-					cancel()
-				}
-			}(ctx.Done(), cn.CloseNotify())
-		}
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		rctx, err := runtime.AnnotateContext(ctx, mux, req)
 		if err != nil {
@@ -204,9 +310,9 @@ func RegisterPrivateConfigKubeConfigAPIHandlerClient(ctx context.Context, mux *r
 }
 
 var (
-	pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"private", "namespaces", "namespace", "sites", "name", "global_access_check"}, ""))
+	pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"private", "namespaces", "namespace", "sites", "name", "global_access_check"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7, 2, 8}, []string{"ves.io.schema", "introspect", "read", "private", "namespaces", "namespace", "sites", "name", "global_access_check"}, ""))
+	pattern_PrivateConfigKubeConfigAPI_GlobalAccessEnabled_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7, 2, 8}, []string{"ves.io.schema", "introspect", "read", "private", "namespaces", "namespace", "sites", "name", "global_access_check"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

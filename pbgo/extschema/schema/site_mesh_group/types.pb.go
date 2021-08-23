@@ -3,32 +3,33 @@
 
 package site_mesh_group
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Site Mesh Group Type
 //
@@ -57,6 +58,7 @@ var SiteMeshGroupType_name = map[int32]string{
 	2: "SITE_MESH_GROUP_TYPE_SPOKE",
 	3: "SITE_MESH_GROUP_TYPE_FULL_MESH",
 }
+
 var SiteMeshGroupType_value = map[string]int32{
 	"SITE_MESH_GROUP_TYPE_INVALID":       0,
 	"SITE_MESH_GROUP_TYPE_HUB_FULL_MESH": 1,
@@ -64,7 +66,9 @@ var SiteMeshGroupType_value = map[string]int32{
 	"SITE_MESH_GROUP_TYPE_FULL_MESH":     3,
 }
 
-func (SiteMeshGroupType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (SiteMeshGroupType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{0}
+}
 
 // Global Specification
 //
@@ -87,7 +91,7 @@ type GlobalSpecType struct {
 	// If Site reachability is over private network and application traffic is always using TLS, then Clear is preferable.
 	// In case of Clear simple GRE tunnel will be used.
 	// Only tunnels of type IPSec are support currently.
-	TunnelType ves_io_schema4.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
+	TunnelType schema.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
 	// virtual_site
 	//
 	// x-displayName: "Virtual Site (Sites in this group)"
@@ -95,19 +99,43 @@ type GlobalSpecType struct {
 	// If 'Type' is Spoke, then it gives set of spoke sites.
 	// If 'Type' is Hub, then it gives set of hub sites.
 	// If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.
-	VirtualSite []*ves_io_schema4.ObjectRefType `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite" json:"virtual_site,omitempty"`
+	VirtualSite []*schema.ObjectRefType `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite,proto3" json:"virtual_site,omitempty"`
 	// hub
 	//
 	// x-displayName: "Hub (site mesh group)"
 	// If 'Type' is Spoke, 'Hub' refers to a Site Mesh Group of 'type' Hub.
 	// Spoke sites will connect to all the member sites of Hub Site Mesh Group
 	// Hub must be empty when Site Mesh Group type is Hub or Full Mesh
-	Hub []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=hub" json:"hub,omitempty"`
+	Hub []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=hub,proto3" json:"hub,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetType() SiteMeshGroupType {
 	if m != nil {
@@ -116,21 +144,21 @@ func (m *GlobalSpecType) GetType() SiteMeshGroupType {
 	return SITE_MESH_GROUP_TYPE_INVALID
 }
 
-func (m *GlobalSpecType) GetTunnelType() ves_io_schema4.SiteToSiteTunnelType {
+func (m *GlobalSpecType) GetTunnelType() schema.SiteToSiteTunnelType {
 	if m != nil {
 		return m.TunnelType
 	}
-	return ves_io_schema4.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
+	return schema.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
 }
 
-func (m *GlobalSpecType) GetVirtualSite() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetVirtualSite() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VirtualSite
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
+func (m *GlobalSpecType) GetHub() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Hub
 	}
@@ -142,15 +170,39 @@ func (m *GlobalSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
 // x-displayName: "Create Site Mesh Group"
 // Create a Site Mesh Group in system namespace of user
 type CreateSpecType struct {
-	Type        SiteMeshGroupType                   `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
-	TunnelType  ves_io_schema4.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
-	VirtualSite []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite" json:"virtual_site,omitempty"`
-	Hub         []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,4,rep,name=hub" json:"hub,omitempty"`
+	Type        SiteMeshGroupType           `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
+	TunnelType  schema.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
+	VirtualSite []*schema.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite,proto3" json:"virtual_site,omitempty"`
+	Hub         []*schema.ObjectRefType     `protobuf:"bytes,4,rep,name=hub,proto3" json:"hub,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetType() SiteMeshGroupType {
 	if m != nil {
@@ -159,21 +211,21 @@ func (m *CreateSpecType) GetType() SiteMeshGroupType {
 	return SITE_MESH_GROUP_TYPE_INVALID
 }
 
-func (m *CreateSpecType) GetTunnelType() ves_io_schema4.SiteToSiteTunnelType {
+func (m *CreateSpecType) GetTunnelType() schema.SiteToSiteTunnelType {
 	if m != nil {
 		return m.TunnelType
 	}
-	return ves_io_schema4.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
+	return schema.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
 }
 
-func (m *CreateSpecType) GetVirtualSite() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetVirtualSite() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VirtualSite
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
+func (m *CreateSpecType) GetHub() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Hub
 	}
@@ -185,15 +237,39 @@ func (m *CreateSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
 // x-displayName: "Replace Site Mesh Group"
 // Replace contents of a Site Mesh Group object
 type ReplaceSpecType struct {
-	Type        SiteMeshGroupType                   `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
-	TunnelType  ves_io_schema4.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
-	VirtualSite []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite" json:"virtual_site,omitempty"`
-	Hub         []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,4,rep,name=hub" json:"hub,omitempty"`
+	Type        SiteMeshGroupType           `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
+	TunnelType  schema.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
+	VirtualSite []*schema.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite,proto3" json:"virtual_site,omitempty"`
+	Hub         []*schema.ObjectRefType     `protobuf:"bytes,4,rep,name=hub,proto3" json:"hub,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 func (m *ReplaceSpecType) GetType() SiteMeshGroupType {
 	if m != nil {
@@ -202,21 +278,21 @@ func (m *ReplaceSpecType) GetType() SiteMeshGroupType {
 	return SITE_MESH_GROUP_TYPE_INVALID
 }
 
-func (m *ReplaceSpecType) GetTunnelType() ves_io_schema4.SiteToSiteTunnelType {
+func (m *ReplaceSpecType) GetTunnelType() schema.SiteToSiteTunnelType {
 	if m != nil {
 		return m.TunnelType
 	}
-	return ves_io_schema4.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
+	return schema.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
 }
 
-func (m *ReplaceSpecType) GetVirtualSite() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetVirtualSite() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VirtualSite
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
+func (m *ReplaceSpecType) GetHub() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Hub
 	}
@@ -228,15 +304,39 @@ func (m *ReplaceSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
 // x-displayName: "Get Site Mesh Group"
 // Gets Site Mesh Group object from system namespace
 type GetSpecType struct {
-	Type        SiteMeshGroupType                   `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
-	TunnelType  ves_io_schema4.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
-	VirtualSite []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite" json:"virtual_site,omitempty"`
-	Hub         []*ves_io_schema4.ObjectRefType     `protobuf:"bytes,4,rep,name=hub" json:"hub,omitempty"`
+	Type        SiteMeshGroupType           `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.site_mesh_group.SiteMeshGroupType" json:"type,omitempty"`
+	TunnelType  schema.SiteToSiteTunnelType `protobuf:"varint,2,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.SiteToSiteTunnelType" json:"tunnel_type,omitempty"`
+	VirtualSite []*schema.ObjectRefType     `protobuf:"bytes,3,rep,name=virtual_site,json=virtualSite,proto3" json:"virtual_site,omitempty"`
+	Hub         []*schema.ObjectRefType     `protobuf:"bytes,4,rep,name=hub,proto3" json:"hub,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetType() SiteMeshGroupType {
 	if m != nil {
@@ -245,21 +345,21 @@ func (m *GetSpecType) GetType() SiteMeshGroupType {
 	return SITE_MESH_GROUP_TYPE_INVALID
 }
 
-func (m *GetSpecType) GetTunnelType() ves_io_schema4.SiteToSiteTunnelType {
+func (m *GetSpecType) GetTunnelType() schema.SiteToSiteTunnelType {
 	if m != nil {
 		return m.TunnelType
 	}
-	return ves_io_schema4.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
+	return schema.SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL
 }
 
-func (m *GetSpecType) GetVirtualSite() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetVirtualSite() []*schema.ObjectRefType {
 	if m != nil {
 		return m.VirtualSite
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHub() []*ves_io_schema4.ObjectRefType {
+func (m *GetSpecType) GetHub() []*schema.ObjectRefType {
 	if m != nil {
 		return m.Hub
 	}
@@ -276,12 +376,36 @@ type SiteMeshGroupStatus struct {
 	// x-displayName: "Other Connected Sites"
 	// x-example: "[ce01-sfo, ce01-nyc]"
 	// List of sites connected by this Site Mesh Group
-	OtherConnectedSites []string `protobuf:"bytes,1,rep,name=other_connected_sites,json=otherConnectedSites" json:"other_connected_sites,omitempty"`
+	OtherConnectedSites []string `protobuf:"bytes,1,rep,name=other_connected_sites,json=otherConnectedSites,proto3" json:"other_connected_sites,omitempty"`
 }
 
-func (m *SiteMeshGroupStatus) Reset()                    { *m = SiteMeshGroupStatus{} }
-func (*SiteMeshGroupStatus) ProtoMessage()               {}
-func (*SiteMeshGroupStatus) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *SiteMeshGroupStatus) Reset()      { *m = SiteMeshGroupStatus{} }
+func (*SiteMeshGroupStatus) ProtoMessage() {}
+func (*SiteMeshGroupStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{4}
+}
+func (m *SiteMeshGroupStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SiteMeshGroupStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SiteMeshGroupStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SiteMeshGroupStatus.Merge(m, src)
+}
+func (m *SiteMeshGroupStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *SiteMeshGroupStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_SiteMeshGroupStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SiteMeshGroupStatus proto.InternalMessageInfo
 
 func (m *SiteMeshGroupStatus) GetOtherConnectedSites() []string {
 	if m != nil {
@@ -291,6 +415,8 @@ func (m *SiteMeshGroupStatus) GetOtherConnectedSites() []string {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
+	golang_proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.site_mesh_group.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.site_mesh_group.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.site_mesh_group.CreateSpecType")
@@ -301,9 +427,65 @@ func init() {
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.site_mesh_group.GetSpecType")
 	proto.RegisterType((*SiteMeshGroupStatus)(nil), "ves.io.schema.site_mesh_group.SiteMeshGroupStatus")
 	golang_proto.RegisterType((*SiteMeshGroupStatus)(nil), "ves.io.schema.site_mesh_group.SiteMeshGroupStatus")
-	proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
-	golang_proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/site_mesh_group/types.proto", fileDescriptor_e184213e79779d5e)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/site_mesh_group/types.proto", fileDescriptor_e184213e79779d5e)
+}
+
+var fileDescriptor_e184213e79779d5e = []byte{
+	// 732 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xcf, 0x4f, 0xd3, 0x60,
+	0x18, 0xc7, 0xf7, 0xae, 0x80, 0xfa, 0x4e, 0x61, 0x96, 0x18, 0x47, 0x81, 0xd7, 0x65, 0x46, 0x33,
+	0x0d, 0xb4, 0x3a, 0x3c, 0x79, 0x20, 0x71, 0x30, 0xc7, 0xe2, 0x60, 0xcb, 0xba, 0x99, 0xe8, 0xc1,
+	0xa6, 0x1b, 0x2f, 0x5d, 0xb5, 0xdb, 0xdb, 0xb4, 0x6f, 0xa7, 0x1c, 0x48, 0x08, 0x17, 0xaf, 0xea,
+	0x1f, 0x61, 0x0c, 0x7f, 0x82, 0x7a, 0xe0, 0x68, 0x8c, 0x89, 0x3b, 0x12, 0x4f, 0xd2, 0x5d, 0xf4,
+	0x46, 0xfc, 0x0b, 0x4c, 0xdf, 0x8d, 0x1f, 0x2d, 0x8b, 0x21, 0xc8, 0x91, 0xcb, 0xd6, 0x37, 0xdf,
+	0xef, 0xf3, 0x7d, 0x9e, 0xe7, 0xd3, 0x65, 0x2d, 0xbc, 0xd5, 0xc2, 0xb6, 0xa8, 0x13, 0xc9, 0xae,
+	0xd5, 0x71, 0x43, 0x95, 0x6c, 0x9d, 0x62, 0xa5, 0x81, 0xed, 0xba, 0xa2, 0x59, 0xc4, 0x31, 0x25,
+	0xba, 0x6a, 0x62, 0x5b, 0x34, 0x2d, 0x42, 0x09, 0x3f, 0xd9, 0xb5, 0x8a, 0x5d, 0xab, 0x18, 0xb0,
+	0x0a, 0xd3, 0x9a, 0x4e, 0xeb, 0x4e, 0x55, 0xac, 0x91, 0x86, 0xa4, 0x11, 0x8d, 0x48, 0xac, 0xaa,
+	0xea, 0xac, 0xb0, 0x13, 0x3b, 0xb0, 0xab, 0x6e, 0x9a, 0x70, 0x4d, 0x23, 0x44, 0x33, 0xf0, 0x81,
+	0x8b, 0xea, 0x0d, 0x6c, 0x53, 0xb5, 0x61, 0xf6, 0x0c, 0x57, 0xfd, 0x93, 0x35, 0x31, 0xed, 0x09,
+	0xe3, 0x7e, 0x81, 0x98, 0x54, 0x27, 0xcd, 0xde, 0x90, 0xc2, 0xa4, 0x5f, 0x34, 0x5b, 0x54, 0x39,
+	0xb4, 0x83, 0x80, 0x8e, 0xae, 0x7b, 0x78, 0x47, 0x61, 0xcc, 0xaf, 0x1f, 0x96, 0x26, 0xfc, 0x52,
+	0x4b, 0x35, 0xf4, 0x65, 0x95, 0xe2, 0x9e, 0x1a, 0x0f, 0xa8, 0x3a, 0x7e, 0xa9, 0xf8, 0x26, 0x4b,
+	0xbc, 0xe6, 0xe0, 0x70, 0xd6, 0x20, 0x55, 0xd5, 0x90, 0x4d, 0x5c, 0x2b, 0xaf, 0x9a, 0x98, 0x97,
+	0xe1, 0x80, 0xd7, 0x21, 0x06, 0xe2, 0x20, 0x39, 0x9c, 0xba, 0x23, 0xfe, 0x13, 0xb0, 0x28, 0xeb,
+	0x14, 0x2f, 0x62, 0xbb, 0x9e, 0xf5, 0x4e, 0x5e, 0x7d, 0xfa, 0xd2, 0xc7, 0xdf, 0x5b, 0xdc, 0xf9,
+	0x0d, 0x30, 0x28, 0x70, 0x20, 0xcc, 0x95, 0x58, 0x18, 0xdf, 0x84, 0x11, 0xea, 0x34, 0x9b, 0xd8,
+	0x60, 0x8b, 0xc7, 0xc2, 0x2c, 0xfb, 0x7a, 0x20, 0xdb, 0xcb, 0x2a, 0x13, 0xf6, 0xc9, 0xbc, 0x2c,
+	0x2e, 0xf9, 0xe3, 0x13, 0x18, 0x93, 0x73, 0xe5, 0x8c, 0x52, 0x2e, 0x28, 0xdd, 0xef, 0xca, 0xd2,
+	0x52, 0x26, 0xaf, 0xe4, 0x8a, 0x72, 0x66, 0xce, 0xeb, 0x35, 0xb4, 0x01, 0x38, 0x01, 0x80, 0x12,
+	0xa4, 0xfb, 0x55, 0xfc, 0x33, 0x78, 0xb1, 0xa5, 0x5b, 0xd4, 0x51, 0x0d, 0xc5, 0x9b, 0x38, 0xc6,
+	0xc5, 0xb9, 0x64, 0x24, 0x35, 0x11, 0x68, 0x58, 0xa8, 0x3e, 0xc7, 0x35, 0x5a, 0xc2, 0x2b, 0xac,
+	0xd3, 0xe4, 0xe6, 0x9a, 0xaf, 0x68, 0xfd, 0x33, 0x00, 0x5e, 0xfe, 0xe0, 0x3b, 0x10, 0x8e, 0x82,
+	0x52, 0xa4, 0xa7, 0x79, 0xf3, 0xf1, 0x45, 0xc8, 0xd5, 0x9d, 0x6a, 0x6c, 0xe0, 0x18, 0xb1, 0xf1,
+	0xcd, 0xb5, 0x91, 0x00, 0xb5, 0x40, 0xb2, 0x17, 0x95, 0xf8, 0x1e, 0x86, 0xc3, 0x73, 0x16, 0x56,
+	0x29, 0xde, 0xbf, 0x13, 0xf3, 0xff, 0x77, 0x27, 0x7a, 0xe8, 0xe7, 0x4f, 0x8a, 0xde, 0x07, 0xb4,
+	0x78, 0x02, 0xa0, 0x23, 0x01, 0xa0, 0x7e, 0x84, 0xe9, 0xe3, 0x23, 0xe4, 0x8f, 0x22, 0x64, 0xd0,
+	0xee, 0x8f, 0x7f, 0x9d, 0x0d, 0xfc, 0x7c, 0xff, 0xcc, 0x9e, 0xbb, 0x3b, 0x35, 0x33, 0x75, 0x6f,
+	0x2a, 0x95, 0x68, 0x87, 0xe1, 0x48, 0x09, 0x9b, 0x86, 0x5a, 0x3b, 0x43, 0x7a, 0x4a, 0x48, 0xbf,
+	0x85, 0x61, 0x24, 0x8b, 0xe9, 0x19, 0xce, 0xd3, 0xc1, 0x99, 0x83, 0xa3, 0x3e, 0x26, 0x32, 0x55,
+	0xa9, 0x63, 0xf3, 0x29, 0x78, 0x85, 0xd0, 0x3a, 0xb6, 0x94, 0x1a, 0x69, 0x36, 0x71, 0x8d, 0xe2,
+	0x65, 0x36, 0x9c, 0x1d, 0x03, 0x71, 0x2e, 0x79, 0xa1, 0x34, 0xca, 0xc4, 0xb9, 0x3d, 0xcd, 0x4b,
+	0xb0, 0x6f, 0xbf, 0x07, 0xf0, 0xf2, 0x11, 0xbe, 0xfc, 0x0d, 0x38, 0xc1, 0xfe, 0x32, 0x17, 0x33,
+	0xf2, 0x82, 0x92, 0x2d, 0x15, 0x2a, 0x45, 0xa5, 0xfc, 0xa4, 0x98, 0x51, 0x72, 0x4b, 0x8f, 0x1f,
+	0xe4, 0x73, 0xf3, 0xd1, 0x90, 0xc0, 0xad, 0xaf, 0x01, 0xfe, 0x26, 0x4c, 0xf4, 0xb5, 0x2d, 0x54,
+	0xd2, 0xca, 0xc3, 0x4a, 0x3e, 0xcf, 0x84, 0x28, 0xe0, 0x11, 0x14, 0xfa, 0xfa, 0xe4, 0x62, 0xe1,
+	0x51, 0x26, 0x1a, 0xe6, 0x13, 0x10, 0xf5, 0xd5, 0x0f, 0x32, 0xb8, 0xf4, 0x5b, 0xd0, 0xde, 0x41,
+	0xa1, 0xed, 0x1d, 0x14, 0xda, 0xdd, 0x41, 0x60, 0xdd, 0x45, 0xe0, 0x83, 0x8b, 0xc0, 0x17, 0x17,
+	0x81, 0xb6, 0x8b, 0xc0, 0xb6, 0x8b, 0xc0, 0x4f, 0x17, 0x81, 0x5f, 0x2e, 0x0a, 0xed, 0xba, 0x08,
+	0xbc, 0xe9, 0xa0, 0xd0, 0x56, 0x07, 0x81, 0x76, 0x07, 0x85, 0xb6, 0x3b, 0x28, 0xf4, 0x54, 0xd6,
+	0x88, 0xf9, 0x42, 0x13, 0x5b, 0xc4, 0xa0, 0xd8, 0xb2, 0x54, 0xd1, 0xb1, 0x25, 0x76, 0xb1, 0x42,
+	0xac, 0xc6, 0xb4, 0x69, 0x91, 0x96, 0xbe, 0x8c, 0xad, 0xe9, 0x3d, 0x59, 0x32, 0xab, 0x1a, 0x91,
+	0xf0, 0x2b, 0xba, 0xf7, 0x68, 0xed, 0xfb, 0x42, 0x51, 0x1d, 0x62, 0x0f, 0xc3, 0x99, 0xbf, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0xb9, 0x29, 0x94, 0x20, 0x78, 0x08, 0x00, 0x00,
+}
+
 func (x SiteMeshGroupType) String() string {
 	s, ok := SiteMeshGroupType_name[int32(x)]
 	if ok {
@@ -601,7 +783,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -609,51 +791,60 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
-	}
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+	if len(m.Hub) > 0 {
+		for iNdEx := len(m.Hub) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Hub[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if len(m.VirtualSite) > 0 {
-		for _, msg := range m.VirtualSite {
+		for iNdEx := len(m.VirtualSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VirtualSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
-	if len(m.Hub) > 0 {
-		for _, msg := range m.Hub {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -661,51 +852,60 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
-	}
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+	if len(m.Hub) > 0 {
+		for iNdEx := len(m.Hub) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Hub[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if len(m.VirtualSite) > 0 {
-		for _, msg := range m.VirtualSite {
+		for iNdEx := len(m.VirtualSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VirtualSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
-	if len(m.Hub) > 0 {
-		for _, msg := range m.Hub {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -713,51 +913,60 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
-	}
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+	if len(m.Hub) > 0 {
+		for iNdEx := len(m.Hub) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Hub[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if len(m.VirtualSite) > 0 {
-		for _, msg := range m.VirtualSite {
+		for iNdEx := len(m.VirtualSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VirtualSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
-	if len(m.Hub) > 0 {
-		for _, msg := range m.Hub {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -765,51 +974,60 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Type != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
-	}
-	if m.TunnelType != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+	if len(m.Hub) > 0 {
+		for iNdEx := len(m.Hub) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Hub[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
 	}
 	if len(m.VirtualSite) > 0 {
-		for _, msg := range m.VirtualSite {
+		for iNdEx := len(m.VirtualSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VirtualSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
 		}
 	}
-	if len(m.Hub) > 0 {
-		for _, msg := range m.Hub {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.TunnelType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TunnelType))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *SiteMeshGroupStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -817,38 +1035,42 @@ func (m *SiteMeshGroupStatus) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SiteMeshGroupStatus) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SiteMeshGroupStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.OtherConnectedSites) > 0 {
-		for _, s := range m.OtherConnectedSites {
+		for iNdEx := len(m.OtherConnectedSites) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.OtherConnectedSites[iNdEx])
+			copy(dAtA[i:], m.OtherConnectedSites[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.OtherConnectedSites[iNdEx])))
+			i--
 			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != 0 {
@@ -873,6 +1095,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != 0 {
@@ -897,6 +1122,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != 0 {
@@ -921,6 +1149,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != 0 {
@@ -945,6 +1176,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *SiteMeshGroupStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.OtherConnectedSites) > 0 {
@@ -957,14 +1191,7 @@ func (m *SiteMeshGroupStatus) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -973,11 +1200,21 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVirtualSite := "[]*ObjectRefType{"
+	for _, f := range this.VirtualSite {
+		repeatedStringForVirtualSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVirtualSite += "}"
+	repeatedStringForHub := "[]*ObjectRefType{"
+	for _, f := range this.Hub {
+		repeatedStringForHub += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHub += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`VirtualSite:` + strings.Replace(fmt.Sprintf("%v", this.VirtualSite), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
+		`Hub:` + repeatedStringForHub + `,`,
 		`}`,
 	}, "")
 	return s
@@ -986,11 +1223,21 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVirtualSite := "[]*ObjectRefType{"
+	for _, f := range this.VirtualSite {
+		repeatedStringForVirtualSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVirtualSite += "}"
+	repeatedStringForHub := "[]*ObjectRefType{"
+	for _, f := range this.Hub {
+		repeatedStringForHub += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHub += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`VirtualSite:` + strings.Replace(fmt.Sprintf("%v", this.VirtualSite), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
+		`Hub:` + repeatedStringForHub + `,`,
 		`}`,
 	}, "")
 	return s
@@ -999,11 +1246,21 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVirtualSite := "[]*ObjectRefType{"
+	for _, f := range this.VirtualSite {
+		repeatedStringForVirtualSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVirtualSite += "}"
+	repeatedStringForHub := "[]*ObjectRefType{"
+	for _, f := range this.Hub {
+		repeatedStringForHub += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHub += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`VirtualSite:` + strings.Replace(fmt.Sprintf("%v", this.VirtualSite), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
+		`Hub:` + repeatedStringForHub + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1012,11 +1269,21 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForVirtualSite := "[]*ObjectRefType{"
+	for _, f := range this.VirtualSite {
+		repeatedStringForVirtualSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForVirtualSite += "}"
+	repeatedStringForHub := "[]*ObjectRefType{"
+	for _, f := range this.Hub {
+		repeatedStringForHub += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForHub += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
-		`VirtualSite:` + strings.Replace(fmt.Sprintf("%v", this.VirtualSite), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`Hub:` + strings.Replace(fmt.Sprintf("%v", this.Hub), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
+		`Hub:` + repeatedStringForHub + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1054,7 +1321,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1082,7 +1349,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (SiteMeshGroupType(b) & 0x7F) << shift
+				m.Type |= SiteMeshGroupType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1101,7 +1368,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (ves_io_schema4.SiteToSiteTunnelType(b) & 0x7F) << shift
+				m.TunnelType |= schema.SiteToSiteTunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1120,7 +1387,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1129,10 +1396,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VirtualSite = append(m.VirtualSite, &ves_io_schema4.ObjectRefType{})
+			m.VirtualSite = append(m.VirtualSite, &schema.ObjectRefType{})
 			if err := m.VirtualSite[len(m.VirtualSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1151,7 +1421,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1160,10 +1430,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Hub = append(m.Hub, &ves_io_schema4.ObjectRefType{})
+			m.Hub = append(m.Hub, &schema.ObjectRefType{})
 			if err := m.Hub[len(m.Hub)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1175,6 +1448,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1204,7 +1480,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1232,7 +1508,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (SiteMeshGroupType(b) & 0x7F) << shift
+				m.Type |= SiteMeshGroupType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1251,7 +1527,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (ves_io_schema4.SiteToSiteTunnelType(b) & 0x7F) << shift
+				m.TunnelType |= schema.SiteToSiteTunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1270,7 +1546,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1279,10 +1555,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VirtualSite = append(m.VirtualSite, &ves_io_schema4.ObjectRefType{})
+			m.VirtualSite = append(m.VirtualSite, &schema.ObjectRefType{})
 			if err := m.VirtualSite[len(m.VirtualSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1301,7 +1580,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1310,10 +1589,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Hub = append(m.Hub, &ves_io_schema4.ObjectRefType{})
+			m.Hub = append(m.Hub, &schema.ObjectRefType{})
 			if err := m.Hub[len(m.Hub)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1325,6 +1607,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1354,7 +1639,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1382,7 +1667,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (SiteMeshGroupType(b) & 0x7F) << shift
+				m.Type |= SiteMeshGroupType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1401,7 +1686,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (ves_io_schema4.SiteToSiteTunnelType(b) & 0x7F) << shift
+				m.TunnelType |= schema.SiteToSiteTunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1420,7 +1705,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1429,10 +1714,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VirtualSite = append(m.VirtualSite, &ves_io_schema4.ObjectRefType{})
+			m.VirtualSite = append(m.VirtualSite, &schema.ObjectRefType{})
 			if err := m.VirtualSite[len(m.VirtualSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1451,7 +1739,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1460,10 +1748,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Hub = append(m.Hub, &ves_io_schema4.ObjectRefType{})
+			m.Hub = append(m.Hub, &schema.ObjectRefType{})
 			if err := m.Hub[len(m.Hub)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1475,6 +1766,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1504,7 +1798,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1532,7 +1826,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Type |= (SiteMeshGroupType(b) & 0x7F) << shift
+				m.Type |= SiteMeshGroupType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1551,7 +1845,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TunnelType |= (ves_io_schema4.SiteToSiteTunnelType(b) & 0x7F) << shift
+				m.TunnelType |= schema.SiteToSiteTunnelType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1570,7 +1864,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1579,10 +1873,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.VirtualSite = append(m.VirtualSite, &ves_io_schema4.ObjectRefType{})
+			m.VirtualSite = append(m.VirtualSite, &schema.ObjectRefType{})
 			if err := m.VirtualSite[len(m.VirtualSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1601,7 +1898,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1610,10 +1907,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Hub = append(m.Hub, &ves_io_schema4.ObjectRefType{})
+			m.Hub = append(m.Hub, &schema.ObjectRefType{})
 			if err := m.Hub[len(m.Hub)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1625,6 +1925,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1654,7 +1957,7 @@ func (m *SiteMeshGroupStatus) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1682,7 +1985,7 @@ func (m *SiteMeshGroupStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1692,6 +1995,9 @@ func (m *SiteMeshGroupStatus) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1704,6 +2010,9 @@ func (m *SiteMeshGroupStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1721,6 +2030,7 @@ func (m *SiteMeshGroupStatus) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1752,10 +2062,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1772,108 +2080,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/site_mesh_group/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/site_mesh_group/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 725 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xcf, 0x4f, 0xd3, 0x60,
-	0x18, 0xc7, 0xf7, 0xae, 0x80, 0xfa, 0x4e, 0x61, 0x96, 0x18, 0x47, 0x81, 0xd7, 0x65, 0x46, 0x33,
-	0x0d, 0xb4, 0x3a, 0x3c, 0x79, 0x20, 0x71, 0x30, 0xc7, 0xe2, 0x60, 0xcb, 0xba, 0x99, 0xe8, 0xc1,
-	0xa6, 0x1b, 0x2f, 0x5d, 0xb5, 0xeb, 0xdb, 0xb4, 0x6f, 0xa7, 0x1c, 0x48, 0x08, 0x17, 0xe3, 0xcd,
-	0xf8, 0x47, 0x18, 0xc3, 0x9f, 0xa0, 0x1e, 0x38, 0x1a, 0x63, 0x22, 0x47, 0xe2, 0x49, 0xca, 0x45,
-	0x6f, 0xc4, 0xbf, 0xc0, 0xf4, 0xdd, 0xf8, 0xd1, 0xb2, 0x18, 0x82, 0x1c, 0xb9, 0x6c, 0x7d, 0xf3,
-	0xfd, 0x3e, 0xdf, 0xe7, 0x79, 0x3e, 0x5d, 0xd6, 0xc2, 0x5b, 0x6d, 0xec, 0x88, 0x3a, 0x91, 0x9c,
-	0x46, 0x13, 0xb7, 0x54, 0xc9, 0xd1, 0x29, 0x56, 0x5a, 0xd8, 0x69, 0x2a, 0x9a, 0x4d, 0x5c, 0x4b,
-	0xa2, 0xcb, 0x16, 0x76, 0x44, 0xcb, 0x26, 0x94, 0xf0, 0xe3, 0x1d, 0xab, 0xd8, 0xb1, 0x8a, 0x21,
-	0xab, 0x30, 0xa9, 0xe9, 0xb4, 0xe9, 0xd6, 0xc5, 0x06, 0x69, 0x49, 0x1a, 0xd1, 0x88, 0xc4, 0xaa,
-	0xea, 0xee, 0x12, 0x3b, 0xb1, 0x03, 0xbb, 0xea, 0xa4, 0x09, 0xd7, 0x34, 0x42, 0x34, 0x03, 0x1f,
-	0xb8, 0xa8, 0xde, 0xc2, 0x0e, 0x55, 0x5b, 0x56, 0xd7, 0x70, 0x35, 0x38, 0x99, 0x89, 0x69, 0x57,
-	0x18, 0x0d, 0x0a, 0xc4, 0xa2, 0x3a, 0x31, 0xbb, 0x43, 0x0a, 0xe3, 0x41, 0xd1, 0x6a, 0x53, 0xe5,
-	0xd0, 0x0e, 0x02, 0x3a, 0xba, 0xee, 0xe1, 0x1d, 0x85, 0x91, 0xa0, 0x7e, 0x58, 0x1a, 0x0b, 0x4a,
-	0x6d, 0xd5, 0xd0, 0x17, 0x55, 0x8a, 0xbb, 0x6a, 0x32, 0xa4, 0xea, 0xf8, 0xa5, 0x12, 0x98, 0x2c,
-	0xf5, 0x9a, 0x83, 0x83, 0x79, 0x83, 0xd4, 0x55, 0x43, 0xb6, 0x70, 0xa3, 0xba, 0x6c, 0x61, 0x5e,
-	0x86, 0x7d, 0x7e, 0x87, 0x04, 0x48, 0x82, 0xf4, 0x60, 0xe6, 0x8e, 0xf8, 0x4f, 0xc0, 0xa2, 0xac,
-	0x53, 0x3c, 0x8f, 0x9d, 0x66, 0xde, 0x3f, 0xf9, 0xf5, 0xd9, 0x4b, 0x1f, 0x7f, 0x6f, 0x70, 0xe7,
-	0xd7, 0x40, 0xbf, 0xc0, 0x81, 0x28, 0x57, 0x61, 0x61, 0xbc, 0x09, 0x63, 0xd4, 0x35, 0x4d, 0x6c,
-	0xb0, 0xc5, 0x13, 0x51, 0x96, 0x7d, 0x3d, 0x94, 0xed, 0x67, 0x55, 0x09, 0xfb, 0x64, 0x5e, 0x16,
-	0x97, 0xfe, 0xf1, 0x09, 0x8c, 0xc8, 0x85, 0x6a, 0x4e, 0xa9, 0x96, 0x94, 0xce, 0x77, 0x6d, 0x61,
-	0x21, 0x57, 0x54, 0x0a, 0x65, 0x39, 0x37, 0xe3, 0xf7, 0x1a, 0x58, 0x03, 0x9c, 0x00, 0x40, 0x05,
-	0xd2, 0xfd, 0x2a, 0xfe, 0x19, 0xbc, 0xd8, 0xd6, 0x6d, 0xea, 0xaa, 0x86, 0xe2, 0x4f, 0x9c, 0xe0,
-	0x92, 0x5c, 0x3a, 0x96, 0x19, 0x0b, 0x35, 0x2c, 0xd5, 0x9f, 0xe3, 0x06, 0xad, 0xe0, 0x25, 0xd6,
-	0x69, 0x7c, 0x7d, 0x25, 0x50, 0xb4, 0xfa, 0x19, 0x00, 0x3f, 0xbf, 0xff, 0x1d, 0x88, 0xc6, 0x41,
-	0x25, 0xd6, 0xd5, 0xfc, 0xf9, 0xf8, 0x32, 0xe4, 0x9a, 0x6e, 0x3d, 0xd1, 0x77, 0x8c, 0xd8, 0xe4,
-	0xfa, 0xca, 0x50, 0x88, 0x5a, 0x28, 0xd9, 0x8f, 0x4a, 0x7d, 0x8f, 0xc2, 0xc1, 0x19, 0x1b, 0xab,
-	0x14, 0xef, 0xdf, 0x89, 0xd9, 0xff, 0xbb, 0x13, 0x5d, 0xf4, 0xb3, 0x27, 0x45, 0x1f, 0x00, 0x5a,
-	0x3e, 0x01, 0xd0, 0xa1, 0x10, 0xd0, 0x20, 0xc2, 0xec, 0xf1, 0x11, 0xf2, 0x47, 0x11, 0x32, 0x68,
-	0xf7, 0x47, 0xbf, 0x4e, 0x87, 0x7e, 0xbe, 0x7f, 0xa6, 0xcf, 0xdd, 0x9d, 0x98, 0x9a, 0xb8, 0x37,
-	0x91, 0x49, 0x6d, 0x46, 0xe1, 0x50, 0x05, 0x5b, 0x86, 0xda, 0x38, 0x43, 0x7a, 0x4a, 0x48, 0xbf,
-	0x45, 0x61, 0x2c, 0x8f, 0xe9, 0x19, 0xce, 0xd3, 0xc1, 0x59, 0x80, 0xc3, 0x01, 0x26, 0x32, 0x55,
-	0xa9, 0xeb, 0xf0, 0x19, 0x78, 0x85, 0xd0, 0x26, 0xb6, 0x95, 0x06, 0x31, 0x4d, 0xdc, 0xa0, 0x78,
-	0x91, 0x0d, 0xe7, 0x24, 0x40, 0x92, 0x4b, 0x5f, 0xa8, 0x0c, 0x33, 0x71, 0x66, 0x4f, 0xf3, 0x13,
-	0x9c, 0xdb, 0xef, 0x01, 0xbc, 0x7c, 0x84, 0x2f, 0x7f, 0x03, 0x8e, 0xb1, 0xbf, 0xcc, 0xf9, 0x9c,
-	0x3c, 0xa7, 0xe4, 0x2b, 0xa5, 0x5a, 0x59, 0xa9, 0x3e, 0x29, 0xe7, 0x94, 0xc2, 0xc2, 0xe3, 0x07,
-	0xc5, 0xc2, 0x6c, 0x3c, 0x22, 0x70, 0xab, 0x2b, 0x80, 0xbf, 0x09, 0x53, 0x3d, 0x6d, 0x73, 0xb5,
-	0xac, 0xf2, 0xb0, 0x56, 0x2c, 0x32, 0x21, 0x0e, 0x78, 0x04, 0x85, 0x9e, 0x3e, 0xb9, 0x5c, 0x7a,
-	0x94, 0x8b, 0x47, 0xf9, 0x14, 0x44, 0x3d, 0xf5, 0x83, 0x0c, 0x2e, 0xfb, 0x06, 0x6c, 0x6e, 0xa3,
-	0xc8, 0xd6, 0x36, 0x8a, 0xec, 0x6e, 0x23, 0xb0, 0xea, 0x21, 0xf0, 0xc1, 0x43, 0xe0, 0x8b, 0x87,
-	0xc0, 0xa6, 0x87, 0xc0, 0x96, 0x87, 0xc0, 0x4f, 0x0f, 0x81, 0x5f, 0x1e, 0x8a, 0xec, 0x7a, 0x08,
-	0xbc, 0xdd, 0x41, 0x91, 0x8d, 0x1d, 0x04, 0x9e, 0xca, 0x1a, 0xb1, 0x5e, 0x68, 0x62, 0x9b, 0x18,
-	0x14, 0xdb, 0xb6, 0x2a, 0xba, 0x8e, 0xc4, 0x2e, 0x96, 0x88, 0xdd, 0x9a, 0xb4, 0x6c, 0xd2, 0xd6,
-	0x17, 0xb1, 0x3d, 0xb9, 0x27, 0x4b, 0x56, 0x5d, 0x23, 0x12, 0x7e, 0x45, 0xf7, 0x1e, 0xa9, 0x3d,
-	0x5f, 0x24, 0xea, 0x03, 0xec, 0x21, 0x38, 0xf5, 0x37, 0x00, 0x00, 0xff, 0xff, 0xe2, 0xf3, 0xab,
-	0x44, 0x70, 0x08, 0x00, 0x00,
-}

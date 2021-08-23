@@ -3,19 +3,26 @@
 
 package vesenv
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	proto "github.com/gogo/protobuf/proto"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type QuotaResourceKeyChoice struct {
 	// Types that are valid to be assigned to Choice:
@@ -49,8 +56,34 @@ type QuotaResourceKeyChoice struct {
 func (m *QuotaResourceKeyChoice) Reset()      { *m = QuotaResourceKeyChoice{} }
 func (*QuotaResourceKeyChoice) ProtoMessage() {}
 func (*QuotaResourceKeyChoice) Descriptor() ([]byte, []int) {
-	return fileDescriptorQuotaResourceKeys, []int{0}
+	return fileDescriptor_67f2dcc7407ee85c, []int{0}
 }
+func (m *QuotaResourceKeyChoice) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QuotaResourceKeyChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QuotaResourceKeyChoice.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QuotaResourceKeyChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuotaResourceKeyChoice.Merge(m, src)
+}
+func (m *QuotaResourceKeyChoice) XXX_Size() int {
+	return m.Size()
+}
+func (m *QuotaResourceKeyChoice) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuotaResourceKeyChoice.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QuotaResourceKeyChoice proto.InternalMessageInfo
 
 type isQuotaResourceKeyChoice_Choice interface {
 	isQuotaResourceKeyChoice_Choice()
@@ -60,76 +93,76 @@ type isQuotaResourceKeyChoice_Choice interface {
 }
 
 type QuotaResourceKeyChoice_ApiCredentialService struct {
-	ApiCredentialService bool `protobuf:"varint,1,opt,name=api_credential_service,json=apiCredentialService,proto3,oneof"`
+	ApiCredentialService bool `protobuf:"varint,1,opt,name=api_credential_service,json=apiCredentialService,proto3,oneof" json:"api_credential_service,omitempty"`
 }
 type QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge struct {
-	CpuLimitsPerVk8SPerRegionalEdge bool `protobuf:"varint,2,opt,name=cpu_limits_per_vk8s_per_regional_edge,json=cpuLimitsPerVk8sPerRegionalEdge,proto3,oneof"`
+	CpuLimitsPerVk8SPerRegionalEdge bool `protobuf:"varint,2,opt,name=cpu_limits_per_vk8s_per_regional_edge,json=cpuLimitsPerVk8sPerRegionalEdge,proto3,oneof" json:"cpu_limits_per_vk8s_per_regional_edge,omitempty"`
 }
 type QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge struct {
-	CpuRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,3,opt,name=cpu_requests_per_vk8s_per_regional_edge,json=cpuRequestsPerVk8sPerRegionalEdge,proto3,oneof"`
+	CpuRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,3,opt,name=cpu_requests_per_vk8s_per_regional_edge,json=cpuRequestsPerVk8sPerRegionalEdge,proto3,oneof" json:"cpu_requests_per_vk8s_per_regional_edge,omitempty"`
 }
 type QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge struct {
-	MemoryLimitsPerVk8SPerRegionalEdge bool `protobuf:"varint,4,opt,name=memory_limits_per_vk8s_per_regional_edge,json=memoryLimitsPerVk8sPerRegionalEdge,proto3,oneof"`
+	MemoryLimitsPerVk8SPerRegionalEdge bool `protobuf:"varint,4,opt,name=memory_limits_per_vk8s_per_regional_edge,json=memoryLimitsPerVk8sPerRegionalEdge,proto3,oneof" json:"memory_limits_per_vk8s_per_regional_edge,omitempty"`
 }
 type QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge struct {
-	MemoryRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,5,opt,name=memory_requests_per_vk8s_per_regional_edge,json=memoryRequestsPerVk8sPerRegionalEdge,proto3,oneof"`
+	MemoryRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,5,opt,name=memory_requests_per_vk8s_per_regional_edge,json=memoryRequestsPerVk8sPerRegionalEdge,proto3,oneof" json:"memory_requests_per_vk8s_per_regional_edge,omitempty"`
 }
 type QuotaResourceKeyChoice_NodeFlavorSmall struct {
-	NodeFlavorSmall bool `protobuf:"varint,6,opt,name=node_flavor_small,json=nodeFlavorSmall,proto3,oneof"`
+	NodeFlavorSmall bool `protobuf:"varint,6,opt,name=node_flavor_small,json=nodeFlavorSmall,proto3,oneof" json:"node_flavor_small,omitempty"`
 }
 type QuotaResourceKeyChoice_NodeFlavorMedium struct {
-	NodeFlavorMedium bool `protobuf:"varint,7,opt,name=node_flavor_medium,json=nodeFlavorMedium,proto3,oneof"`
+	NodeFlavorMedium bool `protobuf:"varint,7,opt,name=node_flavor_medium,json=nodeFlavorMedium,proto3,oneof" json:"node_flavor_medium,omitempty"`
 }
 type QuotaResourceKeyChoice_NodeFlavorLarge struct {
-	NodeFlavorLarge bool `protobuf:"varint,8,opt,name=node_flavor_large,json=nodeFlavorLarge,proto3,oneof"`
+	NodeFlavorLarge bool `protobuf:"varint,8,opt,name=node_flavor_large,json=nodeFlavorLarge,proto3,oneof" json:"node_flavor_large,omitempty"`
 }
 type QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge struct {
-	StorageRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,9,opt,name=storage_requests_per_vk8s_per_regional_edge,json=storageRequestsPerVk8sPerRegionalEdge,proto3,oneof"`
+	StorageRequestsPerVk8SPerRegionalEdge bool `protobuf:"varint,9,opt,name=storage_requests_per_vk8s_per_regional_edge,json=storageRequestsPerVk8sPerRegionalEdge,proto3,oneof" json:"storage_requests_per_vk8s_per_regional_edge,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwAwsByol struct {
-	ChwAwsByol bool `protobuf:"varint,10,opt,name=chw_aws_byol,json=chwAwsByol,proto3,oneof"`
+	ChwAwsByol bool `protobuf:"varint,10,opt,name=chw_aws_byol,json=chwAwsByol,proto3,oneof" json:"chw_aws_byol,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwAzureByol struct {
-	ChwAzureByol bool `protobuf:"varint,11,opt,name=chw_azure_byol,json=chwAzureByol,proto3,oneof"`
+	ChwAzureByol bool `protobuf:"varint,11,opt,name=chw_azure_byol,json=chwAzureByol,proto3,oneof" json:"chw_azure_byol,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwGcpByol struct {
-	ChwGcpByol bool `protobuf:"varint,12,opt,name=chw_gcp_byol,json=chwGcpByol,proto3,oneof"`
+	ChwGcpByol bool `protobuf:"varint,12,opt,name=chw_gcp_byol,json=chwGcpByol,proto3,oneof" json:"chw_gcp_byol,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwAzureFree struct {
-	ChwAzureFree bool `protobuf:"varint,13,opt,name=chw_azure_free,json=chwAzureFree,proto3,oneof"`
+	ChwAzureFree bool `protobuf:"varint,13,opt,name=chw_azure_free,json=chwAzureFree,proto3,oneof" json:"chw_azure_free,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwAwsFree struct {
-	ChwAwsFree bool `protobuf:"varint,14,opt,name=chw_aws_free,json=chwAwsFree,proto3,oneof"`
+	ChwAwsFree bool `protobuf:"varint,14,opt,name=chw_aws_free,json=chwAwsFree,proto3,oneof" json:"chw_aws_free,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwGcpFree struct {
-	ChwGcpFree bool `protobuf:"varint,15,opt,name=chw_gcp_free,json=chwGcpFree,proto3,oneof"`
+	ChwGcpFree bool `protobuf:"varint,15,opt,name=chw_gcp_free,json=chwGcpFree,proto3,oneof" json:"chw_gcp_free,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwGeneric struct {
-	ChwGeneric bool `protobuf:"varint,16,opt,name=chw_generic,json=chwGeneric,proto3,oneof"`
+	ChwGeneric bool `protobuf:"varint,16,opt,name=chw_generic,json=chwGeneric,proto3,oneof" json:"chw_generic,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwIgw struct {
-	ChwIgw bool `protobuf:"varint,17,opt,name=chw_igw,json=chwIgw,proto3,oneof"`
+	ChwIgw bool `protobuf:"varint,17,opt,name=chw_igw,json=chwIgw,proto3,oneof" json:"chw_igw,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwIsv struct {
-	ChwIsv bool `protobuf:"varint,18,opt,name=chw_isv,json=chwIsv,proto3,oneof"`
+	ChwIsv bool `protobuf:"varint,18,opt,name=chw_isv,json=chwIsv,proto3,oneof" json:"chw_isv,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwKvm struct {
-	ChwKvm bool `protobuf:"varint,19,opt,name=chw_kvm,json=chwKvm,proto3,oneof"`
+	ChwKvm bool `protobuf:"varint,19,opt,name=chw_kvm,json=chwKvm,proto3,oneof" json:"chw_kvm,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwK8S struct {
-	ChwK8S bool `protobuf:"varint,20,opt,name=chw_k8s,json=chwK8s,proto3,oneof"`
+	ChwK8S bool `protobuf:"varint,20,opt,name=chw_k8s,json=chwK8s,proto3,oneof" json:"chw_k8s,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwVmware struct {
-	ChwVmware bool `protobuf:"varint,21,opt,name=chw_vmware,json=chwVmware,proto3,oneof"`
+	ChwVmware bool `protobuf:"varint,21,opt,name=chw_vmware,json=chwVmware,proto3,oneof" json:"chw_vmware,omitempty"`
 }
 type QuotaResourceKeyChoice_ChwTiny struct {
-	ChwTiny bool `protobuf:"varint,22,opt,name=chw_tiny,json=chwTiny,proto3,oneof"`
+	ChwTiny bool `protobuf:"varint,22,opt,name=chw_tiny,json=chwTiny,proto3,oneof" json:"chw_tiny,omitempty"`
 }
 type QuotaResourceKeyChoice_VirtualHostPublic struct {
-	VirtualHostPublic bool `protobuf:"varint,23,opt,name=virtual_host_public,json=virtualHostPublic,proto3,oneof"`
+	VirtualHostPublic bool `protobuf:"varint,23,opt,name=virtual_host_public,json=virtualHostPublic,proto3,oneof" json:"virtual_host_public,omitempty"`
 }
 type QuotaResourceKeyChoice_HealthcheckMinimumInterval struct {
-	HealthcheckMinimumInterval bool `protobuf:"varint,24,opt,name=healthcheck_minimum_interval,json=healthcheckMinimumInterval,proto3,oneof"`
+	HealthcheckMinimumInterval bool `protobuf:"varint,24,opt,name=healthcheck_minimum_interval,json=healthcheckMinimumInterval,proto3,oneof" json:"healthcheck_minimum_interval,omitempty"`
 }
 
 func (*QuotaResourceKeyChoice_ApiCredentialService) isQuotaResourceKeyChoice_Choice()               {}
@@ -334,9 +367,9 @@ func (m *QuotaResourceKeyChoice) GetHealthcheckMinimumInterval() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*QuotaResourceKeyChoice) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _QuotaResourceKeyChoice_OneofMarshaler, _QuotaResourceKeyChoice_OneofUnmarshaler, _QuotaResourceKeyChoice_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*QuotaResourceKeyChoice) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*QuotaResourceKeyChoice_ApiCredentialService)(nil),
 		(*QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge)(nil),
 		(*QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge)(nil),
@@ -364,447 +397,77 @@ func (*QuotaResourceKeyChoice) XXX_OneofFuncs() (func(msg proto.Message, b *prot
 	}
 }
 
-func _QuotaResourceKeyChoice_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*QuotaResourceKeyChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *QuotaResourceKeyChoice_ApiCredentialService:
-		t := uint64(0)
-		if x.ApiCredentialService {
-			t = 1
-		}
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge:
-		t := uint64(0)
-		if x.CpuLimitsPerVk8SPerRegionalEdge {
-			t = 1
-		}
-		_ = b.EncodeVarint(2<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge:
-		t := uint64(0)
-		if x.CpuRequestsPerVk8SPerRegionalEdge {
-			t = 1
-		}
-		_ = b.EncodeVarint(3<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge:
-		t := uint64(0)
-		if x.MemoryLimitsPerVk8SPerRegionalEdge {
-			t = 1
-		}
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge:
-		t := uint64(0)
-		if x.MemoryRequestsPerVk8SPerRegionalEdge {
-			t = 1
-		}
-		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_NodeFlavorSmall:
-		t := uint64(0)
-		if x.NodeFlavorSmall {
-			t = 1
-		}
-		_ = b.EncodeVarint(6<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_NodeFlavorMedium:
-		t := uint64(0)
-		if x.NodeFlavorMedium {
-			t = 1
-		}
-		_ = b.EncodeVarint(7<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_NodeFlavorLarge:
-		t := uint64(0)
-		if x.NodeFlavorLarge {
-			t = 1
-		}
-		_ = b.EncodeVarint(8<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge:
-		t := uint64(0)
-		if x.StorageRequestsPerVk8SPerRegionalEdge {
-			t = 1
-		}
-		_ = b.EncodeVarint(9<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwAwsByol:
-		t := uint64(0)
-		if x.ChwAwsByol {
-			t = 1
-		}
-		_ = b.EncodeVarint(10<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwAzureByol:
-		t := uint64(0)
-		if x.ChwAzureByol {
-			t = 1
-		}
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwGcpByol:
-		t := uint64(0)
-		if x.ChwGcpByol {
-			t = 1
-		}
-		_ = b.EncodeVarint(12<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwAzureFree:
-		t := uint64(0)
-		if x.ChwAzureFree {
-			t = 1
-		}
-		_ = b.EncodeVarint(13<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwAwsFree:
-		t := uint64(0)
-		if x.ChwAwsFree {
-			t = 1
-		}
-		_ = b.EncodeVarint(14<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwGcpFree:
-		t := uint64(0)
-		if x.ChwGcpFree {
-			t = 1
-		}
-		_ = b.EncodeVarint(15<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwGeneric:
-		t := uint64(0)
-		if x.ChwGeneric {
-			t = 1
-		}
-		_ = b.EncodeVarint(16<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwIgw:
-		t := uint64(0)
-		if x.ChwIgw {
-			t = 1
-		}
-		_ = b.EncodeVarint(17<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwIsv:
-		t := uint64(0)
-		if x.ChwIsv {
-			t = 1
-		}
-		_ = b.EncodeVarint(18<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwKvm:
-		t := uint64(0)
-		if x.ChwKvm {
-			t = 1
-		}
-		_ = b.EncodeVarint(19<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwK8S:
-		t := uint64(0)
-		if x.ChwK8S {
-			t = 1
-		}
-		_ = b.EncodeVarint(20<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwVmware:
-		t := uint64(0)
-		if x.ChwVmware {
-			t = 1
-		}
-		_ = b.EncodeVarint(21<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_ChwTiny:
-		t := uint64(0)
-		if x.ChwTiny {
-			t = 1
-		}
-		_ = b.EncodeVarint(22<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_VirtualHostPublic:
-		t := uint64(0)
-		if x.VirtualHostPublic {
-			t = 1
-		}
-		_ = b.EncodeVarint(23<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *QuotaResourceKeyChoice_HealthcheckMinimumInterval:
-		t := uint64(0)
-		if x.HealthcheckMinimumInterval {
-			t = 1
-		}
-		_ = b.EncodeVarint(24<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("QuotaResourceKeyChoice.Choice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _QuotaResourceKeyChoice_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*QuotaResourceKeyChoice)
-	switch tag {
-	case 1: // choice.api_credential_service
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ApiCredentialService{x != 0}
-		return true, err
-	case 2: // choice.cpu_limits_per_vk8s_per_regional_edge
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge{x != 0}
-		return true, err
-	case 3: // choice.cpu_requests_per_vk8s_per_regional_edge
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge{x != 0}
-		return true, err
-	case 4: // choice.memory_limits_per_vk8s_per_regional_edge
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge{x != 0}
-		return true, err
-	case 5: // choice.memory_requests_per_vk8s_per_regional_edge
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge{x != 0}
-		return true, err
-	case 6: // choice.node_flavor_small
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_NodeFlavorSmall{x != 0}
-		return true, err
-	case 7: // choice.node_flavor_medium
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_NodeFlavorMedium{x != 0}
-		return true, err
-	case 8: // choice.node_flavor_large
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_NodeFlavorLarge{x != 0}
-		return true, err
-	case 9: // choice.storage_requests_per_vk8s_per_regional_edge
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge{x != 0}
-		return true, err
-	case 10: // choice.chw_aws_byol
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwAwsByol{x != 0}
-		return true, err
-	case 11: // choice.chw_azure_byol
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwAzureByol{x != 0}
-		return true, err
-	case 12: // choice.chw_gcp_byol
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwGcpByol{x != 0}
-		return true, err
-	case 13: // choice.chw_azure_free
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwAzureFree{x != 0}
-		return true, err
-	case 14: // choice.chw_aws_free
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwAwsFree{x != 0}
-		return true, err
-	case 15: // choice.chw_gcp_free
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwGcpFree{x != 0}
-		return true, err
-	case 16: // choice.chw_generic
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwGeneric{x != 0}
-		return true, err
-	case 17: // choice.chw_igw
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwIgw{x != 0}
-		return true, err
-	case 18: // choice.chw_isv
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwIsv{x != 0}
-		return true, err
-	case 19: // choice.chw_kvm
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwKvm{x != 0}
-		return true, err
-	case 20: // choice.chw_k8s
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwK8S{x != 0}
-		return true, err
-	case 21: // choice.chw_vmware
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwVmware{x != 0}
-		return true, err
-	case 22: // choice.chw_tiny
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_ChwTiny{x != 0}
-		return true, err
-	case 23: // choice.virtual_host_public
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_VirtualHostPublic{x != 0}
-		return true, err
-	case 24: // choice.healthcheck_minimum_interval
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Choice = &QuotaResourceKeyChoice_HealthcheckMinimumInterval{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _QuotaResourceKeyChoice_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*QuotaResourceKeyChoice)
-	// choice
-	switch x := m.Choice.(type) {
-	case *QuotaResourceKeyChoice_ApiCredentialService:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge:
-		n += proto.SizeVarint(2<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge:
-		n += proto.SizeVarint(3<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge:
-		n += proto.SizeVarint(4<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge:
-		n += proto.SizeVarint(5<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_NodeFlavorSmall:
-		n += proto.SizeVarint(6<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_NodeFlavorMedium:
-		n += proto.SizeVarint(7<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_NodeFlavorLarge:
-		n += proto.SizeVarint(8<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge:
-		n += proto.SizeVarint(9<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwAwsByol:
-		n += proto.SizeVarint(10<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwAzureByol:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwGcpByol:
-		n += proto.SizeVarint(12<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwAzureFree:
-		n += proto.SizeVarint(13<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwAwsFree:
-		n += proto.SizeVarint(14<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwGcpFree:
-		n += proto.SizeVarint(15<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwGeneric:
-		n += proto.SizeVarint(16<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwIgw:
-		n += proto.SizeVarint(17<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwIsv:
-		n += proto.SizeVarint(18<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwKvm:
-		n += proto.SizeVarint(19<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwK8S:
-		n += proto.SizeVarint(20<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwVmware:
-		n += proto.SizeVarint(21<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_ChwTiny:
-		n += proto.SizeVarint(22<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_VirtualHostPublic:
-		n += proto.SizeVarint(23<<3 | proto.WireVarint)
-		n += 1
-	case *QuotaResourceKeyChoice_HealthcheckMinimumInterval:
-		n += proto.SizeVarint(24<<3 | proto.WireVarint)
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*QuotaResourceKeyChoice)(nil), "ves.io.schema.vesenv.QuotaResourceKeyChoice")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/vesenv/quota_resource_keys.proto", fileDescriptor_67f2dcc7407ee85c)
+}
+
+var fileDescriptor_67f2dcc7407ee85c = []byte{
+	// 936 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x96, 0x4f, 0x6f, 0xd4, 0x46,
+	0x18, 0xc6, 0xd7, 0x6d, 0x9a, 0x84, 0x81, 0x42, 0xb2, 0x09, 0x9b, 0x21, 0x80, 0x81, 0x08, 0xd4,
+	0xa8, 0x95, 0xbd, 0xa5, 0x41, 0xed, 0xaa, 0x52, 0x55, 0x11, 0x04, 0x84, 0x02, 0x15, 0x59, 0x2a,
+	0x0e, 0x5c, 0xac, 0xc9, 0xec, 0x1b, 0x7b, 0xb4, 0xf6, 0x8e, 0x99, 0xf1, 0x9f, 0x6e, 0x4f, 0x48,
+	0x3d, 0x55, 0xaa, 0xd4, 0xaa, 0x52, 0xbf, 0x43, 0xe5, 0xaf, 0xe0, 0x2f, 0xd0, 0x63, 0x8e, 0x1c,
+	0x9b, 0xcd, 0xa5, 0x47, 0x3e, 0x42, 0xe5, 0xd7, 0x66, 0xbb, 0xd9, 0xdd, 0xc0, 0x72, 0x8a, 0xf5,
+	0x3e, 0xcf, 0xef, 0x99, 0x67, 0x5e, 0x2b, 0x5a, 0x13, 0x3b, 0x01, 0x6d, 0x0b, 0xd9, 0xd4, 0xdc,
+	0x83, 0x80, 0x35, 0x13, 0xd0, 0xd0, 0x4b, 0x9a, 0x2f, 0x62, 0x19, 0x31, 0x47, 0x81, 0x96, 0xb1,
+	0xe2, 0xe0, 0x74, 0xa1, 0xaf, 0xed, 0x50, 0xc9, 0x48, 0xd6, 0x57, 0x4b, 0xbf, 0x5d, 0xfa, 0xed,
+	0xd2, 0xbf, 0xbe, 0x31, 0x35, 0x45, 0x86, 0x91, 0x90, 0xbd, 0x8a, 0xdc, 0xf8, 0x6d, 0x89, 0x34,
+	0x76, 0x8b, 0xdc, 0x76, 0x15, 0xfb, 0x10, 0xfa, 0x77, 0x3c, 0x29, 0x38, 0xd4, 0x9f, 0x93, 0x06,
+	0x0b, 0x85, 0xc3, 0x15, 0x74, 0xa0, 0x17, 0x09, 0xe6, 0x3b, 0x1a, 0x54, 0x22, 0x38, 0x50, 0xe3,
+	0xaa, 0xb1, 0xb9, 0xb8, 0xbd, 0x91, 0xe5, 0xd4, 0x1c, 0xf7, 0xd8, 0x95, 0xa7, 0x3e, 0x07, 0xfd,
+	0x94, 0xed, 0xd4, 0xda, 0xab, 0x2c, 0x14, 0x77, 0x86, 0xf2, 0xd3, 0x4a, 0xfd, 0xd9, 0x20, 0x37,
+	0x78, 0x18, 0x3b, 0xbe, 0x08, 0x44, 0xa4, 0x9d, 0x10, 0x94, 0x93, 0x74, 0x5b, 0xe5, 0x83, 0x02,
+	0x57, 0xc8, 0x1e, 0xf3, 0x1d, 0xe8, 0xb8, 0x40, 0x3f, 0xc0, 0xb3, 0x6e, 0x66, 0x39, 0xb5, 0x66,
+	0x44, 0xea, 0x73, 0xac, 0xcb, 0xd4, 0x4e, 0xad, 0x7d, 0x85, 0x87, 0xf1, 0x23, 0x74, 0x3f, 0x01,
+	0xf5, 0xac, 0xdb, 0x2a, 0xfe, 0xb4, 0x2b, 0xe7, 0xdd, 0xc2, 0xf8, 0x8b, 0x41, 0x3e, 0x29, 0x22,
+	0x15, 0xbc, 0x88, 0x41, 0xbf, 0xbd, 0xc7, 0x87, 0xd8, 0x63, 0x2b, 0xcb, 0x69, 0x73, 0x66, 0x68,
+	0xd8, 0xe4, 0x1a, 0x0f, 0xe3, 0x76, 0xe5, 0x3f, 0xa1, 0xcb, 0xaf, 0x06, 0xd9, 0x0c, 0x20, 0x90,
+	0xaa, 0x3f, 0xc3, 0x52, 0xe6, 0xb0, 0xcc, 0xad, 0x2c, 0xa7, 0x9f, 0xcf, 0x4e, 0x0d, 0xdb, 0x6c,
+	0x94, 0xc4, 0x5b, 0x57, 0xf3, 0x87, 0x41, 0x3e, 0xad, 0x82, 0x67, 0xd9, 0xce, 0x47, 0x58, 0xe8,
+	0xcb, 0x2c, 0xa7, 0x5f, 0xbc, 0x0f, 0x37, 0xac, 0x74, 0xbd, 0x64, 0xde, 0xb1, 0xa3, 0xef, 0xc9,
+	0x72, 0x4f, 0x76, 0xc0, 0xd9, 0xf7, 0x59, 0x22, 0x95, 0xa3, 0x03, 0xe6, 0xfb, 0x74, 0x1e, 0x8f,
+	0xbe, 0x9a, 0xe5, 0xf4, 0xd2, 0x14, 0xb9, 0xbe, 0x10, 0xb0, 0x58, 0x09, 0x0e, 0x3b, 0xb5, 0xf6,
+	0xb9, 0x42, 0xbd, 0x87, 0xe2, 0x53, 0xd4, 0x76, 0x49, 0x7d, 0x14, 0x08, 0xa0, 0x23, 0xe2, 0x80,
+	0x2e, 0x60, 0xe0, 0xb5, 0x2c, 0xa7, 0x97, 0xa7, 0xe9, 0xa3, 0x89, 0x4b, 0xff, 0x27, 0x3e, 0x2e,
+	0xc5, 0xb1, 0x8a, 0x3e, 0x53, 0x2e, 0xd0, 0xc5, 0x93, 0x2a, 0xa2, 0x7c, 0x42, 0xc5, 0x47, 0xa8,
+	0xfd, 0x69, 0x90, 0xcf, 0x74, 0x24, 0x15, 0x73, 0x61, 0xa6, 0x17, 0x71, 0x0a, 0x8f, 0xfa, 0x2a,
+	0xcb, 0xe9, 0xd6, 0x7b, 0x81, 0xc3, 0x37, 0x71, 0xa3, 0x82, 0xde, 0xf1, 0x2a, 0xbe, 0x25, 0x67,
+	0xb8, 0x97, 0x3a, 0x2c, 0xd5, 0xce, 0x5e, 0x5f, 0xfa, 0x94, 0xe0, 0xb9, 0x17, 0xb3, 0x9c, 0xae,
+	0xa1, 0x62, 0xb1, 0x54, 0x5b, 0x85, 0x32, 0x7a, 0x3b, 0xc2, 0xbd, 0xf4, 0x76, 0xaa, 0xb7, 0x8b,
+	0xf1, 0x5d, 0x72, 0x16, 0x03, 0x7e, 0x8a, 0x15, 0x94, 0x11, 0xa7, 0x31, 0xe2, 0x72, 0x96, 0xd3,
+	0x0b, 0xa8, 0x59, 0xa8, 0x4d, 0x84, 0x14, 0xe9, 0xb7, 0x0b, 0x05, 0x63, 0xaa, 0x1e, 0x2e, 0x0f,
+	0xcb, 0x90, 0x33, 0xe3, 0x3d, 0x5c, 0x1e, 0x4e, 0xed, 0x71, 0x9f, 0x87, 0x93, 0x3d, 0xf6, 0x15,
+	0x00, 0xfd, 0x78, 0x7a, 0x8f, 0x42, 0x9b, 0xda, 0xe3, 0x5e, 0x21, 0x8c, 0xec, 0x03, 0x43, 0xce,
+	0x4e, 0xdb, 0xc7, 0x78, 0x44, 0xb5, 0x8f, 0xd1, 0x80, 0xe2, 0x22, 0x18, 0x70, 0x6e, 0xda, 0x45,
+	0xa6, 0x05, 0xdc, 0xe7, 0x21, 0x06, 0x7c, 0x43, 0x4e, 0x63, 0x00, 0xf4, 0x40, 0x09, 0x4e, 0x97,
+	0x90, 0x5f, 0xcf, 0x72, 0xda, 0x40, 0xc1, 0xaa, 0x84, 0x09, 0xbc, 0x1a, 0xdf, 0x24, 0x0b, 0x05,
+	0x2e, 0xdc, 0x94, 0x2e, 0x23, 0xda, 0xc8, 0x72, 0x5a, 0xc7, 0xa1, 0x25, 0xdc, 0x74, 0x14, 0x9b,
+	0xe7, 0x5e, 0xfa, 0xc0, 0x4d, 0x87, 0x88, 0x4e, 0x68, 0x7d, 0x02, 0xd1, 0xc9, 0x04, 0xa2, 0x93,
+	0x37, 0x48, 0x37, 0x09, 0xe8, 0xca, 0x38, 0xd2, 0x4d, 0x82, 0x71, 0xe4, 0x61, 0x12, 0x0c, 0x91,
+	0x96, 0xa6, 0xab, 0x13, 0x48, 0x4b, 0x4f, 0x20, 0x2d, 0x5d, 0xff, 0x9a, 0x14, 0x37, 0x73, 0x92,
+	0x20, 0x65, 0x0a, 0xe8, 0x79, 0xa4, 0x2e, 0x64, 0x39, 0x3d, 0x8f, 0x73, 0xab, 0x9c, 0x8f, 0x82,
+	0xa7, 0xb8, 0x97, 0x3e, 0x2b, 0xa7, 0xb7, 0xc8, 0x62, 0xc1, 0x46, 0xa2, 0xd7, 0xa7, 0x0d, 0x24,
+	0xd7, 0xb2, 0x9c, 0xae, 0xe0, 0xd4, 0x2a, 0xa6, 0xa3, 0x5c, 0x51, 0xe2, 0x87, 0x62, 0xb6, 0x4b,
+	0x56, 0x12, 0xa1, 0xa2, 0x98, 0xf9, 0x8e, 0x27, 0x75, 0xe4, 0x84, 0xf1, 0x9e, 0x2f, 0x38, 0x5d,
+	0xc3, 0x80, 0x2b, 0x59, 0x4e, 0x2f, 0x1e, 0x37, 0xd8, 0xa5, 0x61, 0xf8, 0x5f, 0xb7, 0x5c, 0x89,
+	0x3b, 0x52, 0x47, 0x4f, 0x4a, 0xc9, 0x27, 0x97, 0x3c, 0x60, 0x7e, 0xe4, 0x71, 0x0f, 0x78, 0xd7,
+	0x09, 0x44, 0x4f, 0x04, 0x71, 0xe0, 0x88, 0x5e, 0x04, 0x2a, 0x61, 0x3e, 0xa5, 0x98, 0xbd, 0x99,
+	0xe5, 0xf4, 0xfa, 0x31, 0xa7, 0x3d, 0xee, 0x1c, 0x1e, 0xb2, 0x3e, 0xe2, 0x7a, 0x5c, 0x9a, 0x1e,
+	0x54, 0x9e, 0xed, 0x45, 0x32, 0xcf, 0xf1, 0x67, 0x7f, 0xfb, 0xa5, 0x71, 0x70, 0x68, 0xd6, 0x5e,
+	0x1d, 0x9a, 0xb5, 0xd7, 0x87, 0xa6, 0xf1, 0x72, 0x60, 0x1a, 0x7f, 0x0d, 0x4c, 0xe3, 0xef, 0x81,
+	0x69, 0x1c, 0x0c, 0x4c, 0xe3, 0x9f, 0x81, 0x69, 0xfc, 0x3b, 0x30, 0x6b, 0xaf, 0x07, 0xa6, 0xf1,
+	0xfb, 0x91, 0x59, 0x3b, 0x38, 0x32, 0x6b, 0xaf, 0x8e, 0xcc, 0xda, 0xf3, 0xef, 0x5c, 0x19, 0x76,
+	0x5d, 0x3b, 0x91, 0x7e, 0x04, 0x4a, 0x31, 0x3b, 0xd6, 0x4d, 0x7c, 0xd8, 0x97, 0x2a, 0xb0, 0x42,
+	0x25, 0x13, 0xd1, 0x01, 0x65, 0xbd, 0x91, 0x9b, 0xe1, 0x9e, 0x2b, 0x9b, 0xf0, 0x63, 0x54, 0x7d,
+	0x9b, 0x1c, 0xfb, 0x44, 0xd9, 0x9b, 0xc7, 0x6f, 0x93, 0xad, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff,
+	0x18, 0x3b, 0xf0, 0x91, 0x07, 0x09, 0x00, 0x00,
+}
+
 func (this *QuotaResourceKeyChoice) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1626,7 +1289,7 @@ func valueToGoStringQuotaResourceKeys(v interface{}, typ string) string {
 func (m *QuotaResourceKeyChoice) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1634,336 +1297,468 @@ func (m *QuotaResourceKeyChoice) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *QuotaResourceKeyChoice) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn1, err := m.Choice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *QuotaResourceKeyChoice_ApiCredentialService) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ApiCredentialService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ApiCredentialService {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x10
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.CpuLimitsPerVk8SPerRegionalEdge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x10
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x18
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.CpuRequestsPerVk8SPerRegionalEdge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x18
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x20
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.MemoryLimitsPerVk8SPerRegionalEdge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x28
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.MemoryRequestsPerVk8SPerRegionalEdge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x28
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorSmall) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x30
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_NodeFlavorSmall) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.NodeFlavorSmall {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x30
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorMedium) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x38
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_NodeFlavorMedium) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.NodeFlavorMedium {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x38
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorLarge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x40
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_NodeFlavorLarge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.NodeFlavorLarge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x40
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x48
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.StorageRequestsPerVk8SPerRegionalEdge {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x48
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwAwsByol) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x50
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwAwsByol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwAwsByol {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x50
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwAzureByol) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwAzureByol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwAzureByol {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x58
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwGcpByol) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x60
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwGcpByol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwGcpByol {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x60
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwAzureFree) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x68
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwAzureFree) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwAzureFree {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x68
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwAwsFree) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x70
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwAwsFree) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwAwsFree {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x70
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwGcpFree) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x78
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwGcpFree) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwGcpFree {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x78
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwGeneric) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x80
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwGeneric) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwGeneric {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwIgw) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x88
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwIgw) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwIgw {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwIsv) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x90
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwIsv) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwIsv {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwKvm) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x98
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwKvm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwKvm {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwK8S) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwK8S) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwK8S {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwVmware) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwVmware) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwVmware {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_ChwTiny) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_ChwTiny) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.ChwTiny {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_VirtualHostPublic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xb8
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_VirtualHostPublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.VirtualHostPublic {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
 }
 func (m *QuotaResourceKeyChoice_HealthcheckMinimumInterval) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QuotaResourceKeyChoice_HealthcheckMinimumInterval) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.HealthcheckMinimumInterval {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func encodeVarintQuotaResourceKeys(dAtA []byte, offset int, v uint64) int {
+	offset -= sovQuotaResourceKeys(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *QuotaResourceKeyChoice) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Choice != nil {
@@ -1973,144 +1768,216 @@ func (m *QuotaResourceKeyChoice) Size() (n int) {
 }
 
 func (m *QuotaResourceKeyChoice_ApiCredentialService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorSmall) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorMedium) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_NodeFlavorLarge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwAwsByol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwAzureByol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwGcpByol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwAzureFree) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwAwsFree) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwGcpFree) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 2
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwGeneric) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwIgw) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwIsv) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwKvm) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwK8S) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwVmware) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_ChwTiny) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_VirtualHostPublic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
 	return n
 }
 func (m *QuotaResourceKeyChoice_HealthcheckMinimumInterval) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3
@@ -2118,14 +1985,7 @@ func (m *QuotaResourceKeyChoice_HealthcheckMinimumInterval) Size() (n int) {
 }
 
 func sovQuotaResourceKeys(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozQuotaResourceKeys(x uint64) (n int) {
 	return sovQuotaResourceKeys(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2403,7 +2263,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2431,7 +2291,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2452,7 +2312,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2473,7 +2333,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2494,7 +2354,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2515,7 +2375,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2536,7 +2396,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2557,7 +2417,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2578,7 +2438,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2599,7 +2459,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2620,7 +2480,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2641,7 +2501,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2662,7 +2522,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2683,7 +2543,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2704,7 +2564,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2725,7 +2585,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2746,7 +2606,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2767,7 +2627,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2788,7 +2648,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2809,7 +2669,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2830,7 +2690,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2851,7 +2711,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2872,7 +2732,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2893,7 +2753,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2914,7 +2774,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2928,6 +2788,9 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthQuotaResourceKeys
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthQuotaResourceKeys
 			}
 			if (iNdEx + skippy) > l {
@@ -2945,6 +2808,7 @@ func (m *QuotaResourceKeyChoice) Unmarshal(dAtA []byte) error {
 func skipQuotaResourceKeys(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2976,10 +2840,8 @@ func skipQuotaResourceKeys(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2996,119 +2858,34 @@ func skipQuotaResourceKeys(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthQuotaResourceKeys
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowQuotaResourceKeys
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipQuotaResourceKeys(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupQuotaResourceKeys
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthQuotaResourceKeys
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthQuotaResourceKeys = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowQuotaResourceKeys   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthQuotaResourceKeys        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowQuotaResourceKeys          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupQuotaResourceKeys = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/vesenv/quota_resource_keys.proto", fileDescriptorQuotaResourceKeys)
-}
-
-var fileDescriptorQuotaResourceKeys = []byte{
-	// 927 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x96, 0x4f, 0x6f, 0xd4, 0x46,
-	0x18, 0xc6, 0xd7, 0x2d, 0x4d, 0xc2, 0x40, 0x21, 0xd9, 0x84, 0xcd, 0x10, 0xc0, 0x40, 0x04, 0x6a,
-	0xd4, 0xca, 0xde, 0xd2, 0xa0, 0x76, 0x55, 0xa9, 0xaa, 0x08, 0x02, 0x42, 0x81, 0x8a, 0x2c, 0x15,
-	0x07, 0x2e, 0xd6, 0x64, 0xf6, 0x8d, 0x3d, 0x5a, 0x7b, 0xc7, 0xcc, 0xf8, 0x0f, 0xdb, 0x53, 0xa5,
-	0x9e, 0x2a, 0x55, 0x6a, 0x55, 0xa9, 0xdf, 0xa1, 0xf2, 0x57, 0xf0, 0x17, 0xe8, 0x91, 0x63, 0x8f,
-	0xcd, 0xf6, 0xd2, 0x23, 0x1f, 0xa1, 0xf2, 0x6b, 0xb3, 0xdd, 0xec, 0x3a, 0xb0, 0x9c, 0x62, 0xbd,
-	0xcf, 0xf3, 0x7b, 0xe6, 0x99, 0xd7, 0x8a, 0xd6, 0xc4, 0x4e, 0x40, 0xdb, 0x42, 0xb6, 0x35, 0xf7,
-	0x20, 0x60, 0xed, 0x04, 0x34, 0x0c, 0x92, 0xf6, 0xf3, 0x58, 0x46, 0xcc, 0x51, 0xa0, 0x65, 0xac,
-	0x38, 0x38, 0x7d, 0x18, 0x6a, 0x3b, 0x54, 0x32, 0x92, 0xcd, 0xb5, 0xd2, 0x6f, 0x97, 0x7e, 0xbb,
-	0xf4, 0x6f, 0x6c, 0xd6, 0xa6, 0xc8, 0x30, 0x12, 0x72, 0x50, 0x91, 0x9b, 0xbf, 0x2c, 0x93, 0xd6,
-	0x5e, 0x91, 0xdb, 0xad, 0x62, 0x1f, 0xc0, 0xf0, 0xb6, 0x27, 0x05, 0x87, 0xe6, 0x33, 0xd2, 0x62,
-	0xa1, 0x70, 0xb8, 0x82, 0x1e, 0x0c, 0x22, 0xc1, 0x7c, 0x47, 0x83, 0x4a, 0x04, 0x07, 0x6a, 0x5c,
-	0x31, 0xb6, 0x96, 0x76, 0x36, 0xb3, 0x9c, 0x9a, 0xd3, 0x1e, 0xbb, 0xf2, 0x34, 0x4f, 0xc0, 0x30,
-	0x65, 0xbb, 0x8d, 0xee, 0x1a, 0x0b, 0xc5, 0xed, 0xb1, 0xfc, 0xa4, 0x52, 0x7f, 0x34, 0xc8, 0x75,
-	0x1e, 0xc6, 0x8e, 0x2f, 0x02, 0x11, 0x69, 0x27, 0x04, 0xe5, 0x24, 0xfd, 0x4e, 0xf9, 0xa0, 0xc0,
-	0x15, 0x72, 0xc0, 0x7c, 0x07, 0x7a, 0x2e, 0xd0, 0xf7, 0xf0, 0xac, 0x1b, 0x59, 0x4e, 0xad, 0x39,
-	0x91, 0xe6, 0x09, 0xd6, 0x67, 0x6a, 0xb7, 0xd1, 0xbd, 0xcc, 0xc3, 0xf8, 0x21, 0xba, 0x1f, 0x83,
-	0x7a, 0xda, 0xef, 0x14, 0x7f, 0xba, 0x95, 0xf3, 0x4e, 0x61, 0xfc, 0xc9, 0x20, 0x1f, 0x15, 0x91,
-	0x0a, 0x9e, 0xc7, 0xa0, 0xdf, 0xdc, 0xe3, 0x7d, 0xec, 0xb1, 0x9d, 0xe5, 0xb4, 0x3d, 0x37, 0x34,
-	0x6e, 0x72, 0x95, 0x87, 0x71, 0xb7, 0xf2, 0x1f, 0xd3, 0xe5, 0x67, 0x83, 0x6c, 0x05, 0x10, 0x48,
-	0x35, 0x9c, 0x63, 0x29, 0x27, 0xb0, 0xcc, 0xcd, 0x2c, 0xa7, 0x9f, 0xce, 0x4f, 0x8d, 0xdb, 0x6c,
-	0x96, 0xc4, 0x1b, 0x57, 0xf3, 0x9b, 0x41, 0x3e, 0xae, 0x82, 0xe7, 0xd9, 0xce, 0x07, 0x58, 0xe8,
-	0xf3, 0x2c, 0xa7, 0x9f, 0xbd, 0x0b, 0x37, 0xae, 0x74, 0xad, 0x64, 0xde, 0xb2, 0xa3, 0x6f, 0xc9,
-	0xca, 0x40, 0xf6, 0xc0, 0x39, 0xf0, 0x59, 0x22, 0x95, 0xa3, 0x03, 0xe6, 0xfb, 0x74, 0x01, 0x8f,
-	0xbe, 0x92, 0xe5, 0xf4, 0x62, 0x8d, 0xdc, 0x5c, 0x0c, 0x58, 0xac, 0x04, 0x87, 0xdd, 0x46, 0xf7,
-	0x6c, 0xa1, 0xde, 0x45, 0xf1, 0x09, 0x6a, 0x7b, 0xa4, 0x39, 0x09, 0x04, 0xd0, 0x13, 0x71, 0x40,
-	0x17, 0x31, 0xf0, 0x6a, 0x96, 0xd3, 0x4b, 0x75, 0xfa, 0x64, 0xe2, 0xf2, 0xff, 0x89, 0x8f, 0x4a,
-	0x71, 0xaa, 0xa2, 0xcf, 0x94, 0x0b, 0x74, 0xe9, 0xb8, 0x8a, 0x28, 0x1f, 0x53, 0xf1, 0x21, 0x6a,
-	0xbf, 0x1b, 0xe4, 0x13, 0x1d, 0x49, 0xc5, 0x5c, 0x98, 0xeb, 0x45, 0x9c, 0xc4, 0xa3, 0xbe, 0xc8,
-	0x72, 0xba, 0xfd, 0x4e, 0xe0, 0xf8, 0x4d, 0x5c, 0xaf, 0xa0, 0xb7, 0xbc, 0x8a, 0xaf, 0xc9, 0x69,
-	0xee, 0xa5, 0x0e, 0x4b, 0xb5, 0xb3, 0x3f, 0x94, 0x3e, 0x25, 0x78, 0xee, 0x85, 0x2c, 0xa7, 0xeb,
-	0xa8, 0x58, 0x2c, 0xd5, 0x56, 0xa1, 0x4c, 0xde, 0x8e, 0x70, 0x2f, 0xbd, 0x95, 0xea, 0x9d, 0x62,
-	0x7c, 0x87, 0x9c, 0xc1, 0x80, 0xef, 0x63, 0x05, 0x65, 0xc4, 0x29, 0x8c, 0xb8, 0x94, 0xe5, 0xf4,
-	0x3c, 0x6a, 0x16, 0x6a, 0x33, 0x21, 0x45, 0xfa, 0xad, 0x42, 0xc1, 0x98, 0xaa, 0x87, 0xcb, 0xc3,
-	0x32, 0xe4, 0xf4, 0x74, 0x0f, 0x97, 0x87, 0xb5, 0x3d, 0xee, 0xf1, 0x70, 0xb6, 0xc7, 0x81, 0x02,
-	0xa0, 0x1f, 0xd6, 0xf7, 0x28, 0xb4, 0xda, 0x1e, 0x77, 0x0b, 0x61, 0x62, 0x1f, 0x18, 0x72, 0xa6,
-	0x6e, 0x1f, 0xd3, 0x11, 0xd5, 0x3e, 0x26, 0x03, 0x8a, 0x8b, 0x60, 0xc0, 0xd9, 0xba, 0x8b, 0xd4,
-	0x05, 0xdc, 0xe3, 0x21, 0x06, 0x7c, 0x45, 0x4e, 0x61, 0x00, 0x0c, 0x40, 0x09, 0x4e, 0x97, 0x91,
-	0xdf, 0xc8, 0x72, 0xda, 0x42, 0xc1, 0xaa, 0x84, 0x19, 0xbc, 0x1a, 0xdf, 0x20, 0x8b, 0x05, 0x2e,
-	0xdc, 0x94, 0xae, 0x20, 0xda, 0xca, 0x72, 0xda, 0xc4, 0xa1, 0x25, 0xdc, 0x74, 0x12, 0x5b, 0xe0,
-	0x5e, 0x7a, 0xdf, 0x4d, 0xc7, 0x88, 0x4e, 0x68, 0x73, 0x06, 0xd1, 0xc9, 0x0c, 0xa2, 0x93, 0xd7,
-	0x48, 0x3f, 0x09, 0xe8, 0xea, 0x34, 0xd2, 0x4f, 0x82, 0x69, 0xe4, 0x41, 0x12, 0x8c, 0x91, 0x8e,
-	0xa6, 0x6b, 0x33, 0x48, 0x47, 0xcf, 0x20, 0x1d, 0xdd, 0xfc, 0x92, 0x14, 0x37, 0x73, 0x92, 0x20,
-	0x65, 0x0a, 0xe8, 0x39, 0xa4, 0xce, 0x67, 0x39, 0x3d, 0x87, 0x73, 0xab, 0x9c, 0x4f, 0x82, 0x27,
-	0xb9, 0x97, 0x3e, 0x2d, 0xa7, 0x37, 0xc9, 0x52, 0xc1, 0x46, 0x62, 0x30, 0xa4, 0x2d, 0x24, 0xd7,
-	0xb3, 0x9c, 0xae, 0xe2, 0xd4, 0x2a, 0xa6, 0x93, 0x5c, 0x51, 0xe2, 0xbb, 0x62, 0xb6, 0x47, 0x56,
-	0x13, 0xa1, 0xa2, 0x98, 0xf9, 0x8e, 0x27, 0x75, 0xe4, 0x84, 0xf1, 0xbe, 0x2f, 0x38, 0x5d, 0xc7,
-	0x80, 0xcb, 0x59, 0x4e, 0x2f, 0x1c, 0x35, 0xd8, 0xa5, 0x61, 0xfc, 0x5f, 0xb7, 0x52, 0x89, 0xbb,
-	0x52, 0x47, 0x8f, 0x4b, 0xc9, 0x27, 0x17, 0x3d, 0x60, 0x7e, 0xe4, 0x71, 0x0f, 0x78, 0xdf, 0x09,
-	0xc4, 0x40, 0x04, 0x71, 0xe0, 0x88, 0x41, 0x04, 0x2a, 0x61, 0x3e, 0xa5, 0x98, 0xbd, 0x95, 0xe5,
-	0xf4, 0xda, 0x11, 0xa7, 0x3d, 0xed, 0x1c, 0x1f, 0xb2, 0x31, 0xe1, 0x7a, 0x54, 0x9a, 0xee, 0x57,
-	0x9e, 0x9d, 0x25, 0xb2, 0xc0, 0xf1, 0x67, 0x7f, 0xe7, 0xc5, 0xcb, 0x43, 0xb3, 0xf1, 0xd7, 0xa1,
-	0xd9, 0x78, 0x75, 0x68, 0x1a, 0x3f, 0x8c, 0x4c, 0xe3, 0x8f, 0x91, 0x69, 0xfc, 0x39, 0x32, 0x8d,
-	0x97, 0x23, 0xd3, 0xf8, 0x7b, 0x64, 0x1a, 0xff, 0x8e, 0xcc, 0xc6, 0xab, 0x91, 0x69, 0xfc, 0xfa,
-	0x8f, 0xd9, 0x78, 0xf6, 0x8d, 0x2b, 0xc3, 0xbe, 0x6b, 0x27, 0xd2, 0x8f, 0x40, 0x29, 0x66, 0xc7,
-	0xba, 0x8d, 0x0f, 0x07, 0x52, 0x05, 0x56, 0xa8, 0x64, 0x22, 0x7a, 0xa0, 0xac, 0xd7, 0x72, 0x3b,
-	0xdc, 0x77, 0x65, 0x1b, 0x5e, 0x44, 0xd5, 0x27, 0xc9, 0x91, 0x2f, 0x93, 0xfd, 0x05, 0xfc, 0x24,
-	0xd9, 0xfe, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x92, 0xc1, 0x5b, 0xc7, 0xfe, 0x08, 0x00, 0x00,
-}

@@ -296,7 +296,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.virtual_k8s.CustomDataAPI.PVCMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/virtual_k8sPVCMetricsResponse"
                         }
@@ -353,9 +353,11 @@ var CustomDataAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

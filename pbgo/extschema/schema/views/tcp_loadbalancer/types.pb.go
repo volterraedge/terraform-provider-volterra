@@ -3,28 +3,32 @@
 
 package tcp_loadbalancer
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-import ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GlobalSpecType
 //
@@ -39,7 +43,7 @@ type GlobalSpecType struct {
 	//
 	// Domains are also used for SNI matching if the with_sni is true
 	// Domains also indicate the list of names for which DNS resolution will be done by VER
-	Domains []string `protobuf:"bytes,1,rep,name=domains" json:"domains,omitempty"`
+	Domains []string `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	// Listen Port
 	//
 	// x-displayName: "Listen Port"
@@ -62,12 +66,12 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Origin Pools(deprecated)"
 	// Origin pools with equal weights used for this loadbalancer. This field will be removed.
-	OriginPools []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,4,rep,name=origin_pools,json=originPools" json:"origin_pools,omitempty"`
+	OriginPools []*views.ObjectRefType `protobuf:"bytes,4,rep,name=origin_pools,json=originPools,proto3" json:"origin_pools,omitempty"`
 	// Origin Pools with Weights
 	//
 	// x-displayName: "Origin Pools"
 	// Origin pools and weights used for this loadbalancer.
-	OriginPoolsWeights []*ves_io_schema_views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights" json:"origin_pools_weights,omitempty"`
+	OriginPoolsWeights []*views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights,proto3" json:"origin_pools_weights,omitempty"`
 	// Advertise choice
 	//
 	// x-displayName: "Where to Advertise the VIP"
@@ -113,7 +117,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "View Internal"
 	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 	// host name
 	//
 	// x-displayName: "Host Name"
@@ -124,12 +128,36 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "DNS Information"
 	// DNS information for this virtual host
-	DnsInfo []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
+	DnsInfo []*virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_af54a43838ffcca9, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 type isGlobalSpecType_AdvertiseChoice interface {
 	isGlobalSpecType_AdvertiseChoice()
@@ -151,34 +179,34 @@ type isGlobalSpecType_ClusterRetractChoice interface {
 }
 
 type GlobalSpecType_DoNotAdvertise struct {
-	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
+	DoNotAdvertise *schema.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,proto3,oneof" json:"do_not_advertise,omitempty"`
 }
 type GlobalSpecType_AdvertiseOnPublicDefaultVip struct {
-	AdvertiseOnPublicDefaultVip *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,oneof"`
+	AdvertiseOnPublicDefaultVip *schema.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,proto3,oneof" json:"advertise_on_public_default_vip,omitempty"`
 }
 type GlobalSpecType_AdvertiseOnPublic struct {
-	AdvertiseOnPublic *ves_io_schema_views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,oneof"`
+	AdvertiseOnPublic *views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,proto3,oneof" json:"advertise_on_public,omitempty"`
 }
 type GlobalSpecType_AdvertiseCustom struct {
-	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
+	AdvertiseCustom *views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,proto3,oneof" json:"advertise_custom,omitempty"`
 }
 type GlobalSpecType_HashPolicyChoiceRoundRobin struct {
-	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+	HashPolicyChoiceRoundRobin *schema.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,proto3,oneof" json:"hash_policy_choice_round_robin,omitempty"`
 }
 type GlobalSpecType_HashPolicyChoiceLeastActive struct {
-	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+	HashPolicyChoiceLeastActive *schema.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,proto3,oneof" json:"hash_policy_choice_least_active,omitempty"`
 }
 type GlobalSpecType_HashPolicyChoiceRandom struct {
-	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+	HashPolicyChoiceRandom *schema.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,proto3,oneof" json:"hash_policy_choice_random,omitempty"`
 }
 type GlobalSpecType_HashPolicyChoiceSourceIpStickiness struct {
-	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+	HashPolicyChoiceSourceIpStickiness *schema.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,proto3,oneof" json:"hash_policy_choice_source_ip_stickiness,omitempty"`
 }
 type GlobalSpecType_RetractCluster struct {
-	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+	RetractCluster *schema.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,proto3,oneof" json:"retract_cluster,omitempty"`
 }
 type GlobalSpecType_DoNotRetractCluster struct {
-	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+	DoNotRetractCluster *schema.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,proto3,oneof" json:"do_not_retract_cluster,omitempty"`
 }
 
 func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()                      {}
@@ -239,70 +267,70 @@ func (m *GlobalSpecType) GetDnsVolterraManaged() bool {
 	return false
 }
 
-func (m *GlobalSpecType) GetOriginPools() []*ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetOriginPools() []*views.ObjectRefType {
 	if m != nil {
 		return m.OriginPools
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetOriginPoolsWeights() []*ves_io_schema_views.OriginPoolWithWeight {
+func (m *GlobalSpecType) GetOriginPoolsWeights() []*views.OriginPoolWithWeight {
 	if m != nil {
 		return m.OriginPoolsWeights
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDoNotAdvertise() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDoNotAdvertise() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*GlobalSpecType_DoNotAdvertise); ok {
 		return x.DoNotAdvertise
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAdvertiseOnPublicDefaultVip() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetAdvertiseOnPublicDefaultVip() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*GlobalSpecType_AdvertiseOnPublicDefaultVip); ok {
 		return x.AdvertiseOnPublicDefaultVip
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAdvertiseOnPublic() *ves_io_schema_views.AdvertisePublic {
+func (m *GlobalSpecType) GetAdvertiseOnPublic() *views.AdvertisePublic {
 	if x, ok := m.GetAdvertiseChoice().(*GlobalSpecType_AdvertiseOnPublic); ok {
 		return x.AdvertiseOnPublic
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCustom {
+func (m *GlobalSpecType) GetAdvertiseCustom() *views.AdvertiseCustom {
 	if x, ok := m.GetAdvertiseChoice().(*GlobalSpecType_AdvertiseCustom); ok {
 		return x.AdvertiseCustom
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetHashPolicyChoiceRoundRobin() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRoundRobin); ok {
 		return x.HashPolicyChoiceRoundRobin
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetHashPolicyChoiceLeastActive() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceLeastActive); ok {
 		return x.HashPolicyChoiceLeastActive
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetHashPolicyChoiceRandom() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRandom); ok {
 		return x.HashPolicyChoiceRandom
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetHashPolicyChoiceSourceIpStickiness() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness); ok {
 		return x.HashPolicyChoiceSourceIpStickiness
 	}
@@ -316,21 +344,21 @@ func (m *GlobalSpecType) GetIdleTimeout() uint32 {
 	return 0
 }
 
-func (m *GlobalSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*GlobalSpecType_RetractCluster); ok {
 		return x.RetractCluster
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+func (m *GlobalSpecType) GetDoNotRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*GlobalSpecType_DoNotRetractCluster); ok {
 		return x.DoNotRetractCluster
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
 	}
@@ -344,16 +372,16 @@ func (m *GlobalSpecType) GetHostName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetDnsInfo() []*ves_io_schema_virtual_host_dns_info.DnsInfo {
+func (m *GlobalSpecType) GetDnsInfo() []*virtual_host_dns_info.DnsInfo {
 	if m != nil {
 		return m.DnsInfo
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GlobalSpecType_DoNotAdvertise)(nil),
 		(*GlobalSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*GlobalSpecType_AdvertiseOnPublic)(nil),
@@ -367,250 +395,16 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GlobalSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *GlobalSpecType_DoNotAdvertise:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotAdvertise); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublicDefaultVip); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AdvertiseOnPublic:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublic); err != nil {
-			return err
-		}
-	case *GlobalSpecType_AdvertiseCustom:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseCustom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.AdvertiseChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
-			return err
-		}
-	case *GlobalSpecType_HashPolicyChoiceLeastActive:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
-			return err
-		}
-	case *GlobalSpecType_HashPolicyChoiceRandom:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
-			return err
-		}
-	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.HashPolicyChoice has unexpected type %T", x)
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *GlobalSpecType_RetractCluster:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RetractCluster); err != nil {
-			return err
-		}
-	case *GlobalSpecType_DoNotRetractCluster:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ClusterRetractChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GlobalSpecType)
-	switch tag {
-	case 7: // advertise_choice.do_not_advertise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GlobalSpecType_DoNotAdvertise{msg}
-		return true, err
-	case 8: // advertise_choice.advertise_on_public_default_vip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GlobalSpecType_AdvertiseOnPublicDefaultVip{msg}
-		return true, err
-	case 5: // advertise_choice.advertise_on_public
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertisePublic)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GlobalSpecType_AdvertiseOnPublic{msg}
-		return true, err
-	case 6: // advertise_choice.advertise_custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertiseCustom)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GlobalSpecType_AdvertiseCustom{msg}
-		return true, err
-	case 13: // hash_policy_choice.hash_policy_choice_round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{msg}
-		return true, err
-	case 14: // hash_policy_choice.hash_policy_choice_least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{msg}
-		return true, err
-	case 15: // hash_policy_choice.hash_policy_choice_random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{msg}
-		return true, err
-	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{msg}
-		return true, err
-	case 19: // cluster_retract_choice.retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &GlobalSpecType_RetractCluster{msg}
-		return true, err
-	case 20: // cluster_retract_choice.do_not_retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GlobalSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *GlobalSpecType_DoNotAdvertise:
-		s := proto.Size(x.DoNotAdvertise)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
-		s := proto.Size(x.AdvertiseOnPublicDefaultVip)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AdvertiseOnPublic:
-		s := proto.Size(x.AdvertiseOnPublic)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_AdvertiseCustom:
-		s := proto.Size(x.AdvertiseCustom)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
-		s := proto.Size(x.HashPolicyChoiceRoundRobin)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_HashPolicyChoiceLeastActive:
-		s := proto.Size(x.HashPolicyChoiceLeastActive)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_HashPolicyChoiceRandom:
-		s := proto.Size(x.HashPolicyChoiceRandom)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
-		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *GlobalSpecType_RetractCluster:
-		s := proto.Size(x.RetractCluster)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_DoNotRetractCluster:
-		s := proto.Size(x.DoNotRetractCluster)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // CreateSpecType
 //
 // x-displayName: "Create TCP Loadbalancer"
 // Shape of the TCP loadbalancer create specification
 type CreateSpecType struct {
-	Domains            []string                                    `protobuf:"bytes,1,rep,name=domains" json:"domains,omitempty"`
-	ListenPort         uint32                                      `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
-	WithSni            bool                                        `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
-	DnsVolterraManaged bool                                        `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
-	OriginPoolsWeights []*ves_io_schema_views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights" json:"origin_pools_weights,omitempty"`
+	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
+	WithSni            bool                          `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
+	DnsVolterraManaged bool                          `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
+	OriginPoolsWeights []*views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights,proto3" json:"origin_pools_weights,omitempty"`
 	// Types that are valid to be assigned to AdvertiseChoice:
 	//	*CreateSpecType_DoNotAdvertise
 	//	*CreateSpecType_AdvertiseOnPublicDefaultVip
@@ -630,9 +424,33 @@ type CreateSpecType struct {
 	ClusterRetractChoice isCreateSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_af54a43838ffcca9, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 type isCreateSpecType_AdvertiseChoice interface {
 	isCreateSpecType_AdvertiseChoice()
@@ -654,34 +472,34 @@ type isCreateSpecType_ClusterRetractChoice interface {
 }
 
 type CreateSpecType_DoNotAdvertise struct {
-	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
+	DoNotAdvertise *schema.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,proto3,oneof" json:"do_not_advertise,omitempty"`
 }
 type CreateSpecType_AdvertiseOnPublicDefaultVip struct {
-	AdvertiseOnPublicDefaultVip *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,oneof"`
+	AdvertiseOnPublicDefaultVip *schema.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,proto3,oneof" json:"advertise_on_public_default_vip,omitempty"`
 }
 type CreateSpecType_AdvertiseOnPublic struct {
-	AdvertiseOnPublic *ves_io_schema_views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,oneof"`
+	AdvertiseOnPublic *views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,proto3,oneof" json:"advertise_on_public,omitempty"`
 }
 type CreateSpecType_AdvertiseCustom struct {
-	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
+	AdvertiseCustom *views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,proto3,oneof" json:"advertise_custom,omitempty"`
 }
 type CreateSpecType_HashPolicyChoiceRoundRobin struct {
-	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+	HashPolicyChoiceRoundRobin *schema.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,proto3,oneof" json:"hash_policy_choice_round_robin,omitempty"`
 }
 type CreateSpecType_HashPolicyChoiceLeastActive struct {
-	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+	HashPolicyChoiceLeastActive *schema.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,proto3,oneof" json:"hash_policy_choice_least_active,omitempty"`
 }
 type CreateSpecType_HashPolicyChoiceRandom struct {
-	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+	HashPolicyChoiceRandom *schema.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,proto3,oneof" json:"hash_policy_choice_random,omitempty"`
 }
 type CreateSpecType_HashPolicyChoiceSourceIpStickiness struct {
-	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+	HashPolicyChoiceSourceIpStickiness *schema.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,proto3,oneof" json:"hash_policy_choice_source_ip_stickiness,omitempty"`
 }
 type CreateSpecType_RetractCluster struct {
-	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+	RetractCluster *schema.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,proto3,oneof" json:"retract_cluster,omitempty"`
 }
 type CreateSpecType_DoNotRetractCluster struct {
-	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+	DoNotRetractCluster *schema.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,proto3,oneof" json:"do_not_retract_cluster,omitempty"`
 }
 
 func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()                      {}
@@ -742,63 +560,63 @@ func (m *CreateSpecType) GetDnsVolterraManaged() bool {
 	return false
 }
 
-func (m *CreateSpecType) GetOriginPoolsWeights() []*ves_io_schema_views.OriginPoolWithWeight {
+func (m *CreateSpecType) GetOriginPoolsWeights() []*views.OriginPoolWithWeight {
 	if m != nil {
 		return m.OriginPoolsWeights
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDoNotAdvertise() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDoNotAdvertise() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*CreateSpecType_DoNotAdvertise); ok {
 		return x.DoNotAdvertise
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAdvertiseOnPublicDefaultVip() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetAdvertiseOnPublicDefaultVip() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*CreateSpecType_AdvertiseOnPublicDefaultVip); ok {
 		return x.AdvertiseOnPublicDefaultVip
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAdvertiseOnPublic() *ves_io_schema_views.AdvertisePublic {
+func (m *CreateSpecType) GetAdvertiseOnPublic() *views.AdvertisePublic {
 	if x, ok := m.GetAdvertiseChoice().(*CreateSpecType_AdvertiseOnPublic); ok {
 		return x.AdvertiseOnPublic
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCustom {
+func (m *CreateSpecType) GetAdvertiseCustom() *views.AdvertiseCustom {
 	if x, ok := m.GetAdvertiseChoice().(*CreateSpecType_AdvertiseCustom); ok {
 		return x.AdvertiseCustom
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetHashPolicyChoiceRoundRobin() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRoundRobin); ok {
 		return x.HashPolicyChoiceRoundRobin
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetHashPolicyChoiceLeastActive() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceLeastActive); ok {
 		return x.HashPolicyChoiceLeastActive
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetHashPolicyChoiceRandom() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRandom); ok {
 		return x.HashPolicyChoiceRandom
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetHashPolicyChoiceSourceIpStickiness() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceSourceIpStickiness); ok {
 		return x.HashPolicyChoiceSourceIpStickiness
 	}
@@ -812,23 +630,23 @@ func (m *CreateSpecType) GetIdleTimeout() uint32 {
 	return 0
 }
 
-func (m *CreateSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*CreateSpecType_RetractCluster); ok {
 		return x.RetractCluster
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+func (m *CreateSpecType) GetDoNotRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*CreateSpecType_DoNotRetractCluster); ok {
 		return x.DoNotRetractCluster
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*CreateSpecType_DoNotAdvertise)(nil),
 		(*CreateSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*CreateSpecType_AdvertiseOnPublic)(nil),
@@ -842,251 +660,17 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	}
 }
 
-func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CreateSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *CreateSpecType_DoNotAdvertise:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotAdvertise); err != nil {
-			return err
-		}
-	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublicDefaultVip); err != nil {
-			return err
-		}
-	case *CreateSpecType_AdvertiseOnPublic:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublic); err != nil {
-			return err
-		}
-	case *CreateSpecType_AdvertiseCustom:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseCustom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.AdvertiseChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *CreateSpecType_HashPolicyChoiceRoundRobin:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
-			return err
-		}
-	case *CreateSpecType_HashPolicyChoiceLeastActive:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
-			return err
-		}
-	case *CreateSpecType_HashPolicyChoiceRandom:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
-			return err
-		}
-	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.HashPolicyChoice has unexpected type %T", x)
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *CreateSpecType_RetractCluster:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RetractCluster); err != nil {
-			return err
-		}
-	case *CreateSpecType_DoNotRetractCluster:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ClusterRetractChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CreateSpecType)
-	switch tag {
-	case 7: // advertise_choice.do_not_advertise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &CreateSpecType_DoNotAdvertise{msg}
-		return true, err
-	case 8: // advertise_choice.advertise_on_public_default_vip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &CreateSpecType_AdvertiseOnPublicDefaultVip{msg}
-		return true, err
-	case 5: // advertise_choice.advertise_on_public
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertisePublic)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &CreateSpecType_AdvertiseOnPublic{msg}
-		return true, err
-	case 6: // advertise_choice.advertise_custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertiseCustom)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &CreateSpecType_AdvertiseCustom{msg}
-		return true, err
-	case 13: // hash_policy_choice.hash_policy_choice_round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRoundRobin{msg}
-		return true, err
-	case 14: // hash_policy_choice.hash_policy_choice_least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceLeastActive{msg}
-		return true, err
-	case 15: // hash_policy_choice.hash_policy_choice_random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRandom{msg}
-		return true, err
-	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{msg}
-		return true, err
-	case 19: // cluster_retract_choice.retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &CreateSpecType_RetractCluster{msg}
-		return true, err
-	case 20: // cluster_retract_choice.do_not_retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &CreateSpecType_DoNotRetractCluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*CreateSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *CreateSpecType_DoNotAdvertise:
-		s := proto.Size(x.DoNotAdvertise)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AdvertiseOnPublicDefaultVip:
-		s := proto.Size(x.AdvertiseOnPublicDefaultVip)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AdvertiseOnPublic:
-		s := proto.Size(x.AdvertiseOnPublic)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_AdvertiseCustom:
-		s := proto.Size(x.AdvertiseCustom)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *CreateSpecType_HashPolicyChoiceRoundRobin:
-		s := proto.Size(x.HashPolicyChoiceRoundRobin)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_HashPolicyChoiceLeastActive:
-		s := proto.Size(x.HashPolicyChoiceLeastActive)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_HashPolicyChoiceRandom:
-		s := proto.Size(x.HashPolicyChoiceRandom)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
-		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *CreateSpecType_RetractCluster:
-		s := proto.Size(x.RetractCluster)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DoNotRetractCluster:
-		s := proto.Size(x.DoNotRetractCluster)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // ReplaceSpecType
 //
 // x-displayName: "Replace TCP Loadbalancer"
 // Shape of the TCP loadbalancer replace specification
 type ReplaceSpecType struct {
-	Domains            []string                                    `protobuf:"bytes,1,rep,name=domains" json:"domains,omitempty"`
-	ListenPort         uint32                                      `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
-	WithSni            bool                                        `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
-	DnsVolterraManaged bool                                        `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
-	OriginPools        []*ves_io_schema_views.ObjectRefType        `protobuf:"bytes,4,rep,name=origin_pools,json=originPools" json:"origin_pools,omitempty"`
-	OriginPoolsWeights []*ves_io_schema_views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights" json:"origin_pools_weights,omitempty"`
+	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
+	WithSni            bool                          `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
+	DnsVolterraManaged bool                          `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
+	OriginPools        []*views.ObjectRefType        `protobuf:"bytes,4,rep,name=origin_pools,json=originPools,proto3" json:"origin_pools,omitempty"`
+	OriginPoolsWeights []*views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights,proto3" json:"origin_pools_weights,omitempty"`
 	// Types that are valid to be assigned to AdvertiseChoice:
 	//	*ReplaceSpecType_DoNotAdvertise
 	//	*ReplaceSpecType_AdvertiseOnPublicDefaultVip
@@ -1106,9 +690,33 @@ type ReplaceSpecType struct {
 	ClusterRetractChoice isReplaceSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_af54a43838ffcca9, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 type isReplaceSpecType_AdvertiseChoice interface {
 	isReplaceSpecType_AdvertiseChoice()
@@ -1130,34 +738,34 @@ type isReplaceSpecType_ClusterRetractChoice interface {
 }
 
 type ReplaceSpecType_DoNotAdvertise struct {
-	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
+	DoNotAdvertise *schema.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,proto3,oneof" json:"do_not_advertise,omitempty"`
 }
 type ReplaceSpecType_AdvertiseOnPublicDefaultVip struct {
-	AdvertiseOnPublicDefaultVip *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,oneof"`
+	AdvertiseOnPublicDefaultVip *schema.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,proto3,oneof" json:"advertise_on_public_default_vip,omitempty"`
 }
 type ReplaceSpecType_AdvertiseOnPublic struct {
-	AdvertiseOnPublic *ves_io_schema_views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,oneof"`
+	AdvertiseOnPublic *views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,proto3,oneof" json:"advertise_on_public,omitempty"`
 }
 type ReplaceSpecType_AdvertiseCustom struct {
-	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
+	AdvertiseCustom *views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,proto3,oneof" json:"advertise_custom,omitempty"`
 }
 type ReplaceSpecType_HashPolicyChoiceRoundRobin struct {
-	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+	HashPolicyChoiceRoundRobin *schema.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,proto3,oneof" json:"hash_policy_choice_round_robin,omitempty"`
 }
 type ReplaceSpecType_HashPolicyChoiceLeastActive struct {
-	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+	HashPolicyChoiceLeastActive *schema.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,proto3,oneof" json:"hash_policy_choice_least_active,omitempty"`
 }
 type ReplaceSpecType_HashPolicyChoiceRandom struct {
-	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+	HashPolicyChoiceRandom *schema.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,proto3,oneof" json:"hash_policy_choice_random,omitempty"`
 }
 type ReplaceSpecType_HashPolicyChoiceSourceIpStickiness struct {
-	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+	HashPolicyChoiceSourceIpStickiness *schema.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,proto3,oneof" json:"hash_policy_choice_source_ip_stickiness,omitempty"`
 }
 type ReplaceSpecType_RetractCluster struct {
-	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+	RetractCluster *schema.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,proto3,oneof" json:"retract_cluster,omitempty"`
 }
 type ReplaceSpecType_DoNotRetractCluster struct {
-	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+	DoNotRetractCluster *schema.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,proto3,oneof" json:"do_not_retract_cluster,omitempty"`
 }
 
 func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()                      {}
@@ -1218,70 +826,70 @@ func (m *ReplaceSpecType) GetDnsVolterraManaged() bool {
 	return false
 }
 
-func (m *ReplaceSpecType) GetOriginPools() []*ves_io_schema_views.ObjectRefType {
+func (m *ReplaceSpecType) GetOriginPools() []*views.ObjectRefType {
 	if m != nil {
 		return m.OriginPools
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetOriginPoolsWeights() []*ves_io_schema_views.OriginPoolWithWeight {
+func (m *ReplaceSpecType) GetOriginPoolsWeights() []*views.OriginPoolWithWeight {
 	if m != nil {
 		return m.OriginPoolsWeights
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDoNotAdvertise() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDoNotAdvertise() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*ReplaceSpecType_DoNotAdvertise); ok {
 		return x.DoNotAdvertise
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAdvertiseOnPublicDefaultVip() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetAdvertiseOnPublicDefaultVip() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*ReplaceSpecType_AdvertiseOnPublicDefaultVip); ok {
 		return x.AdvertiseOnPublicDefaultVip
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAdvertiseOnPublic() *ves_io_schema_views.AdvertisePublic {
+func (m *ReplaceSpecType) GetAdvertiseOnPublic() *views.AdvertisePublic {
 	if x, ok := m.GetAdvertiseChoice().(*ReplaceSpecType_AdvertiseOnPublic); ok {
 		return x.AdvertiseOnPublic
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCustom {
+func (m *ReplaceSpecType) GetAdvertiseCustom() *views.AdvertiseCustom {
 	if x, ok := m.GetAdvertiseChoice().(*ReplaceSpecType_AdvertiseCustom); ok {
 		return x.AdvertiseCustom
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetHashPolicyChoiceRoundRobin() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRoundRobin); ok {
 		return x.HashPolicyChoiceRoundRobin
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetHashPolicyChoiceLeastActive() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceLeastActive); ok {
 		return x.HashPolicyChoiceLeastActive
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetHashPolicyChoiceRandom() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRandom); ok {
 		return x.HashPolicyChoiceRandom
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetHashPolicyChoiceSourceIpStickiness() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness); ok {
 		return x.HashPolicyChoiceSourceIpStickiness
 	}
@@ -1295,23 +903,23 @@ func (m *ReplaceSpecType) GetIdleTimeout() uint32 {
 	return 0
 }
 
-func (m *ReplaceSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*ReplaceSpecType_RetractCluster); ok {
 		return x.RetractCluster
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+func (m *ReplaceSpecType) GetDoNotRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*ReplaceSpecType_DoNotRetractCluster); ok {
 		return x.DoNotRetractCluster
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ReplaceSpecType_DoNotAdvertise)(nil),
 		(*ReplaceSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*ReplaceSpecType_AdvertiseOnPublic)(nil),
@@ -1325,251 +933,17 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 	}
 }
 
-func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ReplaceSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *ReplaceSpecType_DoNotAdvertise:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotAdvertise); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublicDefaultVip); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AdvertiseOnPublic:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublic); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_AdvertiseCustom:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseCustom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.AdvertiseChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_HashPolicyChoiceRandom:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.HashPolicyChoice has unexpected type %T", x)
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *ReplaceSpecType_RetractCluster:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RetractCluster); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DoNotRetractCluster:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ClusterRetractChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ReplaceSpecType)
-	switch tag {
-	case 7: // advertise_choice.do_not_advertise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &ReplaceSpecType_DoNotAdvertise{msg}
-		return true, err
-	case 8: // advertise_choice.advertise_on_public_default_vip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &ReplaceSpecType_AdvertiseOnPublicDefaultVip{msg}
-		return true, err
-	case 5: // advertise_choice.advertise_on_public
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertisePublic)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &ReplaceSpecType_AdvertiseOnPublic{msg}
-		return true, err
-	case 6: // advertise_choice.advertise_custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertiseCustom)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &ReplaceSpecType_AdvertiseCustom{msg}
-		return true, err
-	case 13: // hash_policy_choice.hash_policy_choice_round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRoundRobin{msg}
-		return true, err
-	case 14: // hash_policy_choice.hash_policy_choice_least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceLeastActive{msg}
-		return true, err
-	case 15: // hash_policy_choice.hash_policy_choice_random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRandom{msg}
-		return true, err
-	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{msg}
-		return true, err
-	case 19: // cluster_retract_choice.retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &ReplaceSpecType_RetractCluster{msg}
-		return true, err
-	case 20: // cluster_retract_choice.do_not_retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &ReplaceSpecType_DoNotRetractCluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ReplaceSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *ReplaceSpecType_DoNotAdvertise:
-		s := proto.Size(x.DoNotAdvertise)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
-		s := proto.Size(x.AdvertiseOnPublicDefaultVip)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AdvertiseOnPublic:
-		s := proto.Size(x.AdvertiseOnPublic)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_AdvertiseCustom:
-		s := proto.Size(x.AdvertiseCustom)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
-		s := proto.Size(x.HashPolicyChoiceRoundRobin)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
-		s := proto.Size(x.HashPolicyChoiceLeastActive)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_HashPolicyChoiceRandom:
-		s := proto.Size(x.HashPolicyChoiceRandom)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
-		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *ReplaceSpecType_RetractCluster:
-		s := proto.Size(x.RetractCluster)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DoNotRetractCluster:
-		s := proto.Size(x.DoNotRetractCluster)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // GetSpecType
 //
 // x-displayName: "Get TCP Loadbalancer"
 // Shape of the TCP loadbalancer get specification
 type GetSpecType struct {
-	Domains            []string                                    `protobuf:"bytes,1,rep,name=domains" json:"domains,omitempty"`
-	ListenPort         uint32                                      `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
-	WithSni            bool                                        `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
-	DnsVolterraManaged bool                                        `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
-	OriginPools        []*ves_io_schema_views.ObjectRefType        `protobuf:"bytes,4,rep,name=origin_pools,json=originPools" json:"origin_pools,omitempty"`
-	OriginPoolsWeights []*ves_io_schema_views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights" json:"origin_pools_weights,omitempty"`
+	Domains            []string                      `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	ListenPort         uint32                        `protobuf:"varint,2,opt,name=listen_port,json=listenPort,proto3" json:"listen_port,omitempty"`
+	WithSni            bool                          `protobuf:"varint,3,opt,name=with_sni,json=withSni,proto3" json:"with_sni,omitempty"`
+	DnsVolterraManaged bool                          `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
+	OriginPools        []*views.ObjectRefType        `protobuf:"bytes,4,rep,name=origin_pools,json=originPools,proto3" json:"origin_pools,omitempty"`
+	OriginPoolsWeights []*views.OriginPoolWithWeight `protobuf:"bytes,10,rep,name=origin_pools_weights,json=originPoolsWeights,proto3" json:"origin_pools_weights,omitempty"`
 	// Types that are valid to be assigned to AdvertiseChoice:
 	//	*GetSpecType_DoNotAdvertise
 	//	*GetSpecType_AdvertiseOnPublicDefaultVip
@@ -1586,14 +960,38 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to ClusterRetractChoice:
 	//	*GetSpecType_RetractCluster
 	//	*GetSpecType_DoNotRetractCluster
-	ClusterRetractChoice isGetSpecType_ClusterRetractChoice             `protobuf_oneof:"cluster_retract_choice"`
-	HostName             string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo              []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
+	ClusterRetractChoice isGetSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
+	HostName             string                             `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo              []*virtual_host_dns_info.DnsInfo   `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_af54a43838ffcca9, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 type isGetSpecType_AdvertiseChoice interface {
 	isGetSpecType_AdvertiseChoice()
@@ -1615,34 +1013,34 @@ type isGetSpecType_ClusterRetractChoice interface {
 }
 
 type GetSpecType_DoNotAdvertise struct {
-	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
+	DoNotAdvertise *schema.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,proto3,oneof" json:"do_not_advertise,omitempty"`
 }
 type GetSpecType_AdvertiseOnPublicDefaultVip struct {
-	AdvertiseOnPublicDefaultVip *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,oneof"`
+	AdvertiseOnPublicDefaultVip *schema.Empty `protobuf:"bytes,8,opt,name=advertise_on_public_default_vip,json=advertiseOnPublicDefaultVip,proto3,oneof" json:"advertise_on_public_default_vip,omitempty"`
 }
 type GetSpecType_AdvertiseOnPublic struct {
-	AdvertiseOnPublic *ves_io_schema_views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,oneof"`
+	AdvertiseOnPublic *views.AdvertisePublic `protobuf:"bytes,5,opt,name=advertise_on_public,json=advertiseOnPublic,proto3,oneof" json:"advertise_on_public,omitempty"`
 }
 type GetSpecType_AdvertiseCustom struct {
-	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
+	AdvertiseCustom *views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,proto3,oneof" json:"advertise_custom,omitempty"`
 }
 type GetSpecType_HashPolicyChoiceRoundRobin struct {
-	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+	HashPolicyChoiceRoundRobin *schema.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,proto3,oneof" json:"hash_policy_choice_round_robin,omitempty"`
 }
 type GetSpecType_HashPolicyChoiceLeastActive struct {
-	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+	HashPolicyChoiceLeastActive *schema.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,proto3,oneof" json:"hash_policy_choice_least_active,omitempty"`
 }
 type GetSpecType_HashPolicyChoiceRandom struct {
-	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+	HashPolicyChoiceRandom *schema.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,proto3,oneof" json:"hash_policy_choice_random,omitempty"`
 }
 type GetSpecType_HashPolicyChoiceSourceIpStickiness struct {
-	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+	HashPolicyChoiceSourceIpStickiness *schema.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,proto3,oneof" json:"hash_policy_choice_source_ip_stickiness,omitempty"`
 }
 type GetSpecType_RetractCluster struct {
-	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+	RetractCluster *schema.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,proto3,oneof" json:"retract_cluster,omitempty"`
 }
 type GetSpecType_DoNotRetractCluster struct {
-	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+	DoNotRetractCluster *schema.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,proto3,oneof" json:"do_not_retract_cluster,omitempty"`
 }
 
 func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()                      {}
@@ -1703,70 +1101,70 @@ func (m *GetSpecType) GetDnsVolterraManaged() bool {
 	return false
 }
 
-func (m *GetSpecType) GetOriginPools() []*ves_io_schema_views.ObjectRefType {
+func (m *GetSpecType) GetOriginPools() []*views.ObjectRefType {
 	if m != nil {
 		return m.OriginPools
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetOriginPoolsWeights() []*ves_io_schema_views.OriginPoolWithWeight {
+func (m *GetSpecType) GetOriginPoolsWeights() []*views.OriginPoolWithWeight {
 	if m != nil {
 		return m.OriginPoolsWeights
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDoNotAdvertise() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDoNotAdvertise() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*GetSpecType_DoNotAdvertise); ok {
 		return x.DoNotAdvertise
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAdvertiseOnPublicDefaultVip() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetAdvertiseOnPublicDefaultVip() *schema.Empty {
 	if x, ok := m.GetAdvertiseChoice().(*GetSpecType_AdvertiseOnPublicDefaultVip); ok {
 		return x.AdvertiseOnPublicDefaultVip
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAdvertiseOnPublic() *ves_io_schema_views.AdvertisePublic {
+func (m *GetSpecType) GetAdvertiseOnPublic() *views.AdvertisePublic {
 	if x, ok := m.GetAdvertiseChoice().(*GetSpecType_AdvertiseOnPublic); ok {
 		return x.AdvertiseOnPublic
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCustom {
+func (m *GetSpecType) GetAdvertiseCustom() *views.AdvertiseCustom {
 	if x, ok := m.GetAdvertiseChoice().(*GetSpecType_AdvertiseCustom); ok {
 		return x.AdvertiseCustom
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetHashPolicyChoiceRoundRobin() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRoundRobin); ok {
 		return x.HashPolicyChoiceRoundRobin
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetHashPolicyChoiceLeastActive() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceLeastActive); ok {
 		return x.HashPolicyChoiceLeastActive
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetHashPolicyChoiceRandom() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRandom); ok {
 		return x.HashPolicyChoiceRandom
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetHashPolicyChoiceSourceIpStickiness() *schema.Empty {
 	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceSourceIpStickiness); ok {
 		return x.HashPolicyChoiceSourceIpStickiness
 	}
@@ -1780,14 +1178,14 @@ func (m *GetSpecType) GetIdleTimeout() uint32 {
 	return 0
 }
 
-func (m *GetSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*GetSpecType_RetractCluster); ok {
 		return x.RetractCluster
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+func (m *GetSpecType) GetDoNotRetractCluster() *schema.Empty {
 	if x, ok := m.GetClusterRetractChoice().(*GetSpecType_DoNotRetractCluster); ok {
 		return x.DoNotRetractCluster
 	}
@@ -1801,16 +1199,16 @@ func (m *GetSpecType) GetHostName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetDnsInfo() []*ves_io_schema_virtual_host_dns_info.DnsInfo {
+func (m *GetSpecType) GetDnsInfo() []*virtual_host_dns_info.DnsInfo {
 	if m != nil {
 		return m.DnsInfo
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*GetSpecType_DoNotAdvertise)(nil),
 		(*GetSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*GetSpecType_AdvertiseOnPublic)(nil),
@@ -1824,240 +1222,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 	}
 }
 
-func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GetSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *GetSpecType_DoNotAdvertise:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotAdvertise); err != nil {
-			return err
-		}
-	case *GetSpecType_AdvertiseOnPublicDefaultVip:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublicDefaultVip); err != nil {
-			return err
-		}
-	case *GetSpecType_AdvertiseOnPublic:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseOnPublic); err != nil {
-			return err
-		}
-	case *GetSpecType_AdvertiseCustom:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvertiseCustom); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.AdvertiseChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GetSpecType_HashPolicyChoiceRoundRobin:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
-			return err
-		}
-	case *GetSpecType_HashPolicyChoiceLeastActive:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
-			return err
-		}
-	case *GetSpecType_HashPolicyChoiceRandom:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
-			return err
-		}
-	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.HashPolicyChoice has unexpected type %T", x)
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *GetSpecType_RetractCluster:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RetractCluster); err != nil {
-			return err
-		}
-	case *GetSpecType_DoNotRetractCluster:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ClusterRetractChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GetSpecType)
-	switch tag {
-	case 7: // advertise_choice.do_not_advertise
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GetSpecType_DoNotAdvertise{msg}
-		return true, err
-	case 8: // advertise_choice.advertise_on_public_default_vip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GetSpecType_AdvertiseOnPublicDefaultVip{msg}
-		return true, err
-	case 5: // advertise_choice.advertise_on_public
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertisePublic)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GetSpecType_AdvertiseOnPublic{msg}
-		return true, err
-	case 6: // advertise_choice.advertise_custom
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.AdvertiseCustom)
-		err := b.DecodeMessage(msg)
-		m.AdvertiseChoice = &GetSpecType_AdvertiseCustom{msg}
-		return true, err
-	case 13: // hash_policy_choice.hash_policy_choice_round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRoundRobin{msg}
-		return true, err
-	case 14: // hash_policy_choice.hash_policy_choice_least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceLeastActive{msg}
-		return true, err
-	case 15: // hash_policy_choice.hash_policy_choice_random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRandom{msg}
-		return true, err
-	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{msg}
-		return true, err
-	case 19: // cluster_retract_choice.retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &GetSpecType_RetractCluster{msg}
-		return true, err
-	case 20: // cluster_retract_choice.do_not_retract_cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ClusterRetractChoice = &GetSpecType_DoNotRetractCluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GetSpecType)
-	// advertise_choice
-	switch x := m.AdvertiseChoice.(type) {
-	case *GetSpecType_DoNotAdvertise:
-		s := proto.Size(x.DoNotAdvertise)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AdvertiseOnPublicDefaultVip:
-		s := proto.Size(x.AdvertiseOnPublicDefaultVip)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AdvertiseOnPublic:
-		s := proto.Size(x.AdvertiseOnPublic)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_AdvertiseCustom:
-		s := proto.Size(x.AdvertiseCustom)
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GetSpecType_HashPolicyChoiceRoundRobin:
-		s := proto.Size(x.HashPolicyChoiceRoundRobin)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_HashPolicyChoiceLeastActive:
-		s := proto.Size(x.HashPolicyChoiceLeastActive)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_HashPolicyChoiceRandom:
-		s := proto.Size(x.HashPolicyChoiceRandom)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
-		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// cluster_retract_choice
-	switch x := m.ClusterRetractChoice.(type) {
-	case *GetSpecType_RetractCluster:
-		s := proto.Size(x.RetractCluster)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DoNotRetractCluster:
-		s := proto.Size(x.DoNotRetractCluster)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType")
@@ -2068,6 +1232,101 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/views/tcp_loadbalancer/types.proto", fileDescriptor_af54a43838ffcca9)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/views/tcp_loadbalancer/types.proto", fileDescriptor_af54a43838ffcca9)
+}
+
+var fileDescriptor_af54a43838ffcca9 = []byte{
+	// 1318 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcd, 0x6f, 0x13, 0xc7,
+	0x1b, 0xf6, 0x24, 0x4e, 0xe2, 0x8c, 0xf3, 0x61, 0xc6, 0x51, 0x7e, 0x4b, 0x40, 0x8b, 0x7f, 0x11,
+	0x2d, 0xa1, 0xda, 0xf8, 0x23, 0xe1, 0xa3, 0xa0, 0xaa, 0x15, 0x1b, 0x5a, 0x3e, 0x4a, 0x21, 0xdd,
+	0x50, 0x90, 0x52, 0xa4, 0xd5, 0x78, 0x77, 0x6c, 0x4f, 0x59, 0xef, 0xac, 0x76, 0xc7, 0xa6, 0x39,
+	0x20, 0x55, 0x9c, 0x7a, 0xac, 0x38, 0x95, 0xbf, 0xa0, 0x15, 0x7f, 0x42, 0xb7, 0x87, 0xb4, 0x27,
+	0xd4, 0x93, 0x8f, 0x51, 0x4f, 0xe0, 0x5c, 0xa0, 0x27, 0x8e, 0x15, 0x52, 0xa5, 0x6a, 0x67, 0x1d,
+	0xe3, 0x8f, 0x8d, 0x85, 0xaa, 0xaa, 0x45, 0xd4, 0xb7, 0x99, 0x7d, 0xdf, 0xe7, 0x79, 0xde, 0x99,
+	0xdd, 0x79, 0x5e, 0xaf, 0x17, 0xe6, 0xeb, 0xc4, 0xcb, 0x52, 0x96, 0xf3, 0x8c, 0x0a, 0xa9, 0xe2,
+	0x5c, 0x9d, 0x92, 0x3b, 0x5e, 0x8e, 0x1b, 0x8e, 0x6e, 0x31, 0x6c, 0x16, 0xb1, 0x85, 0x6d, 0x83,
+	0xb8, 0x39, 0xbe, 0xe5, 0x10, 0x2f, 0xeb, 0xb8, 0x8c, 0x33, 0x74, 0x34, 0x44, 0x64, 0x43, 0x44,
+	0x56, 0x20, 0xb2, 0xbd, 0x88, 0x85, 0xe5, 0x32, 0xe5, 0x95, 0x5a, 0x31, 0x6b, 0xb0, 0x6a, 0xae,
+	0xcc, 0xca, 0x2c, 0x27, 0xc0, 0xc5, 0x5a, 0x49, 0xcc, 0xc4, 0x44, 0x8c, 0x42, 0xd2, 0x85, 0x43,
+	0xdd, 0x65, 0x30, 0x87, 0x53, 0x66, 0xb7, 0x14, 0x17, 0x0e, 0x76, 0x07, 0x3b, 0x8a, 0x59, 0x38,
+	0xdc, 0x53, 0x3e, 0xb6, 0xa8, 0x89, 0x39, 0x69, 0x45, 0x33, 0xfd, 0x8b, 0xd3, 0xbb, 0xa9, 0x8f,
+	0x44, 0x2e, 0xbf, 0x43, 0xa0, 0x6f, 0x7f, 0x5c, 0x5e, 0xc3, 0x96, 0x5e, 0x61, 0x1e, 0xd7, 0x4d,
+	0xdb, 0xd3, 0xa9, 0x5d, 0x62, 0x39, 0x56, 0xfc, 0x82, 0x18, 0x3c, 0x44, 0x2c, 0x3e, 0x98, 0x81,
+	0x33, 0x17, 0x2c, 0x56, 0xc4, 0xd6, 0x86, 0x43, 0x8c, 0xeb, 0x5b, 0x0e, 0x41, 0xef, 0xc1, 0x09,
+	0x93, 0x55, 0x31, 0xb5, 0x3d, 0x09, 0x64, 0x46, 0x97, 0x26, 0xd5, 0xc5, 0x1f, 0x9e, 0x6d, 0x8f,
+	0x4e, 0xde, 0x07, 0xe3, 0x8b, 0x71, 0x77, 0xa4, 0x02, 0x82, 0xd9, 0xd8, 0x7d, 0x30, 0x92, 0xca,
+	0xec, 0x8d, 0x24, 0xa0, 0xed, 0x41, 0xd0, 0x11, 0x98, 0xb4, 0xa8, 0xc7, 0x89, 0xad, 0x3b, 0xcc,
+	0xe5, 0xd2, 0x48, 0x06, 0x2c, 0x4d, 0x6b, 0x30, 0xbc, 0xb4, 0xce, 0x5c, 0x8e, 0x0e, 0xc2, 0xc4,
+	0x1d, 0xca, 0x2b, 0xba, 0x67, 0x53, 0x69, 0x34, 0x03, 0x96, 0x12, 0xda, 0x44, 0x30, 0xdf, 0xb0,
+	0x29, 0xca, 0xc3, 0xb9, 0xa0, 0xca, 0x3a, 0xb3, 0x38, 0x71, 0x5d, 0xac, 0x57, 0xb1, 0x8d, 0xcb,
+	0xc4, 0x94, 0x92, 0x22, 0x0d, 0x99, 0xb6, 0x77, 0xa3, 0x15, 0xfa, 0x24, 0x8c, 0x20, 0x07, 0x4e,
+	0x31, 0x97, 0x96, 0x69, 0xa0, 0xc6, 0x2c, 0x4f, 0x8a, 0x67, 0x46, 0x97, 0x92, 0x2b, 0x8b, 0xd9,
+	0xa8, 0xbb, 0x7e, 0x4d, 0xac, 0x5b, 0x23, 0xa5, 0x60, 0x95, 0xea, 0xf1, 0x87, 0x77, 0x93, 0x1d,
+	0xd0, 0x9d, 0xbb, 0xe0, 0xa9, 0x0f, 0x5e, 0xae, 0x2d, 0xd5, 0xb1, 0xb6, 0x56, 0xde, 0x7a, 0xa0,
+	0x80, 0x6a, 0x70, 0xae, 0x53, 0x51, 0xbf, 0x43, 0x68, 0xb9, 0xc2, 0x3d, 0x09, 0x0a, 0xe5, 0xe3,
+	0xd1, 0xca, 0x6d, 0xfc, 0x4d, 0xca, 0x2b, 0x37, 0x05, 0x42, 0x95, 0x1a, 0xfb, 0xe9, 0xa1, 0x0e,
+	0xbd, 0x30, 0xd9, 0x43, 0x1f, 0xc1, 0x94, 0xc9, 0x74, 0x9b, 0x71, 0x1d, 0x9b, 0x75, 0xe2, 0x72,
+	0xea, 0x11, 0x69, 0x22, 0x03, 0x96, 0x92, 0x2b, 0x73, 0x3d, 0x92, 0x1f, 0x56, 0x1d, 0xbe, 0xa5,
+	0xc6, 0xb7, 0x7d, 0x00, 0x2e, 0xc6, 0xb4, 0x19, 0x93, 0x5d, 0x65, 0xfc, 0xdc, 0x1e, 0x06, 0xdd,
+	0x82, 0x47, 0xda, 0x04, 0x3a, 0xb3, 0x75, 0xa7, 0x56, 0xb4, 0xa8, 0xa1, 0x9b, 0xa4, 0x84, 0x6b,
+	0x16, 0xd7, 0xeb, 0xd4, 0x91, 0x12, 0xfb, 0xd3, 0x5e, 0x8c, 0x69, 0x87, 0xda, 0xf0, 0x6b, 0xf6,
+	0xba, 0x00, 0x9f, 0x0f, 0xb1, 0x37, 0xa8, 0x83, 0x6e, 0xc1, 0x74, 0x04, 0xbb, 0x34, 0x26, 0x18,
+	0x8f, 0x46, 0xee, 0x4d, 0xbb, 0xb4, 0x90, 0xac, 0x5d, 0xf8, 0x81, 0x3e, 0x1d, 0x74, 0x13, 0xa6,
+	0x5e, 0xb2, 0x1b, 0x35, 0x8f, 0xb3, 0xaa, 0x34, 0xfe, 0x2a, 0xd4, 0x6b, 0x22, 0x57, 0x8d, 0x37,
+	0x42, 0xea, 0x59, 0xdc, 0x1d, 0x40, 0x9b, 0x50, 0xae, 0x60, 0xaf, 0xa2, 0x3b, 0xcc, 0xa2, 0xc6,
+	0x96, 0x6e, 0x54, 0x18, 0x35, 0x88, 0xee, 0xb2, 0x9a, 0x6d, 0xea, 0x2e, 0x2b, 0x52, 0x5b, 0x9a,
+	0x1e, 0xb0, 0x27, 0x40, 0x5b, 0x08, 0xd0, 0xeb, 0x02, 0xbc, 0x26, 0xb0, 0x5a, 0x00, 0xd5, 0x02,
+	0x64, 0xb0, 0xe1, 0x11, 0xdc, 0x16, 0xc1, 0x1e, 0xd7, 0xb1, 0xc1, 0x69, 0x9d, 0x48, 0x33, 0x03,
+	0xc9, 0x0f, 0xf5, 0x92, 0x5f, 0x09, 0xb0, 0xe7, 0x04, 0x14, 0x7d, 0x0a, 0x0f, 0x46, 0x55, 0x8e,
+	0x6d, 0x93, 0x55, 0xa5, 0xd9, 0x81, 0xbc, 0xf3, 0x7d, 0x45, 0x0b, 0x14, 0xba, 0x0d, 0x8f, 0x45,
+	0x50, 0x7a, 0xac, 0xe6, 0x1a, 0x44, 0xa7, 0x8e, 0xee, 0x71, 0x6a, 0xdc, 0xa6, 0x36, 0xf1, 0x3c,
+	0x29, 0x35, 0x50, 0x60, 0xb1, 0x57, 0x60, 0x43, 0x70, 0x5c, 0x72, 0x36, 0xda, 0x0c, 0x68, 0x0d,
+	0x4e, 0x51, 0xd3, 0x22, 0x3a, 0xa7, 0x55, 0xc2, 0x6a, 0x5c, 0x3a, 0x10, 0xd8, 0x85, 0x9a, 0x09,
+	0x9e, 0x81, 0x5f, 0x7d, 0x30, 0xb6, 0x9a, 0xcf, 0xe7, 0xf3, 0xbf, 0xfb, 0x20, 0xf6, 0xf5, 0x8f,
+	0x20, 0x16, 0x9c, 0x90, 0xf1, 0x77, 0xe2, 0xd2, 0xe3, 0xef, 0x90, 0x96, 0x0c, 0x50, 0xd7, 0x43,
+	0x10, 0xfa, 0x00, 0xce, 0xba, 0x84, 0xbb, 0xd8, 0xe0, 0xba, 0x61, 0xd5, 0x3c, 0x4e, 0x5c, 0x29,
+	0x3d, 0xa0, 0xb2, 0x11, 0x6d, 0xa6, 0x95, 0xbe, 0x16, 0x66, 0xa3, 0x8f, 0xe1, 0x7c, 0xeb, 0x70,
+	0xf5, 0xf2, 0xcc, 0x0d, 0xe4, 0x49, 0x8b, 0xc3, 0xa5, 0x75, 0x93, 0x6d, 0xc2, 0x69, 0x61, 0xdd,
+	0xd4, 0xe6, 0xc4, 0xb5, 0xb1, 0x25, 0x3d, 0x0d, 0xcf, 0xe9, 0xab, 0x98, 0x52, 0xea, 0xe1, 0xdd,
+	0x6e, 0xb0, 0x36, 0x15, 0x4c, 0x2f, 0xb5, 0x66, 0xe8, 0x30, 0x9c, 0x14, 0x5e, 0x6e, 0xe3, 0x2a,
+	0x91, 0x9e, 0x05, 0xbc, 0x93, 0x5a, 0x22, 0xb8, 0x72, 0x15, 0x57, 0x09, 0xba, 0x08, 0x13, 0x7b,
+	0x26, 0x2f, 0xfd, 0x36, 0x21, 0xfc, 0x48, 0xe9, 0x13, 0x8d, 0xe8, 0x08, 0xd9, 0xf3, 0xb6, 0x77,
+	0xc9, 0x2e, 0x31, 0x6d, 0xc2, 0x0c, 0x07, 0x67, 0x2b, 0x3f, 0xfb, 0xc0, 0x84, 0x6f, 0xc3, 0xb4,
+	0x8a, 0x3d, 0x6a, 0x64, 0xd6, 0x98, 0x5d, 0xa2, 0xe5, 0x9a, 0x8b, 0x83, 0x66, 0x84, 0x66, 0x0b,
+	0xca, 0x8a, 0xb2, 0xaa, 0x14, 0x0a, 0x4a, 0x21, 0xaf, 0x9c, 0x51, 0x4e, 0xc0, 0xc3, 0x70, 0xfe,
+	0x0a, 0xc3, 0x66, 0x46, 0x15, 0xed, 0x94, 0xda, 0xe5, 0x00, 0xc0, 0x5d, 0x66, 0xa1, 0x91, 0xc2,
+	0x4a, 0x10, 0x3d, 0x67, 0xd6, 0x83, 0x3e, 0x6b, 0xf6, 0x10, 0x8d, 0x14, 0x4e, 0xab, 0xc7, 0xba,
+	0xce, 0xb4, 0x78, 0x4c, 0x50, 0x7a, 0xdb, 0x07, 0x89, 0x86, 0x0f, 0x26, 0x9b, 0x3e, 0x98, 0x78,
+	0x57, 0x39, 0xa9, 0x9c, 0x56, 0x4e, 0xa9, 0xcb, 0x10, 0xf5, 0x3f, 0x96, 0xe8, 0x7f, 0xdb, 0x3e,
+	0x98, 0x6e, 0xf8, 0x60, 0xaa, 0xe9, 0x83, 0x64, 0x61, 0x55, 0x29, 0x9c, 0x50, 0x0a, 0x27, 0x95,
+	0xc2, 0x29, 0x35, 0x0f, 0xe7, 0x5b, 0xf7, 0xf0, 0xe5, 0x3d, 0x0d, 0x21, 0xf3, 0xdb, 0x3e, 0x48,
+	0x3f, 0xf2, 0x01, 0x68, 0xf8, 0x00, 0x35, 0x7d, 0x30, 0x5e, 0x38, 0xa3, 0x64, 0x56, 0xf2, 0x97,
+	0xe3, 0x89, 0xc9, 0x14, 0xbc, 0x1c, 0x4f, 0x4c, 0xa5, 0xa6, 0x2f, 0xc7, 0x13, 0x28, 0x95, 0x5e,
+	0xfc, 0x09, 0xc2, 0x99, 0x35, 0x97, 0x60, 0x4e, 0xda, 0xbd, 0x51, 0xea, 0xe9, 0x8d, 0xff, 0x56,
+	0xdf, 0xfb, 0xfc, 0x6f, 0xea, 0x42, 0xc3, 0x5e, 0x33, 0xec, 0x35, 0xff, 0x95, 0x5e, 0xf3, 0xff,
+	0xa8, 0x5e, 0xf3, 0x1a, 0x77, 0x92, 0xb3, 0x07, 0x7e, 0x79, 0xbf, 0xe7, 0xb7, 0xb9, 0x7a, 0x26,
+	0xc2, 0x2e, 0xdf, 0xea, 0xb0, 0xcb, 0x31, 0x61, 0x96, 0xf7, 0x5e, 0x80, 0xbe, 0x34, 0x55, 0x89,
+	0x34, 0xd0, 0xf9, 0x7b, 0x2f, 0x40, 0xc4, 0x75, 0xf5, 0xc4, 0xbe, 0xfe, 0xb9, 0x70, 0xef, 0x05,
+	0xd8, 0x27, 0x16, 0xe1, 0xa1, 0x0f, 0x92, 0x70, 0x56, 0x23, 0x8e, 0x85, 0x8d, 0xd7, 0xcf, 0x44,
+	0x3f, 0xfb, 0xcb, 0x2f, 0x0f, 0x33, 0xdd, 0x2f, 0x0f, 0xdd, 0x6f, 0x08, 0x43, 0x6f, 0x1e, 0x7a,
+	0xf3, 0xd0, 0x9b, 0x87, 0xde, 0xfc, 0xda, 0x7b, 0xf3, 0x1f, 0x49, 0x98, 0xbc, 0x40, 0xf8, 0xd0,
+	0x97, 0x87, 0xbe, 0x3c, 0xf4, 0xe5, 0xa1, 0x2f, 0xbf, 0x09, 0xbe, 0xfc, 0x8f, 0xfd, 0x43, 0xf2,
+	0x06, 0xf8, 0xbf, 0xfa, 0x2d, 0x68, 0x3c, 0x91, 0x63, 0x3b, 0x4f, 0xe4, 0xd8, 0xf3, 0x27, 0x32,
+	0xf8, 0xaa, 0x29, 0x83, 0xef, 0x9b, 0x32, 0x78, 0xd4, 0x94, 0x41, 0xa3, 0x29, 0x83, 0x9d, 0xa6,
+	0x0c, 0x1e, 0x37, 0x65, 0xf0, 0xb4, 0x29, 0xc7, 0x9e, 0x37, 0x65, 0xf0, 0xcd, 0xae, 0x1c, 0xdb,
+	0xde, 0x95, 0x41, 0x63, 0x57, 0x8e, 0xed, 0xec, 0xca, 0xb1, 0xcd, 0xcd, 0x32, 0x73, 0x6e, 0x97,
+	0xb3, 0x7b, 0xc6, 0x9e, 0xad, 0x79, 0x39, 0x31, 0x28, 0x31, 0xb7, 0xba, 0xec, 0xb8, 0xac, 0x4e,
+	0x4d, 0xe2, 0x2e, 0xef, 0x85, 0x73, 0x4e, 0xb1, 0xcc, 0x72, 0xe4, 0x4b, 0xde, 0xfa, 0x36, 0x31,
+	0xf0, 0x13, 0x4e, 0x71, 0x5c, 0x7c, 0x9d, 0x58, 0xfd, 0x33, 0x00, 0x00, 0xff, 0xff, 0xf4, 0xce,
+	0x6e, 0x3e, 0xf1, 0x19, 0x00, 0x00,
+}
+
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3836,7 +3095,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -3844,289 +3103,373 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Domains) > 0 {
-		for _, s := range m.Domains {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if len(m.DnsInfo) > 0 {
+		for iNdEx := len(m.DnsInfo) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsInfo[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i--
+			dAtA[i] = 0x3e
+			i--
+			dAtA[i] = 0xd2
 		}
 	}
-	if m.ListenPort != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+	if len(m.HostName) > 0 {
+		i -= len(m.HostName)
+		copy(dAtA[i:], m.HostName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.HostName)))
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
 	}
-	if m.WithSni {
-		dAtA[i] = 0x18
-		i++
-		if m.WithSni {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if len(m.OriginPools) > 0 {
-		for _, msg := range m.OriginPools {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
 	}
-	if m.AdvertiseChoice != nil {
-		nn1, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
-	}
-	if len(m.OriginPoolsWeights) > 0 {
-		for _, msg := range m.OriginPoolsWeights {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.ClusterRetractChoice != nil {
+		{
+			size := m.ClusterRetractChoice.Size()
+			i -= size
+			if _, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
+		}
+	}
+	if m.IdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
+	}
+	if m.HashPolicyChoice != nil {
+		{
+			size := m.HashPolicyChoice.Size()
+			i -= size
+			if _, err := m.HashPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if m.DnsVolterraManaged {
-		dAtA[i] = 0x58
-		i++
+		i--
 		if m.DnsVolterraManaged {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x58
 	}
-	if m.HashPolicyChoice != nil {
-		nn2, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.OriginPoolsWeights) > 0 {
+		for iNdEx := len(m.OriginPoolsWeights) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPoolsWeights[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x52
 		}
-		i += nn2
 	}
-	if m.IdleTimeout != 0 {
-		dAtA[i] = 0x88
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
-	}
-	if m.ClusterRetractChoice != nil {
-		nn3, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn3
-	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n4, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	if len(m.HostName) > 0 {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.HostName)))
-		i += copy(dAtA[i:], m.HostName)
-	}
-	if len(m.DnsInfo) > 0 {
-		for _, msg := range m.DnsInfo {
-			dAtA[i] = 0xd2
-			i++
-			dAtA[i] = 0x3e
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.AdvertiseChoice != nil {
+		{
+			size := m.AdvertiseChoice.Size()
+			i -= size
+			if _, err := m.AdvertiseChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	return i, nil
+	if len(m.OriginPools) > 0 {
+		for iNdEx := len(m.OriginPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.WithSni {
+		i--
+		if m.WithSni {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ListenPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AdvertiseOnPublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublic != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n5, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AdvertiseCustom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseCustom != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n6, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseCustom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DoNotAdvertise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotAdvertise != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n7, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotAdvertise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublicDefaultVip != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n8, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublicDefaultVip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRoundRobin != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n9, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRoundRobin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HashPolicyChoiceLeastActive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceLeastActive != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n10, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceLeastActive.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HashPolicyChoiceRandom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRandom != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n11, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRandom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n11
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n12, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceSourceIpStickiness.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_RetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.RetractCluster != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
-		n13, err := m.RetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.RetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DoNotRetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotRetractCluster != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
-		n14, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotRetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4134,243 +3477,320 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Domains) > 0 {
-		for _, s := range m.Domains {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if m.ListenPort != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
-	}
-	if m.WithSni {
-		dAtA[i] = 0x18
-		i++
-		if m.WithSni {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if m.AdvertiseChoice != nil {
-		nn15, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn15
-	}
-	if len(m.OriginPoolsWeights) > 0 {
-		for _, msg := range m.OriginPoolsWeights {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.ClusterRetractChoice != nil {
+		{
+			size := m.ClusterRetractChoice.Size()
+			i -= size
+			if _, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
+		}
+	}
+	if m.IdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
+	}
+	if m.HashPolicyChoice != nil {
+		{
+			size := m.HashPolicyChoice.Size()
+			i -= size
+			if _, err := m.HashPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if m.DnsVolterraManaged {
-		dAtA[i] = 0x58
-		i++
+		i--
 		if m.DnsVolterraManaged {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x58
 	}
-	if m.HashPolicyChoice != nil {
-		nn16, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.OriginPoolsWeights) > 0 {
+		for iNdEx := len(m.OriginPoolsWeights) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPoolsWeights[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x52
 		}
-		i += nn16
 	}
-	if m.IdleTimeout != 0 {
-		dAtA[i] = 0x88
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
-	}
-	if m.ClusterRetractChoice != nil {
-		nn17, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.AdvertiseChoice != nil {
+		{
+			size := m.AdvertiseChoice.Size()
+			i -= size
+			if _, err := m.AdvertiseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn17
 	}
-	return i, nil
+	if m.WithSni {
+		i--
+		if m.WithSni {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ListenPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AdvertiseOnPublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublic != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n18, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n18
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AdvertiseCustom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseCustom != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n19, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseCustom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n19
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DoNotAdvertise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotAdvertise != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n20, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotAdvertise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n20
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublicDefaultVip != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n21, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublicDefaultVip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n21
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HashPolicyChoiceRoundRobin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRoundRobin != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n22, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRoundRobin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n22
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HashPolicyChoiceLeastActive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceLeastActive != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n23, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceLeastActive.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n23
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HashPolicyChoiceRandom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRandom != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n24, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRandom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n24
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n25, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceSourceIpStickiness.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n25
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_RetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.RetractCluster != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
-		n26, err := m.RetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.RetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n26
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *CreateSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DoNotRetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotRetractCluster != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
-		n27, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotRetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n27
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4378,255 +3798,334 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Domains) > 0 {
-		for _, s := range m.Domains {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if m.ListenPort != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
-	}
-	if m.WithSni {
-		dAtA[i] = 0x18
-		i++
-		if m.WithSni {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if len(m.OriginPools) > 0 {
-		for _, msg := range m.OriginPools {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.ClusterRetractChoice != nil {
+		{
+			size := m.ClusterRetractChoice.Size()
+			i -= size
+			if _, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if m.AdvertiseChoice != nil {
-		nn28, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn28
+	if m.IdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
 	}
-	if len(m.OriginPoolsWeights) > 0 {
-		for _, msg := range m.OriginPoolsWeights {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.HashPolicyChoice != nil {
+		{
+			size := m.HashPolicyChoice.Size()
+			i -= size
+			if _, err := m.HashPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
 	if m.DnsVolterraManaged {
-		dAtA[i] = 0x58
-		i++
+		i--
 		if m.DnsVolterraManaged {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x58
 	}
-	if m.HashPolicyChoice != nil {
-		nn29, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.OriginPoolsWeights) > 0 {
+		for iNdEx := len(m.OriginPoolsWeights) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPoolsWeights[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x52
 		}
-		i += nn29
 	}
-	if m.IdleTimeout != 0 {
-		dAtA[i] = 0x88
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
-	}
-	if m.ClusterRetractChoice != nil {
-		nn30, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if m.AdvertiseChoice != nil {
+		{
+			size := m.AdvertiseChoice.Size()
+			i -= size
+			if _, err := m.AdvertiseChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn30
 	}
-	return i, nil
+	if len(m.OriginPools) > 0 {
+		for iNdEx := len(m.OriginPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.WithSni {
+		i--
+		if m.WithSni {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ListenPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AdvertiseOnPublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublic != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n31, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n31
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AdvertiseCustom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseCustom != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n32, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseCustom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n32
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DoNotAdvertise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotAdvertise != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n33, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotAdvertise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n33
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublicDefaultVip != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n34, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublicDefaultVip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n34
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRoundRobin != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n35, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRoundRobin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n35
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceLeastActive != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n36, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceLeastActive.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n36
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HashPolicyChoiceRandom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRandom != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n37, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRandom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n37
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n38, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceSourceIpStickiness.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n38
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_RetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.RetractCluster != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
-		n39, err := m.RetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.RetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n39
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *ReplaceSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DoNotRetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotRetractCluster != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
-		n40, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotRetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n40
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -4634,283 +4133,370 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Domains) > 0 {
-		for _, s := range m.Domains {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+	if len(m.DnsInfo) > 0 {
+		for iNdEx := len(m.DnsInfo) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsInfo[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i--
+			dAtA[i] = 0x3e
+			i--
+			dAtA[i] = 0xd2
 		}
 	}
-	if m.ListenPort != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+	if len(m.HostName) > 0 {
+		i -= len(m.HostName)
+		copy(dAtA[i:], m.HostName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.HostName)))
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
 	}
-	if m.WithSni {
-		dAtA[i] = 0x18
-		i++
-		if m.WithSni {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if len(m.OriginPools) > 0 {
-		for _, msg := range m.OriginPools {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.ClusterRetractChoice != nil {
+		{
+			size := m.ClusterRetractChoice.Size()
+			i -= size
+			if _, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	if m.AdvertiseChoice != nil {
-		nn41, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn41
+	if m.IdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
 	}
-	if len(m.OriginPoolsWeights) > 0 {
-		for _, msg := range m.OriginPoolsWeights {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.HashPolicyChoice != nil {
+		{
+			size := m.HashPolicyChoice.Size()
+			i -= size
+			if _, err := m.HashPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
 	if m.DnsVolterraManaged {
-		dAtA[i] = 0x58
-		i++
+		i--
 		if m.DnsVolterraManaged {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x58
 	}
-	if m.HashPolicyChoice != nil {
-		nn42, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+	if len(m.OriginPoolsWeights) > 0 {
+		for iNdEx := len(m.OriginPoolsWeights) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPoolsWeights[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x52
 		}
-		i += nn42
 	}
-	if m.IdleTimeout != 0 {
-		dAtA[i] = 0x88
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
-	}
-	if m.ClusterRetractChoice != nil {
-		nn43, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn43
-	}
-	if len(m.HostName) > 0 {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.HostName)))
-		i += copy(dAtA[i:], m.HostName)
-	}
-	if len(m.DnsInfo) > 0 {
-		for _, msg := range m.DnsInfo {
-			dAtA[i] = 0xd2
-			i++
-			dAtA[i] = 0x3e
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
+	if m.AdvertiseChoice != nil {
+		{
+			size := m.AdvertiseChoice.Size()
+			i -= size
+			if _, err := m.AdvertiseChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
-			i += n
 		}
 	}
-	return i, nil
+	if len(m.OriginPools) > 0 {
+		for iNdEx := len(m.OriginPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.WithSni {
+		i--
+		if m.WithSni {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ListenPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ListenPort))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AdvertiseOnPublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublic != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n44, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n44
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AdvertiseCustom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseCustom != nil {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n45, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseCustom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n45
+		i--
+		dAtA[i] = 0x32
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DoNotAdvertise) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotAdvertise != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n46, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotAdvertise.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n46
+		i--
+		dAtA[i] = 0x3a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AdvertiseOnPublicDefaultVip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AdvertiseOnPublicDefaultVip != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n47, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AdvertiseOnPublicDefaultVip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n47
+		i--
+		dAtA[i] = 0x42
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HashPolicyChoiceRoundRobin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRoundRobin != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n48, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRoundRobin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n48
+		i--
+		dAtA[i] = 0x6a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HashPolicyChoiceLeastActive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceLeastActive != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n49, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceLeastActive.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n49
+		i--
+		dAtA[i] = 0x72
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HashPolicyChoiceRandom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceRandom != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n50, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceRandom.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n50
+		i--
+		dAtA[i] = 0x7a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n51, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.HashPolicyChoiceSourceIpStickiness.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n51
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_RetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.RetractCluster != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
-		n52, err := m.RetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.RetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n52
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *GetSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DoNotRetractCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.DoNotRetractCluster != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
-		n53, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.DoNotRetractCluster.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n53
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Domains) > 0 {
@@ -4970,6 +4556,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *GlobalSpecType_AdvertiseOnPublic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublic != nil {
@@ -4979,6 +4568,9 @@ func (m *GlobalSpecType_AdvertiseOnPublic) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AdvertiseCustom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseCustom != nil {
@@ -4988,6 +4580,9 @@ func (m *GlobalSpecType_AdvertiseCustom) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DoNotAdvertise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotAdvertise != nil {
@@ -4997,6 +4592,9 @@ func (m *GlobalSpecType_DoNotAdvertise) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublicDefaultVip != nil {
@@ -5006,6 +4604,9 @@ func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRoundRobin != nil {
@@ -5015,6 +4616,9 @@ func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceLeastActive != nil {
@@ -5024,6 +4628,9 @@ func (m *GlobalSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRandom != nil {
@@ -5033,6 +4640,9 @@ func (m *GlobalSpecType_HashPolicyChoiceRandom) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
@@ -5042,6 +4652,9 @@ func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_RetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RetractCluster != nil {
@@ -5051,6 +4664,9 @@ func (m *GlobalSpecType_RetractCluster) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType_DoNotRetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotRetractCluster != nil {
@@ -5060,6 +4676,9 @@ func (m *GlobalSpecType_DoNotRetractCluster) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Domains) > 0 {
@@ -5099,6 +4718,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType_AdvertiseOnPublic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublic != nil {
@@ -5108,6 +4730,9 @@ func (m *CreateSpecType_AdvertiseOnPublic) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AdvertiseCustom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseCustom != nil {
@@ -5117,6 +4742,9 @@ func (m *CreateSpecType_AdvertiseCustom) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DoNotAdvertise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotAdvertise != nil {
@@ -5126,6 +4754,9 @@ func (m *CreateSpecType_DoNotAdvertise) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublicDefaultVip != nil {
@@ -5135,6 +4766,9 @@ func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRoundRobin != nil {
@@ -5144,6 +4778,9 @@ func (m *CreateSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceLeastActive != nil {
@@ -5153,6 +4790,9 @@ func (m *CreateSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRandom != nil {
@@ -5162,6 +4802,9 @@ func (m *CreateSpecType_HashPolicyChoiceRandom) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
@@ -5171,6 +4814,9 @@ func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_RetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RetractCluster != nil {
@@ -5180,6 +4826,9 @@ func (m *CreateSpecType_RetractCluster) Size() (n int) {
 	return n
 }
 func (m *CreateSpecType_DoNotRetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotRetractCluster != nil {
@@ -5189,6 +4838,9 @@ func (m *CreateSpecType_DoNotRetractCluster) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Domains) > 0 {
@@ -5234,6 +4886,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType_AdvertiseOnPublic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublic != nil {
@@ -5243,6 +4898,9 @@ func (m *ReplaceSpecType_AdvertiseOnPublic) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AdvertiseCustom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseCustom != nil {
@@ -5252,6 +4910,9 @@ func (m *ReplaceSpecType_AdvertiseCustom) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DoNotAdvertise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotAdvertise != nil {
@@ -5261,6 +4922,9 @@ func (m *ReplaceSpecType_DoNotAdvertise) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublicDefaultVip != nil {
@@ -5270,6 +4934,9 @@ func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRoundRobin != nil {
@@ -5279,6 +4946,9 @@ func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceLeastActive != nil {
@@ -5288,6 +4958,9 @@ func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRandom != nil {
@@ -5297,6 +4970,9 @@ func (m *ReplaceSpecType_HashPolicyChoiceRandom) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
@@ -5306,6 +4982,9 @@ func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_RetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RetractCluster != nil {
@@ -5315,6 +4994,9 @@ func (m *ReplaceSpecType_RetractCluster) Size() (n int) {
 	return n
 }
 func (m *ReplaceSpecType_DoNotRetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotRetractCluster != nil {
@@ -5324,6 +5006,9 @@ func (m *ReplaceSpecType_DoNotRetractCluster) Size() (n int) {
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Domains) > 0 {
@@ -5379,6 +5064,9 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType_AdvertiseOnPublic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublic != nil {
@@ -5388,6 +5076,9 @@ func (m *GetSpecType_AdvertiseOnPublic) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AdvertiseCustom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseCustom != nil {
@@ -5397,6 +5088,9 @@ func (m *GetSpecType_AdvertiseCustom) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DoNotAdvertise) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotAdvertise != nil {
@@ -5406,6 +5100,9 @@ func (m *GetSpecType_DoNotAdvertise) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AdvertiseOnPublicDefaultVip != nil {
@@ -5415,6 +5112,9 @@ func (m *GetSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRoundRobin != nil {
@@ -5424,6 +5124,9 @@ func (m *GetSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceLeastActive != nil {
@@ -5433,6 +5136,9 @@ func (m *GetSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceRandom != nil {
@@ -5442,6 +5148,9 @@ func (m *GetSpecType_HashPolicyChoiceRandom) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.HashPolicyChoiceSourceIpStickiness != nil {
@@ -5451,6 +5160,9 @@ func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_RetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.RetractCluster != nil {
@@ -5460,6 +5172,9 @@ func (m *GetSpecType_RetractCluster) Size() (n int) {
 	return n
 }
 func (m *GetSpecType_DoNotRetractCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.DoNotRetractCluster != nil {
@@ -5470,14 +5185,7 @@ func (m *GetSpecType_DoNotRetractCluster) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -5486,20 +5194,35 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOriginPools := "[]*ObjectRefType{"
+	for _, f := range this.OriginPools {
+		repeatedStringForOriginPools += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOriginPools += "}"
+	repeatedStringForOriginPoolsWeights := "[]*OriginPoolWithWeight{"
+	for _, f := range this.OriginPoolsWeights {
+		repeatedStringForOriginPoolsWeights += strings.Replace(fmt.Sprintf("%v", f), "OriginPoolWithWeight", "views.OriginPoolWithWeight", 1) + ","
+	}
+	repeatedStringForOriginPoolsWeights += "}"
+	repeatedStringForDnsInfo := "[]*DnsInfo{"
+	for _, f := range this.DnsInfo {
+		repeatedStringForDnsInfo += strings.Replace(fmt.Sprintf("%v", f), "DnsInfo", "virtual_host_dns_info.DnsInfo", 1) + ","
+	}
+	repeatedStringForDnsInfo += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`ListenPort:` + fmt.Sprintf("%v", this.ListenPort) + `,`,
 		`WithSni:` + fmt.Sprintf("%v", this.WithSni) + `,`,
-		`OriginPools:` + strings.Replace(fmt.Sprintf("%v", this.OriginPools), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`OriginPools:` + repeatedStringForOriginPools + `,`,
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
-		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
+		`OriginPoolsWeights:` + repeatedStringForOriginPoolsWeights + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
-		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
+		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5509,7 +5232,7 @@ func (this *GlobalSpecType_AdvertiseOnPublic) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AdvertiseOnPublic{`,
-		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "ves_io_schema_views.AdvertisePublic", 1) + `,`,
+		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "views.AdvertisePublic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5519,7 +5242,7 @@ func (this *GlobalSpecType_AdvertiseCustom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AdvertiseCustom{`,
-		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "ves_io_schema_views.AdvertiseCustom", 1) + `,`,
+		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "views.AdvertiseCustom", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5529,7 +5252,7 @@ func (this *GlobalSpecType_DoNotAdvertise) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DoNotAdvertise{`,
-		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5539,7 +5262,7 @@ func (this *GlobalSpecType_AdvertiseOnPublicDefaultVip) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AdvertiseOnPublicDefaultVip{`,
-		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5549,7 +5272,7 @@ func (this *GlobalSpecType_HashPolicyChoiceRoundRobin) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceRoundRobin{`,
-		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5559,7 +5282,7 @@ func (this *GlobalSpecType_HashPolicyChoiceLeastActive) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceLeastActive{`,
-		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5569,7 +5292,7 @@ func (this *GlobalSpecType_HashPolicyChoiceRandom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceRandom{`,
-		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5579,7 +5302,7 @@ func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceSourceIpStickiness{`,
-		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5589,7 +5312,7 @@ func (this *GlobalSpecType_RetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_RetractCluster{`,
-		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5599,7 +5322,7 @@ func (this *GlobalSpecType_DoNotRetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DoNotRetractCluster{`,
-		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5608,12 +5331,17 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOriginPoolsWeights := "[]*OriginPoolWithWeight{"
+	for _, f := range this.OriginPoolsWeights {
+		repeatedStringForOriginPoolsWeights += strings.Replace(fmt.Sprintf("%v", f), "OriginPoolWithWeight", "views.OriginPoolWithWeight", 1) + ","
+	}
+	repeatedStringForOriginPoolsWeights += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`ListenPort:` + fmt.Sprintf("%v", this.ListenPort) + `,`,
 		`WithSni:` + fmt.Sprintf("%v", this.WithSni) + `,`,
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
-		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
+		`OriginPoolsWeights:` + repeatedStringForOriginPoolsWeights + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
@@ -5627,7 +5355,7 @@ func (this *CreateSpecType_AdvertiseOnPublic) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AdvertiseOnPublic{`,
-		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "ves_io_schema_views.AdvertisePublic", 1) + `,`,
+		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "views.AdvertisePublic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5637,7 +5365,7 @@ func (this *CreateSpecType_AdvertiseCustom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AdvertiseCustom{`,
-		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "ves_io_schema_views.AdvertiseCustom", 1) + `,`,
+		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "views.AdvertiseCustom", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5647,7 +5375,7 @@ func (this *CreateSpecType_DoNotAdvertise) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DoNotAdvertise{`,
-		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5657,7 +5385,7 @@ func (this *CreateSpecType_AdvertiseOnPublicDefaultVip) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AdvertiseOnPublicDefaultVip{`,
-		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5667,7 +5395,7 @@ func (this *CreateSpecType_HashPolicyChoiceRoundRobin) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceRoundRobin{`,
-		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5677,7 +5405,7 @@ func (this *CreateSpecType_HashPolicyChoiceLeastActive) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceLeastActive{`,
-		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5687,7 +5415,7 @@ func (this *CreateSpecType_HashPolicyChoiceRandom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceRandom{`,
-		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5697,7 +5425,7 @@ func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceSourceIpStickiness{`,
-		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5707,7 +5435,7 @@ func (this *CreateSpecType_RetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_RetractCluster{`,
-		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5717,7 +5445,7 @@ func (this *CreateSpecType_DoNotRetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_DoNotRetractCluster{`,
-		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5726,13 +5454,23 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOriginPools := "[]*ObjectRefType{"
+	for _, f := range this.OriginPools {
+		repeatedStringForOriginPools += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOriginPools += "}"
+	repeatedStringForOriginPoolsWeights := "[]*OriginPoolWithWeight{"
+	for _, f := range this.OriginPoolsWeights {
+		repeatedStringForOriginPoolsWeights += strings.Replace(fmt.Sprintf("%v", f), "OriginPoolWithWeight", "views.OriginPoolWithWeight", 1) + ","
+	}
+	repeatedStringForOriginPoolsWeights += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`ListenPort:` + fmt.Sprintf("%v", this.ListenPort) + `,`,
 		`WithSni:` + fmt.Sprintf("%v", this.WithSni) + `,`,
-		`OriginPools:` + strings.Replace(fmt.Sprintf("%v", this.OriginPools), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`OriginPools:` + repeatedStringForOriginPools + `,`,
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
-		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
+		`OriginPoolsWeights:` + repeatedStringForOriginPoolsWeights + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
@@ -5746,7 +5484,7 @@ func (this *ReplaceSpecType_AdvertiseOnPublic) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AdvertiseOnPublic{`,
-		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "ves_io_schema_views.AdvertisePublic", 1) + `,`,
+		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "views.AdvertisePublic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5756,7 +5494,7 @@ func (this *ReplaceSpecType_AdvertiseCustom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AdvertiseCustom{`,
-		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "ves_io_schema_views.AdvertiseCustom", 1) + `,`,
+		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "views.AdvertiseCustom", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5766,7 +5504,7 @@ func (this *ReplaceSpecType_DoNotAdvertise) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DoNotAdvertise{`,
-		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5776,7 +5514,7 @@ func (this *ReplaceSpecType_AdvertiseOnPublicDefaultVip) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AdvertiseOnPublicDefaultVip{`,
-		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5786,7 +5524,7 @@ func (this *ReplaceSpecType_HashPolicyChoiceRoundRobin) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceRoundRobin{`,
-		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5796,7 +5534,7 @@ func (this *ReplaceSpecType_HashPolicyChoiceLeastActive) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceLeastActive{`,
-		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5806,7 +5544,7 @@ func (this *ReplaceSpecType_HashPolicyChoiceRandom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceRandom{`,
-		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5816,7 +5554,7 @@ func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) String() string 
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{`,
-		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5826,7 +5564,7 @@ func (this *ReplaceSpecType_RetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_RetractCluster{`,
-		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5836,7 +5574,7 @@ func (this *ReplaceSpecType_DoNotRetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_DoNotRetractCluster{`,
-		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5845,19 +5583,34 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForOriginPools := "[]*ObjectRefType{"
+	for _, f := range this.OriginPools {
+		repeatedStringForOriginPools += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForOriginPools += "}"
+	repeatedStringForOriginPoolsWeights := "[]*OriginPoolWithWeight{"
+	for _, f := range this.OriginPoolsWeights {
+		repeatedStringForOriginPoolsWeights += strings.Replace(fmt.Sprintf("%v", f), "OriginPoolWithWeight", "views.OriginPoolWithWeight", 1) + ","
+	}
+	repeatedStringForOriginPoolsWeights += "}"
+	repeatedStringForDnsInfo := "[]*DnsInfo{"
+	for _, f := range this.DnsInfo {
+		repeatedStringForDnsInfo += strings.Replace(fmt.Sprintf("%v", f), "DnsInfo", "virtual_host_dns_info.DnsInfo", 1) + ","
+	}
+	repeatedStringForDnsInfo += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
 		`ListenPort:` + fmt.Sprintf("%v", this.ListenPort) + `,`,
 		`WithSni:` + fmt.Sprintf("%v", this.WithSni) + `,`,
-		`OriginPools:` + strings.Replace(fmt.Sprintf("%v", this.OriginPools), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`OriginPools:` + repeatedStringForOriginPools + `,`,
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
-		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
+		`OriginPoolsWeights:` + repeatedStringForOriginPoolsWeights + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
-		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
+		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5867,7 +5620,7 @@ func (this *GetSpecType_AdvertiseOnPublic) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AdvertiseOnPublic{`,
-		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "ves_io_schema_views.AdvertisePublic", 1) + `,`,
+		`AdvertiseOnPublic:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublic), "AdvertisePublic", "views.AdvertisePublic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5877,7 +5630,7 @@ func (this *GetSpecType_AdvertiseCustom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AdvertiseCustom{`,
-		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "ves_io_schema_views.AdvertiseCustom", 1) + `,`,
+		`AdvertiseCustom:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseCustom), "AdvertiseCustom", "views.AdvertiseCustom", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5887,7 +5640,7 @@ func (this *GetSpecType_DoNotAdvertise) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DoNotAdvertise{`,
-		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotAdvertise:` + strings.Replace(fmt.Sprintf("%v", this.DoNotAdvertise), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5897,7 +5650,7 @@ func (this *GetSpecType_AdvertiseOnPublicDefaultVip) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_AdvertiseOnPublicDefaultVip{`,
-		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5907,7 +5660,7 @@ func (this *GetSpecType_HashPolicyChoiceRoundRobin) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceRoundRobin{`,
-		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5917,7 +5670,7 @@ func (this *GetSpecType_HashPolicyChoiceLeastActive) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceLeastActive{`,
-		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5927,7 +5680,7 @@ func (this *GetSpecType_HashPolicyChoiceRandom) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceRandom{`,
-		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5937,7 +5690,7 @@ func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceSourceIpStickiness{`,
-		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5947,7 +5700,7 @@ func (this *GetSpecType_RetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_RetractCluster{`,
-		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5957,7 +5710,7 @@ func (this *GetSpecType_DoNotRetractCluster) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_DoNotRetractCluster{`,
-		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5985,7 +5738,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6013,7 +5766,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6023,6 +5776,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6042,7 +5798,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ListenPort |= (uint32(b) & 0x7F) << shift
+				m.ListenPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6061,7 +5817,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6081,7 +5837,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6090,10 +5846,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPools = append(m.OriginPools, &ves_io_schema_views.ObjectRefType{})
+			m.OriginPools = append(m.OriginPools, &views.ObjectRefType{})
 			if err := m.OriginPools[len(m.OriginPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6112,7 +5871,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6121,10 +5880,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertisePublic{}
+			v := &views.AdvertisePublic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6144,7 +5906,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6153,10 +5915,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertiseCustom{}
+			v := &views.AdvertiseCustom{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6176,7 +5941,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6185,10 +5950,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6208,7 +5976,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6217,10 +5985,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6240,7 +6011,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6249,10 +6020,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &ves_io_schema_views.OriginPoolWithWeight{})
+			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &views.OriginPoolWithWeight{})
 			if err := m.OriginPoolsWeights[len(m.OriginPoolsWeights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6271,7 +6045,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6291,7 +6065,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6300,10 +6074,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6323,7 +6100,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6332,10 +6109,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6355,7 +6135,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6364,10 +6144,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6387,7 +6170,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6396,10 +6179,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6419,7 +6205,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.IdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6438,7 +6224,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6447,10 +6233,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6470,7 +6259,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6479,10 +6268,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6502,7 +6294,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6511,11 +6303,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+				m.ViewInternal = &views.ObjectRefType{}
 			}
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6535,7 +6330,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6545,6 +6340,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6564,7 +6362,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6573,10 +6371,13 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DnsInfo = append(m.DnsInfo, &ves_io_schema_virtual_host_dns_info.DnsInfo{})
+			m.DnsInfo = append(m.DnsInfo, &virtual_host_dns_info.DnsInfo{})
 			if err := m.DnsInfo[len(m.DnsInfo)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6588,6 +6389,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -6617,7 +6421,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -6645,7 +6449,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6655,6 +6459,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -6674,7 +6481,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ListenPort |= (uint32(b) & 0x7F) << shift
+				m.ListenPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6693,7 +6500,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6713,7 +6520,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6722,10 +6529,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertisePublic{}
+			v := &views.AdvertisePublic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6745,7 +6555,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6754,10 +6564,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertiseCustom{}
+			v := &views.AdvertiseCustom{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6777,7 +6590,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6786,10 +6599,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6809,7 +6625,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6818,10 +6634,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6841,7 +6660,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6850,10 +6669,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &ves_io_schema_views.OriginPoolWithWeight{})
+			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &views.OriginPoolWithWeight{})
 			if err := m.OriginPoolsWeights[len(m.OriginPoolsWeights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6872,7 +6694,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6892,7 +6714,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6901,10 +6723,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6924,7 +6749,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6933,10 +6758,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6956,7 +6784,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6965,10 +6793,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6988,7 +6819,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -6997,10 +6828,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7020,7 +6854,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.IdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7039,7 +6873,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7048,10 +6882,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7071,7 +6908,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7080,10 +6917,13 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7096,6 +6936,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7125,7 +6968,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7153,7 +6996,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7163,6 +7006,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7182,7 +7028,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ListenPort |= (uint32(b) & 0x7F) << shift
+				m.ListenPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7201,7 +7047,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7221,7 +7067,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7230,10 +7076,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPools = append(m.OriginPools, &ves_io_schema_views.ObjectRefType{})
+			m.OriginPools = append(m.OriginPools, &views.ObjectRefType{})
 			if err := m.OriginPools[len(m.OriginPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7252,7 +7101,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7261,10 +7110,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertisePublic{}
+			v := &views.AdvertisePublic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7284,7 +7136,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7293,10 +7145,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertiseCustom{}
+			v := &views.AdvertiseCustom{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7316,7 +7171,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7325,10 +7180,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7348,7 +7206,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7357,10 +7215,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7380,7 +7241,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7389,10 +7250,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &ves_io_schema_views.OriginPoolWithWeight{})
+			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &views.OriginPoolWithWeight{})
 			if err := m.OriginPoolsWeights[len(m.OriginPoolsWeights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7411,7 +7275,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7431,7 +7295,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7440,10 +7304,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7463,7 +7330,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7472,10 +7339,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7495,7 +7365,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7504,10 +7374,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7527,7 +7400,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7536,10 +7409,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7559,7 +7435,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.IdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7578,7 +7454,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7587,10 +7463,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7610,7 +7489,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7619,10 +7498,13 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7635,6 +7517,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -7664,7 +7549,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -7692,7 +7577,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7702,6 +7587,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -7721,7 +7609,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.ListenPort |= (uint32(b) & 0x7F) << shift
+				m.ListenPort |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7740,7 +7628,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7760,7 +7648,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7769,10 +7657,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPools = append(m.OriginPools, &ves_io_schema_views.ObjectRefType{})
+			m.OriginPools = append(m.OriginPools, &views.ObjectRefType{})
 			if err := m.OriginPools[len(m.OriginPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7791,7 +7682,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7800,10 +7691,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertisePublic{}
+			v := &views.AdvertisePublic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7823,7 +7717,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7832,10 +7726,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema_views.AdvertiseCustom{}
+			v := &views.AdvertiseCustom{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7855,7 +7752,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7864,10 +7761,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7887,7 +7787,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7896,10 +7796,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7919,7 +7822,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7928,10 +7831,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &ves_io_schema_views.OriginPoolWithWeight{})
+			m.OriginPoolsWeights = append(m.OriginPoolsWeights, &views.OriginPoolWithWeight{})
 			if err := m.OriginPoolsWeights[len(m.OriginPoolsWeights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7950,7 +7856,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7970,7 +7876,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -7979,10 +7885,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8002,7 +7911,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8011,10 +7920,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8034,7 +7946,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8043,10 +7955,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8066,7 +7981,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8075,10 +7990,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8098,7 +8016,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				m.IdleTimeout |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8117,7 +8035,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8126,10 +8044,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8149,7 +8070,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8158,10 +8079,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8181,7 +8105,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8191,6 +8115,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -8210,7 +8137,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -8219,10 +8146,13 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DnsInfo = append(m.DnsInfo, &ves_io_schema_virtual_host_dns_info.DnsInfo{})
+			m.DnsInfo = append(m.DnsInfo, &virtual_host_dns_info.DnsInfo{})
 			if err := m.DnsInfo[len(m.DnsInfo)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8234,6 +8164,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -8251,6 +8184,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -8282,10 +8216,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -8302,147 +8234,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/views/tcp_loadbalancer/types.proto", fileDescriptorTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/views/tcp_loadbalancer/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 1315 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcd, 0x6f, 0x13, 0x47,
-	0x1b, 0xf7, 0x24, 0x4e, 0xe2, 0x8c, 0x13, 0xc7, 0x8c, 0xa3, 0xbc, 0x4b, 0x40, 0x8b, 0xdf, 0x88,
-	0xf7, 0x25, 0x54, 0x1b, 0x7f, 0x24, 0x7c, 0x14, 0x54, 0xb5, 0x62, 0x43, 0xcb, 0x47, 0x29, 0xa4,
-	0x1b, 0x0a, 0x52, 0x8a, 0xb4, 0x1a, 0xef, 0x8e, 0xed, 0x29, 0xeb, 0x9d, 0xd5, 0xee, 0xd8, 0x34,
-	0x07, 0xa4, 0x8a, 0x53, 0x8f, 0x88, 0x1b, 0x7f, 0x41, 0x2b, 0xfe, 0x84, 0x6e, 0x0f, 0x69, 0x4f,
-	0xa8, 0x27, 0x1f, 0x51, 0x4f, 0x60, 0x2e, 0xd0, 0x13, 0xc7, 0x0a, 0xa9, 0x52, 0xb5, 0xb3, 0x8e,
-	0xf1, 0xc7, 0xc6, 0x42, 0x15, 0x54, 0x2d, 0xf2, 0x6d, 0x66, 0x9f, 0xe7, 0xf7, 0x7b, 0x9e, 0xd9,
-	0x67, 0xe6, 0xf7, 0x78, 0x3d, 0xb0, 0xd0, 0x20, 0x5e, 0x8e, 0xb2, 0xbc, 0x67, 0x54, 0x49, 0x0d,
-	0xe7, 0x1b, 0x94, 0xdc, 0xf2, 0xf2, 0xdc, 0x70, 0x74, 0x8b, 0x61, 0xb3, 0x84, 0x2d, 0x6c, 0x1b,
-	0xc4, 0xcd, 0xf3, 0x6d, 0x87, 0x78, 0x39, 0xc7, 0x65, 0x9c, 0xa1, 0xc3, 0x21, 0x22, 0x17, 0x22,
-	0x72, 0x02, 0x91, 0xeb, 0x47, 0x2c, 0xae, 0x54, 0x28, 0xaf, 0xd6, 0x4b, 0x39, 0x83, 0xd5, 0xf2,
-	0x15, 0x56, 0x61, 0x79, 0x01, 0x2e, 0xd5, 0xcb, 0x62, 0x26, 0x26, 0x62, 0x14, 0x92, 0x2e, 0x1e,
-	0xe8, 0x4d, 0x83, 0x39, 0x9c, 0x32, 0xbb, 0x1d, 0x71, 0x71, 0x7f, 0xaf, 0xb1, 0x2b, 0x99, 0xc5,
-	0x83, 0x7d, 0xe9, 0x63, 0x8b, 0x9a, 0x98, 0x93, 0xb6, 0x35, 0x3b, 0xb8, 0x38, 0xbd, 0x97, 0xfa,
-	0x50, 0xe4, 0xf2, 0xbb, 0x02, 0x0c, 0xbc, 0x1f, 0x97, 0xd7, 0xb1, 0xa5, 0x57, 0x99, 0xc7, 0x75,
-	0xd3, 0xf6, 0x74, 0x6a, 0x97, 0x59, 0x9e, 0x95, 0xbe, 0x22, 0x06, 0x0f, 0x11, 0x4b, 0xf7, 0x53,
-	0x30, 0x75, 0xce, 0x62, 0x25, 0x6c, 0x6d, 0x3a, 0xc4, 0xb8, 0xba, 0xed, 0x10, 0xf4, 0x01, 0x9c,
-	0x32, 0x59, 0x0d, 0x53, 0xdb, 0x93, 0x40, 0x76, 0x7c, 0x79, 0x5a, 0x5d, 0xfa, 0xe1, 0xf9, 0xce,
-	0xf8, 0xf4, 0x3d, 0x30, 0xb9, 0x14, 0x77, 0xc7, 0xaa, 0x20, 0x98, 0x4d, 0xdc, 0x03, 0x63, 0xe9,
-	0xec, 0xee, 0x48, 0x02, 0xda, 0x2e, 0x04, 0x1d, 0x82, 0x49, 0x8b, 0x7a, 0x9c, 0xd8, 0xba, 0xc3,
-	0x5c, 0x2e, 0x8d, 0x65, 0xc1, 0xf2, 0xac, 0x06, 0xc3, 0x47, 0x1b, 0xcc, 0xe5, 0x68, 0x3f, 0x4c,
-	0xdc, 0xa2, 0xbc, 0xaa, 0x7b, 0x36, 0x95, 0xc6, 0xb3, 0x60, 0x39, 0xa1, 0x4d, 0x05, 0xf3, 0x4d,
-	0x9b, 0x22, 0x07, 0xce, 0x30, 0x97, 0x56, 0x68, 0x80, 0x65, 0x96, 0x27, 0xc5, 0xb3, 0xe3, 0xcb,
-	0xc9, 0xd5, 0xa5, 0x5c, 0x54, 0x0d, 0xaf, 0x88, 0x55, 0x68, 0xa4, 0x1c, 0xe4, 0xac, 0x1e, 0x7d,
-	0x70, 0x3b, 0xd9, 0x05, 0x7d, 0x74, 0x1b, 0x3c, 0xf3, 0xc1, 0xab, 0x4c, 0xd3, 0x5d, 0x99, 0xb6,
-	0xfd, 0x36, 0x82, 0x08, 0xe8, 0x06, 0xcc, 0x60, 0xb3, 0x41, 0x5c, 0x4e, 0x3d, 0xa2, 0x33, 0x5b,
-	0x77, 0xea, 0x25, 0x8b, 0x1a, 0xd2, 0x44, 0x16, 0x2c, 0x27, 0x57, 0x0f, 0x47, 0x06, 0x3e, 0xb3,
-	0xeb, 0xbf, 0x21, 0x7c, 0xd5, 0xf8, 0x8e, 0x0f, 0xc0, 0xf9, 0x98, 0xb6, 0xaf, 0x43, 0x74, 0xc5,
-	0x0e, 0x4d, 0xe8, 0x3a, 0x4c, 0xbf, 0x62, 0x37, 0xea, 0x1e, 0x67, 0x35, 0x69, 0xf2, 0x75, 0xa8,
-	0xd7, 0x85, 0xaf, 0x1a, 0x6f, 0x86, 0xd4, 0x73, 0xb8, 0xd7, 0x80, 0x3e, 0x81, 0x69, 0x93, 0xe9,
-	0x36, 0xe3, 0x7a, 0xc7, 0x22, 0x4d, 0x09, 0xe2, 0xf9, 0x3e, 0xe2, 0x8f, 0x6b, 0x0e, 0xdf, 0xee,
-	0xe4, 0x98, 0x32, 0xd9, 0x65, 0xc6, 0x3b, 0x61, 0xd0, 0x0d, 0x78, 0x28, 0x62, 0xf9, 0xba, 0x49,
-	0xca, 0xb8, 0x6e, 0x71, 0xbd, 0x41, 0x1d, 0x29, 0xb1, 0x37, 0xed, 0xf9, 0x98, 0x76, 0x60, 0x60,
-	0xd1, 0x67, 0x43, 0xec, 0x35, 0xea, 0xa0, 0x3a, 0x9c, 0xef, 0x2e, 0xa7, 0x7e, 0x8b, 0xd0, 0x4a,
-	0x95, 0x7b, 0x12, 0x14, 0x65, 0x3d, 0x1a, 0x5d, 0xd6, 0x4e, 0x71, 0xae, 0x53, 0x5e, 0xbd, 0x2e,
-	0x10, 0xaa, 0xd4, 0xdc, 0xab, 0x98, 0xa8, 0xab, 0x98, 0xa1, 0xb3, 0x87, 0x0a, 0x70, 0x3e, 0xd8,
-	0xeb, 0x0d, 0x66, 0x71, 0xe2, 0xba, 0x58, 0xaf, 0x61, 0x1b, 0x57, 0x88, 0x29, 0x25, 0xc5, 0x66,
-	0x43, 0xa6, 0xed, 0x5d, 0x6b, 0x9b, 0x3e, 0x0b, 0x2d, 0x68, 0x0b, 0xca, 0x55, 0xec, 0x55, 0x75,
-	0x87, 0x59, 0xd4, 0xd8, 0xd6, 0x8d, 0x2a, 0xa3, 0x06, 0xd1, 0x5d, 0x56, 0xb7, 0x4d, 0xdd, 0x65,
-	0x25, 0x6a, 0x4b, 0xb3, 0x43, 0xde, 0x02, 0xd0, 0x16, 0x03, 0xf4, 0x86, 0x00, 0xaf, 0x0b, 0xac,
-	0x16, 0x40, 0xb5, 0x00, 0x19, 0xbc, 0xe2, 0x08, 0x6e, 0x8b, 0x60, 0x8f, 0xeb, 0xd8, 0xe0, 0xb4,
-	0x41, 0xa4, 0xd4, 0x50, 0xf2, 0x03, 0xfd, 0xe4, 0x97, 0x02, 0xec, 0x19, 0x01, 0x45, 0x9f, 0xc3,
-	0xfd, 0x51, 0x99, 0x63, 0xdb, 0x64, 0x35, 0x69, 0x6e, 0x28, 0xef, 0xc2, 0x40, 0xd2, 0x02, 0x85,
-	0x6e, 0xc2, 0x23, 0x11, 0x94, 0x1e, 0xab, 0xbb, 0x06, 0xd1, 0xa9, 0xa3, 0x7b, 0x9c, 0x1a, 0x37,
-	0xa9, 0x4d, 0x3c, 0x4f, 0x4a, 0x0f, 0x0d, 0xb0, 0xd4, 0x1f, 0x60, 0x53, 0x70, 0x5c, 0x70, 0x36,
-	0x3b, 0x0c, 0x68, 0x1d, 0xce, 0x50, 0xd3, 0x22, 0x3a, 0xa7, 0x35, 0xc2, 0xea, 0x5c, 0xda, 0x17,
-	0xc8, 0x85, 0x9a, 0x0d, 0xb6, 0xeb, 0xaf, 0x3e, 0x98, 0x58, 0x2b, 0x14, 0x0a, 0x85, 0xdf, 0x7d,
-	0x10, 0xfb, 0xf6, 0x47, 0x10, 0x0b, 0xca, 0x3e, 0xf9, 0x5e, 0x5c, 0x7a, 0xfc, 0x1d, 0xd2, 0x92,
-	0x01, 0xea, 0x6a, 0x08, 0x42, 0x1f, 0xc1, 0x39, 0x97, 0x70, 0x17, 0x1b, 0x5c, 0x37, 0xac, 0xba,
-	0xc7, 0x89, 0x2b, 0x65, 0x86, 0x64, 0x36, 0xa6, 0xa5, 0xda, 0xee, 0xeb, 0xa1, 0x37, 0xfa, 0x14,
-	0x2e, 0xb4, 0x8f, 0x53, 0x3f, 0xcf, 0xfc, 0x50, 0x9e, 0x8c, 0x38, 0x4e, 0x5a, 0x2f, 0xd9, 0x16,
-	0x9c, 0x15, 0xd2, 0x4d, 0x6d, 0x4e, 0x5c, 0x1b, 0x5b, 0xd2, 0xb3, 0xf0, 0x64, 0xbe, 0x8e, 0x8c,
-	0xa5, 0x1f, 0xdc, 0xee, 0x05, 0x6b, 0x33, 0xc1, 0xf4, 0x42, 0x7b, 0x86, 0x0e, 0xc2, 0x69, 0xa1,
-	0xe5, 0x36, 0xae, 0x11, 0xe9, 0x79, 0xc0, 0x3b, 0xad, 0x25, 0x82, 0x27, 0x97, 0x71, 0x8d, 0xa0,
-	0xf3, 0x30, 0xb1, 0x2b, 0xf2, 0xd2, 0x6f, 0x53, 0xe2, 0x90, 0x29, 0x03, 0x41, 0x23, 0x3a, 0x42,
-	0xee, 0xac, 0xed, 0x5d, 0xb0, 0xcb, 0x4c, 0x9b, 0x32, 0xc3, 0xc1, 0xe9, 0xea, 0xcf, 0x3e, 0x30,
-	0xe1, 0xff, 0x61, 0x46, 0xc5, 0x1e, 0x35, 0xb2, 0xeb, 0xcc, 0x2e, 0xd3, 0x4a, 0xdd, 0xc5, 0x41,
-	0x33, 0x42, 0x73, 0x45, 0x65, 0x55, 0x59, 0x53, 0x8a, 0x45, 0xa5, 0x58, 0x50, 0x4e, 0x29, 0xc7,
-	0xe0, 0x41, 0xb8, 0x70, 0x89, 0x61, 0x33, 0xab, 0x8a, 0x76, 0x4a, 0xed, 0x4a, 0x00, 0xe0, 0x2e,
-	0xb3, 0xd0, 0x58, 0x71, 0x35, 0xb0, 0x9e, 0x31, 0x1b, 0x41, 0x9f, 0x35, 0xfb, 0x88, 0xc6, 0x8a,
-	0x27, 0xd5, 0x23, 0x3d, 0x12, 0x29, 0xb6, 0x09, 0xca, 0xec, 0xf8, 0x20, 0xd1, 0xf4, 0xc1, 0x74,
-	0xcb, 0x07, 0x53, 0xef, 0x2b, 0xc7, 0x95, 0x93, 0xca, 0x09, 0x75, 0x05, 0xa2, 0xc1, 0x6d, 0x89,
-	0xfe, 0xb3, 0xe3, 0x83, 0xd9, 0xa6, 0x0f, 0x66, 0x5a, 0x3e, 0x48, 0x16, 0xd7, 0x94, 0xe2, 0x31,
-	0xa5, 0x78, 0x5c, 0x29, 0x9e, 0x50, 0x0b, 0x70, 0xa1, 0x5d, 0xc3, 0x57, 0x35, 0x0d, 0x21, 0x0b,
-	0x3b, 0x3e, 0xc8, 0x3c, 0xf4, 0x01, 0x68, 0xfa, 0x00, 0xb5, 0x7c, 0x30, 0x59, 0x3c, 0xa5, 0x64,
-	0x57, 0x0b, 0x17, 0xe3, 0x89, 0xe9, 0x34, 0xbc, 0x18, 0x4f, 0xcc, 0xa4, 0x67, 0x2f, 0xc6, 0x13,
-	0x28, 0x9d, 0x59, 0xfa, 0x09, 0xc2, 0xd4, 0xba, 0x4b, 0x30, 0x27, 0x9d, 0xde, 0x28, 0xf5, 0xf5,
-	0xc6, 0x37, 0xd3, 0xf7, 0x46, 0x5d, 0xe8, 0x2d, 0x76, 0xa1, 0x2f, 0xdf, 0x50, 0x17, 0x1a, 0xf5,
-	0x9a, 0x7f, 0x79, 0xaf, 0xf9, 0x6f, 0x54, 0xaf, 0xf9, 0x07, 0x77, 0x92, 0xd3, 0xfb, 0x7e, 0xf9,
-	0xb0, 0xef, 0xb7, 0xb9, 0x7a, 0x2a, 0x42, 0x2e, 0xff, 0xd7, 0x25, 0x97, 0x13, 0x42, 0x2c, 0xef,
-	0xbc, 0x04, 0x03, 0x6e, 0xaa, 0x12, 0x29, 0xa0, 0x0b, 0x77, 0x5e, 0x82, 0x88, 0xe7, 0xea, 0xb1,
-	0x3d, 0xf5, 0x73, 0xf1, 0xce, 0x4b, 0xb0, 0x87, 0x2d, 0x42, 0x43, 0xef, 0x27, 0xe1, 0x9c, 0x46,
-	0x1c, 0x0b, 0x1b, 0x6f, 0x5b, 0x44, 0xbf, 0xf8, 0xcb, 0x1f, 0x0f, 0xa9, 0xde, 0x8f, 0x87, 0xd1,
-	0x17, 0xc2, 0x48, 0x9b, 0x47, 0xda, 0x3c, 0xd2, 0xe6, 0x77, 0x5e, 0x9b, 0xff, 0x48, 0xc2, 0xe4,
-	0x39, 0xc2, 0x47, 0xba, 0x3c, 0xd2, 0xe5, 0x91, 0x2e, 0x8f, 0x74, 0xf9, 0x5d, 0xd0, 0xe5, 0xbf,
-	0xed, 0x1f, 0x92, 0x77, 0x40, 0xff, 0xd5, 0xbb, 0xa0, 0xf9, 0x44, 0x8e, 0x3d, 0x7a, 0x22, 0xc7,
-	0x5e, 0x3c, 0x91, 0xc1, 0x37, 0x2d, 0x19, 0x7c, 0xdf, 0x92, 0xc1, 0xc3, 0x96, 0x0c, 0x9a, 0x2d,
-	0x19, 0x3c, 0x6a, 0xc9, 0xe0, 0x71, 0x4b, 0x06, 0xcf, 0x5a, 0x72, 0xec, 0x45, 0x4b, 0x06, 0x77,
-	0x9f, 0xca, 0xb1, 0x9d, 0xa7, 0x32, 0xd8, 0xda, 0xaa, 0x30, 0xe7, 0x66, 0x25, 0xb7, 0x7b, 0x7e,
-	0x73, 0x75, 0x2f, 0x2f, 0x06, 0x65, 0xe6, 0xd6, 0x56, 0x1c, 0x97, 0x35, 0xa8, 0x49, 0xdc, 0x95,
-	0x5d, 0x73, 0xde, 0x29, 0x55, 0x58, 0x9e, 0x7c, 0xcd, 0xdb, 0x77, 0x12, 0x43, 0xaf, 0x6e, 0x4a,
-	0x93, 0xe2, 0x56, 0x62, 0xed, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x32, 0xe7, 0x4e, 0xcc, 0xe9,
-	0x19, 0x00, 0x00,
-}

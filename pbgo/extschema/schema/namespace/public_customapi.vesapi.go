@@ -557,7 +557,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceEvaluateAPIAccessResp"
                         }
@@ -641,7 +641,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceUpdateAllowAdvertiseOnPublicResp"
                         }
@@ -725,7 +725,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.namespace.CustomAPI.CascadeDelete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/namespaceCascadeDeleteResponse"
                         }
@@ -782,9 +782,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"value\"\nThe name of the namespace",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

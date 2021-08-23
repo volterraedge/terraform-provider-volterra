@@ -712,7 +712,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/wafRuleHitsCountResponse"
                         }
@@ -769,9 +769,11 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nnamespace is used to scope the WAF rule hits for the given namespace.\nx-example: \"bloggin-app-namespace-1\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -802,7 +804,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/wafSecurityEventsCountResponse"
                         }
@@ -859,9 +861,11 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"bloggin-app-namespace-1\"\nnamespace is used to scope the WAF security events for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -892,7 +896,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/wafRuleHitsCountResponse"
                         }
@@ -949,9 +953,11 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nnamespace is used to scope the WAF rule hits for the given namespace.\nx-example: \"bloggin-app-namespace-1\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -982,7 +988,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/wafSecurityEventsCountResponse"
                         }
@@ -1039,9 +1045,11 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"bloggin-app-namespace-1\"\nnamespace is used to scope the WAF security events for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",

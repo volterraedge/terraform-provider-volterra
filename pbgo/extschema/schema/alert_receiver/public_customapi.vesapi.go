@@ -559,7 +559,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/alert_receiverConfirmAlertReceiverResponse"
                         }
@@ -616,15 +616,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"ns1\"\nNamespace in which the alert receiver is configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"email1\"\nName of the alert receiver",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -655,7 +659,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/alert_receiverTestAlertReceiverResponse"
                         }
@@ -712,15 +716,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"ns1\"\nNamespace in which the alert receiver is configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"slack1\"\nName of the alert receiver",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -751,7 +759,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/alert_receiverVerifyAlertReceiverResponse"
                         }
@@ -808,15 +816,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"ns1\"\nNamespace in which the alert receiver is configured",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"email1\"\nName of the alert receiver",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",

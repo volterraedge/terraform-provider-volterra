@@ -3,27 +3,31 @@
 
 package k8s_cluster_role_binding
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type ServiceAccountType struct {
 	// Namespace
@@ -42,9 +46,33 @@ type ServiceAccountType struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
-func (m *ServiceAccountType) Reset()                    { *m = ServiceAccountType{} }
-func (*ServiceAccountType) ProtoMessage()               {}
-func (*ServiceAccountType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *ServiceAccountType) Reset()      { *m = ServiceAccountType{} }
+func (*ServiceAccountType) ProtoMessage() {}
+func (*ServiceAccountType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{0}
+}
+func (m *ServiceAccountType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceAccountType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ServiceAccountType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceAccountType.Merge(m, src)
+}
+func (m *ServiceAccountType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceAccountType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceAccountType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceAccountType proto.InternalMessageInfo
 
 func (m *ServiceAccountType) GetNamespace() string {
 	if m != nil {
@@ -78,9 +106,33 @@ type SubjectType struct {
 	SubjectChoice isSubjectType_SubjectChoice `protobuf_oneof:"subject_choice"`
 }
 
-func (m *SubjectType) Reset()                    { *m = SubjectType{} }
-func (*SubjectType) ProtoMessage()               {}
-func (*SubjectType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *SubjectType) Reset()      { *m = SubjectType{} }
+func (*SubjectType) ProtoMessage() {}
+func (*SubjectType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{1}
+}
+func (m *SubjectType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SubjectType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SubjectType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SubjectType.Merge(m, src)
+}
+func (m *SubjectType) XXX_Size() int {
+	return m.Size()
+}
+func (m *SubjectType) XXX_DiscardUnknown() {
+	xxx_messageInfo_SubjectType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SubjectType proto.InternalMessageInfo
 
 type isSubjectType_SubjectChoice interface {
 	isSubjectType_SubjectChoice()
@@ -90,13 +142,13 @@ type isSubjectType_SubjectChoice interface {
 }
 
 type SubjectType_User struct {
-	User string `protobuf:"bytes,2,opt,name=user,proto3,oneof"`
+	User string `protobuf:"bytes,2,opt,name=user,proto3,oneof" json:"user,omitempty"`
 }
 type SubjectType_ServiceAccount struct {
-	ServiceAccount *ServiceAccountType `protobuf:"bytes,3,opt,name=service_account,json=serviceAccount,oneof"`
+	ServiceAccount *ServiceAccountType `protobuf:"bytes,3,opt,name=service_account,json=serviceAccount,proto3,oneof" json:"service_account,omitempty"`
 }
 type SubjectType_Group struct {
-	Group string `protobuf:"bytes,4,opt,name=group,proto3,oneof"`
+	Group string `protobuf:"bytes,4,opt,name=group,proto3,oneof" json:"group,omitempty"`
 }
 
 func (*SubjectType_User) isSubjectType_SubjectChoice()           {}
@@ -131,89 +183,13 @@ func (m *SubjectType) GetGroup() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*SubjectType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SubjectType_OneofMarshaler, _SubjectType_OneofUnmarshaler, _SubjectType_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SubjectType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*SubjectType_User)(nil),
 		(*SubjectType_ServiceAccount)(nil),
 		(*SubjectType_Group)(nil),
 	}
-}
-
-func _SubjectType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SubjectType)
-	// subject_choice
-	switch x := m.SubjectChoice.(type) {
-	case *SubjectType_User:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.User)
-	case *SubjectType_ServiceAccount:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServiceAccount); err != nil {
-			return err
-		}
-	case *SubjectType_Group:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Group)
-	case nil:
-	default:
-		return fmt.Errorf("SubjectType.SubjectChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _SubjectType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SubjectType)
-	switch tag {
-	case 2: // subject_choice.user
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.SubjectChoice = &SubjectType_User{x}
-		return true, err
-	case 3: // subject_choice.service_account
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ServiceAccountType)
-		err := b.DecodeMessage(msg)
-		m.SubjectChoice = &SubjectType_ServiceAccount{msg}
-		return true, err
-	case 4: // subject_choice.group
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.SubjectChoice = &SubjectType_Group{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _SubjectType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SubjectType)
-	// subject_choice
-	switch x := m.SubjectChoice.(type) {
-	case *SubjectType_User:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.User)))
-		n += len(x.User)
-	case *SubjectType_ServiceAccount:
-		s := proto.Size(x.ServiceAccount)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SubjectType_Group:
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Group)))
-		n += len(x.Group)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // GlobalSpecType
@@ -226,13 +202,13 @@ type GlobalSpecType struct {
 	// x-displayName: "K8s Cluster Role"
 	// x-required
 	// K8s Cluster Role for which bindings are defined.
-	K8SClusterRole *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole" json:"k8s_cluster_role,omitempty"`
+	K8SClusterRole *views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole,proto3" json:"k8s_cluster_role,omitempty"`
 	// Subjects
 	//
 	// x-displayName: "Subjects"
 	// x-required
 	// List of subjects (user, group or service account) to which this role is bound
-	Subjects []*SubjectType `protobuf:"bytes,2,rep,name=subjects" json:"subjects,omitempty"`
+	Subjects []*SubjectType `protobuf:"bytes,2,rep,name=subjects,proto3" json:"subjects,omitempty"`
 	// K8s YAML
 	//
 	// x-displayName: "K8s YAML"
@@ -240,11 +216,35 @@ type GlobalSpecType struct {
 	GeneratedYaml string `protobuf:"bytes,1001,opt,name=generated_yaml,json=generatedYaml,proto3" json:"generated_yaml,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{2}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
 
-func (m *GlobalSpecType) GetK8SClusterRole() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
+
+func (m *GlobalSpecType) GetK8SClusterRole() *views.ObjectRefType {
 	if m != nil {
 		return m.K8SClusterRole
 	}
@@ -270,15 +270,39 @@ func (m *GlobalSpecType) GetGeneratedYaml() string {
 // x-displayName: "Create Configuration Specification"
 // Create k8s_cluster_role_binding will create the object in the storage backend for namespace metadata.namespace
 type CreateSpecType struct {
-	K8SClusterRole *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole" json:"k8s_cluster_role,omitempty"`
-	Subjects       []*SubjectType                     `protobuf:"bytes,2,rep,name=subjects" json:"subjects,omitempty"`
+	K8SClusterRole *views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole,proto3" json:"k8s_cluster_role,omitempty"`
+	Subjects       []*SubjectType       `protobuf:"bytes,2,rep,name=subjects,proto3" json:"subjects,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{3}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
 
-func (m *CreateSpecType) GetK8SClusterRole() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetK8SClusterRole() *views.ObjectRefType {
 	if m != nil {
 		return m.K8SClusterRole
 	}
@@ -298,15 +322,39 @@ func (m *CreateSpecType) GetSubjects() []*SubjectType {
 // Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write
 type ReplaceSpecType struct {
-	K8SClusterRole *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole" json:"k8s_cluster_role,omitempty"`
-	Subjects       []*SubjectType                     `protobuf:"bytes,2,rep,name=subjects" json:"subjects,omitempty"`
+	K8SClusterRole *views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole,proto3" json:"k8s_cluster_role,omitempty"`
+	Subjects       []*SubjectType       `protobuf:"bytes,2,rep,name=subjects,proto3" json:"subjects,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{4}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
 
-func (m *ReplaceSpecType) GetK8SClusterRole() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
+
+func (m *ReplaceSpecType) GetK8SClusterRole() *views.ObjectRefType {
 	if m != nil {
 		return m.K8SClusterRole
 	}
@@ -325,15 +373,39 @@ func (m *ReplaceSpecType) GetSubjects() []*SubjectType {
 // x-displayName: "Get Configuration Specification"
 // Get k8s_cluster_role_binding will get the object from the storage backend for namespace metadata.namespace
 type GetSpecType struct {
-	K8SClusterRole *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole" json:"k8s_cluster_role,omitempty"`
-	Subjects       []*SubjectType                     `protobuf:"bytes,2,rep,name=subjects" json:"subjects,omitempty"`
+	K8SClusterRole *views.ObjectRefType `protobuf:"bytes,1,opt,name=k8s_cluster_role,json=k8sClusterRole,proto3" json:"k8s_cluster_role,omitempty"`
+	Subjects       []*SubjectType       `protobuf:"bytes,2,rep,name=subjects,proto3" json:"subjects,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e4b9e76e4e16ff24, []int{5}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
 
-func (m *GetSpecType) GetK8SClusterRole() *ves_io_schema_views.ObjectRefType {
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
+
+func (m *GetSpecType) GetK8SClusterRole() *views.ObjectRefType {
 	if m != nil {
 		return m.K8SClusterRole
 	}
@@ -361,6 +433,61 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.k8s_cluster_role_binding.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.k8s_cluster_role_binding.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/k8s_cluster_role_binding/types.proto", fileDescriptor_e4b9e76e4e16ff24)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/k8s_cluster_role_binding/types.proto", fileDescriptor_e4b9e76e4e16ff24)
+}
+
+var fileDescriptor_e4b9e76e4e16ff24 = []byte{
+	// 680 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x55, 0xcf, 0x4f, 0xdb, 0x48,
+	0x14, 0xf6, 0x4b, 0x02, 0x1b, 0x26, 0x22, 0x04, 0xaf, 0x56, 0xf2, 0x86, 0xd5, 0x90, 0x0d, 0x12,
+	0x62, 0x57, 0x60, 0x6b, 0xc3, 0x1e, 0x10, 0x87, 0xd5, 0x36, 0x1c, 0x40, 0xed, 0x01, 0xc9, 0xe9,
+	0xa5, 0x55, 0xa5, 0xd4, 0x71, 0x1e, 0xc6, 0xc5, 0xc9, 0x58, 0x33, 0x76, 0x5a, 0x0e, 0x48, 0xfc,
+	0x09, 0x88, 0x63, 0xff, 0x82, 0xaa, 0x7f, 0x42, 0x73, 0x41, 0x3d, 0x55, 0x3d, 0xe5, 0x50, 0xb5,
+	0x39, 0x16, 0xe7, 0x50, 0xb8, 0xf1, 0x27, 0x54, 0x8c, 0xc3, 0x8f, 0x24, 0x54, 0xe5, 0x50, 0xf5,
+	0xc0, 0xed, 0xcd, 0x7c, 0xf3, 0xcd, 0xfb, 0xbe, 0xef, 0x59, 0x63, 0x52, 0x6a, 0xa1, 0xd0, 0x5d,
+	0x66, 0x08, 0x7b, 0x1b, 0x1b, 0x96, 0xb1, 0xb3, 0x22, 0xaa, 0xb6, 0x17, 0x8a, 0x00, 0x79, 0x95,
+	0x33, 0x0f, 0xab, 0x35, 0xb7, 0x59, 0x77, 0x9b, 0x8e, 0x11, 0xec, 0xfa, 0x28, 0x74, 0x9f, 0xb3,
+	0x80, 0xa9, 0xf3, 0x31, 0x47, 0x8f, 0x39, 0xfa, 0xb7, 0x38, 0xf9, 0x25, 0xc7, 0x0d, 0xb6, 0xc3,
+	0x9a, 0x6e, 0xb3, 0x86, 0xe1, 0x30, 0x87, 0x19, 0x92, 0x5e, 0x0b, 0xb7, 0xe4, 0x4a, 0x2e, 0x64,
+	0x15, 0x5f, 0x9b, 0x9f, 0x19, 0x94, 0xc2, 0xfc, 0xc0, 0x65, 0xcd, 0x7e, 0xcf, 0xfc, 0xef, 0x83,
+	0xe0, 0x35, 0x39, 0xf9, 0x3f, 0x06, 0xa1, 0x96, 0xe5, 0xb9, 0x75, 0x2b, 0xc0, 0x3e, 0x5a, 0x18,
+	0x42, 0x5d, 0x7c, 0x5e, 0x1d, 0xbc, 0x7a, 0x76, 0xf4, 0x84, 0xb8, 0xde, 0xa0, 0xf8, 0x94, 0xa8,
+	0x15, 0xe4, 0x2d, 0xd7, 0xc6, 0x7b, 0xb6, 0xcd, 0xc2, 0x66, 0xf0, 0x70, 0xd7, 0x47, 0xf5, 0x2f,
+	0x32, 0xd1, 0xb4, 0x1a, 0x28, 0x7c, 0xcb, 0x46, 0x0d, 0x0a, 0xb0, 0x30, 0x51, 0xce, 0xbc, 0x39,
+	0x3d, 0x4a, 0x8e, 0xf3, 0x54, 0x0e, 0xb4, 0xff, 0xcd, 0x2b, 0x54, 0x9d, 0x25, 0xa9, 0xf3, 0x85,
+	0x96, 0x18, 0x3d, 0x25, 0x81, 0xe2, 0x17, 0x20, 0x99, 0x4a, 0x58, 0x7b, 0x86, 0x76, 0x7c, 0xf7,
+	0x9f, 0x24, 0x15, 0x0a, 0xe4, 0x37, 0x10, 0x36, 0x14, 0x53, 0x42, 0x2a, 0x92, 0x29, 0x11, 0x8b,
+	0xaa, 0x5a, 0xb1, 0x2a, 0x2d, 0x59, 0x80, 0x85, 0x4c, 0x69, 0x55, 0xbf, 0xdd, 0x78, 0xf4, 0x51,
+	0x4f, 0x1b, 0x8a, 0x99, 0x15, 0x03, 0xbb, 0xea, 0x1c, 0x19, 0x73, 0x38, 0x0b, 0x7d, 0x2d, 0x75,
+	0x93, 0x94, 0x18, 0x2b, 0xcf, 0x91, 0xac, 0x88, 0xd5, 0x57, 0xed, 0x6d, 0xe6, 0xda, 0xa8, 0x4e,
+	0x1f, 0xb5, 0x21, 0xd1, 0x69, 0x03, 0x44, 0x6d, 0x18, 0x2b, 0x2d, 0x2e, 0x2f, 0xfe, 0x7b, 0x3f,
+	0x95, 0x86, 0x5c, 0xa2, 0xf8, 0x31, 0x41, 0xb2, 0xeb, 0x1e, 0xab, 0x59, 0x5e, 0xc5, 0x47, 0x5b,
+	0x9a, 0xb5, 0x48, 0x6e, 0x58, 0xa3, 0xcc, 0x33, 0x53, 0x2a, 0x0e, 0x59, 0x91, 0xa3, 0xd1, 0x37,
+	0x65, 0x27, 0x13, 0xb7, 0xce, 0xd9, 0xe5, 0x5f, 0x5f, 0xef, 0x8d, 0xd0, 0xcd, 0xec, 0xce, 0x8a,
+	0x58, 0x8b, 0x37, 0x4c, 0xe6, 0xa1, 0xea, 0x93, 0x74, 0x5f, 0xa0, 0xd0, 0x12, 0x85, 0xe4, 0x42,
+	0xa6, 0xb4, 0x7c, 0xeb, 0x94, 0xae, 0xc6, 0x52, 0x9e, 0x95, 0xee, 0x0f, 0x21, 0x99, 0xdb, 0x4f,
+	0x9c, 0x97, 0x63, 0x87, 0x90, 0x48, 0xc3, 0x45, 0xa5, 0x81, 0x79, 0xd9, 0x45, 0x5d, 0x23, 0x59,
+	0x07, 0x9b, 0xc8, 0xad, 0x00, 0xeb, 0xd5, 0x5d, 0xab, 0xe1, 0x69, 0xa7, 0xbf, 0xc8, 0x04, 0x67,
+	0xba, 0x7b, 0x70, 0xd2, 0x86, 0x98, 0xc5, 0x93, 0xda, 0x7e, 0xa1, 0x5f, 0x1d, 0x00, 0x98, 0x93,
+	0x97, 0x9c, 0x47, 0x56, 0xc3, 0x5b, 0xfd, 0xfb, 0x6d, 0x1b, 0xe6, 0xc9, 0x6f, 0x24, 0xf7, 0x60,
+	0x45, 0x14, 0xfa, 0x7e, 0x0a, 0xd2, 0x10, 0xfc, 0x43, 0x26, 0x49, 0xba, 0x72, 0xd1, 0x0d, 0x4a,
+	0xc5, 0x4f, 0x40, 0xb2, 0x6b, 0x1c, 0xad, 0x00, 0x7f, 0x66, 0xb0, 0x9b, 0x3f, 0x24, 0xd8, 0xab,
+	0xdc, 0x56, 0xa7, 0xdf, 0xff, 0x37, 0xf4, 0x7d, 0x14, 0xbb, 0x40, 0xa6, 0x4c, 0xf4, 0x3d, 0xcb,
+	0xbe, 0x73, 0xd6, 0x3e, 0x00, 0xc9, 0xac, 0x63, 0x70, 0xc7, 0x6c, 0x95, 0x5f, 0x42, 0xe7, 0x98,
+	0x2a, 0xdd, 0x63, 0xaa, 0x9c, 0x1d, 0x53, 0xd8, 0x8f, 0x28, 0xbc, 0x8a, 0x28, 0xbc, 0x8b, 0x28,
+	0x74, 0x22, 0x0a, 0xdd, 0x88, 0xc2, 0xe7, 0x88, 0xc2, 0x49, 0x44, 0x95, 0xb3, 0x88, 0xc2, 0x41,
+	0x8f, 0x2a, 0x47, 0x3d, 0x0a, 0x9d, 0x1e, 0x55, 0xba, 0x3d, 0xaa, 0x3c, 0x7e, 0xe2, 0x30, 0x7f,
+	0xc7, 0xd1, 0x5b, 0xcc, 0x0b, 0x90, 0x73, 0x4b, 0x0f, 0x85, 0x21, 0x8b, 0x2d, 0xc6, 0x1b, 0x4b,
+	0x3e, 0x67, 0x2d, 0xb7, 0x8e, 0x7c, 0xe9, 0x02, 0x36, 0xfc, 0x9a, 0xc3, 0x0c, 0x7c, 0x11, 0xf4,
+	0xdf, 0xef, 0xef, 0xfc, 0xc9, 0x6a, 0xe3, 0xf2, 0x51, 0x5f, 0xfe, 0x1a, 0x00, 0x00, 0xff, 0xff,
+	0xff, 0x56, 0x57, 0x34, 0xfa, 0x06, 0x00, 0x00,
+}
+
 func (this *ServiceAccountType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -740,7 +867,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *ServiceAccountType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -748,29 +875,36 @@ func (m *ServiceAccountType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ServiceAccountType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceAccountType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Namespace) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
-		i += copy(dAtA[i:], m.Namespace)
-	}
 	if len(m.Name) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *SubjectType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -778,54 +912,80 @@ func (m *SubjectType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SubjectType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubjectType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.SubjectChoice != nil {
-		nn1, err := m.SubjectChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.SubjectChoice.Size()
+			i -= size
+			if _, err := m.SubjectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *SubjectType_User) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubjectType_User) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.User)
+	copy(dAtA[i:], m.User)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.User)))
-	i += copy(dAtA[i:], m.User)
-	return i, nil
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
 }
 func (m *SubjectType_ServiceAccount) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubjectType_ServiceAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.ServiceAccount != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServiceAccount.Size()))
-		n2, err := m.ServiceAccount.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.ServiceAccount.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *SubjectType_Group) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x22
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubjectType_Group) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Group)
+	copy(dAtA[i:], m.Group)
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.Group)))
-	i += copy(dAtA[i:], m.Group)
-	return i, nil
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -833,47 +993,57 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.K8SClusterRole != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRole.Size()))
-		n3, err := m.K8SClusterRole.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
+	if len(m.GeneratedYaml) > 0 {
+		i -= len(m.GeneratedYaml)
+		copy(dAtA[i:], m.GeneratedYaml)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GeneratedYaml)))
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xca
 	}
 	if len(m.Subjects) > 0 {
-		for _, msg := range m.Subjects {
+		for iNdEx := len(m.Subjects) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subjects[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		}
+	}
+	if m.K8SClusterRole != nil {
+		{
+			size, err := m.K8SClusterRole.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	if len(m.GeneratedYaml) > 0 {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GeneratedYaml)))
-		i += copy(dAtA[i:], m.GeneratedYaml)
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -881,39 +1051,48 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.K8SClusterRole != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRole.Size()))
-		n4, err := m.K8SClusterRole.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
 	if len(m.Subjects) > 0 {
-		for _, msg := range m.Subjects {
+		for iNdEx := len(m.Subjects) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subjects[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		}
+	}
+	if m.K8SClusterRole != nil {
+		{
+			size, err := m.K8SClusterRole.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -921,39 +1100,48 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.K8SClusterRole != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRole.Size()))
-		n5, err := m.K8SClusterRole.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
 	if len(m.Subjects) > 0 {
-		for _, msg := range m.Subjects {
+		for iNdEx := len(m.Subjects) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subjects[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		}
+	}
+	if m.K8SClusterRole != nil {
+		{
+			size, err := m.K8SClusterRole.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -961,45 +1149,59 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.K8SClusterRole != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterRole.Size()))
-		n6, err := m.K8SClusterRole.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
 	if len(m.Subjects) > 0 {
-		for _, msg := range m.Subjects {
+		for iNdEx := len(m.Subjects) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subjects[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+		}
+	}
+	if m.K8SClusterRole != nil {
+		{
+			size, err := m.K8SClusterRole.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *ServiceAccountType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Namespace)
@@ -1014,6 +1216,9 @@ func (m *ServiceAccountType) Size() (n int) {
 }
 
 func (m *SubjectType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SubjectChoice != nil {
@@ -1023,6 +1228,9 @@ func (m *SubjectType) Size() (n int) {
 }
 
 func (m *SubjectType_User) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.User)
@@ -1030,6 +1238,9 @@ func (m *SubjectType_User) Size() (n int) {
 	return n
 }
 func (m *SubjectType_ServiceAccount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ServiceAccount != nil {
@@ -1039,6 +1250,9 @@ func (m *SubjectType_ServiceAccount) Size() (n int) {
 	return n
 }
 func (m *SubjectType_Group) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Group)
@@ -1046,6 +1260,9 @@ func (m *SubjectType_Group) Size() (n int) {
 	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRole != nil {
@@ -1066,6 +1283,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRole != nil {
@@ -1082,6 +1302,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRole != nil {
@@ -1098,6 +1321,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.K8SClusterRole != nil {
@@ -1114,14 +1340,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1181,9 +1400,14 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSubjects := "[]*SubjectType{"
+	for _, f := range this.Subjects {
+		repeatedStringForSubjects += strings.Replace(f.String(), "SubjectType", "SubjectType", 1) + ","
+	}
+	repeatedStringForSubjects += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`Subjects:` + strings.Replace(fmt.Sprintf("%v", this.Subjects), "SubjectType", "SubjectType", 1) + `,`,
+		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Subjects:` + repeatedStringForSubjects + `,`,
 		`GeneratedYaml:` + fmt.Sprintf("%v", this.GeneratedYaml) + `,`,
 		`}`,
 	}, "")
@@ -1193,9 +1417,14 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSubjects := "[]*SubjectType{"
+	for _, f := range this.Subjects {
+		repeatedStringForSubjects += strings.Replace(f.String(), "SubjectType", "SubjectType", 1) + ","
+	}
+	repeatedStringForSubjects += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`Subjects:` + strings.Replace(fmt.Sprintf("%v", this.Subjects), "SubjectType", "SubjectType", 1) + `,`,
+		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Subjects:` + repeatedStringForSubjects + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1204,9 +1433,14 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSubjects := "[]*SubjectType{"
+	for _, f := range this.Subjects {
+		repeatedStringForSubjects += strings.Replace(f.String(), "SubjectType", "SubjectType", 1) + ","
+	}
+	repeatedStringForSubjects += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`Subjects:` + strings.Replace(fmt.Sprintf("%v", this.Subjects), "SubjectType", "SubjectType", 1) + `,`,
+		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Subjects:` + repeatedStringForSubjects + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1215,9 +1449,14 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSubjects := "[]*SubjectType{"
+	for _, f := range this.Subjects {
+		repeatedStringForSubjects += strings.Replace(f.String(), "SubjectType", "SubjectType", 1) + ","
+	}
+	repeatedStringForSubjects += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`Subjects:` + strings.Replace(fmt.Sprintf("%v", this.Subjects), "SubjectType", "SubjectType", 1) + `,`,
+		`K8SClusterRole:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterRole), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Subjects:` + repeatedStringForSubjects + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1245,7 +1484,7 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1273,7 +1512,7 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1283,6 +1522,9 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1302,7 +1544,7 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1312,6 +1554,9 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1324,6 +1569,9 @@ func (m *ServiceAccountType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1353,7 +1601,7 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1381,7 +1629,7 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1391,6 +1639,9 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1410,7 +1661,7 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1419,6 +1670,9 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1442,7 +1696,7 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1452,6 +1706,9 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1464,6 +1721,9 @@ func (m *SubjectType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1493,7 +1753,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1521,7 +1781,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1530,11 +1790,14 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.K8SClusterRole == nil {
-				m.K8SClusterRole = &ves_io_schema_views.ObjectRefType{}
+				m.K8SClusterRole = &views.ObjectRefType{}
 			}
 			if err := m.K8SClusterRole.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1554,7 +1817,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1563,6 +1826,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1585,7 +1851,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1595,6 +1861,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1607,6 +1876,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1636,7 +1908,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1664,7 +1936,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1673,11 +1945,14 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.K8SClusterRole == nil {
-				m.K8SClusterRole = &ves_io_schema_views.ObjectRefType{}
+				m.K8SClusterRole = &views.ObjectRefType{}
 			}
 			if err := m.K8SClusterRole.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1697,7 +1972,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1706,6 +1981,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1721,6 +1999,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1750,7 +2031,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1778,7 +2059,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1787,11 +2068,14 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.K8SClusterRole == nil {
-				m.K8SClusterRole = &ves_io_schema_views.ObjectRefType{}
+				m.K8SClusterRole = &views.ObjectRefType{}
 			}
 			if err := m.K8SClusterRole.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1811,7 +2095,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1820,6 +2104,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1835,6 +2122,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -1864,7 +2154,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1892,7 +2182,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1901,11 +2191,14 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			if m.K8SClusterRole == nil {
-				m.K8SClusterRole = &ves_io_schema_views.ObjectRefType{}
+				m.K8SClusterRole = &views.ObjectRefType{}
 			}
 			if err := m.K8SClusterRole.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1925,7 +2218,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1934,6 +2227,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1951,6 +2247,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -1966,6 +2265,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1997,10 +2297,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2017,106 +2315,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/k8s_cluster_role_binding/types.proto", fileDescriptorTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/k8s_cluster_role_binding/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 669 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x55, 0x4f, 0x4f, 0x13, 0x4f,
-	0x18, 0xee, 0xdb, 0x16, 0x7e, 0x65, 0x1a, 0x4a, 0xd9, 0x5f, 0x4c, 0xd6, 0x62, 0x96, 0x5a, 0x12,
-	0x82, 0x06, 0x76, 0x63, 0xf1, 0x40, 0x38, 0x18, 0x2d, 0x07, 0x88, 0x1e, 0x48, 0xb6, 0x5e, 0x34,
-	0x26, 0x75, 0x76, 0xfb, 0xb2, 0xac, 0x6c, 0x3b, 0x9b, 0x99, 0xdd, 0x2a, 0x07, 0x12, 0x3e, 0x02,
-	0xe1, 0x53, 0x18, 0x3f, 0x82, 0xbd, 0x10, 0x4f, 0xc6, 0x13, 0x07, 0xa3, 0x3d, 0xca, 0x72, 0x10,
-	0x6e, 0x7c, 0x04, 0xc3, 0x6c, 0xf9, 0xd3, 0x16, 0x23, 0x07, 0xe3, 0x81, 0xdb, 0x3b, 0xf3, 0xcc,
-	0x33, 0xef, 0xf3, 0x3c, 0xef, 0x66, 0x96, 0x94, 0x5b, 0x28, 0x74, 0x97, 0x19, 0xc2, 0x5e, 0xc7,
-	0x06, 0x35, 0x36, 0x16, 0x44, 0xcd, 0xf6, 0x42, 0x11, 0x20, 0xaf, 0x71, 0xe6, 0x61, 0xcd, 0x72,
-	0x9b, 0x75, 0xb7, 0xe9, 0x18, 0xc1, 0xa6, 0x8f, 0x42, 0xf7, 0x39, 0x0b, 0x98, 0x32, 0x1d, 0x73,
-	0xf4, 0x98, 0xa3, 0xff, 0x8e, 0x53, 0x98, 0x73, 0xdc, 0x60, 0x3d, 0xb4, 0x74, 0x9b, 0x35, 0x0c,
-	0x87, 0x39, 0xcc, 0x90, 0x74, 0x2b, 0x5c, 0x93, 0x2b, 0xb9, 0x90, 0x55, 0x7c, 0x6d, 0x61, 0xa2,
-	0x57, 0x0a, 0xf3, 0x03, 0x97, 0x35, 0xbb, 0x3d, 0x0b, 0xb7, 0x7b, 0xc1, 0x4b, 0x72, 0x0a, 0x77,
-	0x7a, 0xa1, 0x16, 0xf5, 0xdc, 0x3a, 0x0d, 0xb0, 0x8b, 0x16, 0xfb, 0x50, 0x17, 0xdf, 0xd6, 0x7a,
-	0xaf, 0x9e, 0x1c, 0x3c, 0x21, 0x2e, 0x37, 0x28, 0xbd, 0x26, 0x4a, 0x15, 0x79, 0xcb, 0xb5, 0xf1,
-	0x89, 0x6d, 0xb3, 0xb0, 0x19, 0x3c, 0xdf, 0xf4, 0x51, 0xb9, 0x47, 0x46, 0x9a, 0xb4, 0x81, 0xc2,
-	0xa7, 0x36, 0xaa, 0x50, 0x84, 0x99, 0x91, 0x4a, 0xf6, 0xe3, 0xf1, 0x5e, 0x6a, 0x98, 0xa7, 0xf3,
-	0xa0, 0x3e, 0x36, 0x2f, 0x50, 0x65, 0x92, 0xa4, 0x4f, 0x17, 0x6a, 0x72, 0xf0, 0x94, 0x04, 0x4a,
-	0x3f, 0x81, 0x64, 0xab, 0xa1, 0xf5, 0x06, 0xed, 0xf8, 0xee, 0xbb, 0x24, 0x1d, 0x0a, 0xe4, 0x57,
-	0x10, 0x56, 0x12, 0xa6, 0x84, 0x14, 0x24, 0x63, 0x22, 0x16, 0x55, 0xa3, 0xb1, 0x2a, 0x35, 0x55,
-	0x84, 0x99, 0x6c, 0x79, 0x51, 0xbf, 0xde, 0x78, 0xf4, 0x41, 0x4f, 0x2b, 0x09, 0x33, 0x27, 0x7a,
-	0x76, 0x95, 0x29, 0x32, 0xe4, 0x70, 0x16, 0xfa, 0x6a, 0xfa, 0x2a, 0x29, 0x31, 0x56, 0x99, 0x22,
-	0x39, 0x11, 0xab, 0xaf, 0xd9, 0xeb, 0xcc, 0xb5, 0x51, 0x19, 0xdf, 0x6b, 0x43, 0x72, 0xbf, 0x0d,
-	0x10, 0xb5, 0x61, 0xa8, 0x3c, 0x3b, 0x3f, 0xfb, 0xf0, 0x69, 0x3a, 0x03, 0xf9, 0x64, 0xe9, 0x5b,
-	0x92, 0xe4, 0x96, 0x3d, 0x66, 0x51, 0xaf, 0xea, 0xa3, 0x2d, 0xcd, 0x52, 0x92, 0xef, 0xd7, 0x28,
-	0xf3, 0xcc, 0x96, 0x4b, 0x7d, 0x56, 0xe4, 0x68, 0xf4, 0x55, 0xd9, 0xc9, 0xc4, 0xb5, 0x53, 0x76,
-	0xe5, 0xff, 0x0f, 0x5b, 0x03, 0x74, 0x33, 0xb7, 0xb1, 0x20, 0x96, 0xe2, 0x0d, 0x93, 0x79, 0xa8,
-	0xf8, 0x24, 0xd3, 0x15, 0x28, 0xd4, 0x64, 0x31, 0x35, 0x93, 0x2d, 0xcf, 0x5f, 0x3b, 0xa5, 0x8b,
-	0xb1, 0x54, 0x26, 0xa5, 0xfb, 0x5d, 0x48, 0xe5, 0xb7, 0x93, 0xa7, 0xe5, 0xd0, 0x2e, 0x24, 0x33,
-	0x70, 0x56, 0xa9, 0x60, 0x9e, 0x77, 0x51, 0x96, 0x48, 0xce, 0xc1, 0x26, 0x72, 0x1a, 0x60, 0xbd,
-	0xb6, 0x49, 0x1b, 0x9e, 0x7a, 0xfc, 0x9f, 0x4c, 0x70, 0xa2, 0xb3, 0x05, 0x47, 0x6d, 0x88, 0x59,
-	0x3c, 0xa5, 0x6e, 0x17, 0xbb, 0xd5, 0x0e, 0x80, 0x39, 0x7a, 0xce, 0x79, 0x41, 0x1b, 0xde, 0xe2,
-	0xfd, 0x4f, 0x6d, 0x98, 0x26, 0xb7, 0x48, 0xfe, 0xd9, 0x82, 0x28, 0x76, 0xfd, 0x14, 0xa5, 0x21,
-	0x78, 0x40, 0x46, 0x49, 0xa6, 0x7a, 0xd6, 0x0d, 0xca, 0xa5, 0xef, 0x40, 0x72, 0x4b, 0x1c, 0x69,
-	0x80, 0xff, 0x32, 0xd8, 0xd5, 0xbf, 0x12, 0xec, 0x45, 0x6e, 0x8b, 0xe3, 0x5f, 0x1e, 0xf5, 0x7d,
-	0x1f, 0xa5, 0x0e, 0x90, 0x31, 0x13, 0x7d, 0x8f, 0xda, 0x37, 0xce, 0xda, 0x57, 0x20, 0xd9, 0x65,
-	0x0c, 0x6e, 0x98, 0xad, 0xca, 0x2e, 0xec, 0x1f, 0x68, 0x89, 0xce, 0x81, 0x96, 0x38, 0x39, 0xd0,
-	0x60, 0x3b, 0xd2, 0xe0, 0x7d, 0xa4, 0xc1, 0xe7, 0x48, 0x83, 0xfd, 0x48, 0x83, 0x4e, 0xa4, 0xc1,
-	0x8f, 0x48, 0x83, 0xa3, 0x48, 0x4b, 0x9c, 0x44, 0x1a, 0xec, 0x1c, 0x6a, 0x89, 0xbd, 0x43, 0x0d,
-	0x5e, 0xbe, 0x72, 0x98, 0xbf, 0xe1, 0xe8, 0x2d, 0xe6, 0x05, 0xc8, 0x39, 0xd5, 0x43, 0x61, 0xc8,
-	0x62, 0x8d, 0xf1, 0xc6, 0x9c, 0xcf, 0x59, 0xcb, 0xad, 0x23, 0x9f, 0x3b, 0x83, 0x0d, 0xdf, 0x72,
-	0x98, 0x81, 0xef, 0x82, 0xee, 0xbb, 0xfd, 0x87, 0x3f, 0x98, 0x35, 0x2c, 0x1f, 0xf3, 0xf9, 0x5f,
-	0x01, 0x00, 0x00, 0xff, 0xff, 0xed, 0x85, 0xa6, 0x12, 0xf2, 0x06, 0x00, 0x00,
-}

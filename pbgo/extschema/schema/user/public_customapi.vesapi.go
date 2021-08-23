@@ -1769,7 +1769,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.SyncUser",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/schemauserEmpty"
                         }
@@ -1853,7 +1853,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.AcceptTOS",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userAcceptTOSResponse"
                         }
@@ -1910,9 +1910,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -1943,7 +1945,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.AssignRole",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/schemauserEmpty"
                         }
@@ -2000,9 +2002,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace the requesting user is calling the action from",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2033,7 +2037,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.SendPasswordEmail",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userSendPasswordEmailResponse"
                         }
@@ -2090,9 +2094,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2123,7 +2129,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.GetTOS",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userGetTOSResponse"
                         }
@@ -2180,9 +2186,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2205,7 +2213,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userListUserRoleResponse"
                         }
@@ -2262,9 +2270,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace to use",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2282,7 +2292,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userObject"
                         }
@@ -2339,9 +2349,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2367,7 +2379,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userObject"
                         }
@@ -2424,9 +2436,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2457,7 +2471,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userObject"
                         }
@@ -2514,15 +2528,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nTenant's namespace (system)",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "name\n\nx-example: \"value\"\nuser spec (name and so on)",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Name"
                     },
                     {
                         "name": "body",
@@ -2553,7 +2571,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.CascadeDelete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userCascadeDeleteResponse"
                         }
@@ -2610,9 +2628,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nValue of namespace is always \"system\"",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
@@ -2643,7 +2663,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/userGetUserRoleResponse"
                         }
@@ -2700,9 +2720,11 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace of the user object (namespace where the user object is stored).",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2725,7 +2747,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/schemauserEmpty"
                         }
@@ -2809,7 +2831,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.user.CustomAPI.ResetPassword",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/schemauserEmpty"
                         }

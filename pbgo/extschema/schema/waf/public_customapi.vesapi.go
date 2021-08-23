@@ -290,7 +290,7 @@ var CustomAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.waf.CustomAPI.VirtualHostWafStatus",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/wafVirtualHostWafStatusRsp"
                         }
@@ -347,15 +347,19 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app-namespace-1\"\nNamespace of the virtual host",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "name",
+                        "description": "Name\n\nx-example: \"greatblogs-vhost\"\nName of the virtual host for which waf status is requested",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
                     }
                 ],
                 "tags": [

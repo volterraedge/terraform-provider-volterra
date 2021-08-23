@@ -3,23 +3,29 @@
 
 package schema
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf "github.com/golang/protobuf/protoc-gen-go/descriptor"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // LabelKeyClass
 //
@@ -47,6 +53,7 @@ var LabelKeyClass_name = map[int32]string{
 	2: "KEY_CLASS_GEOIP",
 	3: "KEY_CLASS_IMPLICIT",
 }
+
 var LabelKeyClass_value = map[string]int32{
 	"KEY_CLASS_GENERIC":  0,
 	"KEY_CLASS_KNOWN":    1,
@@ -54,7 +61,9 @@ var LabelKeyClass_value = map[string]int32{
 	"KEY_CLASS_IMPLICIT": 3,
 }
 
-func (LabelKeyClass) EnumDescriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{0} }
+func (LabelKeyClass) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{0}
+}
 
 // InputSizeType
 //
@@ -82,6 +91,7 @@ var InputSizeType_name = map[int32]string{
 	3: "INPUT_SIZE_MULTI_LINE",
 	4: "INPUT_CUSTOM_URL_STRING",
 }
+
 var InputSizeType_value = map[string]int32{
 	"INPUT_SIZE_SMALL":        0,
 	"INPUT_SIZE_MEDIUM":       1,
@@ -90,7 +100,9 @@ var InputSizeType_value = map[string]int32{
 	"INPUT_CUSTOM_URL_STRING": 4,
 }
 
-func (InputSizeType) EnumDescriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{1} }
+func (InputSizeType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{1}
+}
 
 // UnitType
 //
@@ -151,6 +163,7 @@ var UnitType_name = map[int32]string{
 	32: "UNIT_PACKETS_PER_SECOND",
 	33: "UNIT_REQUESTS_PER_SECOND",
 }
+
 var UnitType_value = map[string]int32{
 	"UNIT_MILLISECONDS":           0,
 	"UNIT_SECONDS":                1,
@@ -178,7 +191,9 @@ var UnitType_value = map[string]int32{
 	"UNIT_REQUESTS_PER_SECOND":    33,
 }
 
-func (UnitType) EnumDescriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{2} }
+func (UnitType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{2}
+}
 
 // MapRenderStyle
 //
@@ -197,12 +212,15 @@ var MapRenderStyle_name = map[int32]string{
 	0: "MAP_RENDER_LABELS",
 	1: "MAP_RENDER_TABLE",
 }
+
 var MapRenderStyle_value = map[string]int32{
 	"MAP_RENDER_LABELS": 0,
 	"MAP_RENDER_TABLE":  1,
 }
 
-func (MapRenderStyle) EnumDescriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{3} }
+func (MapRenderStyle) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{3}
+}
 
 // RepeatedRenderStyle
 //
@@ -221,13 +239,14 @@ var RepeatedRenderStyle_name = map[int32]string{
 	0: "REPEATED_RENDER_TABLE",
 	1: "REPEATED_RENDER_TILES",
 }
+
 var RepeatedRenderStyle_value = map[string]int32{
 	"REPEATED_RENDER_TABLE": 0,
 	"REPEATED_RENDER_TILES": 1,
 }
 
 func (RepeatedRenderStyle) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorViewOptions, []int{4}
+	return fileDescriptor_2e60bc66177b50a0, []int{4}
 }
 
 // choices
@@ -239,12 +258,36 @@ type Choices struct {
 	//
 	// x-displayName "displayname"
 	// field number of a field inside oneof that should be default choice in UI.
-	Choice []string `protobuf:"bytes,1,rep,name=choice" json:"choice,omitempty"`
+	Choice []string `protobuf:"bytes,1,rep,name=choice,proto3" json:"choice,omitempty"`
 }
 
-func (m *Choices) Reset()                    { *m = Choices{} }
-func (*Choices) ProtoMessage()               {}
-func (*Choices) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{0} }
+func (m *Choices) Reset()      { *m = Choices{} }
+func (*Choices) ProtoMessage() {}
+func (*Choices) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{0}
+}
+func (m *Choices) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Choices) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Choices) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Choices.Merge(m, src)
+}
+func (m *Choices) XXX_Size() int {
+	return m.Size()
+}
+func (m *Choices) XXX_DiscardUnknown() {
+	xxx_messageInfo_Choices.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Choices proto.InternalMessageInfo
 
 func (m *Choices) GetChoice() []string {
 	if m != nil {
@@ -270,9 +313,33 @@ type ChoiceItem struct {
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 }
 
-func (m *ChoiceItem) Reset()                    { *m = ChoiceItem{} }
-func (*ChoiceItem) ProtoMessage()               {}
-func (*ChoiceItem) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{1} }
+func (m *ChoiceItem) Reset()      { *m = ChoiceItem{} }
+func (*ChoiceItem) ProtoMessage() {}
+func (*ChoiceItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{1}
+}
+func (m *ChoiceItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ChoiceItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ChoiceItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ChoiceItem.Merge(m, src)
+}
+func (m *ChoiceItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *ChoiceItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_ChoiceItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ChoiceItem proto.InternalMessageInfo
 
 func (m *ChoiceItem) GetValue() string {
 	if m != nil {
@@ -297,12 +364,36 @@ type ChoiceItemList struct {
 	//
 	// x-displayName: "Choice Items"
 	// List of common choice items.
-	ChoiceItems []*ChoiceItem `protobuf:"bytes,1,rep,name=choice_items,json=choiceItems" json:"choice_items,omitempty"`
+	ChoiceItems []*ChoiceItem `protobuf:"bytes,1,rep,name=choice_items,json=choiceItems,proto3" json:"choice_items,omitempty"`
 }
 
-func (m *ChoiceItemList) Reset()                    { *m = ChoiceItemList{} }
-func (*ChoiceItemList) ProtoMessage()               {}
-func (*ChoiceItemList) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{2} }
+func (m *ChoiceItemList) Reset()      { *m = ChoiceItemList{} }
+func (*ChoiceItemList) ProtoMessage() {}
+func (*ChoiceItemList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{2}
+}
+func (m *ChoiceItemList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ChoiceItemList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ChoiceItemList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ChoiceItemList.Merge(m, src)
+}
+func (m *ChoiceItemList) XXX_Size() int {
+	return m.Size()
+}
+func (m *ChoiceItemList) XXX_DiscardUnknown() {
+	xxx_messageInfo_ChoiceItemList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ChoiceItemList proto.InternalMessageInfo
 
 func (m *ChoiceItemList) GetChoiceItems() []*ChoiceItem {
 	if m != nil {
@@ -320,12 +411,36 @@ type LabelKeyClassList struct {
 	//
 	// x-displayName: "Choice Items"
 	// List of common choice items.
-	KeyClasses []LabelKeyClass `protobuf:"varint,1,rep,packed,name=key_classes,json=keyClasses,enum=ves.io.schema.LabelKeyClass" json:"key_classes,omitempty"`
+	KeyClasses []LabelKeyClass `protobuf:"varint,1,rep,packed,name=key_classes,json=keyClasses,proto3,enum=ves.io.schema.LabelKeyClass" json:"key_classes,omitempty"`
 }
 
-func (m *LabelKeyClassList) Reset()                    { *m = LabelKeyClassList{} }
-func (*LabelKeyClassList) ProtoMessage()               {}
-func (*LabelKeyClassList) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{3} }
+func (m *LabelKeyClassList) Reset()      { *m = LabelKeyClassList{} }
+func (*LabelKeyClassList) ProtoMessage() {}
+func (*LabelKeyClassList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{3}
+}
+func (m *LabelKeyClassList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LabelKeyClassList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LabelKeyClassList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelKeyClassList.Merge(m, src)
+}
+func (m *LabelKeyClassList) XXX_Size() int {
+	return m.Size()
+}
+func (m *LabelKeyClassList) XXX_DiscardUnknown() {
+	xxx_messageInfo_LabelKeyClassList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LabelKeyClassList proto.InternalMessageInfo
 
 func (m *LabelKeyClassList) GetKeyClasses() []LabelKeyClass {
 	if m != nil {
@@ -343,23 +458,47 @@ type HiddenConditions struct {
 	//
 	// x-displayName: "Root Object In"
 	// List of root object types for which the field should be hidden.
-	RootObjectIn []string `protobuf:"bytes,1,rep,name=root_object_in,json=rootObjectIn" json:"root_object_in,omitempty"`
+	RootObjectIn []string `protobuf:"bytes,1,rep,name=root_object_in,json=rootObjectIn,proto3" json:"root_object_in,omitempty"`
 	// ancestor_message_in
 	//
 	// x-displayName: "Ancestor Message In"
 	// List of ancestor message types for which the field should be hidden.
-	AncestorMessageIn []string `protobuf:"bytes,2,rep,name=ancestor_message_in,json=ancestorMessageIn" json:"ancestor_message_in,omitempty"`
+	AncestorMessageIn []string `protobuf:"bytes,2,rep,name=ancestor_message_in,json=ancestorMessageIn,proto3" json:"ancestor_message_in,omitempty"`
 	// path_suffix_in
 	//
 	// x-displayName: "Path Suffix In"
 	// List of path suffixes for which the field should be hidden. Note that each
 	// entry is a path suffix containing field names, not message types.
-	PathSuffixIn []string `protobuf:"bytes,3,rep,name=path_suffix_in,json=pathSuffixIn" json:"path_suffix_in,omitempty"`
+	PathSuffixIn []string `protobuf:"bytes,3,rep,name=path_suffix_in,json=pathSuffixIn,proto3" json:"path_suffix_in,omitempty"`
 }
 
-func (m *HiddenConditions) Reset()                    { *m = HiddenConditions{} }
-func (*HiddenConditions) ProtoMessage()               {}
-func (*HiddenConditions) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{4} }
+func (m *HiddenConditions) Reset()      { *m = HiddenConditions{} }
+func (*HiddenConditions) ProtoMessage() {}
+func (*HiddenConditions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{4}
+}
+func (m *HiddenConditions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HiddenConditions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HiddenConditions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HiddenConditions.Merge(m, src)
+}
+func (m *HiddenConditions) XXX_Size() int {
+	return m.Size()
+}
+func (m *HiddenConditions) XXX_DiscardUnknown() {
+	xxx_messageInfo_HiddenConditions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HiddenConditions proto.InternalMessageInfo
 
 func (m *HiddenConditions) GetRootObjectIn() []string {
 	if m != nil {
@@ -407,9 +546,33 @@ type FieldViewOptions struct {
 	Type isFieldViewOptions_Type `protobuf_oneof:"type"`
 }
 
-func (m *FieldViewOptions) Reset()                    { *m = FieldViewOptions{} }
-func (*FieldViewOptions) ProtoMessage()               {}
-func (*FieldViewOptions) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{5} }
+func (m *FieldViewOptions) Reset()      { *m = FieldViewOptions{} }
+func (*FieldViewOptions) ProtoMessage() {}
+func (*FieldViewOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{5}
+}
+func (m *FieldViewOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *FieldViewOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *FieldViewOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FieldViewOptions.Merge(m, src)
+}
+func (m *FieldViewOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *FieldViewOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_FieldViewOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FieldViewOptions proto.InternalMessageInfo
 
 type isFieldViewOptions_Type interface {
 	isFieldViewOptions_Type()
@@ -419,34 +582,34 @@ type isFieldViewOptions_Type interface {
 }
 
 type FieldViewOptions_NewForm struct {
-	NewForm bool `protobuf:"varint,3000,opt,name=new_form,json=newForm,proto3,oneof"`
+	NewForm bool `protobuf:"varint,3000,opt,name=new_form,json=newForm,proto3,oneof" json:"new_form,omitempty"`
 }
 type FieldViewOptions_InputBoxSize struct {
-	InputBoxSize InputSizeType `protobuf:"varint,3001,opt,name=input_box_size,json=inputBoxSize,proto3,enum=ves.io.schema.InputSizeType,oneof"`
+	InputBoxSize InputSizeType `protobuf:"varint,3001,opt,name=input_box_size,json=inputBoxSize,proto3,enum=ves.io.schema.InputSizeType,oneof" json:"input_box_size,omitempty"`
 }
 type FieldViewOptions_DefaultValue struct {
-	DefaultValue string `protobuf:"bytes,3002,opt,name=default_value,json=defaultValue,proto3,oneof"`
+	DefaultValue string `protobuf:"bytes,3002,opt,name=default_value,json=defaultValue,proto3,oneof" json:"default_value,omitempty"`
 }
 type FieldViewOptions_CommonChoices struct {
-	CommonChoices *Choices `protobuf:"bytes,3003,opt,name=common_choices,json=commonChoices,oneof"`
+	CommonChoices *Choices `protobuf:"bytes,3003,opt,name=common_choices,json=commonChoices,proto3,oneof" json:"common_choices,omitempty"`
 }
 type FieldViewOptions_DisplayName struct {
-	DisplayName string `protobuf:"bytes,3004,opt,name=display_name,json=displayName,proto3,oneof"`
+	DisplayName string `protobuf:"bytes,3004,opt,name=display_name,json=displayName,proto3,oneof" json:"display_name,omitempty"`
 }
 type FieldViewOptions_Description struct {
-	Description string `protobuf:"bytes,3005,opt,name=description,proto3,oneof"`
+	Description string `protobuf:"bytes,3005,opt,name=description,proto3,oneof" json:"description,omitempty"`
 }
 type FieldViewOptions_Map struct {
-	Map *MapOptions `protobuf:"bytes,3009,opt,name=map,oneof"`
+	Map *MapOptions `protobuf:"bytes,3009,opt,name=map,proto3,oneof" json:"map,omitempty"`
 }
 type FieldViewOptions_Repeated struct {
-	Repeated *RepeatedOptions `protobuf:"bytes,3010,opt,name=repeated,oneof"`
+	Repeated *RepeatedOptions `protobuf:"bytes,3010,opt,name=repeated,proto3,oneof" json:"repeated,omitempty"`
 }
 type FieldViewOptions_InNamespaceTypes struct {
-	InNamespaceTypes string `protobuf:"bytes,3011,opt,name=in_namespace_types,json=inNamespaceTypes,proto3,oneof"`
+	InNamespaceTypes string `protobuf:"bytes,3011,opt,name=in_namespace_types,json=inNamespaceTypes,proto3,oneof" json:"in_namespace_types,omitempty"`
 }
 type FieldViewOptions_InputBoxFormat struct {
-	InputBoxFormat string `protobuf:"bytes,3012,opt,name=input_box_format,json=inputBoxFormat,proto3,oneof"`
+	InputBoxFormat string `protobuf:"bytes,3012,opt,name=input_box_format,json=inputBoxFormat,proto3,oneof" json:"input_box_format,omitempty"`
 }
 
 func (*FieldViewOptions_NewForm) isFieldViewOptions_Type()          {}
@@ -537,9 +700,9 @@ func (m *FieldViewOptions) GetInputBoxFormat() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*FieldViewOptions) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _FieldViewOptions_OneofMarshaler, _FieldViewOptions_OneofUnmarshaler, _FieldViewOptions_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*FieldViewOptions) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*FieldViewOptions_NewForm)(nil),
 		(*FieldViewOptions_InputBoxSize)(nil),
 		(*FieldViewOptions_DefaultValue)(nil),
@@ -553,190 +716,6 @@ func (*FieldViewOptions) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buff
 	}
 }
 
-func _FieldViewOptions_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*FieldViewOptions)
-	// type
-	switch x := m.Type.(type) {
-	case *FieldViewOptions_NewForm:
-		t := uint64(0)
-		if x.NewForm {
-			t = 1
-		}
-		_ = b.EncodeVarint(3000<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *FieldViewOptions_InputBoxSize:
-		_ = b.EncodeVarint(3001<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.InputBoxSize))
-	case *FieldViewOptions_DefaultValue:
-		_ = b.EncodeVarint(3002<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DefaultValue)
-	case *FieldViewOptions_CommonChoices:
-		_ = b.EncodeVarint(3003<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CommonChoices); err != nil {
-			return err
-		}
-	case *FieldViewOptions_DisplayName:
-		_ = b.EncodeVarint(3004<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.DisplayName)
-	case *FieldViewOptions_Description:
-		_ = b.EncodeVarint(3005<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Description)
-	case *FieldViewOptions_Map:
-		_ = b.EncodeVarint(3009<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Map); err != nil {
-			return err
-		}
-	case *FieldViewOptions_Repeated:
-		_ = b.EncodeVarint(3010<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Repeated); err != nil {
-			return err
-		}
-	case *FieldViewOptions_InNamespaceTypes:
-		_ = b.EncodeVarint(3011<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.InNamespaceTypes)
-	case *FieldViewOptions_InputBoxFormat:
-		_ = b.EncodeVarint(3012<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.InputBoxFormat)
-	case nil:
-	default:
-		return fmt.Errorf("FieldViewOptions.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _FieldViewOptions_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*FieldViewOptions)
-	switch tag {
-	case 3000: // type.new_form
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Type = &FieldViewOptions_NewForm{x != 0}
-		return true, err
-	case 3001: // type.input_box_size
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Type = &FieldViewOptions_InputBoxSize{InputSizeType(x)}
-		return true, err
-	case 3002: // type.default_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Type = &FieldViewOptions_DefaultValue{x}
-		return true, err
-	case 3003: // type.common_choices
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Choices)
-		err := b.DecodeMessage(msg)
-		m.Type = &FieldViewOptions_CommonChoices{msg}
-		return true, err
-	case 3004: // type.display_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Type = &FieldViewOptions_DisplayName{x}
-		return true, err
-	case 3005: // type.description
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Type = &FieldViewOptions_Description{x}
-		return true, err
-	case 3009: // type.map
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(MapOptions)
-		err := b.DecodeMessage(msg)
-		m.Type = &FieldViewOptions_Map{msg}
-		return true, err
-	case 3010: // type.repeated
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RepeatedOptions)
-		err := b.DecodeMessage(msg)
-		m.Type = &FieldViewOptions_Repeated{msg}
-		return true, err
-	case 3011: // type.in_namespace_types
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Type = &FieldViewOptions_InNamespaceTypes{x}
-		return true, err
-	case 3012: // type.input_box_format
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Type = &FieldViewOptions_InputBoxFormat{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _FieldViewOptions_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*FieldViewOptions)
-	// type
-	switch x := m.Type.(type) {
-	case *FieldViewOptions_NewForm:
-		n += proto.SizeVarint(3000<<3 | proto.WireVarint)
-		n += 1
-	case *FieldViewOptions_InputBoxSize:
-		n += proto.SizeVarint(3001<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.InputBoxSize))
-	case *FieldViewOptions_DefaultValue:
-		n += proto.SizeVarint(3002<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DefaultValue)))
-		n += len(x.DefaultValue)
-	case *FieldViewOptions_CommonChoices:
-		s := proto.Size(x.CommonChoices)
-		n += proto.SizeVarint(3003<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FieldViewOptions_DisplayName:
-		n += proto.SizeVarint(3004<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.DisplayName)))
-		n += len(x.DisplayName)
-	case *FieldViewOptions_Description:
-		n += proto.SizeVarint(3005<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Description)))
-		n += len(x.Description)
-	case *FieldViewOptions_Map:
-		s := proto.Size(x.Map)
-		n += proto.SizeVarint(3009<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FieldViewOptions_Repeated:
-		s := proto.Size(x.Repeated)
-		n += proto.SizeVarint(3010<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *FieldViewOptions_InNamespaceTypes:
-		n += proto.SizeVarint(3011<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.InNamespaceTypes)))
-		n += len(x.InNamespaceTypes)
-	case *FieldViewOptions_InputBoxFormat:
-		n += proto.SizeVarint(3012<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.InputBoxFormat)))
-		n += len(x.InputBoxFormat)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 type MapOptions struct {
 	// style
 	//
@@ -747,17 +726,41 @@ type MapOptions struct {
 	//
 	// x-displayName "Keys Options"
 	// Keys specifies the view options to be applied to each key in the field.
-	Keys *FieldViewOptions `protobuf:"bytes,2,opt,name=keys" json:"keys,omitempty"`
+	Keys *FieldViewOptions `protobuf:"bytes,2,opt,name=keys,proto3" json:"keys,omitempty"`
 	// values
 	//
 	// x-displayName "Values Options"
 	// Values specifies the view options to be applied to each key in the field.
-	Values *FieldViewOptions `protobuf:"bytes,3,opt,name=values" json:"values,omitempty"`
+	Values *FieldViewOptions `protobuf:"bytes,3,opt,name=values,proto3" json:"values,omitempty"`
 }
 
-func (m *MapOptions) Reset()                    { *m = MapOptions{} }
-func (*MapOptions) ProtoMessage()               {}
-func (*MapOptions) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{6} }
+func (m *MapOptions) Reset()      { *m = MapOptions{} }
+func (*MapOptions) ProtoMessage() {}
+func (*MapOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{6}
+}
+func (m *MapOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MapOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MapOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MapOptions.Merge(m, src)
+}
+func (m *MapOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *MapOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_MapOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MapOptions proto.InternalMessageInfo
 
 func (m *MapOptions) GetStyle() MapRenderStyle {
 	if m != nil {
@@ -793,9 +796,33 @@ type RepeatedOptions struct {
 	OrderedList bool `protobuf:"varint,2,opt,name=ordered_list,json=orderedList,proto3" json:"ordered_list,omitempty"`
 }
 
-func (m *RepeatedOptions) Reset()                    { *m = RepeatedOptions{} }
-func (*RepeatedOptions) ProtoMessage()               {}
-func (*RepeatedOptions) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{7} }
+func (m *RepeatedOptions) Reset()      { *m = RepeatedOptions{} }
+func (*RepeatedOptions) ProtoMessage() {}
+func (*RepeatedOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{7}
+}
+func (m *RepeatedOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RepeatedOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RepeatedOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RepeatedOptions.Merge(m, src)
+}
+func (m *RepeatedOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *RepeatedOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_RepeatedOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RepeatedOptions proto.InternalMessageInfo
 
 func (m *RepeatedOptions) GetStyle() RepeatedRenderStyle {
 	if m != nil {
@@ -838,9 +865,33 @@ type Tile struct {
 	InheritDescription bool `protobuf:"varint,4,opt,name=inherit_description,json=inheritDescription,proto3" json:"inherit_description,omitempty"`
 }
 
-func (m *Tile) Reset()                    { *m = Tile{} }
-func (*Tile) ProtoMessage()               {}
-func (*Tile) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{8} }
+func (m *Tile) Reset()      { *m = Tile{} }
+func (*Tile) ProtoMessage() {}
+func (*Tile) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{8}
+}
+func (m *Tile) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Tile) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tile.Merge(m, src)
+}
+func (m *Tile) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tile) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tile.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tile proto.InternalMessageInfo
 
 func (m *Tile) GetTitle() string {
 	if m != nil {
@@ -879,12 +930,36 @@ type Tiles struct {
 	//
 	// x-displayName "displayname"
 	// field number of a field inside oneof that should be default choice in UI.
-	TileList []*Tile `protobuf:"bytes,1,rep,name=tile_list,json=tileList" json:"tile_list,omitempty"`
+	TileList []*Tile `protobuf:"bytes,1,rep,name=tile_list,json=tileList,proto3" json:"tile_list,omitempty"`
 }
 
-func (m *Tiles) Reset()                    { *m = Tiles{} }
-func (*Tiles) ProtoMessage()               {}
-func (*Tiles) Descriptor() ([]byte, []int) { return fileDescriptorViewOptions, []int{9} }
+func (m *Tiles) Reset()      { *m = Tiles{} }
+func (*Tiles) ProtoMessage() {}
+func (*Tiles) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2e60bc66177b50a0, []int{9}
+}
+func (m *Tiles) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Tiles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Tiles) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Tiles.Merge(m, src)
+}
+func (m *Tiles) XXX_Size() int {
+	return m.Size()
+}
+func (m *Tiles) XXX_DiscardUnknown() {
+	xxx_messageInfo_Tiles.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Tiles proto.InternalMessageInfo
 
 func (m *Tiles) GetTileList() []*Tile {
 	if m != nil {
@@ -894,52 +969,52 @@ func (m *Tiles) GetTileList() []*Tile {
 }
 
 var E_AdvancedLevel = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*int32)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.advanced_level",
-	Tag:           "varint,3000,opt,name=advanced_level,json=advancedLevel",
+	Tag:           "varint,3000,opt,name=advanced_level",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_SiteType = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3001,
 	Name:          "ves.io.schema.site_type",
-	Tag:           "bytes,3001,opt,name=site_type,json=siteType",
+	Tag:           "bytes,3001,opt,name=site_type",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_NewForm = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3002,
 	Name:          "ves.io.schema.new_form",
-	Tag:           "varint,3002,opt,name=new_form,json=newForm",
+	Tag:           "varint,3002,opt,name=new_form",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_DefaultValue = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3003,
 	Name:          "ves.io.schema.default_value",
-	Tag:           "bytes,3003,opt,name=default_value,json=defaultValue",
+	Tag:           "bytes,3003,opt,name=default_value",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_CommonChoices = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*Choices)(nil),
 	Field:         3004,
 	Name:          "ves.io.schema.common_choices",
-	Tag:           "bytes,3004,opt,name=common_choices,json=commonChoices",
+	Tag:           "bytes,3004,opt,name=common_choices",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_Hidden = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3005,
 	Name:          "ves.io.schema.hidden",
@@ -948,7 +1023,7 @@ var E_Hidden = &proto.ExtensionDesc{
 }
 
 var E_Anonymous = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3006,
 	Name:          "ves.io.schema.anonymous",
@@ -957,25 +1032,25 @@ var E_Anonymous = &proto.ExtensionDesc{
 }
 
 var E_InputBoxSize = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*InputSizeType)(nil),
 	Field:         3007,
 	Name:          "ves.io.schema.input_box_size",
-	Tag:           "varint,3007,opt,name=input_box_size,json=inputBoxSize,enum=ves.io.schema.InputSizeType",
+	Tag:           "varint,3007,opt,name=input_box_size,enum=ves.io.schema.InputSizeType",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_DisableCreate = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3008,
 	Name:          "ves.io.schema.disable_create",
-	Tag:           "varint,3008,opt,name=disable_create,json=disableCreate",
+	Tag:           "varint,3008,opt,name=disable_create",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_Unit = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*UnitType)(nil),
 	Field:         3009,
 	Name:          "ves.io.schema.unit",
@@ -984,160 +1059,160 @@ var E_Unit = &proto.ExtensionDesc{
 }
 
 var E_CommonChoiceItems = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*ChoiceItemList)(nil),
 	Field:         3010,
 	Name:          "ves.io.schema.common_choice_items",
-	Tag:           "bytes,3010,opt,name=common_choice_items,json=commonChoiceItems",
+	Tag:           "bytes,3010,opt,name=common_choice_items",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_LabelKeyClasses = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*LabelKeyClassList)(nil),
 	Field:         3011,
 	Name:          "ves.io.schema.label_key_classes",
-	Tag:           "bytes,3011,opt,name=label_key_classes,json=labelKeyClasses",
+	Tag:           "bytes,3011,opt,name=label_key_classes",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_InputBoxFormat = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3012,
 	Name:          "ves.io.schema.input_box_format",
-	Tag:           "bytes,3012,opt,name=input_box_format,json=inputBoxFormat",
+	Tag:           "bytes,3012,opt,name=input_box_format",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_HiddenConditions = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*HiddenConditions)(nil),
 	Field:         3013,
 	Name:          "ves.io.schema.hidden_conditions",
-	Tag:           "bytes,3013,opt,name=hidden_conditions,json=hiddenConditions",
+	Tag:           "bytes,3013,opt,name=hidden_conditions",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_DefaultEnum = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.EnumOptions)(nil),
+	ExtendedType:  (*descriptor.EnumOptions)(nil),
 	ExtensionType: (*int32)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.default_enum",
-	Tag:           "varint,3000,opt,name=default_enum,json=defaultEnum",
+	Tag:           "varint,3000,opt,name=default_enum",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_EnumDisplayOrder = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.EnumOptions)(nil),
+	ExtendedType:  (*descriptor.EnumOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3004,
 	Name:          "ves.io.schema.enum_display_order",
-	Tag:           "bytes,3004,opt,name=enum_display_order,json=enumDisplayOrder",
+	Tag:           "bytes,3004,opt,name=enum_display_order",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_HiddenValue = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.EnumValueOptions)(nil),
+	ExtendedType:  (*descriptor.EnumValueOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.hidden_value",
-	Tag:           "varint,3000,opt,name=hidden_value,json=hiddenValue",
+	Tag:           "varint,3000,opt,name=hidden_value",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_DefaultChoice = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*int32)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.default_choice",
-	Tag:           "varint,3000,opt,name=default_choice,json=defaultChoice",
+	Tag:           "varint,3000,opt,name=default_choice",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofAdvancedLevel = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*int32)(nil),
 	Field:         3001,
 	Name:          "ves.io.schema.oneof_advanced_level",
-	Tag:           "varint,3001,opt,name=oneof_advanced_level,json=oneofAdvancedLevel",
+	Tag:           "varint,3001,opt,name=oneof_advanced_level",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofFieldNumber = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*int32)(nil),
 	Field:         3002,
 	Name:          "ves.io.schema.oneof_field_number",
-	Tag:           "varint,3002,opt,name=oneof_field_number,json=oneofFieldNumber",
+	Tag:           "varint,3002,opt,name=oneof_field_number",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofDisplayOrder = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3004,
 	Name:          "ves.io.schema.oneof_display_order",
-	Tag:           "bytes,3004,opt,name=oneof_display_order,json=oneofDisplayOrder",
+	Tag:           "bytes,3004,opt,name=oneof_display_order",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofIsImmutable = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3005,
 	Name:          "ves.io.schema.oneof_is_immutable",
-	Tag:           "varint,3005,opt,name=oneof_is_immutable,json=oneofIsImmutable",
+	Tag:           "varint,3005,opt,name=oneof_is_immutable",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofHidden = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         3006,
 	Name:          "ves.io.schema.oneof_hidden",
-	Tag:           "varint,3006,opt,name=oneof_hidden,json=oneofHidden",
+	Tag:           "varint,3006,opt,name=oneof_hidden",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofInputBoxSize = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*InputSizeType)(nil),
 	Field:         3007,
 	Name:          "ves.io.schema.oneof_input_box_size",
-	Tag:           "varint,3007,opt,name=oneof_input_box_size,json=oneofInputBoxSize,enum=ves.io.schema.InputSizeType",
+	Tag:           "varint,3007,opt,name=oneof_input_box_size,enum=ves.io.schema.InputSizeType",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofInNamespaceTypes = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*string)(nil),
 	Field:         3008,
 	Name:          "ves.io.schema.oneof_in_namespace_types",
-	Tag:           "bytes,3008,opt,name=oneof_in_namespace_types,json=oneofInNamespaceTypes",
+	Tag:           "bytes,3008,opt,name=oneof_in_namespace_types",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_OneofHiddenConditions = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.OneofOptions)(nil),
+	ExtendedType:  (*descriptor.OneofOptions)(nil),
 	ExtensionType: (*HiddenConditions)(nil),
 	Field:         3009,
 	Name:          "ves.io.schema.oneof_hidden_conditions",
-	Tag:           "bytes,3009,opt,name=oneof_hidden_conditions,json=oneofHiddenConditions",
+	Tag:           "bytes,3009,opt,name=oneof_hidden_conditions",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_ViewOptions = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
+	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*FieldViewOptions)(nil),
 	Field:         929292,
 	Name:          "ves.io.schema.view_options",
-	Tag:           "bytes,929292,opt,name=view_options,json=viewOptions",
+	Tag:           "bytes,929292,opt,name=view_options",
 	Filename:      "ves.io/schema/view_options.proto",
 }
 
 var E_Tiles = &proto.ExtensionDesc{
-	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtendedType:  (*descriptor.MessageOptions)(nil),
 	ExtensionType: (*Tiles)(nil),
 	Field:         3000,
 	Name:          "ves.io.schema.tiles",
@@ -1146,6 +1221,11 @@ var E_Tiles = &proto.ExtensionDesc{
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.LabelKeyClass", LabelKeyClass_name, LabelKeyClass_value)
+	proto.RegisterEnum("ves.io.schema.InputSizeType", InputSizeType_name, InputSizeType_value)
+	proto.RegisterEnum("ves.io.schema.UnitType", UnitType_name, UnitType_value)
+	proto.RegisterEnum("ves.io.schema.MapRenderStyle", MapRenderStyle_name, MapRenderStyle_value)
+	proto.RegisterEnum("ves.io.schema.RepeatedRenderStyle", RepeatedRenderStyle_name, RepeatedRenderStyle_value)
 	proto.RegisterType((*Choices)(nil), "ves.io.schema.Choices")
 	proto.RegisterType((*ChoiceItem)(nil), "ves.io.schema.ChoiceItem")
 	proto.RegisterType((*ChoiceItemList)(nil), "ves.io.schema.ChoiceItemList")
@@ -1156,11 +1236,6 @@ func init() {
 	proto.RegisterType((*RepeatedOptions)(nil), "ves.io.schema.RepeatedOptions")
 	proto.RegisterType((*Tile)(nil), "ves.io.schema.Tile")
 	proto.RegisterType((*Tiles)(nil), "ves.io.schema.Tiles")
-	proto.RegisterEnum("ves.io.schema.LabelKeyClass", LabelKeyClass_name, LabelKeyClass_value)
-	proto.RegisterEnum("ves.io.schema.InputSizeType", InputSizeType_name, InputSizeType_value)
-	proto.RegisterEnum("ves.io.schema.UnitType", UnitType_name, UnitType_value)
-	proto.RegisterEnum("ves.io.schema.MapRenderStyle", MapRenderStyle_name, MapRenderStyle_value)
-	proto.RegisterEnum("ves.io.schema.RepeatedRenderStyle", RepeatedRenderStyle_name, RepeatedRenderStyle_value)
 	proto.RegisterExtension(E_AdvancedLevel)
 	proto.RegisterExtension(E_SiteType)
 	proto.RegisterExtension(E_NewForm)
@@ -1190,6 +1265,133 @@ func init() {
 	proto.RegisterExtension(E_ViewOptions)
 	proto.RegisterExtension(E_Tiles)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/view_options.proto", fileDescriptor_2e60bc66177b50a0) }
+
+var fileDescriptor_2e60bc66177b50a0 = []byte{
+	// 1909 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x58, 0xcf, 0x6f, 0xdb, 0xc8,
+	0xf5, 0x97, 0x6c, 0xc5, 0x6b, 0x3f, 0xc9, 0x32, 0x3d, 0xfe, 0xa5, 0x64, 0x1d, 0xc5, 0xd1, 0x77,
+	0xf1, 0x45, 0xe0, 0x22, 0x72, 0xe1, 0x00, 0xed, 0x2e, 0xbb, 0x01, 0x56, 0x96, 0x19, 0x9b, 0x30,
+	0x25, 0xb9, 0x23, 0x69, 0x17, 0x59, 0xa0, 0x18, 0x50, 0xd2, 0xd8, 0x66, 0xc3, 0x1f, 0x82, 0x48,
+	0xd9, 0xd1, 0x02, 0x05, 0xda, 0x63, 0x81, 0xa2, 0xe8, 0xff, 0xd0, 0x4b, 0x6f, 0xbd, 0x76, 0x7f,
+	0xb5, 0x9b, 0x6e, 0x0b, 0xf4, 0x98, 0x63, 0x0e, 0x3d, 0x34, 0xce, 0xa5, 0xc7, 0xfd, 0x13, 0x8a,
+	0x99, 0x21, 0x29, 0x92, 0x76, 0x42, 0x9f, 0xc4, 0xf9, 0xbc, 0xf7, 0x79, 0xef, 0xcd, 0x9b, 0x99,
+	0x37, 0x6f, 0x04, 0x5b, 0xe7, 0xd4, 0xad, 0x1a, 0xce, 0x8e, 0xdb, 0x3f, 0xa3, 0x96, 0xbe, 0x73,
+	0x6e, 0xd0, 0x0b, 0xe2, 0x0c, 0x3d, 0xc3, 0xb1, 0xdd, 0xea, 0x70, 0xe4, 0x78, 0x0e, 0x5a, 0x14,
+	0x1a, 0x55, 0xa1, 0x71, 0xe7, 0xe1, 0xa9, 0xe1, 0x9d, 0x8d, 0x7b, 0xd5, 0xbe, 0x63, 0xed, 0x9c,
+	0x3a, 0xa7, 0xce, 0x0e, 0xd7, 0xea, 0x8d, 0x4f, 0xf8, 0x88, 0x0f, 0xf8, 0x97, 0x60, 0xdf, 0xd9,
+	0x3a, 0x75, 0x9c, 0x53, 0x93, 0x4e, 0xb5, 0x06, 0xd4, 0xed, 0x8f, 0x8c, 0xa1, 0xe7, 0x8c, 0x7c,
+	0x8d, 0xcd, 0x44, 0x04, 0xba, 0x69, 0x0c, 0x74, 0x8f, 0x0a, 0x69, 0xe5, 0x3e, 0xbc, 0x57, 0x3f,
+	0x73, 0x8c, 0x3e, 0x75, 0xd1, 0x3a, 0xcc, 0xf5, 0xf9, 0x67, 0x29, 0xbb, 0x35, 0xfb, 0x60, 0x01,
+	0xfb, 0xa3, 0xca, 0x3e, 0x80, 0x50, 0x51, 0x3d, 0x6a, 0xa1, 0x55, 0xb8, 0x75, 0xae, 0x9b, 0x63,
+	0xa6, 0x94, 0x7d, 0xb0, 0x80, 0xc5, 0x00, 0x6d, 0x41, 0x3e, 0x70, 0x6c, 0x38, 0x76, 0x69, 0x86,
+	0xcb, 0xa2, 0x50, 0xa5, 0x09, 0xc5, 0xa9, 0x15, 0xcd, 0x70, 0x3d, 0xf4, 0x31, 0x14, 0x84, 0x07,
+	0x62, 0x78, 0xd4, 0x72, 0xb9, 0xd7, 0xfc, 0xee, 0xed, 0x6a, 0x2c, 0x1f, 0xd5, 0x29, 0x09, 0xe7,
+	0xfb, 0xe1, 0xb7, 0x5b, 0xc1, 0xb0, 0xac, 0xe9, 0x3d, 0x6a, 0x1e, 0xd1, 0x49, 0xdd, 0xd4, 0x5d,
+	0x97, 0x9b, 0x7c, 0x0c, 0xf9, 0x67, 0x74, 0x42, 0xfa, 0x0c, 0xa0, 0xc2, 0x62, 0x71, 0x77, 0x33,
+	0x61, 0x31, 0x46, 0xc3, 0xf0, 0xcc, 0xff, 0xa2, 0x6e, 0xe5, 0xf7, 0x59, 0x90, 0x0e, 0x8d, 0xc1,
+	0x80, 0xda, 0x75, 0xc7, 0x1e, 0x18, 0x7c, 0x95, 0xd0, 0x07, 0x50, 0x1c, 0x39, 0x8e, 0x47, 0x9c,
+	0xde, 0x2f, 0x69, 0xdf, 0x23, 0x86, 0xed, 0xa7, 0xa7, 0xc0, 0xd0, 0x16, 0x07, 0x55, 0x1b, 0x55,
+	0x61, 0x45, 0xb7, 0xfb, 0xd4, 0xf5, 0x9c, 0x11, 0xb1, 0xa8, 0xeb, 0xea, 0xa7, 0x94, 0xa9, 0xce,
+	0x70, 0xd5, 0xe5, 0x40, 0xd4, 0x10, 0x12, 0xd5, 0x66, 0x56, 0x87, 0xba, 0x77, 0x46, 0xdc, 0xf1,
+	0xc9, 0x89, 0xf1, 0x9c, 0xa9, 0xce, 0x0a, 0xab, 0x0c, 0x6d, 0x73, 0x50, 0xb5, 0x2b, 0xbf, 0xc9,
+	0x81, 0xf4, 0xc4, 0xa0, 0xe6, 0xe0, 0x53, 0x83, 0x5e, 0xb4, 0xc4, 0xb6, 0x41, 0x9b, 0x30, 0x6f,
+	0xd3, 0x0b, 0x72, 0xe2, 0x8c, 0xac, 0xd2, 0x5f, 0x36, 0xb6, 0xb2, 0x0f, 0xe6, 0x0f, 0x33, 0xf8,
+	0x3d, 0x9b, 0x5e, 0x3c, 0x71, 0x46, 0x16, 0x52, 0xa0, 0x68, 0xd8, 0xc3, 0xb1, 0x47, 0x7a, 0xce,
+	0x73, 0xe2, 0x1a, 0x5f, 0xd0, 0xd2, 0x97, 0x4c, 0xe7, 0x6a, 0x1a, 0x54, 0xa6, 0xd5, 0x36, 0xbe,
+	0xa0, 0x9d, 0xc9, 0x90, 0x1e, 0x66, 0x70, 0x81, 0xd3, 0xf6, 0x9c, 0xe7, 0x0c, 0x43, 0xff, 0x0f,
+	0x8b, 0x03, 0x7a, 0xa2, 0x8f, 0x4d, 0x8f, 0x88, 0xe5, 0xfe, 0x8a, 0x59, 0x59, 0x60, 0x7a, 0x3e,
+	0xfe, 0x29, 0x5f, 0xf8, 0x4f, 0xa0, 0xd8, 0x77, 0x2c, 0xcb, 0xb1, 0x89, 0x58, 0x1c, 0xb7, 0xf4,
+	0x35, 0x53, 0xcc, 0xef, 0xae, 0x5f, 0xbb, 0x8e, 0xee, 0x61, 0x06, 0x2f, 0x0a, 0x42, 0xb0, 0xed,
+	0x3e, 0x80, 0xc2, 0xc0, 0x70, 0x87, 0xa6, 0x3e, 0x21, 0xb6, 0x6e, 0xd1, 0xd2, 0x37, 0x81, 0xa3,
+	0xbc, 0x0f, 0x37, 0x75, 0x8b, 0xa2, 0xff, 0x8b, 0x6f, 0xb0, 0x6f, 0xa7, 0x4a, 0x53, 0x14, 0x55,
+	0x61, 0xd6, 0xd2, 0x87, 0xa5, 0x17, 0x22, 0x82, 0xe4, 0x4e, 0x6a, 0xe8, 0x43, 0x3f, 0x85, 0x87,
+	0x19, 0xcc, 0x14, 0xd1, 0x63, 0x98, 0x1f, 0xd1, 0x21, 0xd5, 0x3d, 0x3a, 0x28, 0xfd, 0x5d, 0x90,
+	0xca, 0x09, 0x12, 0xf6, 0xe5, 0x53, 0x66, 0x48, 0x41, 0x3b, 0x80, 0x0c, 0x9b, 0x07, 0xed, 0x0e,
+	0xf5, 0x3e, 0x25, 0xde, 0x64, 0x48, 0xdd, 0xd2, 0xf7, 0x41, 0x68, 0x92, 0x61, 0x37, 0x03, 0x19,
+	0xcb, 0xb1, 0x8b, 0x7e, 0x04, 0xd2, 0x74, 0x6d, 0xd8, 0xfa, 0xe9, 0x5e, 0xe9, 0x1f, 0x81, 0x7a,
+	0x31, 0xc8, 0xff, 0x13, 0x2e, 0xd8, 0x9b, 0x83, 0x1c, 0x33, 0x58, 0xf9, 0x73, 0x16, 0x60, 0x1a,
+	0x3a, 0x7a, 0x04, 0xb7, 0x5c, 0x6f, 0x62, 0x8a, 0xf3, 0x57, 0xdc, 0xbd, 0x7b, 0x75, 0x92, 0x98,
+	0xda, 0x03, 0x3a, 0x6a, 0x33, 0x25, 0x2c, 0x74, 0xd1, 0x23, 0xc8, 0x3d, 0xa3, 0x13, 0x97, 0x9f,
+	0xcb, 0xfc, 0xee, 0xbd, 0x04, 0x27, 0xb9, 0xc3, 0x30, 0x57, 0x46, 0x3f, 0x85, 0x39, 0xbe, 0xf4,
+	0x6e, 0x69, 0xf6, 0x66, 0x34, 0x5f, 0xbd, 0x62, 0xc3, 0x52, 0x22, 0x6d, 0xe8, 0xc3, 0x78, 0xd4,
+	0x95, 0xb7, 0x64, 0xf9, 0x9a, 0xd0, 0xef, 0x43, 0xc1, 0x19, 0x0d, 0xe8, 0x88, 0x0e, 0x88, 0x69,
+	0xb8, 0x1e, 0x9f, 0xc2, 0x3c, 0xce, 0xfb, 0x18, 0x3b, 0xf5, 0x95, 0x09, 0xe4, 0x3a, 0x86, 0x49,
+	0x59, 0x69, 0xf2, 0x0c, 0xcf, 0x0c, 0x4b, 0x13, 0x1f, 0xb0, 0xb2, 0x76, 0xc2, 0x22, 0x75, 0xfd,
+	0xaa, 0xe4, 0x8f, 0x10, 0x82, 0xdc, 0x19, 0x35, 0x87, 0x7c, 0x72, 0x0b, 0x98, 0x7f, 0xa3, 0x1d,
+	0x58, 0x31, 0xec, 0x33, 0x3a, 0x32, 0x3c, 0x12, 0xdd, 0x6d, 0x39, 0xee, 0x13, 0xf9, 0xa2, 0xfd,
+	0x48, 0x55, 0xfb, 0x08, 0x6e, 0x31, 0xd7, 0x2e, 0xfa, 0x31, 0x2c, 0x78, 0x86, 0x49, 0x45, 0x8c,
+	0xa2, 0x92, 0xad, 0x24, 0x26, 0xc9, 0x14, 0xf1, 0x3c, 0xd3, 0x62, 0x51, 0x6f, 0x9f, 0xc1, 0x62,
+	0xac, 0x12, 0xa1, 0x35, 0x58, 0x3e, 0x52, 0x9e, 0x92, 0xba, 0x56, 0x6b, 0xb7, 0xc9, 0x81, 0xd2,
+	0x54, 0xb0, 0x5a, 0x97, 0x32, 0x68, 0x05, 0x96, 0xa6, 0xf0, 0x51, 0xb3, 0xf5, 0x59, 0x53, 0xca,
+	0xc6, 0xc1, 0x03, 0xa5, 0xa5, 0x1e, 0x4b, 0x33, 0x68, 0x1d, 0xd0, 0x14, 0x54, 0x1b, 0xc7, 0x9a,
+	0x5a, 0x57, 0x3b, 0xd2, 0xec, 0xf6, 0x6f, 0xb3, 0xb0, 0x18, 0x3b, 0xed, 0x68, 0x15, 0x24, 0xb5,
+	0x79, 0xdc, 0xed, 0x90, 0xb6, 0xfa, 0xb9, 0x42, 0xda, 0x8d, 0x9a, 0xa6, 0x49, 0x19, 0x16, 0x40,
+	0x04, 0x6d, 0x28, 0xfb, 0x6a, 0xb7, 0x21, 0x7c, 0x45, 0xe0, 0x27, 0x5d, 0x4d, 0x93, 0x66, 0xd0,
+	0x6d, 0x58, 0x8b, 0xea, 0x76, 0xb5, 0x8e, 0x4a, 0x34, 0xb5, 0xa9, 0x48, 0xb3, 0xe8, 0x7d, 0xd8,
+	0x10, 0xa2, 0x7a, 0xb7, 0xdd, 0x69, 0x35, 0x48, 0x17, 0x6b, 0xa4, 0xdd, 0xc1, 0x6a, 0xf3, 0x40,
+	0xca, 0x6d, 0xff, 0x31, 0x07, 0xf3, 0x5d, 0xdb, 0xf0, 0x78, 0x18, 0x6b, 0xb0, 0xdc, 0x6d, 0xaa,
+	0x1d, 0xd2, 0x50, 0x35, 0x4d, 0x6d, 0x2b, 0xf5, 0x56, 0x73, 0xbf, 0x2d, 0x65, 0x90, 0x04, 0x05,
+	0x0e, 0x07, 0x48, 0x36, 0x44, 0x1a, 0x6a, 0xb3, 0xdb, 0x51, 0xda, 0xd2, 0x0c, 0x2a, 0x02, 0x70,
+	0xe4, 0xb0, 0xd5, 0xc5, 0x6d, 0x69, 0x16, 0x2d, 0xc2, 0x02, 0x1f, 0xef, 0xd7, 0x9e, 0xb6, 0xa5,
+	0x5c, 0x28, 0xde, 0x7b, 0xca, 0xd4, 0x01, 0x2d, 0x41, 0x9e, 0x8f, 0x8f, 0x04, 0x90, 0x0f, 0x81,
+	0x86, 0x00, 0x0a, 0x21, 0x70, 0x20, 0x80, 0xc5, 0x10, 0xe8, 0x08, 0xa0, 0x88, 0x10, 0x14, 0x85,
+	0x0d, 0x75, 0x4f, 0x15, 0xd8, 0x52, 0x88, 0x35, 0x42, 0x4c, 0x0a, 0xb1, 0x83, 0x10, 0x5b, 0x0e,
+	0xb1, 0x8e, 0x12, 0x60, 0x08, 0x95, 0x60, 0x55, 0xc4, 0xa8, 0x76, 0xda, 0xe4, 0x58, 0xc1, 0xfe,
+	0x7c, 0xa5, 0x55, 0x96, 0xdc, 0x69, 0xf4, 0x51, 0xd1, 0x5a, 0x28, 0x3a, 0x4a, 0xb2, 0xd6, 0xd1,
+	0x1d, 0x58, 0x8f, 0xcc, 0x31, 0x2a, 0xdb, 0x08, 0x69, 0x8d, 0x24, 0xad, 0x14, 0xd2, 0x1a, 0x57,
+	0x68, 0xb7, 0xd1, 0x3d, 0x78, 0x9f, 0xcb, 0xea, 0xad, 0x66, 0x53, 0xa9, 0x77, 0xd4, 0x56, 0x33,
+	0xa6, 0x50, 0x0e, 0xc9, 0x0a, 0xc6, 0x2d, 0x1c, 0x93, 0xdd, 0x63, 0xfb, 0x80, 0xcb, 0x8e, 0x6b,
+	0xf5, 0x23, 0x25, 0xee, 0x75, 0x0b, 0x6d, 0x42, 0x89, 0x0b, 0xb1, 0xf2, 0xf3, 0xae, 0xd2, 0x8e,
+	0x4b, 0xef, 0x6f, 0x3f, 0x86, 0x62, 0xbc, 0x90, 0xb1, 0xad, 0xd2, 0xa8, 0x1d, 0x13, 0xac, 0x34,
+	0xf7, 0x15, 0x4c, 0xb4, 0xda, 0x9e, 0xa2, 0xb1, 0xad, 0xb2, 0x0a, 0x52, 0x04, 0xee, 0xd4, 0xf6,
+	0x34, 0x45, 0xca, 0x6e, 0x1f, 0xc1, 0xca, 0x35, 0x15, 0x85, 0x25, 0x01, 0x2b, 0xc7, 0x4a, 0xad,
+	0xa3, 0xec, 0xc7, 0x19, 0x99, 0x6b, 0x45, 0xaa, 0xa6, 0xb4, 0xa5, 0xac, 0xac, 0x40, 0x51, 0x1f,
+	0x9c, 0xb3, 0x1b, 0x7c, 0x40, 0x4c, 0x7a, 0x4e, 0x4d, 0x74, 0xb7, 0x2a, 0x9a, 0xae, 0x6a, 0xd0,
+	0x74, 0x89, 0x52, 0xe8, 0xd7, 0x3a, 0x71, 0x27, 0xdf, 0xc2, 0x8b, 0x01, 0x4b, 0x63, 0x24, 0xf9,
+	0x67, 0xb0, 0xe0, 0x1a, 0x9e, 0xb8, 0x24, 0xd2, 0x2c, 0xf0, 0x1b, 0x7b, 0x01, 0xcf, 0x33, 0x02,
+	0x3b, 0x28, 0xf2, 0x47, 0xd3, 0x2b, 0x3f, 0x8d, 0xcb, 0xef, 0xe9, 0xf9, 0xb0, 0x1f, 0x90, 0xeb,
+	0x89, 0x8b, 0x3c, 0x8d, 0xff, 0xb5, 0xf0, 0x1d, 0xbb, 0xe5, 0xe5, 0x5f, 0x24, 0x6f, 0xf9, 0x34,
+	0x2b, 0xdf, 0xbc, 0xb3, 0x09, 0x48, 0xb4, 0x00, 0xf2, 0x4f, 0x60, 0xee, 0x8c, 0xb7, 0x5d, 0x69,
+	0x66, 0xbf, 0x15, 0x93, 0xf3, 0xb5, 0xe5, 0x8f, 0x61, 0x41, 0xb7, 0x1d, 0x7b, 0x62, 0x39, 0xe3,
+	0xd4, 0x88, 0xfe, 0x2a, 0xa8, 0x53, 0x82, 0xdc, 0x4b, 0x76, 0x4a, 0x69, 0x26, 0xfe, 0x76, 0x83,
+	0x46, 0x2a, 0xde, 0x46, 0xb1, 0xcd, 0x33, 0x30, 0x5c, 0xbd, 0x67, 0x52, 0xd2, 0x1f, 0xb1, 0x0d,
+	0x99, 0xe6, 0xe3, 0x3b, 0x11, 0xe6, 0xa2, 0xcf, 0xaa, 0x73, 0x92, 0x7c, 0x04, 0xb9, 0xb1, 0x6d,
+	0x78, 0x69, 0xe4, 0x17, 0x22, 0xc0, 0x8d, 0x44, 0x80, 0x41, 0xbd, 0xc5, 0xdc, 0x88, 0x6c, 0xc1,
+	0x4a, 0x6c, 0x31, 0x45, 0xfb, 0x9d, 0x66, 0xdb, 0xef, 0x8f, 0xee, 0xbe, 0xb5, 0x3d, 0x67, 0x97,
+	0x1a, 0x5e, 0x8e, 0x2e, 0x2c, 0x6f, 0xd4, 0x65, 0x13, 0x96, 0x4d, 0x76, 0xcf, 0x91, 0x48, 0x67,
+	0x9e, 0xe6, 0xec, 0x7b, 0xe1, 0x6c, 0xeb, 0x5d, 0x9d, 0x3b, 0xf7, 0xb7, 0x64, 0x46, 0x21, 0xea,
+	0xca, 0x87, 0x57, 0x5b, 0xac, 0x34, 0x67, 0xa2, 0x03, 0x4b, 0xf6, 0x5f, 0x2c, 0x6e, 0xb1, 0xcd,
+	0x48, 0x7f, 0xfa, 0x18, 0x48, 0x31, 0xf5, 0xcf, 0x8d, 0x6b, 0x3b, 0xa5, 0xe4, 0x9b, 0x02, 0x4b,
+	0x67, 0x09, 0x44, 0xfe, 0x04, 0x82, 0x13, 0x47, 0xa8, 0x3d, 0xb6, 0xd0, 0xe6, 0x15, 0x47, 0x8a,
+	0x3d, 0xb6, 0x12, 0x25, 0x26, 0xef, 0x53, 0x98, 0x48, 0x3e, 0x02, 0xc4, 0x98, 0x24, 0x68, 0xa6,
+	0x79, 0x87, 0x94, 0x62, 0x47, 0xf4, 0xda, 0x58, 0x62, 0xc4, 0x7d, 0xc1, 0x6b, 0x31, 0x9a, 0xac,
+	0x40, 0xc1, 0x9f, 0xbc, 0x28, 0x1a, 0xf7, 0xaf, 0x35, 0xc3, 0x8b, 0x43, 0x2c, 0xa6, 0x79, 0x9c,
+	0x17, 0x3c, 0x51, 0x37, 0xd8, 0xf6, 0xf7, 0x67, 0x25, 0xf6, 0xda, 0x35, 0x09, 0x6c, 0xd9, 0xd4,
+	0x39, 0x49, 0xd6, 0x4e, 0x9f, 0x25, 0xf6, 0x91, 0x7c, 0x0c, 0xab, 0x0e, 0xd3, 0x22, 0xa9, 0x85,
+	0x38, 0x66, 0xec, 0x4b, 0x61, 0x0c, 0x71, 0x6e, 0x2d, 0x56, 0x8d, 0x35, 0x10, 0x28, 0xe1, 0xcd,
+	0x20, 0xb1, 0xc7, 0x56, 0x8f, 0x8e, 0xd2, 0xec, 0x7d, 0x25, 0xec, 0x49, 0x9c, 0xc9, 0xd7, 0xbd,
+	0xc9, 0x79, 0x72, 0x13, 0x56, 0x84, 0xb5, 0x78, 0xee, 0x53, 0xcc, 0xf9, 0xc9, 0x5f, 0xe6, 0xd4,
+	0x58, 0xf6, 0xc3, 0xe8, 0x0c, 0x97, 0x18, 0x96, 0x35, 0xf6, 0x58, 0x29, 0x48, 0x33, 0xe7, 0xd7,
+	0x46, 0x11, 0x9d, 0xea, 0xaa, 0x01, 0x4f, 0xae, 0x41, 0x41, 0x58, 0x7b, 0x6b, 0x8d, 0x8d, 0xd9,
+	0xf1, 0x0b, 0x65, 0x9e, 0x73, 0xc4, 0xce, 0x95, 0xad, 0x60, 0x01, 0x52, 0x0b, 0x66, 0xcc, 0xd4,
+	0x8d, 0x0a, 0xa6, 0x98, 0xbf, 0x1a, 0xad, 0x9a, 0x9f, 0x41, 0x29, 0x70, 0x97, 0x7c, 0x5e, 0xa5,
+	0xb9, 0xfc, 0x4e, 0x24, 0x75, 0xcd, 0x37, 0x1a, 0x7f, 0x80, 0xc9, 0x17, 0xb0, 0x11, 0x4d, 0xc5,
+	0xbb, 0x4f, 0x76, 0xcc, 0xee, 0x8b, 0x1b, 0x9e, 0xec, 0xb5, 0x48, 0xda, 0x22, 0xc7, 0xbb, 0x0f,
+	0x85, 0xe8, 0x5f, 0x3f, 0x69, 0x75, 0xe4, 0x77, 0xff, 0xfe, 0xf0, 0x66, 0x4f, 0xae, 0xfc, 0xf9,
+	0x74, 0x20, 0x6b, 0xec, 0xfd, 0xc3, 0x1e, 0x23, 0xf7, 0xae, 0x58, 0xf7, 0xff, 0x78, 0x88, 0x1d,
+	0xb3, 0xfc, 0xee, 0xea, 0x35, 0x2f, 0x14, 0x17, 0x0b, 0x23, 0x7b, 0xbf, 0x7a, 0xf9, 0xba, 0x9c,
+	0x79, 0xf5, 0xba, 0x9c, 0xf9, 0xe1, 0x75, 0x39, 0xfb, 0xeb, 0xcb, 0x72, 0xf6, 0x4f, 0x97, 0xe5,
+	0xec, 0xbf, 0x2e, 0xcb, 0xd9, 0x97, 0x97, 0xe5, 0xec, 0xab, 0xcb, 0x72, 0xf6, 0x3f, 0x97, 0xe5,
+	0xec, 0x7f, 0x2f, 0xcb, 0x99, 0x1f, 0x2e, 0xcb, 0xd9, 0x3f, 0xbc, 0x29, 0x67, 0x5e, 0xbe, 0x29,
+	0x67, 0x5e, 0xbd, 0x29, 0x67, 0x3e, 0xaf, 0x9f, 0x3a, 0xc3, 0x67, 0xa7, 0xd5, 0x73, 0xc7, 0xf4,
+	0xe8, 0x68, 0xa4, 0x57, 0xc7, 0xee, 0x0e, 0xff, 0x60, 0xe5, 0xf8, 0xe1, 0x70, 0xe4, 0x9c, 0x1b,
+	0x03, 0x3a, 0x7a, 0x18, 0x88, 0x77, 0x86, 0xbd, 0x53, 0x67, 0x87, 0x3e, 0xf7, 0xfc, 0x3f, 0xa8,
+	0xc4, 0x4f, 0x6f, 0x8e, 0xc7, 0xfe, 0xe8, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x7c, 0xc2, 0x16,
+	0x57, 0x41, 0x13, 0x00, 0x00,
+}
+
 func (x LabelKeyClass) String() string {
 	s, ok := LabelKeyClass_name[int32(x)]
 	if ok {
@@ -1983,7 +2185,7 @@ func valueToGoStringViewOptions(v interface{}, typ string) string {
 func (m *Choices) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1991,32 +2193,31 @@ func (m *Choices) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Choices) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Choices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Choice) > 0 {
-		for _, s := range m.Choice {
+		for iNdEx := len(m.Choice) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Choice[iNdEx])
+			copy(dAtA[i:], m.Choice[iNdEx])
+			i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Choice[iNdEx])))
+			i--
 			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ChoiceItem) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2024,29 +2225,36 @@ func (m *ChoiceItem) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ChoiceItem) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ChoiceItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Value) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Value)))
-		i += copy(dAtA[i:], m.Value)
-	}
 	if len(m.Description) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
 		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Description)))
-		i += copy(dAtA[i:], m.Description)
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *ChoiceItemList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2054,29 +2262,36 @@ func (m *ChoiceItemList) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ChoiceItemList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ChoiceItemList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.ChoiceItems) > 0 {
-		for _, msg := range m.ChoiceItems {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintViewOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.ChoiceItems) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ChoiceItems[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintViewOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *LabelKeyClassList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2084,7 +2299,12 @@ func (m *LabelKeyClassList) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LabelKeyClassList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelKeyClassList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
@@ -2100,18 +2320,19 @@ func (m *LabelKeyClassList) MarshalTo(dAtA []byte) (int, error) {
 			dAtA2[j1] = uint8(num)
 			j1++
 		}
-		dAtA[i] = 0xa
-		i++
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
 		i = encodeVarintViewOptions(dAtA, i, uint64(j1))
-		i += copy(dAtA[i:], dAtA2[:j1])
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *HiddenConditions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2119,62 +2340,49 @@ func (m *HiddenConditions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HiddenConditions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HiddenConditions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.RootObjectIn) > 0 {
-		for _, s := range m.RootObjectIn {
-			dAtA[i] = 0xa
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.PathSuffixIn) > 0 {
+		for iNdEx := len(m.PathSuffixIn) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.PathSuffixIn[iNdEx])
+			copy(dAtA[i:], m.PathSuffixIn[iNdEx])
+			i = encodeVarintViewOptions(dAtA, i, uint64(len(m.PathSuffixIn[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
 	if len(m.AncestorMessageIn) > 0 {
-		for _, s := range m.AncestorMessageIn {
+		for iNdEx := len(m.AncestorMessageIn) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AncestorMessageIn[iNdEx])
+			copy(dAtA[i:], m.AncestorMessageIn[iNdEx])
+			i = encodeVarintViewOptions(dAtA, i, uint64(len(m.AncestorMessageIn[iNdEx])))
+			i--
 			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.PathSuffixIn) > 0 {
-		for _, s := range m.PathSuffixIn {
-			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+	if len(m.RootObjectIn) > 0 {
+		for iNdEx := len(m.RootObjectIn) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RootObjectIn[iNdEx])
+			copy(dAtA[i:], m.RootObjectIn[iNdEx])
+			i = encodeVarintViewOptions(dAtA, i, uint64(len(m.RootObjectIn[iNdEx])))
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FieldViewOptions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2182,165 +2390,233 @@ func (m *FieldViewOptions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FieldViewOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Type != nil {
-		nn3, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.Type.Size()
+			i -= size
+			if _, err := m.Type.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn3
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *FieldViewOptions_NewForm) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc0
-	i++
-	dAtA[i] = 0xbb
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_NewForm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
 	if m.NewForm {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i++
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbb
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_InputBoxSize) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xc8
-	i++
-	dAtA[i] = 0xbb
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_InputBoxSize) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	i = encodeVarintViewOptions(dAtA, i, uint64(m.InputBoxSize))
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbb
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_DefaultValue) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xd2
-	i++
-	dAtA[i] = 0xbb
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_DefaultValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DefaultValue)
+	copy(dAtA[i:], m.DefaultValue)
 	i = encodeVarintViewOptions(dAtA, i, uint64(len(m.DefaultValue)))
-	i += copy(dAtA[i:], m.DefaultValue)
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbb
+	i--
+	dAtA[i] = 0xd2
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_CommonChoices) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_CommonChoices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CommonChoices != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0xbb
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.CommonChoices.Size()))
-		n4, err := m.CommonChoices.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CommonChoices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintViewOptions(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xbb
+		i--
+		dAtA[i] = 0xda
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_DisplayName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xe2
-	i++
-	dAtA[i] = 0xbb
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_DisplayName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.DisplayName)
+	copy(dAtA[i:], m.DisplayName)
 	i = encodeVarintViewOptions(dAtA, i, uint64(len(m.DisplayName)))
-	i += copy(dAtA[i:], m.DisplayName)
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbb
+	i--
+	dAtA[i] = 0xe2
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_Description) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xea
-	i++
-	dAtA[i] = 0xbb
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_Description) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Description)
+	copy(dAtA[i:], m.Description)
 	i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Description)))
-	i += copy(dAtA[i:], m.Description)
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbb
+	i--
+	dAtA[i] = 0xea
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_Map) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_Map) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Map != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0xbc
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Map.Size()))
-		n5, err := m.Map.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Map.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintViewOptions(dAtA, i, uint64(size))
 		}
-		i += n5
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xbc
+		i--
+		dAtA[i] = 0x8a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_Repeated) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_Repeated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Repeated != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0xbc
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Repeated.Size()))
-		n6, err := m.Repeated.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Repeated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintViewOptions(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xbc
+		i--
+		dAtA[i] = 0x92
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_InNamespaceTypes) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x9a
-	i++
-	dAtA[i] = 0xbc
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_InNamespaceTypes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.InNamespaceTypes)
+	copy(dAtA[i:], m.InNamespaceTypes)
 	i = encodeVarintViewOptions(dAtA, i, uint64(len(m.InNamespaceTypes)))
-	i += copy(dAtA[i:], m.InNamespaceTypes)
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbc
+	i--
+	dAtA[i] = 0x9a
+	return len(dAtA) - i, nil
 }
 func (m *FieldViewOptions_InputBoxFormat) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa2
-	i++
-	dAtA[i] = 0xbc
-	i++
-	dAtA[i] = 0x1
-	i++
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *FieldViewOptions_InputBoxFormat) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.InputBoxFormat)
+	copy(dAtA[i:], m.InputBoxFormat)
 	i = encodeVarintViewOptions(dAtA, i, uint64(len(m.InputBoxFormat)))
-	i += copy(dAtA[i:], m.InputBoxFormat)
-	return i, nil
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xbc
+	i--
+	dAtA[i] = 0xa2
+	return len(dAtA) - i, nil
 }
 func (m *MapOptions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2348,42 +2624,51 @@ func (m *MapOptions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MapOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MapOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Style != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Style))
+	if m.Values != nil {
+		{
+			size, err := m.Values.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintViewOptions(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if m.Keys != nil {
+		{
+			size, err := m.Keys.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintViewOptions(dAtA, i, uint64(size))
+		}
+		i--
 		dAtA[i] = 0x12
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Keys.Size()))
-		n7, err := m.Keys.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
 	}
-	if m.Values != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Values.Size()))
-		n8, err := m.Values.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n8
+	if m.Style != 0 {
+		i = encodeVarintViewOptions(dAtA, i, uint64(m.Style))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *RepeatedOptions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2391,32 +2676,37 @@ func (m *RepeatedOptions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RepeatedOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RepeatedOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Style != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(m.Style))
-	}
 	if m.OrderedList {
-		dAtA[i] = 0x10
-		i++
+		i--
 		if m.OrderedList {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if m.Style != 0 {
+		i = encodeVarintViewOptions(dAtA, i, uint64(m.Style))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Tile) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2424,45 +2714,53 @@ func (m *Tile) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Tile) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Title) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Title)))
-		i += copy(dAtA[i:], m.Title)
-	}
-	if len(m.Fields) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Fields)))
-		i += copy(dAtA[i:], m.Fields)
-	}
-	if len(m.Help) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Help)))
-		i += copy(dAtA[i:], m.Help)
-	}
 	if m.InheritDescription {
-		dAtA[i] = 0x20
-		i++
+		i--
 		if m.InheritDescription {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x20
 	}
-	return i, nil
+	if len(m.Help) > 0 {
+		i -= len(m.Help)
+		copy(dAtA[i:], m.Help)
+		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Help)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Fields) > 0 {
+		i -= len(m.Fields)
+		copy(dAtA[i:], m.Fields)
+		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Fields)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Title) > 0 {
+		i -= len(m.Title)
+		copy(dAtA[i:], m.Title)
+		i = encodeVarintViewOptions(dAtA, i, uint64(len(m.Title)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Tiles) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2470,35 +2768,47 @@ func (m *Tiles) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Tiles) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Tiles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.TileList) > 0 {
-		for _, msg := range m.TileList {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintViewOptions(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.TileList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TileList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintViewOptions(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintViewOptions(dAtA []byte, offset int, v uint64) int {
+	offset -= sovViewOptions(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *Choices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Choice) > 0 {
@@ -2511,6 +2821,9 @@ func (m *Choices) Size() (n int) {
 }
 
 func (m *ChoiceItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Value)
@@ -2525,6 +2838,9 @@ func (m *ChoiceItem) Size() (n int) {
 }
 
 func (m *ChoiceItemList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.ChoiceItems) > 0 {
@@ -2537,6 +2853,9 @@ func (m *ChoiceItemList) Size() (n int) {
 }
 
 func (m *LabelKeyClassList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.KeyClasses) > 0 {
@@ -2550,6 +2869,9 @@ func (m *LabelKeyClassList) Size() (n int) {
 }
 
 func (m *HiddenConditions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.RootObjectIn) > 0 {
@@ -2574,6 +2896,9 @@ func (m *HiddenConditions) Size() (n int) {
 }
 
 func (m *FieldViewOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Type != nil {
@@ -2583,18 +2908,27 @@ func (m *FieldViewOptions) Size() (n int) {
 }
 
 func (m *FieldViewOptions_NewForm) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 4
 	return n
 }
 func (m *FieldViewOptions_InputBoxSize) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	n += 3 + sovViewOptions(uint64(m.InputBoxSize))
 	return n
 }
 func (m *FieldViewOptions_DefaultValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DefaultValue)
@@ -2602,6 +2936,9 @@ func (m *FieldViewOptions_DefaultValue) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_CommonChoices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CommonChoices != nil {
@@ -2611,6 +2948,9 @@ func (m *FieldViewOptions_CommonChoices) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_DisplayName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.DisplayName)
@@ -2618,6 +2958,9 @@ func (m *FieldViewOptions_DisplayName) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_Description) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Description)
@@ -2625,6 +2968,9 @@ func (m *FieldViewOptions_Description) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_Map) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Map != nil {
@@ -2634,6 +2980,9 @@ func (m *FieldViewOptions_Map) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_Repeated) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Repeated != nil {
@@ -2643,6 +2992,9 @@ func (m *FieldViewOptions_Repeated) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_InNamespaceTypes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.InNamespaceTypes)
@@ -2650,6 +3002,9 @@ func (m *FieldViewOptions_InNamespaceTypes) Size() (n int) {
 	return n
 }
 func (m *FieldViewOptions_InputBoxFormat) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.InputBoxFormat)
@@ -2657,6 +3012,9 @@ func (m *FieldViewOptions_InputBoxFormat) Size() (n int) {
 	return n
 }
 func (m *MapOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Style != 0 {
@@ -2674,6 +3032,9 @@ func (m *MapOptions) Size() (n int) {
 }
 
 func (m *RepeatedOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Style != 0 {
@@ -2686,6 +3047,9 @@ func (m *RepeatedOptions) Size() (n int) {
 }
 
 func (m *Tile) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	l = len(m.Title)
@@ -2707,6 +3071,9 @@ func (m *Tile) Size() (n int) {
 }
 
 func (m *Tiles) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.TileList) > 0 {
@@ -2719,14 +3086,7 @@ func (m *Tiles) Size() (n int) {
 }
 
 func sovViewOptions(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozViewOptions(x uint64) (n int) {
 	return sovViewOptions(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -2756,8 +3116,13 @@ func (this *ChoiceItemList) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForChoiceItems := "[]*ChoiceItem{"
+	for _, f := range this.ChoiceItems {
+		repeatedStringForChoiceItems += strings.Replace(f.String(), "ChoiceItem", "ChoiceItem", 1) + ","
+	}
+	repeatedStringForChoiceItems += "}"
 	s := strings.Join([]string{`&ChoiceItemList{`,
-		`ChoiceItems:` + strings.Replace(fmt.Sprintf("%v", this.ChoiceItems), "ChoiceItem", "ChoiceItem", 1) + `,`,
+		`ChoiceItems:` + repeatedStringForChoiceItems + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2900,8 +3265,8 @@ func (this *MapOptions) String() string {
 	}
 	s := strings.Join([]string{`&MapOptions{`,
 		`Style:` + fmt.Sprintf("%v", this.Style) + `,`,
-		`Keys:` + strings.Replace(fmt.Sprintf("%v", this.Keys), "FieldViewOptions", "FieldViewOptions", 1) + `,`,
-		`Values:` + strings.Replace(fmt.Sprintf("%v", this.Values), "FieldViewOptions", "FieldViewOptions", 1) + `,`,
+		`Keys:` + strings.Replace(this.Keys.String(), "FieldViewOptions", "FieldViewOptions", 1) + `,`,
+		`Values:` + strings.Replace(this.Values.String(), "FieldViewOptions", "FieldViewOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2934,8 +3299,13 @@ func (this *Tiles) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForTileList := "[]*Tile{"
+	for _, f := range this.TileList {
+		repeatedStringForTileList += strings.Replace(f.String(), "Tile", "Tile", 1) + ","
+	}
+	repeatedStringForTileList += "}"
 	s := strings.Join([]string{`&Tiles{`,
-		`TileList:` + strings.Replace(fmt.Sprintf("%v", this.TileList), "Tile", "Tile", 1) + `,`,
+		`TileList:` + repeatedStringForTileList + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2963,7 +3333,7 @@ func (m *Choices) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2991,7 +3361,7 @@ func (m *Choices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3001,6 +3371,9 @@ func (m *Choices) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3013,6 +3386,9 @@ func (m *Choices) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3042,7 +3418,7 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3070,7 +3446,7 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3080,6 +3456,9 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3099,7 +3478,7 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3109,6 +3488,9 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3121,6 +3503,9 @@ func (m *ChoiceItem) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3150,7 +3535,7 @@ func (m *ChoiceItemList) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3178,7 +3563,7 @@ func (m *ChoiceItemList) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3187,6 +3572,9 @@ func (m *ChoiceItemList) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3202,6 +3590,9 @@ func (m *ChoiceItemList) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3231,7 +3622,7 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3257,7 +3648,7 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= (LabelKeyClass(b) & 0x7F) << shift
+					v |= LabelKeyClass(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3274,7 +3665,7 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
+					packedLen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -3283,8 +3674,15 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 					return ErrInvalidLengthViewOptions
 				}
 				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthViewOptions
+				}
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.KeyClasses) == 0 {
+					m.KeyClasses = make([]LabelKeyClass, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v LabelKeyClass
@@ -3297,7 +3695,7 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= (LabelKeyClass(b) & 0x7F) << shift
+						v |= LabelKeyClass(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -3314,6 +3712,9 @@ func (m *LabelKeyClassList) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3343,7 +3744,7 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3371,7 +3772,7 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3381,6 +3782,9 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3400,7 +3804,7 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3410,6 +3814,9 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3429,7 +3836,7 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3439,6 +3846,9 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3451,6 +3861,9 @@ func (m *HiddenConditions) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3480,7 +3893,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3508,7 +3921,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3529,7 +3942,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (InputSizeType(b) & 0x7F) << shift
+				v |= InputSizeType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3549,7 +3962,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3559,6 +3972,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3578,7 +3994,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3587,6 +4003,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3610,7 +4029,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3620,6 +4039,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3639,7 +4061,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3649,6 +4071,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3668,7 +4093,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3677,6 +4102,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3700,7 +4128,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3709,6 +4137,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3732,7 +4163,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3742,6 +4173,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3761,7 +4195,7 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3771,6 +4205,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3783,6 +4220,9 @@ func (m *FieldViewOptions) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3812,7 +4252,7 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3840,7 +4280,7 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Style |= (MapRenderStyle(b) & 0x7F) << shift
+				m.Style |= MapRenderStyle(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3859,7 +4299,7 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3868,6 +4308,9 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3892,7 +4335,7 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3901,6 +4344,9 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -3918,6 +4364,9 @@ func (m *MapOptions) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -3947,7 +4396,7 @@ func (m *RepeatedOptions) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -3975,7 +4424,7 @@ func (m *RepeatedOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Style |= (RepeatedRenderStyle(b) & 0x7F) << shift
+				m.Style |= RepeatedRenderStyle(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3994,7 +4443,7 @@ func (m *RepeatedOptions) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4007,6 +4456,9 @@ func (m *RepeatedOptions) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4036,7 +4488,7 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4064,7 +4516,7 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4074,6 +4526,9 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4093,7 +4548,7 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4103,6 +4558,9 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4122,7 +4580,7 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4132,6 +4590,9 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4151,7 +4612,7 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (int(b) & 0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4164,6 +4625,9 @@ func (m *Tile) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthViewOptions
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthViewOptions
 			}
 			if (iNdEx + skippy) > l {
@@ -4193,7 +4657,7 @@ func (m *Tiles) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -4221,7 +4685,7 @@ func (m *Tiles) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -4230,6 +4694,9 @@ func (m *Tiles) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthViewOptions
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4247,6 +4714,9 @@ func (m *Tiles) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthViewOptions
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthViewOptions
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -4262,6 +4732,7 @@ func (m *Tiles) Unmarshal(dAtA []byte) error {
 func skipViewOptions(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -4293,10 +4764,8 @@ func skipViewOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -4313,178 +4782,34 @@ func skipViewOptions(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthViewOptions
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowViewOptions
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipViewOptions(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupViewOptions
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthViewOptions
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthViewOptions = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowViewOptions   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthViewOptions        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowViewOptions          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupViewOptions = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/view_options.proto", fileDescriptorViewOptions) }
-
-var fileDescriptorViewOptions = []byte{
-	// 1899 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x58, 0xcf, 0x6f, 0xdb, 0xc8,
-	0xf5, 0x97, 0x6c, 0xc5, 0x6b, 0x3f, 0xc9, 0x32, 0x3d, 0xfe, 0xa5, 0x64, 0x1d, 0xc5, 0xd1, 0x77,
-	0xf1, 0x45, 0xe0, 0x22, 0x72, 0xe1, 0x00, 0xed, 0x2e, 0xbb, 0x01, 0x56, 0x96, 0x19, 0x9b, 0x30,
-	0x25, 0xb9, 0x23, 0x69, 0x17, 0x59, 0xa0, 0x18, 0x50, 0xd2, 0xd8, 0x66, 0xc3, 0x1f, 0x02, 0x49,
-	0xd9, 0xf1, 0x9e, 0xda, 0x63, 0x81, 0xa2, 0xe8, 0xff, 0xd0, 0x4b, 0x6f, 0xbd, 0x76, 0x7f, 0xb5,
-	0x9b, 0x6e, 0x0b, 0xf4, 0xb8, 0xc7, 0x3d, 0xf4, 0xd0, 0xb8, 0x97, 0x1e, 0xf7, 0x4f, 0x28, 0x66,
-	0x86, 0xa4, 0x48, 0xda, 0x09, 0x7d, 0x12, 0xe7, 0xf3, 0xde, 0xe7, 0xbd, 0x37, 0x6f, 0x66, 0xde,
-	0xbc, 0x11, 0x6c, 0x9d, 0x53, 0xaf, 0x6e, 0x38, 0x3b, 0xde, 0xf0, 0x8c, 0x5a, 0xfa, 0xce, 0xb9,
-	0x41, 0x2f, 0x88, 0x33, 0xf6, 0x0d, 0xc7, 0xf6, 0xea, 0x63, 0xd7, 0xf1, 0x1d, 0xb4, 0x28, 0x34,
-	0xea, 0x42, 0xe3, 0xde, 0xe3, 0x53, 0xc3, 0x3f, 0x9b, 0x0c, 0xea, 0x43, 0xc7, 0xda, 0x39, 0x75,
-	0x4e, 0x9d, 0x1d, 0xae, 0x35, 0x98, 0x9c, 0xf0, 0x11, 0x1f, 0xf0, 0x2f, 0xc1, 0xbe, 0xb7, 0x75,
-	0xea, 0x38, 0xa7, 0x26, 0x9d, 0x6a, 0x8d, 0xa8, 0x37, 0x74, 0x8d, 0xb1, 0xef, 0xb8, 0x81, 0xc6,
-	0x66, 0x2a, 0x02, 0xdd, 0x34, 0x46, 0xba, 0x4f, 0x85, 0xb4, 0xf6, 0x10, 0xde, 0x69, 0x9e, 0x39,
-	0xc6, 0x90, 0x7a, 0x68, 0x1d, 0xe6, 0x86, 0xfc, 0xb3, 0x92, 0xdf, 0x9a, 0x7d, 0xb4, 0x80, 0x83,
-	0x51, 0x6d, 0x1f, 0x40, 0xa8, 0xa8, 0x3e, 0xb5, 0xd0, 0x2a, 0xdc, 0x39, 0xd7, 0xcd, 0x09, 0x53,
-	0xca, 0x3f, 0x5a, 0xc0, 0x62, 0x80, 0xb6, 0xa0, 0x18, 0x3a, 0x36, 0x1c, 0xbb, 0x32, 0xc3, 0x65,
-	0x71, 0xa8, 0xd6, 0x86, 0xf2, 0xd4, 0x8a, 0x66, 0x78, 0x3e, 0xfa, 0x10, 0x4a, 0xc2, 0x03, 0x31,
-	0x7c, 0x6a, 0x79, 0xdc, 0x6b, 0x71, 0xf7, 0x6e, 0x3d, 0x91, 0x8f, 0xfa, 0x94, 0x84, 0x8b, 0xc3,
-	0xe8, 0xdb, 0xab, 0x61, 0x58, 0xd6, 0xf4, 0x01, 0x35, 0x8f, 0xe8, 0x65, 0xd3, 0xd4, 0x3d, 0x8f,
-	0x9b, 0x7c, 0x0a, 0xc5, 0x17, 0xf4, 0x92, 0x0c, 0x19, 0x40, 0x85, 0xc5, 0xf2, 0xee, 0x66, 0xca,
-	0x62, 0x82, 0x86, 0xe1, 0x45, 0xf0, 0x45, 0xbd, 0xda, 0xef, 0xf2, 0x20, 0x1d, 0x1a, 0xa3, 0x11,
-	0xb5, 0x9b, 0x8e, 0x3d, 0x32, 0xf8, 0x2a, 0xa1, 0xf7, 0xa0, 0xec, 0x3a, 0x8e, 0x4f, 0x9c, 0xc1,
-	0x2f, 0xe9, 0xd0, 0x27, 0x86, 0x1d, 0xa4, 0xa7, 0xc4, 0xd0, 0x0e, 0x07, 0x55, 0x1b, 0xd5, 0x61,
-	0x45, 0xb7, 0x87, 0xd4, 0xf3, 0x1d, 0x97, 0x58, 0xd4, 0xf3, 0xf4, 0x53, 0xca, 0x54, 0x67, 0xb8,
-	0xea, 0x72, 0x28, 0x6a, 0x09, 0x89, 0x6a, 0x33, 0xab, 0x63, 0xdd, 0x3f, 0x23, 0xde, 0xe4, 0xe4,
-	0xc4, 0x78, 0xc9, 0x54, 0x67, 0x85, 0x55, 0x86, 0x76, 0x39, 0xa8, 0xda, 0xb5, 0x5f, 0x17, 0x40,
-	0x7a, 0x66, 0x50, 0x73, 0xf4, 0xb1, 0x41, 0x2f, 0x3a, 0x62, 0xdb, 0xa0, 0x4d, 0x98, 0xb7, 0xe9,
-	0x05, 0x39, 0x71, 0x5c, 0xab, 0xf2, 0xe7, 0x8d, 0xad, 0xfc, 0xa3, 0xf9, 0xc3, 0x1c, 0x7e, 0xc7,
-	0xa6, 0x17, 0xcf, 0x1c, 0xd7, 0x42, 0x0a, 0x94, 0x0d, 0x7b, 0x3c, 0xf1, 0xc9, 0xc0, 0x79, 0x49,
-	0x3c, 0xe3, 0x33, 0x5a, 0xf9, 0x9c, 0xe9, 0x5c, 0x4f, 0x83, 0xca, 0xb4, 0xba, 0xc6, 0x67, 0xb4,
-	0x77, 0x39, 0xa6, 0x87, 0x39, 0x5c, 0xe2, 0xb4, 0x3d, 0xe7, 0x25, 0xc3, 0xd0, 0xff, 0xc3, 0xe2,
-	0x88, 0x9e, 0xe8, 0x13, 0xd3, 0x27, 0x62, 0xb9, 0xbf, 0x60, 0x56, 0x16, 0x98, 0x5e, 0x80, 0x7f,
-	0xcc, 0x17, 0xfe, 0x23, 0x28, 0x0f, 0x1d, 0xcb, 0x72, 0x6c, 0x22, 0x16, 0xc7, 0xab, 0x7c, 0xc9,
-	0x14, 0x8b, 0xbb, 0xeb, 0x37, 0xae, 0xa3, 0x77, 0x98, 0xc3, 0x8b, 0x82, 0x10, 0x6e, 0xbb, 0xf7,
-	0xa0, 0x34, 0x32, 0xbc, 0xb1, 0xa9, 0x5f, 0x12, 0x5b, 0xb7, 0x68, 0xe5, 0xab, 0xd0, 0x51, 0x31,
-	0x80, 0xdb, 0xba, 0x45, 0xd1, 0xff, 0x25, 0x37, 0xd8, 0xd7, 0x53, 0xa5, 0x29, 0x8a, 0xea, 0x30,
-	0x6b, 0xe9, 0xe3, 0xca, 0x2b, 0x11, 0x41, 0x7a, 0x27, 0xb5, 0xf4, 0x71, 0x90, 0xc2, 0xc3, 0x1c,
-	0x66, 0x8a, 0xe8, 0x29, 0xcc, 0xbb, 0x74, 0x4c, 0x75, 0x9f, 0x8e, 0x2a, 0x7f, 0x13, 0xa4, 0x6a,
-	0x8a, 0x84, 0x03, 0xf9, 0x94, 0x19, 0x51, 0xd0, 0x0e, 0x20, 0xc3, 0xe6, 0x41, 0x7b, 0x63, 0x7d,
-	0x48, 0x89, 0x7f, 0x39, 0xa6, 0x5e, 0xe5, 0xdb, 0x30, 0x34, 0xc9, 0xb0, 0xdb, 0xa1, 0x8c, 0xe5,
-	0xd8, 0x43, 0x3f, 0x02, 0x69, 0xba, 0x36, 0x6c, 0xfd, 0x74, 0xbf, 0xf2, 0xf7, 0x50, 0xbd, 0x1c,
-	0xe6, 0xff, 0x19, 0x17, 0xec, 0xcd, 0x41, 0x81, 0x19, 0xac, 0xfd, 0x29, 0x0f, 0x30, 0x0d, 0x1d,
-	0x3d, 0x81, 0x3b, 0x9e, 0x7f, 0x69, 0x8a, 0xf3, 0x57, 0xde, 0xbd, 0x7f, 0x7d, 0x92, 0x98, 0xda,
-	0x23, 0xea, 0x76, 0x99, 0x12, 0x16, 0xba, 0xe8, 0x09, 0x14, 0x5e, 0xd0, 0x4b, 0x8f, 0x9f, 0xcb,
-	0xe2, 0xee, 0x83, 0x14, 0x27, 0xbd, 0xc3, 0x30, 0x57, 0x46, 0x3f, 0x85, 0x39, 0xbe, 0xf4, 0x5e,
-	0x65, 0xf6, 0x76, 0xb4, 0x40, 0xbd, 0x66, 0xc3, 0x52, 0x2a, 0x6d, 0xe8, 0xfd, 0x64, 0xd4, 0xb5,
-	0x37, 0x64, 0xf9, 0x86, 0xd0, 0x1f, 0x42, 0xc9, 0x71, 0x47, 0xd4, 0xa5, 0x23, 0x62, 0x1a, 0x9e,
-	0xcf, 0xa7, 0x30, 0x8f, 0x8b, 0x01, 0xc6, 0x4e, 0x7d, 0xed, 0x12, 0x0a, 0x3d, 0xc3, 0xa4, 0xac,
-	0x34, 0xf9, 0x86, 0x6f, 0x46, 0xa5, 0x89, 0x0f, 0x58, 0x59, 0x3b, 0x61, 0x91, 0x7a, 0x41, 0x55,
-	0x0a, 0x46, 0x08, 0x41, 0xe1, 0x8c, 0x9a, 0x63, 0x3e, 0xb9, 0x05, 0xcc, 0xbf, 0xd1, 0x0e, 0xac,
-	0x18, 0xf6, 0x19, 0x75, 0x0d, 0x9f, 0xc4, 0x77, 0x5b, 0x81, 0xfb, 0x44, 0x81, 0x68, 0x3f, 0x56,
-	0xd5, 0x3e, 0x80, 0x3b, 0xcc, 0xb5, 0x87, 0x7e, 0x0c, 0x0b, 0xbe, 0x61, 0x52, 0x11, 0xa3, 0xa8,
-	0x64, 0x2b, 0xa9, 0x49, 0x32, 0x45, 0x3c, 0xcf, 0xb4, 0x58, 0xd4, 0xdb, 0x67, 0xb0, 0x98, 0xa8,
-	0x44, 0x68, 0x0d, 0x96, 0x8f, 0x94, 0xe7, 0xa4, 0xa9, 0x35, 0xba, 0x5d, 0x72, 0xa0, 0xb4, 0x15,
-	0xac, 0x36, 0xa5, 0x1c, 0x5a, 0x81, 0xa5, 0x29, 0x7c, 0xd4, 0xee, 0x7c, 0xd2, 0x96, 0xf2, 0x49,
-	0xf0, 0x40, 0xe9, 0xa8, 0xc7, 0xd2, 0x0c, 0x5a, 0x07, 0x34, 0x05, 0xd5, 0xd6, 0xb1, 0xa6, 0x36,
-	0xd5, 0x9e, 0x34, 0xbb, 0xfd, 0x9b, 0x3c, 0x2c, 0x26, 0x4e, 0x3b, 0x5a, 0x05, 0x49, 0x6d, 0x1f,
-	0xf7, 0x7b, 0xa4, 0xab, 0x7e, 0xaa, 0x90, 0x6e, 0xab, 0xa1, 0x69, 0x52, 0x8e, 0x05, 0x10, 0x43,
-	0x5b, 0xca, 0xbe, 0xda, 0x6f, 0x09, 0x5f, 0x31, 0xf8, 0x59, 0x5f, 0xd3, 0xa4, 0x19, 0x74, 0x17,
-	0xd6, 0xe2, 0xba, 0x7d, 0xad, 0xa7, 0x12, 0x4d, 0x6d, 0x2b, 0xd2, 0x2c, 0x7a, 0x17, 0x36, 0x84,
-	0xa8, 0xd9, 0xef, 0xf6, 0x3a, 0x2d, 0xd2, 0xc7, 0x1a, 0xe9, 0xf6, 0xb0, 0xda, 0x3e, 0x90, 0x0a,
-	0xdb, 0x7f, 0x28, 0xc0, 0x7c, 0xdf, 0x36, 0x7c, 0x1e, 0xc6, 0x1a, 0x2c, 0xf7, 0xdb, 0x6a, 0x8f,
-	0xb4, 0x54, 0x4d, 0x53, 0xbb, 0x4a, 0xb3, 0xd3, 0xde, 0xef, 0x4a, 0x39, 0x24, 0x41, 0x89, 0xc3,
-	0x21, 0x92, 0x8f, 0x90, 0x96, 0xda, 0xee, 0xf7, 0x94, 0xae, 0x34, 0x83, 0xca, 0x00, 0x1c, 0x39,
-	0xec, 0xf4, 0x71, 0x57, 0x9a, 0x45, 0x8b, 0xb0, 0xc0, 0xc7, 0xfb, 0x8d, 0xe7, 0x5d, 0xa9, 0x10,
-	0x89, 0xf7, 0x9e, 0x33, 0x75, 0x40, 0x4b, 0x50, 0xe4, 0xe3, 0x23, 0x01, 0x14, 0x23, 0xa0, 0x25,
-	0x80, 0x52, 0x04, 0x1c, 0x08, 0x60, 0x31, 0x02, 0x7a, 0x02, 0x28, 0x23, 0x04, 0x65, 0x61, 0x43,
-	0xdd, 0x53, 0x05, 0xb6, 0x14, 0x61, 0xad, 0x08, 0x93, 0x22, 0xec, 0x20, 0xc2, 0x96, 0x23, 0xac,
-	0xa7, 0x84, 0x18, 0x42, 0x15, 0x58, 0x15, 0x31, 0xaa, 0xbd, 0x2e, 0x39, 0x56, 0x70, 0x30, 0x5f,
-	0x69, 0x95, 0x25, 0x77, 0x1a, 0x7d, 0x5c, 0xb4, 0x16, 0x89, 0x8e, 0xd2, 0xac, 0x75, 0x74, 0x0f,
-	0xd6, 0x63, 0x73, 0x8c, 0xcb, 0x36, 0x22, 0x5a, 0x2b, 0x4d, 0xab, 0x44, 0xb4, 0xd6, 0x35, 0xda,
-	0x5d, 0xf4, 0x00, 0xde, 0xe5, 0xb2, 0x66, 0xa7, 0xdd, 0x56, 0x9a, 0x3d, 0xb5, 0xd3, 0x4e, 0x28,
-	0x54, 0x23, 0xb2, 0x82, 0x71, 0x07, 0x27, 0x64, 0x0f, 0xd8, 0x3e, 0xe0, 0xb2, 0xe3, 0x46, 0xf3,
-	0x48, 0x49, 0x7a, 0xdd, 0x42, 0x9b, 0x50, 0xe1, 0x42, 0xac, 0xfc, 0xbc, 0xaf, 0x74, 0x93, 0xd2,
-	0x87, 0xdb, 0x4f, 0xa1, 0x9c, 0x2c, 0x64, 0x6c, 0xab, 0xb4, 0x1a, 0xc7, 0x04, 0x2b, 0xed, 0x7d,
-	0x05, 0x13, 0xad, 0xb1, 0xa7, 0x68, 0x6c, 0xab, 0xac, 0x82, 0x14, 0x83, 0x7b, 0x8d, 0x3d, 0x4d,
-	0x91, 0xf2, 0xdb, 0x47, 0xb0, 0x72, 0x43, 0x45, 0x61, 0x49, 0xc0, 0xca, 0xb1, 0xd2, 0xe8, 0x29,
-	0xfb, 0x49, 0x46, 0xee, 0x46, 0x91, 0xaa, 0x29, 0x5d, 0x29, 0x2f, 0x2b, 0x50, 0xd6, 0x47, 0xe7,
-	0xec, 0x06, 0x1f, 0x11, 0x93, 0x9e, 0x53, 0x13, 0xdd, 0xaf, 0x8b, 0xa6, 0xab, 0x1e, 0x36, 0x5d,
-	0xa2, 0x14, 0x06, 0xb5, 0x4e, 0xdc, 0xc9, 0x77, 0xf0, 0x62, 0xc8, 0xd2, 0x18, 0x49, 0xfe, 0x19,
-	0x2c, 0x78, 0x86, 0x2f, 0x2e, 0x89, 0x2c, 0x0b, 0xfc, 0xc6, 0x5e, 0xc0, 0xf3, 0x8c, 0xc0, 0x0e,
-	0x8a, 0xfc, 0xc1, 0xf4, 0xca, 0xcf, 0xe2, 0xf2, 0x7b, 0x7a, 0x3e, 0xea, 0x07, 0xe4, 0x66, 0xea,
-	0x22, 0xcf, 0xe2, 0x7f, 0x29, 0x7c, 0x27, 0x6e, 0x79, 0xf9, 0x17, 0xe9, 0x5b, 0x3e, 0xcb, 0xca,
-	0x57, 0x6f, 0x6d, 0x02, 0x52, 0x2d, 0x80, 0xfc, 0x13, 0x98, 0x3b, 0xe3, 0x6d, 0x57, 0x96, 0xd9,
-	0xaf, 0xc5, 0xe4, 0x02, 0x6d, 0xf9, 0x43, 0x58, 0xd0, 0x6d, 0xc7, 0xbe, 0xb4, 0x9c, 0x49, 0x66,
-	0x44, 0x7f, 0x11, 0xd4, 0x29, 0x41, 0x1e, 0xa4, 0x3b, 0xa5, 0x2c, 0x13, 0x7f, 0xbd, 0x45, 0x23,
-	0x95, 0x6c, 0xa3, 0xd8, 0xe6, 0x19, 0x19, 0x9e, 0x3e, 0x30, 0x29, 0x19, 0xba, 0x6c, 0x43, 0x66,
-	0xf9, 0xf8, 0x46, 0x84, 0xb9, 0x18, 0xb0, 0x9a, 0x9c, 0x24, 0x1f, 0x41, 0x61, 0x62, 0x1b, 0x7e,
-	0x16, 0xf9, 0x95, 0x08, 0x70, 0x23, 0x15, 0x60, 0x58, 0x6f, 0x31, 0x37, 0x22, 0x5b, 0xb0, 0x92,
-	0x58, 0x4c, 0xd1, 0x7e, 0x67, 0xd9, 0x0e, 0xfa, 0xa3, 0xfb, 0x6f, 0x6c, 0xcf, 0xd9, 0xa5, 0x86,
-	0x97, 0xe3, 0x0b, 0xcb, 0x1b, 0x75, 0xd9, 0x84, 0x65, 0x93, 0xdd, 0x73, 0x24, 0xd6, 0x99, 0x67,
-	0x39, 0xfb, 0x56, 0x38, 0xdb, 0x7a, 0x5b, 0xe7, 0xce, 0xfd, 0x2d, 0x99, 0x71, 0x88, 0x7a, 0xf2,
-	0xe1, 0xf5, 0x16, 0x2b, 0xcb, 0x99, 0xe8, 0xc0, 0xd2, 0xfd, 0x17, 0x8b, 0x5b, 0x6c, 0x33, 0x32,
-	0x9c, 0x3e, 0x06, 0x32, 0x4c, 0xfd, 0x63, 0xe3, 0xc6, 0x4e, 0x29, 0xfd, 0xa6, 0xc0, 0xd2, 0x59,
-	0x0a, 0x91, 0x3f, 0x82, 0xf0, 0xc4, 0x11, 0x6a, 0x4f, 0x2c, 0xb4, 0x79, 0xcd, 0x91, 0x62, 0x4f,
-	0xac, 0x54, 0x89, 0x29, 0x06, 0x14, 0x26, 0x92, 0x8f, 0x00, 0x31, 0x26, 0x09, 0x9b, 0x69, 0xde,
-	0x21, 0x65, 0xd8, 0x11, 0xbd, 0x36, 0x96, 0x18, 0x71, 0x5f, 0xf0, 0x3a, 0x8c, 0x26, 0x2b, 0x50,
-	0x0a, 0x26, 0x2f, 0x8a, 0xc6, 0xc3, 0x1b, 0xcd, 0xf0, 0xe2, 0x90, 0x88, 0x69, 0x1e, 0x17, 0x05,
-	0x4f, 0xd4, 0x0d, 0xb6, 0xfd, 0x83, 0x59, 0x89, 0xbd, 0x76, 0x43, 0x02, 0x3b, 0x36, 0x75, 0x4e,
-	0xd2, 0xb5, 0x33, 0x60, 0x89, 0x7d, 0x24, 0x1f, 0xc3, 0xaa, 0xc3, 0xb4, 0x48, 0x66, 0x21, 0x4e,
-	0x18, 0xfb, 0x5c, 0x18, 0x43, 0x9c, 0xdb, 0x48, 0x54, 0x63, 0x0d, 0x04, 0x4a, 0x78, 0x33, 0x48,
-	0xec, 0x89, 0x35, 0xa0, 0x6e, 0x96, 0xbd, 0x2f, 0x84, 0x3d, 0x89, 0x33, 0xf9, 0xba, 0xb7, 0x39,
-	0x4f, 0x6e, 0xc3, 0x8a, 0xb0, 0x96, 0xcc, 0x7d, 0x86, 0xb9, 0x20, 0xf9, 0xcb, 0x9c, 0x9a, 0xc8,
-	0x7e, 0x14, 0x9d, 0xe1, 0x11, 0xc3, 0xb2, 0x26, 0x3e, 0x2b, 0x05, 0x59, 0xe6, 0x82, 0xda, 0x28,
-	0xa2, 0x53, 0x3d, 0x35, 0xe4, 0xc9, 0x0d, 0x28, 0x09, 0x6b, 0x6f, 0xac, 0xb1, 0x09, 0x3b, 0x41,
-	0xa1, 0x2c, 0x72, 0x8e, 0xd8, 0xb9, 0xb2, 0x15, 0x2e, 0x40, 0x66, 0xc1, 0x4c, 0x98, 0xba, 0x55,
-	0xc1, 0x14, 0xf3, 0x57, 0xe3, 0x55, 0xf3, 0x13, 0xa8, 0x84, 0xee, 0xd2, 0xcf, 0xab, 0x2c, 0x97,
-	0xdf, 0x88, 0xa4, 0xae, 0x05, 0x46, 0x93, 0x0f, 0x30, 0xf9, 0x02, 0x36, 0xe2, 0xa9, 0x78, 0xfb,
-	0xc9, 0x4e, 0xd8, 0x7d, 0x75, 0xcb, 0x93, 0xbd, 0x16, 0x4b, 0x5b, 0xec, 0x78, 0x0f, 0xa1, 0x14,
-	0xff, 0xeb, 0x27, 0xab, 0x8e, 0xfc, 0xf6, 0x5f, 0xef, 0xdf, 0xee, 0xc9, 0x55, 0x3c, 0x9f, 0x0e,
-	0x64, 0x8d, 0xbd, 0x7f, 0xd8, 0x63, 0xe4, 0xc1, 0x35, 0xeb, 0xc1, 0x1f, 0x0f, 0x89, 0x63, 0x56,
-	0xdc, 0x5d, 0xbd, 0xe1, 0x85, 0xe2, 0x61, 0x61, 0x64, 0x6f, 0xf2, 0xdd, 0xeb, 0x6a, 0xee, 0xfb,
-	0xd7, 0xd5, 0xdc, 0x0f, 0xaf, 0xab, 0xf9, 0x5f, 0x5d, 0x55, 0xf3, 0x7f, 0xbc, 0xaa, 0xe6, 0xff,
-	0x79, 0x55, 0xcd, 0x7f, 0x77, 0x55, 0xcd, 0x7f, 0x7f, 0x55, 0xcd, 0xff, 0xfb, 0xaa, 0x9a, 0xff,
-	0xef, 0x55, 0x35, 0xf7, 0xc3, 0x55, 0x35, 0xff, 0xfb, 0xff, 0x54, 0x73, 0x9f, 0x36, 0x4f, 0x9d,
-	0xf1, 0x8b, 0xd3, 0xfa, 0xb9, 0x63, 0xfa, 0xd4, 0x75, 0xf5, 0xfa, 0xc4, 0xdb, 0xe1, 0x1f, 0xac,
-	0x0c, 0x3f, 0x1e, 0xbb, 0xce, 0xb9, 0x31, 0xa2, 0xee, 0xe3, 0x50, 0xbc, 0x33, 0x1e, 0x9c, 0x3a,
-	0x3b, 0xf4, 0xa5, 0x1f, 0xfc, 0x31, 0x25, 0x7e, 0x06, 0x73, 0x3c, 0xe6, 0x27, 0xff, 0x0b, 0x00,
-	0x00, 0xff, 0xff, 0xa6, 0x30, 0xc8, 0xdf, 0x39, 0x13, 0x00, 0x00,
-}

@@ -3,26 +3,31 @@
 
 package token
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strconv "strconv"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strconv "strconv"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // State
 //
@@ -48,13 +53,16 @@ var State_name = map[int32]string{
 	1: "VALID",
 	3: "EXPIRED",
 }
+
 var State_value = map[string]int32{
 	"UNKNOWN": 0,
 	"VALID":   1,
 	"EXPIRED": 3,
 }
 
-func (State) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (State) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{0}
+}
 
 // Token state
 //
@@ -69,9 +77,33 @@ type GlobalSpecType struct {
 	State State `protobuf:"varint,1,opt,name=state,proto3,enum=ves.io.schema.token.State" json:"state,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{0}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetState() State {
 	if m != nil {
@@ -88,9 +120,33 @@ func (m *GlobalSpecType) GetState() State {
 type CreateSpecType struct {
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{1}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 // Replace token
 //
@@ -100,9 +156,33 @@ func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 type ReplaceSpecType struct {
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{2}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 // Get token
 //
@@ -113,9 +193,33 @@ type GetSpecType struct {
 	State State `protobuf:"varint,1,opt,name=state,proto3,enum=ves.io.schema.token.State" json:"state,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{3}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetState() State {
 	if m != nil {
@@ -125,6 +229,8 @@ func (m *GetSpecType) GetState() State {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
+	golang_proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.token.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.token.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.token.CreateSpecType")
@@ -133,9 +239,40 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.token.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.token.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.token.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
-	golang_proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
 }
+
+func init() { proto.RegisterFile("ves.io/schema/token/types.proto", fileDescriptor_6dd221b9cd54c493) }
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/token/types.proto", fileDescriptor_6dd221b9cd54c493)
+}
+
+var fileDescriptor_6dd221b9cd54c493 = []byte{
+	// 368 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2f, 0x4b, 0x2d, 0xd6,
+	0xcb, 0xcc, 0xd7, 0x2f, 0x4e, 0xce, 0x48, 0xcd, 0x4d, 0xd4, 0x2f, 0xc9, 0xcf, 0x4e, 0xcd, 0xd3,
+	0x2f, 0xa9, 0x2c, 0x48, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x86, 0x28, 0xd0,
+	0x83, 0x28, 0xd0, 0x03, 0x2b, 0x90, 0xd2, 0x4d, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce,
+	0xcf, 0xd5, 0x4f, 0xcf, 0x4f, 0xcf, 0xd7, 0x07, 0xab, 0x4d, 0x2a, 0x4d, 0x03, 0xf3, 0xc0, 0x1c,
+	0x30, 0x0b, 0x62, 0x86, 0x94, 0x34, 0xaa, 0x25, 0xf9, 0x05, 0x25, 0x99, 0xf9, 0x79, 0x50, 0x0b,
+	0xa4, 0x24, 0xd1, 0x5c, 0x80, 0xb0, 0x5b, 0xc9, 0x89, 0x8b, 0xcf, 0x3d, 0x27, 0x3f, 0x29, 0x31,
+	0x27, 0xb8, 0x20, 0x35, 0x39, 0xa4, 0xb2, 0x20, 0x55, 0xc8, 0x80, 0x8b, 0xb5, 0xb8, 0x24, 0xb1,
+	0x24, 0x55, 0x82, 0x51, 0x81, 0x51, 0x83, 0xcf, 0x48, 0x4a, 0x0f, 0x8b, 0xeb, 0xf4, 0x82, 0x41,
+	0x2a, 0x82, 0x20, 0x0a, 0x95, 0x94, 0xb9, 0xf8, 0x9c, 0x8b, 0x52, 0x13, 0x4b, 0x52, 0x61, 0x66,
+	0x58, 0x09, 0x9e, 0xb2, 0x43, 0x33, 0x56, 0x49, 0x85, 0x8b, 0x3f, 0x28, 0xb5, 0x20, 0x27, 0x31,
+	0x19, 0xaf, 0xaa, 0x20, 0x2e, 0x6e, 0xf7, 0xd4, 0x12, 0xf2, 0xdd, 0x82, 0xc5, 0x4c, 0x2d, 0x1d,
+	0x2e, 0x56, 0xb0, 0x12, 0x21, 0x6e, 0x2e, 0xf6, 0x50, 0x3f, 0x6f, 0x3f, 0xff, 0x70, 0x3f, 0x01,
+	0x06, 0x21, 0x4e, 0x2e, 0xd6, 0x30, 0x47, 0x1f, 0x4f, 0x17, 0x01, 0x46, 0x90, 0xb8, 0x6b, 0x44,
+	0x80, 0x67, 0x90, 0xab, 0x8b, 0x00, 0xb3, 0x53, 0x3b, 0xe3, 0x85, 0x87, 0x72, 0x0c, 0x37, 0x1e,
+	0xca, 0x31, 0x7c, 0x78, 0x28, 0xc7, 0xd8, 0xf0, 0x48, 0x8e, 0x71, 0xc5, 0x23, 0x39, 0xc6, 0x13,
+	0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0xbc, 0xf1, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6,
+	0x17, 0x8f, 0xe4, 0x18, 0x3e, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc0, 0x63, 0x39,
+	0xc6, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xf2, 0x4c, 0xcf, 0x2f, 0xc8, 0x4e,
+	0xd7, 0x2b, 0xcb, 0xcf, 0x29, 0x49, 0x2d, 0x2a, 0x4a, 0xd4, 0x2b, 0x2d, 0xd6, 0x07, 0x33, 0xd2,
+	0xf2, 0x8b, 0x72, 0x75, 0x0b, 0x8a, 0xf2, 0xcb, 0x32, 0x53, 0x52, 0x8b, 0x74, 0x61, 0xd2, 0xfa,
+	0x05, 0x49, 0xe9, 0xf9, 0xfa, 0xa9, 0x15, 0x25, 0xd0, 0x98, 0x41, 0x4e, 0x22, 0x49, 0x6c, 0xe0,
+	0x18, 0x32, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x1e, 0x90, 0x0a, 0x25, 0x40, 0x02, 0x00, 0x00,
+}
+
 func (x State) String() string {
 	s, ok := State_name[int32(x)]
 	if ok {
@@ -282,7 +419,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -290,22 +427,27 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.State != 0 {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -313,17 +455,22 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -331,17 +478,22 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -349,28 +501,38 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.State != 0 {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.State != 0 {
@@ -380,18 +542,27 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	return n
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	return n
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.State != 0 {
@@ -401,14 +572,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -474,7 +638,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -502,7 +666,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.State |= (State(b) & 0x7F) << shift
+				m.State |= State(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -514,6 +678,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -543,7 +710,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -564,6 +731,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -593,7 +763,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -614,6 +784,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -643,7 +816,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -671,7 +844,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.State |= (State(b) & 0x7F) << shift
+				m.State |= State(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -683,6 +856,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -700,6 +876,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -731,10 +908,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -751,83 +926,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() { proto.RegisterFile("ves.io/schema/token/types.proto", fileDescriptorTypes) }
-func init() { golang_proto.RegisterFile("ves.io/schema/token/types.proto", fileDescriptorTypes) }
-
-var fileDescriptorTypes = []byte{
-	// 359 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2f, 0x4b, 0x2d, 0xd6,
-	0xcb, 0xcc, 0xd7, 0x2f, 0x4e, 0xce, 0x48, 0xcd, 0x4d, 0xd4, 0x2f, 0xc9, 0xcf, 0x4e, 0xcd, 0xd3,
-	0x2f, 0xa9, 0x2c, 0x48, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x86, 0x28, 0xd0,
-	0x83, 0x28, 0xd0, 0x03, 0x2b, 0x90, 0xd2, 0x4d, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce,
-	0xcf, 0xd5, 0x4f, 0xcf, 0x4f, 0xcf, 0xd7, 0x07, 0xab, 0x4d, 0x2a, 0x4d, 0x03, 0xf3, 0xc0, 0x1c,
-	0x30, 0x0b, 0x62, 0x86, 0x94, 0x34, 0xaa, 0x25, 0xf9, 0x05, 0x25, 0x99, 0xf9, 0x79, 0x50, 0x0b,
-	0xa4, 0x24, 0xd1, 0x5c, 0x80, 0xb0, 0x5b, 0xc9, 0x89, 0x8b, 0xcf, 0x3d, 0x27, 0x3f, 0x29, 0x31,
-	0x27, 0xb8, 0x20, 0x35, 0x39, 0xa4, 0xb2, 0x20, 0x55, 0xc8, 0x80, 0x8b, 0xb5, 0xb8, 0x24, 0xb1,
-	0x24, 0x55, 0x82, 0x51, 0x81, 0x51, 0x83, 0xcf, 0x48, 0x4a, 0x0f, 0x8b, 0xeb, 0xf4, 0x82, 0x41,
-	0x2a, 0x82, 0x20, 0x0a, 0x95, 0x94, 0xb9, 0xf8, 0x9c, 0x8b, 0x52, 0x13, 0x4b, 0x52, 0x61, 0x66,
-	0x58, 0x09, 0x9e, 0xb2, 0x43, 0x33, 0x56, 0x49, 0x85, 0x8b, 0x3f, 0x28, 0xb5, 0x20, 0x27, 0x31,
-	0x19, 0xaf, 0xaa, 0x20, 0x2e, 0x6e, 0xf7, 0xd4, 0x12, 0xf2, 0xdd, 0x82, 0xc5, 0x4c, 0x2d, 0x1d,
-	0x2e, 0x56, 0xb0, 0x12, 0x21, 0x6e, 0x2e, 0xf6, 0x50, 0x3f, 0x6f, 0x3f, 0xff, 0x70, 0x3f, 0x01,
-	0x06, 0x21, 0x4e, 0x2e, 0xd6, 0x30, 0x47, 0x1f, 0x4f, 0x17, 0x01, 0x46, 0x90, 0xb8, 0x6b, 0x44,
-	0x80, 0x67, 0x90, 0xab, 0x8b, 0x00, 0xb3, 0x53, 0xfd, 0x85, 0x87, 0x72, 0x0c, 0x37, 0x1e, 0xca,
-	0x31, 0x7c, 0x78, 0x28, 0xc7, 0xd8, 0xf0, 0x48, 0x8e, 0x71, 0xc5, 0x23, 0x39, 0xc6, 0x13, 0x8f,
-	0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0xbc, 0xf1, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x17,
-	0x8f, 0xe4, 0x18, 0x3e, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc0, 0x63, 0x39, 0xc6,
-	0x28, 0xcf, 0xf4, 0xfc, 0x82, 0xec, 0x74, 0xbd, 0xb2, 0xfc, 0x9c, 0x92, 0xd4, 0xa2, 0xa2, 0x44,
-	0xbd, 0xd2, 0x62, 0x7d, 0x30, 0x23, 0x2d, 0xbf, 0x28, 0x57, 0xb7, 0xa0, 0x28, 0xbf, 0x2c, 0x33,
-	0x25, 0xb5, 0x48, 0x17, 0x26, 0xad, 0x5f, 0x90, 0x94, 0x9e, 0xaf, 0x9f, 0x5a, 0x51, 0x02, 0x8d,
-	0x10, 0xe4, 0x94, 0x91, 0xc4, 0x06, 0x8e, 0x18, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x62,
-	0x34, 0x46, 0x76, 0x37, 0x02, 0x00, 0x00,
-}

@@ -3,27 +3,31 @@
 
 package malicious_user_mitigation
 
-import proto "github.com/gogo/protobuf/proto"
-import golang_proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import _ "github.com/gogo/protobuf/gogoproto"
-import _ "github.com/gogo/protobuf/types"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-import strings "strings"
-import reflect "reflect"
-
-import io "io"
+import (
+	fmt "fmt"
+	_ "github.com/gogo/protobuf/gogoproto"
+	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
+	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	io "io"
+	math "math"
+	math_bits "math/bits"
+	reflect "reflect"
+	strings "strings"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MaliciousUserThreatLevel
 //
@@ -43,9 +47,33 @@ type MaliciousUserThreatLevel struct {
 	ThreatLevel isMaliciousUserThreatLevel_ThreatLevel `protobuf_oneof:"threat_level"`
 }
 
-func (m *MaliciousUserThreatLevel) Reset()                    { *m = MaliciousUserThreatLevel{} }
-func (*MaliciousUserThreatLevel) ProtoMessage()               {}
-func (*MaliciousUserThreatLevel) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+func (m *MaliciousUserThreatLevel) Reset()      { *m = MaliciousUserThreatLevel{} }
+func (*MaliciousUserThreatLevel) ProtoMessage() {}
+func (*MaliciousUserThreatLevel) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3846b9e60d65fab8, []int{0}
+}
+func (m *MaliciousUserThreatLevel) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MaliciousUserThreatLevel) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MaliciousUserThreatLevel) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaliciousUserThreatLevel.Merge(m, src)
+}
+func (m *MaliciousUserThreatLevel) XXX_Size() int {
+	return m.Size()
+}
+func (m *MaliciousUserThreatLevel) XXX_DiscardUnknown() {
+	xxx_messageInfo_MaliciousUserThreatLevel.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MaliciousUserThreatLevel proto.InternalMessageInfo
 
 type isMaliciousUserThreatLevel_ThreatLevel interface {
 	isMaliciousUserThreatLevel_ThreatLevel()
@@ -55,13 +83,13 @@ type isMaliciousUserThreatLevel_ThreatLevel interface {
 }
 
 type MaliciousUserThreatLevel_Low struct {
-	Low *ves_io_schema4.Empty `protobuf:"bytes,1,opt,name=low,oneof"`
+	Low *schema.Empty `protobuf:"bytes,1,opt,name=low,proto3,oneof" json:"low,omitempty"`
 }
 type MaliciousUserThreatLevel_Medium struct {
-	Medium *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=medium,oneof"`
+	Medium *schema.Empty `protobuf:"bytes,2,opt,name=medium,proto3,oneof" json:"medium,omitempty"`
 }
 type MaliciousUserThreatLevel_High struct {
-	High *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=high,oneof"`
+	High *schema.Empty `protobuf:"bytes,3,opt,name=high,proto3,oneof" json:"high,omitempty"`
 }
 
 func (*MaliciousUserThreatLevel_Low) isMaliciousUserThreatLevel_ThreatLevel()    {}
@@ -75,118 +103,34 @@ func (m *MaliciousUserThreatLevel) GetThreatLevel() isMaliciousUserThreatLevel_T
 	return nil
 }
 
-func (m *MaliciousUserThreatLevel) GetLow() *ves_io_schema4.Empty {
+func (m *MaliciousUserThreatLevel) GetLow() *schema.Empty {
 	if x, ok := m.GetThreatLevel().(*MaliciousUserThreatLevel_Low); ok {
 		return x.Low
 	}
 	return nil
 }
 
-func (m *MaliciousUserThreatLevel) GetMedium() *ves_io_schema4.Empty {
+func (m *MaliciousUserThreatLevel) GetMedium() *schema.Empty {
 	if x, ok := m.GetThreatLevel().(*MaliciousUserThreatLevel_Medium); ok {
 		return x.Medium
 	}
 	return nil
 }
 
-func (m *MaliciousUserThreatLevel) GetHigh() *ves_io_schema4.Empty {
+func (m *MaliciousUserThreatLevel) GetHigh() *schema.Empty {
 	if x, ok := m.GetThreatLevel().(*MaliciousUserThreatLevel_High); ok {
 		return x.High
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*MaliciousUserThreatLevel) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _MaliciousUserThreatLevel_OneofMarshaler, _MaliciousUserThreatLevel_OneofUnmarshaler, _MaliciousUserThreatLevel_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MaliciousUserThreatLevel) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*MaliciousUserThreatLevel_Low)(nil),
 		(*MaliciousUserThreatLevel_Medium)(nil),
 		(*MaliciousUserThreatLevel_High)(nil),
 	}
-}
-
-func _MaliciousUserThreatLevel_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*MaliciousUserThreatLevel)
-	// threat_level
-	switch x := m.ThreatLevel.(type) {
-	case *MaliciousUserThreatLevel_Low:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Low); err != nil {
-			return err
-		}
-	case *MaliciousUserThreatLevel_Medium:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Medium); err != nil {
-			return err
-		}
-	case *MaliciousUserThreatLevel_High:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.High); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("MaliciousUserThreatLevel.ThreatLevel has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _MaliciousUserThreatLevel_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*MaliciousUserThreatLevel)
-	switch tag {
-	case 1: // threat_level.low
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ThreatLevel = &MaliciousUserThreatLevel_Low{msg}
-		return true, err
-	case 2: // threat_level.medium
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ThreatLevel = &MaliciousUserThreatLevel_Medium{msg}
-		return true, err
-	case 3: // threat_level.high
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ThreatLevel = &MaliciousUserThreatLevel_High{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _MaliciousUserThreatLevel_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*MaliciousUserThreatLevel)
-	// threat_level
-	switch x := m.ThreatLevel.(type) {
-	case *MaliciousUserThreatLevel_Low:
-		s := proto.Size(x.Low)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserThreatLevel_Medium:
-		s := proto.Size(x.Medium)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserThreatLevel_High:
-		s := proto.Size(x.High)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // MaliciousUserMitigationAction
@@ -212,8 +156,30 @@ type MaliciousUserMitigationAction struct {
 func (m *MaliciousUserMitigationAction) Reset()      { *m = MaliciousUserMitigationAction{} }
 func (*MaliciousUserMitigationAction) ProtoMessage() {}
 func (*MaliciousUserMitigationAction) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{1}
+	return fileDescriptor_3846b9e60d65fab8, []int{1}
 }
+func (m *MaliciousUserMitigationAction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MaliciousUserMitigationAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MaliciousUserMitigationAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaliciousUserMitigationAction.Merge(m, src)
+}
+func (m *MaliciousUserMitigationAction) XXX_Size() int {
+	return m.Size()
+}
+func (m *MaliciousUserMitigationAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_MaliciousUserMitigationAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MaliciousUserMitigationAction proto.InternalMessageInfo
 
 type isMaliciousUserMitigationAction_MitigationAction interface {
 	isMaliciousUserMitigationAction_MitigationAction()
@@ -223,19 +189,19 @@ type isMaliciousUserMitigationAction_MitigationAction interface {
 }
 
 type MaliciousUserMitigationAction_None struct {
-	None *ves_io_schema4.Empty `protobuf:"bytes,1,opt,name=none,oneof"`
+	None *schema.Empty `protobuf:"bytes,1,opt,name=none,proto3,oneof" json:"none,omitempty"`
 }
 type MaliciousUserMitigationAction_AlertOnly struct {
-	AlertOnly *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=alert_only,json=alertOnly,oneof"`
+	AlertOnly *schema.Empty `protobuf:"bytes,2,opt,name=alert_only,json=alertOnly,proto3,oneof" json:"alert_only,omitempty"`
 }
 type MaliciousUserMitigationAction_JavascriptChallenge struct {
-	JavascriptChallenge *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=javascript_challenge,json=javascriptChallenge,oneof"`
+	JavascriptChallenge *schema.Empty `protobuf:"bytes,3,opt,name=javascript_challenge,json=javascriptChallenge,proto3,oneof" json:"javascript_challenge,omitempty"`
 }
 type MaliciousUserMitigationAction_CaptchaChallenge struct {
-	CaptchaChallenge *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=captcha_challenge,json=captchaChallenge,oneof"`
+	CaptchaChallenge *schema.Empty `protobuf:"bytes,4,opt,name=captcha_challenge,json=captchaChallenge,proto3,oneof" json:"captcha_challenge,omitempty"`
 }
 type MaliciousUserMitigationAction_BlockTemporarily struct {
-	BlockTemporarily *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=block_temporarily,json=blockTemporarily,oneof"`
+	BlockTemporarily *schema.Empty `protobuf:"bytes,5,opt,name=block_temporarily,json=blockTemporarily,proto3,oneof" json:"block_temporarily,omitempty"`
 }
 
 func (*MaliciousUserMitigationAction_None) isMaliciousUserMitigationAction_MitigationAction()      {}
@@ -254,170 +220,50 @@ func (m *MaliciousUserMitigationAction) GetMitigationAction() isMaliciousUserMit
 	return nil
 }
 
-func (m *MaliciousUserMitigationAction) GetNone() *ves_io_schema4.Empty {
+func (m *MaliciousUserMitigationAction) GetNone() *schema.Empty {
 	if x, ok := m.GetMitigationAction().(*MaliciousUserMitigationAction_None); ok {
 		return x.None
 	}
 	return nil
 }
 
-func (m *MaliciousUserMitigationAction) GetAlertOnly() *ves_io_schema4.Empty {
+func (m *MaliciousUserMitigationAction) GetAlertOnly() *schema.Empty {
 	if x, ok := m.GetMitigationAction().(*MaliciousUserMitigationAction_AlertOnly); ok {
 		return x.AlertOnly
 	}
 	return nil
 }
 
-func (m *MaliciousUserMitigationAction) GetJavascriptChallenge() *ves_io_schema4.Empty {
+func (m *MaliciousUserMitigationAction) GetJavascriptChallenge() *schema.Empty {
 	if x, ok := m.GetMitigationAction().(*MaliciousUserMitigationAction_JavascriptChallenge); ok {
 		return x.JavascriptChallenge
 	}
 	return nil
 }
 
-func (m *MaliciousUserMitigationAction) GetCaptchaChallenge() *ves_io_schema4.Empty {
+func (m *MaliciousUserMitigationAction) GetCaptchaChallenge() *schema.Empty {
 	if x, ok := m.GetMitigationAction().(*MaliciousUserMitigationAction_CaptchaChallenge); ok {
 		return x.CaptchaChallenge
 	}
 	return nil
 }
 
-func (m *MaliciousUserMitigationAction) GetBlockTemporarily() *ves_io_schema4.Empty {
+func (m *MaliciousUserMitigationAction) GetBlockTemporarily() *schema.Empty {
 	if x, ok := m.GetMitigationAction().(*MaliciousUserMitigationAction_BlockTemporarily); ok {
 		return x.BlockTemporarily
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*MaliciousUserMitigationAction) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _MaliciousUserMitigationAction_OneofMarshaler, _MaliciousUserMitigationAction_OneofUnmarshaler, _MaliciousUserMitigationAction_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MaliciousUserMitigationAction) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*MaliciousUserMitigationAction_None)(nil),
 		(*MaliciousUserMitigationAction_AlertOnly)(nil),
 		(*MaliciousUserMitigationAction_JavascriptChallenge)(nil),
 		(*MaliciousUserMitigationAction_CaptchaChallenge)(nil),
 		(*MaliciousUserMitigationAction_BlockTemporarily)(nil),
 	}
-}
-
-func _MaliciousUserMitigationAction_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*MaliciousUserMitigationAction)
-	// mitigation_action
-	switch x := m.MitigationAction.(type) {
-	case *MaliciousUserMitigationAction_None:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.None); err != nil {
-			return err
-		}
-	case *MaliciousUserMitigationAction_AlertOnly:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AlertOnly); err != nil {
-			return err
-		}
-	case *MaliciousUserMitigationAction_JavascriptChallenge:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.JavascriptChallenge); err != nil {
-			return err
-		}
-	case *MaliciousUserMitigationAction_CaptchaChallenge:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CaptchaChallenge); err != nil {
-			return err
-		}
-	case *MaliciousUserMitigationAction_BlockTemporarily:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BlockTemporarily); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("MaliciousUserMitigationAction.MitigationAction has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _MaliciousUserMitigationAction_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*MaliciousUserMitigationAction)
-	switch tag {
-	case 1: // mitigation_action.none
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MitigationAction = &MaliciousUserMitigationAction_None{msg}
-		return true, err
-	case 2: // mitigation_action.alert_only
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MitigationAction = &MaliciousUserMitigationAction_AlertOnly{msg}
-		return true, err
-	case 3: // mitigation_action.javascript_challenge
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MitigationAction = &MaliciousUserMitigationAction_JavascriptChallenge{msg}
-		return true, err
-	case 4: // mitigation_action.captcha_challenge
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MitigationAction = &MaliciousUserMitigationAction_CaptchaChallenge{msg}
-		return true, err
-	case 5: // mitigation_action.block_temporarily
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MitigationAction = &MaliciousUserMitigationAction_BlockTemporarily{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _MaliciousUserMitigationAction_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*MaliciousUserMitigationAction)
-	// mitigation_action
-	switch x := m.MitigationAction.(type) {
-	case *MaliciousUserMitigationAction_None:
-		s := proto.Size(x.None)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserMitigationAction_AlertOnly:
-		s := proto.Size(x.AlertOnly)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserMitigationAction_JavascriptChallenge:
-		s := proto.Size(x.JavascriptChallenge)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserMitigationAction_CaptchaChallenge:
-		s := proto.Size(x.CaptchaChallenge)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *MaliciousUserMitigationAction_BlockTemporarily:
-		s := proto.Size(x.BlockTemporarily)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // MaliciousUserMitigationRule
@@ -430,20 +276,42 @@ type MaliciousUserMitigationRule struct {
 	// x-displayName: "Threat Level"
 	// x-required
 	// The threat level at which mitigation actions will be taken
-	ThreatLevel *MaliciousUserThreatLevel `protobuf:"bytes,1,opt,name=threat_level,json=threatLevel" json:"threat_level,omitempty"`
+	ThreatLevel *MaliciousUserThreatLevel `protobuf:"bytes,1,opt,name=threat_level,json=threatLevel,proto3" json:"threat_level,omitempty"`
 	// mitigation action
 	//
 	// x-displayName: "Mitigation Action"
 	// x-required
 	// The action to be taken at the specified threat level
-	MitigationAction *MaliciousUserMitigationAction `protobuf:"bytes,2,opt,name=mitigation_action,json=mitigationAction" json:"mitigation_action,omitempty"`
+	MitigationAction *MaliciousUserMitigationAction `protobuf:"bytes,2,opt,name=mitigation_action,json=mitigationAction,proto3" json:"mitigation_action,omitempty"`
 }
 
 func (m *MaliciousUserMitigationRule) Reset()      { *m = MaliciousUserMitigationRule{} }
 func (*MaliciousUserMitigationRule) ProtoMessage() {}
 func (*MaliciousUserMitigationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
+	return fileDescriptor_3846b9e60d65fab8, []int{2}
 }
+func (m *MaliciousUserMitigationRule) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MaliciousUserMitigationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MaliciousUserMitigationRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaliciousUserMitigationRule.Merge(m, src)
+}
+func (m *MaliciousUserMitigationRule) XXX_Size() int {
+	return m.Size()
+}
+func (m *MaliciousUserMitigationRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_MaliciousUserMitigationRule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MaliciousUserMitigationRule proto.InternalMessageInfo
 
 func (m *MaliciousUserMitigationRule) GetThreatLevel() *MaliciousUserThreatLevel {
 	if m != nil {
@@ -471,14 +339,36 @@ type MaliciousUserMitigationType struct {
 	// x-required
 	// Malicious user mitigation rules specify the actions to be taken for users mapped to different threat levels.
 	// A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.
-	Rules []*MaliciousUserMitigationRule `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
+	Rules []*MaliciousUserMitigationRule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
 }
 
 func (m *MaliciousUserMitigationType) Reset()      { *m = MaliciousUserMitigationType{} }
 func (*MaliciousUserMitigationType) ProtoMessage() {}
 func (*MaliciousUserMitigationType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{3}
+	return fileDescriptor_3846b9e60d65fab8, []int{3}
 }
+func (m *MaliciousUserMitigationType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MaliciousUserMitigationType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MaliciousUserMitigationType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaliciousUserMitigationType.Merge(m, src)
+}
+func (m *MaliciousUserMitigationType) XXX_Size() int {
+	return m.Size()
+}
+func (m *MaliciousUserMitigationType) XXX_DiscardUnknown() {
+	xxx_messageInfo_MaliciousUserMitigationType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MaliciousUserMitigationType proto.InternalMessageInfo
 
 func (m *MaliciousUserMitigationType) GetRules() []*MaliciousUserMitigationRule {
 	if m != nil {
@@ -497,12 +387,36 @@ type GlobalSpecType struct {
 	// x-displayName: "Malicious User Mitigation Type"
 	// Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.
 	// A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.
-	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType,proto3" json:"mitigation_type,omitempty"`
 }
 
-func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
-func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
+func (*GlobalSpecType) ProtoMessage() {}
+func (*GlobalSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3846b9e60d65fab8, []int{4}
+}
+func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GlobalSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GlobalSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GlobalSpecType.Merge(m, src)
+}
+func (m *GlobalSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GlobalSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GlobalSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
 func (m *GlobalSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
@@ -516,12 +430,36 @@ func (m *GlobalSpecType) GetMitigationType() *MaliciousUserMitigationType {
 // x-displayName: "Create Malicious User Mitigation"
 // Create malicious_user_mitigation creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType,proto3" json:"mitigation_type,omitempty"`
 }
 
-func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
-func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
+func (*CreateSpecType) ProtoMessage() {}
+func (*CreateSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3846b9e60d65fab8, []int{5}
+}
+func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSpecType.Merge(m, src)
+}
+func (m *CreateSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
 func (m *CreateSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
@@ -535,12 +473,36 @@ func (m *CreateSpecType) GetMitigationType() *MaliciousUserMitigationType {
 // x-displayName: "Replace Malicious User Mitigation"
 // Replace malicious_user_mitigation replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType,proto3" json:"mitigation_type,omitempty"`
 }
 
-func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
-func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
+func (*ReplaceSpecType) ProtoMessage() {}
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3846b9e60d65fab8, []int{6}
+}
+func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceSpecType.Merge(m, src)
+}
+func (m *ReplaceSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
 func (m *ReplaceSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
@@ -554,12 +516,36 @@ func (m *ReplaceSpecType) GetMitigationType() *MaliciousUserMitigationType {
 // x-displayName: "Get Malicious User Mitigation"
 // Get malicious_user_mitigation reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType,proto3" json:"mitigation_type,omitempty"`
 }
 
-func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
-func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
+func (*GetSpecType) ProtoMessage() {}
+func (*GetSpecType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3846b9e60d65fab8, []int{7}
+}
+func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSpecType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GetSpecType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSpecType.Merge(m, src)
+}
+func (m *GetSpecType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSpecType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSpecType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
 func (m *GetSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
@@ -586,6 +572,65 @@ func init() {
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.malicious_user_mitigation.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.malicious_user_mitigation.GetSpecType")
 }
+
+func init() {
+	proto.RegisterFile("ves.io/schema/malicious_user_mitigation/types.proto", fileDescriptor_3846b9e60d65fab8)
+}
+func init() {
+	golang_proto.RegisterFile("ves.io/schema/malicious_user_mitigation/types.proto", fileDescriptor_3846b9e60d65fab8)
+}
+
+var fileDescriptor_3846b9e60d65fab8 = []byte{
+	// 750 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0x41, 0x6f, 0xd3, 0x48,
+	0x14, 0xce, 0x24, 0x4e, 0x36, 0x9d, 0xac, 0xda, 0xc4, 0xdb, 0x95, 0xb2, 0xe9, 0xae, 0xb7, 0xe4,
+	0x42, 0x55, 0xa5, 0xb6, 0x68, 0xe9, 0x85, 0x03, 0x52, 0x53, 0xa0, 0x10, 0x51, 0x21, 0x85, 0x72,
+	0x41, 0x42, 0xd6, 0xc4, 0x9d, 0x3a, 0xd3, 0x8e, 0x33, 0x23, 0x7b, 0x9c, 0x92, 0x1b, 0x07, 0x2e,
+	0x9c, 0x8a, 0xca, 0x81, 0x03, 0x7f, 0x80, 0xdf, 0x40, 0x2e, 0x3d, 0x02, 0xa7, 0x1c, 0x7b, 0xa4,
+	0xce, 0x05, 0x6e, 0xfd, 0x09, 0xc8, 0x8e, 0xd3, 0xc4, 0x11, 0x49, 0x10, 0x15, 0x52, 0x2f, 0xd1,
+	0xd8, 0xef, 0xfb, 0xde, 0xfb, 0xde, 0xfb, 0x9e, 0x33, 0x70, 0xad, 0x89, 0x1d, 0x95, 0x30, 0xcd,
+	0x31, 0xea, 0xd8, 0x42, 0x9a, 0x85, 0x28, 0x31, 0x08, 0x73, 0x1d, 0xdd, 0x75, 0xb0, 0xad, 0x5b,
+	0x44, 0x10, 0x13, 0x09, 0xc2, 0x1a, 0x9a, 0x68, 0x71, 0xec, 0xa8, 0xdc, 0x66, 0x82, 0xc9, 0xd7,
+	0x7b, 0x24, 0xb5, 0x47, 0x52, 0xc7, 0x92, 0x0a, 0x2b, 0x26, 0x11, 0x75, 0xb7, 0xa6, 0x1a, 0xcc,
+	0xd2, 0x4c, 0x66, 0x32, 0x2d, 0xe0, 0xd7, 0xdc, 0xbd, 0xe0, 0x29, 0x78, 0x08, 0x4e, 0xbd, 0xbc,
+	0x85, 0xff, 0x4d, 0xc6, 0x4c, 0x8a, 0x07, 0x28, 0x41, 0x2c, 0xec, 0x08, 0x64, 0xf1, 0x10, 0xb0,
+	0x10, 0x55, 0xcb, 0xb8, 0x5f, 0x25, 0x54, 0x55, 0xf8, 0x27, 0x1a, 0x1c, 0x12, 0x5c, 0xf8, 0x37,
+	0x1a, 0x6a, 0x22, 0x4a, 0x76, 0x91, 0xc0, 0x61, 0x74, 0x71, 0x24, 0x4a, 0xf0, 0xa1, 0x1e, 0x49,
+	0x5d, 0xfc, 0x04, 0x60, 0x7e, 0xbb, 0xdf, 0xe5, 0x13, 0x07, 0xdb, 0x3b, 0x75, 0x1b, 0x23, 0xf1,
+	0x10, 0x37, 0x31, 0x95, 0x97, 0x60, 0x82, 0xb2, 0xc3, 0x3c, 0x58, 0x04, 0x4b, 0x99, 0xd5, 0x79,
+	0x35, 0x3a, 0x9b, 0xbb, 0x16, 0x17, 0xad, 0xfb, 0xb1, 0xaa, 0x0f, 0x91, 0x55, 0x98, 0xb2, 0xf0,
+	0x2e, 0x71, 0xad, 0x7c, 0x7c, 0x22, 0x38, 0x44, 0xc9, 0xcb, 0x50, 0xaa, 0x13, 0xb3, 0x9e, 0x4f,
+	0x4c, 0x44, 0x07, 0x98, 0xf2, 0x35, 0xf8, 0xa7, 0x08, 0x44, 0xe9, 0x34, 0x50, 0x95, 0x3b, 0x69,
+	0x03, 0xd0, 0x69, 0x03, 0xc9, 0x6b, 0x83, 0xe4, 0x8d, 0xd2, 0x6a, 0x69, 0xad, 0x22, 0xa5, 0xa5,
+	0x6c, 0xb2, 0xf8, 0x2a, 0x01, 0xff, 0x8b, 0xf4, 0xb2, 0x7d, 0xe1, 0xd7, 0x86, 0xe1, 0xff, 0xfa,
+	0x65, 0x1b, 0xac, 0x81, 0xa7, 0x74, 0x14, 0x60, 0xe4, 0x75, 0x08, 0x11, 0xc5, 0xb6, 0xd0, 0x59,
+	0x83, 0xb6, 0xa6, 0xb4, 0x35, 0x13, 0x20, 0x1f, 0x35, 0x68, 0x4b, 0x7e, 0x00, 0xe7, 0xf7, 0x51,
+	0x13, 0x39, 0x86, 0x4d, 0xb8, 0xd0, 0x8d, 0x3a, 0xa2, 0x14, 0x37, 0x4c, 0x3c, 0xa5, 0xd3, 0xbf,
+	0x06, 0x9c, 0xcd, 0x3e, 0x45, 0xde, 0x84, 0x39, 0x03, 0x71, 0x61, 0xd4, 0xd1, 0x50, 0x1e, 0x69,
+	0x62, 0x9e, 0x6c, 0x48, 0x88, 0x24, 0xa9, 0x51, 0x66, 0x1c, 0xe8, 0x02, 0x5b, 0x9c, 0xd9, 0xc8,
+	0x26, 0xb4, 0x95, 0x4f, 0x4e, 0x4e, 0x12, 0x10, 0x76, 0x06, 0xf8, 0xf2, 0x32, 0xcc, 0x0d, 0x76,
+	0x5f, 0x47, 0xbd, 0x61, 0xfe, 0x1d, 0xfa, 0x90, 0xf2, 0xda, 0x60, 0x26, 0xf0, 0xa1, 0x74, 0xb3,
+	0xb4, 0x5e, 0x91, 0xd2, 0xa9, 0xec, 0x1f, 0xc5, 0x97, 0x71, 0xb8, 0x30, 0xc6, 0x8b, 0xaa, 0x4b,
+	0xb1, 0xbc, 0x1f, 0x35, 0x35, 0x74, 0x64, 0x43, 0xfd, 0xc9, 0xef, 0x4f, 0x1d, 0xb7, 0xb3, 0x65,
+	0xe9, 0xbc, 0x0d, 0x40, 0x35, 0x23, 0x86, 0xd6, 0xb8, 0xf5, 0x03, 0xf5, 0xa1, 0xa1, 0xf7, 0x7e,
+	0xad, 0xe0, 0xe8, 0x62, 0x85, 0x55, 0xb3, 0xd6, 0xc8, 0xfb, 0xe2, 0x11, 0x18, 0x3b, 0x86, 0x9d,
+	0x16, 0xc7, 0x32, 0x87, 0x49, 0xdb, 0xa5, 0xd8, 0xc9, 0x83, 0xc5, 0xc4, 0x52, 0x66, 0xf5, 0xce,
+	0x65, 0xe5, 0xf8, 0xb3, 0x2d, 0xcf, 0x7f, 0xf8, 0x76, 0x92, 0x48, 0x1e, 0x83, 0x78, 0x56, 0xea,
+	0x9f, 0xf2, 0xa0, 0xda, 0x2b, 0x54, 0x7c, 0x0b, 0xe0, 0xec, 0x16, 0x65, 0x35, 0x44, 0x1f, 0x73,
+	0x6c, 0x04, 0x22, 0x1c, 0x38, 0x37, 0x34, 0x1f, 0xff, 0xdf, 0x25, 0xb4, 0xe3, 0xd2, 0x72, 0xfc,
+	0xf4, 0xe1, 0x6c, 0x66, 0xad, 0xc8, 0xdb, 0x8a, 0x94, 0x8e, 0x67, 0x13, 0x15, 0x29, 0x9d, 0xc8,
+	0x4a, 0xe1, 0xe7, 0x7b, 0x0c, 0xe0, 0xec, 0xa6, 0xef, 0x1a, 0xbe, 0x50, 0x66, 0xfd, 0x56, 0x65,
+	0xa3, 0x9a, 0x6e, 0xe5, 0x3e, 0xdf, 0x1e, 0x99, 0x4d, 0xf1, 0x0d, 0x80, 0x73, 0x55, 0xcc, 0x29,
+	0x32, 0xae, 0x92, 0xaa, 0x23, 0x00, 0x33, 0x5b, 0x58, 0x5c, 0x1d, 0x45, 0xe5, 0x77, 0xa0, 0x73,
+	0xa6, 0xc4, 0x4e, 0xcf, 0x94, 0xd8, 0xf9, 0x99, 0x02, 0x5e, 0x78, 0x0a, 0x78, 0xef, 0x29, 0xe0,
+	0xa3, 0xa7, 0x80, 0x8e, 0xa7, 0x80, 0x53, 0x4f, 0x01, 0x5f, 0x3c, 0x05, 0x7c, 0xf5, 0x94, 0xd8,
+	0xb9, 0xa7, 0x80, 0xd7, 0x5d, 0x25, 0x76, 0xd2, 0x55, 0x40, 0xa7, 0xab, 0xc4, 0x4e, 0xbb, 0x4a,
+	0xec, 0xe9, 0x33, 0x93, 0xf1, 0x03, 0x53, 0x6d, 0x32, 0x2a, 0xb0, 0x6d, 0x23, 0xd5, 0x75, 0xb4,
+	0xe0, 0xb0, 0xc7, 0x6c, 0x6b, 0x85, 0xdb, 0xac, 0x49, 0x76, 0xb1, 0xbd, 0xd2, 0x0f, 0x6b, 0xbc,
+	0x66, 0x32, 0x0d, 0x3f, 0x17, 0xe1, 0xbd, 0x36, 0xed, 0x8a, 0xaf, 0xa5, 0x82, 0xcb, 0x6e, 0xed,
+	0x7b, 0x00, 0x00, 0x00, 0xff, 0xff, 0x44, 0x2e, 0x08, 0x44, 0x14, 0x08, 0x00, 0x00,
+}
+
 func (this *MaliciousUserThreatLevel) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1164,7 +1209,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 func (m *MaliciousUserThreatLevel) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1172,66 +1217,94 @@ func (m *MaliciousUserThreatLevel) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MaliciousUserThreatLevel) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserThreatLevel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.ThreatLevel != nil {
-		nn1, err := m.ThreatLevel.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.ThreatLevel.Size()
+			i -= size
+			if _, err := m.ThreatLevel.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn1
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *MaliciousUserThreatLevel_Low) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserThreatLevel_Low) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Low != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Low.Size()))
-		n2, err := m.Low.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Low.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserThreatLevel_Medium) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserThreatLevel_Medium) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.Medium != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Medium.Size()))
-		n3, err := m.Medium.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.Medium.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserThreatLevel_High) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserThreatLevel_High) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.High != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.High.Size()))
-		n4, err := m.High.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.High.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationAction) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1239,94 +1312,136 @@ func (m *MaliciousUserMitigationAction) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MaliciousUserMitigationAction) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MitigationAction != nil {
-		nn5, err := m.MitigationAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size := m.MitigationAction.Size()
+			i -= size
+			if _, err := m.MitigationAction.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
-		i += nn5
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *MaliciousUserMitigationAction_None) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction_None) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.None != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.None.Size()))
-		n6, err := m.None.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.None.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n6
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationAction_AlertOnly) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction_AlertOnly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.AlertOnly != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AlertOnly.Size()))
-		n7, err := m.AlertOnly.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.AlertOnly.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationAction_JavascriptChallenge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction_JavascriptChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.JavascriptChallenge != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptChallenge.Size()))
-		n8, err := m.JavascriptChallenge.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.JavascriptChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n8
+		i--
+		dAtA[i] = 0x1a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationAction_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction_CaptchaChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.CaptchaChallenge != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallenge.Size()))
-		n9, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.CaptchaChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n9
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationAction_BlockTemporarily) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationAction_BlockTemporarily) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.BlockTemporarily != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BlockTemporarily.Size()))
-		n10, err := m.BlockTemporarily.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.BlockTemporarily.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n10
+		i--
+		dAtA[i] = 0x2a
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 func (m *MaliciousUserMitigationRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1334,37 +1449,46 @@ func (m *MaliciousUserMitigationRule) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MaliciousUserMitigationRule) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.ThreatLevel != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ThreatLevel.Size()))
-		n11, err := m.ThreatLevel.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n11
-	}
 	if m.MitigationAction != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationAction.Size()))
-		n12, err := m.MitigationAction.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.MitigationAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n12
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.ThreatLevel != nil {
+		{
+			size, err := m.ThreatLevel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *MaliciousUserMitigationType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1372,29 +1496,36 @@ func (m *MaliciousUserMitigationType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MaliciousUserMitigationType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MaliciousUserMitigationType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1402,27 +1533,34 @@ func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MitigationType != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n13, err := m.MitigationType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.MitigationType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n13
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1430,27 +1568,34 @@ func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MitigationType != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n14, err := m.MitigationType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.MitigationType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n14
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1458,27 +1603,34 @@ func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MitigationType != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n15, err := m.MitigationType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.MitigationType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n15
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1486,33 +1638,45 @@ func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.MitigationType != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n16, err := m.MitigationType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
+		{
+			size, err := m.MitigationType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-		i += n16
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTypes(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *MaliciousUserThreatLevel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ThreatLevel != nil {
@@ -1522,6 +1686,9 @@ func (m *MaliciousUserThreatLevel) Size() (n int) {
 }
 
 func (m *MaliciousUserThreatLevel_Low) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Low != nil {
@@ -1531,6 +1698,9 @@ func (m *MaliciousUserThreatLevel_Low) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserThreatLevel_Medium) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Medium != nil {
@@ -1540,6 +1710,9 @@ func (m *MaliciousUserThreatLevel_Medium) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserThreatLevel_High) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.High != nil {
@@ -1549,6 +1722,9 @@ func (m *MaliciousUserThreatLevel_High) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationAction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MitigationAction != nil {
@@ -1558,6 +1734,9 @@ func (m *MaliciousUserMitigationAction) Size() (n int) {
 }
 
 func (m *MaliciousUserMitigationAction_None) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.None != nil {
@@ -1567,6 +1746,9 @@ func (m *MaliciousUserMitigationAction_None) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationAction_AlertOnly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.AlertOnly != nil {
@@ -1576,6 +1758,9 @@ func (m *MaliciousUserMitigationAction_AlertOnly) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationAction_JavascriptChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.JavascriptChallenge != nil {
@@ -1585,6 +1770,9 @@ func (m *MaliciousUserMitigationAction_JavascriptChallenge) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationAction_CaptchaChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.CaptchaChallenge != nil {
@@ -1594,6 +1782,9 @@ func (m *MaliciousUserMitigationAction_CaptchaChallenge) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationAction_BlockTemporarily) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.BlockTemporarily != nil {
@@ -1603,6 +1794,9 @@ func (m *MaliciousUserMitigationAction_BlockTemporarily) Size() (n int) {
 	return n
 }
 func (m *MaliciousUserMitigationRule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.ThreatLevel != nil {
@@ -1617,6 +1811,9 @@ func (m *MaliciousUserMitigationRule) Size() (n int) {
 }
 
 func (m *MaliciousUserMitigationType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Rules) > 0 {
@@ -1629,6 +1826,9 @@ func (m *MaliciousUserMitigationType) Size() (n int) {
 }
 
 func (m *GlobalSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MitigationType != nil {
@@ -1639,6 +1839,9 @@ func (m *GlobalSpecType) Size() (n int) {
 }
 
 func (m *CreateSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MitigationType != nil {
@@ -1649,6 +1852,9 @@ func (m *CreateSpecType) Size() (n int) {
 }
 
 func (m *ReplaceSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MitigationType != nil {
@@ -1659,6 +1865,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 }
 
 func (m *GetSpecType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.MitigationType != nil {
@@ -1669,14 +1878,7 @@ func (m *GetSpecType) Size() (n int) {
 }
 
 func sovTypes(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1696,7 +1898,7 @@ func (this *MaliciousUserThreatLevel_Low) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserThreatLevel_Low{`,
-		`Low:` + strings.Replace(fmt.Sprintf("%v", this.Low), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Low:` + strings.Replace(fmt.Sprintf("%v", this.Low), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1706,7 +1908,7 @@ func (this *MaliciousUserThreatLevel_Medium) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserThreatLevel_Medium{`,
-		`Medium:` + strings.Replace(fmt.Sprintf("%v", this.Medium), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`Medium:` + strings.Replace(fmt.Sprintf("%v", this.Medium), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1716,7 +1918,7 @@ func (this *MaliciousUserThreatLevel_High) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserThreatLevel_High{`,
-		`High:` + strings.Replace(fmt.Sprintf("%v", this.High), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`High:` + strings.Replace(fmt.Sprintf("%v", this.High), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1736,7 +1938,7 @@ func (this *MaliciousUserMitigationAction_None) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationAction_None{`,
-		`None:` + strings.Replace(fmt.Sprintf("%v", this.None), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`None:` + strings.Replace(fmt.Sprintf("%v", this.None), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1746,7 +1948,7 @@ func (this *MaliciousUserMitigationAction_AlertOnly) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationAction_AlertOnly{`,
-		`AlertOnly:` + strings.Replace(fmt.Sprintf("%v", this.AlertOnly), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`AlertOnly:` + strings.Replace(fmt.Sprintf("%v", this.AlertOnly), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1756,7 +1958,7 @@ func (this *MaliciousUserMitigationAction_JavascriptChallenge) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationAction_JavascriptChallenge{`,
-		`JavascriptChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallenge), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`JavascriptChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallenge), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1766,7 +1968,7 @@ func (this *MaliciousUserMitigationAction_CaptchaChallenge) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationAction_CaptchaChallenge{`,
-		`CaptchaChallenge:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallenge), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`CaptchaChallenge:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallenge), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1776,7 +1978,7 @@ func (this *MaliciousUserMitigationAction_BlockTemporarily) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationAction_BlockTemporarily{`,
-		`BlockTemporarily:` + strings.Replace(fmt.Sprintf("%v", this.BlockTemporarily), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`BlockTemporarily:` + strings.Replace(fmt.Sprintf("%v", this.BlockTemporarily), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1786,8 +1988,8 @@ func (this *MaliciousUserMitigationRule) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MaliciousUserMitigationRule{`,
-		`ThreatLevel:` + strings.Replace(fmt.Sprintf("%v", this.ThreatLevel), "MaliciousUserThreatLevel", "MaliciousUserThreatLevel", 1) + `,`,
-		`MitigationAction:` + strings.Replace(fmt.Sprintf("%v", this.MitigationAction), "MaliciousUserMitigationAction", "MaliciousUserMitigationAction", 1) + `,`,
+		`ThreatLevel:` + strings.Replace(this.ThreatLevel.String(), "MaliciousUserThreatLevel", "MaliciousUserThreatLevel", 1) + `,`,
+		`MitigationAction:` + strings.Replace(this.MitigationAction.String(), "MaliciousUserMitigationAction", "MaliciousUserMitigationAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1796,8 +1998,13 @@ func (this *MaliciousUserMitigationType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRules := "[]*MaliciousUserMitigationRule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "MaliciousUserMitigationRule", "MaliciousUserMitigationRule", 1) + ","
+	}
+	repeatedStringForRules += "}"
 	s := strings.Join([]string{`&MaliciousUserMitigationType{`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "MaliciousUserMitigationRule", "MaliciousUserMitigationRule", 1) + `,`,
+		`Rules:` + repeatedStringForRules + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1807,7 +2014,7 @@ func (this *GlobalSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
+		`MitigationType:` + strings.Replace(this.MitigationType.String(), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1817,7 +2024,7 @@ func (this *CreateSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
+		`MitigationType:` + strings.Replace(this.MitigationType.String(), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1827,7 +2034,7 @@ func (this *ReplaceSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
+		`MitigationType:` + strings.Replace(this.MitigationType.String(), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1837,7 +2044,7 @@ func (this *GetSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
-		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
+		`MitigationType:` + strings.Replace(this.MitigationType.String(), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1865,7 +2072,7 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -1893,7 +2100,7 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1902,10 +2109,13 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1925,7 +2135,7 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1934,10 +2144,13 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1957,7 +2170,7 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1966,10 +2179,13 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1982,6 +2198,9 @@ func (m *MaliciousUserThreatLevel) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2011,7 +2230,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2039,7 +2258,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2048,10 +2267,13 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2071,7 +2293,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2080,10 +2302,13 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2103,7 +2328,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2112,10 +2337,13 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2135,7 +2363,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2144,10 +2372,13 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2167,7 +2398,7 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2176,10 +2407,13 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ves_io_schema4.Empty{}
+			v := &schema.Empty{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2192,6 +2426,9 @@ func (m *MaliciousUserMitigationAction) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2221,7 +2458,7 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2249,7 +2486,7 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2258,6 +2495,9 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2282,7 +2522,7 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2291,6 +2531,9 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2308,6 +2551,9 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2337,7 +2583,7 @@ func (m *MaliciousUserMitigationType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2365,7 +2611,7 @@ func (m *MaliciousUserMitigationType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2374,6 +2620,9 @@ func (m *MaliciousUserMitigationType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2389,6 +2638,9 @@ func (m *MaliciousUserMitigationType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2418,7 +2670,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2446,7 +2698,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2455,6 +2707,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2472,6 +2727,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2501,7 +2759,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2529,7 +2787,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2538,6 +2796,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2555,6 +2816,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2584,7 +2848,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2612,7 +2876,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2621,6 +2885,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2638,6 +2905,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -2667,7 +2937,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			b := dAtA[iNdEx]
 			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
+			wire |= uint64(b&0x7F) << shift
 			if b < 0x80 {
 				break
 			}
@@ -2695,7 +2965,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2704,6 +2974,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return ErrInvalidLengthTypes
 			}
 			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2723,6 +2996,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if skippy < 0 {
 				return ErrInvalidLengthTypes
 			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -2738,6 +3014,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 func skipTypes(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -2769,10 +3046,8 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -2789,111 +3064,34 @@ func skipTypes(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			iNdEx += length
 			if length < 0 {
 				return 0, ErrInvalidLengthTypes
 			}
-			return iNdEx, nil
+			iNdEx += length
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipTypes(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTypes
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTypes
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthTypes = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowTypes   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTypes          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTypes = fmt.Errorf("proto: unexpected end of group")
 )
-
-func init() {
-	proto.RegisterFile("ves.io/schema/malicious_user_mitigation/types.proto", fileDescriptorTypes)
-}
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/malicious_user_mitigation/types.proto", fileDescriptorTypes)
-}
-
-var fileDescriptorTypes = []byte{
-	// 737 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0x31, 0x6f, 0xd3, 0x40,
-	0x14, 0xce, 0x25, 0x4e, 0x48, 0x2f, 0xa8, 0x4d, 0x4c, 0x91, 0x42, 0x0a, 0xa6, 0x64, 0xa1, 0xaa,
-	0x52, 0x5b, 0xb4, 0x74, 0x61, 0x40, 0x6a, 0x0a, 0x14, 0x22, 0x2a, 0xa4, 0x50, 0x16, 0x24, 0x64,
-	0x5d, 0xdc, 0xab, 0x73, 0xed, 0x39, 0x77, 0xb2, 0xcf, 0x29, 0xd9, 0x18, 0x58, 0x98, 0x8a, 0xda,
-	0x81, 0xbf, 0xc0, 0x6f, 0x20, 0x4b, 0x47, 0x60, 0xea, 0xd8, 0x91, 0xba, 0x0b, 0x6c, 0xfd, 0x09,
-	0xc8, 0x8e, 0xd3, 0xc4, 0x11, 0x49, 0x10, 0x15, 0x52, 0x97, 0xe8, 0xec, 0xf7, 0x7d, 0xef, 0x7d,
-	0xef, 0x7d, 0xcf, 0x39, 0xb8, 0xd4, 0xc4, 0x8e, 0x4a, 0x98, 0xe6, 0x18, 0x75, 0x6c, 0x21, 0xcd,
-	0x42, 0x94, 0x18, 0x84, 0xb9, 0x8e, 0xee, 0x3a, 0xd8, 0xd6, 0x2d, 0x22, 0x88, 0x89, 0x04, 0x61,
-	0x0d, 0x4d, 0xb4, 0x38, 0x76, 0x54, 0x6e, 0x33, 0xc1, 0xe4, 0xbb, 0x1d, 0x92, 0xda, 0x21, 0xa9,
-	0x43, 0x49, 0x85, 0x05, 0x93, 0x88, 0xba, 0x5b, 0x53, 0x0d, 0x66, 0x69, 0x26, 0x33, 0x99, 0x16,
-	0xf0, 0x6b, 0xee, 0x56, 0xf0, 0x14, 0x3c, 0x04, 0xa7, 0x4e, 0xde, 0xc2, 0x6d, 0x93, 0x31, 0x93,
-	0xe2, 0x1e, 0x4a, 0x10, 0x0b, 0x3b, 0x02, 0x59, 0x3c, 0x04, 0xcc, 0x44, 0xd5, 0x32, 0xee, 0x57,
-	0x09, 0x55, 0x15, 0x6e, 0x44, 0x83, 0x7d, 0x82, 0x0b, 0x37, 0xa3, 0xa1, 0x26, 0xa2, 0x64, 0x13,
-	0x09, 0x1c, 0x46, 0x67, 0x07, 0xa2, 0x04, 0xef, 0xea, 0x91, 0xd4, 0xc5, 0x6f, 0x00, 0xe6, 0xd7,
-	0xbb, 0x5d, 0xbe, 0x72, 0xb0, 0xbd, 0x51, 0xb7, 0x31, 0x12, 0xcf, 0x71, 0x13, 0x53, 0x79, 0x0e,
-	0x26, 0x28, 0xdb, 0xcd, 0x83, 0x59, 0x30, 0x97, 0x59, 0x9c, 0x56, 0xa3, 0xb3, 0x79, 0x6c, 0x71,
-	0xd1, 0x7a, 0x1a, 0xab, 0xfa, 0x10, 0x59, 0x85, 0x29, 0x0b, 0x6f, 0x12, 0xd7, 0xca, 0xc7, 0x47,
-	0x82, 0x43, 0x94, 0x3c, 0x0f, 0xa5, 0x3a, 0x31, 0xeb, 0xf9, 0xc4, 0x48, 0x74, 0x80, 0x29, 0xdf,
-	0x81, 0x57, 0x45, 0x20, 0x4a, 0xa7, 0x81, 0xaa, 0xdc, 0x61, 0x1b, 0x80, 0xa3, 0x36, 0x90, 0xbc,
-	0x36, 0x48, 0xde, 0x2b, 0x2d, 0x96, 0x96, 0x2a, 0x52, 0x5a, 0xca, 0x26, 0x8b, 0x1f, 0x12, 0xf0,
-	0x56, 0xa4, 0x97, 0xf5, 0x73, 0xbf, 0x56, 0x0c, 0xff, 0xd7, 0x2f, 0xdb, 0x60, 0x0d, 0x3c, 0xa6,
-	0xa3, 0x00, 0x23, 0x2f, 0x43, 0x88, 0x28, 0xb6, 0x85, 0xce, 0x1a, 0xb4, 0x35, 0xa6, 0xad, 0x89,
-	0x00, 0xf9, 0xa2, 0x41, 0x5b, 0xf2, 0x33, 0x38, 0xbd, 0x8d, 0x9a, 0xc8, 0x31, 0x6c, 0xc2, 0x85,
-	0x6e, 0xd4, 0x11, 0xa5, 0xb8, 0x61, 0xe2, 0x31, 0x9d, 0x5e, 0xeb, 0x71, 0x56, 0xbb, 0x14, 0x79,
-	0x15, 0xe6, 0x0c, 0xc4, 0x85, 0x51, 0x47, 0x7d, 0x79, 0xa4, 0x91, 0x79, 0xb2, 0x21, 0x21, 0x92,
-	0xa4, 0x46, 0x99, 0xb1, 0xa3, 0x0b, 0x6c, 0x71, 0x66, 0x23, 0x9b, 0xd0, 0x56, 0x3e, 0x39, 0x3a,
-	0x49, 0x40, 0xd8, 0xe8, 0xe1, 0xcb, 0xf3, 0x30, 0xd7, 0xdb, 0x7d, 0x1d, 0x75, 0x86, 0x79, 0x3d,
-	0xf4, 0x21, 0xe5, 0xb5, 0xc1, 0x44, 0xe0, 0x43, 0xe9, 0x7e, 0x69, 0xb9, 0x22, 0xa5, 0x53, 0xd9,
-	0x2b, 0xc5, 0xf7, 0x71, 0x38, 0x33, 0xc4, 0x8b, 0xaa, 0x4b, 0xb1, 0xbc, 0x1d, 0x35, 0x35, 0x74,
-	0x64, 0x45, 0xfd, 0xcb, 0xef, 0x4f, 0x1d, 0xb6, 0xb3, 0x65, 0xe9, 0xac, 0x0d, 0x40, 0x35, 0x23,
-	0xfa, 0xd6, 0xb8, 0xf5, 0x07, 0xf5, 0xa1, 0xa1, 0x4f, 0xfe, 0xad, 0xe0, 0xe0, 0x62, 0x85, 0x55,
-	0xb3, 0xd6, 0xc0, 0xfb, 0xe2, 0x1e, 0x18, 0x3a, 0x86, 0x8d, 0x16, 0xc7, 0x32, 0x87, 0x49, 0xdb,
-	0xa5, 0xd8, 0xc9, 0x83, 0xd9, 0xc4, 0x5c, 0x66, 0xf1, 0xd1, 0x45, 0xe5, 0xf8, 0xb3, 0x2d, 0x4f,
-	0x7f, 0xf9, 0x75, 0x98, 0x48, 0xee, 0x83, 0x78, 0x56, 0xea, 0x9e, 0xf2, 0xa0, 0xda, 0x29, 0x54,
-	0xfc, 0x04, 0xe0, 0xe4, 0x1a, 0x65, 0x35, 0x44, 0x5f, 0x72, 0x6c, 0x04, 0x22, 0x1c, 0x38, 0xd5,
-	0x37, 0x1f, 0xff, 0xdf, 0x25, 0xb4, 0xe3, 0xc2, 0x72, 0xfc, 0xf4, 0xe1, 0x6c, 0x26, 0xad, 0xc8,
-	0xdb, 0x8a, 0x94, 0x8e, 0x67, 0x13, 0x15, 0x29, 0x9d, 0xc8, 0x4a, 0xe1, 0xe7, 0xbb, 0x0f, 0xe0,
-	0xe4, 0xaa, 0xef, 0x1a, 0x3e, 0x57, 0x66, 0xfd, 0x57, 0x65, 0x83, 0x9a, 0x1e, 0xe4, 0xbe, 0x3f,
-	0x1c, 0x98, 0x4d, 0xf1, 0x00, 0xc0, 0xa9, 0x2a, 0xe6, 0x14, 0x19, 0x97, 0x49, 0xd5, 0x1e, 0x80,
-	0x99, 0x35, 0x2c, 0x2e, 0x8f, 0xa2, 0xf2, 0x01, 0x38, 0x3a, 0x51, 0x62, 0xc7, 0x27, 0x4a, 0xec,
-	0xec, 0x44, 0x01, 0xef, 0x3c, 0x05, 0x7c, 0xf6, 0x14, 0xf0, 0xd5, 0x53, 0xc0, 0x91, 0xa7, 0x80,
-	0x63, 0x4f, 0x01, 0x3f, 0x3c, 0x05, 0xfc, 0xf4, 0x94, 0xd8, 0x99, 0xa7, 0x80, 0x8f, 0xa7, 0x4a,
-	0xec, 0xf0, 0x54, 0x01, 0xaf, 0xdf, 0x98, 0x8c, 0xef, 0x98, 0x6a, 0x93, 0x51, 0x81, 0x6d, 0x1b,
-	0xa9, 0xae, 0xa3, 0x05, 0x87, 0x2d, 0x66, 0x5b, 0x0b, 0xdc, 0x66, 0x4d, 0xb2, 0x89, 0xed, 0x85,
-	0x6e, 0x58, 0xe3, 0x35, 0x93, 0x69, 0xf8, 0xad, 0x08, 0xef, 0xb3, 0x71, 0x57, 0x7b, 0x2d, 0x15,
-	0x5c, 0x72, 0x4b, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0x63, 0xf2, 0x00, 0x41, 0x0c, 0x08, 0x00,
-	0x00,
-}

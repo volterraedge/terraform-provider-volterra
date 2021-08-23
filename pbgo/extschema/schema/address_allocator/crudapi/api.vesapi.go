@@ -1482,7 +1482,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectGetRsp"
                         }
@@ -1557,7 +1557,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "include_referred_id",
@@ -1581,7 +1582,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectDeleteRsp"
                         }
@@ -1656,7 +1657,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectReplaceRsp"
                         }
@@ -1746,7 +1747,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectListRsp"
                         }
@@ -1809,7 +1810,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -1819,7 +1821,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -1836,7 +1839,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -1868,7 +1872,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectCreateRsp"
                         }
@@ -1952,9 +1956,9 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.ListStream",
                 "responses": {
                     "200": {
-                        "description": "(streaming responses)",
+                        "description": "A successful response.(streaming responses)",
                         "schema": {
-                            "$ref": "#/definitions/crudapiObjectListRsp"
+                            "$ref": "#/x-stream-definitions/crudapiObjectListRsp"
                         }
                     },
                     "401": {
@@ -2015,7 +2019,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -2025,7 +2030,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -2042,7 +2048,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -2081,7 +2088,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Get",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectGetRsp"
                         }
@@ -2156,7 +2163,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "include_referred_id",
@@ -2187,7 +2195,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.List",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectListRsp"
                         }
@@ -2250,7 +2258,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "namespace_filter",
@@ -2260,7 +2269,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "label_filter",
@@ -2277,7 +2287,8 @@ var APISwaggerJSON string = `{
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "name": "resource_version",
@@ -2316,7 +2327,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Delete",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectDeleteRsp"
                         }
@@ -2391,7 +2402,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Replace",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectReplaceRsp"
                         }
@@ -2481,7 +2492,7 @@ var APISwaggerJSON string = `{
                 "operationId": "ves.io.schema.address_allocator.crudapi.API.Create",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/crudapiObjectCreateRsp"
                         }
@@ -2929,6 +2940,31 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "runtimeStreamError": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
+                },
+                "grpc_code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "http_code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "http_status": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },
@@ -3402,5 +3438,19 @@ var APISwaggerJSON string = `{
         }
     },
     "x-displayname": "",
+    "x-stream-definitions": {
+        "crudapiObjectListRsp": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                    "$ref": "#/definitions/crudapiObjectListRsp"
+                }
+            },
+            "title": "Stream result of crudapiObjectListRsp",
+            "type": "object"
+        }
+    },
     "x-ves-proto-file": "ves.io/schema/address_allocator/crudapi/api.proto"
 }`

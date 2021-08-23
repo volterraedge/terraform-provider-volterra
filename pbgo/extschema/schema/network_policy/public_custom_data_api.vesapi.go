@@ -294,7 +294,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.network_policy.CustomDataAPI.NetworkPolicyHits",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/network_policyNetworkPolicyHitsResponse"
                         }
@@ -351,9 +351,11 @@ var CustomDataAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace is used to scope network policy hits for the given namespace.",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     },
                     {
                         "name": "body",
