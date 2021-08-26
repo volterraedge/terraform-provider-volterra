@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -22,6 +24,102 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotProtectionSetting) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotProtectionSetting) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotProtectionSetting) DeepCopy() *BotProtectionSetting {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotProtectionSetting{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotProtectionSetting) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotProtectionSetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotProtectionSettingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotProtectionSetting struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotProtectionSetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotProtectionSetting)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotProtectionSetting got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["good_bot_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("good_bot_action"))
+		if err := fv(ctx, m.GetGoodBotAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malicious_bot_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malicious_bot_action"))
+		if err := fv(ctx, m.GetMaliciousBotAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suspicious_bot_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suspicious_bot_action"))
+		if err := fv(ctx, m.GetSuspiciousBotAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotProtectionSettingValidator = func() *ValidateBotProtectionSetting {
+	v := &ValidateBotProtectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotProtectionSettingValidator() db.Validator {
+	return DefaultBotProtectionSettingValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -64,6 +162,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_protection_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -92,6 +198,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
+		val := m.GetBotProtectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_protection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotProtectionChoice().(type) {
+	case *CreateSpecType_DefaultBotSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.default_bot_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*CreateSpecType_DefaultBotSetting).DefaultBotSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("default_bot_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BotProtectionSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*CreateSpecType_BotProtectionSetting).BotProtectionSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -192,6 +334,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
+	rulesBotProtectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotProtectionChoice(rulesBotProtectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.bot_protection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_protection_choice"] = vFn
+
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -286,6 +439,10 @@ func (v *ValidateDetectionSetting) ViolationDetectionSettingValidationRuleHandle
 		return nil, errors.Wrap(err, "ValidationRuleHandler for violation_detection_setting")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateDetectionSetting) ViolationDetectionSettingEnabledViolationTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ViolationSettingValidator().Validate, nil
 }
 
 func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -467,7 +624,17 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	}
 	v.FldValidators["violation_detection_setting"] = vFn
 
-	v.FldValidators["violation_detection_setting.enabled_violation_types"] = ViolationSettingValidator().Validate
+	vrhViolationDetectionSettingEnabledViolationTypes := v.ViolationDetectionSettingEnabledViolationTypesValidationRuleHandler
+	rulesViolationDetectionSettingEnabledViolationTypes := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["violation_detection_setting.enabled_violation_types"], err = vrhViolationDetectionSettingEnabledViolationTypes(rulesViolationDetectionSettingEnabledViolationTypes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DetectionSetting.violation_detection_setting_enabled_violation_types: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["violation_detection_setting.enabled_violation_types"] = vFnMap["violation_detection_setting.enabled_violation_types"]
 
 	v.FldValidators["signature_selection_setting"] = SignatureSelectionSettingValidator().Validate
 
@@ -626,298 +793,6 @@ func EnabledAttackTypesValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *EnabledEvasionSubViolations) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *EnabledEvasionSubViolations) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *EnabledEvasionSubViolations) DeepCopy() *EnabledEvasionSubViolations {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &EnabledEvasionSubViolations{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *EnabledEvasionSubViolations) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *EnabledEvasionSubViolations) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EnabledEvasionSubViolationsValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateEnabledEvasionSubViolations struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateEnabledEvasionSubViolations) EvasionViolationSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepEnumItemRules(rules)
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(EvasionSubViolationType)
-		return int32(i)
-	}
-	// EvasionSubViolationType_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, EvasionSubViolationType_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for evasion_violation_settings")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []EvasionSubViolationType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for evasion_violation_settings")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]EvasionSubViolationType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []EvasionSubViolationType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated evasion_violation_settings")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items evasion_violation_settings")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateEnabledEvasionSubViolations) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EnabledEvasionSubViolations)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *EnabledEvasionSubViolations got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["evasion_violation_settings"]; exists {
-		vOpts := append(opts, db.WithValidateField("evasion_violation_settings"))
-		if err := fv(ctx, m.GetEvasionViolationSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultEnabledEvasionSubViolationsValidator = func() *ValidateEnabledEvasionSubViolations {
-	v := &ValidateEnabledEvasionSubViolations{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhEvasionViolationSettings := v.EvasionViolationSettingsValidationRuleHandler
-	rulesEvasionViolationSettings := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "8",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhEvasionViolationSettings(rulesEvasionViolationSettings)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for EnabledEvasionSubViolations.evasion_violation_settings: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["evasion_violation_settings"] = vFn
-
-	return v
-}()
-
-func EnabledEvasionSubViolationsValidator() db.Validator {
-	return DefaultEnabledEvasionSubViolationsValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *EnabledHTTPProtocolSubViolations) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *EnabledHTTPProtocolSubViolations) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *EnabledHTTPProtocolSubViolations) DeepCopy() *EnabledHTTPProtocolSubViolations {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &EnabledHTTPProtocolSubViolations{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *EnabledHTTPProtocolSubViolations) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *EnabledHTTPProtocolSubViolations) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EnabledHTTPProtocolSubViolationsValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateEnabledHTTPProtocolSubViolations struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateEnabledHTTPProtocolSubViolations) HttpProtocolSubViolationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepEnumItemRules(rules)
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(HTTPProtocolSubViolationType)
-		return int32(i)
-	}
-	// HTTPProtocolSubViolationType_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, HTTPProtocolSubViolationType_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for http_protocol_sub_violations")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []HTTPProtocolSubViolationType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for http_protocol_sub_violations")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]HTTPProtocolSubViolationType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []HTTPProtocolSubViolationType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated http_protocol_sub_violations")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items http_protocol_sub_violations")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateEnabledHTTPProtocolSubViolations) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EnabledHTTPProtocolSubViolations)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *EnabledHTTPProtocolSubViolations got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["http_protocol_sub_violations"]; exists {
-		vOpts := append(opts, db.WithValidateField("http_protocol_sub_violations"))
-		if err := fv(ctx, m.GetHttpProtocolSubViolations(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultEnabledHTTPProtocolSubViolationsValidator = func() *ValidateEnabledHTTPProtocolSubViolations {
-	v := &ValidateEnabledHTTPProtocolSubViolations{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhHttpProtocolSubViolations := v.HttpProtocolSubViolationsValidationRuleHandler
-	rulesHttpProtocolSubViolations := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "19",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhHttpProtocolSubViolations(rulesHttpProtocolSubViolations)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for EnabledHTTPProtocolSubViolations.http_protocol_sub_violations: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["http_protocol_sub_violations"] = vFn
-
-	return v
-}()
-
-func EnabledHTTPProtocolSubViolationsValidator() db.Validator {
-	return DefaultEnabledHTTPProtocolSubViolationsValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -957,6 +832,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_protection_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -985,6 +868,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
+		val := m.GetBotProtectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_protection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotProtectionChoice().(type) {
+	case *GetSpecType_DefaultBotSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.default_bot_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*GetSpecType_DefaultBotSetting).DefaultBotSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("default_bot_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BotProtectionSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*GetSpecType_BotProtectionSetting).BotProtectionSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -1085,6 +1004,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
+	rulesBotProtectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotProtectionChoice(rulesBotProtectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.bot_protection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_protection_choice"] = vFn
+
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1157,6 +1087,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_protection_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1185,6 +1123,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
+		val := m.GetBotProtectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_protection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotProtectionChoice().(type) {
+	case *GlobalSpecType_DefaultBotSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.default_bot_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*GlobalSpecType_DefaultBotSetting).DefaultBotSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("default_bot_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotProtectionSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*GlobalSpecType_BotProtectionSetting).BotProtectionSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -1285,6 +1259,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
+	rulesBotProtectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotProtectionChoice(rulesBotProtectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.bot_protection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_protection_choice"] = vFn
+
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1357,6 +1342,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_protection_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) DetectionSettingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1385,6 +1378,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
+		val := m.GetBotProtectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_protection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotProtectionChoice().(type) {
+	case *ReplaceSpecType_DefaultBotSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.default_bot_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*ReplaceSpecType_DefaultBotSetting).DefaultBotSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("default_bot_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BotProtectionSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*ReplaceSpecType_BotProtectionSetting).BotProtectionSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["detection_setting_choice"]; exists {
@@ -1484,6 +1513,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
+	rulesBotProtectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotProtectionChoice(rulesBotProtectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bot_protection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_protection_choice"] = vFn
 
 	vrhDetectionSettingChoice := v.DetectionSettingChoiceValidationRuleHandler
 	rulesDetectionSettingChoice := map[string]string{
@@ -1757,36 +1797,20 @@ type ValidateViolationSetting struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateViolationSetting) EvasionViolationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for evasion_violation_setting")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateViolationSetting) HttpProtocolViolationSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for http_protocol_violation_setting")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateViolationSetting) EnabledViolationTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
-		i := v.(ViolationType)
+		i := v.(ves_io_schema.AppFirewallViolationType)
 		return int32(i)
 	}
-	// ViolationType_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ViolationType_name, conv)
+	// ves_io_schema.AppFirewallViolationType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.AppFirewallViolationType_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for enabled_violation_types")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []ViolationType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.AppFirewallViolationType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
@@ -1800,9 +1824,9 @@ func (v *ValidateViolationSetting) EnabledViolationTypesValidationRuleHandler(ru
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]ViolationType)
+		elems, ok := val.([]ves_io_schema.AppFirewallViolationType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []ViolationType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.AppFirewallViolationType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1843,78 +1867,6 @@ func (v *ValidateViolationSetting) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["evasion_violation_setting"]; exists {
-		val := m.GetEvasionViolationSetting()
-		vOpts := append(opts,
-			db.WithValidateField("evasion_violation_setting"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetEvasionViolationSetting().(type) {
-	case *ViolationSetting_DefaultEvasionViolationSettings:
-		if fv, exists := v.FldValidators["evasion_violation_setting.default_evasion_violation_settings"]; exists {
-			val := m.GetEvasionViolationSetting().(*ViolationSetting_DefaultEvasionViolationSettings).DefaultEvasionViolationSettings
-			vOpts := append(opts,
-				db.WithValidateField("evasion_violation_setting"),
-				db.WithValidateField("default_evasion_violation_settings"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ViolationSetting_EnabledEvasionViolations:
-		if fv, exists := v.FldValidators["evasion_violation_setting.enabled_evasion_violations"]; exists {
-			val := m.GetEvasionViolationSetting().(*ViolationSetting_EnabledEvasionViolations).EnabledEvasionViolations
-			vOpts := append(opts,
-				db.WithValidateField("evasion_violation_setting"),
-				db.WithValidateField("enabled_evasion_violations"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["http_protocol_violation_setting"]; exists {
-		val := m.GetHttpProtocolViolationSetting()
-		vOpts := append(opts,
-			db.WithValidateField("http_protocol_violation_setting"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetHttpProtocolViolationSetting().(type) {
-	case *ViolationSetting_DefaultHttpProtocolViolationSettings:
-		if fv, exists := v.FldValidators["http_protocol_violation_setting.default_http_protocol_violation_settings"]; exists {
-			val := m.GetHttpProtocolViolationSetting().(*ViolationSetting_DefaultHttpProtocolViolationSettings).DefaultHttpProtocolViolationSettings
-			vOpts := append(opts,
-				db.WithValidateField("http_protocol_violation_setting"),
-				db.WithValidateField("default_http_protocol_violation_settings"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ViolationSetting_EnabledHttpProtocolViolations:
-		if fv, exists := v.FldValidators["http_protocol_violation_setting.enabled_http_protocol_violations"]; exists {
-			val := m.GetHttpProtocolViolationSetting().(*ViolationSetting_EnabledHttpProtocolViolations).EnabledHttpProtocolViolations
-			vOpts := append(opts,
-				db.WithValidateField("http_protocol_violation_setting"),
-				db.WithValidateField("enabled_http_protocol_violations"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -1930,28 +1882,6 @@ var DefaultViolationSettingValidator = func() *ValidateViolationSetting {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhEvasionViolationSetting := v.EvasionViolationSettingValidationRuleHandler
-	rulesEvasionViolationSetting := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhEvasionViolationSetting(rulesEvasionViolationSetting)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ViolationSetting.evasion_violation_setting: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["evasion_violation_setting"] = vFn
-
-	vrhHttpProtocolViolationSetting := v.HttpProtocolViolationSettingValidationRuleHandler
-	rulesHttpProtocolViolationSetting := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhHttpProtocolViolationSetting(rulesHttpProtocolViolationSetting)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ViolationSetting.http_protocol_violation_setting: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["http_protocol_violation_setting"] = vFn
-
 	vrhEnabledViolationTypes := v.EnabledViolationTypesValidationRuleHandler
 	rulesEnabledViolationTypes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -1965,15 +1895,46 @@ var DefaultViolationSettingValidator = func() *ValidateViolationSetting {
 	}
 	v.FldValidators["enabled_violation_types"] = vFn
 
-	v.FldValidators["evasion_violation_setting.enabled_evasion_violations"] = EnabledEvasionSubViolationsValidator().Validate
-
-	v.FldValidators["http_protocol_violation_setting.enabled_http_protocol_violations"] = EnabledHTTPProtocolSubViolationsValidator().Validate
-
 	return v
 }()
 
 func ViolationSettingValidator() db.Validator {
 	return DefaultViolationSettingValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *CreateSpecType_BotProtectionSetting:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *CreateSpecType_DefaultBotSetting:
+		o.BotProtectionChoice = &GlobalSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtectionSetting:
+		r.BotProtectionChoice = &CreateSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *GlobalSpecType_DefaultBotSetting:
+		r.BotProtectionChoice = &CreateSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -2056,6 +2017,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
 }
@@ -2066,8 +2028,44 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *GetSpecType_BotProtectionSetting:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *GetSpecType_DefaultBotSetting:
+		o.BotProtectionChoice = &GlobalSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtectionSetting:
+		r.BotProtectionChoice = &GetSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *GlobalSpecType_DefaultBotSetting:
+		r.BotProtectionChoice = &GetSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -2150,6 +2148,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
 }
@@ -2160,8 +2159,44 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBotProtectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotProtectionChoice.(type) {
+	case nil:
+		o.BotProtectionChoice = nil
+
+	case *ReplaceSpecType_BotProtectionSetting:
+		o.BotProtectionChoice = &GlobalSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *ReplaceSpecType_DefaultBotSetting:
+		o.BotProtectionChoice = &GlobalSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBotProtectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotProtectionChoice.(type) {
+	case nil:
+		r.BotProtectionChoice = nil
+
+	case *GlobalSpecType_BotProtectionSetting:
+		r.BotProtectionChoice = &ReplaceSpecType_BotProtectionSetting{BotProtectionSetting: of.BotProtectionSetting}
+
+	case *GlobalSpecType_DefaultBotSetting:
+		r.BotProtectionChoice = &ReplaceSpecType_DefaultBotSetting{DefaultBotSetting: of.DefaultBotSetting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -2244,6 +2279,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetBotProtectionChoiceFromGlobalSpecType(f)
 	m.GetDetectionSettingChoiceFromGlobalSpecType(f)
 	m.GetEnforcementModeChoiceFromGlobalSpecType(f)
 }
@@ -2254,6 +2290,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetBotProtectionChoiceToGlobalSpecType(f)
 	m1.SetDetectionSettingChoiceToGlobalSpecType(f)
 	m1.SetEnforcementModeChoiceToGlobalSpecType(f)
 }

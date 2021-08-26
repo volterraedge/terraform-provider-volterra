@@ -1839,6 +1839,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *CreateSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*CreateSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*CreateSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -3465,6 +3491,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *GetSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GetSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GetSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -3878,6 +3930,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.authentication")
 	}
 
+	if err := m.GetBotDefense().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.bot_defense")
+	}
+
 	return nil
 }
 
@@ -3917,6 +3973,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -4055,6 +4117,37 @@ func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetBotDefenseChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+
+	case *GlobalSpecType_BotDefense:
+		odrInfos, err = m.GetBotDefense().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "bot_defense." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -5170,6 +5263,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -5388,6 +5507,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("max_request_header_size"))
 		if err := fv(ctx, m.GetMaxRequestHeaderSize(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetPathNormalizeChoice().(type) {
+	case *GlobalSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GlobalSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*GlobalSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5817,7 +5962,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhServicePolicySets := v.ServicePolicySetsValidationRuleHandler
 	rulesServicePolicySets := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.max_items": "5",
 	}
 	vFn, err = vrhServicePolicySets(rulesServicePolicySets)
 	if err != nil {
@@ -5827,6 +5972,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["service_policy_sets"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseConfigTypeValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
@@ -7446,6 +7593,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *ReplaceSpecType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*ReplaceSpecType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*ReplaceSpecType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
@@ -7812,6 +7985,203 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ShapeBotDefenseConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeBotDefenseConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ShapeBotDefenseConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetApiAuthKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ShapeBotDefenseConfigType.api_auth_key")
+	}
+
+	return nil
+}
+
+func (m *ShapeBotDefenseConfigType) DeepCopy() *ShapeBotDefenseConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeBotDefenseConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeBotDefenseConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeBotDefenseConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeBotDefenseConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ShapeBotDefenseConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInstanceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *ShapeBotDefenseConfigType) GetInstanceDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetInstance() {
+		if ref == nil {
+			return nil, fmt.Errorf("ShapeBotDefenseConfigType.instance[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "shape_bot_defense_instance.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "instance",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetInstanceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ShapeBotDefenseConfigType) GetInstanceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "shape_bot_defense_instance.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: shape_bot_defense_instance")
+	}
+	for _, ref := range m.GetInstance() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateShapeBotDefenseConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeBotDefenseConfigType) ApplicationIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for application_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeBotDefenseConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeBotDefenseConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_auth_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_auth_key"))
+		if err := fv(ctx, m.GetApiAuthKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["application_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("application_id"))
+		if err := fv(ctx, m.GetApplicationId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance"))
+		for idx, item := range m.GetInstance() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseConfigType {
+	v := &ValidateShapeBotDefenseConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApplicationId := v.ApplicationIdValidationRuleHandler
+	rulesApplicationId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.string.min_len": "32",
+	}
+	vFn, err = vrhApplicationId(rulesApplicationId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotDefenseConfigType.application_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["application_id"] = vFn
+
+	v.FldValidators["api_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func ShapeBotDefenseConfigTypeValidator() db.Validator {
+	return DefaultShapeBotDefenseConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *TemporaryUserBlockingType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7995,6 +8365,41 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *CreateSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *CreateSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &CreateSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &CreateSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8059,6 +8464,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8095,6 +8501,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
@@ -8188,6 +8595,41 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *GetSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GetSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &GetSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &GetSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8256,6 +8698,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.HostName = f.GetHostName()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8298,6 +8741,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.HostName = m1.HostName
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
@@ -8393,6 +8837,41 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PathNormalizeChoice.(type) {
+	case nil:
+		o.PathNormalizeChoice = nil
+
+	case *ReplaceSpecType_DisablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *ReplaceSpecType_EnablePathNormalize:
+		o.PathNormalizeChoice = &GlobalSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPathNormalizeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PathNormalizeChoice.(type) {
+	case nil:
+		r.PathNormalizeChoice = nil
+
+	case *GlobalSpecType_DisablePathNormalize:
+		r.PathNormalizeChoice = &ReplaceSpecType_DisablePathNormalize{DisablePathNormalize: of.DisablePathNormalize}
+
+	case *GlobalSpecType_EnablePathNormalize:
+		r.PathNormalizeChoice = &ReplaceSpecType_EnablePathNormalize{EnablePathNormalize: of.EnablePathNormalize}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ServerHeaderChoice.(type) {
 	case nil:
@@ -8457,6 +8936,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
+	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
@@ -8493,6 +8973,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
+	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes

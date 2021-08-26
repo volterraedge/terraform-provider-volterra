@@ -1619,7 +1619,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual Host",
-        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTypes of proxies supported\n\n* HTTP Proxy\n* TCP Proxy\n* TCP Proxy with SNI\n* HTTPS Proxy\n* UDP Proxy\n* Secret Management Access Proxy\n\nTerminology\n\nDownstream: A downstream host connects to virtual host, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from virtual host and returns responses.",
+        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is\nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTypes of proxies supported\n\n* HTTP Proxy\n* TCP Proxy\n* TCP Proxy with SNI\n* HTTPS Proxy\n* UDP Proxy\n* Secret Management Access Proxy\n\nTerminology\n\nDownstream: A downstream host connects to virtual host, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from virtual host and returns responses.",
         "version": "version not set"
     },
     "schemes": [
@@ -3824,6 +3824,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.CreateSpecType",
             "properties": {
@@ -3893,6 +3894,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "domains": {
                     "type": "array",
                     "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-",
@@ -3907,6 +3912,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
                 },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -3920,7 +3929,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
                     "x-ves-example": "42"
@@ -3938,7 +3947,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
                 },
@@ -4042,6 +4051,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "10,15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GetSpecType",
             "properties": {
@@ -4121,6 +4131,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "dns_info": {
                     "type": "array",
                     "description": " DNS information for this virtual host",
@@ -4143,6 +4157,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
                 },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -4162,7 +4180,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
                     "x-ves-example": "42"
@@ -4180,7 +4198,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
                 },
@@ -4292,7 +4310,9 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
+            "x-ves-oneof-field-bot_defense_choice": "[\"bot_defense\",\"disable_bot_defense\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
@@ -4342,6 +4362,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Auto Cert State"
                 },
+                "bot_defense": {
+                    "description": "Exclusive with [disable_bot_defense]\nx-displayName: \"Specify Shape Bot Defense Configuration\"\nShape Bot Defense intent configuration object",
+                    "title": "Shape Bot Defense",
+                    "$ref": "#/definitions/virtual_hostShapeBotDefenseConfigType"
+                },
                 "buffer_policy": {
                     "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
                     "title": "Buffer configuration for requests",
@@ -4377,6 +4402,11 @@ var APISwaggerJSON string = `{
                     "title": "default_header",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "disable_bot_defense": {
+                    "description": "Exclusive with [bot_defense]\nx-displayName: \"Disable Shape Bot Defense\"\nNo Shape Bot Defense configuration for this load balancer",
+                    "title": "Disable Shape Bot Defense",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "disable_default_error_pages": {
                     "type": "boolean",
                     "description": "\n An option to specify whether to disable using default Volterra error pages\n\nExample: - \"true\"-",
@@ -4392,6 +4422,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "dns_domains": {
                     "type": "array",
@@ -4433,6 +4468,11 @@ var APISwaggerJSON string = `{
                     "title": "Enable the dynamic resolution of the endpoint",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "host_name": {
                     "type": "string",
@@ -4486,7 +4526,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
@@ -4513,7 +4553,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostPolicyBasedChallenge"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "title": "Proxy Type",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
@@ -4700,6 +4740,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.ReplaceSpecType",
             "properties": {
@@ -4769,6 +4810,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
                 },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "domains": {
                     "type": "array",
                     "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-",
@@ -4783,6 +4828,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
                 },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -4796,7 +4845,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
                     "x-ves-example": "42"
@@ -4814,7 +4863,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
                 },
@@ -5312,7 +5361,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
-            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow \nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
+            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
             "title": "JavascriptChallengeType",
             "x-displayname": "Javascript Challenge Parameters",
             "x-ves-proto-message": "ves.io.schema.virtual_host.JavascriptChallengeType",
@@ -5567,6 +5616,37 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.virtual_host.ReplaceResponse"
         },
+        "virtual_hostShapeBotDefenseConfigType": {
+            "type": "object",
+            "description": "This defines various configuration options for Shape Bot Defense per virtual host.",
+            "title": "ShapeBotDefenseConfigType",
+            "x-displayname": "Shape Bot Defense Config for virtual host",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ShapeBotDefenseConfigType",
+            "properties": {
+                "api_auth_key": {
+                    "description": " API auth key for Shared Shape Bot Defense instance. This value is set\n on the tenant object from Shape Backend.",
+                    "title": "API auth key for Shared Shape Instance",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "API auth key"
+                },
+                "application_id": {
+                    "type": "string",
+                    "description": " Shape Bot Defense Application ID is used by shared instances.\n\nExample: - \"707a0c622df8414886a5ca71c46caf2f\"-",
+                    "title": "Application ID",
+                    "x-displayname": "Application ID",
+                    "x-ves-example": "707a0c622df8414886a5ca71c46caf2f"
+                },
+                "instance": {
+                    "type": "array",
+                    "description": " Which Shape insatnce to use",
+                    "title": "Shape Instance",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Shape Instance"
+                }
+            }
+        },
         "virtual_hostStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
@@ -5601,7 +5681,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
             "title": "TemporaryUserBlockingType",
             "x-displayname": "Temporary User Blocking",
             "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",

@@ -2083,6 +2083,266 @@ var APISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
             "x-ves-proto-service-type": "AUTO_CRUD"
         },
+        "/ves.io.schema.views.terraform_parameters/StatusObjects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/StatusObjects/stream": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.(streaming responses)",
+                        "schema": {
+                            "$ref": "#/x-stream-definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-ListStream"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
         "/ves.io.schema.views.terraform_parameters/introspect/read/Object/{object_uid}": {
             "get": {
                 "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Get",
@@ -2320,6 +2580,136 @@ var APISwaggerJSON string = `{
             "x-ves-object-kind": "terraform_parameters",
             "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
             "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/read/StatusObjects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
             "x-ves-proto-service-type": "AUTO_CRUD"
         },
         "/ves.io.schema.views.terraform_parameters/introspect/write/Object/{object_uid}": {
@@ -2757,6 +3147,55 @@ var APISwaggerJSON string = `{
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "crudapiStatusObjectListRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/crudapiStatusObjectListRspItem"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaListMetaType"
+                },
+                "uids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "crudapiStatusObjectListRspItem": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRspItem",
+            "properties": {
+                "apply_status": {
+                    "$ref": "#/definitions/terraform_parametersApplyStatus"
+                },
+                "metadata": {
+                    "title": "If StatusObjectListReq has any specified report_fields, it will appear in below fields",
+                    "$ref": "#/definitions/schemaStatusMetaType"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "plan_status": {
+                    "$ref": "#/definitions/terraform_parametersPlanStatus"
+                },
+                "statusobject_uid": {
+                    "type": "string"
                 }
             }
         },
@@ -3441,6 +3880,3087 @@ var APISwaggerJSON string = `{
                 }
             },
             "title": "Stream result of crudapiObjectListRsp",
+            "type": "object"
+        },
+        "crudapiStatusObjectListRsp": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                    "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                }
+            },
+            "title": "Stream result of crudapiStatusObjectListRsp",
+            "type": "object"
+        }
+    },
+    "x-ves-proto-file": "ves.io/schema/views/terraform_parameters/crudapi/api.proto"
+}`
+
+// augment methods on Object<Oper>Req from api.pb.go
+
+// CLIENT side
+
+func NewStatusObjectListReq(opts ...server.CRUDCallOpt) *StatusObjectListReq {
+	return &StatusObjectListReq{}
+}
+
+// GRPC Client
+type crudStatusAPIGrpcClient struct {
+	conn       *grpc.ClientConn
+	grpcClient StatusAPIClient
+}
+
+func (c *crudStatusAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
+	idSet := []string{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return idSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		idSet = append(idSet, li.GetStatusobjectUid())
+	}
+	return idSet, err
+
+}
+
+func (c *crudStatusAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
+	sliSet := []server.ListItem{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return sliSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		sliSet = append(sliSet, li)
+	}
+	return sliSet, err
+
+}
+
+func (c *crudStatusAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*StatusObjectListRsp, error) {
+	req := NewStatusObjectListReq()
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
+	req.TenantFilter = cco.TenantFilter
+	req.NamespaceFilter = cco.NamespaceFilter
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		req.LabelFilter = cco.LabelFilter[0]
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+	req.ReportFields = cco.ReportFields
+
+	req.IncludeReferredId = cco.IncludeReferredID
+	if cco.OutResourceVersion != nil {
+		req.ResourceVersion = true
+	}
+	rsp, err := c.grpcClient.List(ctx, req, cco.GrpcCallOpts...)
+
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
+	if cco.OutResourceVersion != nil {
+		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
+	}
+	return rsp, err
+}
+
+func (c *crudStatusAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+
+	req := NewStatusObjectListReq()
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
+	req.TenantFilter = cco.TenantFilter
+	req.NamespaceFilter = cco.NamespaceFilter
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		req.LabelFilter = cco.LabelFilter[0]
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+	req.ReportFields = cco.ReportFields
+
+	req.IncludeReferredId = cco.IncludeReferredID
+	stream, err := c.grpcClient.ListStream(ctx, req, cco.GrpcCallOpts...)
+	if err != nil {
+		return nil, errors.Wrap(err, "Listing with grpc client")
+	}
+	lc := &crudStatusAPIGrpcListStreamClient{stream}
+	return lc, nil
+
+}
+
+func (c *crudStatusAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func NewCRUDStatusAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
+	ccl := &crudStatusAPIGrpcClient{cc, NewStatusAPIClient(cc)}
+	return ccl
+}
+
+type crudStatusAPIGrpcListStreamClient struct {
+	stream StatusAPI_ListStreamClient
+}
+
+func (lc *crudStatusAPIGrpcListStreamClient) RecvIDs() ([]string, error) {
+	idSet := []string{}
+	rsp, err := lc.stream.Recv()
+	if rsp == nil {
+		return idSet, err
+	}
+	for _, li := range rsp.GetItems() {
+		idSet = append(idSet, li.GetStatusobjectUid())
+	}
+	return idSet, err
+}
+
+func (lc *crudStatusAPIGrpcListStreamClient) RecvItems() ([]server.ListItem, error) {
+	sliSet := []server.ListItem{}
+	rsp, err := lc.stream.Recv()
+	if rsp == nil {
+		return sliSet, err
+	}
+	for _, li := range rsp.GetItems() {
+		sliSet = append(sliSet, li)
+	}
+	return sliSet, err
+}
+
+// REST Client
+type crudStatusAPIRestClient struct {
+	baseURL string
+	client  http.Client
+}
+
+func (c *crudStatusAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
+	idSet := []string{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return idSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		idSet = append(idSet, li.GetStatusobjectUid())
+	}
+	return idSet, err
+
+}
+
+func (c *crudStatusAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
+	sliSet := []server.ListItem{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return sliSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		sliSet = append(sliSet, li)
+	}
+	return sliSet, err
+
+}
+
+func (c *crudStatusAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*StatusObjectListRsp, error) {
+	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
+	sl := strings.Split("ves.io.schema.views.terraform_parameters.crudapi", ".")
+	t := strings.Join(sl[:len(sl)-1], ".")
+	url := fmt.Sprintf("%s/%s/StatusObjects", c.baseURL, t)
+
+	hReq, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+	client.AddHdrsToReq(cco.Headers, hReq)
+
+	q := hReq.URL.Query()
+	for _, fVal := range cco.TenantFilter {
+		q.Add("tenant_filter", fVal)
+	}
+	for _, fVal := range cco.NamespaceFilter {
+		q.Add("namespace_filter", fVal)
+	}
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		q.Add("label_filter", cco.LabelFilter[0])
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+
+	for _, fName := range cco.ReportFields {
+		q.Add("report_fields", fName)
+	}
+
+	if cco.IncludeReferredID {
+		q.Add("include_referred_id", "true")
+	}
+
+	if cco.OutResourceVersion != nil {
+		q.Add("resource_version", "true")
+	}
+	hReq.URL.RawQuery += q.Encode()
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+	}
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "RestClient List")
+	}
+
+	rspo := &StatusObjectListRsp{}
+	if err := codec.FromJSON(string(body), rspo); err != nil {
+		return nil, errors.Wrap(err, "Converting json to response protobuf message")
+	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rspo
+		cco.OutCallResponse.JSON = string(body)
+	}
+	if cco.OutResourceVersion != nil {
+		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
+	}
+	return rspo, nil
+}
+
+func (c *crudStatusAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+	return nil, fmt.Errorf("Not implemented")
+}
+
+func (c *crudStatusAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func NewCRUDStatusAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
+	crcl := &crudStatusAPIRestClient{baseURL, cl}
+	return crcl
+}
+
+// INPROC Client (satisfying StatusAPIClient interface)
+type StatusAPIInprocClient struct {
+	crudCl *crudStatusAPIInprocClient
+}
+
+func (c *StatusAPIInprocClient) List(ctx context.Context, req *StatusObjectListReq, opts ...grpc.CallOption) (*StatusObjectListRsp, error) {
+	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.crudapi.StatusAPI")
+	oah, ok := ah.(*StatusAPISrv)
+	if !ok {
+		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.terraform_parameters.crudapi")
+	}
+
+	return oah.List(ctx, req)
+}
+
+func (c *StatusAPIInprocClient) ListStream(ctx context.Context, req *StatusObjectListReq, opts ...grpc.CallOption) (StatusAPI_ListStreamClient, error) {
+	return nil, fmt.Errorf("ListStream Not implemented")
+}
+
+func NewStatusAPIInprocClient(svc svcfw.Service) StatusAPIClient {
+	crudCl := newCRUDStatusAPIInprocClient(svc)
+	return &StatusAPIInprocClient{crudCl}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudStatusAPIInprocClient struct {
+	svc svcfw.Service
+}
+
+func (c *crudStatusAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
+	return nil, fmt.Errorf("Not implemented")
+
+}
+
+func (c *crudStatusAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
+	idSet := []string{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return idSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		idSet = append(idSet, li.GetStatusobjectUid())
+	}
+	return idSet, err
+
+}
+
+func (c *crudStatusAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
+	sliSet := []server.ListItem{}
+	listRsp, err := c.List(ctx, opts...)
+	if listRsp == nil {
+		return sliSet, err
+	}
+	for _, li := range listRsp.GetItems() {
+		sliSet = append(sliSet, li)
+	}
+	return sliSet, err
+
+}
+
+func (c *crudStatusAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*StatusObjectListRsp, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.terraform_parameters.crudapi.StatusAPI")
+	oah, ok := ah.(*StatusAPISrv)
+	if !ok {
+		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.terraform_parameters.crudapi")
+	}
+
+	cco := server.NewCRUDCallOpts()
+	for _, opt := range opts {
+		opt(cco)
+	}
+
+	req := NewStatusObjectListReq()
+	req.TenantFilter = cco.TenantFilter
+	req.NamespaceFilter = cco.NamespaceFilter
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		req.LabelFilter = cco.LabelFilter[0]
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+
+	if cco.OutResourceVersion != nil {
+		req.ResourceVersion = true
+	}
+	rsp, err := oah.List(ctx, req)
+
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
+	if cco.OutResourceVersion != nil {
+		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
+	}
+	return rsp, err
+}
+
+func (c *crudStatusAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+	return nil, fmt.Errorf("Not implemented")
+}
+
+func (c *crudStatusAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
+	return fmt.Errorf("Not implemented")
+
+}
+
+func newCRUDStatusAPIInprocClient(svc svcfw.Service) *crudStatusAPIInprocClient {
+	crcl := &crudStatusAPIInprocClient{svc: svc}
+	return crcl
+}
+
+func NewCRUDStatusAPIInprocClient(svc svcfw.Service) server.CRUDClient {
+	return newCRUDStatusAPIInprocClient(svc)
+}
+
+// SERVER side
+type StatusAPISrv struct {
+	oType   string
+	tblName string
+	sf      svcfw.Service
+
+	opts *server.CrudServerOpts
+	// derived from opts
+	apiWrapper *server.DBAPIWrapper
+}
+
+func (s *StatusAPISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.terraform_parameters.crudapi.StatusAPI", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.terraform_parameters.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
+func (s *StatusAPISrv) List(ctx context.Context, req *StatusObjectListReq) (*StatusObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
+	if s.sf.Config().EnableAPIValidation {
+		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"); rvFn != nil {
+			if err := rvFn(ctx, req); err != nil {
+				return nil, errors.Wrap(err, "Validating private list request")
+			}
+		}
+	}
+	var merr *multierror.Error
+	rsrcReq := &server.ResourceListRequest{
+		TenantFilter:       req.TenantFilter,
+		NamespaceFilter:    req.NamespaceFilter,
+		LabelFilter:        req.LabelFilter,
+		RspStreamed:        false,
+		GetResourceVersion: req.ResourceVersion,
+		OmitReferredID:     !req.IncludeReferredId,
+	}
+	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
+	if err != nil {
+		merr = multierror.Append(merr, errors.Wrap(err, "List"))
+	}
+	rsp, err := NewStatusObjectListRsp(req, rsrcRsp.Items)
+	if err != nil {
+		merr = multierror.Append(merr, err)
+	}
+	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+	return rsp, errors.ErrOrNil(merr)
+}
+
+func (s *StatusAPISrv) ListStream(req *StatusObjectListReq, stream StatusAPI_ListStreamServer) error {
+	var merr *multierror.Error
+	rsrcReq := &server.ResourceListRequest{
+		TenantFilter:    req.TenantFilter,
+		NamespaceFilter: req.NamespaceFilter,
+		LabelFilter:     req.LabelFilter,
+		RspStreamed:     true,
+	}
+	rsrcRsp, err := s.opts.RsrcHandler.ListFn(stream.Context(), rsrcReq, s.apiWrapper)
+	if err != nil {
+		merr = multierror.Append(merr, errors.Wrap(err, "ListStream"))
+	}
+	streamSvr := &crudStatusAPIListStreamServer{stream}
+	for item := range rsrcRsp.ItemsCh {
+		if err := streamSvr.SendResource(req, item); err != nil {
+			merr = multierror.Append(merr, errors.Wrap(err, "Stream-Send"))
+			continue
+		}
+	}
+	return errors.ErrOrNil(merr)
+}
+
+// Assert that APISrv implements both the generated gRPC APIServer interface and the
+// stdlib CRUDServer interface
+var (
+	_ StatusAPIServer = &StatusAPISrv{}
+)
+
+func NewCRUDStatusAPIServer(oType string, tblName string, sf svcfw.Service, opts ...server.CRUDServerOpt) (server.APIHandler, string) {
+	// convert ves.io.examplesvc.objectone.Object to
+	//         ves.io.examplesvc.objectone.crudapi.API
+	sl := strings.Split(oType, ".")
+	csOpts := server.NewCRUDServerOpts()
+	for _, o := range opts {
+		o(csOpts)
+	}
+	wrapper := server.NewDBAPIWrapper(csOpts.APIWrapperOpts...)
+	s := &StatusAPISrv{
+		oType:      oType,
+		tblName:    tblName,
+		sf:         sf,
+		opts:       csOpts,
+		apiWrapper: wrapper,
+	}
+	return s, fmt.Sprintf("%s.crudapi.StatusAPI", strings.Join(sl[:len(sl)-1], "."))
+}
+
+// implements both stdlib.server.ListStreamServer and API_ListStreamServer
+type crudStatusAPIListStreamServer struct {
+	stream StatusAPI_ListStreamServer
+}
+
+func (lc *crudStatusAPIListStreamServer) Context() context.Context {
+	return lc.stream.Context()
+}
+
+func (lc *crudStatusAPIListStreamServer) SendResource(r *StatusObjectListReq, item *server.ResourceListResponseItem) error {
+	lRsp, err := NewStatusObjectListRsp(r, []*server.ResourceListResponseItem{item})
+	if err != nil {
+		return errors.Wrap(err, "SendResource with NewStatusObjectListRsp")
+	}
+	if err := lc.Send(lRsp); err != nil {
+		return errors.Wrap(err, "ListStreamServer.SendResource()")
+	}
+	return nil
+}
+
+func (lc *crudStatusAPIListStreamServer) Send(o *StatusObjectListRsp) error {
+	if err := lc.stream.Send(o); err != nil {
+		return errors.Wrap(err, "ListStreamServer.Send()")
+	}
+	return nil
+}
+
+// Implement server.ListItem interface on StatusObjectListRspItem
+func (l *StatusObjectListRspItem) GetObjUid() string {
+	return l.StatusobjectUid
+}
+
+// Implement server.SROListItem interface on StatusObjectListRspItem
+
+func NewStatusObjectListRsp(req *StatusObjectListReq, rsrcRspItems []*server.ResourceListResponseItem) (*StatusObjectListRsp, error) {
+	if req == nil {
+		return nil, fmt.Errorf("Nil StatusObjectListReq")
+	}
+	var errs error
+	o := &StatusObjectListRsp{}
+	o.Metadata = &ves_io_schema.ListMetaType{}
+	o.Uids = []string{}
+	o.Items = []*StatusObjectListRspItem{}
+	for _, rsrcItem := range rsrcRspItems {
+		if rsrcItem == nil {
+			errs = multierror.Append(errs, fmt.Errorf("ResourceListResponseItem is nil"))
+			continue
+		}
+		e := rsrcItem.Entry
+		dbObj, ok := e.(*object.DBStatusObject)
+		if !ok {
+			errs = multierror.Append(errs, fmt.Errorf("Expected %T, got %T: %v", &object.DBStatusObject{}, e, e))
+			continue
+		}
+		key, err := dbObj.Key()
+		if err != nil {
+			errs = multierror.Append(errs, errors.WithMessagef(err, "Key() %v FAILED", dbObj))
+			continue
+		}
+
+		// TODO: DEPRECATE setting to o.Uids
+		o.Uids = append(o.Uids, key)
+
+		item := &StatusObjectListRspItem{
+			StatusobjectUid: key,
+		}
+		if len(req.ReportFields) > 0 {
+			item.FromStatusObject(e)
+		}
+		o.Items = append(o.Items, item)
+	}
+	return o, errs
+}
+
+func RegisterGwStatusAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+	s, ok := svc.(svcfw.Service)
+	if !ok {
+		return fmt.Errorf("svc is not svcfw.Service")
+	}
+	return RegisterStatusAPIHandlerClient(ctx, mux, NewStatusAPIInprocClient(s))
+}
+
+var StatusAPISwaggerJSON string = `{
+    "swagger": "2.0",
+    "info": {
+        "title": "ves.io/schema/views/terraform_parameters/crudapi/api.proto",
+        "version": "version not set"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "tags": null,
+    "paths": {
+        "/ves.io.schema.views.terraform_parameters/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
+            },
+            "delete": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
+            },
+            "post": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/Objects/stream": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.ListStream",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.(streaming responses)",
+                        "schema": {
+                            "$ref": "#/x-stream-definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-ListStream"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.ListStream"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/StatusObjects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/StatusObjects/stream": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.(streaming responses)",
+                        "schema": {
+                            "$ref": "#/x-stream-definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-ListStream"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/read/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/read/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/read/StatusObjects": {
+            "get": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "StatusAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-StatusAPI-List"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
+            },
+            "x-displayname": "",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/write/Object/{object_uid}": {
+            "delete": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.views.terraform_parameters/introspect/write/Objects": {
+            "post": {
+                "operationId": "ves.io.schema.views.terraform_parameters.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-API-Create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "terraform_parameters",
+            "x-ves-object-type": "ves.io.schema.views.terraform_parameters.Object",
+            "x-ves-proto-service": "ves.io.schema.views.terraform_parameters.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        }
+    },
+    "definitions": {
+        "crudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.crudapi.ErrorCode"
+        },
+        "crudapiObjectCreateReq": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateReq",
+            "properties": {
+                "metadata": {
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                },
+                "system_metadata": {
+                    "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "crudapiObjectCreateRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "object_uid": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                },
+                "system_metadata": {
+                    "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "crudapiObjectDeleteRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                }
+            }
+        },
+        "crudapiObjectGetRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectGetRsp",
+            "properties": {
+                "ent_backrefs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
+                },
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "resource_version": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/terraform_parametersStatusObject"
+                    }
+                },
+                "system_metadata": {
+                    "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "crudapiObjectListRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/crudapiObjectListRspItem"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaListMetaType"
+                },
+                "uids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "crudapiObjectListRspItem": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRspItem",
+            "properties": {
+                "labels": {
+                    "type": "object"
+                },
+                "metadata": {
+                    "title": "If ObjectListReq has any specified report_fields, it will appear in below fields",
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "object_uid": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/terraform_parametersStatusObject"
+                    }
+                },
+                "system_metadata": {
+                    "$ref": "#/definitions/schemaSystemObjectMetaType"
+                },
+                "tenant": {
+                    "type": "string"
+                }
+            }
+        },
+        "crudapiObjectReplaceReq": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceReq",
+            "properties": {
+                "metadata": {
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "object_uid": {
+                    "type": "string"
+                },
+                "resource_version": {
+                    "type": "string"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                }
+            }
+        },
+        "crudapiObjectReplaceRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaObjectMetaType"
+                },
+                "spec": {
+                    "$ref": "#/definitions/terraform_parametersSpecType"
+                },
+                "system_metadata": {
+                    "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "crudapiStatusObjectListRsp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
+            "properties": {
+                "err": {
+                    "$ref": "#/definitions/crudapiErrorCode"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/crudapiStatusObjectListRspItem"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/schemaListMetaType"
+                },
+                "uids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "crudapiStatusObjectListRspItem": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRspItem",
+            "properties": {
+                "apply_status": {
+                    "$ref": "#/definitions/terraform_parametersApplyStatus"
+                },
+                "metadata": {
+                    "title": "If StatusObjectListReq has any specified report_fields, it will appear in below fields",
+                    "$ref": "#/definitions/schemaStatusMetaType"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "plan_status": {
+                    "$ref": "#/definitions/terraform_parametersPlanStatus"
+                },
+                "statusobject_uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
+        "runtimeStreamError": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
+                },
+                "grpc_code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "http_code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "http_status": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemaInitializerType": {
+            "type": "object",
+            "description": "Initializer is information about an initializer that has not yet completed.",
+            "title": "InitializerType",
+            "x-displayname": "Initializer",
+            "x-ves-proto-message": "ves.io.schema.InitializerType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " name of the service that is responsible for initializing this object.",
+                    "title": "name",
+                    "x-displayname": "Name"
+                }
+            }
+        },
+        "schemaInitializersType": {
+            "type": "object",
+            "description": "Initializers tracks the progress of initialization of a configuration object",
+            "title": "InitializersType",
+            "x-displayname": "Initializers",
+            "x-ves-proto-message": "ves.io.schema.InitializersType",
+            "properties": {
+                "pending": {
+                    "type": "array",
+                    "description": " Pending is a list of initializers that must execute in order before this object is initialized.\n When the last pending initializer is removed, and no failing result is set, the initializers\n struct will be set to nil and the object is considered as initialized and visible to all\n clients.",
+                    "title": "pending",
+                    "items": {
+                        "$ref": "#/definitions/schemaInitializerType"
+                    },
+                    "x-displayname": "Pending"
+                },
+                "result": {
+                    "description": " If result is set with the Failure field, the object will be persisted to storage and then deleted,\n ensuring that other clients can observe the deletion.",
+                    "title": "result",
+                    "$ref": "#/definitions/schemaStatusType",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "schemaListMetaType": {
+            "type": "object",
+            "description": "ListMetaType is metadata that all lists must have.",
+            "title": "ListMetaType",
+            "x-displayname": "List Metadata",
+            "x-ves-proto-message": "ves.io.schema.ListMetaType",
+            "properties": {
+                "resource_version": {
+                    "type": "string",
+                    "description": " An opaque value that represents the revision of the store at the time the list API is\n performed. It can be used in subsequent watch API to receive all changes after the list\n API, or in a replace API to make the replace conditional on the object still being at\n that revision\n\nExample: - \"181255\"-",
+                    "title": "resource_version",
+                    "x-displayname": "Resource Version",
+                    "x-ves-example": "181255"
+                }
+            }
+        },
+        "schemaObjectMetaType": {
+            "type": "object",
+            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "ObjectMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
+            "properties": {
+                "annotations": {
+                    "type": "object",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "title": "annotations",
+                    "x-displayname": "Annotations",
+                    "x-ves-example": "value"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "staging"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "schemaStatusMetaType": {
+            "type": "object",
+            "description": "StatusMetaType is metadata that all status must have.",
+            "title": "StatusMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.StatusMetaType",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " creation_timestamp is when the status object was created. It is used to find/tie-break\n for latest status object from same origin",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "creator_class": {
+                    "type": "string",
+                    "description": " Class of creator which created this StatusObject. This will be service's DNS FQDN.\n This will be set by the system based on client certificate information.\n\nExample: - \"ver.re1.int.ves.io\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "ver.re1.int.ves.io"
+                },
+                "creator_id": {
+                    "type": "string",
+                    "description": " ID of creator which created this StatusObject. This will be a concrete identifier for service (e.g.\n identifying the environment also). This will be set by the system based on client certificate\n information\n\nExample: - \"ver-instance-1\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "ver-instance-1"
+                },
+                "publish": {
+                    "description": " Decides wether this status object will be propagated to user.",
+                    "title": "publish",
+                    "$ref": "#/definitions/schemaStatusPublishType",
+                    "x-displayname": "Publish"
+                },
+                "status_id": {
+                    "type": "string",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "title": "status_id",
+                    "x-displayname": "Status ID"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for a StatusObject.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
+                }
+            }
+        },
+        "schemaStatusPublishType": {
+            "type": "string",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "title": "StatusPublishType",
+            "enum": [
+                "STATUS_DO_NOT_PUBLISH",
+                "STATUS_PUBLISH"
+            ],
+            "default": "STATUS_DO_NOT_PUBLISH",
+            "x-displayname": "Publish",
+            "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
+        },
+        "schemaStatusType": {
+            "type": "object",
+            "description": "Status is a return value for calls that don't return other objects.",
+            "title": "StatusType",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.StatusType",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "description": " Suggested HTTP return code for this status, 0 if not set.\n\nExample: - \"0\"-",
+                    "title": "code",
+                    "format": "int32",
+                    "x-displayname": "Code",
+                    "x-ves-example": "0"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " A human-readable description of why this operation is in the\n \"Failure\" status. If this value is empty there\n is no information available.\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the operation.\n One of: \"Success\" or \"Failure\".\n\nExample: - \"value\"-",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaSystemObjectMetaType": {
+            "type": "object",
+            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
+            "title": "SystemObjectMetaType",
+            "x-displayname": "System Metadata",
+            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "creator_class": {
+                    "type": "string",
+                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "value"
+                },
+                "creator_cookie": {
+                    "type": "string",
+                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
+                    "title": "creator_cookie",
+                    "x-displayname": "Creator Cookie",
+                    "x-ves-example": "value"
+                },
+                "creator_id": {
+                    "type": "string",
+                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "value"
+                },
+                "deletion_timestamp": {
+                    "type": "string",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "title": "deletion_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Deletion Timestamp"
+                },
+                "finalizers": {
+                    "type": "array",
+                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
+                    "title": "finalizers",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Finalizers",
+                    "x-ves-example": "value"
+                },
+                "initializers": {
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "title": "initializers",
+                    "$ref": "#/definitions/schemaInitializersType",
+                    "x-displayname": "Initializers"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "namespace": {
+                    "type": "array",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
+                    "title": "namespace",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Namespace Reference"
+                },
+                "object_index": {
+                    "type": "integer",
+                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
+                    "title": "object_index",
+                    "format": "int64",
+                    "x-displayname": "Object Index",
+                    "x-ves-example": "0"
+                },
+                "owner_view": {
+                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
+                    "title": "owner_view",
+                    "$ref": "#/definitions/schemaViewRefType",
+                    "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "trace_info": {
+                    "type": "string",
+                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
+                    "title": "trace_info",
+                    "x-displayname": "Trace Info",
+                    "x-ves-example": "value"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
+                }
+            }
+        },
+        "schemaViewRefType": {
+            "type": "object",
+            "description": "ViewRefType represents a reference to a view",
+            "title": "ViewRefType",
+            "x-displayname": "View Reference",
+            "x-ves-proto-message": "ves.io.schema.ViewRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " Kind of the view object\n\nExample: - \"http_proxy\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "http_proxy"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " UID of the view object\n\nExample: - \"f3744323-1adf-4aaa-a5dc-0707c1d1bd82\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "terraform_parametersApplyStageState": {
+            "type": "string",
+            "description": "Terraform state during apply stage",
+            "title": "Apply Stage State",
+            "enum": [
+                "APPLIED",
+                "APPLY_ERRORED",
+                "APPLY_INIT_ERRORED",
+                "APPLYING",
+                "APPLY_PLANNING",
+                "APPLY_PLAN_ERRORED"
+            ],
+            "default": "APPLIED",
+            "x-displayname": "Apply Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.ApplyStageState"
+        },
+        "terraform_parametersApplyStatus": {
+            "type": "object",
+            "x-ves-oneof-field-state": "[\"apply_state\",\"destroy_state\",\"infra_state\"]",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.ApplyStatus",
+            "properties": {
+                "apply_state": {
+                    "description": "Exclusive with [destroy_state infra_state]\nx-displayName: \"Apply State\"\nTerraform state during apply stage",
+                    "title": "apply_state",
+                    "$ref": "#/definitions/terraform_parametersApplyStageState"
+                },
+                "destroy_state": {
+                    "description": "Exclusive with [apply_state infra_state]\nx-displayName: \"Destroy State\"\nTerraform state during destroy stage",
+                    "title": "destroy_state",
+                    "$ref": "#/definitions/terraform_parametersDestroyStageState"
+                },
+                "error_output": {
+                    "type": "string",
+                    "description": " Error output of terraform run\n\nExample: - \"value\"-",
+                    "title": "error_output",
+                    "x-displayname": "Error Output",
+                    "x-ves-example": "value"
+                },
+                "infra_state": {
+                    "description": "Exclusive with [apply_state destroy_state]\nx-displayName: \"Infra State\"\nInfrastructure state of the view provisioning",
+                    "title": "infra_state",
+                    "$ref": "#/definitions/terraform_parametersInfraState"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this status was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "tf_output": {
+                    "type": "string",
+                    "description": " The value of an \"output\" variable from the terraform state file.\n\nExample: - \"value\"-",
+                    "title": "tf_output",
+                    "x-displayname": "Terraform Output",
+                    "x-ves-example": "value"
+                },
+                "tf_stdout": {
+                    "type": "string",
+                    "description": " The stdout of terraform apply command.",
+                    "title": "tf_stdout",
+                    "x-displayname": "Terraform Standard Output"
+                }
+            }
+        },
+        "terraform_parametersDestroyStageState": {
+            "type": "string",
+            "description": "Terraform state during destroy stage",
+            "title": "Destroy Stage State",
+            "enum": [
+                "DESTROYED",
+                "DESTROY_ERRORED",
+                "DESTROYING"
+            ],
+            "default": "DESTROYED",
+            "x-displayname": "Destroy Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.DestroyStageState"
+        },
+        "terraform_parametersGlobalSpecType": {
+            "type": "object",
+            "description": "Shape of the view terraform parameters specification",
+            "title": "GlobalSpecType",
+            "x-displayname": "View Terraform Parameters Specification",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.GlobalSpecType",
+            "properties": {
+                "tf_objects": {
+                    "type": "array",
+                    "description": " Data specific to child objects",
+                    "title": "child_objects",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    },
+                    "x-displayname": "Child Objects"
+                }
+            }
+        },
+        "terraform_parametersInfraState": {
+            "type": "string",
+            "description": "Infrastructure state of the view provisioning",
+            "title": "Infra State",
+            "enum": [
+                "PROVISIONED",
+                "TIMED_OUT",
+                "ERRORED",
+                "PROVISIONING"
+            ],
+            "default": "PROVISIONED",
+            "x-displayname": "Infra State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
+        },
+        "terraform_parametersPlanStageState": {
+            "type": "string",
+            "description": "Terraform state during plan stage",
+            "title": "Plan Stage State",
+            "enum": [
+                "PLANNING",
+                "PLAN_ERRORED",
+                "NO_CHANGES",
+                "HAS_CHANGES",
+                "DISCARDED",
+                "PLAN_INIT_ERRORED"
+            ],
+            "default": "PLANNING",
+            "x-displayname": "Plan Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.PlanStageState"
+        },
+        "terraform_parametersPlanStatus": {
+            "type": "object",
+            "x-ves-oneof-field-state": "[\"infra_state\",\"plan_state\"]",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.PlanStatus",
+            "properties": {
+                "error_output": {
+                    "type": "string",
+                    "description": " Error output of terraform run\n\nExample: - \"value\"-",
+                    "title": "error_output",
+                    "x-displayname": "Error Output",
+                    "x-ves-example": "value"
+                },
+                "infra_state": {
+                    "description": "Exclusive with [plan_state]\nx-displayName: \"Infra State\"\nInfrastructure state of the view provisioning",
+                    "title": "infra_state",
+                    "$ref": "#/definitions/terraform_parametersInfraState"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this status was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "plan_state": {
+                    "description": "Exclusive with [infra_state]\nx-displayName: \"Plan State\"\nTerraform state during plan stage",
+                    "title": "plan_state",
+                    "$ref": "#/definitions/terraform_parametersPlanStageState"
+                },
+                "tf_plan_output": {
+                    "type": "string",
+                    "description": " Terraform \"plan\" command output. Terraform performs a refresh, unless explicitly disabled, and then\n determines what actions are necessary to achieve the desired state specified in the configuration files.\n\nExample: - \"value\"-",
+                    "title": "tf_plan_output",
+                    "x-displayname": "Terraform Plan Output",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "terraform_parametersSpecType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "$ref": "#/definitions/terraform_parametersGlobalSpecType"
+                }
+            }
+        },
+        "terraform_parametersStatusObject": {
+            "type": "object",
+            "description": "view terraform parameters status object",
+            "title": "Status Object",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.StatusObject",
+            "properties": {
+                "apply_status": {
+                    "description": " Status of Apply or Destroy action",
+                    "title": "Apply Status",
+                    "$ref": "#/definitions/terraform_parametersApplyStatus",
+                    "x-displayname": "Apply Status"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " View terraform parameters object reference for which this status object is generated",
+                    "title": "object_refs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
+                },
+                "plan_status": {
+                    "description": " Status of Plan action",
+                    "title": "Plan Status",
+                    "$ref": "#/definitions/terraform_parametersPlanStatus",
+                    "x-displayname": "Plan Status"
+                }
+            }
+        }
+    },
+    "x-displayname": "",
+    "x-stream-definitions": {
+        "crudapiObjectListRsp": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                    "$ref": "#/definitions/crudapiObjectListRsp"
+                }
+            },
+            "title": "Stream result of crudapiObjectListRsp",
+            "type": "object"
+        },
+        "crudapiStatusObjectListRsp": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/runtimeStreamError"
+                },
+                "result": {
+                    "$ref": "#/definitions/crudapiStatusObjectListRsp"
+                }
+            },
+            "title": "Stream result of crudapiStatusObjectListRsp",
             "type": "object"
         }
     },

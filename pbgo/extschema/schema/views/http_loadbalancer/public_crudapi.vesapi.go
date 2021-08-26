@@ -2151,6 +2151,7 @@ var APISwaggerJSON string = `{
             "description": "This defines various options to define a route",
             "title": "Advanced options",
             "x-displayname": "Advanced Options",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType",
             "properties": {
                 "buffer_policy": {
@@ -2177,6 +2178,16 @@ var APISwaggerJSON string = `{
                     "title": "Disable the use of default Volterra error pages",
                     "format": "boolean",
                     "x-displayname": "Disable Default Error Pages"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "idle_timeout": {
                     "type": "integer",
@@ -3377,6 +3388,66 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyAppFirewallDetectionControl": {
+            "type": "object",
+            "description": "App Firewall detection changes to be applied for this request",
+            "title": "App Firewall Detection Control",
+            "x-displayname": "App Firewall Detection Control",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
+            "properties": {
+                "exclude_signature_contexts": {
+                    "type": "array",
+                    "description": " App Firewall signature contexts to be excluded for this request",
+                    "title": "Exclude Signature Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallSignatureContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Signature Contexts"
+                },
+                "exclude_violation_contexts": {
+                    "type": "array",
+                    "description": " App Firewall violation contexts to be excluded for this request",
+                    "title": "Exclude Signature Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallViolationContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Violation Contexts"
+                }
+            }
+        },
+        "policyAppFirewallSignatureContext": {
+            "type": "object",
+            "description": "App Firewall signature context changes to be applied for this request",
+            "title": "App Firewall Signature Context",
+            "x-displayname": "App Firewall Signature Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallSignatureContext",
+            "properties": {
+                "signature_id": {
+                    "type": "integer",
+                    "description": " App Firewall signature ID\nRequired: YES",
+                    "title": "SignatureID",
+                    "format": "int64",
+                    "x-displayname": "SignatureID",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyAppFirewallViolationContext": {
+            "type": "object",
+            "description": "App Firewall violation context changes to be applied for this request",
+            "title": "App Firewall Violation Context",
+            "x-displayname": "App Firewall Violation Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
+            "properties": {
+                "exclude_violation": {
+                    "description": " App Firewall violation type\nRequired: YES",
+                    "title": "ViolationType",
+                    "$ref": "#/definitions/schemaAppFirewallViolationType",
+                    "x-displayname": "Violation Type",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policyArgMatcherType": {
             "type": "object",
             "description": "A argument matcher specifies the name of a single argument in the body and the criteria to match it.\nA argument matcher can check for one of the following:\n* Presence or absence of the argument\n* At least one of the values for the argument in the request satisfies the MatcherType item",
@@ -3959,6 +4030,12 @@ var APISwaggerJSON string = `{
                     "title": "Any domain",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "app_firewall_detection_control": {
+                    "description": " App Firewall detection changes to be applied for this request",
+                    "title": "App Firewall Detection control",
+                    "$ref": "#/definitions/policyAppFirewallDetectionControl",
+                    "x-displayname": "App Firewall Detection Control"
+                },
                 "domain_regex": {
                     "type": "string",
                     "description": "Exclusive with [any_domain]\nx-displayName: \"Domain Regex\"\nx-example: \"*.mybloggingwebsite.org\"\nDomain to be matched",
@@ -4351,6 +4428,54 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Use Websocket"
                 }
             }
+        },
+        "schemaAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all Violation Types\n",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
+                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0",
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_EVASION_BARE_BYTE_DECODING",
+                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
+                "VIOL_EVASION_IIS_BACKSLASHES",
+                "VIOL_EVASION_U_DECODING",
+                "VIOL_EVASION_MULTIPLE_DECODING",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.AppFirewallViolationType"
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
@@ -7504,7 +7629,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
-            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow \nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
+            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
             "title": "JavascriptChallengeType",
             "x-displayname": "Javascript Challenge Parameters",
             "x-ves-proto-message": "ves.io.schema.virtual_host.JavascriptChallengeType",
@@ -7534,7 +7659,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
             "title": "TemporaryUserBlockingType",
             "x-displayname": "Temporary User Blocking",
             "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",

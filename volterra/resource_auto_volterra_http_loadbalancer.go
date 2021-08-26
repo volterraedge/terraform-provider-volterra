@@ -2384,6 +2384,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_path_normalize": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_path_normalize": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"request_headers_to_add": {
 
 							Type:     schema.TypeList,
@@ -3687,6 +3699,46 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"app_firewall_detection_control": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_signature_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"signature_id": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"exclude_violation_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_violation": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 
 						"any_domain": {
 
@@ -6831,6 +6883,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				moreOption.MaxRequestHeaderSize = uint32(w.(int))
 			}
 
+			pathNormalizeChoiceTypeFound := false
+
+			if v, ok := moreOptionMapStrToI["disable_path_normalize"]; ok && !isIntfNil(v) && !pathNormalizeChoiceTypeFound {
+
+				pathNormalizeChoiceTypeFound = true
+
+				if v.(bool) {
+					pathNormalizeChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisablePathNormalize{}
+					pathNormalizeChoiceInt.DisablePathNormalize = &ves_io_schema.Empty{}
+					moreOption.PathNormalizeChoice = pathNormalizeChoiceInt
+				}
+
+			}
+
+			if v, ok := moreOptionMapStrToI["enable_path_normalize"]; ok && !isIntfNil(v) && !pathNormalizeChoiceTypeFound {
+
+				pathNormalizeChoiceTypeFound = true
+
+				if v.(bool) {
+					pathNormalizeChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnablePathNormalize{}
+					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
+					moreOption.PathNormalizeChoice = pathNormalizeChoiceInt
+				}
+
+			}
+
 			if v, ok := moreOptionMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -8579,6 +8657,54 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 		for i, set := range sl {
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
+
+			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				appFirewallDetectionControl := &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
+				for _, set := range sl {
+					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						appFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						appFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema.AppFirewallViolationType(ves_io_schema.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			domainChoiceTypeFound := false
 
@@ -11764,6 +11890,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				moreOption.MaxRequestHeaderSize = uint32(w.(int))
 			}
 
+			pathNormalizeChoiceTypeFound := false
+
+			if v, ok := moreOptionMapStrToI["disable_path_normalize"]; ok && !isIntfNil(v) && !pathNormalizeChoiceTypeFound {
+
+				pathNormalizeChoiceTypeFound = true
+
+				if v.(bool) {
+					pathNormalizeChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_DisablePathNormalize{}
+					pathNormalizeChoiceInt.DisablePathNormalize = &ves_io_schema.Empty{}
+					moreOption.PathNormalizeChoice = pathNormalizeChoiceInt
+				}
+
+			}
+
+			if v, ok := moreOptionMapStrToI["enable_path_normalize"]; ok && !isIntfNil(v) && !pathNormalizeChoiceTypeFound {
+
+				pathNormalizeChoiceTypeFound = true
+
+				if v.(bool) {
+					pathNormalizeChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnablePathNormalize{}
+					pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
+					moreOption.PathNormalizeChoice = pathNormalizeChoiceInt
+				}
+
+			}
+
 			if v, ok := moreOptionMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -13502,6 +13654,54 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 		for i, set := range sl {
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
+
+			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				appFirewallDetectionControl := &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
+				for _, set := range sl {
+					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						appFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := appFirewallDetectionControlMapStrToI["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						appFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema.AppFirewallViolationType(ves_io_schema.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			domainChoiceTypeFound := false
 

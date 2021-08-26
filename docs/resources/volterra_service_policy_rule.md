@@ -21,32 +21,19 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
+  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
-  client_name = "backend.production.customer.volterra.us"
+  // One of the arguments from this list "client_selector client_name_matcher any_client client_name" must be set
+  any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  any_ip = true
 
-  ip_prefix_list {
-    invert_match = true
-
-    ip_prefixes = ["192.168.20.0/24"]
-  }
   waf_action {
-    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none" must be set
-
-    waf_rule_control {
-      exclude_rule_ids {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      monitoring_mode = true
-    }
+    // One of the arguments from this list "waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control none waf_skip_processing waf_rule_control" must be set
+    none = true
   }
 }
 
@@ -97,6 +84,8 @@ Argument Reference
 
 `client_role` - (Optional) The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.. See [Client Role ](#client-role) below for details.
 
+`content_rewrite_action` - (Optional) Rewrite HTML response action to insert HTML content such as Javascript <script> tags into the HTML document. See [Content Rewrite Action ](#content-rewrite-action) below for details.
+
 `cookie_matchers` - (Optional) Note that all specified cookie matcher predicates must evaluate to true.. See [Cookie Matchers ](#cookie-matchers) below for details.
 
 `domain_matcher` - (Optional) matcher.. See [Domain Matcher ](#domain-matcher) below for details.
@@ -145,6 +134,8 @@ Argument Reference
 
 `server_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.
 
+`shape_protected_endpoint_action` - (Optional) Shape Protected Endpoint Action that include application traffic type and mitigation. See [Shape Protected Endpoint Action ](#shape-protected-endpoint-action) below for details.
+
 `tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
 
 `url_matcher` - (Optional) A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.. See [Url Matcher ](#url-matcher) below for details.
@@ -153,6 +144,10 @@ Argument Reference
 
 `waf_action` - (Required) App Firewall action to be enforced if the input request matches the rule.. See [Waf Action ](#waf-action) below for details.
 
+### Alert
+
+Generate alert while not taking any invasive actions..
+
 ### Api Group Matcher
 
 The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher..
@@ -160,6 +155,14 @@ The predicate evaluates to true if any of the actual API group names for the req
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
 `match` - (Required) A list of exact values to match the input against. (`String`).
+
+### App Firewall Detection Control
+
+App Firewall detection changes to be applied for this request.
+
+`exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
+
+`exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
 
 ### Arg Matchers
 
@@ -188,6 +191,14 @@ The predicate evaluates to true if the origin ASN is present in the ASN list..
 The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects..
 
 `asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
+
+### Block
+
+Block bot request and send response with custom content..
+
+`body` - (Optional) E.g. "<p> Your request was blocked </p>". Base64 encoded string for this html is "LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==" (`String`).
+
+`status` - (Optional) HTTP Status code to respond with (`String`).
 
 ### Body Matcher
 
@@ -227,6 +238,16 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
+### Content Rewrite Action
+
+Rewrite HTML response action to insert HTML content such as Javascript <script> tags into the HTML document.
+
+`element_selector` - (Required) Element selector to insert into. (`String`).
+
+`insert_content` - (Optional) HTML content to insert. (`String`).
+
+`position` - (Optional) Position of HTML content to be inserted within HTML tag. (`String`).
+
 ### Cookie Matchers
 
 Note that all specified cookie matcher predicates must evaluate to true..
@@ -250,6 +271,10 @@ matcher..
 `exact_values` - (Optional) A list of exact values to match the input against. (`String`).
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+### Drop
+
+Drop network connection..
 
 ### Dst Asn List
 
@@ -278,6 +303,18 @@ The predicate evaluates to true if the destination address is covered by one or 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
 `ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+
+### Exclude Signature Contexts
+
+App Firewall signature contexts to be excluded for this request.
+
+`signature_id` - (Required) App Firewall signature ID (`Int`).
+
+### Exclude Violation Contexts
+
+App Firewall violation contexts to be excluded for this request.
+
+`exclude_violation` - (Required) App Firewall violation type (`String`).
 
 ### Headers
 
@@ -351,9 +388,23 @@ other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
+### Mitigation
+
+Mitigation action for shape protected endpoint.
+
+`alert` - (Optional) Generate alert while not taking any invasive actions. (bool).
+
+`block` - (Optional) Block bot request and send response with custom content.. See [Block ](#block) below for details.
+
+`drop` - (Optional) Drop network connection. (bool).
+
+`none` - (Optional) No mitigation actions. (bool).
+
+`redirect` - (Optional) Redirect bot request to a custom URI.. See [Redirect ](#redirect) below for details.
+
 ### None
 
-Perform normal App Firewall processing for this request.
+No mitigation actions..
 
 ### Path
 
@@ -391,6 +442,12 @@ Note that all specified query parameter predicates must evaluate to true..
 
 `presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).
 
+### Redirect
+
+Redirect bot request to a custom URI..
+
+`uri` - (Optional) URI location for redirect may be relative or absolute. (`String`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -406,6 +463,14 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 The predicate evaluates to true if the expressions in the label selector are true for the server labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+
+### Shape Protected Endpoint Action
+
+Shape Protected Endpoint Action that include application traffic type and mitigation.
+
+`app_traffic_type` - (Required) Traffic type (`String`).
+
+`mitigation` - (Required) Mitigation action for shape protected endpoint. See [Mitigation ](#mitigation) below for details.
 
 ### Tls Fingerprint Matcher
 
@@ -450,6 +515,8 @@ Hidden because this will be used only in system generated rate limiting service_
 ### Waf Action
 
 App Firewall action to be enforced if the input request matches the rule..
+
+`app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 

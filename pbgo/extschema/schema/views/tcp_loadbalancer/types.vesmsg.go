@@ -562,7 +562,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
 	rulesIdleTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "300000",
+		"ves.io.schema.rules.uint32.lte": "4147200000",
 	}
 	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
 	if err != nil {
@@ -1254,7 +1254,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
 	rulesIdleTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "300000",
+		"ves.io.schema.rules.uint32.lte": "4147200000",
 	}
 	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
 	if err != nil {
@@ -2013,7 +2013,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
 	rulesIdleTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "300000",
+		"ves.io.schema.rules.uint32.lte": "4147200000",
 	}
 	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
 	if err != nil {
@@ -2688,7 +2688,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
 	rulesIdleTimeout := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "300000",
+		"ves.io.schema.rules.uint32.lte": "4147200000",
 	}
 	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
 	if err != nil {

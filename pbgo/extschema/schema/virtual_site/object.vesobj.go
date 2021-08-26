@@ -547,6 +547,16 @@ func (o *StatusObject) SetStatusObjMetadata(md sro.StatusObjectMetadata) {
 	o.Metadata = md.(*ves_io_schema.StatusMetaType)
 }
 
+// GetVtrpId returns vtrpId of the status object.
+func (o *StatusObject) GetVtrpId() string {
+	return o.GetMetadata().GetVtrpId()
+}
+
+// SetVtrpId sets vtrpId of the status object.
+func (o *StatusObject) SetVtrpId(id string) {
+	o.GetMetadata().SetVtrpId(id)
+}
+
 func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
 	if o == nil {
 		return nil
@@ -763,6 +773,16 @@ func (o *DBObject) IsSpecEqual(other sro.SRO) bool {
 	}
 
 	return o.GetSpec().Equal(otherSpec)
+}
+
+// GetVtrpId returns vtrpId of the object.
+func (o *DBObject) GetVtrpId() string {
+	return o.GetSystemMetadata().GetVtrpId()
+}
+
+// SetVtrpId sets vtrpId of the object.
+func (o *DBObject) SetVtrpId(id string) {
+	o.GetSystemMetadata().SetVtrpId(id)
 }
 
 type ValidateObject struct {

@@ -2197,6 +2197,78 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyAppFirewallDetectionControl": {
+            "type": "object",
+            "description": "App Firewall detection changes to be applied for this request",
+            "title": "App Firewall Detection Control",
+            "x-displayname": "App Firewall Detection Control",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
+            "properties": {
+                "exclude_signature_contexts": {
+                    "type": "array",
+                    "description": " App Firewall signature contexts to be excluded for this request",
+                    "title": "Exclude Signature Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallSignatureContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Signature Contexts"
+                },
+                "exclude_violation_contexts": {
+                    "type": "array",
+                    "description": " App Firewall violation contexts to be excluded for this request",
+                    "title": "Exclude Signature Contexts",
+                    "items": {
+                        "$ref": "#/definitions/policyAppFirewallViolationContext"
+                    },
+                    "x-displayname": "Exclude App Firewall Violation Contexts"
+                }
+            }
+        },
+        "policyAppFirewallSignatureContext": {
+            "type": "object",
+            "description": "App Firewall signature context changes to be applied for this request",
+            "title": "App Firewall Signature Context",
+            "x-displayname": "App Firewall Signature Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallSignatureContext",
+            "properties": {
+                "signature_id": {
+                    "type": "integer",
+                    "description": " App Firewall signature ID\nRequired: YES",
+                    "title": "SignatureID",
+                    "format": "int64",
+                    "x-displayname": "SignatureID",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyAppFirewallViolationContext": {
+            "type": "object",
+            "description": "App Firewall violation context changes to be applied for this request",
+            "title": "App Firewall Violation Context",
+            "x-displayname": "App Firewall Violation Context",
+            "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
+            "properties": {
+                "exclude_violation": {
+                    "description": " App Firewall violation type\nRequired: YES",
+                    "title": "ViolationType",
+                    "$ref": "#/definitions/schemaAppFirewallViolationType",
+                    "x-displayname": "Violation Type",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyAppTrafficType": {
+            "type": "string",
+            "description": "Application traffic type\n\n - WEB: WebTrafficType\n\nWeb application traffic type.\n - MOBILE: MobileTrafficType\n\nMobile application traffic type.",
+            "title": "AppTrafficType",
+            "enum": [
+                "WEB",
+                "MOBILE"
+            ],
+            "default": "WEB",
+            "x-displayname": "App Traffic type",
+            "x-ves-proto-enum": "ves.io.schema.policy.AppTrafficType"
+        },
         "policyArgMatcherType": {
             "type": "object",
             "description": "A argument matcher specifies the name of a single argument in the body and the criteria to match it.\nA argument matcher can check for one of the following:\n* Presence or absence of the argument\n* At least one of the values for the argument in the request satisfies the MatcherType item",
@@ -2298,6 +2370,34 @@ var APISwaggerJSON string = `{
             "default": "DEFAULT_CHALLENGE",
             "x-displayname": "Challenge Action",
             "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
+        },
+        "policyContentRewriteAction": {
+            "type": "object",
+            "description": "Rewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
+            "title": "ContentRewriteAction",
+            "x-displayname": "Content Rewrite Action",
+            "x-ves-proto-message": "ves.io.schema.policy.ContentRewriteAction",
+            "properties": {
+                "element_selector": {
+                    "type": "string",
+                    "description": " Element selector to insert into.\nRequired: YES",
+                    "title": "Element selector",
+                    "x-displayname": "Element selector to rewrite",
+                    "x-ves-required": "true"
+                },
+                "insert_content": {
+                    "type": "string",
+                    "description": " HTML content to insert.",
+                    "title": "Insert Content",
+                    "x-displayname": "HTML Content to insert"
+                },
+                "position": {
+                    "description": " Position of HTML content to be inserted within HTML tag.",
+                    "title": "Position",
+                    "$ref": "#/definitions/policyHTMLPosition",
+                    "x-displayname": "HTML position"
+                }
+            }
         },
         "policyCookieMatcherType": {
             "type": "object",
@@ -2633,6 +2733,20 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyHTMLPosition": {
+            "type": "string",
+            "description": "Position of the HTML tag to insert in HTML document\n\nBeginning of HTML tag.\nEnd of HTML tag.\nBefore HTML tag.\nAfter HTML tag.",
+            "title": "HTMLPosition",
+            "enum": [
+                "BEGINNING",
+                "END",
+                "BEFORE",
+                "AFTER"
+            ],
+            "default": "BEGINNING",
+            "x-displayname": "HTML Position",
+            "x-ves-proto-enum": "ves.io.schema.policy.HTMLPosition"
+        },
         "policyHttpMethodMatcherType": {
             "type": "object",
             "description": "A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list.\nThe result of the match based on the method list is inverted if invert_matcher is true.",
@@ -2902,6 +3016,101 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Combining Algorithm",
             "x-ves-proto-enum": "ves.io.schema.policy.RuleCombiningAlgorithm"
         },
+        "policyShapeBotBlockMitigationActionType": {
+            "type": "object",
+            "description": "Block request and respond with custom content.",
+            "title": "ShapeBotBlockMitigationActionType",
+            "x-displayname": "Block bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotBlockMitigationActionType",
+            "properties": {
+                "body": {
+                    "type": "string",
+                    "description": " Custom body message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\n\nExample: - \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"-",
+                    "title": "body",
+                    "x-displayname": "Body",
+                    "x-ves-example": "string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg=="
+                },
+                "status": {
+                    "description": " HTTP Status code to respond with",
+                    "title": "Status",
+                    "$ref": "#/definitions/schemaHttpStatusCode",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "policyShapeBotMitigationAction": {
+            "type": "object",
+            "description": "Modify Shape Bot  behavior for a matching request.",
+            "title": "ShapeBotMitigationAction",
+            "x-displayname": "Shape Bot Mitigation Action",
+            "x-ves-oneof-field-action_type": "[\"alert\",\"block\",\"drop\",\"none\",\"redirect\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotMitigationAction",
+            "properties": {
+                "alert": {
+                    "description": "Exclusive with [block drop none redirect]\nx-displayName: \"Alert\"\nGenerate alert while not taking any invasive actions.",
+                    "title": "Alert Only",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "block": {
+                    "description": "Exclusive with [alert drop none redirect]\nx-displayName: \"Block\"\nBlock bot request and send response with custom content.",
+                    "title": "Block",
+                    "$ref": "#/definitions/policyShapeBotBlockMitigationActionType"
+                },
+                "drop": {
+                    "description": "Exclusive with [alert block none redirect]\nx-displayName: \"Drop\"\nDrop network connection.",
+                    "title": "Drop",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "none": {
+                    "description": "Exclusive with [alert block drop redirect]\nx-displayName: \"No Action\"\nNo mitigation actions.",
+                    "title": "None",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "redirect": {
+                    "description": "Exclusive with [alert block drop none]\nx-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
+                    "title": "Redirect",
+                    "$ref": "#/definitions/policyShapeBotRedirectMitigationActionType"
+                }
+            }
+        },
+        "policyShapeBotRedirectMitigationActionType": {
+            "type": "object",
+            "description": "Redirect request to a custom URI.",
+            "title": "ShapeBotRedirectMitigationTypeAction",
+            "x-displayname": "Redirect bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotRedirectMitigationActionType",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": " URI location for redirect may be relative or absolute.",
+                    "title": "URI",
+                    "x-displayname": "URI"
+                }
+            }
+        },
+        "policyShapeProtectedEndpointAction": {
+            "type": "object",
+            "description": "Shape Protected Endpoint Action",
+            "title": "ShapeProtectedEndpointAction",
+            "x-displayname": "Shape Protected Endpoint Action",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeProtectedEndpointAction",
+            "properties": {
+                "app_traffic_type": {
+                    "description": " Traffic type\nRequired: YES",
+                    "title": "Application traffic type",
+                    "$ref": "#/definitions/policyAppTrafficType",
+                    "x-displayname": "Traffic type",
+                    "x-ves-required": "true"
+                },
+                "mitigation": {
+                    "description": " Mitigation action for shape protected endpoint\nRequired: YES",
+                    "title": "Mitigation",
+                    "$ref": "#/definitions/policyShapeBotMitigationAction",
+                    "x-displayname": "Mitigation",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policyStringMatcherType": {
             "type": "object",
             "description": "A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. The result of\nthe match is inverted if invert_matcher is true.",
@@ -3055,31 +3264,36 @@ var APISwaggerJSON string = `{
             "description": "Modify App Firewall behavior for a matching request. The modification could either be to entirely skip firewall processing or to customize the firewall rules\nto be applied as defined by App Firewall Rule Control settings.",
             "title": "App Firewall Action",
             "x-displayname": "App Firewall Action",
-            "x-ves-oneof-field-action_type": "[\"none\",\"waf_in_monitoring_mode\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
+            "x-ves-oneof-field-action_type": "[\"app_firewall_detection_control\",\"none\",\"waf_in_monitoring_mode\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
+                "app_firewall_detection_control": {
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Detection Control\"\nApp Firewall detection changes to be applied for this request",
+                    "title": "App Firewall Detection control",
+                    "$ref": "#/definitions/policyAppFirewallDetectionControl"
+                },
                 "none": {
-                    "description": "Exclusive with [waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
                     "title": "Normal App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "waf_in_monitoring_mode": {
-                    "description": "Exclusive with [none waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
+                    "description": "Exclusive with [app_firewall_detection_control none waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
                     "title": "Set App Firewall in Monitoring Mode",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "waf_inline_rule_control": {
-                    "description": "Exclusive with [none waf_in_monitoring_mode waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control with inline Rule IDs",
                     "$ref": "#/definitions/policyWafInlineRuleControl"
                 },
                 "waf_rule_control": {
-                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control",
                     "$ref": "#/definitions/policyWafRuleControl"
                 },
                 "waf_skip_processing": {
-                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
+                    "description": "Exclusive with [app_firewall_detection_control none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
                     "title": "Skip App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -3149,6 +3363,54 @@ var APISwaggerJSON string = `{
                     "format": "byte"
                 }
             }
+        },
+        "schemaAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all Violation Types\n",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
+                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0",
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_EVASION_BARE_BYTE_DECODING",
+                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
+                "VIOL_EVASION_IIS_BACKSLASHES",
+                "VIOL_EVASION_U_DECODING",
+                "VIOL_EVASION_MULTIPLE_DECODING",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.AppFirewallViolationType"
         },
         "schemaConditionType": {
             "type": "object",
@@ -3264,6 +3526,73 @@ var APISwaggerJSON string = `{
             "default": "ANY",
             "x-displayname": "HTTP Method",
             "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "schemaHttpStatusCode": {
+            "type": "string",
+            "description": "HTTP response status codes\n\nEmptyStatusCode response codes means it is not specified\nCONTINUE code\nOK code\nCreated status code\nAccepted status code\nNonAuthoritativeInformation status code\nNoContent status code\nResetContent status code\nPartialContent status code\nMultiStatus status code\nAlreadyReported status code\nIMUsed status code\nMultipleChoices status code\nMovedPermanently status code\nFound status code\nSeeOther status code\nNotModified status code\nUseProxy status code\nTemporaryRedirect status code\nPermanentRedirect status code\nBadRequest status code\nUnauthorized status code\nPaymentRequired status code\nForbidden status code\nNotFound status code\nMethodNotAllowed status code\nNotAcceptable status code\nProxyAuthenticationRequired status code\nRequestTimeout status code\nConflict status code\nGone status code\nLengthRequired status code\nPreconditionFailed status code\nPayloadTooLarge status code\nURITooLong status code\nUnsupportedMediaType status code\nRangeNotSatisfiable status code\nExpectationFailed status code\nMisdirectedRequest status code\nUnprocessableEntity status code\nLocked status code\nFailedDependency status code\nUpgradeRequired status code\nPreconditionRequired status code\nTooManyRequests status code\nRequestHeaderFieldsTooLarge status code\nInternalServerError status code\nNotImplemented status code\nBadGateway status code\nServiceUnavailable status code\nGatewayTimeout status code\nHTTPVersionNotSupported status code\nVariantAlsoNegotiates status code\nInsufficientStorage status code\nLoopDetected status code\nNotExtended status code\nNetworkAuthenticationRequired status code",
+            "title": "HttpStatusCode",
+            "enum": [
+                "EmptyStatusCode",
+                "Continue",
+                "OK",
+                "Created",
+                "Accepted",
+                "NonAuthoritativeInformation",
+                "NoContent",
+                "ResetContent",
+                "PartialContent",
+                "MultiStatus",
+                "AlreadyReported",
+                "IMUsed",
+                "MultipleChoices",
+                "MovedPermanently",
+                "Found",
+                "SeeOther",
+                "NotModified",
+                "UseProxy",
+                "TemporaryRedirect",
+                "PermanentRedirect",
+                "BadRequest",
+                "Unauthorized",
+                "PaymentRequired",
+                "Forbidden",
+                "NotFound",
+                "MethodNotAllowed",
+                "NotAcceptable",
+                "ProxyAuthenticationRequired",
+                "RequestTimeout",
+                "Conflict",
+                "Gone",
+                "LengthRequired",
+                "PreconditionFailed",
+                "PayloadTooLarge",
+                "URITooLong",
+                "UnsupportedMediaType",
+                "RangeNotSatisfiable",
+                "ExpectationFailed",
+                "MisdirectedRequest",
+                "UnprocessableEntity",
+                "Locked",
+                "FailedDependency",
+                "UpgradeRequired",
+                "PreconditionRequired",
+                "TooManyRequests",
+                "RequestHeaderFieldsTooLarge",
+                "InternalServerError",
+                "NotImplemented",
+                "BadGateway",
+                "ServiceUnavailable",
+                "GatewayTimeout",
+                "HTTPVersionNotSupported",
+                "VariantAlsoNegotiates",
+                "InsufficientStorage",
+                "LoopDetected",
+                "NotExtended",
+                "NetworkAuthenticationRequired"
+            ],
+            "default": "EmptyStatusCode",
+            "x-displayname": "HTTP Status Code",
+            "x-ves-proto-enum": "ves.io.schema.HttpStatusCode"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -4544,6 +4873,12 @@ var APISwaggerJSON string = `{
                     "title": "client selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
+                "content_rewrite_action": {
+                    "description": " Rewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
+                    "title": "Shape Content Rewrite Action",
+                    "$ref": "#/definitions/policyContentRewriteAction",
+                    "x-displayname": "Shape Content Rewrite Action Type"
+                },
                 "cookie_matchers": {
                     "type": "array",
                     "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.",
@@ -4694,6 +5029,12 @@ var APISwaggerJSON string = `{
                     "title": "server selector",
                     "$ref": "#/definitions/schemaLabelSelectorType",
                     "x-displayname": "Group of Servers by Label Selector"
+                },
+                "shape_protected_endpoint_action": {
+                    "description": " Shape Protected Endpoint Action that include application traffic type and mitigation",
+                    "title": "Shape Protected Endpoint Action",
+                    "$ref": "#/definitions/policyShapeProtectedEndpointAction",
+                    "x-displayname": "Shape Protected Endpoint Action"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",

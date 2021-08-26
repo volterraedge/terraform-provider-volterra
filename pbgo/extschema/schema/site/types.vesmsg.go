@@ -2928,6 +2928,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["site_subtype"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_subtype"))
+		if err := fv(ctx, m.GetSiteSubtype(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_to_site_network_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_network_type"))
@@ -8721,6 +8730,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.OutsideVip = f.GetOutsideVip()
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
+	m.SiteSubtype = f.GetSiteSubtype()
 	m.SiteToSiteNetworkType = f.GetSiteToSiteNetworkType()
 	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.SiteType = f.GetSiteType()
@@ -8757,6 +8767,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.OutsideVip = m1.OutsideVip
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState
+	f.SiteSubtype = m1.SiteSubtype
 	f.SiteToSiteNetworkType = m1.SiteToSiteNetworkType
 	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.SiteType = m1.SiteType

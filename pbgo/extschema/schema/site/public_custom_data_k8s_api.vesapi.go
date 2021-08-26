@@ -17,9 +17,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	k8s_io_api_apps_v1 "k8s.io/api/apps/v1"
-	k8s_io_api_batch_v1 "k8s.io/api/batch/v1"
-	k8s_io_api_batch_v1beta1 "k8s.io/api/batch/v1beta1"
-	k8s_io_api_core_v1 "k8s.io/api/core/v1"
+        k8s_io_api_batch_v1 "k8s.io/api/batch/v1"
+        k8s_io_api_batch_v1beta1 "k8s.io/api/batch/v1beta1"
+        k8s_io_api_core_v1 "k8s.io/api/core/v1"
 
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/codec"
@@ -2167,7 +2167,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ConfigMapList"
                         }
@@ -2224,9 +2224,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -2257,7 +2259,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1EndpointsList"
                         }
@@ -2314,9 +2316,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -2347,7 +2351,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1NamespaceList"
                         }
@@ -2404,9 +2408,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -2429,7 +2435,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ConfigMapList"
                         }
@@ -2486,15 +2492,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of configmaps in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2517,7 +2527,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1EndpointsList"
                         }
@@ -2574,15 +2584,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of endpoints in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2605,7 +2619,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeClaimList"
                         }
@@ -2662,15 +2676,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of PVCs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2693,7 +2711,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PodList"
                         }
@@ -2750,15 +2768,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of pods in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2781,7 +2803,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1SecretList"
                         }
@@ -2838,15 +2860,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of secrets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2869,7 +2895,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ServiceList"
                         }
@@ -2926,15 +2952,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of services in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -2957,7 +2987,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NodeList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1NodeList"
                         }
@@ -3014,9 +3044,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -3039,7 +3071,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeClaimList"
                         }
@@ -3096,9 +3128,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3129,7 +3163,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PersistentVolumeList"
                         }
@@ -3186,9 +3220,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -3211,7 +3247,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1PodList"
                         }
@@ -3268,9 +3304,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3301,7 +3339,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1SecretList"
                         }
@@ -3358,9 +3396,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3391,7 +3431,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ServiceList"
                         }
@@ -3448,9 +3488,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3481,7 +3523,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DaemonSetList"
                         }
@@ -3538,9 +3580,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3571,7 +3615,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DeploymentList"
                         }
@@ -3628,9 +3672,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -3661,7 +3707,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DaemonSetList"
                         }
@@ -3718,15 +3764,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of daemon sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3749,7 +3799,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1DeploymentList"
                         }
@@ -3806,15 +3856,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of deployments in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3837,7 +3891,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ReplicaSetList"
                         }
@@ -3894,15 +3948,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of replication sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -3925,7 +3983,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1StatefulSetList"
                         }
@@ -3982,15 +4040,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of stateful sets in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -4013,7 +4075,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1ReplicaSetList"
                         }
@@ -4070,9 +4132,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4103,7 +4167,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1StatefulSetList"
                         }
@@ -4160,9 +4224,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4193,7 +4259,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1JobList"
                         }
@@ -4250,9 +4316,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4283,7 +4351,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1JobList"
                         }
@@ -4340,15 +4408,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of jobs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [
@@ -4371,7 +4443,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1beta1CronJobList"
                         }
@@ -4428,9 +4500,11 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
@@ -4461,7 +4535,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "A successful response.",
                         "schema": {
                             "$ref": "#/definitions/v1beta1CronJobList"
                         }
@@ -4518,15 +4592,19 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Site"
                     },
                     {
                         "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of cronjobs in a site",
                         "in": "path",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "x-displayname": "Namespace"
                     }
                 ],
                 "tags": [

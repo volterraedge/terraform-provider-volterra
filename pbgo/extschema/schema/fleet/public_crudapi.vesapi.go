@@ -5768,6 +5768,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specifications",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
+            "x-ves-oneof-field-flow_exporter_choice": "[\"disable_flow_export\",\"enable_flow_export\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5822,6 +5823,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Devices"
                 },
+                "disable_flow_export": {
+                    "description": "Exclusive with [enable_flow_export]\nx-displayName: \"Disable Flow Export\"\nFlows are not exported",
+                    "title": "Disable Flow Export",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "disable_gpu": {
                     "description": "Exclusive with [enable_gpu enable_vgpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this fleet",
                     "title": "GPU Disabled",
@@ -5833,6 +5839,11 @@ var APISwaggerJSON string = `{
                     "title": "Enable default fleet config download",
                     "format": "boolean",
                     "x-displayname": "Enable Default Fleet Config Download"
+                },
+                "enable_flow_export": {
+                    "description": "Exclusive with [disable_flow_export]\nx-displayName: \"Enable Flow Export\"\nExport flows to system defined collector",
+                    "title": "Enable Flow Export",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "enable_gpu": {
                     "description": "Exclusive with [disable_gpu enable_vgpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",

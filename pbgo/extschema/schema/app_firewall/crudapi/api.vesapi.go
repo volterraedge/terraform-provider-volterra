@@ -2606,6 +2606,46 @@ var APISwaggerJSON string = `{
             "x-displayname": "Attack Type",
             "x-ves-proto-enum": "ves.io.schema.app_firewall.AttackType"
         },
+        "app_firewallBotAction": {
+            "type": "string",
+            "description": "Action to be performed on the request\n",
+            "title": "Bot Action",
+            "enum": [
+                "BLOCK",
+                "REPORT",
+                "IGNORE"
+            ],
+            "default": "BLOCK",
+            "x-displayname": "Bot Action",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.BotAction"
+        },
+        "app_firewallBotProtectionSetting": {
+            "type": "object",
+            "description": "Configuration of WAF Bot Protection",
+            "title": "BotProtectionSetting",
+            "x-displayname": "Bot Protection",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.BotProtectionSetting",
+            "properties": {
+                "good_bot_action": {
+                    "description": " Action to be taken when a good (benign) bot agent is detected",
+                    "title": "good_bot_action",
+                    "$ref": "#/definitions/app_firewallBotAction",
+                    "x-displayname": "Good Bot Action"
+                },
+                "malicious_bot_action": {
+                    "description": " Action to be taken when a malicious bot agent is detected",
+                    "title": "malicious_bot_action",
+                    "$ref": "#/definitions/app_firewallBotAction",
+                    "x-displayname": "Malicious Bot Action"
+                },
+                "suspicious_bot_action": {
+                    "description": " Action to be taken when a suspicious bot agent is detected",
+                    "title": "suspicious_bot_action",
+                    "$ref": "#/definitions/app_firewallBotAction",
+                    "x-displayname": "Suspicious Bot Action"
+                }
+            }
+        },
         "app_firewallDetectionSetting": {
             "type": "object",
             "description": "Specifies detection settings to be used by WAF",
@@ -2642,8 +2682,8 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enabled_violation_types": {
-                    "description": "Exclusive with [default_violation_settings]\nx-displayName: \"Violation Setting\"\nSpecifies violation settings to be used by WAF",
-                    "title": "Violation Setting",
+                    "description": "Exclusive with [default_violation_settings]\nx-displayName: \"Enable Violations for Detection\"\nx-required\nList of violations to be detected",
+                    "title": "Enable Violations",
                     "$ref": "#/definitions/app_firewallViolationSetting"
                 },
                 "signature_selection_setting": {
@@ -2672,93 +2712,6 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 }
             }
-        },
-        "app_firewallEnabledEvasionSubViolations": {
-            "type": "object",
-            "description": "list of enabled sub-violation types for detection.",
-            "title": "Enabled Evasion Violations",
-            "x-displayname": "Enabled Evasion Violations",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.EnabledEvasionSubViolations",
-            "properties": {
-                "evasion_violation_settings": {
-                    "type": "array",
-                    "description": " list of enabled sub-violation types for detection.\nRequired: YES",
-                    "title": "Evasion Violation Settings",
-                    "items": {
-                        "$ref": "#/definitions/app_firewallEvasionSubViolationType"
-                    },
-                    "x-displayname": "Evasion Violations",
-                    "x-ves-required": "true"
-                }
-            }
-        },
-        "app_firewallEnabledHTTPProtocolSubViolations": {
-            "type": "object",
-            "description": "list of enabled sub-violation types for detection.",
-            "title": "Enabled HTTP Protocol Violations",
-            "x-displayname": "Enabled HTTP Protocol Violations",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.EnabledHTTPProtocolSubViolations",
-            "properties": {
-                "http_protocol_sub_violations": {
-                    "type": "array",
-                    "description": " list of enabled sub-violation types for detection.\nRequired: YES",
-                    "title": "Enabled HTTP Protocol Violations",
-                    "items": {
-                        "$ref": "#/definitions/app_firewallHTTPProtocolSubViolationType"
-                    },
-                    "x-displayname": "Enabled HTTP Protocol Violations",
-                    "x-ves-required": "true"
-                }
-            }
-        },
-        "app_firewallEvasionSubViolationType": {
-            "type": "string",
-            "description": "List of Sub-Violation Types\n",
-            "title": "Evasion Sub-Violation Type",
-            "enum": [
-                "VIOL_EVASION_NONE",
-                "VIOL_EVASION_BAD_UNESCAPE",
-                "VIOL_EVASION_APACHE_WHITESPACE",
-                "VIOL_EVASION_BARE_BYTE_DECODING",
-                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
-                "VIOL_EVASION_IIS_BACKSLASHES",
-                "VIOL_EVASION_U_DECODING",
-                "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
-            ],
-            "default": "VIOL_EVASION_NONE",
-            "x-displayname": "Evasion Sub-Violation Type",
-            "x-ves-proto-enum": "ves.io.schema.app_firewall.EvasionSubViolationType"
-        },
-        "app_firewallHTTPProtocolSubViolationType": {
-            "type": "string",
-            "description": "List of Sub-Violation Types\n",
-            "title": "HTTP Protocol Sub-Violation Type",
-            "enum": [
-                "VIOL_HTTP_PROTOCOL_NONE",
-                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
-                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
-                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
-                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
-                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
-                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
-                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
-                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
-                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
-                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
-                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
-                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
-                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0"
-            ],
-            "default": "VIOL_HTTP_PROTOCOL_NONE",
-            "x-displayname": "HTTP Protocol Sub-Violation Type",
-            "x-ves-proto-enum": "ves.io.schema.app_firewall.HTTPProtocolSubViolationType"
         },
         "app_firewallSignatureSelectionSetting": {
             "type": "object",
@@ -2848,62 +2801,19 @@ var APISwaggerJSON string = `{
             "description": "Specifies violation settings to be used by WAF",
             "title": "Violation Setting",
             "x-displayname": "Violation Setting",
-            "x-ves-oneof-field-evasion_violation_setting": "[\"default_evasion_violation_settings\",\"enabled_evasion_violations\"]",
-            "x-ves-oneof-field-http_protocol_violation_setting": "[\"default_http_protocol_violation_settings\",\"enabled_http_protocol_violations\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.ViolationSetting",
             "properties": {
-                "default_evasion_violation_settings": {
-                    "description": "Exclusive with [enabled_evasion_violations]\nx-displayName: \"Default Evasion Violation Settings\"\nUse default violation settings. This will enable all violation types for detection.",
-                    "title": "Default Evasion Violation Settings",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "default_http_protocol_violation_settings": {
-                    "description": "Exclusive with [enabled_http_protocol_violations]\nx-displayName: \"Default HTTP Protocol Violation Settings\"\nUse default violation settings. This will enable all violation types for detection.",
-                    "title": "Default HTTP Protocol Violation Settings",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "enabled_evasion_violations": {
-                    "description": "Exclusive with [default_evasion_violation_settings]\nx-displayName: \"HTTP Protocol Violation Settings\"\nlist of enabled sub-violation types for detection.",
-                    "title": "Evasion Violation Settings",
-                    "$ref": "#/definitions/app_firewallEnabledEvasionSubViolations"
-                },
-                "enabled_http_protocol_violations": {
-                    "description": "Exclusive with [default_http_protocol_violation_settings]\nx-displayName: \"HTTP Protocol Violation Settings\"\nlist of enabled sub-violation types for detection.",
-                    "title": "HTTP Protocol Violation Settings",
-                    "$ref": "#/definitions/app_firewallEnabledHTTPProtocolSubViolations"
-                },
                 "enabled_violation_types": {
                     "type": "array",
                     "description": " List of violations to be detected\nRequired: YES",
                     "title": "Enable Violations",
                     "items": {
-                        "$ref": "#/definitions/app_firewallViolationType"
+                        "$ref": "#/definitions/schemaAppFirewallViolationType"
                     },
                     "x-displayname": "Enable Violations for Detection",
                     "x-ves-required": "true"
                 }
             }
-        },
-        "app_firewallViolationType": {
-            "type": "string",
-            "description": "List of all Violation Types\n",
-            "title": "Violation Type",
-            "enum": [
-                "VIOL_NONE",
-                "VIOL_FILETYPE",
-                "VIOL_METHOD",
-                "VIOL_MANDATORY_HEADER",
-                "VIOL_HTTP_RESPONSE_STATUS",
-                "VIOL_REQUEST_MAX_LENGTH",
-                "VIOL_FILE_UPLOAD",
-                "VIOL_FILE_UPLOAD_IN_BODY",
-                "VIOL_XML_MALFORMED",
-                "VIOL_JSON_MALFORMED",
-                "VIOL_ASM_COOKIE_MODIFIED"
-            ],
-            "default": "VIOL_NONE",
-            "x-displayname": "Violation Type",
-            "x-ves-proto-enum": "ves.io.schema.app_firewall.ViolationType"
         },
         "crudapiErrorCode": {
             "type": "string",
@@ -3131,6 +3041,54 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 }
             }
+        },
+        "schemaAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all Violation Types\n",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
+                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0",
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_EVASION_BARE_BYTE_DECODING",
+                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
+                "VIOL_EVASION_IIS_BACKSLASHES",
+                "VIOL_EVASION_U_DECODING",
+                "VIOL_EVASION_MULTIPLE_DECODING",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.AppFirewallViolationType"
         },
         "schemaConditionType": {
             "type": "object",
@@ -3611,6 +3569,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "GlobalSpecType",
             "x-displayname": "Application Firewall Specification",
+            "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
             "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
             "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\",\"use_loadbalancer_setting\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
@@ -3620,8 +3579,18 @@ var APISwaggerJSON string = `{
                     "title": "Blocking",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "bot_protection_setting": {
+                    "description": "Exclusive with [default_bot_setting]\nx-displayName: \"Custom Settings\"\nBot protection configuration, mitigation actions for the different types of bots",
+                    "title": "Custom Settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                },
+                "default_bot_setting": {
+                    "description": "Exclusive with [bot_protection_setting]\nx-displayName: \"Default Bot Settings\"\nDefault bot protection settings will be applied.\nMalicious bots will be blocked.\nSuspicious and Good bots will be reported.",
+                    "title": "Default Bot Settings",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\nx-displayName: \"Default Detection Settings\"\nUse default recommended detection settings. \nThese settings are recommended for detecting malicious requests with high accuracy and a low false positive rate.",
+                    "description": "Exclusive with [detection_settings]\nx-displayName: \"Default Detection Settings\"\nUse default recommended detection settings.\nThese settings are recommended for detecting malicious requests with high accuracy and a low false positive rate.",
                     "title": "Default Detection Settings",
                     "$ref": "#/definitions/schemaEmpty"
                 },

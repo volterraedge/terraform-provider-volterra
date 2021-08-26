@@ -1479,6 +1479,366 @@ func ObjectReplaceRspValidator() db.Validator {
 	return DefaultObjectReplaceRspValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListReq) DeepCopy() *StatusObjectListReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["include_referred_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("include_referred_id"))
+		if err := fv(ctx, m.GetIncludeReferredId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["label_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label_filter"))
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_filter"))
+		for idx, item := range m.GetNamespaceFilter() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["report_fields"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("report_fields"))
+		for idx, item := range m.GetReportFields() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_version"))
+		if err := fv(ctx, m.GetResourceVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_filter"))
+		for idx, item := range m.GetTenantFilter() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListReqValidator = func() *ValidateStatusObjectListReq {
+	v := &ValidateStatusObjectListReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListReqValidator() db.Validator {
+	return DefaultStatusObjectListReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListRsp) DeepCopy() *StatusObjectListRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["err"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("err"))
+		if err := fv(ctx, m.GetErr(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uids"))
+		for idx, item := range m.GetUids() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListRspValidator = func() *ValidateStatusObjectListRsp {
+	v := &ValidateStatusObjectListRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListRspValidator() db.Validator {
+	return DefaultStatusObjectListRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatusObjectListRspItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatusObjectListRspItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatusObjectListRspItem) DeepCopy() *StatusObjectListRspItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatusObjectListRspItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatusObjectListRspItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatusObjectListRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatusObjectListRspItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatusObjectListRspItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatusObjectListRspItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatusObjectListRspItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatusObjectListRspItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apply_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apply_status"))
+		if err := fv(ctx, m.GetApplyStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_refs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_refs"))
+		for idx, item := range m.GetObjectRefs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["plan_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("plan_status"))
+		if err := fv(ctx, m.GetPlanStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["statusobject_uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("statusobject_uid"))
+		if err := fv(ctx, m.GetStatusobjectUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatusObjectListRspItemValidator = func() *ValidateStatusObjectListRspItem {
+	v := &ValidateStatusObjectListRspItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatusObjectListRspItemValidator() db.Validator {
+	return DefaultStatusObjectListRspItemValidator
+}
+
 func (m *ObjectCreateReq) FromObject(e db.Entry) {
 	f := e.DeepCopy().(*ves_io_schema_views_terraform_parameters.DBObject)
 	_ = f
@@ -1605,4 +1965,26 @@ func (m *ObjectReplaceRsp) ToObject(e db.Entry) {
 	f.Metadata = m1.Metadata
 	f.Spec = m1.Spec
 	f.SystemMetadata = m1.SystemMetadata
+}
+
+func (m *StatusObjectListRspItem) FromStatusObject(e db.Entry) {
+	f := e.DeepCopy().(*ves_io_schema_views_terraform_parameters.DBStatusObject)
+	_ = f
+	m.ApplyStatus = f.GetApplyStatus()
+	m.Metadata = f.GetMetadata()
+	m.ObjectRefs = f.GetObjectRefs()
+	m.PlanStatus = f.GetPlanStatus()
+
+}
+
+func (m *StatusObjectListRspItem) ToStatusObject(e db.Entry) {
+	m1 := m.DeepCopy()
+	_ = m1
+	f := e.(*ves_io_schema_views_terraform_parameters.DBStatusObject)
+	_ = f
+	f.ApplyStatus = m1.ApplyStatus
+	f.Metadata = m1.Metadata
+	f.ObjectRefs = m1.ObjectRefs
+	f.PlanStatus = m1.PlanStatus
+
 }
