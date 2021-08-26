@@ -8558,6 +8558,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetFlowExporterChoice().(type) {
+	case *GlobalSpecType_DisableFlowExport:
+		if fv, exists := v.FldValidators["flow_exporter_choice.disable_flow_export"]; exists {
+			val := m.GetFlowExporterChoice().(*GlobalSpecType_DisableFlowExport).DisableFlowExport
+			vOpts := append(opts,
+				db.WithValidateField("flow_exporter_choice"),
+				db.WithValidateField("disable_flow_export"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableFlowExport:
+		if fv, exists := v.FldValidators["flow_exporter_choice.enable_flow_export"]; exists {
+			val := m.GetFlowExporterChoice().(*GlobalSpecType_EnableFlowExport).EnableFlowExport
+			vOpts := append(opts,
+				db.WithValidateField("flow_exporter_choice"),
+				db.WithValidateField("enable_flow_export"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["generated_yamls"]; exists {
 		vOpts := append(opts, db.WithValidateField("generated_yamls"))
 		if err := fv(ctx, m.GetGeneratedYamls(), vOpts...); err != nil {

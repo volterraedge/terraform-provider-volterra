@@ -522,6 +522,15 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["invert_match"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invert_match"))
+		if err := fv(ctx, m.GetInvertMatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["path_suffix_in"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path_suffix_in"))

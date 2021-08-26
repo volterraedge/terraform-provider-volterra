@@ -64,6 +64,8 @@ import (
 	ves_io_schema_fast_acl_rule_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule/crudapi"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_fleet_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet/crudapi"
+	ves_io_schema_flow_exporter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_exporter"
+	ves_io_schema_flow_exporter_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_exporter/crudapi"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 	ves_io_schema_healthcheck_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck/crudapi"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
@@ -542,11 +544,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceRequest"] = ves_io_schema_app_firewall.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceResponse"] = ves_io_schema_app_firewall.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.app_firewall.BotProtectionSetting"] = ves_io_schema_app_firewall.BotProtectionSettingValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.CreateSpecType"] = ves_io_schema_app_firewall.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.DetectionSetting"] = ves_io_schema_app_firewall.DetectionSettingValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledAttackTypes"] = ves_io_schema_app_firewall.EnabledAttackTypesValidator()
-	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledEvasionSubViolations"] = ves_io_schema_app_firewall.EnabledEvasionSubViolationsValidator()
-	MDR.ValidatorRegistry["ves.io.schema.app_firewall.EnabledHTTPProtocolSubViolations"] = ves_io_schema_app_firewall.EnabledHTTPProtocolSubViolationsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GetSpecType"] = ves_io_schema_app_firewall.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.GlobalSpecType"] = ves_io_schema_app_firewall.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_firewall.ReplaceSpecType"] = ves_io_schema_app_firewall.ReplaceSpecTypeValidator()
@@ -1202,6 +1203,27 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectReplaceReq"] = ves_io_schema_fleet_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.fleet.crudapi.ObjectReplaceRsp"] = ves_io_schema_fleet_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.SpecType"] = ves_io_schema_flow_exporter.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.FlowCollector"] = ves_io_schema_flow_exporter.FlowCollectorValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.FlowCollectorEndPoint"] = ves_io_schema_flow_exporter.FlowCollectorEndPointValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.FlowExportTimeout"] = ves_io_schema_flow_exporter.FlowExportTimeoutValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.FlowSampler"] = ves_io_schema_flow_exporter.FlowSamplerValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.GlobalSpecType"] = ves_io_schema_flow_exporter.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.IpfixParameters"] = ves_io_schema_flow_exporter.IpfixParametersValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectCreateReq"] = ves_io_schema_flow_exporter_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectCreateRsp"] = ves_io_schema_flow_exporter_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectDeleteReq"] = ves_io_schema_flow_exporter_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectDeleteRsp"] = ves_io_schema_flow_exporter_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectGetReq"] = ves_io_schema_flow_exporter_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectGetRsp"] = ves_io_schema_flow_exporter_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectListReq"] = ves_io_schema_flow_exporter_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectListRsp"] = ves_io_schema_flow_exporter_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectListRspItem"] = ves_io_schema_flow_exporter_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectReplaceReq"] = ves_io_schema_flow_exporter_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.crudapi.ObjectReplaceRsp"] = ves_io_schema_flow_exporter_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.healthcheck.SpecType"] = ves_io_schema_healthcheck.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.healthcheck.CreateRequest"] = ves_io_schema_healthcheck.CreateRequestValidator()
@@ -1819,9 +1841,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.policer.crudapi.ObjectReplaceReq"] = ves_io_schema_policer_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policer.crudapi.ObjectReplaceRsp"] = ves_io_schema_policer_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallDetectionControl"] = ves_io_schema_policy.AppFirewallDetectionControlValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallSignatureContext"] = ves_io_schema_policy.AppFirewallSignatureContextValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.AppFirewallViolationContext"] = ves_io_schema_policy.AppFirewallViolationContextValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.ArgMatcherType"] = ves_io_schema_policy.ArgMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.AsnMatchList"] = ves_io_schema_policy.AsnMatchListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.AsnMatcherType"] = ves_io_schema_policy.AsnMatcherTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.ContentRewriteAction"] = ves_io_schema_policy.ContentRewriteActionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.CookieMatcherType"] = ves_io_schema_policy.CookieMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.DenyInformation"] = ves_io_schema_policy.DenyInformationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.HeaderMatcherType"] = ves_io_schema_policy.HeaderMatcherTypeValidator()
@@ -1835,6 +1861,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.policy.PrefixMatchList"] = ves_io_schema_policy.PrefixMatchListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.QueryParameterMatcherType"] = ves_io_schema_policy.QueryParameterMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.RoleMatcherType"] = ves_io_schema_policy.RoleMatcherTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.ShapeBotBlockMitigationActionType"] = ves_io_schema_policy.ShapeBotBlockMitigationActionTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.ShapeBotMitigationAction"] = ves_io_schema_policy.ShapeBotMitigationActionValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.ShapeBotRedirectMitigationActionType"] = ves_io_schema_policy.ShapeBotRedirectMitigationActionTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.ShapeProtectedEndpointAction"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.SimpleWafExclusionRule"] = ves_io_schema_policy.SimpleWafExclusionRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.StringMatcherType"] = ves_io_schema_policy.StringMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.TlsFingerprintMatcherType"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator()
@@ -3066,6 +3096,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.ObjectListRspItem"] = ves_io_schema_views_terraform_parameters_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceReq"] = ves_io_schema_views_terraform_parameters_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_terraform_parameters_crudapi.ObjectReplaceRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListReq"] = ves_io_schema_views_terraform_parameters_crudapi.StatusObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp"] = ves_io_schema_views_terraform_parameters_crudapi.StatusObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRspItem"] = ves_io_schema_views_terraform_parameters_crudapi.StatusObjectListRspItemValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.voltstack_site.SpecType"] = ves_io_schema_views_voltstack_site.SpecTypeValidator()
 
@@ -3226,6 +3259,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavascriptChallengeType"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.PolicyBasedChallenge"] = ves_io_schema_virtual_host.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.ReplaceSpecType"] = ves_io_schema_virtual_host.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.ShapeBotDefenseConfigType"] = ves_io_schema_virtual_host.ShapeBotDefenseConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.TemporaryUserBlockingType"] = ves_io_schema_virtual_host.TemporaryUserBlockingTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.crudapi.ObjectCreateReq"] = ves_io_schema_virtual_host_crudapi.ObjectCreateReqValidator()
@@ -3703,16 +3737,13 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"bot_protection_setting", "default_bot_setting"}...),
 				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
 			},
 			"spec.detection_settings": []sets.String{
 				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
 				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
 				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
-			},
-			"spec.detection_settings.enabled_violation_types": []sets.String{
-				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
-				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
 			},
 			"spec.detection_settings.signature_selection_setting": []sets.String{
 				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
@@ -3725,16 +3756,13 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"bot_protection_setting", "default_bot_setting"}...),
 				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
 			},
 			"spec.detection_settings": []sets.String{
 				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
 				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
 				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
-			},
-			"spec.detection_settings.enabled_violation_types": []sets.String{
-				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
-				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
 			},
 			"spec.detection_settings.signature_selection_setting": []sets.String{
 				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
@@ -3747,16 +3775,13 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"bot_protection_setting", "default_bot_setting"}...),
 				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
 			},
 			"spec.gc_spec.detection_settings": []sets.String{
 				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
 				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
 				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
-			},
-			"spec.gc_spec.detection_settings.enabled_violation_types": []sets.String{
-				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
-				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
 			},
 			"spec.gc_spec.detection_settings.signature_selection_setting": []sets.String{
 				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
@@ -3769,16 +3794,13 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"blocking", "monitoring", "use_loadbalancer_setting"}...),
+				sets.NewString([]string{"bot_protection_setting", "default_bot_setting"}...),
 				sets.NewString([]string{"default_detection_settings", "detection_settings"}...),
 			},
 			"spec.gc_spec.detection_settings": []sets.String{
 				sets.NewString([]string{"default_violation_settings", "enabled_violation_types"}...),
 				sets.NewString([]string{"disable_suppression", "enable_suppression"}...),
 				sets.NewString([]string{"disable_threat_campaigns", "enable_threat_campaigns"}...),
-			},
-			"spec.gc_spec.detection_settings.enabled_violation_types": []sets.String{
-				sets.NewString([]string{"default_evasion_violation_settings", "enabled_evasion_violations"}...),
-				sets.NewString([]string{"default_http_protocol_violation_settings", "enabled_http_protocol_violations"}...),
 			},
 			"spec.gc_spec.detection_settings.signature_selection_setting": []sets.String{
 				sets.NewString([]string{"default_attack_type_settings", "enabled_attack_types"}...),
@@ -5125,6 +5147,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_flow_export", "enable_flow_export"}...),
 				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
@@ -5244,6 +5267,7 @@ func init() {
 				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
 				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
 				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_flow_export", "enable_flow_export"}...),
 				sets.NewString([]string{"disable_gpu", "enable_gpu", "enable_vgpu"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
@@ -5350,6 +5374,36 @@ func init() {
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 			"spec.gc_spec.storage_static_routes.storage_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.flow_exporter.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.flow_collector": []sets.String{
+				sets.NewString([]string{"ipfix_collector_parameters"}...),
+			},
+			"spec.gc_spec.flow_collector.collector_end_point": []sets.String{
+				sets.NewString([]string{"collector_ip", "collector_service_name"}...),
+				sets.NewString([]string{"site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.flow_collector.collector_end_point.collector_ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.flow_exporter.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.flow_collector": []sets.String{
+				sets.NewString([]string{"ipfix_collector_parameters"}...),
+			},
+			"spec.gc_spec.flow_collector.collector_end_point": []sets.String{
+				sets.NewString([]string{"collector_ip", "collector_service_name"}...),
+				sets.NewString([]string{"site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.flow_collector.collector_end_point.collector_ip": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
 			},
 		},
@@ -6756,12 +6810,15 @@ func init() {
 			"spec.rule_list.rules.spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.rule_list.rules.spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.rule_list.rules.spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6797,12 +6854,15 @@ func init() {
 			"spec.rule_list.rules.spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.rule_list.rules.spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.rule_list.rules.spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6838,12 +6898,15 @@ func init() {
 			"spec.gc_spec.rule_list.rules.spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.gc_spec.rule_list.rules.spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.gc_spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.simple_rules.headers": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
@@ -6853,7 +6916,7 @@ func init() {
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.simple_rules.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6889,12 +6952,15 @@ func init() {
 			"spec.gc_spec.rule_list.rules.spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.gc_spec.rule_list.rules.spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.gc_spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.simple_rules.headers": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
@@ -6904,7 +6970,7 @@ func init() {
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.simple_rules.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6930,12 +6996,15 @@ func init() {
 			"spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6961,12 +7030,15 @@ func init() {
 			"spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -6992,12 +7064,15 @@ func init() {
 			"spec.gc_spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.gc_spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.gc_spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -7023,12 +7098,15 @@ func init() {
 			"spec.gc_spec.query_params": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
+			"spec.gc_spec.shape_protected_endpoint_action.mitigation": []sets.String{
+				sets.NewString([]string{"alert", "block", "drop", "none", "redirect"}...),
+			},
 			"spec.gc_spec.url_matcher.url_items": []sets.String{
 				sets.NewString([]string{"domain_regex", "domain_value"}...),
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.gc_spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+				sets.NewString([]string{"app_firewall_detection_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
 	}
@@ -9633,6 +9711,9 @@ func init() {
 			"spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
+			"spec.more_option": []sets.String{
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
+			},
 			"spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
 				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
@@ -9758,6 +9839,9 @@ func init() {
 			},
 			"spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.more_option": []sets.String{
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -9886,6 +9970,9 @@ func init() {
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
+			"spec.gc_spec.more_option": []sets.String{
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
+			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
 				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
@@ -10012,6 +10099,9 @@ func init() {
 			},
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.more_option": []sets.String{
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -13385,6 +13475,7 @@ func init() {
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"authentication", "no_authentication"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge"}...),
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -13414,6 +13505,7 @@ func init() {
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"authentication", "no_authentication"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge"}...),
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -13442,7 +13534,9 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"bot_defense", "disable_bot_defense"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.gc_spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -13455,6 +13549,9 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.bot_defense.api_auth_key": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
@@ -13488,7 +13585,9 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"bot_defense", "disable_bot_defense"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
 			},
 			"spec.gc_spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -13501,6 +13600,9 @@ func init() {
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.bot_defense.api_auth_key": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
@@ -14666,6 +14768,33 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.fleet.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.flow_exporter.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.flow_exporter.Object"] = reflect.TypeOf(&ves_io_schema_flow_exporter.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.flow_exporter.StatusObject"] = ves_io_schema_flow_exporter.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.flow_exporter.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.flow_exporter.StatusObject"] = reflect.TypeOf(&ves_io_schema_flow_exporter.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.flow_exporter.StatusObject"] = ves_io_schema_flow_exporter.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.flow_exporter.StatusObject"] = ves_io_schema_flow_exporter.StatusObjectValidator()
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.flow_exporter.crudapi.API"] = ves_io_schema_flow_exporter_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.flow_exporter.crudapi.API"] = ves_io_schema_flow_exporter_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.flow_exporter.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.flow_exporter.Object"] = ves_io_schema_flow_exporter_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.healthcheck.Object"] = ves_io_schema_healthcheck.NewEntryObject
@@ -16694,6 +16823,20 @@ func init() {
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.terraform_parameters.Object"] = ves_io_schema_views_terraform_parameters_crudapi.APISwaggerJSON
 
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.terraform_parameters.crudapi.StatusAPI"] = ves_io_schema_views_terraform_parameters_crudapi.RegisterStatusAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.terraform_parameters.crudapi.StatusAPI"] = ves_io_schema_views_terraform_parameters_crudapi.RegisterGwStatusAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDStatusAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDStatusAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDStatusAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDStatusAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.terraform_parameters.StatusObject"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.terraform_parameters.StatusObject"] = ves_io_schema_views_terraform_parameters_crudapi.StatusAPISwaggerJSON
+
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.views.voltstack_site.Object"] = ves_io_schema_views_voltstack_site.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.views.voltstack_site.Object"] = store.InMemory
@@ -17820,6 +17963,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_fleet_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_fleet_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.flow_exporter.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_flow_exporter_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_flow_exporter_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_flow_exporter_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_flow_exporter_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -19187,6 +19342,17 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_views_terraform_parameters_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_terraform_parameters_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+	case "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_terraform_parameters_crudapi.StatusAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_terraform_parameters_crudapi.StatusAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_terraform_parameters_crudapi.StatusAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_terraform_parameters_crudapi.StatusAPIServer", srv))
 		}
 		h(gSrv, s)
 

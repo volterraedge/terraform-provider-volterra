@@ -710,6 +710,16 @@ func (o *DBObject) IsSpecEqual(other sro.SRO) bool {
 	return o.GetSpec().Equal(otherSpec)
 }
 
+// GetVtrpId returns vtrpId of the object.
+func (o *DBObject) GetVtrpId() string {
+	return o.GetSystemMetadata().GetVtrpId()
+}
+
+// SetVtrpId sets vtrpId of the object.
+func (o *DBObject) SetVtrpId(id string) {
+	o.GetSystemMetadata().SetVtrpId(id)
+}
+
 type ValidateObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }

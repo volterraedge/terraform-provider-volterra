@@ -4191,7 +4191,9 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
+            "x-ves-oneof-field-bot_defense_choice": "[\"bot_defense\",\"disable_bot_defense\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
@@ -4241,6 +4243,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Auto Cert State"
                 },
+                "bot_defense": {
+                    "description": "Exclusive with [disable_bot_defense]\nx-displayName: \"Specify Shape Bot Defense Configuration\"\nShape Bot Defense intent configuration object",
+                    "title": "Shape Bot Defense",
+                    "$ref": "#/definitions/virtual_hostShapeBotDefenseConfigType"
+                },
                 "buffer_policy": {
                     "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
                     "title": "Buffer configuration for requests",
@@ -4276,6 +4283,11 @@ var APISwaggerJSON string = `{
                     "title": "default_header",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "disable_bot_defense": {
+                    "description": "Exclusive with [bot_defense]\nx-displayName: \"Disable Shape Bot Defense\"\nNo Shape Bot Defense configuration for this load balancer",
+                    "title": "Disable Shape Bot Defense",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "disable_default_error_pages": {
                     "type": "boolean",
                     "description": "\n An option to specify whether to disable using default Volterra error pages\n\nExample: - \"true\"-",
@@ -4291,6 +4303,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Disable DNS resolution",
                     "x-ves-example": "false"
+                },
+                "disable_path_normalize": {
+                    "description": "Exclusive with [enable_path_normalize]\nx-displayName: \"Disable path normalization\"\nPath normalization is disabled",
+                    "title": "Disable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "dns_domains": {
                     "type": "array",
@@ -4332,6 +4349,11 @@ var APISwaggerJSON string = `{
                     "title": "Enable the dynamic resolution of the endpoint",
                     "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
                     "x-displayname": "Dynamic Reverse Proxy"
+                },
+                "enable_path_normalize": {
+                    "description": "Exclusive with [disable_path_normalize]\nx-displayName: \"Enable path normalization\"\nPath normalization is enabled",
+                    "title": "Enable Path normalization",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "host_name": {
                     "type": "string",
@@ -4385,7 +4407,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
@@ -4412,7 +4434,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostPolicyBasedChallenge"
                 },
                 "proxy": {
-                    "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
+                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "title": "Proxy Type",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
@@ -4808,7 +4830,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
-            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow \nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
+            "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
             "title": "JavascriptChallengeType",
             "x-displayname": "Javascript Challenge Parameters",
             "x-ves-proto-message": "ves.io.schema.virtual_host.JavascriptChallengeType",
@@ -4903,6 +4925,37 @@ var APISwaggerJSON string = `{
             "x-displayname": "Type of Proxy",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.ProxyType"
         },
+        "virtual_hostShapeBotDefenseConfigType": {
+            "type": "object",
+            "description": "This defines various configuration options for Shape Bot Defense per virtual host.",
+            "title": "ShapeBotDefenseConfigType",
+            "x-displayname": "Shape Bot Defense Config for virtual host",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ShapeBotDefenseConfigType",
+            "properties": {
+                "api_auth_key": {
+                    "description": " API auth key for Shared Shape Bot Defense instance. This value is set\n on the tenant object from Shape Backend.",
+                    "title": "API auth key for Shared Shape Instance",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "API auth key"
+                },
+                "application_id": {
+                    "type": "string",
+                    "description": " Shape Bot Defense Application ID is used by shared instances.\n\nExample: - \"707a0c622df8414886a5ca71c46caf2f\"-",
+                    "title": "Application ID",
+                    "x-displayname": "Application ID",
+                    "x-ves-example": "707a0c622df8414886a5ca71c46caf2f"
+                },
+                "instance": {
+                    "type": "array",
+                    "description": " Which Shape insatnce to use",
+                    "title": "Shape Instance",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Shape Instance"
+                }
+            }
+        },
         "virtual_hostStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
@@ -4937,7 +4990,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
             "title": "TemporaryUserBlockingType",
             "x-displayname": "Temporary User Blocking",
             "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",

@@ -28,6 +28,425 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AppFirewallDetectionControl) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AppFirewallDetectionControl) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AppFirewallDetectionControl) DeepCopy() *AppFirewallDetectionControl {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AppFirewallDetectionControl{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AppFirewallDetectionControl) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AppFirewallDetectionControl) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AppFirewallDetectionControlValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAppFirewallDetectionControl struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAppFirewallDetectionControl) ExcludeSignatureContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*AppFirewallSignatureContext, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := AppFirewallSignatureContextValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_signature_contexts")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AppFirewallSignatureContext)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AppFirewallSignatureContext, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_signature_contexts")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_signature_contexts")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallDetectionControl) ExcludeViolationContextsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*AppFirewallViolationContext, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := AppFirewallViolationContextValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_violation_contexts")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AppFirewallViolationContext)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AppFirewallViolationContext, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_violation_contexts")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_violation_contexts")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallDetectionControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AppFirewallDetectionControl)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AppFirewallDetectionControl got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_signature_contexts"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_signature_contexts"))
+		if err := fv(ctx, m.GetExcludeSignatureContexts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["exclude_violation_contexts"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_violation_contexts"))
+		if err := fv(ctx, m.GetExcludeViolationContexts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAppFirewallDetectionControlValidator = func() *ValidateAppFirewallDetectionControl {
+	v := &ValidateAppFirewallDetectionControl{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExcludeSignatureContexts := v.ExcludeSignatureContextsValidationRuleHandler
+	rulesExcludeSignatureContexts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeSignatureContexts(rulesExcludeSignatureContexts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallDetectionControl.exclude_signature_contexts: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_signature_contexts"] = vFn
+
+	vrhExcludeViolationContexts := v.ExcludeViolationContextsValidationRuleHandler
+	rulesExcludeViolationContexts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeViolationContexts(rulesExcludeViolationContexts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallDetectionControl.exclude_violation_contexts: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_violation_contexts"] = vFn
+
+	return v
+}()
+
+func AppFirewallDetectionControlValidator() db.Validator {
+	return DefaultAppFirewallDetectionControlValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AppFirewallSignatureContext) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AppFirewallSignatureContext) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AppFirewallSignatureContext) DeepCopy() *AppFirewallSignatureContext {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AppFirewallSignatureContext{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AppFirewallSignatureContext) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AppFirewallSignatureContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AppFirewallSignatureContextValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAppFirewallSignatureContext struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAppFirewallSignatureContext) SignatureIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for signature_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallSignatureContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AppFirewallSignatureContext)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AppFirewallSignatureContext got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["signature_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("signature_id"))
+		if err := fv(ctx, m.GetSignatureId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAppFirewallSignatureContextValidator = func() *ValidateAppFirewallSignatureContext {
+	v := &ValidateAppFirewallSignatureContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSignatureId := v.SignatureIdValidationRuleHandler
+	rulesSignatureId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "10000000",
+		"ves.io.schema.rules.uint32.lte":       "30000000",
+	}
+	vFn, err = vrhSignatureId(rulesSignatureId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallSignatureContext.signature_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["signature_id"] = vFn
+
+	return v
+}()
+
+func AppFirewallSignatureContextValidator() db.Validator {
+	return DefaultAppFirewallSignatureContextValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AppFirewallViolationContext) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AppFirewallViolationContext) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AppFirewallViolationContext) DeepCopy() *AppFirewallViolationContext {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AppFirewallViolationContext{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AppFirewallViolationContext) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AppFirewallViolationContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AppFirewallViolationContextValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAppFirewallViolationContext struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAppFirewallViolationContext) ExcludeViolationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.AppFirewallViolationType)
+		return int32(i)
+	}
+	// ves_io_schema.AppFirewallViolationType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.AppFirewallViolationType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exclude_violation")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallViolationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AppFirewallViolationContext)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AppFirewallViolationContext got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_violation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("exclude_violation"))
+		if err := fv(ctx, m.GetExcludeViolation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAppFirewallViolationContextValidator = func() *ValidateAppFirewallViolationContext {
+	v := &ValidateAppFirewallViolationContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExcludeViolation := v.ExcludeViolationValidationRuleHandler
+	rulesExcludeViolation := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhExcludeViolation(rulesExcludeViolation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallViolationContext.exclude_violation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_violation"] = vFn
+
+	return v
+}()
+
+func AppFirewallViolationContextValidator() db.Validator {
+	return DefaultAppFirewallViolationContextValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ArgMatcherType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -551,6 +970,155 @@ var DefaultAsnMatcherTypeValidator = func() *ValidateAsnMatcherType {
 
 func AsnMatcherTypeValidator() db.Validator {
 	return DefaultAsnMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ContentRewriteAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ContentRewriteAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ContentRewriteAction) DeepCopy() *ContentRewriteAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ContentRewriteAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ContentRewriteAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ContentRewriteAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ContentRewriteActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateContentRewriteAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateContentRewriteAction) InsertContentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insert_content")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateContentRewriteAction) ElementSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for element_selector")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateContentRewriteAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ContentRewriteAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ContentRewriteAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["element_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("element_selector"))
+		if err := fv(ctx, m.GetElementSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["insert_content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("insert_content"))
+		if err := fv(ctx, m.GetInsertContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["position"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("position"))
+		if err := fv(ctx, m.GetPosition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultContentRewriteActionValidator = func() *ValidateContentRewriteAction {
+	v := &ValidateContentRewriteAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInsertContent := v.InsertContentValidationRuleHandler
+	rulesInsertContent := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhInsertContent(rulesInsertContent)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ContentRewriteAction.insert_content: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insert_content"] = vFn
+
+	vrhElementSelector := v.ElementSelectorValidationRuleHandler
+	rulesElementSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhElementSelector(rulesElementSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ContentRewriteAction.element_selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["element_selector"] = vFn
+
+	return v
+}()
+
+func ContentRewriteActionValidator() db.Validator {
+	return DefaultContentRewriteActionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3003,6 +3571,539 @@ func RoleMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ShapeBotBlockMitigationActionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeBotBlockMitigationActionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ShapeBotBlockMitigationActionType) DeepCopy() *ShapeBotBlockMitigationActionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeBotBlockMitigationActionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeBotBlockMitigationActionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeBotBlockMitigationActionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeBotBlockMitigationActionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateShapeBotBlockMitigationActionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeBotBlockMitigationActionType) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpStatusCode)
+		return int32(i)
+	}
+	// ves_io_schema.HttpStatusCode_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.HttpStatusCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for status")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeBotBlockMitigationActionType) BodyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for body")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeBotBlockMitigationActionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeBotBlockMitigationActionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeBotBlockMitigationActionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["body"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("body"))
+		if err := fv(ctx, m.GetBody(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeBotBlockMitigationActionTypeValidator = func() *ValidateShapeBotBlockMitigationActionType {
+	v := &ValidateShapeBotBlockMitigationActionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStatus := v.StatusValidationRuleHandler
+	rulesStatus := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.not_in":       "[0]",
+	}
+	vFn, err = vrhStatus(rulesStatus)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotBlockMitigationActionType.status: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["status"] = vFn
+
+	vrhBody := v.BodyValidationRuleHandler
+	rulesBody := map[string]string{
+		"ves.io.schema.rules.string.max_len": "65536",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhBody(rulesBody)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotBlockMitigationActionType.body: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["body"] = vFn
+
+	return v
+}()
+
+func ShapeBotBlockMitigationActionTypeValidator() db.Validator {
+	return DefaultShapeBotBlockMitigationActionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ShapeBotMitigationAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeBotMitigationAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ShapeBotMitigationAction) DeepCopy() *ShapeBotMitigationAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeBotMitigationAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeBotMitigationAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeBotMitigationAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeBotMitigationActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateShapeBotMitigationAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeBotMitigationAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeBotMitigationAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeBotMitigationAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetActionType().(type) {
+	case *ShapeBotMitigationAction_None:
+		if fv, exists := v.FldValidators["action_type.none"]; exists {
+			val := m.GetActionType().(*ShapeBotMitigationAction_None).None
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ShapeBotMitigationAction_Block:
+		if fv, exists := v.FldValidators["action_type.block"]; exists {
+			val := m.GetActionType().(*ShapeBotMitigationAction_Block).Block
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ShapeBotMitigationAction_Redirect:
+		if fv, exists := v.FldValidators["action_type.redirect"]; exists {
+			val := m.GetActionType().(*ShapeBotMitigationAction_Redirect).Redirect
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("redirect"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ShapeBotMitigationAction_Drop:
+		if fv, exists := v.FldValidators["action_type.drop"]; exists {
+			val := m.GetActionType().(*ShapeBotMitigationAction_Drop).Drop
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("drop"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ShapeBotMitigationAction_Alert:
+		if fv, exists := v.FldValidators["action_type.alert"]; exists {
+			val := m.GetActionType().(*ShapeBotMitigationAction_Alert).Alert
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("alert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeBotMitigationActionValidator = func() *ValidateShapeBotMitigationAction {
+	v := &ValidateShapeBotMitigationAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["action_type.block"] = ShapeBotBlockMitigationActionTypeValidator().Validate
+	v.FldValidators["action_type.redirect"] = ShapeBotRedirectMitigationActionTypeValidator().Validate
+
+	return v
+}()
+
+func ShapeBotMitigationActionValidator() db.Validator {
+	return DefaultShapeBotMitigationActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ShapeBotRedirectMitigationActionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeBotRedirectMitigationActionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ShapeBotRedirectMitigationActionType) DeepCopy() *ShapeBotRedirectMitigationActionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeBotRedirectMitigationActionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeBotRedirectMitigationActionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeBotRedirectMitigationActionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeBotRedirectMitigationActionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateShapeBotRedirectMitigationActionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeBotRedirectMitigationActionType) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeBotRedirectMitigationActionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeBotRedirectMitigationActionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeBotRedirectMitigationActionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["uri"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uri"))
+		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeBotRedirectMitigationActionTypeValidator = func() *ValidateShapeBotRedirectMitigationActionType {
+	v := &ValidateShapeBotRedirectMitigationActionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUri := v.UriValidationRuleHandler
+	rulesUri := map[string]string{
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFn, err = vrhUri(rulesUri)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeBotRedirectMitigationActionType.uri: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["uri"] = vFn
+
+	return v
+}()
+
+func ShapeBotRedirectMitigationActionTypeValidator() db.Validator {
+	return DefaultShapeBotRedirectMitigationActionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ShapeProtectedEndpointAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ShapeProtectedEndpointAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ShapeProtectedEndpointAction) DeepCopy() *ShapeProtectedEndpointAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ShapeProtectedEndpointAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ShapeProtectedEndpointAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ShapeProtectedEndpointAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ShapeProtectedEndpointActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateShapeProtectedEndpointAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateShapeProtectedEndpointAction) AppTrafficTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(AppTrafficType)
+		return int32(i)
+	}
+	// AppTrafficType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, AppTrafficType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for app_traffic_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeProtectedEndpointAction) MitigationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for mitigation")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ShapeProtectedEndpointAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ShapeProtectedEndpointAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_traffic_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_traffic_type"))
+		if err := fv(ctx, m.GetAppTrafficType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mitigation"))
+		if err := fv(ctx, m.GetMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtectedEndpointAction {
+	v := &ValidateShapeProtectedEndpointAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAppTrafficType := v.AppTrafficTypeValidationRuleHandler
+	rulesAppTrafficType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAppTrafficType(rulesAppTrafficType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeProtectedEndpointAction.app_traffic_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["app_traffic_type"] = vFn
+
+	vrhMitigation := v.MitigationValidationRuleHandler
+	rulesMitigation := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMitigation(rulesMitigation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeProtectedEndpointAction.mitigation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mitigation"] = vFn
+
+	return v
+}()
+
+func ShapeProtectedEndpointActionValidator() db.Validator {
+	return DefaultShapeProtectedEndpointActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SimpleWafExclusionRule) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3185,6 +4286,13 @@ func (v *ValidateSimpleWafExclusionRule) MetadataValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleWafExclusionRule) AppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn := AppFirewallDetectionControlValidator().Validate
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleWafExclusionRule)
 	if !ok {
@@ -3197,6 +4305,15 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_firewall_detection_control"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_firewall_detection_control"))
+		if err := fv(ctx, m.GetAppFirewallDetectionControl(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -3365,6 +4482,17 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
+
+	vrhAppFirewallDetectionControl := v.AppFirewallDetectionControlValidationRuleHandler
+	rulesAppFirewallDetectionControl := map[string]string{
+		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
+	}
+	vFn, err = vrhAppFirewallDetectionControl(rulesAppFirewallDetectionControl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.app_firewall_detection_control: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["app_firewall_detection_control"] = vFn
 
 	return v
 }()
@@ -4285,6 +5413,8 @@ func (m *WafAction) GetActionTypeDRefInfo() ([]db.DRefInfo, error) {
 
 	case *WafAction_WafInMonitoringMode:
 
+	case *WafAction_AppFirewallDetectionControl:
+
 	}
 
 	return drInfos, err
@@ -4300,6 +5430,10 @@ func (v *ValidateWafAction) ActionTypeValidationRuleHandler(rules map[string]str
 		return nil, errors.Wrap(err, "ValidationRuleHandler for action_type")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateWafAction) ActionTypeAppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AppFirewallDetectionControlValidator().Validate, nil
 }
 
 func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -4382,6 +5516,17 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *WafAction_AppFirewallDetectionControl:
+		if fv, exists := v.FldValidators["action_type.app_firewall_detection_control"]; exists {
+			val := m.GetActionType().(*WafAction_AppFirewallDetectionControl).AppFirewallDetectionControl
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("app_firewall_detection_control"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4410,6 +5555,18 @@ var DefaultWafActionValidator = func() *ValidateWafAction {
 		panic(errMsg)
 	}
 	v.FldValidators["action_type"] = vFn
+
+	vrhActionTypeAppFirewallDetectionControl := v.ActionTypeAppFirewallDetectionControlValidationRuleHandler
+	rulesActionTypeAppFirewallDetectionControl := map[string]string{
+		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
+	}
+	vFnMap["action_type.app_firewall_detection_control"], err = vrhActionTypeAppFirewallDetectionControl(rulesActionTypeAppFirewallDetectionControl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WafAction.action_type_app_firewall_detection_control: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["action_type.app_firewall_detection_control"] = vFnMap["action_type.app_firewall_detection_control"]
 
 	v.FldValidators["action_type.waf_rule_control"] = WafRuleControlValidator().Validate
 	v.FldValidators["action_type.waf_inline_rule_control"] = WafInlineRuleControlValidator().Validate

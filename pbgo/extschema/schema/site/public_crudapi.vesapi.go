@@ -3125,6 +3125,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
                 },
+                "site_subtype": {
+                    "description": " Site subtype",
+                    "$ref": "#/definitions/siteSiteSubtype",
+                    "x-displayname": "Site Subtype"
+                },
                 "site_to_site_network_type": {
                     "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration",
                     "$ref": "#/definitions/schemaVirtualNetworkType",

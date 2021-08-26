@@ -1568,6 +1568,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
+		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
@@ -1813,6 +1822,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
+		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2066,6 +2084,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
+
+	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	return v
 }()
@@ -2938,6 +2960,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
+		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
@@ -3183,6 +3214,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
+		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3436,6 +3476,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
+
+	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	return v
 }()
@@ -4395,6 +4439,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
+		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
@@ -4648,6 +4701,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
+		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4912,6 +4974,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
+
+	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	return v
 }()
@@ -6102,6 +6168,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
+		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
 		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
 		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
@@ -6347,6 +6422,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
 		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
+		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6600,6 +6684,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
+
+	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
 
 	return v
 }()
@@ -7032,6 +7120,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
+	m.ContentRewriteAction = f.GetContentRewriteAction()
 	m.CookieMatchers = f.GetCookieMatchers()
 
 	if f.GetDomainMatcher() != nil {
@@ -7059,6 +7148,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
+	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -7088,6 +7178,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
+	f.ContentRewriteAction = m1.ContentRewriteAction
 	f.CookieMatchers = m1.CookieMatchers
 
 	if m1.DomainMatcher != nil {
@@ -7118,6 +7209,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
+	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
@@ -7368,6 +7460,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
+	m.ContentRewriteAction = f.GetContentRewriteAction()
 	m.CookieMatchers = f.GetCookieMatchers()
 
 	if f.GetDomainMatcher() != nil {
@@ -7395,6 +7488,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
+	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -7424,6 +7518,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
+	f.ContentRewriteAction = m1.ContentRewriteAction
 	f.CookieMatchers = m1.CookieMatchers
 
 	if m1.DomainMatcher != nil {
@@ -7454,6 +7549,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
+	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
@@ -7747,6 +7843,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
+	m.ContentRewriteAction = f.GetContentRewriteAction()
 	m.CookieMatchers = f.GetCookieMatchers()
 
 	if f.GetDomainMatcher() != nil {
@@ -7774,6 +7871,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
+	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -7803,6 +7901,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
+	f.ContentRewriteAction = m1.ContentRewriteAction
 	f.CookieMatchers = m1.CookieMatchers
 
 	if m1.DomainMatcher != nil {
@@ -7833,6 +7932,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
+	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 

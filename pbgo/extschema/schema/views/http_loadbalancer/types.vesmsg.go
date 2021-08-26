@@ -453,6 +453,32 @@ func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetPathNormalizeChoice().(type) {
+	case *AdvancedOptionsType_EnablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.enable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*AdvancedOptionsType_EnablePathNormalize).EnablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("enable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AdvancedOptionsType_DisablePathNormalize:
+		if fv, exists := v.FldValidators["path_normalize_choice.disable_path_normalize"]; exists {
+			val := m.GetPathNormalizeChoice().(*AdvancedOptionsType_DisablePathNormalize).DisablePathNormalize
+			vOpts := append(opts,
+				db.WithValidateField("path_normalize_choice"),
+				db.WithValidateField("disable_path_normalize"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -3059,6 +3085,26 @@ func (v *ValidateDDoSMitigationRule) MetadataValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateDDoSMitigationRule) ExpirationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
+		}
+		// TODO: lookup configured third-party type validators
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDDoSMitigationRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DDoSMitigationRule)
 	if !ok {
@@ -3222,6 +3268,18 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
+
+	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
+	rulesExpirationTimestamp := map[string]string{
+		"ves.io.schema.rules.timestamp.gt_now":         "true",
+		"ves.io.schema.rules.timestamp.within.seconds": "31536000",
+	}
+	vFn, err = vrhExpirationTimestamp(rulesExpirationTimestamp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DDoSMitigationRule.expiration_timestamp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_timestamp"] = vFn
 
 	return v
 }()
@@ -12771,6 +12829,26 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceAsNumberValidationRuleHa
 	return oValidatorFn_AsNumber, nil
 }
 
+func (v *ValidateSimpleClientSrcRule) ExpirationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var (
+		reqdValidatorFn db.ValidatorFunc
+		err             error
+	)
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if reqdValidatorFn != nil {
+			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
+				return err
+			}
+		}
+		// TODO: lookup configured third-party type validators
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleClientSrcRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -12910,6 +12988,18 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
+
+	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
+	rulesExpirationTimestamp := map[string]string{
+		"ves.io.schema.rules.timestamp.gt_now":         "true",
+		"ves.io.schema.rules.timestamp.within.seconds": "31536000",
+	}
+	vFn, err = vrhExpirationTimestamp(rulesExpirationTimestamp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.expiration_timestamp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_timestamp"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
