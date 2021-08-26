@@ -1034,6 +1034,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 					}
 
+
 					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()

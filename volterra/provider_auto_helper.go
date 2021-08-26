@@ -14,7 +14,6 @@ import (
 	ves_io_schema_advertise_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 	ves_io_schema_alert_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
 	ves_io_schema_alert_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
-	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
@@ -49,6 +48,7 @@ import (
 	ves_io_schema_secret_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy"
 	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_site_mesh_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
@@ -112,6 +112,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_secret_policy":             resourceVolterraSecretPolicy(),
 		"volterra_secret_policy_rule":        resourceVolterraSecretPolicyRule(),
 		"volterra_service_policy_rule":       resourceVolterraServicePolicyRule(),
+		"volterra_site_mesh_group":           resourceVolterraSiteMeshGroup(),
 		"volterra_usb_policy":                resourceVolterraUsbPolicy(),
 		"volterra_user":                      resourceVolterraUser(),
 		"volterra_user_identification":       resourceVolterraUserIdentification(),
@@ -143,7 +144,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_advertise_policy.ObjectType,
 		ves_io_schema_alert_policy.ObjectType,
 		ves_io_schema_alert_receiver.ObjectType,
-		ves_io_schema_app_firewall.ObjectType,
 		ves_io_schema_app_setting.ObjectType,
 		ves_io_schema_app_type.ObjectType,
 		ves_io_schema_bgp.ObjectType,
@@ -178,6 +178,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_secret_policy.ObjectType,
 		ves_io_schema_secret_policy_rule.ObjectType,
 		ves_io_schema_service_policy_rule.ObjectType,
+		ves_io_schema_site_mesh_group.ObjectType,
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user.ObjectType,
 		ves_io_schema_user_identification.ObjectType,

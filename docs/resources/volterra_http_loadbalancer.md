@@ -20,50 +20,43 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "policy_based_challenge no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
 
+  js_challenge {
+    cookie_expiry   = "cookie_expiry"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "js_script_delay"
+  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
 
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      header_name = "host"
-
-      terminal = true
-    }
+  cookie_stickiness {
+    name = "userid"
+    path = "/Users/userid/browser/cookies"
+    ttl  = "ttl"
   }
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
   }
-
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
-
-  rate_limit {
-    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
-    no_ip_allowed_list = true
-
-    // One of the arguments from this list "no_policies policies" must be set
-    no_policies = true
-
-    rate_limiter {
-      burst_multiplier = "burst_multiplier"
-      total_number     = "total_number"
-      unit             = "unit"
-    }
-  }
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  disable_rate_limit = true
+  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
   service_policies_from_namespace = true
+
   // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
-  disable_waf = true
+
+  waf {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -282,6 +275,14 @@ Apply this waf exclusion rule for any domain.
 ### Any Ip
 
 any_ip.
+
+### App Firewall Detection Control
+
+App Firewall detection changes to be applied for this request.
+
+`exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
+
+`exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
 
 ### Arg Matchers
 
@@ -617,6 +618,10 @@ Host header is not modified.
 
 Disable Mirroring of request.
 
+### Disable Path Normalize
+
+Path normalization is disabled.
+
 ### Disable Prefix Rewrite
 
 Do not rewrite the path prefix..
@@ -653,9 +658,25 @@ Enable captcha challenge.
 
 Enable javascript challenge.
 
+### Enable Path Normalize
+
+Path normalization is enabled.
+
 ### Enable Spdy
 
 SPDY upgrade is enabled.
+
+### Exclude Signature Contexts
+
+App Firewall signature contexts to be excluded for this request.
+
+`signature_id` - (Required) App Firewall signature ID (`Int`).
+
+### Exclude Violation Contexts
+
+App Firewall violation contexts to be excluded for this request.
+
+`exclude_violation` - (Required) App Firewall violation type (`String`).
 
 ### Hash Policy
 
@@ -846,6 +867,10 @@ More options like header manipulation, compression etc..
 `jwt` - (Optional) audiences and issuer. See [ref](#ref) below for details.
 
 `max_request_header_size` - (Optional) such loadbalancers is used for all the loadbalancers in question. (`Int`).
+
+`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+
+`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
 
 `request_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Request Headers To Add ](#request-headers-to-add) below for details.
 
@@ -1332,6 +1357,8 @@ Advertise on vK8s Service Network on RE..
 ### Waf Exclusion Rules
 
 Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation.
+
+`app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `any_domain` - (Optional) Apply this waf exclusion rule for any domain (bool).
 

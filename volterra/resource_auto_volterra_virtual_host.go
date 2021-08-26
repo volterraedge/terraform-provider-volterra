@@ -769,6 +769,18 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Optional: true,
 			},
 
+			"disable_path_normalize": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_path_normalize": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"proxy": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -2360,6 +2372,34 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.MaxRequestHeaderSize =
 			uint32(v.(int))
+
+	}
+
+	//path_normalize_choice
+
+	pathNormalizeChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_path_normalize"); ok && !pathNormalizeChoiceTypeFound {
+
+		pathNormalizeChoiceTypeFound = true
+
+		if v.(bool) {
+			pathNormalizeChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_DisablePathNormalize{}
+			pathNormalizeChoiceInt.DisablePathNormalize = &ves_io_schema.Empty{}
+			createSpec.PathNormalizeChoice = pathNormalizeChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_path_normalize"); ok && !pathNormalizeChoiceTypeFound {
+
+		pathNormalizeChoiceTypeFound = true
+
+		if v.(bool) {
+			pathNormalizeChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_EnablePathNormalize{}
+			pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
+			createSpec.PathNormalizeChoice = pathNormalizeChoiceInt
+		}
 
 	}
 
@@ -4097,6 +4137,32 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.MaxRequestHeaderSize =
 			uint32(v.(int))
+
+	}
+
+	pathNormalizeChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_path_normalize"); ok && !pathNormalizeChoiceTypeFound {
+
+		pathNormalizeChoiceTypeFound = true
+
+		if v.(bool) {
+			pathNormalizeChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_DisablePathNormalize{}
+			pathNormalizeChoiceInt.DisablePathNormalize = &ves_io_schema.Empty{}
+			updateSpec.PathNormalizeChoice = pathNormalizeChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_path_normalize"); ok && !pathNormalizeChoiceTypeFound {
+
+		pathNormalizeChoiceTypeFound = true
+
+		if v.(bool) {
+			pathNormalizeChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_EnablePathNormalize{}
+			pathNormalizeChoiceInt.EnablePathNormalize = &ves_io_schema.Empty{}
+			updateSpec.PathNormalizeChoice = pathNormalizeChoiceInt
+		}
 
 	}
 

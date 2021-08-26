@@ -20,8 +20,13 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
+
+  js_challenge {
+    cookie_expiry   = "cookie_expiry"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "js_script_delay"
+  }
 }
 
 ```
@@ -79,7 +84,11 @@ Argument Reference
 
 `max_request_header_size` - (Optional) on any of the virtual hosts (`Int`).
 
-`proxy` - (Optional) Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access (`String`).
+`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+
+`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+
+`proxy` - (Optional) Indicates whether the type of proxy is UDP/Secret Management Access (`String`).
 
 `rate_limiter` - (Optional) Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.. See [ref](#ref) below for details.
 

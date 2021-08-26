@@ -12,9 +12,9 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/svcfw"
+	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
 
 const (
