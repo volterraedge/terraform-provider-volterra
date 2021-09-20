@@ -96,8 +96,8 @@ func Provider() terraform.ResourceProvider {
 			"timeout": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("VOLT_API_TIMEOUT", "10s"),
-				Description: "The Volt API call timeout value, by default its 10s",
+				DefaultFunc: schema.EnvDefaultFunc("VOLT_API_TIMEOUT", "20s"),
+				Description: "The Volt API call timeout value, by default its 20s",
 			},
 		},
 		ResourcesMap: getResourceMap(),

@@ -28,4 +28,4 @@ provider "volterra" {
 
 * `url` - (Required) Tenant API url file path. This can also be sourced from `VOLT_API_URL` env variable (`String`).
 
-* `timeout` - Volterra api call timeout, by default its 10 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).
+* `timeout` - Volterra api call timeout, by default its 20 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).
