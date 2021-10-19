@@ -1,6 +1,6 @@
 # Volterra Provider
 
-Volterra terraform provider can be used to configure Volterra Objects amd these objects represent desired state of the system. The desired state of the system could be configuring a http/tcp loadbalancer, vk8s cluster, service mesh, enabling api security etc.
+Volterra terraform provider can be used to configure Volterra Objects and these objects represent desired state of the system. The desired state of the system could be configuring a http/tcp loadbalancer, vk8s cluster, service mesh, enabling api security etc.
 
 
 ## Authenticating to Volterra
