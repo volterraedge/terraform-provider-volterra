@@ -45,6 +45,7 @@ func testConfigDataSourceServicePolicy(objType, name string) string {
 	resource "%[1]s" "%[2]s" {
 		name = "%[2]s"
 		namespace = "system"
+		algo = "FIRST_MATCH"
 	}
 
 	data "%[1]s" "%[2]s" {
