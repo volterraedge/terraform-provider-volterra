@@ -48,9 +48,11 @@ func testConfigDataSourceServicePolicy(objType, name string) string {
 		algo = "FIRST_MATCH"
 		any_server = true
 		allow_all_requests = true
+		deny_all_requests  = false
 	}
 
 	data "%[1]s" "%[2]s" {
+		depends_on = [%[1]s.%[2]s]
 		name = "%[2]s"
 		namespace = "shared"
 	}`, tfResourceName, name)
