@@ -46,6 +46,8 @@ func testConfigDataSourceServicePolicy(objType, name string) string {
 		name = "%[2]s"
 		namespace = "shared"
 		algo = "FIRST_MATCH"
+		any_server = true
+		allow_all_requests = true
 	}
 
 	data "%[1]s" "%[2]s" {
