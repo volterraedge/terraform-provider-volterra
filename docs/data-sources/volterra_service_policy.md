@@ -13,12 +13,15 @@ Service Policy creates logical independent workspace within a tenant. Data Sourc
 ```hcl
 data volterra_service_policy" "example" {
   name = "example"
+  namespace = "system"
 }
 ```
 
 ## Argument Reference
 
 * `name` - (Required) Name of the service_policy to be queried
+
+* `namespace` - (Required) Namespace where the tunnel is configure. Example `system`
 
 
 ## Attribute Reference

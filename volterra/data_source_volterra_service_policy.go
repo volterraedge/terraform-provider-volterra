@@ -25,6 +25,10 @@ func dataSourceVolterraServicePolicy() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"namespace": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
 			"tenant_name": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -37,8 +41,9 @@ func dataSourceVolterraServicePolicy() *schema.Resource {
 func dataSourceVolterraServicePolicyRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	name := d.Get("name").(string)
+	namespace := d.Get("namespace").(string)
 
-	resp, err := client.GetObject(context.Background(), ves_io_schema_service_policy.ObjectType, "", name)
+	resp, err := client.GetObject(context.Background(), ves_io_schema_service_policy.ObjectType, "", namespace, name)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
 			log.Printf("[INFO] Service Policy %s no longer exists", d.Id())
