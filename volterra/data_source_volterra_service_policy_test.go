@@ -44,12 +44,12 @@ func testConfigDataSourceServicePolicy(objType, name string) string {
 	return fmt.Sprintf(`
 	resource "%[1]s" "%[2]s" {
 		name = "%[2]s"
-		namespace = "system"
+		namespace = "shared"
 		algo = "FIRST_MATCH"
 	}
 
 	data "%[1]s" "%[2]s" {
 		name = "%[2]s"
-		namespace = "system"
+		namespace = "shared"
 	}`, tfResourceName, name)
 }
