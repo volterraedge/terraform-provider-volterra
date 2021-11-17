@@ -10,13 +10,13 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
+	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 )
 
 func TestAccDataSourceServicePolicyBasic(t *testing.T) {
 	name := generateResourceName()
-	resourceName := "volterra_service_policy." + name
-	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
+	resourceName := "data.volterra_service_policy." + name
+	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_service_policy.ObjectType})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
@@ -28,7 +28,7 @@ func TestAccDataSourceServicePolicyBasic(t *testing.T) {
 		PreCheck:  func() { testAccPreCheck() },
 		Steps: []resource.TestStep{
 			{
-				Config: testConfigDataSourceServicePolicy(ves_io_schema_ns.ObjectType, name),
+				Config: testConfigDataSourceServicePolicy(ves_io_schema_service_policy.ObjectType, name),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", name),
 				),

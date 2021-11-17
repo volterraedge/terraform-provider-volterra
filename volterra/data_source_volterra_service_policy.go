@@ -7,10 +7,13 @@ package volterra
 import (
 	"context"
 	"fmt"
-	"log"
+	"reflect"
 	"strings"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"gopkg.volterra.us/stdlib/client/vesapi"
+	"gopkg.volterra.us/stdlib/server"
 
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 )
@@ -29,10 +32,6 @@ func dataSourceVolterraServicePolicy() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"tenant_name": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 		},
 	}
 }
@@ -43,17 +42,22 @@ func dataSourceVolterraServicePolicyRead(d *schema.ResourceData, meta interface{
 	name := d.Get("name").(string)
 	namespace := d.Get("namespace").(string)
 
-	resp, err := client.GetObject(context.Background(), ves_io_schema_service_policy.ObjectType, "", namespace, name)
-	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] Service Policy %s no longer exists", d.Id())
-			d.SetId("")
-			return nil
-		}
-		return fmt.Errorf("Error finding Volterra Service Policy %q: %s", d.Id(), err)
+	rspFmt := server.GetSpecForm
+	msgFQN := strings.Replace(ves_io_schema_service_policy.ObjectType, "Object", "GetResponse", 1)
+	protoMsgType := proto.MessageType(msgFQN).Elem()
+	protoMsg := reflect.New(protoMsgType).Interface().(proto.Message)
+	callRsp := &server.CallResponse{
+		ProtoMsg: protoMsg,
 	}
-	d.Set("tenant_name", resp.GetObjSystemMetadata().GetTenant())
-	d.Set("name", resp.GetObjName)
-	d.SetId(resp.GetObjUid())
+	opts := []vesapi.CallOpt{
+		vesapi.WithResponseFormat(rspFmt),
+		vesapi.WithOutCallResponse(callRsp),
+	}
+	resp, err := client.GetObject(context.Background(), ves_io_schema_service_policy.ObjectType, namespace, name, opts...)
+	if err != nil {
+		return fmt.Errorf("Error finding Volterra Service Policy %s: %s", name, err)
+	}
+
+	d.SetId(resp.GetObjSystemMetadata().GetUid())
 	return nil
 }
