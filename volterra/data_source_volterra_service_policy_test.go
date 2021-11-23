@@ -38,7 +38,7 @@ func TestAccDataSourceServicePolicyBasic(t *testing.T) {
 }
 
 func testConfigDataSourceServicePolicy(objType, name string) string {
-	// convert ves.io.schema.vservice_policy.Object to volt_service_policy
+	//  convert ves.io.schema.vservice_policy.Object to volt_service_policy
 	parts := strings.Split(objType, ".")
 	tfResourceName := fmt.Sprintf("volterra_%s", parts[3])
 	return fmt.Sprintf(`
