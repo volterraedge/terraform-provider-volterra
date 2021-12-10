@@ -183,6 +183,11 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				},
 			},
 
+			"site_to_site_tunnel_ip": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -667,6 +672,44 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																					"description": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
 																					},
 
 																					"private_key": {
@@ -1764,6 +1807,44 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
@@ -2613,6 +2694,14 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//site_to_site_tunnel_ip
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		createSpec.SiteToSiteTunnelIp =
+			v.(string)
+
+	}
+
 	//site_type
 
 	siteTypeTypeFound := false
@@ -3339,6 +3428,45 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -4884,6 +5012,45 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
 
 														sl := v.(*schema.Set).List()
@@ -5926,6 +6093,13 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		updateSpec.SiteToSiteTunnelIp =
+			v.(string)
+
+	}
+
 	siteTypeTypeFound := false
 
 	if v, ok := d.GetOk("ingress_egress_gw"); ok && !siteTypeTypeFound {
@@ -6450,6 +6624,45 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -7835,6 +8048,45 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {

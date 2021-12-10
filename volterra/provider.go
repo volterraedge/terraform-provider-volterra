@@ -103,7 +103,6 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: getResourceMap(),
 		DataSourcesMap: map[string]*schema.Resource{
 			"volterra_namespace":                   dataSourceVolterraNamespace(),
-			"volterra_service_policy":              dataSourceVolterraServicePolicy(),
 			"volterra_virtual_host_dns_info":       dataSourceVolterraVirtualHostDNSInfo(),
 			"volterra_address_allocator":           dataSourceVolterraAddressAllocator(),
 			"volterra_tunnel":                      dataSourceVolterraTunnel(),

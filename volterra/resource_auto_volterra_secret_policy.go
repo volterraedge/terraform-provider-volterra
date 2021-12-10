@@ -71,6 +71,11 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 				Optional: true,
 			},
 
+			"decrypt_cache_timeout": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"rules": {
 
 				Type:     schema.TypeList,
@@ -167,6 +172,13 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 
 		createSpec.AllowVolterra =
 			v.(bool)
+
+	}
+
+	//decrypt_cache_timeout
+	if v, ok := d.GetOk("decrypt_cache_timeout"); ok && !isIntfNil(v) {
+
+		//createSpec.DecryptCacheTimeout = v.(string)
 
 	}
 
@@ -311,6 +323,12 @@ func resourceVolterraSecretPolicyUpdate(d *schema.ResourceData, meta interface{}
 
 		updateSpec.AllowVolterra =
 			v.(bool)
+
+	}
+
+	if v, ok := d.GetOk("decrypt_cache_timeout"); ok && !isIntfNil(v) {
+
+		//updateSpec.DecryptCacheTimeout = v.(string)
 
 	}
 

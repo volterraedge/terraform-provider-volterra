@@ -41,6 +41,7 @@ func testVPNTunnels(name string) string {
 			node_name = "master-0"
 			tunnel_remote_ips = ["192.168.0.1"]
 			node_id = "ves-node-id-xxxxxx"
+			type = "SERVICES"
 		  }
 		}
 		`, setVPNTunnels, name, name)

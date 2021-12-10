@@ -281,6 +281,21 @@ func resourceVolterraK8SCluster() *schema.Resource {
 											},
 										},
 									},
+
+									"prometheus": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"generated_yaml": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -831,6 +846,27 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
+
+						appChoiceTypeFound = true
+						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
+						appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
+						clusterWideApps[i].AppChoice = appChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+								appChoiceInt.Prometheus.GeneratedYaml = v.(string)
 
 							}
 
@@ -1549,6 +1585,27 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
 								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
+
+						appChoiceTypeFound = true
+						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
+						appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
+						clusterWideApps[i].AppChoice = appChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+								appChoiceInt.Prometheus.GeneratedYaml = v.(string)
 
 							}
 

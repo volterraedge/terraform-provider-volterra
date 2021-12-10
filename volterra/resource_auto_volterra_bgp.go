@@ -1034,6 +1034,43 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 					}
 
+					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
+						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
+						for _, set := range sl {
+							familyInet6VpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
 
@@ -1824,6 +1861,44 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 							addressChoiceInt := &ves_io_schema_bgp.PeerInternal_FromSite{}
 							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
 							typeChoiceInt.Internal.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["family_inet6vpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet6Vpn := &ves_io_schema_bgp.FamilyInet6Vpn{}
+						typeChoiceInt.Internal.FamilyInet6Vpn = familyInet6Vpn
+						for _, set := range sl {
+							familyInet6VpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInet6VpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInet6VpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet6Vpn_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet6Vpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
 						}
 
 					}

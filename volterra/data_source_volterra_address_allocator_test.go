@@ -13,10 +13,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"gopkg.volterra.us/stdlib/client"
-	"gopkg.volterra.us/stdlib/server"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_addr_alloc "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/address_allocator"
+	"gopkg.volterra.us/stdlib/client"
+	"gopkg.volterra.us/stdlib/server"
 )
 
 func TestDataAddressAllocator(t *testing.T) {
