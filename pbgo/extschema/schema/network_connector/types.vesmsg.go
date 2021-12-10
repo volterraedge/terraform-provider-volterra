@@ -78,85 +78,83 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetConnectorChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetConnectorChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConnectorChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConnectorChoice().(type) {
 	case *CreateSpecType_SliToSloSnat:
-		odrInfos, err = m.GetSliToSloSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_slo_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_SliToSloDr:
 
+		return nil, nil
+
 	case *CreateSpecType_SliToGlobalDr:
-		odrInfos, err = m.GetSliToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_SliToGlobalSnat:
-		odrInfos, err = m.GetSliToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_SloToGlobalDr:
-		odrInfos, err = m.GetSloToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_SloToGlobalSnat:
-		odrInfos, err = m.GetSloToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -399,19 +397,21 @@ func (m *DynamicReverseProxyListType) Validate(ctx context.Context, opts ...db.V
 }
 
 func (m *DynamicReverseProxyListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDrpsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDrpsDRefInfo()
+
 }
 
 func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetDrps() {
+	vrefs := m.GetDrps()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("DynamicReverseProxyListType.drps[%d] has a nil value", i)
 		}
@@ -427,8 +427,8 @@ func (m *DynamicReverseProxyListType) GetDrpsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetDrpsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -613,85 +613,83 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetConnectorChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetConnectorChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConnectorChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConnectorChoice().(type) {
 	case *GetSpecType_SliToSloSnat:
-		odrInfos, err = m.GetSliToSloSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_slo_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_SliToSloDr:
 
+		return nil, nil
+
 	case *GetSpecType_SliToGlobalDr:
-		odrInfos, err = m.GetSliToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_SliToGlobalSnat:
-		odrInfos, err = m.GetSliToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_SloToGlobalDr:
-		odrInfos, err = m.GetSloToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_SloToGlobalSnat:
-		odrInfos, err = m.GetSloToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -934,24 +932,28 @@ func (m *GlobalSnatConnectorType) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *GlobalSnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetGlobalVnDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetGlobalVnDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSnatConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSnatConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetGlobalVn()
 	if vref == nil {
@@ -959,16 +961,16 @@ func (m *GlobalSnatConnectorType) GetGlobalVnDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_network.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_network.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "global_vn",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetGlobalVnDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1002,25 +1004,20 @@ func (m *GlobalSnatConnectorType) GetGlobalVnDBEntries(ctx context.Context, d db
 
 // GetDRefInfo for the field's type
 func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSnatConfig() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSnatConfig().GetDRefInfo()
+	drInfos, err := m.GetSnatConfig().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSnatConfig().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "snat_config." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateGlobalSnatConnectorType struct {
@@ -1167,31 +1164,40 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInsideNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInsideNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOutsideNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOutsideNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetDynamicReverseProxy() {
+	refs := m.GetDynamicReverseProxy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.dynamic_reverse_proxy[%d] has a nil value", i)
 		}
@@ -1206,8 +1212,8 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetDynamicReverseProxyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1231,8 +1237,12 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDBEntries(ctx context.Context, d 
 }
 
 func (m *GlobalSpecType) GetInsideNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetInsideNetwork() {
+	refs := m.GetInsideNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.inside_network[%d] has a nil value", i)
 		}
@@ -1247,8 +1257,8 @@ func (m *GlobalSpecType) GetInsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInsideNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1272,8 +1282,12 @@ func (m *GlobalSpecType) GetInsideNetworkDBEntries(ctx context.Context, d db.Int
 }
 
 func (m *GlobalSpecType) GetOutsideNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOutsideNetwork() {
+	refs := m.GetOutsideNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.outside_network[%d] has a nil value", i)
 		}
@@ -1288,8 +1302,8 @@ func (m *GlobalSpecType) GetOutsideNetworkDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetOutsideNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1886,85 +1900,83 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetConnectorChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetConnectorChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConnectorChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConnectorChoice().(type) {
 	case *ReplaceSpecType_SliToSloSnat:
-		odrInfos, err = m.GetSliToSloSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_slo_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_slo_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_SliToSloDr:
 
+		return nil, nil
+
 	case *ReplaceSpecType_SliToGlobalDr:
-		odrInfos, err = m.GetSliToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_SliToGlobalSnat:
-		odrInfos, err = m.GetSliToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "sli_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sli_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_SloToGlobalDr:
-		odrInfos, err = m.GetSloToGlobalDr().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_dr." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_dr." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_SloToGlobalSnat:
-		odrInfos, err = m.GetSloToGlobalSnat().GetDRefInfo()
+		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "slo_to_global_snat." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "slo_to_global_snat." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -2207,21 +2219,19 @@ func (m *SnatConnectorType) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *SnatConnectorType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPoolChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPoolChoiceDRefInfo()
+
 }
 
 func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetPoolChoice().(type) {
 	case *SnatConnectorType_InterfaceIp:
+
+		return nil, nil
 
 	case *SnatConnectorType_SnatPoolAllocator:
 
@@ -2231,7 +2241,7 @@ func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("address_allocator.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "address_allocator.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2239,11 +2249,11 @@ func (m *SnatConnectorType) GetPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "snat_pool_allocator",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetPoolChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

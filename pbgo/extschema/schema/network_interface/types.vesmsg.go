@@ -64,67 +64,65 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *CreateSpecType_DedicatedInterface:
 
+		return nil, nil
+
 	case *CreateSpecType_EthernetInterface:
-		odrInfos, err = m.GetEthernetInterface().GetDRefInfo()
+		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ethernet_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ethernet_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_TunnelInterface:
-		odrInfos, err = m.GetTunnelInterface().GetDRefInfo()
+		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "tunnel_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tunnel_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_LegacyInterface:
-		odrInfos, err = m.GetLegacyInterface().GetDRefInfo()
+		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_DedicatedManagementInterface:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -443,19 +441,15 @@ func (m *DHCPNetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *DHCPNetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkPrefixChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNetworkPrefixChoiceDRefInfo()
+
 }
 
 func (m *DHCPNetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPrefixChoice().(type) {
 	case *DHCPNetworkType_NetworkPrefixAllocator:
 
@@ -465,7 +459,7 @@ func (m *DHCPNetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("address_allocator.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "address_allocator.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -473,11 +467,11 @@ func (m *DHCPNetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "network_prefix_allocator",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetNetworkPrefixChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1072,39 +1066,34 @@ func (m *DHCPServerParametersType) Validate(ctx context.Context, opts ...db.Vali
 }
 
 func (m *DHCPServerParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDhcpNetworksDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDhcpNetworksDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *DHCPServerParametersType) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDhcpNetworks() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetDhcpNetworks() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDhcpNetworks() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("dhcp_networks[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateDHCPServerParametersType struct {
@@ -1954,107 +1943,107 @@ func (m *EthernetInterfaceType) Validate(ctx context.Context, opts ...db.Validat
 }
 
 func (m *EthernetInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAddressChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAddressChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAddressChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAddressChoice().(type) {
 	case *EthernetInterfaceType_DhcpClient:
 
+		return nil, nil
+
 	case *EthernetInterfaceType_DhcpServer:
-		odrInfos, err = m.GetDhcpServer().GetDRefInfo()
+		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "dhcp_server." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dhcp_server." + dri.DRField
 		}
+		return drInfos, err
 
 	case *EthernetInterfaceType_StaticIp:
-		odrInfos, err = m.GetStaticIp().GetDRefInfo()
+		drInfos, err := m.GetStaticIp().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "static_ip." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_ip." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIpv6AddressChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetIpv6AddressChoice().(type) {
 	case *EthernetInterfaceType_NoIpv6Address:
 
-	case *EthernetInterfaceType_StaticIpv6Address:
-		odrInfos, err = m.GetStaticIpv6Address().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "static_ipv6_address." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *EthernetInterfaceType_StaticIpv6Address:
+		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_ipv6_address." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *EthernetInterfaceType_SiteLocalNetwork:
 
+		return nil, nil
+
 	case *EthernetInterfaceType_SiteLocalInsideNetwork:
+
+		return nil, nil
 
 	case *EthernetInterfaceType_InsideNetwork:
 
@@ -2064,7 +2053,7 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_network.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2072,9 +2061,11 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "inside_network",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *EthernetInterfaceType_StorageNetwork:
+
+		return nil, nil
 
 	case *EthernetInterfaceType_Srv6Network:
 
@@ -2084,7 +2075,7 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_network.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -2092,11 +2083,11 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 			DRField:    "srv6_network",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetNetworkChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2755,67 +2746,65 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *GetSpecType_DedicatedInterface:
 
+		return nil, nil
+
 	case *GetSpecType_EthernetInterface:
-		odrInfos, err = m.GetEthernetInterface().GetDRefInfo()
+		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ethernet_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ethernet_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_TunnelInterface:
-		odrInfos, err = m.GetTunnelInterface().GetDRefInfo()
+		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "tunnel_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tunnel_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_LegacyInterface:
-		odrInfos, err = m.GetLegacyInterface().GetDRefInfo()
+		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_DedicatedManagementInterface:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -2990,55 +2979,64 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAddressAllocatorDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAddressAllocatorDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDhcpServerParamsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDhcpServerParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetInterfaceChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIpv6StaticAddressesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIpv6StaticAddressesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetParentNetworkInterfaceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetParentNetworkInterfaceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAddressAllocator() {
+	refs := m.GetAddressAllocator()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.address_allocator[%d] has a nil value", i)
 		}
@@ -3053,8 +3051,8 @@ func (m *GlobalSpecType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAddressAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3079,98 +3077,93 @@ func (m *GlobalSpecType) GetAddressAllocatorDBEntries(ctx context.Context, d db.
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDhcpServerParamsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDhcpServerParams() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDhcpServerParams().GetDRefInfo()
+	drInfos, err := m.GetDhcpServerParams().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDhcpServerParams().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "dhcp_server_params." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *GlobalSpecType_DedicatedInterface:
 
+		return nil, nil
+
 	case *GlobalSpecType_EthernetInterface:
-		odrInfos, err = m.GetEthernetInterface().GetDRefInfo()
+		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ethernet_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ethernet_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_TunnelInterface:
-		odrInfos, err = m.GetTunnelInterface().GetDRefInfo()
+		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "tunnel_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tunnel_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_Legacy:
 
+		return nil, nil
+
 	case *GlobalSpecType_DedicatedManagementInterface:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetIpv6StaticAddressesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetIpv6StaticAddresses() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetIpv6StaticAddresses().GetDRefInfo()
+	drInfos, err := m.GetIpv6StaticAddresses().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIpv6StaticAddresses().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "ipv6_static_addresses." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetParentNetworkInterface() {
+	refs := m.GetParentNetworkInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.parent_network_interface[%d] has a nil value", i)
 		}
@@ -3185,8 +3178,8 @@ func (m *GlobalSpecType) GetParentNetworkInterfaceDRefInfo() ([]db.DRefInfo, err
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetParentNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3211,30 +3204,29 @@ func (m *GlobalSpecType) GetParentNetworkInterfaceDBEntries(ctx context.Context,
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTunnel() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTunnel().GetDRefInfo()
+	drInfos, err := m.GetTunnel().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTunnel().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tunnel." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualNetwork() {
+	refs := m.GetVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.virtual_network[%d] has a nil value", i)
 		}
@@ -3249,8 +3241,8 @@ func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4086,31 +4078,40 @@ func (m *LegacyInterfaceType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *LegacyInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAddressAllocatorDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAddressAllocatorDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *LegacyInterfaceType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAddressAllocator() {
+	refs := m.GetAddressAllocator()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("LegacyInterfaceType.address_allocator[%d] has a nil value", i)
 		}
@@ -4125,8 +4126,8 @@ func (m *LegacyInterfaceType) GetAddressAllocatorDRefInfo() ([]db.DRefInfo, erro
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAddressAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4151,30 +4152,29 @@ func (m *LegacyInterfaceType) GetAddressAllocatorDBEntries(ctx context.Context, 
 
 // GetDRefInfo for the field's type
 func (m *LegacyInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetTunnel() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetTunnel().GetDRefInfo()
+	drInfos, err := m.GetTunnel().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTunnel().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "tunnel." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *LegacyInterfaceType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetVirtualNetwork() {
+	refs := m.GetVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("LegacyInterfaceType.virtual_network[%d] has a nil value", i)
 		}
@@ -4189,8 +4189,8 @@ func (m *LegacyInterfaceType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error)
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5120,19 +5120,21 @@ func (m *NetworkInterfaceTunnel) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *NetworkInterfaceTunnel) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetTunnelDRefInfo()
+
 }
 
 func (m *NetworkInterfaceTunnel) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetTunnel() {
+	refs := m.GetTunnel()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("NetworkInterfaceTunnel.tunnel[%d] has a nil value", i)
 		}
@@ -5147,8 +5149,8 @@ func (m *NetworkInterfaceTunnel) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5308,67 +5310,65 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfaceChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetInterfaceChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetInterfaceChoice().(type) {
 	case *ReplaceSpecType_DedicatedInterface:
 
+		return nil, nil
+
 	case *ReplaceSpecType_EthernetInterface:
-		odrInfos, err = m.GetEthernetInterface().GetDRefInfo()
+		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ethernet_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ethernet_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_TunnelInterface:
-		odrInfos, err = m.GetTunnelInterface().GetDRefInfo()
+		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "tunnel_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tunnel_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_LegacyInterface:
-		odrInfos, err = m.GetLegacyInterface().GetDRefInfo()
+		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_interface." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_interface." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_DedicatedManagementInterface:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -5543,47 +5543,43 @@ func (m *StaticIPParametersType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *StaticIPParametersType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkPrefixChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNetworkPrefixChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *StaticIPParametersType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkPrefixChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkPrefixChoice().(type) {
 	case *StaticIPParametersType_NodeStaticIp:
 
+		return nil, nil
+
 	case *StaticIPParametersType_ClusterStaticIp:
 
-	case *StaticIPParametersType_FleetStaticIp:
-		odrInfos, err = m.GetFleetStaticIp().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "fleet_static_ip." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *StaticIPParametersType_FleetStaticIp:
+		drInfos, err := m.GetFleetStaticIp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFleetStaticIp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "fleet_static_ip." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateStaticIPParametersType struct {
@@ -5872,18 +5868,15 @@ func (m *StaticIpParametersFleetType) Validate(ctx context.Context, opts ...db.V
 }
 
 func (m *StaticIpParametersFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkPrefixAllocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNetworkPrefixAllocatorDRefInfo()
+
 }
 
 func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetNetworkPrefixAllocator()
 	if vref == nil {
@@ -5891,16 +5884,16 @@ func (m *StaticIpParametersFleetType) GetNetworkPrefixAllocatorDRefInfo() ([]db.
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("address_allocator.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "address_allocator.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "network_prefix_allocator",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetNetworkPrefixAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6249,35 +6242,42 @@ func (m *TunnelInterfaceType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *TunnelInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStaticIpDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticIpDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *TunnelInterfaceType_SiteLocalNetwork:
 
+		return nil, nil
+
 	case *TunnelInterfaceType_SiteLocalInsideNetwork:
+
+		return nil, nil
 
 	case *TunnelInterfaceType_InsideNetwork:
 
@@ -6287,7 +6287,7 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("virtual_network.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "virtual_network.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -6295,11 +6295,11 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "inside_network",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetNetworkChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6342,29 +6342,23 @@ func (m *TunnelInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d d
 
 // GetDRefInfo for the field's type
 func (m *TunnelInterfaceType) GetStaticIpDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticIp() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetStaticIp().GetDRefInfo()
+	drInfos, err := m.GetStaticIp().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "static_ip." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 func (m *TunnelInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetTunnel()
 	if vref == nil {
@@ -6372,16 +6366,16 @@ func (m *TunnelInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("tunnel.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "tunnel.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "tunnel",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

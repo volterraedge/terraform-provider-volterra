@@ -195,6 +195,11 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Required: true,
 			},
 
+			"site_to_site_tunnel_ip": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -593,6 +598,44 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"description": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
 																					},
 
 																					"private_key": {
@@ -1475,6 +1518,44 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"description": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
 																					},
 
 																					"private_key": {
@@ -2764,6 +2845,44 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
@@ -3215,6 +3334,62 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 								},
 							},
 						},
+
+						"default_storage": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"storage_class_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"storage_classes": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"default_storage_class": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"openebs_enterprise": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"replication": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"storage_class_size": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"storage_class_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -3483,6 +3658,44 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"description": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
 																					},
 
 																					"private_key": {
@@ -4018,6 +4231,62 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 								},
 							},
 						},
+
+						"default_storage": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"storage_class_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"storage_classes": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"default_storage_class": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"openebs_enterprise": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"replication": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"storage_class_size": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"storage_class_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -4391,6 +4660,14 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("resource_group"); ok && !isIntfNil(v) {
 
 		createSpec.ResourceGroup =
+			v.(string)
+
+	}
+
+	//site_to_site_tunnel_ip
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		createSpec.SiteToSiteTunnelIp =
 			v.(string)
 
 	}
@@ -4980,6 +5257,45 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -6214,6 +6530,45 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -8017,6 +8372,45 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 													}
 
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
 
 														sl := v.(*schema.Set).List()
@@ -8642,6 +9036,85 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			storageClassChoiceTypeFound := false
+
+			if v, ok := cs["default_storage"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
+
+				storageClassChoiceTypeFound = true
+
+				if v.(bool) {
+					storageClassChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_DefaultStorage{}
+					storageClassChoiceInt.DefaultStorage = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackCluster.StorageClassChoice = storageClassChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["storage_class_list"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
+
+				storageClassChoiceTypeFound = true
+				storageClassChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_StorageClassList{}
+				storageClassChoiceInt.StorageClassList = &ves_io_schema_views.StorageClassListType{}
+				siteTypeInt.VoltstackCluster.StorageClassChoice = storageClassChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["storage_classes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						storageClasses := make([]*ves_io_schema_views.StorageClassType, len(sl))
+						storageClassChoiceInt.StorageClassList.StorageClasses = storageClasses
+						for i, set := range sl {
+							storageClasses[i] = &ves_io_schema_views.StorageClassType{}
+							storageClassesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := storageClassesMapStrToI["default_storage_class"]; ok && !isIntfNil(w) {
+								storageClasses[i].DefaultStorageClass = w.(bool)
+							}
+
+							deviceChoiceTypeFound := false
+
+							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+								deviceChoiceInt := &ves_io_schema_views.StorageClassType_OpenebsEnterprise{}
+								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_views.StorageClassOpenebsEnterpriseType{}
+								storageClasses[i].DeviceChoice = deviceChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
+
+									}
+
+									if v, ok := cs["storage_class_size"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.OpenebsEnterprise.StorageClassSize = uint32(v.(int))
+
+									}
+
+								}
+
+							}
+
+							if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
+								storageClasses[i].StorageClassName = w.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -9032,6 +9505,45 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -9770,6 +10282,85 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			storageClassChoiceTypeFound := false
+
+			if v, ok := cs["default_storage"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
+
+				storageClassChoiceTypeFound = true
+
+				if v.(bool) {
+					storageClassChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_DefaultStorage{}
+					storageClassChoiceInt.DefaultStorage = &ves_io_schema.Empty{}
+					siteTypeInt.VoltstackClusterAr.StorageClassChoice = storageClassChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["storage_class_list"]; ok && !isIntfNil(v) && !storageClassChoiceTypeFound {
+
+				storageClassChoiceTypeFound = true
+				storageClassChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_StorageClassList{}
+				storageClassChoiceInt.StorageClassList = &ves_io_schema_views.StorageClassListType{}
+				siteTypeInt.VoltstackClusterAr.StorageClassChoice = storageClassChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["storage_classes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						storageClasses := make([]*ves_io_schema_views.StorageClassType, len(sl))
+						storageClassChoiceInt.StorageClassList.StorageClasses = storageClasses
+						for i, set := range sl {
+							storageClasses[i] = &ves_io_schema_views.StorageClassType{}
+							storageClassesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := storageClassesMapStrToI["default_storage_class"]; ok && !isIntfNil(w) {
+								storageClasses[i].DefaultStorageClass = w.(bool)
+							}
+
+							deviceChoiceTypeFound := false
+
+							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
+
+								deviceChoiceTypeFound = true
+								deviceChoiceInt := &ves_io_schema_views.StorageClassType_OpenebsEnterprise{}
+								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_views.StorageClassOpenebsEnterpriseType{}
+								storageClasses[i].DeviceChoice = deviceChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
+
+									}
+
+									if v, ok := cs["storage_class_size"]; ok && !isIntfNil(v) {
+
+										deviceChoiceInt.OpenebsEnterprise.StorageClassSize = uint32(v.(int))
+
+									}
+
+								}
+
+							}
+
+							if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
+								storageClasses[i].StorageClassName = w.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -10115,6 +10706,13 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
+
+	}
+
+	if v, ok := d.GetOk("site_to_site_tunnel_ip"); ok && !isIntfNil(v) {
+
+		updateSpec.SiteToSiteTunnelIp =
+			v.(string)
 
 	}
 
@@ -10500,6 +11098,45 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -11728,6 +12365,45 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -12970,6 +13646,45 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 													}
 
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
 
 														sl := v.(*schema.Set).List()
@@ -13932,6 +14647,45 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {

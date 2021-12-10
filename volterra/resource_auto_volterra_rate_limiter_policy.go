@@ -307,6 +307,16 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 													},
 												},
 
+												"suffix_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
 												"transformers": {
 
 													Type: schema.TypeList,
@@ -732,6 +742,14 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 									ls[i] = v.(string)
 								}
 								path.RegexValues = ls
+							}
+
+							if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								path.SuffixValues = ls
 							}
 
 							if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
@@ -1228,6 +1246,14 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 									ls[i] = v.(string)
 								}
 								path.RegexValues = ls
+							}
+
+							if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								path.SuffixValues = ls
 							}
 
 							if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {

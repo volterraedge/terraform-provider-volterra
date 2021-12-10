@@ -2573,6 +2573,38 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_firewallAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.AppFirewallViolationType"
+        },
         "crudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -2762,7 +2794,7 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -2823,7 +2855,7 @@ var APISwaggerJSON string = `{
                 "exclude_violation_contexts": {
                     "type": "array",
                     "description": " App Firewall violation contexts to be excluded for this request",
-                    "title": "Exclude Signature Contexts",
+                    "title": "Exclude Violation Contexts",
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallViolationContext"
                     },
@@ -2840,10 +2872,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\nRequired: YES",
+                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\nRequired: YES",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
+                    "x-ves-example": "10000001",
                     "x-ves-required": "true"
                 }
             }
@@ -2856,10 +2889,11 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\nRequired: YES",
+                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\nRequired: YES",
                     "title": "ViolationType",
-                    "$ref": "#/definitions/schemaAppFirewallViolationType",
+                    "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
+                    "x-ves-example": "VIOL_MANDATORY_HEADER",
                     "x-ves-required": "true"
                 }
             }
@@ -3093,6 +3127,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyIPThreatCategory": {
+            "type": "string",
+            "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\nUncategorized\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\nWindows Exploits\n - WEB_ATTACKS: WEB_ATTACKS\n\nWeb Attacks\n - BOTNETS: BOTNETS\n\nBotnets\n - SCANNERS: SCANNERS\n\nScanners\n - REPUTATION: REPUTATION\n\nReputation\n - PHISHING: PHISHING\n\nPhishing\n - PROXY: PROXY\n\nProxy\n - MOBILE_THREATS: MOBILE_THREATS\n\nMobile Threats\n - TOR_PROXY: TOR_PROXY\n\nTor Proxy",
+            "title": "IP Threat Category",
+            "enum": [
+                "SPAM_SOURCES",
+                "WINDOWS_EXPLOITS",
+                "WEB_ATTACKS",
+                "BOTNETS",
+                "SCANNERS",
+                "REPUTATION",
+                "PHISHING",
+                "PROXY",
+                "MOBILE_THREATS",
+                "TOR_PROXY"
+            ],
+            "default": "SPAM_SOURCES",
+            "x-displayname": "IP Threat Category",
+            "x-ves-proto-enum": "ves.io.schema.policy.IPThreatCategory"
+        },
         "policyIpMatcherType": {
             "type": "object",
             "description": "Match any ip prefix contained in the list of ip_prefix_sets.\nThe result of the match is inverted if invert_matcher is true.",
@@ -3198,7 +3252,7 @@ var APISwaggerJSON string = `{
                 },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
                     "title": "transformers",
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
@@ -3321,31 +3375,26 @@ var APISwaggerJSON string = `{
             "description": "Modify Shape Bot  behavior for a matching request.",
             "title": "ShapeBotMitigationAction",
             "x-displayname": "Shape Bot Mitigation Action",
-            "x-ves-oneof-field-action_type": "[\"alert\",\"block\",\"drop\",\"none\",\"redirect\"]",
+            "x-ves-oneof-field-action_type": "[\"block\",\"flag\",\"none\",\"redirect\"]",
             "x-ves-proto-message": "ves.io.schema.policy.ShapeBotMitigationAction",
             "properties": {
-                "alert": {
-                    "description": "Exclusive with [block drop none redirect]\nx-displayName: \"Alert\"\nGenerate alert while not taking any invasive actions.",
-                    "title": "Alert Only",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "block": {
-                    "description": "Exclusive with [alert drop none redirect]\nx-displayName: \"Block\"\nBlock bot request and send response with custom content.",
+                    "description": "Exclusive with [flag none redirect]\nx-displayName: \"Block\"\nBlock bot request and send response with custom content.",
                     "title": "Block",
                     "$ref": "#/definitions/policyShapeBotBlockMitigationActionType"
                 },
-                "drop": {
-                    "description": "Exclusive with [alert block none redirect]\nx-displayName: \"Drop\"\nDrop network connection.",
-                    "title": "Drop",
+                "flag": {
+                    "description": "Exclusive with [block none redirect]\nx-displayName: \"Flag\"\nFlag the request while not taking any invasive actions.",
+                    "title": "Flag",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "none": {
-                    "description": "Exclusive with [alert block drop redirect]\nx-displayName: \"No Action\"\nNo mitigation actions.",
+                    "description": "Exclusive with [block flag redirect]\nx-displayName: \"No Action\"\nNo mitigation actions.",
                     "title": "None",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "redirect": {
-                    "description": "Exclusive with [alert block drop none]\nx-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
+                    "description": "Exclusive with [block flag none]\nx-displayName: \"Redirect\"\nRedirect bot request to a custom URI.",
                     "title": "Redirect",
                     "$ref": "#/definitions/policyShapeBotRedirectMitigationActionType"
                 }
@@ -3360,7 +3409,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": " URI location for redirect may be relative or absolute.",
+                    "description": " URI location for redirect may be relative or absolute.\n\nExample: - Enter URI-",
                     "title": "URI",
                     "x-displayname": "URI"
                 }
@@ -3667,54 +3716,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaAppFirewallViolationType": {
-            "type": "string",
-            "description": "List of all Violation Types\n",
-            "title": "App Firewall Violation Type",
-            "enum": [
-                "VIOL_NONE",
-                "VIOL_FILETYPE",
-                "VIOL_METHOD",
-                "VIOL_MANDATORY_HEADER",
-                "VIOL_HTTP_RESPONSE_STATUS",
-                "VIOL_REQUEST_MAX_LENGTH",
-                "VIOL_FILE_UPLOAD",
-                "VIOL_FILE_UPLOAD_IN_BODY",
-                "VIOL_XML_MALFORMED",
-                "VIOL_JSON_MALFORMED",
-                "VIOL_ASM_COOKIE_MODIFIED",
-                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
-                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
-                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
-                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
-                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
-                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
-                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
-                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
-                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
-                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
-                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
-                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
-                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0",
-                "VIOL_EVASION_BAD_UNESCAPE",
-                "VIOL_EVASION_APACHE_WHITESPACE",
-                "VIOL_EVASION_BARE_BYTE_DECODING",
-                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
-                "VIOL_EVASION_IIS_BACKSLASHES",
-                "VIOL_EVASION_U_DECODING",
-                "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
-            ],
-            "default": "VIOL_NONE",
-            "x-displayname": "App Firewall Violation Type",
-            "x-ves-proto-enum": "ves.io.schema.AppFirewallViolationType"
-        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -3750,7 +3751,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3906,10 +3907,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-",
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\nRequired: YES",
                     "title": "port_ranges",
                     "x-displayname": "Port Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080"
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3925,7 +3927,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelMatcherType": {
             "type": "object",
-            "description": "A label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the \nlabel key name.",
+            "description": "A label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the\nlabel key name.",
             "title": "LabelMatcherType",
             "x-displayname": "Label Matcher",
             "x-ves-proto-message": "ves.io.schema.LabelMatcherType",
@@ -3944,7 +3946,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -4024,14 +4026,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -4074,7 +4076,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -4087,22 +4089,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -4173,7 +4182,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -4189,7 +4198,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -4258,6 +4267,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -4295,6 +4311,26 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemapolicyBotAction": {
+            "type": "object",
+            "description": "Modify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing.",
+            "title": "Bot Action",
+            "x-displayname": "Bot Action",
+            "x-ves-oneof-field-action_type": "[\"bot_skip_processing\",\"none\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.BotAction",
+            "properties": {
+                "bot_skip_processing": {
+                    "description": "Exclusive with [none]\nx-displayName: \"Skip Bot Processing\"\nSkip all Bot processing for this request",
+                    "title": "Skip Bot Processing",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "none": {
+                    "description": "Exclusive with [bot_skip_processing]\nx-displayName: \"Do not modify Bot Processing\"\nPerform normal Bot processing for this request",
+                    "title": "Normal Bot Processing",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -4382,9 +4418,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Regex Values",
                     "x-ves-example": "['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"
                 },
+                "suffix_values": {
+                    "type": "array",
+                    "description": " A list of path suffix values to match the input HTTP path against.\n\nExample: - \"['.exe', '.shtml', '.wmz']\"-",
+                    "title": "Suffix values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Suffix Values",
+                    "x-ves-example": "['.exe', '.shtml', '.wmz']"
+                },
                 "transformers": {
                     "type": "array",
-                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
                     "title": "transformers",
                     "items": {
                         "$ref": "#/definitions/policyTransformer"
@@ -4446,7 +4492,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
             "x-ves-oneof-field-asn_choice": "[\"any_asn\",\"asn_list\",\"asn_matcher\"]",
-            "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\"]",
+            "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\",\"ip_threat_category_list\"]",
             "x-ves-oneof-field-dst_asn_choice": "[\"any_dst_asn\",\"dst_asn_list\",\"dst_asn_matcher\"]",
             "x-ves-oneof-field-dst_ip_choice": "[\"any_dst_ip\",\"dst_ip_matcher\",\"dst_ip_prefix_list\"]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
@@ -4465,7 +4511,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "any_client": {
-                    "description": "Exclusive with [client_name client_name_matcher client_selector]\nx-displayName: \"Any Client\"\nAny Client",
+                    "description": "Exclusive with [client_name client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Any Client\"\nAny Client",
                     "title": "any ip",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4515,6 +4561,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "bot_action": {
+                    "description": " Bot action to be enforced if the input request matches the rule.",
+                    "title": "Bot Action",
+                    "$ref": "#/definitions/schemapolicyBotAction",
+                    "x-displayname": "Bot Action"
+                },
                 "challenge_action": {
                     "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
                     "title": "Challenge Action",
@@ -4524,11 +4576,11 @@ var APISwaggerJSON string = `{
                 },
                 "client_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_client client_name_matcher client_selector]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
+                    "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
                     "title": "client name"
                 },
                 "client_name_matcher": {
-                    "description": "Exclusive with [any_client client_name client_selector]\nx-displayName: \"Group of Clients by Name\"\nA list of exact values and/or regular expressions for the expected name of the client.\nThis is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\nThe predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
+                    "description": "Exclusive with [any_client client_name client_selector ip_threat_category_list]\nx-displayName: \"Group of Clients by Name\"\nA list of exact values and/or regular expressions for the expected name of the client.\nThis is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\nThe predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
                     "title": "client name matcher",
                     "$ref": "#/definitions/policyMatcherType"
                 },
@@ -4539,7 +4591,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Client Role"
                 },
                 "client_selector": {
-                    "description": "Exclusive with [any_client client_name client_name_matcher]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "description": "Exclusive with [any_client client_name client_name_matcher ip_threat_category_list]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
                     "title": "client selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
@@ -4635,6 +4687,11 @@ var APISwaggerJSON string = `{
                     "title": "ip prefix list",
                     "$ref": "#/definitions/policyPrefixMatchList"
                 },
+                "ip_threat_category_list": {
+                    "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\nx-displayName: \"List of IP Threat Categories\"\nIP threat categories to choose from",
+                    "title": "IP Threat Category List",
+                    "$ref": "#/definitions/service_policy_ruleIPThreatCategoryListType"
+                },
                 "l4_dest_matcher": {
                     "description": " A L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination\n IP matches one of the prefixes and the destination port belongs to the port range.",
                     "title": "l4 dest matcher",
@@ -4729,6 +4786,25 @@ var APISwaggerJSON string = `{
                     "title": "App Firewall Action",
                     "$ref": "#/definitions/policyWafAction",
                     "x-displayname": "App Firewall Action",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "service_policy_ruleIPThreatCategoryListType": {
+            "type": "object",
+            "description": "List of ip threat categories",
+            "title": "IP Threat Category List Type",
+            "x-displayname": "IP Threat Category List Type",
+            "x-ves-proto-message": "ves.io.schema.service_policy_rule.IPThreatCategoryListType",
+            "properties": {
+                "ip_threat_categories": {
+                    "type": "array",
+                    "description": " The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions\nRequired: YES",
+                    "title": "IP Threat Categories",
+                    "items": {
+                        "$ref": "#/definitions/policyIPThreatCategory"
+                    },
+                    "x-displayname": "List of IP Threat Categories to choose",
                     "x-ves-required": "true"
                 }
             }

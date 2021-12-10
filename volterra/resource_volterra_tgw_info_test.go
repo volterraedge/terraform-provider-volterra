@@ -38,6 +38,12 @@ func testTGWInfo(name string) string {
 		  name = "%s"
 		  tgw_id = "tgw-0d9bf32a5171e5a49"
 		  vpc_id = "vpc-02d0d70860b330393"
+		  subnet_ids {
+			outside_subnet_id = "subnet-12345678"
+			inside_subnet_id = "subnet-12345678"
+			workload_subnet_id = "subnet-12345678"
+			az = "us-east-2a"
+		  }
 		}
 		`, setTGWInfo, name, name)
 }

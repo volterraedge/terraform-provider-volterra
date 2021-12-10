@@ -20,29 +20,54 @@ resource "volterra_k8s_cluster" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cluster_wide_app_list no_cluster_wide_apps" must be set
-  no_cluster_wide_apps = true
+  // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
 
+  cluster_wide_app_list {
+    cluster_wide_apps {
+      // One of the arguments from this list "argo_cd dashboard metrics_server prometheus" must be set
+
+      argo_cd {
+        generated_yaml = "generated_yaml"
+
+        local_domain {
+          local_domain = "example.com"
+
+          password {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+            wingman_secret_info {
+              name = "ChargeBack-API-Key"
+            }
+          }
+
+          // One of the arguments from this list "port default_port" must be set
+          default_port = true
+        }
+      }
+    }
+  }
   // One of the arguments from this list "use_custom_cluster_role_bindings use_default_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
-
-  // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
+  // One of the arguments from this list "use_custom_cluster_role_list use_default_cluster_roles" must be set
   use_default_cluster_roles = true
-
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
-  no_insecure_registries = true
 
-  // One of the arguments from this list "no_local_access local_access_config" must be set
-
-  local_access_config {
-    local_domain = "example.com"
-
-    // One of the arguments from this list "default_port port" must be set
-    default_port = true
+  insecure_registry_list {
+    insecure_registries = ["example.com:5000"]
   }
+  // One of the arguments from this list "no_local_access local_access_config" must be set
+  no_local_access = true
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
@@ -126,7 +151,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -147,6 +172,8 @@ List of cluster wide applications.
 `dashboard` - (Optional) Deploy Kubernetes Dashboard application. See [Dashboard ](#dashboard) below for details.
 
 `metrics_server` - (Optional) Deploy Kubernetes Metrics Server application. See [Metrics Server ](#metrics-server) below for details.
+
+`prometheus` - (Optional) Prometheus access via k8s api server endpoint. See [Prometheus ](#prometheus) below for details.
 
 ### Dashboard
 
@@ -202,11 +229,17 @@ Select blindfold or clear text password for ArgoCD admin..
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Prometheus
+
+Prometheus access via k8s api server endpoint.
+
+`generated_yaml` - (Optional) Generated YAML (`String`).
 
 ### Ref
 

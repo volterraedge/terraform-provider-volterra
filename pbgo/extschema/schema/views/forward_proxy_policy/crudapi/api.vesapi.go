@@ -2780,7 +2780,7 @@ var APISwaggerJSON string = `{
             "description": "URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP)",
             "title": "Forward Proxy Rule",
             "x-displayname": "Forward Proxy Rule",
-            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"dst_asn_list\",\"dst_asn_set\",\"dst_ip_prefix_set\",\"dst_label_selector\",\"dst_prefix_list\",\"http_list\",\"tls_list\"]",
+            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"dst_asn_list\",\"dst_asn_set\",\"dst_ip_prefix_set\",\"dst_label_selector\",\"dst_prefix_list\",\"http_list\",\"tls_list\",\"url_category_list\"]",
             "x-ves-oneof-field-http_connect_choice": "[\"no_http_connect_port\",\"port_matcher\"]",
             "x-ves-oneof-field-source_choice": "[\"all_sources\",\"inside_sources\",\"interface\",\"ip_prefix_set\",\"label_selector\",\"namespace\",\"prefix_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ForwardProxyAdvancedRuleType",
@@ -2793,7 +2793,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "all_destinations": {
-                    "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
+                    "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
                     "title": "All Destinations",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2803,32 +2803,32 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "dst_asn_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"BGP ASN List\"\nAddresses that belong to the ASNs in the given list\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "description": "Exclusive with [all_destinations dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"BGP ASN List\"\nAddresses that belong to the ASNs in the given list\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
                     "title": "Dst ASN List",
                     "$ref": "#/definitions/policyAsnMatchList"
                 },
                 "dst_asn_set": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"BGP ASN Set\"\nAddresses that belong to the ASNs in the given bgp_asn_set\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"BGP ASN Set\"\nAddresses that belong to the ASNs in the given bgp_asn_set\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
                     "title": "Dst ASN Set",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "dst_ip_prefix_set": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"IP Prefix Set\"\nAddresses that are covered by the prefixes in the given ip_prefix_set",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_label_selector dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"IP Prefix Set\"\nAddresses that are covered by the prefixes in the given ip_prefix_set",
                     "title": "Dst IP Prefix Set",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "dst_label_selector": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_prefix_list http_list tls_list]\nx-displayName: \"Label Selector\"\nx-example: \"geoip.ves.io/country == KY\"\nDestination is the set of prefixes determined by the label selector expression",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_prefix_list http_list tls_list url_category_list]\nx-displayName: \"Label Selector\"\nx-example: \"geoip.ves.io/country == KY\"\nDestination is the set of prefixes determined by the label selector expression",
                     "title": "Dst Label Selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
                 "dst_prefix_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector http_list tls_list]\nx-displayName: \"IPv4 Prefix List\"\nAddresses that are covered by the given list of IPv4 prefixes",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector http_list tls_list url_category_list]\nx-displayName: \"IPv4 Prefix List\"\nAddresses that are covered by the given list of IPv4 prefixes",
                     "title": "Dst IP Prefix List",
                     "$ref": "#/definitions/viewsPrefixStringListType"
                 },
                 "http_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list tls_list]\nx-displayName: \"HTTP URLs\"\nURLs for HTTP connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list tls_list url_category_list]\nx-displayName: \"HTTP URLs\"\nURLs for HTTP connections",
                     "title": "HTTP URLs",
                     "$ref": "#/definitions/forward_proxy_policyURLListType"
                 },
@@ -2894,9 +2894,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "my-policy-allow-github.com"
                 },
                 "tls_list": {
-                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list url_category_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
                     "title": "TLS Domains",
                     "$ref": "#/definitions/forward_proxy_policyDomainListType"
+                },
+                "url_category_list": {
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"List of URL Categories\"\nURL categories to choose, so that the corresponding label selector expressions can be derived from it",
+                    "title": "URL Category List",
+                    "$ref": "#/definitions/forward_proxy_policyURLCategoryListType"
                 }
             }
         },
@@ -3016,6 +3021,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "forward_proxy_policyURLCategoryListType": {
+            "type": "object",
+            "description": "List of url categories",
+            "title": "URL Category List Type",
+            "x-displayname": "URL Category List Type",
+            "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.URLCategoryListType",
+            "properties": {
+                "url_categories": {
+                    "type": "array",
+                    "description": " List of url categories to be selected\nRequired: YES",
+                    "title": "URL Categories",
+                    "items": {
+                        "$ref": "#/definitions/policyURLCategory"
+                    },
+                    "x-displayname": "URL Categories",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "forward_proxy_policyURLListType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.URLListType",
@@ -3079,7 +3103,7 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3185,6 +3209,99 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Action",
             "x-ves-proto-enum": "ves.io.schema.policy.RuleAction"
         },
+        "policyURLCategory": {
+            "type": "string",
+            "description": "The url categories to use when a policy based url category is configured.\n\n - UNCATEGORIZED: UNCATEGORIZED\n\nUncategorized\n - REAL_ESTATE: REAL_ESTATE\n\nReal Estate\n - COMPUTER_AND_INTERNET_SECURITY: COMPUTER_AND_INTERNET_SECURITY\n\nComputer and Internet Security\n - FINANCIAL_SERVICES: FINANCIAL_SERVICES\n\nFinancial Services\n - BUSINESS_AND_ECONOMY: BUSINESS_AND_ECONOMY\n\nBusiness and Economy\n - COMPUTER_AND_INTERNET_INFO: COMPUTER_AND_INTERNET_INFO\n\nComputer and Internet Info\n - AUCTIONS: AUCTIONS\n\nAuctions\n - SHOPPING: SHOPPING\n\nShopping\n - CULT_AND_OCCULT: CULT_AND_OCCULT\n\nCult and Occult\n - TRAVEL: TRAVEL\n\nTravel\n - ABUSED_DRUGS: ABUSED_DRUGS\n\nAbused Drugs\n - ADULT_AND_PORNOGRAPHY: ADULT_AND_PORNOGRAPHY\n\nAdult and Pornography\n - HOME_AND_GARDEN: HOME_AND_GARDEN\n\nHome and Garden\n - MILITARY: MILITARY\n\nMilitary\n - SOCIAL_NETWORKING: SOCIAL_NETWORKING\n\nSocial Networking\n - DEAD_SITES: DEAD_SITES\n\nDead Sites\n - INDIVIDUAL_STOCK_ADVICE_AND_TOOLS: INDIVIDUAL_STOCK_ADVICE_AND_TOOLS\n\nIndividual Stock Advice and Tools\n - TRAINING_AND_TOOLS: TRAINING_AND_TOOLS\n\nTraining and Tools\n - DATING: DATING\n\nDating\n - SEX_EDUCATION: SEX_EDUCATION\n\nSex Education\n - RELIGION: RELIGION\n\nReligion\n - ENTERTAINMENT_AND_ARTS: ENTERTAINMENT_AND_ARTS\n\nEntertainment and Arts\n - PERSONAL_SITES_AND_BLOGS: PERSONAL_SITES_AND_BLOGS\n\nPersonal sites and Blogs\n - LEGAL: LEGAL\n\nLegal\n - LOCAL_INFORMATION: LOCAL_INFORMATION\n\nLocal Information\n - STREAMING_MEDIA: STREAMING_MEDIA\n\nStreaming Media\n - JOB_SEARCH: JOB_SEARCH\n\nJob Search\n - GAMBLING: GAMBLING\n\nGambling\n - TRANSLATION: TRANSLATION\n\nTranslation\n - REFERENCE_AND_RESEARCH: REFERENCE_AND_RESEARCH\n\nReference and Research\n - SHAREWARE_AND_FREEWARE: SHAREWARE_AND_FREEWARE\n\nShareware and Freeware\n - PEER_TO_PEER: PEER_TO_PEER\n\nPeer to Peer\n - MARIJUANA: MARIJUANA\n\nMarijuana\n - HACKING: HACKING\n\nHacking\n - GAMES: GAMES\n\nGames\n - PHILOSOPHY_AND_POLITICAL_ADVOCACY: PHILOSOPHY_AND_POLITICAL_ADVOCACY\n\nPhilosophy and Political Advocacy\n - WEAPONS: WEAPONS\n\nWeapons\n - PAY_TO_SURF: PAY_TO_SURF\n\nPay to Surf\n - HUNTING_AND_FISHING: HUNTING_AND_FISHING\n\nHunting and Fishing\n - SOCIETY: SOCIETY\n\nSociety\n - EDUCATIONAL_INSTITUTIONS: EDUCATIONAL_INSTITUTIONS\n\nEducational Institutions\n - ONLINE_GREETING_CARDS: ONLINE_GREETING_CARDS\n\nOnline Greeting Cards\n - SPORTS: SPORTS\n\nSports\n - SWIMSUITS_AND_INTIMATE_APPAREL: SWIMSUITS_AND_INTIMATE_APPAREL\n\nSwimsuits and Intimate Apparel\n - QUESTIONABLE: QUESTIONABLE\n\nQuestionable\n - KIDS: KIDS\n\nKids\n - HATE_AND_RACISM: HATE_AND_RACISM\n\nHate and Racism\n - PERSONAL_STORAGE: PERSONAL_STORAGE\n\nPersonal Storage\n - VIOLENCE: VIOLENCE\n\nViolence\n - KEYLOGGERS_AND_MONITORING: KEYLOGGERS_AND_MONITORING\n\nKeyloggers and Monitoring\n - SEARCH_ENGINES: SEARCH_ENGINES\n\nSearch Engines\n - INTERNET_PORTALS: INTERNET_PORTALS\n\nInternet Portals\n - WEB_ADVERTISEMENTS: WEB_ADVERTISEMENTS\n\nWeb Advertisements\n - CHEATING: CHEATING\n\nCheating\n - GROSS: GROSS\n\nGross\n - WEB_BASED_EMAIL: WEB_BASED_EMAIL\n\nWeb_based Email\n - MALWARE_SITES: MALWARE_SITES\n\nMalware Sites\n - PHISHING_AND_OTHER_FRAUDS: PHISHING_AND_OTHER_FRAUDS\n\nPhishing and Other Frauds\n - PROXY_AVOIDANCE_AND_ANONYMIZERS: PROXY_AVOIDANCE_AND_ANONYMIZERS\n\nProxy Avoidance and Anonymizers\n - SPYWARE_AND_ADWARE: SPYWARE_AND_ADWARE\n\nSpyware and Adware\n - MUSIC: MUSIC\n\nMusic\n - GOVERNMENT: GOVERNMENT\n\nGovernment\n - NUDITY: NUDITY\n\nNudity\n - NEWS_AND_MEDIA: NEWS_AND_MEDIA\n\nNews and Media\n - ILLEGAL: ILLEGAL\n\nIllegal\n - CONTENT_DELIVERY_NETWORKS: CONTENT_DELIVERY_NETWORKS\n\nContent Delivery Networks\n - INTERNET_COMMUNICATIONS: INTERNET_COMMUNICATIONS\n\nInternet Communications\n - BOT_NETS: BOT_NETS\n\nBot Nets\n - ABORTION: ABORTION\n\nAbortion\n - HEALTH_AND_MEDICINE: HEALTH_AND_MEDICINE\n\nHealth and Medicine\n - CONFIRMED_SPAM_SOURCES: CONFIRMED_SPAM_SOURCES\n\nConfirmed SPAM Sources\n - SPAM_URLS: SPAM_URLS\n\nSPAM URLs\n - UNCONFIRMED_SPAM_SOURCES: UNCONFIRMED_SPAM_SOURCES\n\nUnconfirmed SPAM Sources\n - OPEN_HTTP_PROXIES: OPEN_HTTP_PROXIES\n\nOpen HTTP Proxies\n - DYNAMICALLY_GENERATED_CONTENT: DYNAMICALLY_GENERATED_CONTENT\n\nDynamically Generated Content\n - PARKED_DOMAINS: PARKED_DOMAINS\n\nParked Domains\n - ALCOHOL_AND_TOBACCO: ALCOHOL_AND_TOBACCO\n\nAlcohol and Tobacco\n - PRIVATE_IP_ADDRESSES: PRIVATE_IP_ADDRESSES\n\nPrivate IP Addresses\n - IMAGE_AND_VIDEO_SEARCH: IMAGE_AND_VIDEO_SEARCH\n\nImage and Video Search\n - FASHION_AND_BEAUTY: FASHION_AND_BEAUTY\n\nFashion and Beauty\n - RECREATION_AND_HOBBIES: RECREATION_AND_HOBBIES\n\nRecreation and Hobbies\n - MOTOR_VEHICLES: MOTOR_VEHICLES\n\nMotor Vehicles\n - WEB_HOSTING: WEB_HOSTING\n\nWeb Hosting",
+            "title": "URL Category",
+            "enum": [
+                "UNCATEGORIZED",
+                "REAL_ESTATE",
+                "COMPUTER_AND_INTERNET_SECURITY",
+                "FINANCIAL_SERVICES",
+                "BUSINESS_AND_ECONOMY",
+                "COMPUTER_AND_INTERNET_INFO",
+                "AUCTIONS",
+                "SHOPPING",
+                "CULT_AND_OCCULT",
+                "TRAVEL",
+                "ABUSED_DRUGS",
+                "ADULT_AND_PORNOGRAPHY",
+                "HOME_AND_GARDEN",
+                "MILITARY",
+                "SOCIAL_NETWORKING",
+                "DEAD_SITES",
+                "INDIVIDUAL_STOCK_ADVICE_AND_TOOLS",
+                "TRAINING_AND_TOOLS",
+                "DATING",
+                "SEX_EDUCATION",
+                "RELIGION",
+                "ENTERTAINMENT_AND_ARTS",
+                "PERSONAL_SITES_AND_BLOGS",
+                "LEGAL",
+                "LOCAL_INFORMATION",
+                "STREAMING_MEDIA",
+                "JOB_SEARCH",
+                "GAMBLING",
+                "TRANSLATION",
+                "REFERENCE_AND_RESEARCH",
+                "SHAREWARE_AND_FREEWARE",
+                "PEER_TO_PEER",
+                "MARIJUANA",
+                "HACKING",
+                "GAMES",
+                "PHILOSOPHY_AND_POLITICAL_ADVOCACY",
+                "WEAPONS",
+                "PAY_TO_SURF",
+                "HUNTING_AND_FISHING",
+                "SOCIETY",
+                "EDUCATIONAL_INSTITUTIONS",
+                "ONLINE_GREETING_CARDS",
+                "SPORTS",
+                "SWIMSUITS_AND_INTIMATE_APPAREL",
+                "QUESTIONABLE",
+                "KIDS",
+                "HATE_AND_RACISM",
+                "PERSONAL_STORAGE",
+                "VIOLENCE",
+                "KEYLOGGERS_AND_MONITORING",
+                "SEARCH_ENGINES",
+                "INTERNET_PORTALS",
+                "WEB_ADVERTISEMENTS",
+                "CHEATING",
+                "GROSS",
+                "WEB_BASED_EMAIL",
+                "MALWARE_SITES",
+                "PHISHING_AND_OTHER_FRAUDS",
+                "PROXY_AVOIDANCE_AND_ANONYMIZERS",
+                "SPYWARE_AND_ADWARE",
+                "MUSIC",
+                "GOVERNMENT",
+                "NUDITY",
+                "NEWS_AND_MEDIA",
+                "ILLEGAL",
+                "CONTENT_DELIVERY_NETWORKS",
+                "INTERNET_COMMUNICATIONS",
+                "BOT_NETS",
+                "ABORTION",
+                "HEALTH_AND_MEDICINE",
+                "CONFIRMED_SPAM_SOURCES",
+                "SPAM_URLS",
+                "UNCONFIRMED_SPAM_SOURCES",
+                "OPEN_HTTP_PROXIES",
+                "DYNAMICALLY_GENERATED_CONTENT",
+                "PARKED_DOMAINS",
+                "ALCOHOL_AND_TOBACCO",
+                "PRIVATE_IP_ADDRESSES",
+                "IMAGE_AND_VIDEO_SEARCH",
+                "FASHION_AND_BEAUTY",
+                "RECREATION_AND_HOBBIES",
+                "MOTOR_VEHICLES",
+                "WEB_HOSTING"
+            ],
+            "default": "UNCATEGORIZED",
+            "x-displayname": "URL Category",
+            "x-ves-proto-enum": "ves.io.schema.policy.URLCategory"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -3260,7 +3377,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3354,10 +3471,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-",
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\nRequired: YES",
                     "title": "port_ranges",
                     "x-displayname": "Port Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080"
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3373,7 +3491,7 @@ var APISwaggerJSON string = `{
         },
         "schemaLabelSelectorType": {
             "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
             "title": "LabelSelectorType",
             "x-displayname": "Label Selector",
             "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
@@ -3485,14 +3603,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3535,7 +3653,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -3548,22 +3666,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -3634,7 +3759,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3650,7 +3775,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3719,6 +3844,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },

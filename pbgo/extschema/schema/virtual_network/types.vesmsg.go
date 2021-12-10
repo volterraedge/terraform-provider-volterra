@@ -64,25 +64,34 @@ func (m *ActivePBRPoliciesType) Validate(ctx context.Context, opts ...db.Validat
 }
 
 func (m *ActivePBRPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetForwardProxyPbrPoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetForwardProxyPbrPoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkPbrPoliciesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkPbrPoliciesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ActivePBRPoliciesType) GetForwardProxyPbrPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetForwardProxyPbrPolicies() {
+	vrefs := m.GetForwardProxyPbrPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ActivePBRPoliciesType.forward_proxy_pbr_policies[%d] has a nil value", i)
 		}
@@ -98,8 +107,8 @@ func (m *ActivePBRPoliciesType) GetForwardProxyPbrPoliciesDRefInfo() ([]db.DRefI
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetForwardProxyPbrPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -132,8 +141,12 @@ func (m *ActivePBRPoliciesType) GetForwardProxyPbrPoliciesDBEntries(ctx context.
 }
 
 func (m *ActivePBRPoliciesType) GetNetworkPbrPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetNetworkPbrPolicies() {
+	vrefs := m.GetNetworkPbrPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ActivePBRPoliciesType.network_pbr_policies[%d] has a nil value", i)
 		}
@@ -149,8 +162,8 @@ func (m *ActivePBRPoliciesType) GetNetworkPbrPoliciesDRefInfo() ([]db.DRefInfo, 
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkPbrPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -378,18 +391,15 @@ func (m *AnyCastVIPFleetType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *AnyCastVIPFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVipAllocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVipAllocatorDRefInfo()
+
 }
 
 func (m *AnyCastVIPFleetType) GetVipAllocatorDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVipAllocator()
 	if vref == nil {
@@ -397,16 +407,16 @@ func (m *AnyCastVIPFleetType) GetVipAllocatorDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("address_allocator.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "address_allocator.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "vip_allocator",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetVipAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -557,80 +567,82 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *CreateSpecType_GlobalNetwork:
 
+		return nil, nil
+
 	case *CreateSpecType_SiteLocalNetwork:
+
+		return nil, nil
 
 	case *CreateSpecType_SiteLocalInsideNetwork:
 
-	case *CreateSpecType_Srv6Network:
-		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_network." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *CreateSpecType_Srv6Network:
+		drInfos, err := m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "srv6_network." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -1027,82 +1039,86 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *GetSpecType_GlobalNetwork:
 
+		return nil, nil
+
 	case *GetSpecType_SiteLocalNetwork:
+
+		return nil, nil
 
 	case *GetSpecType_SiteLocalInsideNetwork:
 
+		return nil, nil
+
 	case *GetSpecType_PrivateNetwork:
 
-	case *GetSpecType_Srv6Network:
-		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_network." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GetSpecType_Srv6Network:
+		drInfos, err := m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "srv6_network." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -1369,80 +1385,85 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultVipChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultVipChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetFleetRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFleetRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSliceRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSliceRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSnatPoolChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSnatPoolChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDefaultVipChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDefaultVipChoice().(type) {
 	case *GlobalSpecType_TenantVip:
 
-	case *GlobalSpecType_FleetVip:
-		odrInfos, err = m.GetFleetVip().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "fleet_vip." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_FleetVip:
+		drInfos, err := m.GetFleetVip().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFleetVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "fleet_vip." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetFleetRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetFleetRefs() {
+	refs := m.GetFleetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.fleet_refs[%d] has a nil value", i)
 		}
@@ -1457,8 +1478,8 @@ func (m *GlobalSpecType) GetFleetRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFleetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1483,46 +1504,54 @@ func (m *GlobalSpecType) GetFleetRefsDBEntries(ctx context.Context, d db.Interfa
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *GlobalSpecType_GlobalNetwork:
 
+		return nil, nil
+
 	case *GlobalSpecType_SiteLocalNetwork:
+
+		return nil, nil
 
 	case *GlobalSpecType_SiteLocalInsideNetwork:
 
+		return nil, nil
+
 	case *GlobalSpecType_InsideNetwork:
+
+		return nil, nil
 
 	case *GlobalSpecType_PrivateNetwork:
 
-	case *GlobalSpecType_Srv6Network:
-		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_network." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_Srv6Network:
+		drInfos, err := m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "srv6_network." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetSliceRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetSliceRef() {
+	refs := m.GetSliceRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.slice_ref[%d] has a nil value", i)
 		}
@@ -1537,8 +1566,8 @@ func (m *GlobalSpecType) GetSliceRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSliceRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1563,60 +1592,55 @@ func (m *GlobalSpecType) GetSliceRefDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSnatPoolChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSnatPoolChoice().(type) {
 	case *GlobalSpecType_InterfaceIp:
 
+		return nil, nil
+
 	case *GlobalSpecType_SiteSnatPool:
 
-	case *GlobalSpecType_FleetSnatPool:
-		odrInfos, err = m.GetFleetSnatPool().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "fleet_snat_pool." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *GlobalSpecType_FleetSnatPool:
+		drInfos, err := m.GetFleetSnatPool().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFleetSnatPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "fleet_snat_pool." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGlobalSpecType struct {
@@ -2313,19 +2337,21 @@ func (m *NextHopInterfaceList) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *NextHopInterfaceList) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetInterfacesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetInterfacesDRefInfo()
+
 }
 
 func (m *NextHopInterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetInterfaces() {
+	vrefs := m.GetInterfaces()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("NextHopInterfaceList.interfaces[%d] has a nil value", i)
 		}
@@ -2341,8 +2367,8 @@ func (m *NextHopInterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetInterfacesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2514,68 +2540,73 @@ func (m *PerSiteSrv6NetworkType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *PerSiteSrv6NetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultVipChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultVipChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetFleetsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFleetsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSliceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSliceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSnatPoolChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSnatPoolChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *PerSiteSrv6NetworkType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDefaultVipChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDefaultVipChoice().(type) {
 	case *PerSiteSrv6NetworkType_InterfaceIpVip:
 
-	case *PerSiteSrv6NetworkType_FleetVip:
-		odrInfos, err = m.GetFleetVip().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "fleet_vip." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *PerSiteSrv6NetworkType_FleetVip:
+		drInfos, err := m.GetFleetVip().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFleetVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "fleet_vip." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *PerSiteSrv6NetworkType) GetFleetsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFleets() {
+	vrefs := m.GetFleets()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("PerSiteSrv6NetworkType.fleets[%d] has a nil value", i)
 		}
@@ -2591,8 +2622,8 @@ func (m *PerSiteSrv6NetworkType) GetFleetsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFleetsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2625,7 +2656,6 @@ func (m *PerSiteSrv6NetworkType) GetFleetsDBEntries(ctx context.Context, d db.In
 }
 
 func (m *PerSiteSrv6NetworkType) GetSliceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetSlice()
 	if vref == nil {
@@ -2633,16 +2663,16 @@ func (m *PerSiteSrv6NetworkType) GetSliceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("srv6_network_slice.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "srv6_network_slice.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "slice",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetSliceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2676,35 +2706,33 @@ func (m *PerSiteSrv6NetworkType) GetSliceDBEntries(ctx context.Context, d db.Int
 
 // GetDRefInfo for the field's type
 func (m *PerSiteSrv6NetworkType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSnatPoolChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSnatPoolChoice().(type) {
 	case *PerSiteSrv6NetworkType_InterfaceIpSnatPool:
 
+		return nil, nil
+
 	case *PerSiteSrv6NetworkType_SiteSnatPool:
 
-	case *PerSiteSrv6NetworkType_FleetSnatPool:
-		odrInfos, err = m.GetFleetSnatPool().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "fleet_snat_pool." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *PerSiteSrv6NetworkType_FleetSnatPool:
+		drInfos, err := m.GetFleetSnatPool().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetFleetSnatPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "fleet_snat_pool." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidatePerSiteSrv6NetworkType struct {
@@ -3514,82 +3542,86 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetStaticRoutesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetNetworkChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNetworkChoice().(type) {
 	case *ReplaceSpecType_GlobalNetwork:
 
+		return nil, nil
+
 	case *ReplaceSpecType_SiteLocalNetwork:
+
+		return nil, nil
 
 	case *ReplaceSpecType_SiteLocalInsideNetwork:
 
+		return nil, nil
+
 	case *ReplaceSpecType_PrivateNetwork:
 
-	case *ReplaceSpecType_Srv6Network:
-		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_network." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReplaceSpecType_Srv6Network:
+		drInfos, err := m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "srv6_network." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetStaticRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStaticRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -3856,18 +3888,15 @@ func (m *SNATPoolFleetType) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *SNATPoolFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSnatPoolAllocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSnatPoolAllocatorDRefInfo()
+
 }
 
 func (m *SNATPoolFleetType) GetSnatPoolAllocatorDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetSnatPoolAllocator()
 	if vref == nil {
@@ -3875,16 +3904,16 @@ func (m *SNATPoolFleetType) GetSnatPoolAllocatorDRefInfo() ([]db.DRefInfo, error
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("address_allocator.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "address_allocator.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "snat_pool_allocator",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetSnatPoolAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4422,19 +4451,15 @@ func (m *StaticRouteViewType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *StaticRouteViewType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNextHopChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNextHopChoiceDRefInfo()
+
 }
 
 func (m *StaticRouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetNextHopChoice().(type) {
 	case *StaticRouteViewType_Interface:
 
@@ -4444,7 +4469,7 @@ func (m *StaticRouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) 
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("network_interface.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "network_interface.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -4452,13 +4477,15 @@ func (m *StaticRouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) 
 			DRField:    "interface",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
 	case *StaticRouteViewType_DefaultGateway:
 
-	}
+		return nil, nil
 
-	return odrInfos, nil
+	default:
+		return nil, nil
+	}
 }
 
 // GetNextHopChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

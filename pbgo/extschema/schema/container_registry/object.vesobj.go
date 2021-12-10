@@ -316,19 +316,20 @@ func (e *DBObject) SetTable(tbl db.Table) {
 }
 
 func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		err               error
-		drInfos, fdrInfos []db.DRefInfo
-	)
+	if e == nil {
+		return nil, nil
+	}
 	refrUID, err := e.Key()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
-	fdrInfos, err = e.GetSystemMetadataDRefInfo()
+
+	drInfos, err := e.GetSystemMetadataDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Getting Field direct ref info")
+		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
 	}
-	for _, dri := range fdrInfos {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
 		dri.DRField = "ves.io.schema.container_registry.Object." + dri.DRField
 		dri.RefrType = e.Type()
@@ -346,10 +347,9 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 			}
 			dri.RefdType = refdType
 		}
-		drInfos = append(drInfos, dri)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (e *DBObject) ToStore() store.Entry {
@@ -394,25 +394,20 @@ func NewEntryObject(opts ...db.OpOption) db.Entry {
 
 // GetDRefInfo for the field's type
 func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if e.SystemMetadata == nil {
-		return []db.DRefInfo{}, nil
+	if e.GetSystemMetadata() == nil {
+		return nil, nil
 	}
 
-	driSet, err = e.SystemMetadata.GetDRefInfo()
+	drInfos, err := e.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSystemMetadata().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "system_metadata." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // Implement sro.SRO interface
@@ -526,6 +521,16 @@ func (o *StatusObject) GetVtrpId() string {
 // SetVtrpId sets vtrpId of the status object.
 func (o *StatusObject) SetVtrpId(id string) {
 	o.GetMetadata().SetVtrpId(id)
+}
+
+// GetVtrpStale returns true if the object is stale in Mars
+func (o *StatusObject) GetVtrpStale() bool {
+	return o.GetMetadata().GetVtrpStale()
+}
+
+// SetVtrpStale sets vtrpStale on the status object
+func (o *StatusObject) SetVtrpStale(isStale bool) {
+	o.GetMetadata().SetVtrpStale(isStale)
 }
 
 func (o *StatusObject) GetStatusObjConditions() []sro.StatusObjectCondition {
@@ -754,6 +759,16 @@ func (o *DBObject) GetVtrpId() string {
 // SetVtrpId sets vtrpId of the object.
 func (o *DBObject) SetVtrpId(id string) {
 	o.GetSystemMetadata().SetVtrpId(id)
+}
+
+// GetVtrpStale returns true if the object is stale in Mars
+func (o *DBObject) GetVtrpStale() bool {
+	return o.GetSystemMetadata().GetVtrpStale()
+}
+
+// SetVtrpStale sets vtrpStale on the object
+func (o *DBObject) SetVtrpStale(isStale bool) {
+	o.GetSystemMetadata().SetVtrpStale(isStale)
 }
 
 type ValidateObject struct {
@@ -1022,19 +1037,20 @@ func (e *DBStatusObject) SetTable(tbl db.Table) {
 }
 
 func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		err               error
-		drInfos, fdrInfos []db.DRefInfo
-	)
+	if e == nil {
+		return nil, nil
+	}
 	refrUID, err := e.Key()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
-	fdrInfos, err = e.GetObjectRefsDRefInfo()
+
+	drInfos, err := e.GetObjectRefsDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Getting Field direct ref info")
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
 	}
-	for _, dri := range fdrInfos {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
 		dri.DRField = "ves.io.schema.container_registry.StatusObject." + dri.DRField
 		dri.RefrType = e.Type()
@@ -1052,10 +1068,9 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 			}
 			dri.RefdType = refdType
 		}
-		drInfos = append(drInfos, dri)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (e *DBStatusObject) ToStore() store.Entry {
@@ -1099,14 +1114,16 @@ func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
 }
 
 func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-
 	refrUID, err := e.Key()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
-
-	for i, ref := range e.GetObjectRefs() {
+	refs := e.GetObjectRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("StatusObject.object_refs[%d] has a nil value", i)
 		}

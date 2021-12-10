@@ -620,6 +620,26 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 										},
 									},
 
+									"url_category_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"url_categories": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
 									"no_http_connect_port": {
 
 										Type:     schema.TypeBool,
@@ -1743,6 +1763,31 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+						destinationChoiceTypeFound = true
+						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
+						destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
+						rules[i].DestinationChoice = destinationChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
+
+								url_categoriesList := []ves_io_schema_policy.URLCategory{}
+								for _, j := range v.([]interface{}) {
+									url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
+								}
+								destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
 
 							}
 
@@ -2973,6 +3018,31 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+						destinationChoiceTypeFound = true
+						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
+						destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
+						rules[i].DestinationChoice = destinationChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
+
+								url_categoriesList := []ves_io_schema_policy.URLCategory{}
+								for _, j := range v.([]interface{}) {
+									url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
+								}
+								destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
 
 							}
 

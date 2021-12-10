@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
@@ -274,6 +275,28 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"bot_action": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"bot_skip_processing": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"challenge_action": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -329,6 +352,26 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"expressions": {
+
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
+			"ip_threat_category_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"ip_threat_categories": {
 
 							Type: schema.TypeList,
 
@@ -939,6 +982,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
+						"suffix_values": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"transformers": {
 
 							Type: schema.TypeList,
@@ -1132,12 +1185,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"alert": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
 									"block": {
 
 										Type:     schema.TypeSet,
@@ -1158,7 +1205,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										},
 									},
 
-									"drop": {
+									"flag": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -1771,6 +1818,45 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//bot_action
+	if v, ok := d.GetOk("bot_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		botAction := &ves_io_schema_policy.BotAction{}
+		createSpec.BotAction = botAction
+		for _, set := range sl {
+			botActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+					actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+					actionTypeInt.None = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//challenge_action
 	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
 
@@ -1858,6 +1944,31 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					ls[i] = v.(string)
 				}
 				clientChoiceInt.ClientSelector.Expressions = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+
+		clientChoiceTypeFound = true
+		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_IpThreatCategoryList{}
+		clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+		createSpec.ClientChoice = clientChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
 
 			}
 
@@ -2610,6 +2721,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				path.RegexValues = ls
 			}
 
+			if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				path.SuffixValues = ls
+			}
+
 			if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
 
 				transformersList := []ves_io_schema_policy.Transformer{}
@@ -2843,18 +2962,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					actionTypeTypeFound := false
 
-					if v, ok := mitigationMapStrToI["alert"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-						actionTypeTypeFound = true
-
-						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Alert{}
-							actionTypeInt.Alert = &ves_io_schema.Empty{}
-							mitigation.ActionType = actionTypeInt
-						}
-
-					}
-
 					if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
@@ -2882,13 +2989,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					}
 
-					if v, ok := mitigationMapStrToI["drop"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
 
 						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Drop{}
-							actionTypeInt.Drop = &ves_io_schema.Empty{}
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+							actionTypeInt.Flag = &ves_io_schema.Empty{}
 							mitigation.ActionType = actionTypeInt
 						}
 
@@ -3142,7 +3249,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 
-								excludeViolationContexts[i].ExcludeViolation = ves_io_schema.AppFirewallViolationType(ves_io_schema.AppFirewallViolationType_value[v.(string)])
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
 
 							}
 
@@ -3633,6 +3740,44 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("bot_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		botAction := &ves_io_schema_policy.BotAction{}
+		updateSpec.BotAction = botAction
+		for _, set := range sl {
+			botActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := botActionMapStrToI["bot_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_BotSkipProcessing{}
+					actionTypeInt.BotSkipProcessing = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := botActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.BotAction_None{}
+					actionTypeInt.None = &ves_io_schema.Empty{}
+					botAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
 
 		updateSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
@@ -3717,6 +3862,31 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					ls[i] = v.(string)
 				}
 				clientChoiceInt.ClientSelector.Expressions = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+
+		clientChoiceTypeFound = true
+		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_IpThreatCategoryList{}
+		clientChoiceInt.IpThreatCategoryList = &ves_io_schema_service_policy_rule.IPThreatCategoryListType{}
+		updateSpec.ClientChoice = clientChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ip_threat_categories"]; ok && !isIntfNil(v) {
+
+				ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
+				for _, j := range v.([]interface{}) {
+					ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
+				}
+				clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
 
 			}
 
@@ -4451,6 +4621,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				path.RegexValues = ls
 			}
 
+			if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				path.SuffixValues = ls
+			}
+
 			if v, ok := pathMapStrToI["transformers"]; ok && !isIntfNil(v) {
 
 				transformersList := []ves_io_schema_policy.Transformer{}
@@ -4678,18 +4856,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					actionTypeTypeFound := false
 
-					if v, ok := mitigationMapStrToI["alert"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-						actionTypeTypeFound = true
-
-						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Alert{}
-							actionTypeInt.Alert = &ves_io_schema.Empty{}
-							mitigation.ActionType = actionTypeInt
-						}
-
-					}
-
 					if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
@@ -4717,13 +4883,13 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					}
 
-					if v, ok := mitigationMapStrToI["drop"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+					if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 						actionTypeTypeFound = true
 
 						if v.(bool) {
-							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Drop{}
-							actionTypeInt.Drop = &ves_io_schema.Empty{}
+							actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
+							actionTypeInt.Flag = &ves_io_schema.Empty{}
 							mitigation.ActionType = actionTypeInt
 						}
 
@@ -4973,7 +5139,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 
-								excludeViolationContexts[i].ExcludeViolation = ves_io_schema.AppFirewallViolationType(ves_io_schema.AppFirewallViolationType_value[v.(string)])
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
 
 							}
 

@@ -79,25 +79,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHealthcheckDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthcheckDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetHealthcheck() {
+	vrefs := m.GetHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("CreateSpecType.healthcheck[%d] has a nil value", i)
 		}
@@ -113,8 +122,8 @@ func (m *CreateSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -148,27 +157,24 @@ func (m *CreateSpecType) GetHealthcheckDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginServers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginServers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_servers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -602,25 +608,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHealthcheckDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthcheckDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetHealthcheck() {
+	vrefs := m.GetHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetSpecType.healthcheck[%d] has a nil value", i)
 		}
@@ -636,8 +651,8 @@ func (m *GetSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -671,27 +686,24 @@ func (m *GetSpecType) GetHealthcheckDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginServers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginServers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_servers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -1125,31 +1137,40 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHealthcheckDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthcheckDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetHealthcheck() {
+	vrefs := m.GetHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.healthcheck[%d] has a nil value", i)
 		}
@@ -1165,8 +1186,8 @@ func (m *GlobalSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1200,31 +1221,27 @@ func (m *GlobalSpecType) GetHealthcheckDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginServers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginServers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_servers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -1232,16 +1249,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2438,37 +2455,30 @@ func (m *OriginServerConsulService) Validate(ctx context.Context, opts ...db.Val
 }
 
 func (m *OriginServerConsulService) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteLocatorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *OriginServerConsulService) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteLocator() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSiteLocator().GetDRefInfo()
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "site_locator." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateOriginServerConsulService struct {
@@ -2675,18 +2685,15 @@ func (m *OriginServerCustomEndpoint) Validate(ctx context.Context, opts ...db.Va
 }
 
 func (m *OriginServerCustomEndpoint) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetEndpointDRefInfo()
+
 }
 
 func (m *OriginServerCustomEndpoint) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetEndpoint()
 	if vref == nil {
@@ -2694,16 +2701,16 @@ func (m *OriginServerCustomEndpoint) GetEndpointDRefInfo() ([]db.DRefInfo, error
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("endpoint.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "endpoint.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "endpoint",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetEndpointDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2854,37 +2861,30 @@ func (m *OriginServerK8SService) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *OriginServerK8SService) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteLocatorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *OriginServerK8SService) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteLocator() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSiteLocator().GetDRefInfo()
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "site_locator." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateOriginServerK8SService struct {
@@ -3102,37 +3102,30 @@ func (m *OriginServerPrivateIP) Validate(ctx context.Context, opts ...db.Validat
 }
 
 func (m *OriginServerPrivateIP) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteLocatorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *OriginServerPrivateIP) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteLocator() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSiteLocator().GetDRefInfo()
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "site_locator." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateOriginServerPrivateIP struct {
@@ -3340,37 +3333,30 @@ func (m *OriginServerPrivateName) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *OriginServerPrivateName) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteLocatorDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *OriginServerPrivateName) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteLocator() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSiteLocator().GetDRefInfo()
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "site_locator." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateOriginServerPrivateName struct {
@@ -3795,107 +3781,109 @@ func (m *OriginServerType) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *OriginServerType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *OriginServerType_PublicIp:
 
+		return nil, nil
+
 	case *OriginServerType_PrivateIp:
-		odrInfos, err = m.GetPrivateIp().GetDRefInfo()
+		drInfos, err := m.GetPrivateIp().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPrivateIp().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "private_ip." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_ip." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_PublicName:
 
+		return nil, nil
+
 	case *OriginServerType_PrivateName:
-		odrInfos, err = m.GetPrivateName().GetDRefInfo()
+		drInfos, err := m.GetPrivateName().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPrivateName().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "private_name." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_name." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_K8SService:
-		odrInfos, err = m.GetK8SService().GetDRefInfo()
+		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "k8s_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_ConsulService:
-		odrInfos, err = m.GetConsulService().GetDRefInfo()
+		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "consul_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_CustomEndpointObject:
-		odrInfos, err = m.GetCustomEndpointObject().GetDRefInfo()
+		drInfos, err := m.GetCustomEndpointObject().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetCustomEndpointObject().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "custom_endpoint_object." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_endpoint_object." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_VnPrivateIp:
-		odrInfos, err = m.GetVnPrivateIp().GetDRefInfo()
+		drInfos, err := m.GetVnPrivateIp().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVnPrivateIp().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "vn_private_ip." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vn_private_ip." + dri.DRField
 		}
+		return drInfos, err
 
 	case *OriginServerType_VnPrivateName:
-		odrInfos, err = m.GetVnPrivateName().GetDRefInfo()
+		drInfos, err := m.GetVnPrivateName().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVnPrivateName().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "vn_private_name." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vn_private_name." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateOriginServerType struct {
@@ -4130,18 +4118,15 @@ func (m *OriginServerVirtualNetworkIP) Validate(ctx context.Context, opts ...db.
 }
 
 func (m *OriginServerVirtualNetworkIP) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualNetworkDRefInfo()
+
 }
 
 func (m *OriginServerVirtualNetworkIP) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVirtualNetwork()
 	if vref == nil {
@@ -4149,16 +4134,16 @@ func (m *OriginServerVirtualNetworkIP) GetVirtualNetworkDRefInfo() ([]db.DRefInf
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_network.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_network.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "virtual_network",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4340,18 +4325,15 @@ func (m *OriginServerVirtualNetworkName) Validate(ctx context.Context, opts ...d
 }
 
 func (m *OriginServerVirtualNetworkName) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPrivateNetworkDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPrivateNetworkDRefInfo()
+
 }
 
 func (m *OriginServerVirtualNetworkName) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetPrivateNetwork()
 	if vref == nil {
@@ -4359,16 +4341,16 @@ func (m *OriginServerVirtualNetworkName) GetPrivateNetworkDRefInfo() ([]db.DRefI
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_network.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_network.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "private_network",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetPrivateNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4563,25 +4545,34 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHealthcheckDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetHealthcheckDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetOriginServersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetOriginServersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetHealthcheck() {
+	vrefs := m.GetHealthcheck()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.healthcheck[%d] has a nil value", i)
 		}
@@ -4597,8 +4588,8 @@ func (m *ReplaceSpecType) GetHealthcheckDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetHealthcheckDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4632,27 +4623,24 @@ func (m *ReplaceSpecType) GetHealthcheckDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetOriginServers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetOriginServers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("origin_servers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -5091,6 +5079,46 @@ type ValidateTlsCertificatesType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateTlsCertificatesType) TlsCertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.TlsCertificateType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.TlsCertificateTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tls_certificates")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.TlsCertificateType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.TlsCertificateType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tls_certificates")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tls_certificates")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTlsCertificatesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TlsCertificatesType)
 	if !ok {
@@ -5106,13 +5134,9 @@ func (v *ValidateTlsCertificatesType) Validate(ctx context.Context, pm interface
 	}
 
 	if fv, exists := v.FldValidators["tls_certificates"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tls_certificates"))
-		for idx, item := range m.GetTlsCertificates() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetTlsCertificates(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -5124,7 +5148,26 @@ func (v *ValidateTlsCertificatesType) Validate(ctx context.Context, pm interface
 var DefaultTlsCertificatesTypeValidator = func() *ValidateTlsCertificatesType {
 	v := &ValidateTlsCertificatesType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["tls_certificates"] = ves_io_schema.TlsCertificateTypeValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsCertificates := v.TlsCertificatesValidationRuleHandler
+	rulesTlsCertificates := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhTlsCertificates(rulesTlsCertificates)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TlsCertificatesType.tls_certificates: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_certificates"] = vFn
 
 	return v
 }()

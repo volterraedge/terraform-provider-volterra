@@ -321,6 +321,33 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetResponseValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTerraformParametersDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetResponse) GetTerraformParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTerraformParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTerraformParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTerraformParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "terraform_parameters." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateGetResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -400,9 +427,12 @@ func (m *GetStatusResponse) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *GetStatusResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
+	if m == nil {
+		return nil, nil
+	}
 
-	return drInfos, nil
+	return nil, nil
+
 }
 
 type ValidateGetStatusResponse struct {

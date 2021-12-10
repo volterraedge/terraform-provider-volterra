@@ -563,6 +563,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VesIoStoredObjectRead:
+		if fv, exists := v.FldValidators["choice.ves_io_stored_object_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoStoredObjectRead).VesIoStoredObjectRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_stored_object_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VesIoStoredObjectWrite:
+		if fv, exists := v.FldValidators["choice.ves_io_stored_object_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoStoredObjectWrite).VesIoStoredObjectWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_stored_object_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

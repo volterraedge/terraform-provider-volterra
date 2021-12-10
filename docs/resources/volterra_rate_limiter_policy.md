@@ -130,6 +130,8 @@ path.
 
 `regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
 
+`suffix_values` - (Optional) A list of path suffix values to match the input HTTP path against. (`String`).
+
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
 ### Ref

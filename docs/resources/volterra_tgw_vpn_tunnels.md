@@ -12,7 +12,7 @@ Resource volterra_tgw_vpn_tunnels
 
 Configure VPN tunnels for aws_tgw_site object
 
-~> **Note:** Please refer to [Set vpn tunnels docs](https://volterra.io/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels) to learn more
+~> **Note:** Please refer to [Set vpn tunnels docs](https://volterra.io/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels) to learn more ~> **Note:** This resource works well as part of Volterra's aws_tgw_site site bring up terraform script. Please do not use this on already provisioned aws_tgw_site site.
 
 Example Usage
 -------------
@@ -27,6 +27,7 @@ resource "volterra_tgw_vpn_tunnels" "example" {
     node_name = "master-0"
     node_id = "node-1234"
     tunnel_remote_ips = ["1.1.1.1","2.2.2.2"]
+    type = "HUB"
   }
 }
 
@@ -45,14 +46,4 @@ resource "volterra_tgw_vpn_tunnels" "example" {
 	-	`node_name` - (Required) Name of the node (`String`).
 	-	`node_id` - (Required) Name of node-id (`String`).
 	-	`tunnel_remote_ips` - (Required) List of remote IP on AWS tgw side (`String`).
-
-Attribute Reference
--------------------
-
----
-
--	`created_by_tf` - Flag to indicate if token was created by terraform create or it used existing one
-
--	`id` - Token ID
-
--	`tenant_name` - Tenant name configured in volterra
+	-	`type` - (Optional) Type of VPN tunnel, valid values are `HUB` and `SERVICES`.

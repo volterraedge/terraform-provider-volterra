@@ -150,39 +150,34 @@ func (m *VirtualHostWafStatusRsp) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *VirtualHostWafStatusRsp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWafStatusDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWafStatusDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *VirtualHostWafStatusRsp) GetWafStatusDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafStatus() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetWafStatus() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetWafStatus() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("waf_status[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateVirtualHostWafStatusRsp struct {
@@ -269,25 +264,34 @@ func (m *WafStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *WafStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetWafRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWafRulesRefDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafRulesRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *WafStatus) GetWafRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetWafRef() {
+	refs := m.GetWafRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("WafStatus.waf_ref[%d] has a nil value", i)
 		}
@@ -302,8 +306,8 @@ func (m *WafStatus) GetWafRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetWafRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -327,8 +331,12 @@ func (m *WafStatus) GetWafRefDBEntries(ctx context.Context, d db.Interface) ([]d
 }
 
 func (m *WafStatus) GetWafRulesRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetWafRulesRef() {
+	refs := m.GetWafRulesRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("WafStatus.waf_rules_ref[%d] has a nil value", i)
 		}
@@ -343,8 +351,8 @@ func (m *WafStatus) GetWafRulesRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetWafRulesRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

@@ -21,7 +21,7 @@ resource "volterra_virtual_network" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
-  site_local_network = true
+  site_local_inside_network = true
 }
 
 ```
@@ -143,7 +143,7 @@ IPv4 Address Specific Route Target..
 
 `address` - (Required) IPv4 Address (`String`).
 
-`value` - (Required) A 4-byte value that is unique in the scope of the IPv4 address. (`Int`).
+`value` - (Required) A 2-byte value that is unique in the scope of the IPv4 address. (`Int`).
 
 ### No Namespace Network
 

@@ -874,6 +874,44 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"custom_hash_algorithms": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required: true,
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
@@ -2743,6 +2781,45 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
 
 														sl := v.(*schema.Set).List()
@@ -3677,6 +3754,54 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("aws_parameters"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		awsParameters := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType{}
+		updateSpec.AwsParameters = awsParameters
+		for _, set := range sl {
+			awsParametersMapStrToI := set.(map[string]interface{})
+
+			workerNodesTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+
+				if v.(bool) {
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NoWorkerNodes{}
+					workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+					awsParameters.WorkerNodes = workerNodesInt
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NodesPerAz{}
+
+				awsParameters.WorkerNodes = workerNodesInt
+
+				workerNodesInt.NodesPerAz = uint32(v.(int))
+
+			}
+
+			if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+				workerNodesTypeFound = true
+				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_TotalNodes{}
+
+				awsParameters.WorkerNodes = workerNodesInt
+
+				workerNodesInt.TotalNodes = uint32(v.(int))
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -4326,6 +4451,45 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 														signingCertChoiceInt.CustomCertificate.Description = v.(string)
 
+													}
+
+													ocspStaplingChoiceTypeFound := false
+
+													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																for _, j := range v.([]interface{}) {
+																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																}
+																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
+													}
+
+													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+														ocspStaplingChoiceTypeFound = true
+														_ = v
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {

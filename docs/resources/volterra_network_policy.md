@@ -23,8 +23,8 @@ resource "volterra_network_policy" "example" {
   endpoint {
     // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
 
-    prefix_list {
-      prefixes = ["192.168.20.0/24"]
+    label_selector {
+      expressions = ["region in (us-west1, us-west2),tier in (staging)"]
     }
   }
 }

@@ -35,39 +35,14 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
 
-  ingress_egress_gw_ar {
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-    no_network_policy = true
+  ingress_gw_ar {
+    azure_certified_hw = "azure-byol-voltmesh"
 
     node {
       fault_domain = "1"
 
-      inside_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
-
-        subnet {
-          // One of the arguments from this list "subnet_resource_grp vnet_resource_group" must be set
-          subnet_resource_grp = "subnet_resource_grp"
-
-          subnet_name = "MySubnet"
-        }
-      }
-
-      node_number = "node_number"
-
-      outside_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -75,11 +50,9 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
+      node_number   = "node_number"
       update_domain = "1"
     }
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -91,8 +64,8 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
-  nodes_per_az = "2"
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  no_worker_nodes = true
 }
 
 ```
@@ -139,6 +112,8 @@ Argument Reference
 `azure_region` - (Optional) Name of the azure region which supports availability zones. (`String`).
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
+
+`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -214,7 +189,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -236,7 +211,19 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
 ### Custom Static Route
 
@@ -254,6 +241,10 @@ Use Custom static route to configure all advanced options.
 
 Will assign latest available OS version.
 
+### Default Storage
+
+Use standard storage class configured as AWS EBS.
+
 ### Default Sw Version
 
 Will assign latest available SW version.
@@ -265,6 +256,10 @@ Forward Proxy is disabled for this connector.
 ### Disable Interception
 
 Disable Interception.
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
 
 ### Domain Match
 
@@ -512,6 +507,14 @@ Ingress/Egress Gateway (Two Interface) Node information..
 
 `update_domain` - (Optional) Namuber of update domains to be used while creating the availability set (`Int`).
 
+### Openebs Enterprise
+
+Storage class Device configuration for OpenEBS Enterprise.
+
+`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
+
 ### Os
 
 Operating System Details.
@@ -550,7 +553,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -585,6 +588,22 @@ List of Static routes.
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
+
+### Storage Class List
+
+Add additional custom storage classes in kubernetes for site.
+
+`storage_classes` - (Optional) List of custom storage classes. See [Storage Classes ](#storage-classes) below for details.
+
+### Storage Classes
+
+List of custom storage classes.
+
+`default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
+
+`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
+
+`storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
 ### Subnet
 
@@ -635,6 +654,10 @@ Specify TLS interception configuration for the network connector.
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
 `volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -700,6 +723,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
+
+`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
+
 ### Voltstack Cluster Ar
 
 Voltstack Cluster using single interface, useful for deploying K8s cluster..
@@ -729,6 +756,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
+
+`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
 
 ### Wingman Secret Info
 

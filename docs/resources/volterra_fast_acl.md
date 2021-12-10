@@ -20,14 +20,14 @@ resource "volterra_fast_acl" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
+  // One of the arguments from this list "re_acl legacy_acl site_acl" must be set
 
   site_acl {
     fast_acl_rules {
       action {
         // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
 
-        policer_action {
+        protocol_policer_action {
           ref {
             name      = "test1"
             namespace = "staging"
@@ -45,7 +45,7 @@ resource "volterra_fast_acl" "example" {
       name = "name"
 
       port {
-        // One of the arguments from this list "dns all user_defined" must be set
+        // One of the arguments from this list "all user_defined dns" must be set
         all = true
       }
 

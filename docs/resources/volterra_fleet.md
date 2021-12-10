@@ -24,51 +24,41 @@ resource "volterra_fleet" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
-
-  enable_vgpu {
-    feature_type   = "feature_type"
-    server_address = "gridlicense1.example.com"
-    server_port    = "server_port"
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
-  // One of the arguments from this list "interface_list default_config device_list" must be set
-  default_config = true
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+  fleet_label = ["sfo"]
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  enable_gpu = true
 
-  // One of the arguments from this list "default_storage_class storage_class_list" must be set
+  // One of the arguments from this list "default_config device_list interface_list" must be set
 
-  storage_class_list {
-    storage_classes {
-      advanced_storage_parameters = {
-        "key1" = "value1"
-      }
-
-      allow_volume_expansion = true
-      default_storage_class  = true
-      description            = "description"
-
-      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise custom_storage" must be set
-
-      netapp_trident {
-        selector = {
-          "key1" = "value1"
-        }
-
-        storage_pools = "backend-name1:.*;backend-name2:storagePoolListName"
-      }
-      reclaim_policy     = "Delete"
-      storage_class_name = "premium"
-      storage_device     = "storage_device"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
+  default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
+
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-  no_storage_interfaces = true
+
+  storage_interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
@@ -158,6 +148,10 @@ Argument Reference
 
 `usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
 
+`disable_vm` - (Optional) VMs support is not enabled for this fleet (bool).
+
+`enable_vm` - (Optional) VMs support is enabled for this fleet. See [Enable Vm ](#enable-vm) below for details.
+
 `volterra_software_version` - (Optional) Current software installed can be overridden via site config. (`String`).
 
 ### Active Backup
@@ -217,6 +211,10 @@ Enable NVIDIA vGPU hosted on VMware.
 `server_address` - (Optional) Set License Server Address (`String`).
 
 `server_port` - (Optional) Set License Server port number (`Int`).
+
+### Enable Vm
+
+VMs support is enabled for this fleet.
 
 ### Interface List
 
