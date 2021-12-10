@@ -12,7 +12,7 @@ Resource volterra_tgw_vpc_ip_prefixes
 
 Configure VPC IP prefix set for aws_tgw_site object
 
-~> **Note:** Please refer to [Set vpc IP prefix docs](https://volterra.io/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes) to learn more
+~> **Note:** Please refer to [Set vpc IP prefix docs](https://volterra.io/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes) to learn more ~> **Note:** This resource works well as part of Volterra's aws_tgw_site site bring up terraform script. Please do not use this on already provisioned aws_tgw_site site.
 
 Example Usage
 -------------
@@ -43,14 +43,3 @@ resource "volterra_tgw_vpc_ip_prefixes" "example" {
 
 	-	`name` - (Required) Name of vpc (`String`\)
 	-	`values` - (Required) List of vpc cidrs (`String`\)
-
-Attribute Reference
--------------------
-
----
-
--	`created_by_tf` - Flag to indicate if token was created by terraform create or it used existing one
-
--	`id` - Token ID
-
--	`tenant_name` - Tenant name configured in volterra

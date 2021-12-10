@@ -32,12 +32,12 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
 
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
-      use_https_port = true
+      use_http_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -100,6 +100,8 @@ Argument Reference
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -197,7 +199,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -219,7 +221,19 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
 ### Custom Ports
 
@@ -258,6 +272,10 @@ Forward Proxy is disabled for this connector.
 ### Disable Interception
 
 Disable Interception.
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
 
 ### Domain Match
 
@@ -499,7 +517,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -606,6 +624,10 @@ Only HTTP Port (80) will be allowed..
 ### Use Https Port
 
 Only HTTPS Port (443) will be allowed..
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 

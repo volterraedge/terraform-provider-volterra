@@ -25,14 +25,14 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_selector client_name_matcher any_client client_name" must be set
+  // One of the arguments from this list "client_name_matcher any_client client_name ip_threat_category_list client_selector" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control none waf_skip_processing waf_rule_control" must be set
+    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control" must be set
     none = true
   }
 }
@@ -72,6 +72,8 @@ Argument Reference
 
 `body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Body Matcher ](#body-matcher) below for details.
 
+`bot_action` - (Optional) Bot action to be enforced if the input request matches the rule.. See [Bot Action ](#bot-action) below for details.
+
 `challenge_action` - (Required) Select challenge action, enable javascript/captcha challenge or disable challenge (`String`).
 
 `any_client` - (Optional) Any Client (bool).
@@ -81,6 +83,8 @@ Argument Reference
 `client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Name Matcher ](#client-name-matcher) below for details.
 
 `client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
+
+`ip_threat_category_list` - (Optional) IP threat categories to choose from. See [Ip Threat Category List ](#ip-threat-category-list) below for details.
 
 `client_role` - (Optional) The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.. See [Client Role ](#client-role) below for details.
 
@@ -144,10 +148,6 @@ Argument Reference
 
 `waf_action` - (Required) App Firewall action to be enforced if the input request matches the rule.. See [Waf Action ](#waf-action) below for details.
 
-### Alert
-
-Generate alert while not taking any invasive actions..
-
 ### Api Group Matcher
 
 The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher..
@@ -209,6 +209,18 @@ The actual request body value is extracted from the request API as a string..
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+
+### Bot Action
+
+Bot action to be enforced if the input request matches the rule..
+
+`bot_skip_processing` - (Optional) Skip all Bot processing for this request (bool).
+
+`none` - (Optional) Perform normal Bot processing for this request (bool).
+
+### Bot Skip Processing
+
+Skip all Bot processing for this request.
 
 ### Check Not Present
 
@@ -272,10 +284,6 @@ matcher..
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
-### Drop
-
-Drop network connection..
-
 ### Dst Asn List
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
@@ -315,6 +323,10 @@ App Firewall signature contexts to be excluded for this request.
 App Firewall violation contexts to be excluded for this request.
 
 `exclude_violation` - (Required) App Firewall violation type (`String`).
+
+### Flag
+
+Flag the request while not taking any invasive actions..
 
 ### Headers
 
@@ -356,6 +368,12 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 `ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
 
+### Ip Threat Category List
+
+IP threat categories to choose from.
+
+`ip_threat_categories` - (Required) The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions (`List of Strings`).
+
 ### Item
 
 Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher..
@@ -378,7 +396,7 @@ IP matches one of the prefixes and the destination port belongs to the port rang
 
 A list of L4 destinations used as match criteria. The match is considered successful if the destination IP and path match any of the L4 destinations..
 
-`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `prefixes` - (Required) Destination IPv4 prefixes. (`String`).
 
@@ -392,11 +410,9 @@ other labels do not matter..
 
 Mitigation action for shape protected endpoint.
 
-`alert` - (Optional) Generate alert while not taking any invasive actions. (bool).
-
 `block` - (Optional) Block bot request and send response with custom content.. See [Block ](#block) below for details.
 
-`drop` - (Optional) Drop network connection. (bool).
+`flag` - (Optional) Flag the request while not taking any invasive actions. (bool).
 
 `none` - (Optional) No mitigation actions. (bool).
 
@@ -404,7 +420,7 @@ Mitigation action for shape protected endpoint.
 
 ### None
 
-No mitigation actions..
+Perform normal Bot processing for this request.
 
 ### Path
 
@@ -415,6 +431,8 @@ The predicate evaluates to true if the actual path value matches any of the exac
 `prefix_values` - (Optional) A list of path prefix values to match the input HTTP path against. (`String`).
 
 `regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
+
+`suffix_values` - (Optional) A list of path suffix values to match the input HTTP path against. (`String`).
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 

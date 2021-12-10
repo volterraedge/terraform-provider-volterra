@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
 
   js_challenge {
     cookie_expiry   = "cookie_expiry"
@@ -114,6 +114,10 @@ Argument Reference
 
 `server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
 
+`additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Additional Domains ](#additional-domains) below for details.
+
+`enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check" (bool).
+
 `temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary User Blocking ](#temporary-user-blocking) below for details.
 
 `tls_parameters` - (Optional) in advertise policy. See [Tls Parameters ](#tls-parameters) below for details.
@@ -121,6 +125,12 @@ Argument Reference
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
 `waf_type` - (Optional) Enable/Disable individual WAF security rules. See [Waf Type ](#waf-type) below for details.
+
+### Additional Domains
+
+Wildcard names are supported in the suffix or prefix form.
+
+`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### App Firewall
 
@@ -202,7 +212,7 @@ Configure Captcha challenge on Virtual Host.
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -272,6 +282,16 @@ resources from a server at a different origin.
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
 ### Dynamic Reverse Proxy
 
 request. The DNS response is cached for 60s by default..
@@ -310,7 +330,7 @@ Primary HMAC Key.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -326,7 +346,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -354,7 +374,9 @@ Headers specified at this level are applied after headers from matched Route are
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Response Headers To Add
 
@@ -364,7 +386,9 @@ Headers specified at this level are applied after headers from matched Route are
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-`value` - (Required) Value of the HTTP header. (`String`).
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
 
 ### Retry Policy
 
@@ -392,7 +416,23 @@ Secondary HMAC Key.
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Secret Value
+
+Secret Value of the HTTP header..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -412,6 +452,12 @@ Set of TLS certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Tls Parameters
@@ -425,6 +471,10 @@ in advertise policy.
 ### Use Auth Object Config
 
 Use the Cookie Params configured in Authentication Object.
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Validation Params
 

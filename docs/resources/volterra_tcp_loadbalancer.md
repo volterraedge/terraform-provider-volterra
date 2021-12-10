@@ -20,13 +20,13 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
   do_not_advertise = true
 
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random" must be set
+  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
   hash_policy_choice_round_robin = true
 }
 
@@ -124,6 +124,8 @@ Origin pools and weights used for this loadbalancer..
 `cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+
+`priority` - (Optional) made active as per the increasing priority. (`Int`).
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 

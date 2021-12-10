@@ -23,21 +23,15 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "private_name consul_service custom_endpoint_object vn_private_name public_ip public_name private_ip k8s_service vn_private_ip" must be set
+    // One of the arguments from this list "custom_endpoint_object vn_private_ip vn_private_name public_name k8s_service consul_service public_ip private_ip private_name" must be set
 
-    k8s_service {
-      // One of the arguments from this list "inside_network outside_network vk8s_networks" must be set
-      inside_network = true
-      service_name   = "service_name"
+    vn_private_name {
+      dns_name = "dns_name"
 
-      site_locator {
-        // One of the arguments from this list "site virtual_site" must be set
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+      private_network {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
 
@@ -159,7 +153,7 @@ allows to apply back pressure on downstream quickly..
 
 ### Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted .
+Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
@@ -182,6 +176,12 @@ Specify origin server with Hashi Corp Consul service name and site information.
 Specify origin server with a reference to endpoint object.
 
 `endpoint` - (Required) Reference to an endpoint object. See [ref](#ref) below for details.
+
+### Custom Hash Algorithms
+
+Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
 ### Custom Security
 
@@ -206,6 +206,10 @@ Use the default subset provided here. Select endpoints matching default subset..
 ### Disable Circuit Breaker
 
 Circuit Breaker is disabled.
+
+### Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
 
 ### Disable Outlier Detection
 
@@ -345,7 +349,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
@@ -405,6 +409,12 @@ TLS Certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Tls Config
@@ -427,13 +437,17 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 Use MTLS for this pool using provided certificates.
 
-`tls_certificates` - (Optional) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
+`tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
 ### Use Server Verification
 
 Perform origin server verification using the provided trusted CA list.
 
 `trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
+
+### Use System Defaults
+
+Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Use Tls
 
