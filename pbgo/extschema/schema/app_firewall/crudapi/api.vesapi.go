@@ -2573,9 +2573,153 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_firewallAllowedResponseCodes": {
+            "type": "object",
+            "description": "List of HTTP response status codes that are allowed",
+            "title": "Allowed Response Code",
+            "x-displayname": "Allowed Response Code",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AllowedResponseCodes",
+            "properties": {
+                "response_code": {
+                    "type": "array",
+                    "description": " response code to send\n\nExample: - [200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]-\nRequired: YES",
+                    "title": "response_code",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "Response Code",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "app_firewallAnonymizationConfiguration": {
+            "type": "object",
+            "description": "Configure anonymization for HTTP headers, parameters or cookies which may contain sensitive data",
+            "title": "AnonymizationConfiguration",
+            "x-displayname": "Anonymization Configuration",
+            "x-ves-oneof-field-anonymization_choice": "[\"cookie\",\"http_header\",\"query_parameter\"]",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizationConfiguration",
+            "properties": {
+                "cookie": {
+                    "description": "Exclusive with [http_header query_parameter]\nx-displayName: \"Cookie\"\nAnonymize sensitive HTTP Cookie information",
+                    "title": "AnonymizeCookie",
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpCookie"
+                },
+                "http_header": {
+                    "description": "Exclusive with [cookie query_parameter]\nx-displayName: \"HTTP Header\"\nAnonymize sensitive HTTP Header information",
+                    "title": "http_header",
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpHeader"
+                },
+                "query_parameter": {
+                    "description": "Exclusive with [cookie http_header]\nx-displayName: \"Query Parameter\"\nAnonymize sensitive HTTP query parameters",
+                    "title": "AnonymizeParameter",
+                    "$ref": "#/definitions/app_firewallAnonymizeHttpQueryParameter"
+                }
+            }
+        },
+        "app_firewallAnonymizationSetting": {
+            "type": "object",
+            "description": "Anonymization settings which is a list of HTTP headers, parameters and cookies",
+            "title": "AnonymizationSetting",
+            "x-displayname": "Anonymization Configuration",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizationSetting",
+            "properties": {
+                "anonymization_config": {
+                    "type": "array",
+                    "description": " List of HTTP headers, cookies and query parameters which values will be masked.\nRequired: YES",
+                    "title": "AnonymizationConfiguration",
+                    "items": {
+                        "$ref": "#/definitions/app_firewallAnonymizationConfiguration"
+                    },
+                    "x-displayname": "Configuration",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "app_firewallAnonymizeHttpCookie": {
+            "type": "object",
+            "description": "Configure anonymization for HTTP Cookies",
+            "title": "AnonymizeHttpCookie",
+            "x-displayname": "Anonymize HTTP Cookie",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizeHttpCookie",
+            "properties": {
+                "cookie_name": {
+                    "type": "string",
+                    "description": " Specify name of the sensitive HTTP Cookie\nRequired: YES",
+                    "title": "cookie_name",
+                    "x-displayname": "Cookie Name",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "app_firewallAnonymizeHttpHeader": {
+            "type": "object",
+            "description": "Configure anonymization for HTTP Headers",
+            "title": "AnonymizeHttpHeader",
+            "x-displayname": "Anonymize HTTP Header",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizeHttpHeader",
+            "properties": {
+                "header_name": {
+                    "type": "string",
+                    "description": " Specify name of the sensitive HTTP Header\nRequired: YES",
+                    "title": "header_name",
+                    "x-displayname": "Header Name",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "app_firewallAnonymizeHttpQueryParameter": {
+            "type": "object",
+            "description": "Configure anonymization for HTTP Parameters",
+            "title": "AnonymizeHttpQueryParameter",
+            "x-displayname": "Anonymize HTTP Query Parameter",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AnonymizeHttpQueryParameter",
+            "properties": {
+                "query_param_name": {
+                    "type": "string",
+                    "description": " Specify name of the sensitive HTTP Query Parameter\nRequired: YES",
+                    "title": "query_param_name",
+                    "x-displayname": "Query Parameter Name",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "app_firewallAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all supported Violation Types\n\nNo violation\nIllegal filetype\nIllegal method\nMandatory HTTP header is missing\nIllegal HTTP status in response\nRequest length exceeds defined buffer size\nDisallowed file upload content detected\nDisallowed file upload content detected in body\nMalformed XML data\nMalformed JSON data\nModified ASM cookie\nMultiple Host headers\nBad Host header value\nUnparsable request content\nNull in request\nBad HTTP version\nCRLF characters before request start\nNo Host header in HTTP/1.1 request\nBad multipart parameters parsing\nSeveral Content-Length headers\nContent-Length should be a positive number\nDirectory traversal",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.AppFirewallViolationType"
+        },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n",
+            "description": "List of all Attack Types\n\nNo attack\nNon-Browser Client\nOther Application Attack\nTrojan Backdoor Spyware\nDetection Evasion\nVulnerability Scan\nAbuse of Functionality\nAuthentication Authorization Attack\nBuffer Overflow\nPredictable Resource Location\nInformation Leakage\nDirectory Indexing\nPath Traversal\nXPath Injection\nLDAP Injection\nServer-Side Code Injection\nCommand Execution\nSQL Injection\nCross-Site Scripting\nDenial of Service\nHTTP Parser Attack\nSession Hijacking\nHTTP Response Splitting",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2605,6 +2749,25 @@ var APISwaggerJSON string = `{
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Type",
             "x-ves-proto-enum": "ves.io.schema.app_firewall.AttackType"
+        },
+        "app_firewallAttackTypeSettings": {
+            "type": "object",
+            "description": "Specifies attack-type settings to be used by WAF",
+            "title": "Attack Type Settings",
+            "x-displayname": "Attack Type Settings",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AttackTypeSettings",
+            "properties": {
+                "disabled_attack_types": {
+                    "type": "array",
+                    "description": " List of attack types that will be ignored and not trigger a detection\nRequired: YES",
+                    "title": "Disabled Attack Types",
+                    "items": {
+                        "$ref": "#/definitions/app_firewallAttackType"
+                    },
+                    "x-displayname": "Disabled Attack Types",
+                    "x-ves-required": "true"
+                }
+            }
         },
         "app_firewallBotAction": {
             "type": "string",
@@ -2646,6 +2809,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_firewallCustomBlockingPage": {
+            "type": "object",
+            "description": "Custom blocking page response body",
+            "title": "Custom Blocking Page",
+            "x-displayname": "Custom Blocking Page",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.CustomBlockingPage",
+            "properties": {
+                "blocking_page": {
+                    "type": "string",
+                    "description": " Custom blocking page response body",
+                    "title": "blocking_page",
+                    "x-displayname": "Custom Blocking Page"
+                }
+            }
+        },
         "app_firewallDetectionSetting": {
             "type": "object",
             "description": "Specifies detection settings to be used by WAF",
@@ -2653,12 +2831,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Detection Setting",
             "x-ves-oneof-field-false_positive_suppression": "[\"disable_suppression\",\"enable_suppression\"]",
             "x-ves-oneof-field-threat_campaign_choice": "[\"disable_threat_campaigns\",\"enable_threat_campaigns\"]",
-            "x-ves-oneof-field-violation_detection_setting": "[\"default_violation_settings\",\"enabled_violation_types\"]",
+            "x-ves-oneof-field-violation_detection_setting": "[\"default_violation_settings\",\"violation_settings\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.DetectionSetting",
             "properties": {
                 "default_violation_settings": {
-                    "description": "Exclusive with [enabled_violation_types]\nx-displayName: \"Default Violation Settings\"\nUse default violation settings. This will enable all violation types for detection.",
-                    "title": "Default violation settings",
+                    "description": "Exclusive with [violation_settings]\nx-displayName: \"Default Violation Settings\"\nUse default violation settings. This will enable all violation types for detection.",
+                    "title": "Default Violation Settings",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_suppression": {
@@ -2681,35 +2859,100 @@ var APISwaggerJSON string = `{
                     "title": "enable_threat_campaigns",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "enabled_violation_types": {
-                    "description": "Exclusive with [default_violation_settings]\nx-displayName: \"Enable Violations for Detection\"\nx-required\nList of violations to be detected",
-                    "title": "Enable Violations",
-                    "$ref": "#/definitions/app_firewallViolationSetting"
-                },
                 "signature_selection_setting": {
                     "description": " Specifies signature settings to be used by WAF",
                     "title": "Signature Selection Setting",
                     "$ref": "#/definitions/app_firewallSignatureSelectionSetting",
                     "x-displayname": "Signature Selection Setting"
+                },
+                "violation_settings": {
+                    "description": "Exclusive with [default_violation_settings]\nx-displayName: \"Custom Violation Settings\"\nx-required\nSpecifies violation settings to be used by WAF",
+                    "title": "Custom Violation Settings",
+                    "$ref": "#/definitions/app_firewallViolationSettings"
                 }
             }
         },
-        "app_firewallEnabledAttackTypes": {
+        "app_firewallGlobalSpecType": {
             "type": "object",
-            "description": "This list specifies which attack types are to be excluded from detection",
-            "title": "Enabled Attack Types",
-            "x-displayname": "Enabled Attack Types",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.EnabledAttackTypes",
+            "title": "GlobalSpecType",
+            "x-displayname": "Application Firewall Specification",
+            "x-ves-oneof-field-allowed_response_codes_choice": "[\"allow_all_response_codes\",\"allowed_response_codes\"]",
+            "x-ves-oneof-field-anonymization_setting": "[\"custom_anonymization\",\"default_anonymization\",\"disable_anonymization\"]",
+            "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
+            "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
+            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
+            "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\",\"use_loadbalancer_setting\"]",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
             "properties": {
-                "enabled_attack_types": {
-                    "type": "array",
-                    "description": " This list specifies which attack types are to be excluded from detection\nRequired: YES",
-                    "title": "Enabled Attack Types",
-                    "items": {
-                        "$ref": "#/definitions/app_firewallAttackType"
-                    },
-                    "x-displayname": "Enabled Attack Types",
-                    "x-ves-required": "true"
+                "allow_all_response_codes": {
+                    "description": "Exclusive with [allowed_response_codes]\nx-displayName: \"Default\"\nAll HTTP response status codes are allowed",
+                    "title": "Default",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "allowed_response_codes": {
+                    "description": "Exclusive with [allow_all_response_codes]\nx-displayName: \"Custom\"\nList of HTTP response status codes that are allowed",
+                    "title": "Custom",
+                    "$ref": "#/definitions/app_firewallAllowedResponseCodes"
+                },
+                "blocking": {
+                    "description": "Exclusive with [monitoring use_loadbalancer_setting]\nx-displayName: \"Blocking\"\nOverride the load balancer setting and set mode to blocking",
+                    "title": "Blocking",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "blocking_page": {
+                    "description": "Exclusive with [use_default_blocking_page]\nx-displayName: \"Custom Blocking Page\"\nUse custom blocking response page",
+                    "title": "Custom Blocking Page",
+                    "$ref": "#/definitions/app_firewallCustomBlockingPage"
+                },
+                "bot_protection_setting": {
+                    "description": "Exclusive with [default_bot_setting]\nx-displayName: \"Custom Settings\"\nBot protection configuration, mitigation actions for the different types of bots",
+                    "title": "Custom Settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
+                },
+                "custom_anonymization": {
+                    "description": "Exclusive with [default_anonymization disable_anonymization]\nx-displayName: \"Custom\"\nCustom settings will be applied.\nConfigure full names of http headers, cookies or parameters which values may contain sensitive data.\nWAF performs full case-insensitive match.",
+                    "title": "CustomAnonymization",
+                    "$ref": "#/definitions/app_firewallAnonymizationSetting"
+                },
+                "default_anonymization": {
+                    "description": "Exclusive with [custom_anonymization disable_anonymization]\nx-displayName: \"Default\"\nDefault settings will be applied.\nValues of query parameters \"card\", \"pass\", \"pwd\" and \"password\" will be masked.",
+                    "title": "DefaultAnonymization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_bot_setting": {
+                    "description": "Exclusive with [bot_protection_setting]\nx-displayName: \"Default Bot Settings\"\nDefault bot protection settings will be applied.\nMalicious bots will be blocked.\nSuspicious and Good bots will be reported.",
+                    "title": "Default Bot Settings",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_detection_settings": {
+                    "description": "Exclusive with [detection_settings]\nx-displayName: \"Default Detection Settings\"\nUse default recommended detection settings.\nThese settings are recommended for detecting malicious requests with a low false positive rate.",
+                    "title": "Default Detection Settings",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "detection_settings": {
+                    "description": "Exclusive with [default_detection_settings]\nx-displayName: \"Custom Detection Settings\"\nCustom detection settings",
+                    "title": "Custom Detection Settings",
+                    "$ref": "#/definitions/app_firewallDetectionSetting"
+                },
+                "disable_anonymization": {
+                    "description": "Exclusive with [custom_anonymization default_anonymization]\nx-displayName: \"Disable\"\nDisable masking of sensitive parameters in logs.",
+                    "title": "DisableAnonymization",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "monitoring": {
+                    "description": "Exclusive with [blocking use_loadbalancer_setting]\nx-displayName: \"Monitoring\"\nOverride the load balancer setting and set mode to monitoring",
+                    "title": "Monitoring",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "use_default_blocking_page": {
+                    "description": "Exclusive with [blocking_page]\nx-displayName: \"Default Response\"\nUse default blocking response page",
+                    "title": "Default Blocking Page",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "use_loadbalancer_setting": {
+                    "description": "Exclusive with [blocking monitoring]\nx-displayName: \"Use LoadBalancer Setting\"\nUse the mode as specified in the load balancer",
+                    "title": "Blocking",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -2718,19 +2961,20 @@ var APISwaggerJSON string = `{
             "description": "Specifies signature settings to be used by WAF",
             "title": "Signature Selection Setting",
             "x-displayname": "Signature Selection Setting",
-            "x-ves-oneof-field-attack_type_setting": "[\"default_attack_type_settings\",\"enabled_attack_types\"]",
+            "x-ves-displayorder": "5,1",
+            "x-ves-oneof-field-attack_type_setting": "[\"attack_type_settings\",\"default_attack_type_settings\"]",
             "x-ves-oneof-field-signature_selection_by_accuracy": "[\"high_medium_accuracy_signatures\",\"high_medium_low_accuracy_signatures\",\"only_high_accuracy_signatures\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.SignatureSelectionSetting",
             "properties": {
-                "default_attack_type_settings": {
-                    "description": "Exclusive with [enabled_attack_types]\nx-displayName: \"Default Attack Type Settings\"\nUse default settings. This will enable all attack types for detection.",
-                    "title": "Default attack type settings",
-                    "$ref": "#/definitions/schemaEmpty"
+                "attack_type_settings": {
+                    "description": "Exclusive with [default_attack_type_settings]\nx-displayName: \"Custom Attack Type Settings\"\nSpecifies attack-type settings to be used by WAF",
+                    "title": "Custom Attack Type Settings",
+                    "$ref": "#/definitions/app_firewallAttackTypeSettings"
                 },
-                "enabled_attack_types": {
-                    "description": "Exclusive with [default_attack_type_settings]\nx-displayName: \"Attack Types\"\nBy default all attack types are enabled.\nThis list specifies which attack types are to be excluded from detection",
-                    "title": "Attack Types",
-                    "$ref": "#/definitions/app_firewallEnabledAttackTypes"
+                "default_attack_type_settings": {
+                    "description": "Exclusive with [attack_type_settings]\nx-displayName: \"Default Attack Type Settings\"\nUse default settings. This will enable all attack types for detection.",
+                    "title": "Default Attack Type settings",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "high_medium_accuracy_signatures": {
                     "description": "Exclusive with [high_medium_low_accuracy_signatures only_high_accuracy_signatures]\nx-displayName: \"Enable High and Medium Accuracy Signatures\"\nEnables high and medium accuracy signatures",
@@ -2758,7 +3002,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/schemaapp_firewallGlobalSpecType",
+                    "$ref": "#/definitions/app_firewallGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -2796,21 +3040,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "app_firewallViolationSetting": {
+        "app_firewallViolationSettings": {
             "type": "object",
             "description": "Specifies violation settings to be used by WAF",
-            "title": "Violation Setting",
-            "x-displayname": "Violation Setting",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.ViolationSetting",
+            "title": "Violation Settings",
+            "x-displayname": "Violation Settings",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.ViolationSettings",
             "properties": {
-                "enabled_violation_types": {
+                "disabled_violation_types": {
                     "type": "array",
-                    "description": " List of violations to be detected\nRequired: YES",
-                    "title": "Enable Violations",
+                    "description": " List of violations to be excluded\nRequired: YES",
+                    "title": "Disabled Violations",
                     "items": {
-                        "$ref": "#/definitions/schemaAppFirewallViolationType"
+                        "$ref": "#/definitions/app_firewallAppFirewallViolationType"
                     },
-                    "x-displayname": "Enable Violations for Detection",
+                    "x-displayname": "Disabled Violations",
                     "x-ves-required": "true"
                 }
             }
@@ -3042,54 +3286,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaAppFirewallViolationType": {
-            "type": "string",
-            "description": "List of all Violation Types\n",
-            "title": "App Firewall Violation Type",
-            "enum": [
-                "VIOL_NONE",
-                "VIOL_FILETYPE",
-                "VIOL_METHOD",
-                "VIOL_MANDATORY_HEADER",
-                "VIOL_HTTP_RESPONSE_STATUS",
-                "VIOL_REQUEST_MAX_LENGTH",
-                "VIOL_FILE_UPLOAD",
-                "VIOL_FILE_UPLOAD_IN_BODY",
-                "VIOL_XML_MALFORMED",
-                "VIOL_JSON_MALFORMED",
-                "VIOL_ASM_COOKIE_MODIFIED",
-                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_PARAMETERS",
-                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_CHECK_MAXIMUM_NUMBER_OF_HEADERS",
-                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
-                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
-                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
-                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
-                "VIOL_HTTP_PROTOCOL_HOST_HEADER_CONTAINS_IP_ADDRESS",
-                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
-                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
-                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORM_DATA_REQUEST_PARSING",
-                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUESTS",
-                "VIOL_HTTP_PROTOCOL_CHUNKED_REQUEST_WITH_CONTENT_LENGTH_HEADER",
-                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
-                "VIOL_HTTP_PROTOCOL_HEADER_NAME_WITH_NO_HEADER_VALUE",
-                "VIOL_HTTP_PROTOCOL_POST_REQUEST_WITH_CONTENT_LENGTH_0",
-                "VIOL_EVASION_BAD_UNESCAPE",
-                "VIOL_EVASION_APACHE_WHITESPACE",
-                "VIOL_EVASION_BARE_BYTE_DECODING",
-                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
-                "VIOL_EVASION_IIS_BACKSLASHES",
-                "VIOL_EVASION_U_DECODING",
-                "VIOL_EVASION_MULTIPLE_DECODING",
-                "VIOL_EVASION_DIRECTORY_TRAVERSALS"
-            ],
-            "default": "VIOL_NONE",
-            "x-displayname": "App Firewall Violation Type",
-            "x-ves-proto-enum": "ves.io.schema.AppFirewallViolationType"
-        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -3125,7 +3321,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3247,14 +3443,14 @@ var APISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3263,7 +3459,7 @@ var APISwaggerJSON string = `{
         },
         "schemaObjectRefType": {
             "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
             "x-displayname": "Object reference",
             "x-ves-proto-message": "ves.io.schema.ObjectRefType",
@@ -3341,7 +3537,7 @@ var APISwaggerJSON string = `{
                 },
                 "status_id": {
                     "type": "string",
-                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status \n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
                     "title": "status_id",
                     "x-displayname": "Status ID"
                 },
@@ -3354,22 +3550,29 @@ var APISwaggerJSON string = `{
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": " Oriong of this status exchanged by VTRP. ",
+                    "description": " Origin of this status exchanged by VTRP.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Propagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
             "default": "STATUS_DO_NOT_PUBLISH",
-            "x-displayname": "Publish",
+            "x-displayname": "Status Publish Type",
             "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
@@ -3440,7 +3643,7 @@ var APISwaggerJSON string = `{
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
@@ -3456,7 +3659,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
                     "$ref": "#/definitions/schemaInitializersType",
                     "x-displayname": "Initializers"
@@ -3525,6 +3728,13 @@ var APISwaggerJSON string = `{
                     "description": " Indicate origin of this object.",
                     "title": "vtrp_id",
                     "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3562,52 +3772,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
-                }
-            }
-        },
-        "schemaapp_firewallGlobalSpecType": {
-            "type": "object",
-            "title": "GlobalSpecType",
-            "x-displayname": "Application Firewall Specification",
-            "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
-            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
-            "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\",\"use_loadbalancer_setting\"]",
-            "x-ves-proto-message": "ves.io.schema.app_firewall.GlobalSpecType",
-            "properties": {
-                "blocking": {
-                    "description": "Exclusive with [monitoring use_loadbalancer_setting]\nx-displayName: \"Blocking\"\nOverride the load balancer setting and set mode to blocking",
-                    "title": "Blocking",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "bot_protection_setting": {
-                    "description": "Exclusive with [default_bot_setting]\nx-displayName: \"Custom Settings\"\nBot protection configuration, mitigation actions for the different types of bots",
-                    "title": "Custom Settings",
-                    "$ref": "#/definitions/app_firewallBotProtectionSetting"
-                },
-                "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\nx-displayName: \"Default Bot Settings\"\nDefault bot protection settings will be applied.\nMalicious bots will be blocked.\nSuspicious and Good bots will be reported.",
-                    "title": "Default Bot Settings",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\nx-displayName: \"Default Detection Settings\"\nUse default recommended detection settings.\nThese settings are recommended for detecting malicious requests with high accuracy and a low false positive rate.",
-                    "title": "Default Detection Settings",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\nx-displayName: \"Detection Settings\"\nDetection settings",
-                    "title": "Detection Settings",
-                    "$ref": "#/definitions/app_firewallDetectionSetting"
-                },
-                "monitoring": {
-                    "description": "Exclusive with [blocking use_loadbalancer_setting]\nx-displayName: \"Monitoring\"\nOverride the load balancer setting and set mode to monitoring",
-                    "title": "Monitoring",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "use_loadbalancer_setting": {
-                    "description": "Exclusive with [blocking monitoring]\nx-displayName: \"Use LoadBalancer Setting\"\nUse the mode as specified in the load balancer",
-                    "title": "Blocking",
-                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         }

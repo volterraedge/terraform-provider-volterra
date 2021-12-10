@@ -343,6 +343,61 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_NodeFlavorXlarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_xlarge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavorXlarge).NodeFlavorXlarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_xlarge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavor_2Xlarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_2xlarge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavor_2Xlarge).NodeFlavor_2Xlarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_2xlarge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavor_3Xlarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_3xlarge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavor_3Xlarge).NodeFlavor_3Xlarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_3xlarge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavor_4Xlarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_4xlarge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavor_4Xlarge).NodeFlavor_4Xlarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_4xlarge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavor_5Xlarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_5xlarge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavor_5Xlarge).NodeFlavor_5Xlarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_5xlarge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

@@ -64,21 +64,18 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSiteSelectorSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSiteSelectorSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *CreateSpecType) GetSiteSelectorSRefInfo() ([]db.SelrFldInfo, error) {
 	f := m.GetSiteSelector()
 	if f == nil {
-		return []db.SelrFldInfo{}, nil
+		return nil, nil
 	}
 	return []db.SelrFldInfo{
 		{
@@ -246,21 +243,18 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSiteSelectorSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSiteSelectorSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *GetSpecType) GetSiteSelectorSRefInfo() ([]db.SelrFldInfo, error) {
 	f := m.GetSiteSelector()
 	if f == nil {
-		return []db.SelrFldInfo{}, nil
+		return nil, nil
 	}
 	return []db.SelrFldInfo{
 		{
@@ -428,21 +422,18 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	var srInfos []db.SelrFldInfo
-	if fsrInfos, err := m.GetSiteSelectorSRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "Getting message field selector info")
-	} else {
-		srInfos = append(srInfos, fsrInfos...)
+	if m == nil {
+		return nil, nil
 	}
+	return m.GetSiteSelectorSRefInfo()
 
-	return srInfos, nil
 }
 
 // GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
 func (m *GlobalSpecType) GetSiteSelectorSRefInfo() ([]db.SelrFldInfo, error) {
 	f := m.GetSiteSelector()
 	if f == nil {
-		return []db.SelrFldInfo{}, nil
+		return nil, nil
 	}
 	return []db.SelrFldInfo{
 		{

@@ -63,19 +63,21 @@ func (m *AppTypeSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *AppTypeSettings) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAppTypeRefDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAppTypeRefDRefInfo()
+
 }
 
 func (m *AppTypeSettings) GetAppTypeRefDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppTypeRef() {
+	refs := m.GetAppTypeRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("AppTypeSettings.app_type_ref[%d] has a nil value", i)
 		}
@@ -90,8 +92,8 @@ func (m *AppTypeSettings) GetAppTypeRefDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppTypeRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -378,25 +380,34 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAppTypeRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppTypeRefs() {
+	refs := m.GetAppTypeRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.app_type_refs[%d] has a nil value", i)
 		}
@@ -411,8 +422,8 @@ func (m *CreateSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -437,27 +448,24 @@ func (m *CreateSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAppTypeSettings() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAppTypeSettings() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("app_type_settings[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -839,25 +847,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAppTypeRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppTypeRefs() {
+	refs := m.GetAppTypeRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.app_type_refs[%d] has a nil value", i)
 		}
@@ -872,8 +889,8 @@ func (m *GetSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -898,27 +915,24 @@ func (m *GetSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Interfac
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAppTypeSettings() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAppTypeSettings() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("app_type_settings[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -1084,25 +1098,34 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAppTypeRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppTypeRefs() {
+	refs := m.GetAppTypeRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.app_type_refs[%d] has a nil value", i)
 		}
@@ -1117,8 +1140,8 @@ func (m *GlobalSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1143,27 +1166,24 @@ func (m *GlobalSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inter
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAppTypeSettings() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAppTypeSettings() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("app_type_settings[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGlobalSpecType struct {
@@ -1794,25 +1814,34 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAppTypeRefsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeRefsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetAppTypeSettingsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAppTypeSettingsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetAppTypeRefs() {
+	refs := m.GetAppTypeRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.app_type_refs[%d] has a nil value", i)
 		}
@@ -1827,8 +1856,8 @@ func (m *ReplaceSpecType) GetAppTypeRefsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAppTypeRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1853,27 +1882,24 @@ func (m *ReplaceSpecType) GetAppTypeRefsDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetAppTypeSettingsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAppTypeSettings() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAppTypeSettings() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAppTypeSettings() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("app_type_settings[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {

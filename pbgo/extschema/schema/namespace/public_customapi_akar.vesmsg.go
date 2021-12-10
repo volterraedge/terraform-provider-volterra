@@ -142,19 +142,21 @@ func (m *GetActiveAlertPoliciesResponse) Validate(ctx context.Context, opts ...d
 }
 
 func (m *GetActiveAlertPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAlertPoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAlertPoliciesDRefInfo()
+
 }
 
 func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetAlertPolicies() {
+	vrefs := m.GetAlertPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetActiveAlertPoliciesResponse.alert_policies[%d] has a nil value", i)
 		}
@@ -170,8 +172,8 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefIn
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -365,19 +367,21 @@ func (m *GetActiveNetworkPoliciesResponse) Validate(ctx context.Context, opts ..
 }
 
 func (m *GetActiveNetworkPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkPoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNetworkPoliciesDRefInfo()
+
 }
 
 func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetNetworkPolicies() {
+	vrefs := m.GetNetworkPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetActiveNetworkPoliciesResponse.network_policies[%d] has a nil value", i)
 		}
@@ -393,8 +397,8 @@ func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DR
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -588,19 +592,21 @@ func (m *GetActiveServicePoliciesResponse) Validate(ctx context.Context, opts ..
 }
 
 func (m *GetActiveServicePoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetServicePoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetServicePoliciesDRefInfo()
+
 }
 
 func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetServicePolicies() {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetActiveServicePoliciesResponse.service_policies[%d] has a nil value", i)
 		}
@@ -616,8 +622,8 @@ func (m *GetActiveServicePoliciesResponse) GetServicePoliciesDRefInfo() ([]db.DR
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -811,19 +817,21 @@ func (m *GetFastACLsForInternetVIPsResponse) Validate(ctx context.Context, opts 
 }
 
 func (m *GetFastACLsForInternetVIPsResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetFastAclsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetFastAclsDRefInfo()
+
 }
 
 func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFastAcls() {
+	vrefs := m.GetFastAcls()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("GetFastACLsForInternetVIPsResponse.fast_acls[%d] has a nil value", i)
 		}
@@ -839,8 +847,8 @@ func (m *GetFastACLsForInternetVIPsResponse) GetFastAclsDRefInfo() ([]db.DRefInf
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFastAclsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -956,19 +964,21 @@ func (m *SetActiveAlertPoliciesRequest) Validate(ctx context.Context, opts ...db
 }
 
 func (m *SetActiveAlertPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAlertPoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAlertPoliciesDRefInfo()
+
 }
 
 func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetAlertPolicies() {
+	vrefs := m.GetAlertPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SetActiveAlertPoliciesRequest.alert_policies[%d] has a nil value", i)
 		}
@@ -984,8 +994,8 @@ func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInf
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1232,19 +1242,21 @@ func (m *SetActiveNetworkPoliciesRequest) Validate(ctx context.Context, opts ...
 }
 
 func (m *SetActiveNetworkPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkPoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetNetworkPoliciesDRefInfo()
+
 }
 
 func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetNetworkPolicies() {
+	vrefs := m.GetNetworkPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SetActiveNetworkPoliciesRequest.network_policies[%d] has a nil value", i)
 		}
@@ -1260,8 +1272,8 @@ func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRe
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1508,19 +1520,21 @@ func (m *SetActiveServicePoliciesRequest) Validate(ctx context.Context, opts ...
 }
 
 func (m *SetActiveServicePoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetServicePoliciesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetServicePoliciesDRefInfo()
+
 }
 
 func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetServicePolicies() {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SetActiveServicePoliciesRequest.service_policies[%d] has a nil value", i)
 		}
@@ -1536,8 +1550,8 @@ func (m *SetActiveServicePoliciesRequest) GetServicePoliciesDRefInfo() ([]db.DRe
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1784,19 +1798,21 @@ func (m *SetFastACLsForInternetVIPsRequest) Validate(ctx context.Context, opts .
 }
 
 func (m *SetFastACLsForInternetVIPsRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetFastAclsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetFastAclsDRefInfo()
+
 }
 
 func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetFastAcls() {
+	vrefs := m.GetFastAcls()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SetFastACLsForInternetVIPsRequest.fast_acls[%d] has a nil value", i)
 		}
@@ -1812,8 +1828,8 @@ func (m *SetFastACLsForInternetVIPsRequest) GetFastAclsDRefInfo() ([]db.DRefInfo
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetFastAclsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

@@ -66,79 +66,80 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRuleChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_AllowList:
-		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "allow_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "allow_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_DenyList:
-		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deny_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deny_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_LegacyRuleList:
-		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_InternallyGenerated:
 
+		return nil, nil
+
 	case *CreateSpecType_AllowAllRequests:
+
+		return nil, nil
 
 	case *CreateSpecType_DenyAllRequests:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -481,96 +482,108 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSimpleRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_AllowList:
-		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "allow_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "allow_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_DenyList:
-		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deny_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deny_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_LegacyRuleList:
-		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_InternallyGenerated:
 
+		return nil, nil
+
 	case *GetSpecType_AllowAllRequests:
+
+		return nil, nil
 
 	case *GetSpecType_DenyAllRequests:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRules() {
+	refs := m.GetRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.rules[%d] has a nil value", i)
 		}
@@ -585,8 +598,8 @@ func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -611,27 +624,24 @@ func (m *GetSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) ([]
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSimpleRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSimpleRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -1092,43 +1102,52 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultForwardingClassesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultForwardingClassesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSimpleRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetDefaultForwardingClassesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetDefaultForwardingClasses() {
+	refs := m.GetDefaultForwardingClasses()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.default_forwarding_classes[%d] has a nil value", i)
 		}
@@ -1143,8 +1162,8 @@ func (m *GlobalSpecType) GetDefaultForwardingClassesDRefInfo() ([]db.DRefInfo, e
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetDefaultForwardingClassesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1169,72 +1188,79 @@ func (m *GlobalSpecType) GetDefaultForwardingClassesDBEntries(ctx context.Contex
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_AllowList:
-		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "allow_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "allow_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_DenyList:
-		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deny_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deny_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_LegacyRuleList:
-		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_InternallyGenerated:
 
+		return nil, nil
+
 	case *GlobalSpecType_AllowAllRequests:
+
+		return nil, nil
 
 	case *GlobalSpecType_DenyAllRequests:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRules() {
+	refs := m.GetRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.rules[%d] has a nil value", i)
 		}
@@ -1249,8 +1275,8 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1275,31 +1301,27 @@ func (m *GlobalSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) 
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSimpleRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetSimpleRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -1307,16 +1329,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1898,19 +1920,21 @@ func (m *LegacyRuleList) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *LegacyRuleList) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRulesDRefInfo()
+
 }
 
 func (m *LegacyRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetRules() {
+	refs := m.GetRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("LegacyRuleList.rules[%d] has a nil value", i)
 		}
@@ -1925,8 +1949,8 @@ func (m *LegacyRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2086,79 +2110,80 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRuleChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRuleChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_AllowList:
-		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "allow_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "allow_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_DenyList:
-		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deny_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deny_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_RuleList:
-		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_LegacyRuleList:
-		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_rule_list." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_rule_list." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_InternallyGenerated:
 
+		return nil, nil
+
 	case *ReplaceSpecType_AllowAllRequests:
+
+		return nil, nil
 
 	case *ReplaceSpecType_DenyAllRequests:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -2501,37 +2526,30 @@ func (m *Rule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *Rule) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSpecDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *Rule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSpec() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetSpec().GetDRefInfo()
+	drInfos, err := m.GetSpec().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "spec." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateRule struct {
@@ -2694,39 +2712,34 @@ func (m *RuleList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *RuleList) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRulesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *RuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateRuleList struct {
@@ -2867,37 +2880,30 @@ func (m *SimpleRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error
 }
 
 func (m *SimpleRule) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWafActionDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SimpleRule) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWafAction() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetWafAction().GetDRefInfo()
+	drInfos, err := m.GetWafAction().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWafAction().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "waf_action." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateSimpleRule struct {
@@ -3037,6 +3043,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["bot_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_action"))
+		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["client_role"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("client_role"))
@@ -3050,6 +3065,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("client_selector"))
 		if err := fv(ctx, m.GetClientSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["content_rewrite_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
+		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3188,6 +3212,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["shape_protected_endpoint_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shape_protected_endpoint_action"))
+		if err := fv(ctx, m.GetShapeProtectedEndpointAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -3297,6 +3330,12 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
+	v.FldValidators["bot_action"] = ves_io_schema_policy.BotActionValidator().Validate
+
+	v.FldValidators["content_rewrite_action"] = ves_io_schema_policy.ContentRewriteActionValidator().Validate
+
+	v.FldValidators["shape_protected_endpoint_action"] = ves_io_schema_policy.ShapeProtectedEndpointActionValidator().Validate
+
 	return v
 }()
 
@@ -3342,25 +3381,34 @@ func (m *SourceList) Validate(ctx context.Context, opts ...db.ValidateOpt) error
 }
 
 func (m *SourceList) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAsnSetDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAsnSetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetIpPrefixSetDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetIpPrefixSetDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *SourceList) GetAsnSetDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetAsnSet() {
+	vrefs := m.GetAsnSet()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SourceList.asn_set[%d] has a nil value", i)
 		}
@@ -3376,8 +3424,8 @@ func (m *SourceList) GetAsnSetDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetAsnSetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3410,8 +3458,12 @@ func (m *SourceList) GetAsnSetDBEntries(ctx context.Context, d db.Interface) ([]
 }
 
 func (m *SourceList) GetIpPrefixSetDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetIpPrefixSet() {
+	vrefs := m.GetIpPrefixSet()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SourceList.ip_prefix_set[%d] has a nil value", i)
 		}
@@ -3427,8 +3479,8 @@ func (m *SourceList) GetIpPrefixSetDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetIpPrefixSetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table

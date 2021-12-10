@@ -25,6 +25,93 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AddonServiceAccess) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AddonServiceAccess) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AddonServiceAccess) DeepCopy() *AddonServiceAccess {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AddonServiceAccess{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AddonServiceAccess) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AddonServiceAccess) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AddonServiceAccessValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAddonServiceAccess struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAddonServiceAccess) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AddonServiceAccess)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AddonServiceAccess got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("access"))
+		if err := fv(ctx, m.GetAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAddonServiceAccessValidator = func() *ValidateAddonServiceAccess {
+	v := &ValidateAddonServiceAccess{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AddonServiceAccessValidator() db.Validator {
+	return DefaultAddonServiceAccessValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -61,19 +148,21 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetContactsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetContactsDRefInfo()
+
 }
 
 func (m *CreateSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetContacts() {
+	refs := m.GetContacts()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("CreateSpecType.contacts[%d] has a nil value", i)
 		}
@@ -88,8 +177,8 @@ func (m *CreateSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -239,19 +328,21 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetContactsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetContactsDRefInfo()
+
 }
 
 func (m *GetSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetContacts() {
+	refs := m.GetContacts()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.contacts[%d] has a nil value", i)
 		}
@@ -266,8 +357,8 @@ func (m *GetSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -417,19 +508,21 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetContactsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetContactsDRefInfo()
+
 }
 
 func (m *GlobalSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetContacts() {
+	refs := m.GetContacts()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.contacts[%d] has a nil value", i)
 		}
@@ -444,8 +537,8 @@ func (m *GlobalSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -640,19 +733,21 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetContactsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetContactsDRefInfo()
+
 }
 
 func (m *ReplaceSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetContacts() {
+	refs := m.GetContacts()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("ReplaceSpecType.contacts[%d] has a nil value", i)
 		}
@@ -667,8 +762,8 @@ func (m *ReplaceSpecType) GetContactsDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetContactsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -760,6 +855,84 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TileAccess) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TileAccess) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TileAccess) DeepCopy() *TileAccess {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TileAccess{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TileAccess) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TileAccess) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TileAccessValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTileAccess struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TileAccess)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TileAccess got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTileAccessValidator = func() *ValidateTileAccess {
+	v := &ValidateTileAccess{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TileAccessValidator() db.Validator {
+	return DefaultTileAccessValidator
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {

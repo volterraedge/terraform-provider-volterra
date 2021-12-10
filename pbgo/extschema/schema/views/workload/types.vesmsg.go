@@ -81,70 +81,69 @@ func (m *AdvertiseCustomType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *AdvertiseCustomType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseWhereDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseWhereDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetPortsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetPortsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustomType) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseWhere() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseWhere() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("advertise_where[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseCustomType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPorts() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPorts() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPorts() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ports[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseCustomType struct {
@@ -498,39 +497,34 @@ func (m *AdvertiseMultiPortType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *AdvertiseMultiPortType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPortsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPortsDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseMultiPortType) GetPortsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetPorts() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetPorts() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPorts() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("ports[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseMultiPortType struct {
@@ -689,57 +683,54 @@ func (m *AdvertiseOptionsType) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *AdvertiseOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseOptionsType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *AdvertiseOptionsType_AdvertiseInCluster:
 
+		return nil, nil
+
 	case *AdvertiseOptionsType_AdvertiseOnPublic:
-		odrInfos, err = m.GetAdvertiseOnPublic().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_on_public." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertiseOptionsType_AdvertiseCustom:
-		odrInfos, err = m.GetAdvertiseCustom().GetDRefInfo()
+		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "advertise_custom." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_custom." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertiseOptionsType_DoNotAdvertise:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseOptionsType struct {
@@ -915,45 +906,39 @@ func (m *AdvertisePortType) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *AdvertisePortType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertisePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *AdvertisePortType_HttpLoadbalancer:
-		odrInfos, err = m.GetHttpLoadbalancer().GetDRefInfo()
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "http_loadbalancer." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertisePortType_TcpLoadbalancer:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAdvertisePortType struct {
@@ -1151,53 +1136,46 @@ func (m *AdvertisePublicType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *AdvertisePublicType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertisePublicType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *AdvertisePublicType_Port:
-		odrInfos, err = m.GetPort().GetDRefInfo()
+		drInfos, err := m.GetPort().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetPort().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "port." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "port." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertisePublicType_MultiPorts:
-		odrInfos, err = m.GetMultiPorts().GetDRefInfo()
+		drInfos, err := m.GetMultiPorts().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetMultiPorts().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "multi_ports." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "multi_ports." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAdvertisePublicType struct {
@@ -1526,45 +1504,39 @@ func (m *AdvertiseSinglePortType) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *AdvertiseSinglePortType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetAdvertiseChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseSinglePortType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetAdvertiseChoice().(type) {
 	case *AdvertiseSinglePortType_HttpLoadbalancer:
-		odrInfos, err = m.GetHttpLoadbalancer().GetDRefInfo()
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "http_loadbalancer." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertiseSinglePortType_TcpLoadbalancer:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseSinglePortType struct {
@@ -1744,63 +1716,57 @@ func (m *AdvertiseWhereType) Validate(ctx context.Context, opts ...db.ValidateOp
 }
 
 func (m *AdvertiseWhereType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *AdvertiseWhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *AdvertiseWhereType_Site:
-		odrInfos, err = m.GetSite().GetDRefInfo()
+		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertiseWhereType_VirtualSite:
-		odrInfos, err = m.GetVirtualSite().GetDRefInfo()
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "virtual_site." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
 		}
+		return drInfos, err
 
 	case *AdvertiseWhereType_Vk8SService:
-		odrInfos, err = m.GetVk8SService().GetDRefInfo()
+		drInfos, err := m.GetVk8SService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "vk8s_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "vk8s_service." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateAdvertiseWhereType struct {
@@ -2109,7 +2075,6 @@ var DefaultConfigurationFileTypeValidator = func() *ValidateConfigurationFileTyp
 	vrhMount := v.MountValidationRuleHandler
 	rulesMount := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhMount(rulesMount)
 	if err != nil {
@@ -2435,37 +2400,30 @@ func (m *ContainerType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *ContainerType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetImageDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetImageDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ContainerType) GetImageDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetImage() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetImage().GetDRefInfo()
+	drInfos, err := m.GetImage().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetImage().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "image." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateContainerType struct {
@@ -2798,73 +2756,68 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWorkloadChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWorkloadChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWorkloadChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetWorkloadChoice().(type) {
 	case *CreateSpecType_SimpleService:
-		odrInfos, err = m.GetSimpleService().GetDRefInfo()
+		drInfos, err := m.GetSimpleService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "simple_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_Service:
-		odrInfos, err = m.GetService().GetDRefInfo()
+		drInfos, err := m.GetService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_StatefulService:
-		odrInfos, err = m.GetStatefulService().GetDRefInfo()
+		drInfos, err := m.GetStatefulService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "stateful_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_Job:
-		odrInfos, err = m.GetJob().GetDRefInfo()
+		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "job." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -3027,19 +2980,21 @@ func (m *DeployCESiteType) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *DeployCESiteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteDRefInfo()
+
 }
 
 func (m *DeployCESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetSite() {
+	vrefs := m.GetSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("DeployCESiteType.site[%d] has a nil value", i)
 		}
@@ -3055,8 +3010,8 @@ func (m *DeployCESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3228,19 +3183,21 @@ func (m *DeployCEVirtualSiteType) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *DeployCEVirtualSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualSiteDRefInfo()
+
 }
 
 func (m *DeployCEVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetVirtualSite() {
+	vrefs := m.GetVirtualSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("DeployCEVirtualSiteType.virtual_site[%d] has a nil value", i)
 		}
@@ -3256,8 +3213,8 @@ func (m *DeployCEVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3429,77 +3386,76 @@ func (m *DeployOptionsType) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *DeployOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDeployChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetDeployChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *DeployOptionsType) GetDeployChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDeployChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetDeployChoice().(type) {
 	case *DeployOptionsType_AllRes:
 
+		return nil, nil
+
 	case *DeployOptionsType_DeployReVirtualSites:
-		odrInfos, err = m.GetDeployReVirtualSites().GetDRefInfo()
+		drInfos, err := m.GetDeployReVirtualSites().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeployReVirtualSites().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deploy_re_virtual_sites." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_re_virtual_sites." + dri.DRField
 		}
+		return drInfos, err
 
 	case *DeployOptionsType_DeployCeVirtualSites:
-		odrInfos, err = m.GetDeployCeVirtualSites().GetDRefInfo()
+		drInfos, err := m.GetDeployCeVirtualSites().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeployCeVirtualSites().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deploy_ce_virtual_sites." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_ce_virtual_sites." + dri.DRField
 		}
+		return drInfos, err
 
 	case *DeployOptionsType_DeployCeSites:
-		odrInfos, err = m.GetDeployCeSites().GetDRefInfo()
+		drInfos, err := m.GetDeployCeSites().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetDeployCeSites().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deploy_ce_sites." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_ce_sites." + dri.DRField
 		}
+		return drInfos, err
 
 	case *DeployOptionsType_DefaultVirtualSites:
 
-	case *DeployOptionsType_DeployReSites:
-		odrInfos, err = m.GetDeployReSites().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "deploy_re_sites." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *DeployOptionsType_DeployReSites:
+		drInfos, err := m.GetDeployReSites().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDeployReSites().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "deploy_re_sites." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateDeployOptionsType struct {
@@ -3684,19 +3640,21 @@ func (m *DeployRESiteType) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *DeployRESiteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSiteDRefInfo()
+
 }
 
 func (m *DeployRESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetSite() {
+	vrefs := m.GetSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("DeployRESiteType.site[%d] has a nil value", i)
 		}
@@ -3712,8 +3670,8 @@ func (m *DeployRESiteType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3885,19 +3843,21 @@ func (m *DeployREVirtualSiteType) Validate(ctx context.Context, opts ...db.Valid
 }
 
 func (m *DeployREVirtualSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetVirtualSiteDRefInfo()
+
 }
 
 func (m *DeployREVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetVirtualSite() {
+	vrefs := m.GetVirtualSite()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("DeployREVirtualSiteType.virtual_site[%d] has a nil value", i)
 		}
@@ -3913,8 +3873,8 @@ func (m *DeployREVirtualSiteType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -4697,73 +4657,68 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWorkloadChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWorkloadChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWorkloadChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetWorkloadChoice().(type) {
 	case *GetSpecType_SimpleService:
-		odrInfos, err = m.GetSimpleService().GetDRefInfo()
+		drInfos, err := m.GetSimpleService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "simple_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_Service:
-		odrInfos, err = m.GetService().GetDRefInfo()
+		drInfos, err := m.GetService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_StatefulService:
-		odrInfos, err = m.GetStatefulService().GetDRefInfo()
+		drInfos, err := m.GetStatefulService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "stateful_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_Job:
-		odrInfos, err = m.GetJob().GetDRefInfo()
+		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "job." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -4944,30 +4899,34 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVirtualK8SDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVirtualK8SDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetWorkloadChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetWorkloadChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -4975,16 +4934,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5017,7 +4976,6 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 }
 
 func (m *GlobalSpecType) GetVirtualK8SDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVirtualK8S()
 	if vref == nil {
@@ -5025,16 +4983,16 @@ func (m *GlobalSpecType) GetVirtualK8SDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("virtual_k8s.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "virtual_k8s.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "virtual_k8s",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetVirtualK8SDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -5068,61 +5026,58 @@ func (m *GlobalSpecType) GetVirtualK8SDBEntries(ctx context.Context, d db.Interf
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWorkloadChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetWorkloadChoice().(type) {
 	case *GlobalSpecType_SimpleService:
-		odrInfos, err = m.GetSimpleService().GetDRefInfo()
+		drInfos, err := m.GetSimpleService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "simple_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_Service:
-		odrInfos, err = m.GetService().GetDRefInfo()
+		drInfos, err := m.GetService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_StatefulService:
-		odrInfos, err = m.GetStatefulService().GetDRefInfo()
+		drInfos, err := m.GetStatefulService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "stateful_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_Job:
-		odrInfos, err = m.GetJob().GetDRefInfo()
+		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "job." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGlobalSpecType struct {
@@ -5570,45 +5525,39 @@ func (m *HTTPLoadBalancerType) Validate(ctx context.Context, opts ...db.Validate
 }
 
 func (m *HTTPLoadBalancerType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRouteChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRouteChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *HTTPLoadBalancerType) GetRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRouteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRouteChoice().(type) {
 	case *HTTPLoadBalancerType_DefaultRoute:
 
-	case *HTTPLoadBalancerType_SpecificRoutes:
-		odrInfos, err = m.GetSpecificRoutes().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "specific_routes." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *HTTPLoadBalancerType_SpecificRoutes:
+		drInfos, err := m.GetSpecificRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpecificRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "specific_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateHTTPLoadBalancerType struct {
@@ -6338,21 +6287,19 @@ func (m *ImageType) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *ImageType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRegistryChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRegistryChoiceDRefInfo()
+
 }
 
 func (m *ImageType) GetRegistryChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
 	switch m.GetRegistryChoice().(type) {
 	case *ImageType_Public:
+
+		return nil, nil
 
 	case *ImageType_ContainerRegistry:
 
@@ -6362,7 +6309,7 @@ func (m *ImageType) GetRegistryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("container_registry.Object")
-		odri := db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "container_registry.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
@@ -6370,11 +6317,11 @@ func (m *ImageType) GetRegistryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			DRField:    "container_registry",
 			Ref:        vdRef,
 		}
-		odrInfos = append(odrInfos, odri)
+		return []db.DRefInfo{dri}, nil
 
+	default:
+		return nil, nil
 	}
-
-	return odrInfos, nil
 }
 
 // GetRegistryChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -6588,68 +6535,65 @@ func (m *JobType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 }
 
 func (m *JobType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetContainersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetContainersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDeployOptionsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *JobType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetContainers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetContainers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *JobType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDeployOptions() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDeployOptions().GetDRefInfo()
+	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "deploy_options." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateJobType struct {
@@ -8263,73 +8207,68 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetWorkloadChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetWorkloadChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetWorkloadChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetWorkloadChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetWorkloadChoice().(type) {
 	case *ReplaceSpecType_SimpleService:
-		odrInfos, err = m.GetSimpleService().GetDRefInfo()
+		drInfos, err := m.GetSimpleService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSimpleService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "simple_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "simple_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_Service:
-		odrInfos, err = m.GetService().GetDRefInfo()
+		drInfos, err := m.GetService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_StatefulService:
-		odrInfos, err = m.GetStatefulService().GetDRefInfo()
+		drInfos, err := m.GetStatefulService().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetStatefulService().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "stateful_service." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful_service." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_Job:
-		odrInfos, err = m.GetJob().GetDRefInfo()
+		drInfos, err := m.GetJob().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetJob().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "job." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "job." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -8492,49 +8431,47 @@ func (m *RouteInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *RouteInfoType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetChoiceDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteInfoType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetChoice().(type) {
 	case *RouteInfoType_SimpleRoute:
 
+		return nil, nil
+
 	case *RouteInfoType_RedirectRoute:
+
+		return nil, nil
 
 	case *RouteInfoType_DirectResponseRoute:
 
-	case *RouteInfoType_CustomRouteObject:
-		odrInfos, err = m.GetCustomRouteObject().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "custom_route_object." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *RouteInfoType_CustomRouteObject:
+		drInfos, err := m.GetCustomRouteObject().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_route_object." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateRouteInfoType struct {
@@ -8697,39 +8634,34 @@ func (m *RouteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetRoutesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *RouteType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetRoutes() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetRoutes() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateRouteType struct {
@@ -8883,97 +8815,89 @@ func (m *ServiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *ServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseOptionsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseOptionsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetContainersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetContainersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDeployOptionsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseOptions() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAdvertiseOptions().GetDRefInfo()
+	drInfos, err := m.GetAdvertiseOptions().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "advertise_options." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ServiceType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetContainers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetContainers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDeployOptions() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDeployOptions().GetDRefInfo()
+	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "deploy_options." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateServiceType struct {
@@ -9342,37 +9266,30 @@ func (m *SimpleServiceType) Validate(ctx context.Context, opts ...db.ValidateOpt
 }
 
 func (m *SimpleServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetContainerDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetContainerDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SimpleServiceType) GetContainerDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetContainer() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetContainer().GetDRefInfo()
+	drInfos, err := m.GetContainer().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetContainer().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "container." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateSimpleServiceType struct {
@@ -9792,97 +9709,89 @@ func (m *StatefulServiceType) Validate(ctx context.Context, opts ...db.ValidateO
 }
 
 func (m *StatefulServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseOptionsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseOptionsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetContainersDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetContainersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDeployOptionsDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptionsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *StatefulServiceType) GetAdvertiseOptionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAdvertiseOptions() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAdvertiseOptions().GetDRefInfo()
+	drInfos, err := m.GetAdvertiseOptions().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAdvertiseOptions().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "advertise_options." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *StatefulServiceType) GetContainersDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetContainers() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetContainers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetContainers() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("containers[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *StatefulServiceType) GetDeployOptionsDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetDeployOptions() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetDeployOptions().GetDRefInfo()
+	drInfos, err := m.GetDeployOptions().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDeployOptions().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "deploy_options." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 type ValidateStatefulServiceType struct {
@@ -9978,6 +9887,46 @@ func (v *ValidateStatefulServiceType) PersistentVolumesValidationRuleHandler(rul
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items persistent_volumes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStatefulServiceType) VolumesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*EphemeralStorageVolumeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := EphemeralStorageVolumeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for volumes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*EphemeralStorageVolumeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*EphemeralStorageVolumeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated volumes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items volumes")
 		}
 		return nil
 	}
@@ -10121,13 +10070,9 @@ func (v *ValidateStatefulServiceType) Validate(ctx context.Context, pm interface
 	}
 
 	if fv, exists := v.FldValidators["volumes"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("volumes"))
-		for idx, item := range m.GetVolumes() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetVolumes(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -10195,6 +10140,17 @@ var DefaultStatefulServiceTypeValidator = func() *ValidateStatefulServiceType {
 	}
 	v.FldValidators["persistent_volumes"] = vFn
 
+	vrhVolumes := v.VolumesValidationRuleHandler
+	rulesVolumes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhVolumes(rulesVolumes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StatefulServiceType.volumes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volumes"] = vFn
+
 	vrhDeployOptions := v.DeployOptionsValidationRuleHandler
 	rulesDeployOptions := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -10216,8 +10172,6 @@ var DefaultStatefulServiceTypeValidator = func() *ValidateStatefulServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_options"] = vFn
-
-	v.FldValidators["volumes"] = EphemeralStorageVolumeTypeValidator().Validate
 
 	v.FldValidators["configuration"] = ConfigurationParametersTypeValidator().Validate
 

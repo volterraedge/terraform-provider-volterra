@@ -64,24 +64,28 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProtocolPolicerDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
@@ -89,16 +93,16 @@ func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("protocol_policer.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "protocol_policer.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "protocol_policer",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -132,51 +136,47 @@ func (m *CreateSpecType) GetProtocolPolicerDBEntries(ctx context.Context, d db.I
 
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteChoice().(type) {
 	case *CreateSpecType_SiteAcl:
-		odrInfos, err = m.GetSiteAcl().GetDRefInfo()
+		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_ReAcl:
-		odrInfos, err = m.GetReAcl().GetDRefInfo()
+		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "re_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *CreateSpecType_LegacyAcl:
-		odrInfos, err = m.GetLegacyAcl().GetDRefInfo()
+		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
@@ -705,74 +705,70 @@ func (m *FastACLRuleType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *FastACLRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetActionDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetActionDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSourceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSourceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *FastACLRuleType) GetActionDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetAction() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
-	driSet, err = m.GetAction().GetDRefInfo()
+	drInfos, err := m.GetAction().GetDRefInfo()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetAction().GetDRefInfo() FAILED")
 	}
-	for _, dri := range driSet {
+	for i := range drInfos {
+		dri := &drInfos[i]
 		dri.DRField = "action." + dri.DRField
-		drInfos = append(drInfos, dri)
 	}
-
 	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
 func (m *FastACLRuleType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSource() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSource().(type) {
 	case *FastACLRuleType_Prefix:
 
-	case *FastACLRuleType_IpPrefixSet:
-		odrInfos, err = m.GetIpPrefixSet().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ip_prefix_set." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *FastACLRuleType_IpPrefixSet:
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateFastACLRuleType struct {
@@ -1057,24 +1053,28 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProtocolPolicerDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
@@ -1082,16 +1082,16 @@ func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("protocol_policer.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "protocol_policer.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "protocol_policer",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1125,51 +1125,47 @@ func (m *GetSpecType) GetProtocolPolicerDBEntries(ctx context.Context, d db.Inte
 
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteChoice().(type) {
 	case *GetSpecType_SiteAcl:
-		odrInfos, err = m.GetSiteAcl().GetDRefInfo()
+		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_ReAcl:
-		odrInfos, err = m.GetReAcl().GetDRefInfo()
+		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "re_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GetSpecType_LegacyAcl:
-		odrInfos, err = m.GetLegacyAcl().GetDRefInfo()
+		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
@@ -1331,84 +1327,90 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetConfigChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetConfigChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetDefaultProtocolPolicerDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetDefaultProtocolPolicerDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetProtocolPolicerDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSourceRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSourceRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetConfigChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetConfigChoice().(type) {
 	case *GlobalSpecType_SiteAcl:
-		odrInfos, err = m.GetSiteAcl().GetDRefInfo()
+		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_ReAcl:
-		odrInfos, err = m.GetReAcl().GetDRefInfo()
+		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "re_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *GlobalSpecType_LegacyAcl:
 
+		return nil, nil
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetDefaultProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetDefaultProtocolPolicer() {
+	refs := m.GetDefaultProtocolPolicer()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.default_protocol_policer[%d] has a nil value", i)
 		}
@@ -1423,8 +1425,8 @@ func (m *GlobalSpecType) GetDefaultProtocolPolicerDRefInfo() ([]db.DRefInfo, err
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetDefaultProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1448,7 +1450,6 @@ func (m *GlobalSpecType) GetDefaultProtocolPolicerDBEntries(ctx context.Context,
 }
 
 func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
@@ -1456,16 +1457,16 @@ func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("protocol_policer.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "protocol_policer.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "protocol_policer",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1498,8 +1499,12 @@ func (m *GlobalSpecType) GetProtocolPolicerDBEntries(ctx context.Context, d db.I
 }
 
 func (m *GlobalSpecType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetSourceRules() {
+	refs := m.GetSourceRules()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.source_rules[%d] has a nil value", i)
 		}
@@ -1514,8 +1519,8 @@ func (m *GlobalSpecType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSourceRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1539,7 +1544,6 @@ func (m *GlobalSpecType) GetSourceRulesDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetViewInternal()
 	if vref == nil {
@@ -1547,16 +1551,16 @@ func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("view_internal.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "view_internal.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "view_internal",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -1949,19 +1953,21 @@ func (m *LegacyACLType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 }
 
 func (m *LegacyACLType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSourceRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetSourceRulesDRefInfo()
+
 }
 
 func (m *LegacyACLType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetSourceRules() {
+	vrefs := m.GetSourceRules()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("LegacyACLType.source_rules[%d] has a nil value", i)
 		}
@@ -1977,8 +1983,8 @@ func (m *LegacyACLType) GetSourceRulesDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetSourceRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2221,78 +2227,78 @@ func (m *ReACLType) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 }
 
 func (m *ReACLType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetFastAclRulesDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetFastAclRulesDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetVipChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetVipChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 // GetDRefInfo for the field's type
 func (m *ReACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetFastAclRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetFastAclRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("fast_acl_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
 func (m *ReACLType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetVipChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetVipChoice().(type) {
 	case *ReACLType_AllPublicVips:
 
+		return nil, nil
+
 	case *ReACLType_DefaultTenantVip:
 
-	case *ReACLType_SelectedTenantVip:
-		odrInfos, err = m.GetSelectedTenantVip().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "selected_tenant_vip." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
+		return nil, nil
 
+	case *ReACLType_SelectedTenantVip:
+		drInfos, err := m.GetSelectedTenantVip().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSelectedTenantVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "selected_tenant_vip." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReACLType struct {
@@ -2501,24 +2507,28 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 }
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetProtocolPolicerDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetProtocolPolicerDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSiteChoiceDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetSiteChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
 
 	vref := m.GetProtocolPolicer()
 	if vref == nil {
@@ -2526,16 +2536,16 @@ func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 	}
 	vdRef := db.NewDirectRefForView(vref)
 	vdRef.SetKind("protocol_policer.Object")
-	drInfos = append(drInfos, db.DRefInfo{
+	dri := db.DRefInfo{
 		RefdType:   "protocol_policer.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
 		DRField:    "protocol_policer",
 		Ref:        vdRef,
-	})
+	}
+	return []db.DRefInfo{dri}, nil
 
-	return drInfos, nil
 }
 
 // GetProtocolPolicerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2569,51 +2579,47 @@ func (m *ReplaceSpecType) GetProtocolPolicerDBEntries(ctx context.Context, d db.
 
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetSiteChoice() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
-
-	var odrInfos []db.DRefInfo
-
 	switch m.GetSiteChoice().(type) {
 	case *ReplaceSpecType_SiteAcl:
-		odrInfos, err = m.GetSiteAcl().GetDRefInfo()
+		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "site_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_ReAcl:
-		odrInfos, err = m.GetReAcl().GetDRefInfo()
+		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "re_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "re_acl." + dri.DRField
 		}
+		return drInfos, err
 
 	case *ReplaceSpecType_LegacyAcl:
-		odrInfos, err = m.GetLegacyAcl().GetDRefInfo()
+		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
 		}
-		for _, odri := range odrInfos {
-			odri.DRField = "legacy_acl." + odri.DRField
-			drInfos = append(drInfos, odri)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "legacy_acl." + dri.DRField
 		}
+		return drInfos, err
 
+	default:
+		return nil, nil
 	}
 
-	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
@@ -2775,19 +2781,21 @@ func (m *SelectedTenantVIPsType) Validate(ctx context.Context, opts ...db.Valida
 }
 
 func (m *SelectedTenantVIPsType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetPublicIpRefsDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetPublicIpRefsDRefInfo()
+
 }
 
 func (m *SelectedTenantVIPsType) GetPublicIpRefsDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, vref := range m.GetPublicIpRefs() {
+	vrefs := m.GetPublicIpRefs()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
 		if vref == nil {
 			return nil, fmt.Errorf("SelectedTenantVIPsType.public_ip_refs[%d] has a nil value", i)
 		}
@@ -2803,8 +2811,8 @@ func (m *SelectedTenantVIPsType) GetPublicIpRefsDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetPublicIpRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3120,39 +3128,34 @@ func (m *SiteACLType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *SiteACLType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetFastAclRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	if m == nil {
+		return nil, nil
 	}
 
-	return drInfos, nil
+	return m.GetFastAclRulesDRefInfo()
+
 }
 
 // GetDRefInfo for the field's type
 func (m *SiteACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
 	if m.GetFastAclRules() == nil {
-		return []db.DRefInfo{}, nil
+		return nil, nil
 	}
 
+	var drInfos []db.DRefInfo
 	for idx, e := range m.GetFastAclRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "GetFastAclRules() GetDRefInfo() FAILED")
 		}
-		for _, dri := range driSet {
+		for i := range driSet {
+			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("fast_acl_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
 		}
+		drInfos = append(drInfos, driSet...)
 	}
+	return drInfos, nil
 
-	return drInfos, err
 }
 
 type ValidateSiteACLType struct {

@@ -61,9 +61,12 @@ func (m *ObjectChangeResp) Validate(ctx context.Context, opts ...db.ValidateOpt)
 }
 
 func (m *ObjectChangeResp) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
+	if m == nil {
+		return nil, nil
+	}
 
-	return drInfos, nil
+	return nil, nil
+
 }
 
 type ValidateObjectChangeResp struct {

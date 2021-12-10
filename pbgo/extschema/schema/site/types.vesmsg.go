@@ -753,6 +753,15 @@ func (v *ValidateCpu) Validate(ctx context.Context, pm interface{}, opts ...db.V
 
 	}
 
+	if fv, exists := v.FldValidators["flags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("flags"))
+		if err := fv(ctx, m.GetFlags(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["model"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("model"))
@@ -2391,25 +2400,34 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 }
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetConnectedReDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetConnectedReDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetConnectedReForConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetConnectedReForConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GetSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetConnectedRe() {
+	refs := m.GetConnectedRe()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.connected_re[%d] has a nil value", i)
 		}
@@ -2424,8 +2442,8 @@ func (m *GetSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetConnectedReDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -2449,8 +2467,12 @@ func (m *GetSpecType) GetConnectedReDBEntries(ctx context.Context, d db.Interfac
 }
 
 func (m *GetSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetConnectedReForConfig() {
+	refs := m.GetConnectedReForConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GetSpecType.connected_re_for_config[%d] has a nil value", i)
 		}
@@ -2465,8 +2487,8 @@ func (m *GetSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetConnectedReForConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3467,31 +3489,40 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 }
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetConnectedReDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetConnectedReDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetConnectedReForConfigDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetConnectedReForConfigDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetK8SClusterApiGwDRefInfo(); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "GetK8SClusterApiGwDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetConnectedRe() {
+	refs := m.GetConnectedRe()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.connected_re[%d] has a nil value", i)
 		}
@@ -3506,8 +3537,8 @@ func (m *GlobalSpecType) GetConnectedReDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetConnectedReDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3531,8 +3562,12 @@ func (m *GlobalSpecType) GetConnectedReDBEntries(ctx context.Context, d db.Inter
 }
 
 func (m *GlobalSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetConnectedReForConfig() {
+	refs := m.GetConnectedReForConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.connected_re_for_config[%d] has a nil value", i)
 		}
@@ -3547,8 +3582,8 @@ func (m *GlobalSpecType) GetConnectedReForConfigDRefInfo() ([]db.DRefInfo, error
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetConnectedReForConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3572,8 +3607,12 @@ func (m *GlobalSpecType) GetConnectedReForConfigDBEntries(ctx context.Context, d
 }
 
 func (m *GlobalSpecType) GetK8SClusterApiGwDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetK8SClusterApiGw() {
+	refs := m.GetK8SClusterApiGw()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
 		if ref == nil {
 			return nil, fmt.Errorf("GlobalSpecType.k8s_cluster_api_gw[%d] has a nil value", i)
 		}
@@ -3588,8 +3627,8 @@ func (m *GlobalSpecType) GetK8SClusterApiGwDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        ref,
 		})
 	}
-
 	return drInfos, nil
+
 }
 
 // GetK8SClusterApiGwDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
@@ -3990,6 +4029,46 @@ func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ReMeshGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ReMeshGroup, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ReMeshGroupValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for re_mesh_group")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ReMeshGroup)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ReMeshGroup, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated re_mesh_group")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items re_mesh_group")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4286,6 +4365,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["re_mesh_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("re_mesh_group"))
+		if err := fv(ctx, m.GetReMeshGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("region"))
@@ -4409,6 +4496,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("vega"))
 		if err := fv(ctx, m.GetVega(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vega_cfg"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vega_cfg"))
+		if err := fv(ctx, m.GetVegaCfg(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4697,6 +4793,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vip_params_per_az"] = vFn
+
+	vrhReMeshGroup := v.ReMeshGroupValidationRuleHandler
+	rulesReMeshGroup := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhReMeshGroup(rulesReMeshGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.re_mesh_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_mesh_group"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -6902,6 +7009,101 @@ func PublishVIPParamsPerAzValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ReMeshGroup) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReMeshGroup) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReMeshGroup) DeepCopy() *ReMeshGroup {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReMeshGroup{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReMeshGroup) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReMeshGroup) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReMeshGroupValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReMeshGroup struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReMeshGroup) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReMeshGroup)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReMeshGroup got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetType().(type) {
+	case *ReMeshGroup_IpsecGroup:
+		if fv, exists := v.FldValidators["type.ipsec_group"]; exists {
+			val := m.GetType().(*ReMeshGroup_IpsecGroup).IpsecGroup
+			vOpts := append(opts,
+				db.WithValidateField("type"),
+				db.WithValidateField("ipsec_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReMeshGroup_L3VpnGroup:
+		if fv, exists := v.FldValidators["type.l3vpn_group"]; exists {
+			val := m.GetType().(*ReMeshGroup_L3VpnGroup).L3VpnGroup
+			vOpts := append(opts,
+				db.WithValidateField("type"),
+				db.WithValidateField("l3vpn_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReMeshGroupValidator = func() *ValidateReMeshGroup {
+	v := &ValidateReMeshGroup{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ReMeshGroupValidator() db.Validator {
+	return DefaultReMeshGroupValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8294,6 +8496,93 @@ func USBDeviceValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *VerInstanceRunningStateStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VerInstanceRunningStateStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VerInstanceRunningStateStatusType) DeepCopy() *VerInstanceRunningStateStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VerInstanceRunningStateStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VerInstanceRunningStateStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VerInstanceRunningStateStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VerInstanceRunningStateStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVerInstanceRunningStateStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVerInstanceRunningStateStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VerInstanceRunningStateStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VerInstanceRunningStateStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVerInstanceRunningStateStatusTypeValidator = func() *ValidateVerInstanceRunningStateStatusType {
+	v := &ValidateVerInstanceRunningStateStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VerInstanceRunningStateStatusTypeValidator() db.Validator {
+	return DefaultVerInstanceRunningStateStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *VerMasterStatusType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8487,6 +8776,15 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["running_state_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("running_state_status"))
+		if err := fv(ctx, m.GetRunningStateStatus(), vOpts...); err != nil {
+			return err
 		}
 
 	}
